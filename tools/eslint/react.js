@@ -12,6 +12,16 @@ export default [
     rules: {
       ...reactPlugin.configs['recommended-typescript'].rules,
       ...a11yPlugin.flatConfigs.strict.rules,
+
+      '@eslint-react/naming-convention/component-name': [
+        'warn',
+        { rule: 'PascalCase', allowAllCaps: true },
+      ],
+      '@eslint-react/naming-convention/filename': ['warn', 'kebab-case'],
+      '@eslint-react/naming-convention/filename-extension': [
+        'warn',
+        'as-needed',
+      ],
     },
     settings: reactPlugin.configs['recommended-typescript'].settings,
   },
