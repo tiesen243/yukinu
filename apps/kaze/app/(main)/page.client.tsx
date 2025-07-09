@@ -64,6 +64,7 @@ export const Slider: React.FC = () => {
       <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-3">
         {Array.from({ length: sliders.length }, (_, idx) => (
           <button
+            type="button"
             key={idx}
             className={cn(
               'ring-ring size-2.5 rounded-full ring-2',

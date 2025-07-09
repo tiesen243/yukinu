@@ -78,11 +78,11 @@ export const ProductDetail = ({ id }: { id: string }) => {
             <Typography variant="h3">{product.name}</Typography>
             <div className="mb-4 flex items-center gap-2">
               <div className="flex items-center gap-0.5">
-                {[...Array.from({ length: 5 })].map((_, i) => (
+                {Array.from({ length: 5 }, (_, idx) => (
                   <StarIcon
-                    key={i}
+                    key={idx}
                     className={`h-5 w-5 ${
-                      i < Math.floor(rating)
+                      idx < Math.floor(rating)
                         ? 'fill-yellow-400 text-yellow-400'
                         : 'text-gray-300'
                     }`}
@@ -217,11 +217,11 @@ export const ProductDetail = ({ id }: { id: string }) => {
                       <h4 className="font-semibold">{review.name}</h4>
                       <div className="flex items-center gap-2">
                         <div className="flex">
-                          {[...Array.from({ length: 5 })].map((_, i) => (
+                          {Array.from({ length: 5 }, (_, idx) => (
                             <StarIcon
-                              key={i}
+                              key={idx}
                               className={`h-4 w-4 ${
-                                i < review.rating
+                                idx < review.rating
                                   ? 'fill-yellow-400 text-yellow-400'
                                   : 'text-gray-300'
                               }`}

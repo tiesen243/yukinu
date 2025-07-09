@@ -49,6 +49,7 @@ export default async function ProductDetailPage({
     <HydrateClient>
       <script
         type="application/ld+json"
+        // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 

@@ -26,7 +26,7 @@ type SessionContextValue = {
 const SessionContext = React.createContext<SessionContextValue | null>(null)
 
 function useSession() {
-  const context = React.useContext(SessionContext)
+  const context = React.use(SessionContext)
   if (!context)
     throw new Error('useSession must be used within a SessionProvider')
   return context
@@ -105,13 +105,12 @@ function SessionProvider(
     fetchSession()
   }, [hasInitialSession, fetchSession])
 
-  return (
-    <SessionContext
-      value={{ status, session, signIn, signOut } as SessionContextValue}
-    >
-      {props.children}
-    </SessionContext>
-  )
+  const value = React.useMemo(
+    () => ({ status, session, signIn, signOut }),
+    [status, session, signIn, signOut],
+  ) as SessionContextValue
+
+  return <SessionContext value={value}>{props.children}</SessionContext>
 }
 
 export { useSession, SessionProvider }

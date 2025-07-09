@@ -25,8 +25,8 @@ export default function ProfilePage() {
         </div>
 
         <Suspense
-          fallback={Array(3).map((_, i) => (
-            <AddressCardSkeleton key={i} />
+          fallback={Array.from({ length: 3 }, (_, idx) => (
+            <AddressCardSkeleton key={idx} />
           ))}
         >
           <AddressList />
