@@ -1,6 +1,6 @@
 import nextPlugin from '@next/eslint-plugin-next'
 
-/** @type {import('typescript-eslint').Config} */
+/** @type {Awaited<import('typescript-eslint').Config>} */
 export default [
   {
     files: ['**/*.ts', '**/*.tsx'],

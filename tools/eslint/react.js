@@ -1,7 +1,7 @@
 import reactPlugin from '@eslint-react/eslint-plugin'
 import a11yPlugin from 'eslint-plugin-jsx-a11y'
 
-/** @type {import('typescript-eslint').Config} */
+/** @type {Awaited<import('typescript-eslint').Config>} */
 export default [
   {
     files: ['**/*.ts', '**/*.tsx'],
