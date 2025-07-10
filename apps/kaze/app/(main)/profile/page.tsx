@@ -112,10 +112,10 @@ const a = [
     linkText: 'View Orders',
   },
   {
-    title: 'Addresses',
+    title: 'Address',
     description: 'Manage shipping addresses for your orders',
-    link: '/profile/addresses',
-    linkText: 'Manage Addresses',
+    link: '/profile/address',
+    linkText: 'Manage Address',
   },
   {
     title: 'Shopping Cart',

@@ -8,6 +8,7 @@ import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import type { RouterOutputs } from '@yuki/api'
 import { Badge } from '@yuki/ui/badge'
 import { Button } from '@yuki/ui/button'
+import { Card } from '@yuki/ui/card'
 import { useDebounce } from '@yuki/ui/hooks/use-debounce'
 import { MinusIcon, PlusIcon, Trash2Icon } from '@yuki/ui/icons'
 import { Input } from '@yuki/ui/input'
@@ -29,13 +30,12 @@ export const CardList: React.FC = () => {
   const { data: addresses } = useSuspenseQuery(trpc.address.all.queryOptions())
 
   return (
-    <div className="grid gap-4">
-      <div className="grid gap-2">
-        {cart.items.map((item) => (
-          <CartItem key={item.productId} item={item} />
-        ))}
-      </div>
+    <section className="grid gap-4">
+      <h3 className="sr-only">Your Cart Items</h3>
 
+      {cart.items.map((item) => (
+        <CartItem key={item.productId} item={item} />
+      ))}
       {cart.items.length === 0 ? (
         <div className="text-muted-foreground text-center">
           Your cart is empty
@@ -82,11 +82,11 @@ export const CardList: React.FC = () => {
               </SelectContent>
             </Select>
 
-            <Button className="w-full">Checkout</Button>
+            <Button className="w-full">Proceed to Checkout</Button>
           </div>
         </div>
       )}
-    </div>
+    </section>
   )
 }
 
@@ -125,124 +125,149 @@ const CartItem: React.FC<{
   )
 
   return (
-    <div className="bg-card hover:bg-card/80 grid grid-cols-7 gap-4 rounded-xl border p-4 shadow-md transition-colors">
-      <Link href={`/${slugify(item.productName)}-${item.productId}`}>
-        <Image
-          src={item.productImage}
-          alt={item.productName}
-          className="aspect-square rounded-md object-cover"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          width={80}
-          height={80}
-        />
-        <span className="sr-only">View details for {item.productName}</span>
+    <Card className="w-full flex-row items-center p-4">
+      <Image
+        src={item.productImage}
+        alt={item.productName}
+        width={80}
+        height={80}
+        className="rounded-md object-cover"
+      />
+
+      <Link
+        href={`/${slugify(item.productName)}-${item.productId}`}
+        className="h-full min-w-0 flex-1"
+      >
+        <h4 className="line-clamp-1 text-lg font-semibold">
+          {item.productName}
+        </h4>
+        <p className="text-muted-foreground line-clamp-2 text-sm">
+          ${item.price.toFixed(2)} each
+        </p>
       </Link>
 
-      <div className="col-span-5 grid gap-2">
-        <h3 className="text-lg font-semibold">{item.productName}</h3>
+      {/* Quantity Controls */}
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={() => {
+            handleQuantityChange(item.quantity - 1)
+          }}
+          disabled={isPending || item.quantity <= 1}
+        >
+          <MinusIcon />
+        </Button>
 
-        <div className="flex">
-          <Button
-            variant="outline"
-            size="icon"
-            className="size-8"
-            onClick={() => {
-              if (localQuantity > 1) handleQuantityChange(localQuantity - 1)
-            }}
-            disabled={isPending}
-          >
-            <MinusIcon />
-          </Button>
-
-          <Input
-            type="number"
-            className="mx-2 h-8 w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            value={localQuantity}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10)
-              if (value > 0) handleQuantityChange(value)
-            }}
-            disabled={isPending}
-          />
-          <Button
-            variant="outline"
-            size="icon"
-            className="size-8"
-            onClick={() => {
-              handleQuantityChange(localQuantity + 1)
-            }}
-            disabled={isPending}
-          >
-            <PlusIcon />
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid gap-2">
-        <p className="text-right font-semibold">
-          ${(item.price * localQuantity).toFixed(2)}
-        </p>
+        <Input
+          type="number"
+          value={localQuantity}
+          onChange={(e) => {
+            const value = parseInt(e.target.value, 10)
+            if (!isNaN(value) && value > 0) handleQuantityChange(value)
+          }}
+          className="w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          disabled={isPending}
+        />
 
         <Button
-          variant="ghost"
-          className="text-destructive"
-          disabled={isPending}
+          variant="outline"
+          size="icon"
           onClick={() => {
-            mutate({
-              productId: item.productId,
-              type: 'remove',
-              quantity: 1,
-            })
+            handleQuantityChange(item.quantity + 1)
           }}
+          disabled={isPending}
         >
-          <Trash2Icon /> Remove
+          <PlusIcon />
         </Button>
       </div>
-    </div>
+
+      <div className="min-w-0 text-right">
+        <p className="text-lg font-semibold">
+          ${(item.price * item.quantity).toFixed(2)}
+        </p>
+      </div>
+
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-destructive hover:text-destructive"
+        onClick={() => {
+          mutate({
+            productId: item.productId,
+            type: 'remove',
+            quantity: 1,
+          })
+        }}
+        disabled={isPending}
+      >
+        <Trash2Icon />
+      </Button>
+    </Card>
   )
 }
 
 export const CardListSkeleton: React.FC = () => {
   return (
-    <div className="grid gap-4">
-      <div className="grid gap-2">
-        {Array.from({ length: 3 }, (_, idx) => (
-          <CartItemSkeleton key={idx} />
-        ))}
-      </div>
+    <section className="grid gap-4">
+      <h3 className="sr-only">Your Cart Items</h3>
+
+      {Array.from({ length: 3 }, (_, idx) => (
+        <CartItemSkeleton key={idx} />
+      ))}
 
       <div className="grid gap-1 border-t pt-4">
-        <p className="font-semibold">Total: $0</p>
-        <p className="text-muted-foreground text-sm">Items:0</p>
+        <p className="font-semibold">Total: $0.00</p>
+        <p className="text-muted-foreground text-sm">Items: 0</p>
 
         <div className="grid grid-cols-2 gap-4 pt-4">
           <div className="h-9 w-full animate-pulse rounded-md bg-current" />
           <div className="h-9 w-full animate-pulse rounded-md bg-current" />
         </div>
       </div>
-    </div>
+    </section>
   )
 }
 
 const CartItemSkeleton: React.FC = () => {
   return (
-    <div className="bg-card grid grid-cols-7 gap-4 rounded-xl border p-4 shadow-md">
-      <div className="aspect-square h-20 w-20 animate-pulse rounded-md bg-current" />
+    <Card className="w-full flex-row items-center p-4">
+      <div className="size-20 animate-pulse rounded-md bg-current" />
 
-      <div className="col-span-5 grid gap-2">
-        <div className="h-6 w-3/4 animate-pulse rounded-md bg-current" />
-
-        <div className="flex">
-          <div className="size-8 animate-pulse rounded-md bg-current" />
-          <div className="mx-2 h-8 w-16 animate-pulse rounded-md bg-current" />
-          <div className="size-8 animate-pulse rounded-md bg-current" />
-        </div>
+      <div className="h-full min-w-0 flex-1">
+        <h4 className="line-clamp-1 w-40 animate-pulse rounded-md bg-current text-lg font-semibold">
+          &nbsp;
+        </h4>
+        <p className="text-muted-foreground line-clamp-2 text-sm">$0.00 each</p>
       </div>
 
-      <div className="grid gap-2">
-        <div className="h-6 w-20 animate-pulse rounded-md bg-current" />
-        <div className="h-9 w-20 animate-pulse rounded-md bg-current" />
+      {/* Quantity Controls */}
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="icon">
+          <MinusIcon />
+        </Button>
+
+        <Input
+          type="number"
+          className="w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        />
+
+        <Button variant="outline" size="icon">
+          <PlusIcon />
+        </Button>
       </div>
-    </div>
+
+      <div className="min-w-0 text-right">
+        <p className="text-lg font-semibold">$0.00</p>
+      </div>
+
+      <Button
+        variant="ghost"
+        size="icon"
+        className="text-destructive hover:text-destructive"
+      >
+        <Trash2Icon />
+      </Button>
+    </Card>
   )
 }
