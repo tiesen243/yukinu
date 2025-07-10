@@ -5,7 +5,7 @@ import { Input } from '@yuki/ui/input'
 
 export function Search() {
   return (
-    <Form action="/shop" className="relative flex-1">
+    <Form action="/search" className="relative flex-1">
       <Input
         name="q"
         placeholder="Search products..."

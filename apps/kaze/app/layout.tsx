@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 
 import { Geist, Geist_Mono } from 'next/font/google'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { SessionProvider } from '@yuki/auth/react'
 import { cn, ThemeProvider } from '@yuki/ui'
@@ -39,7 +40,9 @@ export default function RootLayout({
           enableSystem
         >
           <TRPCReactProvider>
-            <SessionProvider>{children}</SessionProvider>
+            <SessionProvider>
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </SessionProvider>
           </TRPCReactProvider>
 
           <Toaster />
