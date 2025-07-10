@@ -75,12 +75,12 @@ export const Footer = () => (
           </h3>
           <ul className="space-y-2">
             {[
-              { href: '/#', text: 'Contact Us' },
-              { href: '/#', text: 'FAQ' },
-              { href: '/#', text: 'Shipping & Delivery' },
-              { href: '/#', text: 'Returns & Exchanges' },
-            ].map((link, idx) => (
-              <li key={idx}>
+              { href: '/#contact', text: 'Contact Us' },
+              { href: '/#faq', text: 'FAQ' },
+              { href: '/#shipping', text: 'Shipping & Delivery' },
+              { href: '/#returns', text: 'Returns & Exchanges' },
+            ].map((link) => (
+              <li key={link.href}>
                 <Link
                   href={link.href}
                   className="text-muted-foreground hover:text-foreground text-sm transition-colors"
@@ -137,12 +137,12 @@ export const Footer = () => (
         </div>
         <div className="flex space-x-6">
           {[
-            { href: '/#', text: 'Terms of Service' },
-            { href: '/#', text: 'Privacy Policy' },
-            { href: '/#', text: 'Cookie Policy' },
-          ].map((link, idx) => (
+            { href: '/#terms', text: 'Terms of Service' },
+            { href: '/#policy', text: 'Privacy Policy' },
+            { href: '/#cookie', text: 'Cookie Policy' },
+          ].map((link) => (
             <Link
-              key={idx}
+              key={link.href}
               href={link.href}
               className="text-muted-foreground hover:text-foreground text-sm transition-colors"
             >

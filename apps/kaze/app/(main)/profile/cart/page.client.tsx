@@ -206,8 +206,8 @@ export const CardListSkeleton: React.FC = () => {
   return (
     <div className="grid gap-4">
       <div className="grid gap-2">
-        {Array.from({ length: 3 }).map((_, index) => (
-          <CartItemSkeleton key={index} />
+        {Array.from({ length: 3 }, (_, idx) => (
+          <CartItemSkeleton key={idx} />
         ))}
       </div>
 

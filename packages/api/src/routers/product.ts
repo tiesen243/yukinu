@@ -1,7 +1,7 @@
 import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
 
-import { and, asc, desc, eq, ne } from '@yuki/db'
+import { and, asc, desc, eq, ilike, ne } from '@yuki/db'
 import { categories, products } from '@yuki/db/schema'
 import { allSchema, byIdSchema } from '@yuki/validators/product'
 
@@ -9,17 +9,23 @@ import { publicProcedure } from '../trpc'
 
 export const productRouter = {
   all: publicProcedure.input(allSchema).query(async ({ ctx, input }) => {
-    const { page, limit, sortBy } = input
-    const orderBy = input.orderBy === 'asc' ? asc : desc
+    const { page, limit, sort, order, query, category } = input
+    const orderBy = order === 'asc' ? asc : desc
+
+    const whereConditions = and(
+      query ? ilike(products.name, `%${query}%`) : undefined,
+      category ? eq(products.categoryId, category) : undefined,
+    )
 
     const productList = await ctx.db
       .select(productPreview)
       .from(products)
+      .where(whereConditions)
       .limit(limit)
       .offset((page - 1) * limit)
-      .orderBy(orderBy(products[sortBy]))
+      .orderBy(orderBy(products[sort]))
 
-    const total = await ctx.db.$count(products)
+    const total = await ctx.db.$count(products, whereConditions)
     const totalPage = Math.ceil(total / limit)
 
     return {

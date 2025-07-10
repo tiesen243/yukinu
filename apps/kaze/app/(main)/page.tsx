@@ -21,8 +21,8 @@ export default function HomePage() {
       <section className="container grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <h2 className="sr-only">Products</h2>
         <Suspense
-          fallback={Array.from({ length: 12 }).map((_, index) => (
-            <ProductCardSkeleton key={index} />
+          fallback={Array.from({ length: 12 }, (_, idx) => (
+            <ProductCardSkeleton key={idx} />
           ))}
         >
           <ProductList />
