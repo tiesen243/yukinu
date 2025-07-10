@@ -77,7 +77,7 @@ export const Footer = () => (
             {[
               { href: '/#contact', text: 'Contact Us' },
               { href: '/#faq', text: 'FAQ' },
-              { href: '/#shippping', text: 'Shipping & Delivery' },
+              { href: '/#shipping', text: 'Shipping & Delivery' },
               { href: '/#returns', text: 'Returns & Exchanges' },
             ].map((link) => (
               <li key={link.href}>
