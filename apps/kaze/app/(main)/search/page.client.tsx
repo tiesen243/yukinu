@@ -5,6 +5,7 @@ import { useQueryStates } from 'nuqs'
 
 import { Button } from '@yuki/ui/button'
 import { useForm } from '@yuki/ui/form'
+import { FilterIcon } from '@yuki/ui/icons'
 import { Input } from '@yuki/ui/input'
 import {
   Pagination,
@@ -73,7 +74,7 @@ export const SearchProduct: React.FC = () => {
         )}
       />
 
-      <div className="grid grid-cols-3 place-items-end gap-4">
+      <div className="grid grid-cols-2 place-items-end gap-4 md:grid-cols-3">
         <form.Field
           name="sort"
           render={({ field, meta }) => (
@@ -118,7 +119,9 @@ export const SearchProduct: React.FC = () => {
           )}
         />
 
-        <Button className="w-full">Apply Filters</Button>
+        <Button className="col-span-2 w-full md:col-span-1">
+          <FilterIcon /> Apply Filters
+        </Button>
       </div>
     </form>
   )
