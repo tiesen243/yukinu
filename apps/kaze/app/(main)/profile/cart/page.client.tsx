@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import type { RouterOutputs } from '@yuki/api'
@@ -20,6 +21,7 @@ import {
   SelectValue,
 } from '@yuki/ui/select'
 
+import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
 
 export const CardList: React.FC = () => {
@@ -132,14 +134,17 @@ const CartItem: React.FC<{
         className="rounded-md object-cover"
       />
 
-      <div className="h-full min-w-0 flex-1">
+      <Link
+        href={`/${slugify(item.productName)}-${item.productId}`}
+        className="h-full min-w-0 flex-1"
+      >
         <h4 className="line-clamp-1 text-lg font-semibold">
           {item.productName}
         </h4>
         <p className="text-muted-foreground line-clamp-2 text-sm">
           ${item.price.toFixed(2)} each
         </p>
-      </div>
+      </Link>
 
       {/* Quantity Controls */}
       <div className="flex items-center gap-2">
@@ -213,7 +218,7 @@ export const CardListSkeleton: React.FC = () => {
 
       <div className="grid gap-1 border-t pt-4">
         <p className="font-semibold">Total: $0.00</p>
-        <p className="text-muted-foreground text-sm">Items:0</p>
+        <p className="text-muted-foreground text-sm">Items: 0</p>
 
         <div className="grid grid-cols-2 gap-4 pt-4">
           <div className="h-9 w-full animate-pulse rounded-md bg-current" />
