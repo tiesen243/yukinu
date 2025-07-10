@@ -31,9 +31,9 @@ The following components are available:
 To get started with this package, you can import the components you want to use in your application.
 
 ```tsx
-import { Button } from '@yuki/ui/button';
+import { Button } from '@yuki/ui/button'
 
 export default function MyComponent() {
-  return <Button>Click me</Button>;
+  return <Button>Click me</Button>
 }
 ```

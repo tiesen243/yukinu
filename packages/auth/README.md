@@ -25,37 +25,35 @@ To get started with this package, you need to have a database set up and the req
 To use the authentication services, you need to wrap your application with the `SessionProvider` component.
 
 ```tsx
-import { SessionProvider } from '@yuki/auth/react';
+import { SessionProvider } from '@yuki/auth/react'
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+        <SessionProvider>{children}</SessionProvider>
       </body>
     </html>
-  );
+  )
 }
 ```
 
 Then, you can use the `useSession` hook to access the session information.
 
 ```tsx
-import { useSession } from '@yuki/auth/react';
+import { useSession } from '@yuki/auth/react'
 
 export default function MyComponent() {
-  const { session, status } = useSession();
+  const { session, status } = useSession()
 
   if (status === 'loading') {
-    return <p>Loading...</p>;
+    return <p>Loading...</p>
   }
 
   if (status === 'unauthenticated') {
-    return <p>You are not authenticated.</p>;
+    return <p>You are not authenticated.</p>
   }
 
-  return <p>Welcome, {session.user.name}!</p>;
+  return <p>Welcome, {session.user.name}!</p>
 }
 ```

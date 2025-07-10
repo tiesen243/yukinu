@@ -23,7 +23,7 @@ The following schemas are available:
 To get started with this package, you can import the schemas you want to use in your application.
 
 ```tsx
-import { addSchema } from '@yuki/validators/address';
+import { addSchema } from '@yuki/validators/address'
 
 const myData = {
   name: 'My Address',
@@ -33,12 +33,12 @@ const myData = {
   state: 'CA',
   postalCode: '12345',
   country: 'USA',
-};
+}
 
 try {
-  addSchema.parse(myData);
-  console.log('Data is valid!');
+  addSchema.parse(myData)
+  console.log('Data is valid!')
 } catch (error) {
-  console.error(error);
+  console.error(error)
 }
 ```
