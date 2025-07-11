@@ -75,10 +75,10 @@ export const Footer = () => (
           </h3>
           <ul className="space-y-2">
             {[
-              { href: '/#contact', text: 'Contact Us' },
-              { href: '/#faq', text: 'FAQ' },
-              { href: '/#shipping', text: 'Shipping & Delivery' },
-              { href: '/#returns', text: 'Returns & Exchanges' },
+              { href: '/contact', text: 'Contact Us' },
+              { href: '/faq', text: 'FAQ' },
+              { href: '/shipping', text: 'Shipping & Delivery' },
+              { href: '/returns', text: 'Returns & Exchanges' },
             ].map((link) => (
               <li key={link.href}>
                 <Link
@@ -137,9 +137,9 @@ export const Footer = () => (
         </div>
         <div className="flex space-x-6">
           {[
-            { href: '/#terms', text: 'Terms of Service' },
-            { href: '/#policy', text: 'Privacy Policy' },
-            { href: '/#cookie', text: 'Cookie Policy' },
+            { href: '/terms', text: 'Terms of Service' },
+            { href: '/policy', text: 'Privacy Policy' },
+            { href: '/cookie', text: 'Cookie Policy' },
           ].map((link) => (
             <Link
               key={link.href}
