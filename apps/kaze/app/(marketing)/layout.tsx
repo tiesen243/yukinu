@@ -1,6 +1,6 @@
 import { Footer } from '../_components/footer'
 
-export default function HomeLayout({
+export default function MarketingLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
