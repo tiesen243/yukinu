@@ -88,6 +88,7 @@ export default function FAQPage() {
                 </Typography>
                 <Button variant="outline" size="sm">
                   Start Chat
+                  <span className="sr-only">Coming soon</span>
                 </Button>
               </div>
 
@@ -106,6 +107,7 @@ export default function FAQPage() {
                 </Typography>
                 <Button variant="outline" size="sm">
                   Send Email
+                  <span className="sr-only">Coming soon</span>
                 </Button>
               </div>
 

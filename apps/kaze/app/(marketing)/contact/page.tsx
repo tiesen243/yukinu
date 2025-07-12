@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Badge } from '@yuki/ui/badge'
 import { Button } from '@yuki/ui/button'
 import { Card, CardContent } from '@yuki/ui/card'
+import { Checkbox } from '@yuki/ui/checkbox'
 import {
   CheckCircleIcon,
   ClockIcon,
@@ -94,12 +95,12 @@ export default function ContactPage() {
             support.
           </Typography>
 
-          <form className="space-y-6">
+          <form className="space-y-6" action="https://youtu.be/dQw4w9WgXcQ">
             <div className="grid gap-4 md:grid-cols-2">
               <div>
                 <label
                   htmlFor="firstName"
-                  className="mb-2 block text-sm font-medium text-gray-700"
+                  className="text-muted-foreground mb-2 block text-sm font-medium"
                 >
                   First Name *
                 </label>
@@ -112,7 +113,7 @@ export default function ContactPage() {
               <div>
                 <label
                   htmlFor="lastName"
-                  className="mb-2 block text-sm font-medium text-gray-700"
+                  className="text-muted-foreground mb-2 block text-sm font-medium"
                 >
                   Last Name *
                 </label>
@@ -127,7 +128,7 @@ export default function ContactPage() {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-medium text-gray-700"
+                className="text-muted-foreground mb-2 block text-sm font-medium"
               >
                 Email Address *
               </label>
@@ -142,7 +143,7 @@ export default function ContactPage() {
             <div>
               <label
                 htmlFor="company"
-                className="mb-2 block text-sm font-medium text-gray-700"
+                className="text-muted-foreground mb-2 block text-sm font-medium"
               >
                 Company (Optional)
               </label>
@@ -152,7 +153,7 @@ export default function ContactPage() {
             <div>
               <label
                 htmlFor="subject"
-                className="mb-2 block text-sm font-medium text-gray-700"
+                className="text-muted-foreground mb-2 block text-sm font-medium"
               >
                 Subject *
               </label>
@@ -166,7 +167,7 @@ export default function ContactPage() {
             <div>
               <label
                 htmlFor="message"
-                className="mb-2 block text-sm font-medium text-gray-700"
+                className="text-muted-foreground mb-2 block text-sm font-medium"
               >
                 Message *
               </label>
@@ -178,8 +179,8 @@ export default function ContactPage() {
               />
             </div>
 
-            <div className="flex items-start space-x-2">
-              <input type="checkbox" id="consent" className="mt-1" required />
+            <div className="flex items-start gap-2">
+              <Checkbox id="consent" required />
               <label
                 htmlFor="consent"
                 className="text-muted-foreground text-sm"
@@ -358,7 +359,7 @@ export default function ContactPage() {
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center justify-between border-b border-gray-100 py-2">
+                <div className="flex items-center justify-between border-b py-2">
                   <Typography className="font-medium">
                     Monday - Friday
                   </Typography>
@@ -366,7 +367,7 @@ export default function ContactPage() {
                     9:00 AM - 6:00 PM PST
                   </Typography>
                 </div>
-                <div className="flex items-center justify-between border-b border-gray-100 py-2">
+                <div className="flex items-center justify-between border-b py-2">
                   <Typography className="font-medium">Saturday</Typography>
                   <Typography className="text-muted-foreground">
                     10:00 AM - 4:00 PM PST

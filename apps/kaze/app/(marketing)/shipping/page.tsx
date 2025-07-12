@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { Badge } from '@yuki/ui/badge'
 import { Button } from '@yuki/ui/button'
 import { Card, CardContent } from '@yuki/ui/card'
@@ -200,7 +202,7 @@ export default function ShippingPage() {
                       </Typography>
                     </div>
                     <div className="text-center">
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" disabled>
                         Calculate
                       </Button>
                     </div>
@@ -545,8 +547,14 @@ export default function ShippingPage() {
                   <Typography className="text-muted-foreground mb-3 text-sm">
                     We'll investigate and provide a replacement or refund.
                   </Typography>
-                  <Button variant="outline" size="sm">
-                    Report Issue
+                  <Button variant="outline" size="sm" asChild>
+                    <a
+                      href="https://youtu.be/9lNZ_Rnr7Jc"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Report Issue
+                    </a>
                   </Button>
                 </div>
                 <div className="bg-secondary rounded-lg p-4">
@@ -556,8 +564,8 @@ export default function ShippingPage() {
                   <Typography className="text-muted-foreground mb-3 text-sm">
                     Questions about delivery times or shipping options.
                   </Typography>
-                  <Button variant="outline" size="sm">
-                    Contact Support
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/contact">Contact Support</Link>
                   </Button>
                 </div>
                 <div className="bg-secondary rounded-lg p-4">
@@ -567,8 +575,8 @@ export default function ShippingPage() {
                   <Typography className="text-muted-foreground mb-3 text-sm">
                     Need to update your delivery address before shipping.
                   </Typography>
-                  <Button variant="outline" size="sm">
-                    Update Address
+                  <Button variant="outline" size="sm" asChild>
+                    <Link href="/profile/address">Update Address</Link>
                   </Button>
                 </div>
               </div>

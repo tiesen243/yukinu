@@ -132,7 +132,7 @@ export const Footer = () => (
       <div className="flex space-x-6">
         {[
           { href: '/terms', text: 'Terms of Service' },
-          { href: '/policy', text: 'Privacy Policy' },
+          { href: '/privacy', text: 'Privacy Policy' },
           { href: '/cookie', text: 'Cookie Policy' },
         ].map((link) => (
           <Link

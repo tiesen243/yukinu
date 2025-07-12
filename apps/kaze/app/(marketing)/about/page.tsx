@@ -324,9 +324,15 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <Button size="lg">
-          View Open Positions
-          <ArrowRightIcon />
+        <Button size="lg" asChild>
+          <a
+            href="https://youtu.be/9lNZ_Rnr7Jc"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View Open Positions
+            <ArrowRightIcon />
+          </a>
         </Button>
       </section>
 
@@ -387,8 +393,14 @@ export default function AboutPage() {
               <Typography variant="p" className="text-muted-foreground mb-4">
                 For partnerships and press
               </Typography>
-              <Button variant="outline" size="sm">
-                Book Meeting
+              <Button variant="outline" size="sm" asChild>
+                <a
+                  href="https://youtu.be/dQw4w9WgXcQ"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Book Meeting
+                </a>
               </Button>
             </CardContent>
           </Card>
