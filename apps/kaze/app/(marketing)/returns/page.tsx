@@ -12,8 +12,8 @@ import { createMetadata } from '@/lib/metadata'
 import {
   nonReturnableItems,
   returnEligibility,
+  returnFeatures,
   returnProcessSteps,
-  returunFeatures,
 } from './page.config'
 
 export const metadata = createMetadata({
@@ -41,7 +41,7 @@ export default function ReturnsPolicyPage() {
           </Typography>
 
           <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {returunFeatures.map((feature) => (
+            {returnFeatures.map((feature) => (
               <div key={feature.title} className="text-center">
                 <div className="bg-secondary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-sm">
                   {feature.icon}

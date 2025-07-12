@@ -8,7 +8,7 @@ import {
   TruckIcon,
 } from '@yuki/ui/icons'
 
-export const returunFeatures = [
+export const returnFeatures = [
   {
     icon: <RefreshCwIcon className="h-6 w-6" />,
     title: '30-Day Returns',
