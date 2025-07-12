@@ -15,7 +15,9 @@ export function Header() {
           height={32}
           className="size-6 object-cover dark:invert"
         />
-        <span className="text-xl font-bold">Yukinu</span>
+        <span className="text-xl font-semibold tracking-tight text-balance lg:text-2xl">
+          Yukinu
+        </span>
       </Link>
 
       <div className="container flex items-center justify-between gap-4">

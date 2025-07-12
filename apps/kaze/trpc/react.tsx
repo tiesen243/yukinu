@@ -43,6 +43,7 @@ function TRPCReactProvider({
 }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = getQueryClient()
 
+  // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
       links: [
@@ -74,6 +75,7 @@ function TRPCReactProvider({
     }),
   )
 
+  // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [trpc] = React.useState(() =>
     createTRPCOptionsProxy<AppRouter>({ client: trpcClient, queryClient }),
   )
