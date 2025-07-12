@@ -1,6 +1,7 @@
 import '@/app/globals.css'
 
 import { Geist, Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 import { SessionProvider } from '@yuki/auth/react'
@@ -25,6 +26,8 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <Script src="https://unpkg.com/@styleglide/theme-editor" />
+
       <body
         className={cn(
           'flex min-h-dvh flex-col font-sans antialiased',

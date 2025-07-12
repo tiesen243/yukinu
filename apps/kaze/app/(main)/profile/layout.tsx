@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import { Navigation } from './layout.client'
 
 export default function ProfileLayout({
@@ -9,9 +7,7 @@ export default function ProfileLayout({
     <main className="container flex min-h-[calc(100vh-30rem)] flex-col gap-4 py-4 md:flex-row">
       <h1 className="sr-only">Profile page</h1>
 
-      <Suspense fallback={<></>}>
-        <Navigation />
-      </Suspense>
+      <Navigation />
       {children}
     </main>
   )

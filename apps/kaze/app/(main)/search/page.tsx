@@ -6,12 +6,9 @@ import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 import { PaginationSearch, ProductList, SearchProduct } from './page.client'
 import { cacheSearch } from './page.lib'
 
-export default async function SearchPage(props: Readonly<Props>) {
-  const searchParams = await cacheSearch.parse(props.searchParams)
-
-  void getQueryClient().ensureQueryData(
-    trpc.product.all.queryOptions(searchParams),
-  )
+export default async function SearchPage({ searchParams }: Readonly<Props>) {
+  const options = await cacheSearch.parse(searchParams)
+  void getQueryClient().ensureQueryData(trpc.product.all.queryOptions(options))
 
   return (
     <HydrateClient>
