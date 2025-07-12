@@ -1,5 +1,23 @@
 import { ClockIcon, GlobeIcon, PackageIcon, TruckIcon } from '@yuki/ui/icons'
 
+export const deliveryFeatures = [
+  {
+    icon: <TruckIcon className="h-6 w-6" />,
+    title: 'Fast Delivery',
+    description: 'Multiple shipping speeds available',
+  },
+  {
+    icon: <ClockIcon className="h-6 w-6" />,
+    title: 'Secure Packaging',
+    description: 'All items carefully protected',
+  },
+  {
+    icon: <GlobeIcon className="h-6 w-6" />,
+    title: 'Worldwide Shipping',
+    description: 'Delivery to 150+ countries',
+  },
+]
+
 export const shippingOptions = [
   {
     name: 'Standard Shipping',
