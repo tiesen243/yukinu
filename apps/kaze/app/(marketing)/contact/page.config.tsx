@@ -41,28 +41,28 @@ export const departments = [
     title: 'Customer Support',
     description: 'Account issues, order problems, technical help',
     email: 'support@yukinu.com',
-    color: 'bg-blue-50 text-blue-600',
+    color: 'bg-info/10 text-info',
   },
   {
     icon: <BuildingIcon className="h-6 w-6" />,
     title: 'Business Partnerships',
     description: 'Seller onboarding, enterprise solutions, integrations',
     email: 'partnerships@yukinu.com',
-    color: 'bg-green-50 text-green-600',
+    color: 'bg-success/10 text-success',
   },
   {
     icon: <UsersIcon className="h-6 w-6" />,
     title: 'Press & Media',
     description: 'Press inquiries, media kits, interviews',
     email: 'press@yukinu.com',
-    color: 'bg-purple-50 text-purple-600',
+    color: 'bg-error/10 text-error',
   },
   {
     icon: <GlobeIcon className="h-6 w-6" />,
     title: 'General Inquiries',
     description: 'Questions about Yukinu, feedback, suggestions',
     email: 'hello@yukinu.com',
-    color: 'bg-orange-50 text-orange-600',
+    color: 'bg-warning/10 text-warning',
   },
 ]
 

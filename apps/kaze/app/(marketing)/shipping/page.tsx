@@ -124,7 +124,7 @@ export default function ShippingPage() {
                   <ul className="space-y-2">
                     {option.features.map((feature) => (
                       <li key={feature} className="flex items-center space-x-2">
-                        <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                        <CheckCircleIcon className="text-success h-4 w-4" />
                         <Typography className="text-muted-foreground text-sm">
                           {feature}
                         </Typography>
@@ -263,19 +263,19 @@ export default function ShippingPage() {
               </Typography>
               <div className="space-y-3">
                 <div className="flex items-center space-x-2">
-                  <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                  <CheckCircleIcon className="text-success h-4 w-4" />
                   <Typography className="text-sm">
                     Protective packaging materials
                   </Typography>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                  <CheckCircleIcon className="text-success h-4 w-4" />
                   <Typography className="text-sm">
                     Eco-friendly packaging options
                   </Typography>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                  <CheckCircleIcon className="text-success h-4 w-4" />
                   <Typography className="text-sm">
                     Fragile item special handling
                   </Typography>

@@ -7,8 +7,6 @@ import {
   ZapIcon,
 } from '@yuki/ui/icons'
 
-export const navs = ['home', 'features', 'about', 'testimonials']
-
 export const features = [
   {
     icon: <SmartphoneIcon className="h-8 w-8" />,

@@ -246,19 +246,19 @@ export default function ContactPage() {
             </Typography>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                <CheckCircleIcon className="text-success h-5 w-5" />
                 <Typography className="text-sm">
                   Email support: Within 24 hours
                 </Typography>
               </div>
               <div className="flex items-center space-x-3">
-                <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                <CheckCircleIcon className="text-success h-5 w-5" />
                 <Typography className="text-sm">
                   Live chat: Within minutes during business hours
                 </Typography>
               </div>
               <div className="flex items-center space-x-3">
-                <CheckCircleIcon className="h-5 w-5 text-green-500" />
+                <CheckCircleIcon className="text-success h-5 w-5" />
                 <Typography className="text-sm">
                   Phone support: Immediate assistance
                 </Typography>

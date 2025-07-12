@@ -14,7 +14,7 @@ import { Input } from '@yuki/ui/input'
 
 export const Footer = () => (
   <footer className="bg-card text-card-foreground border-t py-12">
-    <div className="container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+    <div className="container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
       <div className="space-y-4">
         <Link href="/" className="inline-block">
           <h2 className="text-2xl font-bold">Yukinu</h2>
@@ -46,12 +46,32 @@ export const Footer = () => (
 
       <div className="space-y-4">
         <h3 className="text-sm font-medium tracking-wider uppercase">
+          Quick Links
+        </h3>
+        <ul className="space-y-2">
+          {[
+            { href: '/home', text: 'Home' },
+            { href: '/about', text: 'About Us' },
+            { href: '/contact', text: 'Contact Us' },
+          ].map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="text-muted-foreground hover:text-foreground text-sm transition-colors"
+              >
+                {link.text}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-sm font-medium tracking-wider uppercase">
           Customer Service
         </h3>
         <ul className="space-y-2">
           {[
-            { href: '/about', text: 'About Us' },
-            { href: '/contact', text: 'Contact Us' },
             { href: '/faq', text: 'FAQ' },
             { href: '/shipping', text: 'Shipping & Delivery' },
             { href: '/returns', text: 'Returns & Exchanges' },

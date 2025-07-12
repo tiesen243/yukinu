@@ -1,4 +1,11 @@
+import { Badge } from '@yuki/ui/badge'
+import { Button } from '@yuki/ui/button'
+import { Card, CardContent } from '@yuki/ui/card'
+import { CheckCircleIcon, InfoIcon, SettingsIcon } from '@yuki/ui/icons'
+import { Typography } from '@yuki/ui/typography'
+
 import { createMetadata } from '@/lib/metadata'
+import { cookieFeatures, cookieTypes } from './page.config'
 
 export const metadata = createMetadata({
   title: 'Cookie Policy',
@@ -6,47 +13,247 @@ export const metadata = createMetadata({
     'Learn about our cookie policy and how we use cookies on our website.',
 })
 
-export default function CookiePage() {
+export default function CookiesPolicyPage() {
   return (
-    <main className="container py-12 md:py-24">
-      <h1 className="mb-8 text-4xl font-bold">Cookie Policy</h1>
-      <div className="prose prose-lg max-w-none">
-        <p>
-          This is the Cookie Policy for Yukinu, accessible from
-          https://yukinu.vercel.app
-        </p>
+    <main>
+      <section className="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 py-20 dark:from-purple-950 dark:via-blue-950 dark:to-indigo-950">
+        <div className="container text-center">
+          <Badge variant="secondary" className="mb-6">
+            🍪 Your Privacy Matters
+          </Badge>
 
-        <h2 className="mt-8 text-2xl font-bold">What Are Cookies</h2>
-        <p>
-          As is common practice with almost all professional websites this site
-          uses cookies, which are tiny files that are downloaded to your
-          computer, to improve your experience. This page describes what
-          information they gather, how we use it and why we sometimes need to
-          store these cookies. We will also share how you can prevent these
-          cookies from being stored however this may downgrade or
-          &apos;break&apos; certain elements of the sites functionality.
-        </p>
+          <Typography variant="h1" className="mb-6">
+            Cookies Policy
+          </Typography>
 
-        <h2 className="mt-8 text-2xl font-bold">How We Use Cookies</h2>
-        <p>
-          We use cookies for a variety of reasons detailed below. Unfortunately
-          in most cases there are no industry standard options for disabling
-          cookies without completely disabling the functionality and features
-          they add to this site. It is recommended that you leave on all cookies
-          if you are not sure whether you need them or not in case they are used
-          to provide a service that you use.
-        </p>
+          <Typography className="text-muted-foreground mx-auto mb-8 max-w-3xl text-xl">
+            This policy explains how Yukinu uses cookies and similar
+            technologies to provide, improve, and protect our services. By using
+            our website, you agree to our use of cookies as described in this
+            policy.
+          </Typography>
 
-        <h2 className="mt-8 text-2xl font-bold">Disabling Cookies</h2>
-        <p>
-          You can prevent the setting of cookies by adjusting the settings on
-          your browser (see your browser Help for how to do this). Be aware that
-          disabling cookies will affect the functionality of this and many other
-          websites that you visit. Disabling cookies will usually result in also
-          disabling certain functionality and features of the this site.
-          Therefore it is recommended that you do not disable cookies.
-        </p>
-      </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+            {cookieFeatures.map((feature) => (
+              <div key={feature.title} className="text-center">
+                <div className="bg-secondary mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full shadow-sm">
+                  {feature.icon}
+                </div>
+                <Typography variant="h6" className="mb-2">
+                  {feature.title}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  component="p"
+                  className="text-muted-foreground"
+                >
+                  {feature.description}
+                </Typography>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="container py-20">
+        <Typography variant="h2" className="mb-12 text-center">
+          What are Cookies?
+        </Typography>
+        <Typography className="text-muted-foreground mb-6">
+          Cookies are small text files that are placed on your computer or
+          mobile device when you visit a website. They are widely used to make
+          websites work more efficiently, as well as to provide information to
+          the owners of the site. Cookies enable the website to remember your
+          actions and preferences (such as login, language, font size, and other
+          display preferences) over a period of time, so you don't have to keep
+          re-entering them whenever you come back to the site or browse from one
+          page to another.
+        </Typography>
+        <Typography className="text-muted-foreground mb-0">
+          Cookies can be "persistent" or "session" cookies. Persistent cookies
+          remain on your personal computer or mobile device when you go offline,
+          while session cookies are deleted as soon as you close your web
+          browser.
+        </Typography>
+      </section>
+
+      <section className="bg-secondary py-20">
+        <div className="container">
+          <div className="mb-16 text-center">
+            <Typography variant="h2" className="mb-4">
+              How We Use Cookies
+            </Typography>
+            <Typography className="text-muted-foreground mx-auto max-w-2xl">
+              We use cookies for various purposes to enhance your experience on
+              Yukinu.
+            </Typography>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-2">
+            {cookieTypes.map((type) => (
+              <Card
+                key={type.title}
+                className="border-0 shadow-sm transition-shadow hover:shadow-md"
+              >
+                <CardContent className="p-8">
+                  <div className="mb-6 flex items-start space-x-4">
+                    <div className="bg-primary/10 flex h-12 w-12 items-center justify-center rounded-lg">
+                      <div className="text-primary">{type.icon}</div>
+                    </div>
+                    <div className="flex-1">
+                      <Typography variant="h4" className="mb-2">
+                        {type.title}
+                      </Typography>
+                      <Typography className="text-muted-foreground mb-4">
+                        {type.description}
+                      </Typography>
+                    </div>
+                  </div>
+
+                  <div>
+                    <Typography variant="h6" className="mb-3">
+                      Examples
+                    </Typography>
+                    <ul className="space-y-2">
+                      {type.examples.map((example) => (
+                        <li
+                          key={example}
+                          className="flex items-center space-x-2"
+                        >
+                          <CheckCircleIcon className="h-4 w-4 text-green-500" />
+                          <Typography className="text-muted-foreground text-sm">
+                            {example}
+                          </Typography>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="container py-20">
+        <Typography variant="h2" className="mb-12 text-center">
+          Managing Your Cookie Preferences
+        </Typography>
+        <Typography className="text-muted-foreground mb-6">
+          You have the right to decide whether to accept or reject cookies. You
+          can exercise your cookie preferences by clicking on the appropriate
+          opt-out links provided in the "How We Use Cookies" section above, or
+          by setting your browser to refuse all or some browser cookies, or to
+          alert you when websites set or access cookies.
+        </Typography>
+        <Typography className="text-muted-foreground mb-6">
+          If you disable or refuse cookies, please note that some parts of this
+          website may become inaccessible or not function properly.
+        </Typography>
+
+        <div className="space-y-6">
+          <Card className="bg-info/10 border-info shadow-sm">
+            <CardContent className="p-8">
+              <div className="flex items-start space-x-4">
+                <InfoIcon className="text-info mt-1 h-6 w-6" />
+                <div>
+                  <Typography variant="h5" className="text-info mb-3">
+                    Browser Settings
+                  </Typography>
+                  <Typography className="text-info/90 mb-4">
+                    Most web browsers allow some control of most cookies through
+                    the browser settings. To find out more about cookies,
+                    including how to see what cookies have been set and how to
+                    manage and delete them, visit{' '}
+                    <a
+                      href="https://www.allaboutcookies.org"
+                      className="text-info/80 hover:underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      www.allaboutcookies.org
+                    </a>
+                    .
+                  </Typography>
+                  <Typography className="text-info/80 text-sm">
+                    For specific browser instructions:
+                  </Typography>
+                  <ul className="text-info/80 mt-2 list-inside list-disc space-y-1 text-sm">
+                    <li>
+                      Google Chrome: Settings &gt; Privacy and security &gt;
+                      Cookies and other site data
+                    </li>
+                    <li>
+                      Mozilla Firefox: Options &gt; Privacy & Security &gt;
+                      Cookies and Site Data
+                    </li>
+                    <li>
+                      Microsoft Edge: Settings &gt; Privacy, search, and
+                      services &gt; Clear browsing data
+                    </li>
+                    <li>
+                      Apple Safari: Preferences &gt; Privacy &gt; Manage Website
+                      Data
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-warning/10 border-warning shadow-sm">
+            <CardContent className="p-8">
+              <div className="flex items-start space-x-4">
+                <SettingsIcon className="text-warning mt-1 h-6 w-6" />
+                <div>
+                  <Typography variant="h5" className="text-warning mb-3">
+                    Cookie Consent Tool
+                  </Typography>
+                  <Typography className="text-warning/90 mb-4">
+                    You can also manage your preferences directly through our
+                    website's cookie consent tool, which appears when you first
+                    visit our site. This tool allows you to accept or reject
+                    different categories of cookies.
+                  </Typography>
+                  <Button
+                    variant="outline"
+                    className="text-warning hover:text-warning/90 hover:bg-warning/90 bg-warning"
+                    asChild
+                  >
+                    <a
+                      href="https://youtu.be/9lNZ_Rnr7Jc"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open Cookie Settings
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      <section className="bg-secondary py-20">
+        <div className="container">
+          <Typography variant="h2" className="mb-12 text-center">
+            Changes to This Cookies Policy
+          </Typography>
+          <Typography className="text-muted-foreground mb-6">
+            We may update our Cookies Policy from time to time. We will notify
+            you of any changes by posting the new Cookies Policy on this page.
+            We will let you know via email and/or a prominent notice on our
+            service, prior to the change becoming effective and update the "Last
+            updated" date at the top of this Cookies Policy.
+          </Typography>
+          <Typography className="text-muted-foreground mb-0">
+            You are advised to review this Cookies Policy periodically for any
+            changes. Changes to this Cookies Policy are effective when they are
+            posted on this page.
+          </Typography>
+        </div>
+      </section>
     </main>
   )
 }
