@@ -55,7 +55,7 @@ export const SearchProduct: React.FC = () => {
 
   return (
     <form
-      className="mb-4 grid gap-4"
+      className='mb-4 grid gap-4'
       onSubmit={(e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -63,9 +63,9 @@ export const SearchProduct: React.FC = () => {
       }}
     >
       <form.Field
-        name="query"
+        name='query'
         render={({ field, meta }) => (
-          <div id={meta.id} className="grid gap-2">
+          <div id={meta.id} className='grid gap-2'>
             <form.Label>Search</form.Label>
             <form.Control {...field}>
               <Input />
@@ -74,24 +74,24 @@ export const SearchProduct: React.FC = () => {
         )}
       />
 
-      <div className="grid grid-cols-2 place-items-end gap-4 md:grid-cols-3">
+      <div className='grid grid-cols-2 place-items-end gap-4 md:grid-cols-3'>
         <form.Field
-          name="sort"
+          name='sort'
           render={({ field, meta }) => (
-            <div id={meta.id} className="grid w-full gap-2">
+            <div id={meta.id} className='grid w-full gap-2'>
               <form.Label>Sort By</form.Label>
               <Select defaultValue={field.value} onValueChange={field.onChange}>
-                <form.Control className="w-full">
+                <form.Control className='w-full'>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select sort option" />
+                    <SelectValue placeholder='Select sort option' />
                   </SelectTrigger>
                 </form.Control>
 
                 <SelectContent>
-                  <SelectItem value="name">Name</SelectItem>
-                  <SelectItem value="price">Price</SelectItem>
-                  <SelectItem value="createdAt">Created At</SelectItem>
-                  <SelectItem value="updatedAt">Updated At</SelectItem>
+                  <SelectItem value='name'>Name</SelectItem>
+                  <SelectItem value='price'>Price</SelectItem>
+                  <SelectItem value='createdAt'>Created At</SelectItem>
+                  <SelectItem value='updatedAt'>Updated At</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -99,27 +99,27 @@ export const SearchProduct: React.FC = () => {
         />
 
         <form.Field
-          name="order"
+          name='order'
           render={({ field, meta }) => (
-            <div id={meta.id} className="grid w-full gap-2">
+            <div id={meta.id} className='grid w-full gap-2'>
               <form.Label>Order</form.Label>
               <Select defaultValue={field.value} onValueChange={field.onChange}>
-                <form.Control className="w-full">
+                <form.Control className='w-full'>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select order" />
+                    <SelectValue placeholder='Select order' />
                   </SelectTrigger>
                 </form.Control>
 
                 <SelectContent>
-                  <SelectItem value="asc">Ascending</SelectItem>
-                  <SelectItem value="desc">Descending</SelectItem>
+                  <SelectItem value='asc'>Ascending</SelectItem>
+                  <SelectItem value='desc'>Descending</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           )}
         />
 
-        <Button className="col-span-2 w-full md:col-span-1">
+        <Button className='col-span-2 w-full md:col-span-1'>
           <FilterIcon /> Apply Filters
         </Button>
       </div>
@@ -167,7 +167,7 @@ export const PaginationSearch: React.FC = () => {
   const pages = renderPageNumbers()
 
   return (
-    <Pagination className="mt-4">
+    <Pagination className='mt-4'>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious

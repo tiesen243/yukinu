@@ -10,25 +10,25 @@ import {
 
 export const values = [
   {
-    icon: <HeartIcon className="h-8 w-8" />,
+    icon: <HeartIcon className='h-8 w-8' />,
     title: 'Customer First',
     description:
       'Every decision we make starts with our customers. We listen, learn, and build solutions that truly matter to the people who use our platform every day.',
   },
   {
-    icon: <LightbulbIcon className="h-8 w-8" />,
+    icon: <LightbulbIcon className='h-8 w-8' />,
     title: 'Innovation',
     description:
       'We embrace cutting-edge technology and creative thinking to solve complex problems and create experiences that delight our users.',
   },
   {
-    icon: <ShieldIcon className="h-8 w-8" />,
+    icon: <ShieldIcon className='h-8 w-8' />,
     title: 'Trust & Security',
     description:
       "We build trust through transparency, reliability, and unwavering commitment to protecting our users' data and privacy.",
   },
   {
-    icon: <GlobeIcon className="h-8 w-8" />,
+    icon: <GlobeIcon className='h-8 w-8' />,
     title: 'Global Impact',
     description:
       "We're creating a platform that connects people worldwide, breaking down barriers and enabling commerce across cultures and borders.",
@@ -99,21 +99,21 @@ export const stats = [
   {
     number: '50M+',
     label: 'Products Listed',
-    icon: <TargetIcon className="h-6 w-6" />,
+    icon: <TargetIcon className='h-6 w-6' />,
   },
   {
     number: '1M+',
     label: 'Active Users',
-    icon: <UsersIcon className="h-6 w-6" />,
+    icon: <UsersIcon className='h-6 w-6' />,
   },
   {
     number: '25+',
     label: 'Countries',
-    icon: <GlobeIcon className="h-6 w-6" />,
+    icon: <GlobeIcon className='h-6 w-6' />,
   },
   {
     number: '99.9%',
     label: 'Uptime',
-    icon: <TrendingUpIcon className="h-6 w-6" />,
+    icon: <TrendingUpIcon className='h-6 w-6' />,
   },
 ]

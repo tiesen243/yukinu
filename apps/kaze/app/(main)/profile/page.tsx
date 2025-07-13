@@ -12,44 +12,44 @@ export default async function ProfilePage() {
   if (!user) return null
 
   return (
-    <section className="container grid gap-6">
-      <h2 className="sr-only">User Profile Information section</h2>
+    <section className='container grid gap-6'>
+      <h2 className='sr-only'>User Profile Information section</h2>
 
       <Card>
-        <CardContent className="flex items-center gap-4">
-          <Avatar className="h-16 w-16">
+        <CardContent className='flex items-center gap-4'>
+          <Avatar className='h-16 w-16'>
             <AvatarImage src={user.image} alt={user.name} />
-            <AvatarFallback className="text-lg">{user.name}</AvatarFallback>
+            <AvatarFallback className='text-lg'>{user.name}</AvatarFallback>
           </Avatar>
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <Typography variant="h5" component="h2" className="mb-0">
+          <div className='flex-1'>
+            <div className='flex items-center gap-2'>
+              <Typography variant='h5' component='h2' className='mb-0'>
                 {user.name}
               </Typography>
             </div>
-            <Typography className="text-muted-foreground text-sm">
+            <Typography className='text-sm text-muted-foreground'>
               {user.email}
             </Typography>
-            <Typography className="text-muted-foreground text-xs">
+            <Typography className='text-xs text-muted-foreground'>
               Member since {user.createdAt.toLocaleDateString()}
             </Typography>
           </div>
         </CardContent>
       </Card>
 
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <h3 className="sr-only">Profile Actions section</h3>
+      <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
+        <h3 className='sr-only'>Profile Actions section</h3>
 
         {a.map((item) => (
-          <Card key={item.link} className="transition-shadow hover:shadow-md">
+          <Card key={item.link} className='transition-shadow hover:shadow-md'>
             <CardHeader>
               <CardTitle>{item.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <Typography className="text-muted-foreground text-sm lg:text-base">
+              <Typography className='text-sm text-muted-foreground lg:text-base'>
                 {item.description}
               </Typography>
-              <Button variant="outline" size="sm" className="w-full" asChild>
+              <Button variant='outline' size='sm' className='w-full' asChild>
                 <Link href={item.link}>{item.linkText}</Link>
               </Button>
             </CardContent>
@@ -57,42 +57,42 @@ export default async function ProfilePage() {
         ))}
       </section>
 
-      <Card className="gap-4">
+      <Card className='gap-4'>
         <CardHeader>
           <CardTitle>
-            <Typography variant="h5" component="h2">
+            <Typography variant='h5' component='h2'>
               Account Overview
             </Typography>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className='grid gap-4 md:grid-cols-2'>
             <div>
-              <Typography variant="h6" component="h3">
+              <Typography variant='h6' component='h3'>
                 Account Information
               </Typography>
-              <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Name:</span>
+              <div className='space-y-1 text-sm'>
+                <div className='flex justify-between'>
+                  <span className='text-muted-foreground'>Name:</span>
                   <span>{user.name}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Email:</span>
+                <div className='flex justify-between'>
+                  <span className='text-muted-foreground'>Email:</span>
                   <span>{user.email}</span>
                 </div>
               </div>
             </div>
             <div>
-              <Typography variant="h6" component="h3">
+              <Typography variant='h6' component='h3'>
                 Account Activity
               </Typography>
-              <div className="space-y-1 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Joined:</span>
+              <div className='space-y-1 text-sm'>
+                <div className='flex justify-between'>
+                  <span className='text-muted-foreground'>Joined:</span>
                   <span>{user.createdAt.toLocaleDateString()}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Last Updated:</span>
+                <div className='flex justify-between'>
+                  <span className='text-muted-foreground'>Last Updated:</span>
                   <span>{user.updatedAt.toLocaleDateString()}</span>
                 </div>
               </div>

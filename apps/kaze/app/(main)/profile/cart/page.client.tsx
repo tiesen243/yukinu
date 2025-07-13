@@ -30,49 +30,49 @@ export const CardList: React.FC = () => {
   const { data: addresses } = useSuspenseQuery(trpc.address.all.queryOptions())
 
   return (
-    <section className="grid gap-4">
-      <h3 className="sr-only">Your Cart Items</h3>
+    <section className='grid gap-4'>
+      <h3 className='sr-only'>Your Cart Items</h3>
 
       {cart.items.map((item) => (
         <CartItem key={item.productId} item={item} />
       ))}
       {cart.items.length === 0 ? (
-        <div className="text-muted-foreground text-center">
+        <div className='text-center text-muted-foreground'>
           Your cart is empty
         </div>
       ) : (
-        <div className="grid gap-1 border-t pt-4">
-          <p className="font-semibold">Total: {cart.totalPrice}</p>
-          <p className="text-muted-foreground text-sm">
+        <div className='grid gap-1 border-t pt-4'>
+          <p className='font-semibold'>Total: {cart.totalPrice}</p>
+          <p className='text-sm text-muted-foreground'>
             Items: {cart.items.length}
           </p>
 
-          <div className="grid grid-cols-2 gap-4 pt-4">
+          <div className='grid grid-cols-2 gap-4 pt-4'>
             <Select
               defaultValue={addresses.find((address) => address.isDefault)?.id}
             >
-              <SelectTrigger className="line-clamp-1 w-full">
-                <SelectValue placeholder="Select a address" />
+              <SelectTrigger className='line-clamp-1 w-full'>
+                <SelectValue placeholder='Select a address' />
               </SelectTrigger>
 
               <SelectContent>
                 <SelectGroup>
                   {addresses.map((address) => (
                     <SelectItem key={address.id} value={address.id}>
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{address.name}</span>
+                      <div className='flex flex-col gap-1'>
+                        <div className='flex items-center gap-2'>
+                          <span className='font-medium'>{address.name}</span>
                           {address.isDefault && (
-                            <Badge variant="info" className="py-0">
+                            <Badge variant='info' className='py-0'>
                               Default
                             </Badge>
                           )}
                         </div>
-                        <span className="text-muted-foreground text-sm">
+                        <span className='text-sm text-muted-foreground'>
                           {address.line1}
                           {address.line2 ? `, ${address.line2}` : ''}
                         </span>
-                        <span className="text-muted-foreground text-xs">
+                        <span className='text-xs text-muted-foreground'>
                           {address.city}, {address.state} {address.postalCode}
                         </span>
                       </div>
@@ -82,7 +82,7 @@ export const CardList: React.FC = () => {
               </SelectContent>
             </Select>
 
-            <Button className="w-full">Proceed to Checkout</Button>
+            <Button className='w-full'>Proceed to Checkout</Button>
           </div>
         </div>
       )}
@@ -125,32 +125,32 @@ const CartItem: React.FC<{
   )
 
   return (
-    <Card className="w-full flex-row items-center p-4">
+    <Card className='w-full flex-row items-center p-4'>
       <Image
         src={item.productImage}
         alt={item.productName}
         width={80}
         height={80}
-        className="rounded-md object-cover"
+        className='rounded-md object-cover'
       />
 
       <Link
         href={`/${slugify(item.productName)}-${item.productId}`}
-        className="h-full min-w-0 flex-1"
+        className='h-full min-w-0 flex-1'
       >
-        <h4 className="line-clamp-1 text-lg font-semibold">
+        <h4 className='line-clamp-1 text-lg font-semibold'>
           {item.productName}
         </h4>
-        <p className="text-muted-foreground line-clamp-2 text-sm">
+        <p className='line-clamp-2 text-sm text-muted-foreground'>
           ${item.price.toFixed(2)} each
         </p>
       </Link>
 
       {/* Quantity Controls */}
-      <div className="flex items-center gap-2">
+      <div className='flex items-center gap-2'>
         <Button
-          variant="outline"
-          size="icon"
+          variant='outline'
+          size='icon'
           onClick={() => {
             handleQuantityChange(item.quantity - 1)
           }}
@@ -160,19 +160,19 @@ const CartItem: React.FC<{
         </Button>
 
         <Input
-          type="number"
+          type='number'
           value={localQuantity}
           onChange={(e) => {
             const value = parseInt(e.target.value, 10)
             if (!isNaN(value) && value > 0) handleQuantityChange(value)
           }}
-          className="w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          className='w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
           disabled={isPending}
         />
 
         <Button
-          variant="outline"
-          size="icon"
+          variant='outline'
+          size='icon'
           onClick={() => {
             handleQuantityChange(item.quantity + 1)
           }}
@@ -182,16 +182,16 @@ const CartItem: React.FC<{
         </Button>
       </div>
 
-      <div className="min-w-0 text-right">
-        <p className="text-lg font-semibold">
+      <div className='min-w-0 text-right'>
+        <p className='text-lg font-semibold'>
           ${(item.price * item.quantity).toFixed(2)}
         </p>
       </div>
 
       <Button
-        variant="ghost"
-        size="icon"
-        className="text-destructive hover:text-destructive"
+        variant='ghost'
+        size='icon'
+        className='text-destructive hover:text-destructive'
         onClick={() => {
           mutate({
             productId: item.productId,
@@ -209,20 +209,20 @@ const CartItem: React.FC<{
 
 export const CardListSkeleton: React.FC = () => {
   return (
-    <section className="grid gap-4">
-      <h3 className="sr-only">Your Cart Items</h3>
+    <section className='grid gap-4'>
+      <h3 className='sr-only'>Your Cart Items</h3>
 
       {Array.from({ length: 3 }, (_, idx) => (
         <CartItemSkeleton key={idx} />
       ))}
 
-      <div className="grid gap-1 border-t pt-4">
-        <p className="font-semibold">Total: $0.00</p>
-        <p className="text-muted-foreground text-sm">Items: 0</p>
+      <div className='grid gap-1 border-t pt-4'>
+        <p className='font-semibold'>Total: $0.00</p>
+        <p className='text-sm text-muted-foreground'>Items: 0</p>
 
-        <div className="grid grid-cols-2 gap-4 pt-4">
-          <div className="h-9 w-full animate-pulse rounded-md bg-current" />
-          <div className="h-9 w-full animate-pulse rounded-md bg-current" />
+        <div className='grid grid-cols-2 gap-4 pt-4'>
+          <div className='h-9 w-full animate-pulse rounded-md bg-current' />
+          <div className='h-9 w-full animate-pulse rounded-md bg-current' />
         </div>
       </div>
     </section>
@@ -231,40 +231,40 @@ export const CardListSkeleton: React.FC = () => {
 
 const CartItemSkeleton: React.FC = () => {
   return (
-    <Card className="w-full flex-row items-center p-4">
-      <div className="size-20 animate-pulse rounded-md bg-current" />
+    <Card className='w-full flex-row items-center p-4'>
+      <div className='size-20 animate-pulse rounded-md bg-current' />
 
-      <div className="h-full min-w-0 flex-1">
-        <h4 className="line-clamp-1 w-40 animate-pulse rounded-md bg-current text-lg font-semibold">
+      <div className='h-full min-w-0 flex-1'>
+        <h4 className='line-clamp-1 w-40 animate-pulse rounded-md bg-current text-lg font-semibold'>
           &nbsp;
         </h4>
-        <p className="text-muted-foreground line-clamp-2 text-sm">$0.00 each</p>
+        <p className='line-clamp-2 text-sm text-muted-foreground'>$0.00 each</p>
       </div>
 
       {/* Quantity Controls */}
-      <div className="flex items-center gap-2">
-        <Button variant="outline" size="icon">
+      <div className='flex items-center gap-2'>
+        <Button variant='outline' size='icon'>
           <MinusIcon />
         </Button>
 
         <Input
-          type="number"
-          className="w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+          type='number'
+          className='w-16 [appearance:textfield] text-center [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none'
         />
 
-        <Button variant="outline" size="icon">
+        <Button variant='outline' size='icon'>
           <PlusIcon />
         </Button>
       </div>
 
-      <div className="min-w-0 text-right">
-        <p className="text-lg font-semibold">$0.00</p>
+      <div className='min-w-0 text-right'>
+        <p className='text-lg font-semibold'>$0.00</p>
       </div>
 
       <Button
-        variant="ghost"
-        size="icon"
-        className="text-destructive hover:text-destructive"
+        variant='ghost'
+        size='icon'
+        className='text-destructive hover:text-destructive'
       >
         <Trash2Icon />
       </Button>

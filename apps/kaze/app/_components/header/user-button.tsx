@@ -38,14 +38,14 @@ export const UserButton: React.FC = () => {
   const { theme, setTheme } = useTheme()
 
   if (status === 'loading')
-    return <div className="size-9 animate-pulse rounded-full bg-current" />
+    return <div className='size-9 animate-pulse rounded-full bg-current' />
 
   if (status === 'unauthenticated')
     return (
-      <Button variant="ghost" className="w-9 md:w-auto" asChild>
-        <Link href="/login">
+      <Button variant='ghost' className='w-9 md:w-auto' asChild>
+        <Link href='/login'>
           <LogInIcon />
-          <span className="sr-only md:not-sr-only">Login</span>
+          <span className='sr-only md:not-sr-only'>Login</span>
         </Link>
       </Button>
     )
@@ -55,16 +55,16 @@ export const UserButton: React.FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className="size-9 cursor-pointer">
+        <Avatar className='size-9 cursor-pointer'>
           <AvatarImage src={user.image} />
           <AvatarFallback>{user.name.slice(0, 2)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel className="flex flex-col">
-          <p className="text-sm font-medium">{user.name}</p>
-          <p className="text-muted-foreground text-xs">{user.email}</p>
+      <DropdownMenuContent align='end'>
+        <DropdownMenuLabel className='flex flex-col'>
+          <p className='text-sm font-medium'>{user.name}</p>
+          <p className='text-xs text-muted-foreground'>{user.email}</p>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />
@@ -80,7 +80,7 @@ export const UserButton: React.FC = () => {
           ))}
 
           <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="[&_svg:not([class*='text-'])]:text-muted-foreground gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+            <DropdownMenuSubTrigger className="gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground">
               <SunMoonIcon /> Apperance
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>

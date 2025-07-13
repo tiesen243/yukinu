@@ -7,23 +7,23 @@ export const metadata = createMetadata({
 
 export default function TermsPage() {
   return (
-    <main className="container py-12 md:py-24">
-      <h1 className="mb-8 text-4xl font-bold">Terms of Service</h1>
-      <div className="prose prose-lg max-w-none">
+    <main className='container py-12 md:py-24'>
+      <h1 className='mb-8 text-4xl font-bold'>Terms of Service</h1>
+      <div className='prose prose-lg max-w-none'>
         <p>
           Welcome to Yukinu! These terms and conditions outline the rules and
           regulations for the use of our website and the purchase of our
           products.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">1. Introduction</h2>
+        <h2 className='mt-8 text-2xl font-bold'>1. Introduction</h2>
         <p>
           By accessing this website, we assume you accept these terms and
           conditions. Do not continue to use Yukinu if you do not agree to take
           all of the terms and conditions stated on this page.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">2. Intellectual Property</h2>
+        <h2 className='mt-8 text-2xl font-bold'>2. Intellectual Property</h2>
         <p>
           Unless otherwise stated, Yukinu and/or its licensors own the
           intellectual property rights for all material on Yukinu. All
@@ -32,9 +32,9 @@ export default function TermsPage() {
           these terms and conditions.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">3. Restrictions</h2>
+        <h2 className='mt-8 text-2xl font-bold'>3. Restrictions</h2>
         <p>You are specifically restricted from all of the following:</p>
-        <ul className="list-disc pl-6">
+        <ul className='list-disc pl-6'>
           <li>Publishing any website material in any other media.</li>
           <li>
             Selling, sublicensing and/or otherwise commercializing any website
@@ -51,7 +51,7 @@ export default function TermsPage() {
           </li>
         </ul>
 
-        <h2 className="mt-8 text-2xl font-bold">4. Your Content</h2>
+        <h2 className='mt-8 text-2xl font-bold'>4. Your Content</h2>
         <p>
           In these Website Standard Terms and Conditions, “Your Content” shall
           mean any audio, video text, images or other material you choose to
@@ -61,7 +61,7 @@ export default function TermsPage() {
           media.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">5. No warranties</h2>
+        <h2 className='mt-8 text-2xl font-bold'>5. No warranties</h2>
         <p>
           This Website is provided “as is,” with all faults, and Yukinu express
           no representations or warranties, of any kind related to this Website
@@ -69,7 +69,7 @@ export default function TermsPage() {
           this Website shall be interpreted as advising you.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">6. Limitation of liability</h2>
+        <h2 className='mt-8 text-2xl font-bold'>6. Limitation of liability</h2>
         <p>
           In no event shall Yukinu, nor any of its officers, directors and
           employees, shall be held liable for anything arising out of or in any
@@ -80,7 +80,7 @@ export default function TermsPage() {
           this Website.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">
+        <h2 className='mt-8 text-2xl font-bold'>
           7. Governing Law & Jurisdiction
         </h2>
         <p>

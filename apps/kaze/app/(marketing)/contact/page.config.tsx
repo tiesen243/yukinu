@@ -10,7 +10,7 @@ import {
 
 export const contactMethods = [
   {
-    icon: <MailIcon className="h-8 w-8" />,
+    icon: <MailIcon className='h-8 w-8' />,
     title: 'Email Support',
     description: 'Get help from our support team',
     contact: 'support@yukinu.com',
@@ -18,7 +18,7 @@ export const contactMethods = [
     availability: '24/7',
   },
   {
-    icon: <PhoneIcon className="h-8 w-8" />,
+    icon: <PhoneIcon className='h-8 w-8' />,
     title: 'Phone Support',
     description: 'Speak directly with our team',
     contact: '+1 (555) 123-4567',
@@ -26,7 +26,7 @@ export const contactMethods = [
     availability: 'Mon-Fri, 9AM-6PM PST',
   },
   {
-    icon: <MessageSquareIcon className="h-8 w-8" />,
+    icon: <MessageSquareIcon className='h-8 w-8' />,
     title: 'Live Chat',
     description: 'Chat with us in real-time',
     contact: 'Available on our website',
@@ -37,28 +37,28 @@ export const contactMethods = [
 
 export const departments = [
   {
-    icon: <HeadphonesIcon className="h-6 w-6" />,
+    icon: <HeadphonesIcon className='h-6 w-6' />,
     title: 'Customer Support',
     description: 'Account issues, order problems, technical help',
     email: 'support@yukinu.com',
     color: 'bg-info/10 text-info',
   },
   {
-    icon: <BuildingIcon className="h-6 w-6" />,
+    icon: <BuildingIcon className='h-6 w-6' />,
     title: 'Business Partnerships',
     description: 'Seller onboarding, enterprise solutions, integrations',
     email: 'partnerships@yukinu.com',
     color: 'bg-success/10 text-success',
   },
   {
-    icon: <UsersIcon className="h-6 w-6" />,
+    icon: <UsersIcon className='h-6 w-6' />,
     title: 'Press & Media',
     description: 'Press inquiries, media kits, interviews',
     email: 'press@yukinu.com',
     color: 'bg-error/10 text-error',
   },
   {
-    icon: <GlobeIcon className="h-6 w-6" />,
+    icon: <GlobeIcon className='h-6 w-6' />,
     title: 'General Inquiries',
     description: 'Questions about Yukinu, feedback, suggestions',
     email: 'hello@yukinu.com',

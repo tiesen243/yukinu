@@ -14,13 +14,13 @@ export default function ProfilePage() {
 
   return (
     <HydrateClient>
-      <section className="w-full space-y-4">
-        <div className="flex items-start justify-between gap-4">
-          <Typography variant="h4" component="h2">
+      <section className='w-full space-y-4'>
+        <div className='flex items-start justify-between gap-4'>
+          <Typography variant='h4' component='h2'>
             My Addresses
           </Typography>
           <Button asChild>
-            <Link href="/profile/address/new">Add New Address</Link>
+            <Link href='/profile/address/new'>Add New Address</Link>
           </Button>
         </div>
 

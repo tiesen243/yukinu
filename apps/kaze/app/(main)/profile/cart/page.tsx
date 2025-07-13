@@ -16,8 +16,8 @@ export default function CartPage() {
 
   return (
     <HydrateClient>
-      <section className="w-full space-y-4">
-        <Typography variant="h4" component="h2">
+      <section className='w-full space-y-4'>
+        <Typography variant='h4' component='h2'>
           Your Shopping Cart
         </Typography>
 
