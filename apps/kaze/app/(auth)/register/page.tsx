@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@yuki/ui/card'
 
-import { RegisterForm } from './page.client'
+import { RegisterForm } from '@/app/(auth)/register/page.client'
 
 export default function RegisterPage() {
   return (

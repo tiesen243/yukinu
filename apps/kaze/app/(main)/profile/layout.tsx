@@ -1,4 +1,4 @@
-import { Navigation } from './layout.client'
+import { Navigation } from '@/app/(main)/profile/layout.client'
 
 export default function ProfileLayout({
   children,

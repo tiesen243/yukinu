@@ -4,8 +4,11 @@ import { Card, CardContent } from '@yuki/ui/card'
 import { CheckCircleIcon, InfoIcon, SettingsIcon } from '@yuki/ui/icons'
 import { Typography } from '@yuki/ui/typography'
 
+import {
+  cookieFeatures,
+  cookieTypes,
+} from '@/app/(marketing)/cookie/page.config'
 import { createMetadata } from '@/lib/metadata'
-import { cookieFeatures, cookieTypes } from './page.config'
 
 export const metadata = createMetadata({
   title: 'Cookie Policy',

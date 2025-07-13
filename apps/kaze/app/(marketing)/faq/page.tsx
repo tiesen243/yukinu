@@ -11,8 +11,12 @@ import {
 } from '@yuki/ui/icons'
 import { Typography } from '@yuki/ui/typography'
 
+import {
+  FaqList,
+  FaqProvider,
+  FaqSearch,
+} from '@/app/(marketing)/faq/page.client'
 import { createMetadata } from '@/lib/metadata'
-import { FaqList, FaqProvider, FaqSearch } from './page.client'
 
 export const metadata = createMetadata({
   title: 'FAQ',

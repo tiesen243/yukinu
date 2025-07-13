@@ -9,7 +9,7 @@ import { ChevronDownIcon, SearchIcon } from '@yuki/ui/icons'
 import { Input } from '@yuki/ui/input'
 import { Typography } from '@yuki/ui/typography'
 
-import { faqs } from './page.config'
+import { faqs } from '@/app/(marketing)/faq/page.config'
 
 const FaqContext = React.createContext<{
   searchQuery: string

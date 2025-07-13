@@ -4,8 +4,11 @@ import Link from 'next/link'
 import { Button } from '@yuki/ui/button'
 import { Typography } from '@yuki/ui/typography'
 
+import {
+  AddressCardSkeleton,
+  AddressList,
+} from '@/app/(main)/profile/address/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
-import { AddressCardSkeleton, AddressList } from './page.client'
 
 export const dynamic = 'force-dynamic'
 

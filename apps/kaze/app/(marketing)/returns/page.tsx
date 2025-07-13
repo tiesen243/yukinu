@@ -8,13 +8,13 @@ import {
 } from '@yuki/ui/icons'
 import { Typography } from '@yuki/ui/typography'
 
-import { createMetadata } from '@/lib/metadata'
 import {
   nonReturnableItems,
   returnEligibility,
   returnFeatures,
   returnProcessSteps,
-} from './page.config'
+} from '@/app/(marketing)/returns/page.config'
+import { createMetadata } from '@/lib/metadata'
 
 export const metadata = createMetadata({
   title: 'Returns',

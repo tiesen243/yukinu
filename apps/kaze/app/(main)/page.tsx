@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 
+import { ProductCardSkeleton } from '@/app/_components/product-card'
+import { ProductList, Slider } from '@/app/(main)/page.client'
 import { getQueryClient, trpc } from '@/trpc/rsc'
-import { ProductCardSkeleton } from '../_components/product-card'
-import { ProductList, Slider } from './page.client'
 
 export const dynamic = 'force-dynamic'
 

@@ -17,8 +17,12 @@ import { Input } from '@yuki/ui/input'
 import { Textarea } from '@yuki/ui/textarea'
 import { Typography } from '@yuki/ui/typography'
 
+import {
+  contactMethods,
+  departments,
+  offices,
+} from '@/app/(marketing)/contact/page.config'
 import { createMetadata } from '@/lib/metadata'
-import { contactMethods, departments, offices } from './page.config'
 
 export const metadata = createMetadata({
   title: 'Contact Us',

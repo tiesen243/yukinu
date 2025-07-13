@@ -1,10 +1,14 @@
 import { Suspense } from 'react'
 
-import type { Props } from './page.lib'
+import type { Props } from '@/app/(main)/search/page.lib'
 import { ProductCardSkeleton } from '@/app/_components/product-card'
+import {
+  PaginationSearch,
+  ProductList,
+  SearchProduct,
+} from '@/app/(main)/search/page.client'
+import { cacheSearch } from '@/app/(main)/search/page.lib'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
-import { PaginationSearch, ProductList, SearchProduct } from './page.client'
-import { cacheSearch } from './page.lib'
 
 export default async function SearchPage({ searchParams }: Readonly<Props>) {
   const options = await cacheSearch.parse(searchParams)

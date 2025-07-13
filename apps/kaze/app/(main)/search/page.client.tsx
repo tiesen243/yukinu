@@ -25,8 +25,8 @@ import {
 } from '@yuki/ui/select'
 
 import { ProductCard } from '@/app/_components/product-card'
+import { searchParsers } from '@/app/(main)/search/page.lib'
 import { useTRPC } from '@/trpc/react'
-import { searchParsers } from './page.lib'
 
 export const ProductList: React.FC = () => {
   const [searchParams] = useQueryStates(searchParsers, {

@@ -16,8 +16,13 @@ import {
 } from '@yuki/ui/icons'
 import { Typography } from '@yuki/ui/typography'
 
+import {
+  stats,
+  team,
+  timeline,
+  values,
+} from '@/app/(marketing)/about/page.config'
 import { createMetadata } from '@/lib/metadata'
-import { stats, team, timeline, values } from './page.config'
 
 export const metadata = createMetadata({
   title: 'About Us',

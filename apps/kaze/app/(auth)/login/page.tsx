@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@yuki/ui/card'
 
-import { LoginForm } from './page.client'
+import { LoginForm } from '@/app/(auth)/login/page.client'
 
 export default function LoginPage() {
   return (

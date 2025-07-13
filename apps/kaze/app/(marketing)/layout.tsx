@@ -1,4 +1,4 @@
-import { Footer } from '../_components/footer'
+import { Footer } from '@/app/_components/footer'
 
 export default function MarketingLayout({
   children,

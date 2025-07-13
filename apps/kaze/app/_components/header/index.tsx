@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { Search } from './search'
-import { UserButton } from './user-button'
+import { Search } from '@/app/_components/header/search'
+import { UserButton } from '@/app/_components/header/user-button'
 
 export function Header() {
   return (

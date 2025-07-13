@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
 import { Button } from '@yuki/ui/button'
 import { Card, CardFooter } from '@yuki/ui/card'
 import { FacebookIcon, GoogleIcon } from '@yuki/ui/icons'
@@ -18,18 +17,14 @@ export default function AuthLayout({
             </span>
           </div>
 
-          <div className='grid grid-cols-2 gap-4'>
-            <Button variant='outline' size='sm' asChild>
-              <a href='/api/auth/facebook'>
-                <FacebookIcon /> Facebook
-              </a>
+          <form className='grid grid-cols-2 gap-4'>
+            <Button variant='outline' size='sm' formAction='/api/auth/facebook'>
+              <FacebookIcon /> Facebook
             </Button>
-            <Button variant='outline' size='sm' asChild>
-              <a href='/api/auth/google'>
-                <GoogleIcon /> Google
-              </a>
+            <Button variant='outline' size='sm' formAction='/api/auth/google'>
+              <GoogleIcon /> Google
             </Button>
-          </div>
+          </form>
         </CardFooter>
       </Card>
     </main>

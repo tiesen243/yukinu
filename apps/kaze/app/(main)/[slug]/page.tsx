@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 
+import { ProductDetail } from '@/app/(main)/[slug]/page.client'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
-import { ProductDetail } from './page.client'
 
 export default async function ProductDetailPage({
   params,

@@ -7,8 +7,12 @@ import { Card, CardContent } from '@yuki/ui/card'
 import { ArrowRightIcon, CheckIcon, PlayIcon, StarIcon } from '@yuki/ui/icons'
 import { Typography } from '@yuki/ui/typography'
 
+import {
+  features,
+  stats,
+  testimonials,
+} from '@/app/(marketing)/home/page.config'
 import { createMetadata } from '@/lib/metadata'
-import { features, stats, testimonials } from './page.config'
 
 export const metadata = createMetadata({
   title: 'Experience the Future of Shopping',

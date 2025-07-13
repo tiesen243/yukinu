@@ -14,14 +14,14 @@ import {
 } from '@yuki/ui/icons'
 import { Typography } from '@yuki/ui/typography'
 
-import { createMetadata } from '@/lib/metadata'
 import {
   deliveryFeatures,
   internationalRestrictions,
   restrictedItems,
   shippingOptions,
   shippingZones,
-} from './page.config'
+} from '@/app/(marketing)/shipping/page.config'
+import { createMetadata } from '@/lib/metadata'
 
 export const metadata = createMetadata({
   title: 'Shipping',
