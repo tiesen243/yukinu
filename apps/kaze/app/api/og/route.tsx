@@ -1,5 +1,3 @@
-/* eslint-disable @eslint-react/dom/no-unknown-property */
-
 import type { NextRequest } from 'next/server'
 import { ImageResponse } from 'next/og'
 
