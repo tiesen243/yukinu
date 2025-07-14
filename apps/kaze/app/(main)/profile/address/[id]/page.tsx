@@ -1,7 +1,7 @@
 import type { RouterOutputs } from '@yuki/api'
 
+import { CreateOrEditAddressForm } from '@/app/(main)/profile/address/[id]/page.client'
 import { api } from '@/trpc/rsc'
-import { CreateOrEditAddressForm } from './page.client'
 
 export default async function AddressPage({
   params,

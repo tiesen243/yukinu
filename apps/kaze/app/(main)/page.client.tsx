@@ -26,9 +26,9 @@ export const Slider: React.FC = () => {
   }, [])
 
   return (
-    <div className="relative h-[800px] w-screen overflow-hidden md:h-[500px]">
+    <div className='relative h-[800px] w-screen overflow-hidden md:h-[500px]'>
       <div
-        className="flex h-full w-full transition-transform duration-500 ease-linear"
+        className='flex h-full w-full transition-transform duration-500 ease-linear'
         style={{ transform: `translateX(-${defferredCurrentSlide * 100}%)` }}
       >
         {sliders.map((slider) => (
@@ -39,11 +39,11 @@ export const Slider: React.FC = () => {
               slider.bgColor,
             )}
           >
-            <div className="flex grow flex-col items-center justify-center gap-4 p-4">
-              <Typography variant="h3" className="text-secondary text-center">
+            <div className='flex grow flex-col items-center justify-center gap-4 p-4'>
+              <Typography variant='h3' className='text-center text-secondary'>
                 {slider.description}
               </Typography>
-              <Typography variant="h2" className="text-center">
+              <Typography variant='h2' className='text-center'>
                 {slider.title}
               </Typography>
 
@@ -55,19 +55,19 @@ export const Slider: React.FC = () => {
               alt={slider.title}
               width={600}
               height={500}
-              className="h-full w-full object-cover md:h-[500px] md:w-[600px]"
+              className='h-full w-full object-cover md:h-[500px] md:w-[600px]'
             />
           </div>
         ))}
       </div>
 
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-3">
+      <div className='absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-3'>
         {Array.from({ length: sliders.length }, (_, idx) => (
           <button
-            type="button"
+            type='button'
             key={idx}
             className={cn(
-              'ring-ring size-2.5 rounded-full ring-2',
+              'size-2.5 rounded-full ring-2 ring-ring',
               defferredCurrentSlide === idx ? 'bg-white' : 'bg-transparent',
               'transition-colors duration-200 ease-in-out',
             )}
@@ -75,7 +75,7 @@ export const Slider: React.FC = () => {
               setCurrentSlide(idx)
             }}
           >
-            <span className="sr-only">Slide {idx + 1}</span>
+            <span className='sr-only'>Slide {idx + 1}</span>
           </button>
         ))}
       </div>

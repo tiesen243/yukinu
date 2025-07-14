@@ -7,16 +7,16 @@ export const metadata = createMetadata({
 
 export default function PolicyPage() {
   return (
-    <main className="container py-12 md:py-24">
-      <h1 className="mb-8 text-4xl font-bold">Privacy Policy</h1>
-      <div className="prose prose-lg max-w-none">
+    <main className='container py-12 md:py-24'>
+      <h1 className='mb-8 text-4xl font-bold'>Privacy Policy</h1>
+      <div className='prose prose-lg max-w-none'>
         <p>
           Your privacy is important to us. It is Yukinu&apos;s policy to respect
           your privacy regarding any information we may collect from you across
           our website.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">1. Information We Collect</h2>
+        <h2 className='mt-8 text-2xl font-bold'>1. Information We Collect</h2>
         <p>
           We only ask for personal information when we truly need it to provide
           a service to you. We collect it by fair and lawful means, with your
@@ -24,11 +24,11 @@ export default function PolicyPage() {
           and how it will be used.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">
+        <h2 className='mt-8 text-2xl font-bold'>
           2. How We Use Your Information
         </h2>
         <p>We use the information we collect in various ways, including to:</p>
-        <ul className="list-disc pl-6">
+        <ul className='list-disc pl-6'>
           <li>Provide, operate, and maintain our website</li>
           <li>Improve, personalize, and expand our website</li>
           <li>Understand and analyze how you use our website</li>
@@ -43,7 +43,7 @@ export default function PolicyPage() {
           <li>Find and prevent fraud</li>
         </ul>
 
-        <h2 className="mt-8 text-2xl font-bold">3. Log Files</h2>
+        <h2 className='mt-8 text-2xl font-bold'>3. Log Files</h2>
         <p>
           Yukinu follows a standard procedure of using log files. These files
           log visitors when they visit websites. All hosting companies do this
@@ -57,7 +57,7 @@ export default function PolicyPage() {
           demographic information.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">4. Cookies and Web Beacons</h2>
+        <h2 className='mt-8 text-2xl font-bold'>4. Cookies and Web Beacons</h2>
         <p>
           Like any other website, Yukinu uses ‘cookies’. These cookies are used
           to store information including visitors’ preferences, and the pages on
@@ -66,7 +66,7 @@ export default function PolicyPage() {
           content based on visitors’ browser type and/or other information.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">
+        <h2 className='mt-8 text-2xl font-bold'>
           5. Third-Party Privacy Policies
         </h2>
         <p>
@@ -77,7 +77,7 @@ export default function PolicyPage() {
           to opt-out of certain options.
         </p>
 
-        <h2 className="mt-8 text-2xl font-bold">
+        <h2 className='mt-8 text-2xl font-bold'>
           6. Children&apos;s Information
         </h2>
         <p>

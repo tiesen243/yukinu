@@ -28,7 +28,7 @@ export const LoginForm: React.FC = () => {
 
   return (
     <form
-      className="grid gap-4"
+      className='grid gap-4'
       onSubmit={(e) => {
         e.preventDefault()
         e.stopPropagation()
@@ -36,12 +36,12 @@ export const LoginForm: React.FC = () => {
       }}
     >
       <form.Field
-        name="email"
+        name='email'
         render={({ field, meta }) => (
-          <div id={meta.id} className="grid gap-2">
+          <div id={meta.id} className='grid gap-2'>
             <form.Label>Email</form.Label>
             <form.Control {...field}>
-              <Input type="email" placeholder="yuki@example.com" />
+              <Input type='email' placeholder='yuki@example.com' />
             </form.Control>
             <form.Message />
           </div>
@@ -49,12 +49,12 @@ export const LoginForm: React.FC = () => {
       />
 
       <form.Field
-        name="password"
+        name='password'
         render={({ field, meta }) => (
-          <div id={meta.id} className="grid gap-2">
+          <div id={meta.id} className='grid gap-2'>
             <form.Label>Password</form.Label>
             <form.Control {...field}>
-              <Input type="password" placeholder="********" />
+              <Input type='password' placeholder='********' />
             </form.Control>
             <form.Message />
           </div>

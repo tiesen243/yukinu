@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@yuki/ui/card'
 
-import { RegisterForm } from './page.client'
+import { RegisterForm } from '@/app/(auth)/register/page.client'
 
 export default function RegisterPage() {
   return (
@@ -22,9 +22,9 @@ export default function RegisterPage() {
       <CardContent>
         <RegisterForm />
 
-        <p className="mt-4 text-sm">
+        <p className='mt-4 text-sm'>
           Already have an account?{' '}
-          <Link href={`/login`} className="hover:underline">
+          <Link href={`/login`} className='hover:underline'>
             Login
           </Link>
         </p>

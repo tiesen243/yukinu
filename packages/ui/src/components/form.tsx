@@ -233,7 +233,7 @@ function useForm<
 
     return (
       <label
-        data-slot="form-label"
+        data-slot='form-label'
         htmlFor={meta.formItemId}
         aria-disabled={state.isPending}
         aria-invalid={state.hasError}
@@ -256,7 +256,7 @@ function useForm<
 
     return (
       <Slot
-        data-slot="form-control"
+        data-slot='form-control'
         id={meta.formItemId}
         aria-describedby={
           !state.hasError
@@ -283,9 +283,9 @@ function useForm<
 
     return (
       <span
-        data-slot="form-description"
+        data-slot='form-description'
         id={meta.formDescriptionId}
-        className={cn('text-muted-foreground text-sm', className)}
+        className={cn('text-sm text-muted-foreground', className)}
         {...props}
       >
         {children}
@@ -303,9 +303,9 @@ function useForm<
 
     return (
       <span
-        data-slot="form-message"
+        data-slot='form-message'
         id={meta.formMessageId}
-        className={cn('text-destructive text-sm', className)}
+        className={cn('text-sm text-destructive', className)}
         {...props}
       >
         {body}

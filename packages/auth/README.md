@@ -29,7 +29,7 @@ import { SessionProvider } from '@yuki/auth/react'
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <body>
         <SessionProvider>{children}</SessionProvider>
       </body>

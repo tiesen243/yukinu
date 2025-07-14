@@ -2,17 +2,17 @@ import { ClockIcon, GlobeIcon, PackageIcon, TruckIcon } from '@yuki/ui/icons'
 
 export const deliveryFeatures = [
   {
-    icon: <TruckIcon className="h-6 w-6" />,
+    icon: <TruckIcon className='h-6 w-6' />,
     title: 'Fast Delivery',
     description: 'Multiple shipping speeds available',
   },
   {
-    icon: <ClockIcon className="h-6 w-6" />,
+    icon: <ClockIcon className='h-6 w-6' />,
     title: 'Secure Packaging',
     description: 'All items carefully protected',
   },
   {
-    icon: <GlobeIcon className="h-6 w-6" />,
+    icon: <GlobeIcon className='h-6 w-6' />,
     title: 'Worldwide Shipping',
     description: 'Delivery to 150+ countries',
   },
@@ -21,7 +21,7 @@ export const deliveryFeatures = [
 export const shippingOptions = [
   {
     name: 'Standard Shipping',
-    icon: <TruckIcon className="h-6 w-6" />,
+    icon: <TruckIcon className='h-6 w-6' />,
     timeframe: '5-7 business days',
     cost: 'Free on orders $50+, otherwise $5.99',
     description: 'Reliable delivery for everyday orders',
@@ -33,7 +33,7 @@ export const shippingOptions = [
   },
   {
     name: 'Express Shipping',
-    icon: <ClockIcon className="h-6 w-6" />,
+    icon: <ClockIcon className='h-6 w-6' />,
     timeframe: '2-3 business days',
     cost: '$12.99',
     description: 'Faster delivery when you need it sooner',
@@ -41,7 +41,7 @@ export const shippingOptions = [
   },
   {
     name: 'Overnight Shipping',
-    icon: <PackageIcon className="h-6 w-6" />,
+    icon: <PackageIcon className='h-6 w-6' />,
     timeframe: '1 business day',
     cost: '$24.99',
     description: 'Next-day delivery for urgent orders',
@@ -53,7 +53,7 @@ export const shippingOptions = [
   },
   {
     name: 'International Shipping',
-    icon: <GlobeIcon className="h-6 w-6" />,
+    icon: <GlobeIcon className='h-6 w-6' />,
     timeframe: '7-21 business days',
     cost: 'Varies by destination',
     description: 'Worldwide delivery to 150+ countries',

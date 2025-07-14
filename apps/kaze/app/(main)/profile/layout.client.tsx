@@ -16,12 +16,12 @@ export const Navigation = () => {
   const pathName = usePathname()
 
   return (
-    <Tabs defaultValue={pathName} className="hidden md:flex">
-      <TabsList className="flex h-fit flex-col" variant="light" asChild>
+    <Tabs defaultValue={pathName} className='hidden md:flex'>
+      <TabsList className='flex h-fit flex-col' variant='light' asChild>
         <nav>
           {navItems.map((item) => (
             <TabsTrigger value={item.href} key={item.name} asChild>
-              <Link href={item.href} className="w-full justify-start">
+              <Link href={item.href} className='w-full justify-start'>
                 <item.icon />
                 {item.name}
               </Link>

@@ -1,9 +1,9 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 
+import { ProductDetail } from '@/app/(main)/[slug]/page.client'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
-import { ProductDetail } from './page.client'
 
 export default async function ProductDetailPage({
   params,
@@ -48,18 +48,18 @@ export default async function ProductDetailPage({
   return (
     <HydrateClient>
       <script
-        type="application/ld+json"
+        type='application/ld+json'
         // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main className="container py-4">
-        <h1 className="sr-only">{product.name}</h1>
+      <main className='container py-4'>
+        <h1 className='sr-only'>{product.name}</h1>
         <Suspense
           fallback={
-            <div className="flex h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-4">
-              <div className="border-primary size-9 animate-spin rounded-full border-4 border-t-transparent" />
-              <p className="text-muted-foreground text-lg">
+            <div className='flex h-[calc(100dvh-6rem)] w-full flex-col items-center justify-center gap-4'>
+              <div className='size-9 animate-spin rounded-full border-4 border-primary border-t-transparent' />
+              <p className='text-lg text-muted-foreground'>
                 Loading product...
               </p>
             </div>
