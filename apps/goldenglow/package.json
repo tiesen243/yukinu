@@ -15,9 +15,14 @@
   },
   "prettier": "@yuki/prettier-config",
   "dependencies": {
+    "@tanstack/vue-query": "^5.83.0",
+    "@trpc/client": "catalog:api",
     "@vueuse/core": "^13.5.0",
+    "@yuki/api": "workspace:*",
     "@yuki/ui": "workspace:*",
+    "@yuki/validators": "workspace:*",
     "lucide-vue-next": "^0.525.0",
+    "superjson": "catalog:api",
     "vue": "^3.5.17",
     "vue-router": "^4.5.1"
   },

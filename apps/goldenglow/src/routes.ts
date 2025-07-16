@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import Index from '@/routes/_index.vue'
 import NotFound from '@/routes/not-found.vue'
+import ProductDetail from '@/routes/product-detail.vue'
 
 const routes = [
   {
@@ -12,6 +13,10 @@ const routes = [
   {
     path: '/:pathMatch(.*)*',
     component: NotFound,
+  },
+  {
+    path: '/:id',
+    component: ProductDetail,
   },
 ] as RouteRecordRaw[]
 
