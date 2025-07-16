@@ -84,7 +84,7 @@ import { productQueryOptions } from '@/services/product'
 const route = useRoute()
 const { id } = route.params
 
-const { data, isLoading } = useQuery(productQueryOptions({ id }))
+const { data, isLoading } = useQuery(productQueryOptions({ id: String(id) }))
 
 const discountedPrice = computed(() => {
   if (!data.value) return 0
