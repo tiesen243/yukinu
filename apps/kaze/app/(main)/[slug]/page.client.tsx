@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
@@ -41,18 +41,22 @@ export const ProductDetail = ({ id }: { id: string }) => {
       })
     },
   })
-  if (!product) return
 
-  const rating =
-    reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length ||
-    0
-  const discountedPrice = product.price * (1 - product.discount / 100)
+  const rating = useMemo(
+    () =>
+      reviews.reduce((acc, review) => acc + review.rating, 0) /
+        reviews.length || 0,
+    [reviews],
+  )
+  const discountedPrice = useMemo(
+    () => product.price * (1 - product.discount / 100),
+    [product.price, product.discount],
+  )
 
   return (
     <>
       <section className='mb-12 grid gap-8 lg:grid-cols-2'>
         <h2 className='sr-only'>{product.name} details section</h2>
-        {/* Product Images */}
         <section className='relative aspect-square overflow-hidden rounded-lg'>
           <h3 className='sr-only'>Product Image section</h3>
           <Image
@@ -62,11 +66,6 @@ export const ProductDetail = ({ id }: { id: string }) => {
             className='object-cover'
             priority
           />
-          {product.discount > 0 && (
-            <Badge className='absolute top-4 left-4 bg-red-500 hover:bg-red-600'>
-              -{product.discount}%
-            </Badge>
-          )}
         </section>
 
         <section className='space-y-6'>
@@ -106,7 +105,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
                   <span className='text-xl text-muted-foreground line-through'>
                     ${product.price.toFixed(2)}
                   </span>
-                  <Badge variant='destructive'>
+                  <Badge variant='error'>
                     Save ${(product.price - discountedPrice).toFixed(2)}
                   </Badge>
                 </>

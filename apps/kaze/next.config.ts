@@ -16,10 +16,6 @@ const nextConfig = {
     '@yuki/ui',
     '@yuki/validators',
   ],
-
-  experimental: {
-    dynamicOnHover: true,
-  },
 } satisfies NextConfig
 
 export default nextConfig

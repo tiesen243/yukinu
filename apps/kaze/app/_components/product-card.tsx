@@ -1,9 +1,11 @@
 'use client'
 
+import { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useMutation } from '@tanstack/react-query'
 
+import type { RouterOutputs } from '@yuki/api'
 import { Badge } from '@yuki/ui/badge'
 import { Button } from '@yuki/ui/button'
 import {
@@ -21,14 +23,7 @@ import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
 
 interface ProductCardProps {
-  product: {
-    id: string
-    name: string
-    description: string
-    price: number
-    image: string
-    createdAt: Date
-  }
+  product: RouterOutputs['product']['all']['products'][number]
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
@@ -47,8 +42,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     },
   })
 
-  const isNew =
-    product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const isNew = useMemo(
+    () => product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+    [product.createdAt],
+  )
+
+  const price = useMemo(
+    () =>
+      new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(product.price - product.price * (product.discount / 100)),
+    [product.price, product.discount],
+  )
 
   return (
     <Card className='group/product-card h-full overflow-hidden py-4 pt-0 transition-all hover:shadow-md'>
@@ -61,8 +67,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
             fill
           />
+          {product.discount > 0 && (
+            <Badge variant='error' className='absolute top-2 left-2 z-10'>
+              {product.discount}% OFF
+            </Badge>
+          )}
+
           {isNew && (
-            <Badge variant='info' className='absolute top-2 right-2'>
+            <Badge variant='info' className='absolute top-2 right-2 z-10'>
               New
             </Badge>
           )}
@@ -70,7 +82,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <CardHeader className='px-4'>
           <CardTitle className='line-clamp-1 text-lg'>{product.name}</CardTitle>
-          <span className='font-bold'>${product.price}</span>
+          <span className='font-medium'>
+            {price}
+
+            {product.discount > 0 && (
+              <del className='ml-2 text-sm text-muted-foreground'>
+                ${product.price.toFixed(2)}
+              </del>
+            )}
+          </span>
         </CardHeader>
 
         <CardContent className='px-4'>
