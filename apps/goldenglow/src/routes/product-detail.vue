@@ -78,13 +78,13 @@ import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { productOptions } from '@/api/product'
 import { trpc } from '@/lib/trpc'
-import { productQueryOptions } from '@/services/product'
 
 const route = useRoute()
 const { id } = route.params
 
-const { data, isLoading } = useQuery(productQueryOptions({ id: String(id) }))
+const { data, isLoading } = useQuery(productOptions.byId({ id: String(id) }))
 
 const discountedPrice = computed(() => {
   if (!data.value) return 0
