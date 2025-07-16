@@ -43,6 +43,12 @@ export const productRouter = {
       .innerJoin(categories, eq(products.categoryId, categories.id))
       .limit(1)
 
+    if (!product)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with ID ${input.id} not found`,
+      })
+
     return {
       product,
       reviews,
