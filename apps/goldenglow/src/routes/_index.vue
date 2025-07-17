@@ -4,9 +4,12 @@
       <p>Loading...</p>
     </template>
 
-    <div v-else class="grid grid-cols-4 gap-4">
+    <div
+      v-else-if="data"
+      class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
+    >
       <RouterLink
-        v-for="product in data"
+        v-for="product in data.products"
         :key="product.id"
         :to="`/${product.id}`"
         class="flex flex-col gap-4 rounded-xl border bg-card pb-6 text-card-foreground shadow-sm"
@@ -23,14 +26,16 @@
         </div>
       </RouterLink>
     </div>
+
+    <p v-else class="text-center text-muted-foreground">No products found.</p>
   </main>
 </template>
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
 
+import { productOptions } from '@/api/product'
 import { trpc } from '@/lib/trpc'
-import { productsQueryOptions } from '@/services/product'
 
-const { data, isLoading } = useQuery(productsQueryOptions({}))
+const { data, isLoading } = useQuery(productOptions.all({ limit: 12 }))
 </script>

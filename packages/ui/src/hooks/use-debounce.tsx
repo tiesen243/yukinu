@@ -1,18 +1,34 @@
 import * as React from 'react'
 
-export function useDebounce<T extends (...args: never[]) => void>(
-  callback: T,
+export function useDebounce<T extends (...args: never[]) => unknown>(
+  fn: T,
+  deps: React.DependencyList,
   delay: number,
 ): (...args: Parameters<T>) => void {
-  const timeoutRef = React.useRef<NodeJS.Timeout>(null)
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  return React.useCallback(
+  const debouncedFn = React.useCallback(
     (...args: Parameters<T>) => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-      timeoutRef.current = setTimeout(() => {
-        callback(...args)
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+
+      timerRef.current = setTimeout(() => {
+        fn(...args)
       }, delay)
     },
-    [callback, delay],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [delay, fn, ...deps],
   )
+
+  React.useEffect(
+    () => () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current)
+      }
+    },
+    [],
+  )
+
+  return debouncedFn
 }

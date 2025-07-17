@@ -27,10 +27,6 @@ export default [
       '@eslint-react/prefer-shorthand-boolean': 'warn',
       '@eslint-react/prefer-shorthand-fragment': 'warn',
       '@eslint-react/dom/no-unknown-property': ['error', { ignore: ['tw'] }],
-      '@eslint-react/naming-convention/component-name': [
-        'warn',
-        { rule: 'PascalCase', allowAllCaps: true },
-      ],
       '@eslint-react/naming-convention/filename-extension': [
         'warn',
         'as-needed',

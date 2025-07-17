@@ -1,6 +1,7 @@
 {
   "extends": "@yuki/tsconfig/internal-package.json",
   "compilerOptions": {
+    "lib": ["DOM", "ES2022"],
     "rootDir": "src"
   },
   "include": ["src"],

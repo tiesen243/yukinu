@@ -28,6 +28,7 @@ export const cartRouter = {
         productId: item.product.id,
         productName: item.product.name,
         productImage: item.product.image,
+        productStock: item.product.stock,
         quantity: item.quantity,
         price: item.product.price,
         discount: item.product.discount,
