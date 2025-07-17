@@ -1,5 +1,6 @@
 import { and, db, eq } from '@yuki/db'
 import { accounts, sessions, users } from '@yuki/db/schema'
+import { env } from '@yuki/validators/env'
 
 import type { AuthOptions } from './core/types'
 import { encodeHex, hashSecret } from './core/crypto'
@@ -15,12 +16,12 @@ export const authOptions = {
   },
   providers: {
     facebook: new Facebook({
-      clientId: process.env.AUTH_FACEBOOK_ID ?? '',
-      clientSecret: process.env.AUTH_FACEBOOK_SECRET ?? '',
+      clientId: env.AUTH_FACEBOOK_ID,
+      clientSecret: env.AUTH_FACEBOOK_SECRET,
     }),
     google: new Google({
-      clientId: process.env.AUTH_GOOGLE_ID ?? '',
-      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? '',
+      clientId: env.AUTH_GOOGLE_ID,
+      clientSecret: env.AUTH_GOOGLE_SECRET,
     }),
   },
 } satisfies AuthOptions

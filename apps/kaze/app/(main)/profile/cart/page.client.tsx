@@ -104,24 +104,27 @@ const CartItem: React.FC<{
     },
   })
 
-  const debouncedUpdate = useDebounce((quantity: number) => {
-    if (quantity !== item.quantity && quantity > 0) {
-      mutate({
-        productId: item.productId,
-        type: 'replace',
-        quantity,
-      })
-    }
-  }, 500)
+  const debouncedUpdate = useDebounce(
+    (quantity: number) => {
+      if (quantity !== item.quantity && quantity > 0)
+        mutate({
+          productId: item.productId,
+          type: 'replace',
+          quantity,
+        })
+    },
+    [],
+    500,
+  )
 
   const handleQuantityChange = useCallback(
     (newQuantity: number) => {
-      if (newQuantity > 0) {
+      if (newQuantity > 0 && newQuantity <= item.productStock) {
         setLocalQuantity(newQuantity)
         debouncedUpdate(newQuantity)
       }
     },
-    [debouncedUpdate],
+    [debouncedUpdate, item.productStock],
   )
 
   return (
@@ -146,13 +149,12 @@ const CartItem: React.FC<{
         </p>
       </Link>
 
-      {/* Quantity Controls */}
       <div className='flex items-center gap-2'>
         <Button
           variant='outline'
           size='icon'
           onClick={() => {
-            handleQuantityChange(item.quantity - 1)
+            handleQuantityChange(localQuantity - 1)
           }}
           disabled={isPending || item.quantity <= 1}
         >
@@ -162,6 +164,8 @@ const CartItem: React.FC<{
         <Input
           type='number'
           value={localQuantity}
+          min={1}
+          max={item.productStock}
           onChange={(e) => {
             const value = parseInt(e.target.value, 10)
             if (!isNaN(value) && value > 0) handleQuantityChange(value)
@@ -174,9 +178,9 @@ const CartItem: React.FC<{
           variant='outline'
           size='icon'
           onClick={() => {
-            handleQuantityChange(item.quantity + 1)
+            handleQuantityChange(localQuantity + 1)
           }}
-          disabled={isPending}
+          disabled={isPending || localQuantity >= item.productStock}
         >
           <PlusIcon />
         </Button>

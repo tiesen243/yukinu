@@ -72,14 +72,16 @@ function TRPCReactProvider({
     }),
   )
 
-  // eslint-disable-next-line @eslint-react/naming-convention/use-state
-  const [trpc] = React.useState(() =>
-    createTRPCOptionsProxy<AppRouter>({ client: trpcClient, queryClient }),
-  )
-
   const value = React.useMemo(
-    () => ({ trpc, trpcClient, queryClient }),
-    [trpc, trpcClient, queryClient],
+    () => ({
+      trpc: createTRPCOptionsProxy<AppRouter>({
+        client: trpcClient,
+        queryClient,
+      }),
+      trpcClient,
+      queryClient,
+    }),
+    [trpcClient, queryClient],
   )
 
   return (

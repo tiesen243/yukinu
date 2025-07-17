@@ -5,7 +5,7 @@
     </template>
 
     <div
-      v-else
+      v-else-if="data"
       class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
     >
       <RouterLink
@@ -26,6 +26,8 @@
         </div>
       </RouterLink>
     </div>
+
+    <p v-else class="text-center text-muted-foreground">No products found.</p>
   </main>
 </template>
 
