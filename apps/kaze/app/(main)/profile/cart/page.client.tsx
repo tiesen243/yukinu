@@ -106,25 +106,28 @@ const CartItem: React.FC<{
 
   const debouncedUpdate = useDebounce(
     (quantity: number) => {
-      if (quantity !== item.quantity && quantity > 0)
-        mutate({
-          productId: item.productId,
-          type: 'replace',
-          quantity,
-        })
+      mutate({
+        productId: item.productId,
+        type: 'replace',
+        quantity,
+      })
     },
-    [],
+    [item.productId],
     500,
   )
 
   const handleQuantityChange = useCallback(
     (newQuantity: number) => {
-      if (newQuantity > 0 && newQuantity <= item.productStock) {
+      if (
+        newQuantity > 0 &&
+        newQuantity !== item.quantity &&
+        newQuantity <= item.productStock
+      ) {
         setLocalQuantity(newQuantity)
         debouncedUpdate(newQuantity)
       }
     },
-    [debouncedUpdate, item.productStock],
+    [debouncedUpdate, item.productStock, item.quantity],
   )
 
   return (
