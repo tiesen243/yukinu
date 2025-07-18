@@ -35,7 +35,6 @@
 import { useQuery } from '@tanstack/vue-query'
 
 import { productOptions } from '@/api/product'
-import { trpc } from '@/lib/trpc'
 
 const { data, isLoading } = useQuery(productOptions.all({ limit: 12 }))
 </script>

@@ -8,7 +8,7 @@
       <Typography variant="h3" class="mb-0">Page Not Found</Typography>
     </div>
 
-    <Button as="RouterLink" to="/"> Take me home </Button>
+    <Button as="RouterLink" to="/">Take me home</Button>
   </main>
 </template>
 

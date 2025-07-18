@@ -79,7 +79,6 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { productOptions } from '@/api/product'
-import { trpc } from '@/lib/trpc'
 
 const route = useRoute()
 const { id } = route.params
