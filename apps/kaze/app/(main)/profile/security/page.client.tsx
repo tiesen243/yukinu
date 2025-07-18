@@ -1,7 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
+import type { Session } from '@yuki/auth'
 import { Button } from '@yuki/ui/button'
 import { Checkbox } from '@yuki/ui/checkbox'
 import { useForm } from '@yuki/ui/form'
@@ -14,7 +16,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@yuki/ui/reponsive-dialog'
+} from '@yuki/ui/responsive-dialog'
 import { toast } from '@yuki/ui/sonner'
 import {
   changePasswordSchema,
@@ -118,6 +120,71 @@ export const ChangePasswordForm: React.FC = () => {
     </form>
   )
 }
+
+export const SessionList: React.FC = () => {
+  const { trpc } = useTRPC()
+  const { data, isLoading } = useQuery(trpc.auth.listSessions.queryOptions())
+
+  return (
+    <div className='grid gap-4'>
+      {isLoading
+        ? Array.from({ length: 3 }, (_, index) => (
+            <SessionCardSkeleton key={index} />
+          ))
+        : data?.map((session) => (
+            <SessionCard key={session.token} session={session} />
+          ))}
+    </div>
+  )
+}
+
+const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
+  const { trpc, queryClient } = useTRPC()
+  const { mutate, isPending } = useMutation({
+    ...trpc.auth.deleteSession.mutationOptions(),
+    onSuccess: async () => {
+      toast.success('Session deleted successfully!')
+      await queryClient.invalidateQueries(trpc.auth.listSessions.queryFilter())
+    },
+  })
+
+  return (
+    <div className='flex flex-col justify-between gap-4 rounded-lg border bg-card p-4 shadow-sm md:flex-row md:items-center'>
+      <div className='flex-1 space-y-1'>
+        <h4 className='text-sm font-medium'>User Agent: {session.userAgent}</h4>
+        <div className='text-xs text-muted-foreground'>
+          Expires: {new Date(session.expires).toLocaleString()}
+        </div>
+      </div>
+      <Button
+        variant='destructive'
+        size='sm'
+        disabled={isPending}
+        onClick={() => {
+          mutate({ token: session.token })
+        }}
+      >
+        Delete Session
+      </Button>
+    </div>
+  )
+}
+
+const SessionCardSkeleton: React.FC = () => (
+  <div className='flex flex-col justify-between gap-4 rounded-lg border bg-card p-4 shadow-sm md:flex-row md:items-center'>
+    <div className='flex-1 space-y-1'>
+      <h4 className='w-3/4 animate-pulse rounded-md bg-current text-sm font-medium'>
+        &nbsp;
+      </h4>
+      <div className='w-1/2 animate-pulse rounded-md bg-current text-xs text-muted-foreground'>
+        &nbsp;
+      </div>
+    </div>
+    <Button variant='destructive' size='sm' disabled>
+      Delete Session
+    </Button>
+  </div>
+)
 
 export const DeleteAccountForm: React.FC = () => {
   const { trpcClient } = useTRPC()

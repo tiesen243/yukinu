@@ -12,7 +12,7 @@ export default async function ProfilePage() {
   if (!user) return null
 
   return (
-    <section className='container grid gap-6'>
+    <section className='grid gap-6'>
       <h2 className='sr-only'>User Profile Information section</h2>
 
       <Card>

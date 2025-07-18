@@ -41,3 +41,7 @@ export const deleteAccountSchema = z.object({
     message: 'You must type "Delete my account" to confirm',
   }),
 })
+
+export const deleteSessionSchema = z.object({
+  token: z.string(),
+})

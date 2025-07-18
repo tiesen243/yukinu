@@ -54,6 +54,7 @@ export const sessions = pgTable(
   'session',
   (t) => ({
     token: t.varchar({ length: 64 }).primaryKey().notNull(),
+    userAgent: t.varchar({ length: 255 }).notNull(),
     expires: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
     userId: t
       .varchar({ length: 25 })
