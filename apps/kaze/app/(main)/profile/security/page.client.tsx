@@ -14,7 +14,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@yuki/ui/reponsive-dialog'
+} from '@yuki/ui/responsive-dialog'
 import { toast } from '@yuki/ui/sonner'
 import {
   changePasswordSchema,
