@@ -72,7 +72,7 @@ This monorepo contains multiple applications and shared packages:
 ### Prerequisites
 
 - **Node.js** 18+ or **Bun** runtime
-- **PostgreSQL** database (local or Neon)
+- **PostgreSQL** database ([Neon](https://neon.tech))
 - **Git** for version control
 
 ### Installation
@@ -300,7 +300,7 @@ AUTH_FACEBOOK_SECRET="your-facebook-app-secret"
 
 ### Database Setup
 
-1. Create a PostgreSQL database ([neon](https://neon.tech) )
+1. Create a PostgreSQL database ([Neon](https://neon.tech))
 2. Update `DATABASE_URL` in your environment
 3. Run migrations: `bun run db:push`
 
