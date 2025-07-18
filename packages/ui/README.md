@@ -113,7 +113,7 @@ src/
 ├── hooks/                    # Custom React hooks
 ├── lib/
 │   └── utils.ts              # cn() utility and helpers
-├──  tailwind.css             # Tailwind base styles and variables
+├── tailwind.css              # Tailwind base styles and variables
 └── components.json           # shadcn/ui configuration
 ```
 
