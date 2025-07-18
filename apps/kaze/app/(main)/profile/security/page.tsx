@@ -12,7 +12,7 @@ export default function AddressPage() {
 
       <section>
         <Typography variant='h3'>Change Password</Typography>
-        <ChangePasswordFornm />
+        <ChangePasswordForm />
       </section>
 
       <section>

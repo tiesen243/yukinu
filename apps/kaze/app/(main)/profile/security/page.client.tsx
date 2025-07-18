@@ -14,7 +14,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@yuki/ui/responsive-dialog'
+} from '@yuki/ui/reponsive-dialog'
 import { toast } from '@yuki/ui/sonner'
 import {
   changePasswordSchema,
@@ -23,7 +23,7 @@ import {
 
 import { useTRPC } from '@/trpc/react'
 
-export const ChangePasswordFornm: React.FC = () => {
+export const ChangePasswordForm: React.FC = () => {
   const { trpcClient } = useTRPC()
   const router = useRouter()
 
