@@ -1,7 +1,9 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
+import type { Session } from '@yuki/auth'
 import { Button } from '@yuki/ui/button'
 import { Checkbox } from '@yuki/ui/checkbox'
 import { useForm } from '@yuki/ui/form'
@@ -116,6 +118,57 @@ export const ChangePasswordForm: React.FC = () => {
         Change Password
       </Button>
     </form>
+  )
+}
+
+export const SessionList: React.FC = () => {
+  const { trpc } = useTRPC()
+  const { data, isLoading } = useQuery(trpc.auth.listSessions.queryOptions())
+
+  return (
+    <div className='grid gap-4'>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        data?.map((session) => (
+          <SessionCard key={session.token} session={session} />
+        ))
+      )}
+    </div>
+  )
+}
+
+const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
+  const { trpc, queryClient } = useTRPC()
+  const { mutate, isPending } = useMutation({
+    ...trpc.auth.deleteSession.mutationOptions(),
+    onSuccess: async () => {
+      toast.success('Session deleted successfully!')
+      await queryClient.invalidateQueries(trpc.auth.listSessions.queryFilter())
+    },
+  })
+
+  return (
+    <div className='flex flex-col justify-between gap-4 rounded-lg border bg-card p-4 shadow-sm md:flex-row md:items-center'>
+      <div className='space-y-1'>
+        <div className='text-sm font-medium'>
+          User Agent: {session.userAgent}
+        </div>
+        <div className='text-xs text-muted-foreground'>
+          Expires: {new Date(session.expires).toLocaleString()}
+        </div>
+      </div>
+      <Button
+        variant='destructive'
+        size='sm'
+        disabled={isPending}
+        onClick={() => {
+          mutate({ token: session.token })
+        }}
+      >
+        Delete Session
+      </Button>
+    </div>
   )
 }
 

@@ -18,18 +18,22 @@ export function Auth(opts: AuthOptions) {
 
   const { adapter, cookieKeys, cookieOptions, providers, session } = options
 
-  async function createSession(userId: string): Promise<Session> {
+  async function createSession(
+    userId: string,
+    userAgent: string,
+  ): Promise<Session> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
     await adapter.createSession({
       token: encodeHex(hashToken),
+      userAgent,
       expires,
       userId,
     })
 
-    return { token, userId, expires }
+    return { token, userAgent, expires, userId }
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -57,10 +61,13 @@ export function Auth(opts: AuthOptions) {
     return result
   }
 
-  async function signIn(opts: {
-    email: string
-    password: string
-  }): Promise<Session> {
+  async function signIn(
+    opts: {
+      email: string
+      password: string
+    },
+    userAgent = 'unknown',
+  ): Promise<Session> {
     const { email, password } = opts
 
     const user = await adapter.getUserByEmail(email)
@@ -72,7 +79,7 @@ export function Auth(opts: AuthOptions) {
     const isValid = await new Password().verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
-    return createSession(user.id)
+    return createSession(user.id, userAgent)
   }
 
   async function signOut(request: Request) {
@@ -85,10 +92,11 @@ export function Auth(opts: AuthOptions) {
 
   async function getOrCreateUser(
     opts: Omit<OauthAccount & Account, 'userId'>,
+    userAgent: string,
   ): Promise<Session> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount) return createSession(existingAccount.userId)
+    if (existingAccount) return createSession(existingAccount.userId, userAgent)
 
     const existingUser = await adapter.getUserByEmail(userData.email)
     const userId =
@@ -101,7 +109,7 @@ export function Auth(opts: AuthOptions) {
       userId,
       password: null,
     })
-    return createSession(userId)
+    return createSession(userId, userAgent)
   }
 
   return {
@@ -162,6 +170,8 @@ export function Auth(opts: AuthOptions) {
             const instance = options.providers[provider]
             if (!instance) throw new Error(`Provider ${provider} not found`)
 
+            const userAgent = request.headers.get('user-agent') ?? ''
+
             const code = searchParams.get('code') ?? ''
             const state = searchParams.get('state') ?? ''
             const storedState = cookies.get(cookieKeys.state) ?? ''
@@ -171,11 +181,14 @@ export function Auth(opts: AuthOptions) {
               throw new Error('Invalid state or code')
 
             const userData = await instance.fetchUserData(code, codeVerifier)
-            const session = await getOrCreateUser({
-              ...userData,
-              provider,
-              password: null,
-            })
+            const session = await getOrCreateUser(
+              {
+                ...userData,
+                provider,
+                password: null,
+              },
+              userAgent,
+            )
 
             const Location = new URL(redirectTo, request.url).toString()
             const response = new Response(null, {
@@ -208,7 +221,8 @@ export function Auth(opts: AuthOptions) {
            */
           if (pathname === '/api/auth/sign-in') {
             const body = (await request.json()) as never
-            const result = await signIn(body)
+            const userAgent = request.headers.get('user-agent') ?? ''
+            const result = await signIn(body, userAgent)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {

@@ -42,8 +42,9 @@ export interface OauthAccount {
 
 export interface Session {
   token: string
-  userId: string
+  userAgent: string
   expires: Date
+  userId: string
 }
 
 export interface SessionResult {

@@ -7,6 +7,7 @@ import { accounts, cartItems, sessions, users } from '@yuki/db/schema'
 import {
   changePasswordSchema,
   deleteAccountSchema,
+  deleteSessionSchema,
   signUpSchema,
 } from '@yuki/validators/auth'
 
@@ -129,5 +130,24 @@ export const authRouter = {
         await tx.delete(sessions).where(eq(sessions.userId, userId))
         await tx.delete(cartItems).where(eq(cartItems.userId, userId))
       })
+    }),
+
+  listSessions: protectedProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id
+    return ctx.db.query.sessions.findMany({
+      where: eq(sessions.userId, userId),
+      orderBy: (sessions, { desc }) => [desc(sessions.expires)],
+    })
+  }),
+
+  deleteSession: protectedProcedure
+    .input(deleteSessionSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id
+      await ctx.db
+        .delete(sessions)
+        .where(
+          and(eq(sessions.token, input.token), eq(sessions.userId, userId)),
+        )
     }),
 } satisfies TRPCRouterRecord
