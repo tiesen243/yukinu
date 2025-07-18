@@ -127,13 +127,13 @@ export const SessionList: React.FC = () => {
 
   return (
     <div className='grid gap-4'>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        data?.map((session) => (
-          <SessionCard key={session.token} session={session} />
-        ))
-      )}
+      {isLoading
+        ? Array.from({ length: 3 }, (_, index) => (
+            <SessionCardSkeleton key={index} />
+          ))
+        : data?.map((session) => (
+            <SessionCard key={session.token} session={session} />
+          ))}
     </div>
   )
 }
@@ -150,10 +150,8 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
 
   return (
     <div className='flex flex-col justify-between gap-4 rounded-lg border bg-card p-4 shadow-sm md:flex-row md:items-center'>
-      <div className='space-y-1'>
-        <div className='text-sm font-medium'>
-          User Agent: {session.userAgent}
-        </div>
+      <div className='flex-1 space-y-1'>
+        <h4 className='text-sm font-medium'>User Agent: {session.userAgent}</h4>
         <div className='text-xs text-muted-foreground'>
           Expires: {new Date(session.expires).toLocaleString()}
         </div>
@@ -171,6 +169,22 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
     </div>
   )
 }
+
+const SessionCardSkeleton: React.FC = () => (
+  <div className='flex flex-col justify-between gap-4 rounded-lg border bg-card p-4 shadow-sm md:flex-row md:items-center'>
+    <div className='flex-1 space-y-1'>
+      <h4 className='w-3/4 animate-pulse rounded-md bg-current text-sm font-medium'>
+        &nbsp;
+      </h4>
+      <div className='w-1/2 animate-pulse rounded-md bg-current text-xs text-muted-foreground'>
+        &nbsp;
+      </div>
+    </div>
+    <Button variant='destructive' size='sm' disabled>
+      Delete Session
+    </Button>
+  </div>
+)
 
 export const DeleteAccountForm: React.FC = () => {
   const { trpcClient } = useTRPC()
