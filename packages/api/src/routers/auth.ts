@@ -3,8 +3,12 @@ import { TRPCError } from '@trpc/server'
 
 import { Password } from '@yuki/auth'
 import { and, eq } from '@yuki/db'
-import { accounts, sessions, users } from '@yuki/db/schema'
-import { changePasswordSchema, signUpSchema } from '@yuki/validators/auth'
+import { accounts, cartItems, sessions, users } from '@yuki/db/schema'
+import {
+  changePasswordSchema,
+  deleteAccountSchema,
+  signUpSchema,
+} from '@yuki/validators/auth'
 
 import { protectedProcedure, publicProcedure } from '../trpc'
 
@@ -52,11 +56,17 @@ export const authRouter = {
       const account = await ctx.db.query.accounts.findFirst({
         where: and(
           eq(accounts.provider, 'credentials'),
-          eq(accounts.userId, userId),
+          eq(accounts.accountId, userId),
         ),
         columns: { password: true },
       })
-      if (account?.password && input.currentPassword) {
+
+      if (account?.password) {
+        if (!input.currentPassword)
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Current password is required',
+          })
         const isValid = await password.verify(
           account.password,
           input.currentPassword,
@@ -80,7 +90,7 @@ export const authRouter = {
             password: hashedPassword,
           })
           .onConflictDoUpdate({
-            target: [accounts.provider, accounts.userId],
+            target: [accounts.provider, accounts.accountId],
             set: { password: hashedPassword },
           })
 
@@ -89,5 +99,35 @@ export const authRouter = {
       })
 
       return { message: 'Password changed successfully' }
+    }),
+
+  deleteAccount: protectedProcedure
+    .input(deleteAccountSchema)
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id
+      const account = await ctx.db.query.accounts.findFirst({
+        where: and(
+          eq(accounts.provider, 'credentials'),
+          eq(accounts.accountId, userId),
+        ),
+        columns: { password: true },
+      })
+
+      const isValid = await password.verify(
+        account?.password ?? '',
+        input.password,
+      )
+      if (!isValid)
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Password is incorrect',
+        })
+
+      await ctx.db.transaction(async (tx) => {
+        await tx.delete(users).where(eq(users.id, userId))
+        await tx.delete(accounts).where(eq(accounts.userId, userId))
+        await tx.delete(sessions).where(eq(sessions.userId, userId))
+        await tx.delete(cartItems).where(eq(cartItems.userId, userId))
+      })
     }),
 } satisfies TRPCRouterRecord

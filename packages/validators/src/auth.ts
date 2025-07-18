@@ -34,3 +34,10 @@ export const changePasswordSchema = z
     path: ['confirmNewPassword'],
     error: 'Passwords do not match',
   })
+
+export const deleteAccountSchema = z.object({
+  password: passwordRegex,
+  confirm: z.string().refine((val) => val === 'Delete my account', {
+    message: 'You must type "Delete my account" to confirm',
+  }),
+})
