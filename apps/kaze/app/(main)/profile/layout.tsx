@@ -1,3 +1,8 @@
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+
+import { auth } from '@yuki/auth'
+
 import { Navigation } from '@/app/(main)/profile/layout.client'
 
 export default function ProfileLayout({
@@ -11,4 +16,14 @@ export default function ProfileLayout({
       {children}
     </main>
   )
+}
+
+export async function generateMetadata() {
+  const session = await auth({ headers: await headers() })
+  if (!session.user) redirect('/login')
+
+  return {
+    title: `${session.user.name}'s Profile`,
+    description: 'Manage your account settings and preferences.',
+  }
 }
