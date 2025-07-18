@@ -1,7 +1,7 @@
 import { Typography } from '@yuki/ui/typography'
 
 import {
-  ChangePasswordFornm,
+  ChangePasswordForm,
   DeleteAccountForm,
 } from '@/app/(main)/profile/security/page.client'
 
