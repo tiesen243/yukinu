@@ -74,9 +74,9 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
+import { useQuery } from '@tanstack/vue-query'
 
 import { productOptions } from '@/api/product'
 

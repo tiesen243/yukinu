@@ -1,11 +1,11 @@
 import '@/globals.css'
 
+import { createApp } from 'vue'
 import {
   defaultShouldDehydrateQuery,
   VueQueryPlugin,
 } from '@tanstack/vue-query'
 import SuperJSON from 'superjson'
-import { createApp } from 'vue'
 
 import App from '@/App.vue'
 import { router } from '@/routes'

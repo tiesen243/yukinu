@@ -1,6 +1,6 @@
+import vueParser from 'vue-eslint-parser'
 import vuePlugin from 'eslint-plugin-vue'
 import { parser } from 'typescript-eslint'
-import vueParser from 'vue-eslint-parser'
 
 import baseConfig, { restrictEnvAccess } from '@yuki/eslint-config/base'
 
