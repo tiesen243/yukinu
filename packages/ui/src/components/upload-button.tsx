@@ -2,13 +2,16 @@
 
 import * as React from 'react'
 
-import type { ClientUploadedFileData } from '@yuki/uploader/react'
+import type {
+  ClientUploadedFileData,
+  OurFileRouter,
+} from '@yuki/uploader/react'
 import { Button } from '@yuki/ui/button'
 import { useUploadThing } from '@yuki/uploader/react'
 
 interface UploadButtonProps
   extends Omit<React.ComponentProps<typeof Button>, 'onClick'> {
-  endpoint: 'productUploader' | 'avatarUploader'
+  endpoint: keyof OurFileRouter
   onClientUploadComplete?: (
     res: ClientUploadedFileData<{ uploadedBy: string }>[],
   ) => Promise<void> | void

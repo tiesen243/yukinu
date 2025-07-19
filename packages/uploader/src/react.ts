@@ -11,4 +11,5 @@ const UploadButton = generateUploadButton<OurFileRouter>()
 const UploadDropzone = generateUploadDropzone<OurFileRouter>()
 
 export type { ClientUploadedFileData } from 'uploadthing/types'
+export type { OurFileRouter }
 export { useUploadThing, uploadFiles, UploadButton, UploadDropzone }
