@@ -52,7 +52,7 @@
     "@yuki/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "catalog:tailwind",
     "tw-animate-css": "^1.3.5",
     "typescript": "catalog:"
   }

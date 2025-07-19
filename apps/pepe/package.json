@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "@react-router/dev": "^7.7.0",
-    "@tailwindcss/vite": "^4.1.11",
+    "@tailwindcss/vite": "catalog:tailwind",
     "@types/node": "catalog:",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
@@ -45,7 +45,7 @@
     "dotenv-cli": "catalog:",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
     "vite": "^7.0.5",
     "vite-tsconfig-paths": "^5.1.4"
