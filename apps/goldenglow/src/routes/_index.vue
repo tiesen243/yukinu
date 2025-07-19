@@ -11,7 +11,7 @@
       <RouterLink
         v-for="product in data.products"
         :key="product.id"
-        :to="`/${product.id}`"
+        :to="`/p/${product.id}`"
         class="flex flex-col gap-4 rounded-xl border bg-card pb-6 text-card-foreground shadow-sm"
       >
         <img :src="product.image" class="rounded-t-xl" />

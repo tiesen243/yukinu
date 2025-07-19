@@ -62,10 +62,7 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function signIn(
-    opts: {
-      email: string
-      password: string
-    },
+    opts: { email: string; password: string },
     userAgent = 'unknown',
   ): Promise<Session> {
     const { email, password } = opts

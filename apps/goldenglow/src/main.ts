@@ -11,7 +11,6 @@ import App from '@/App.vue'
 import { router } from '@/routes'
 
 const app = createApp(App)
-app.use(router)
 
 app.use(VueQueryPlugin, {
   queryClientConfig: {
@@ -33,5 +32,7 @@ app.use(VueQueryPlugin, {
     },
   },
 })
+
+app.use(router)
 
 app.mount('#app')
