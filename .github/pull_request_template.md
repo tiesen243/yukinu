@@ -18,6 +18,7 @@ Brief description of the changes made in this PR.
 - [ ] `apps/nextjs` - Next.js application
 - [ ] `apps/react-router` - React Router application
 - [ ] `packages/api` - tRPC API package
+- [ ] `packages/auth` - Authentication package
 - [ ] `packages/db` - Database package
 - [ ] `packages/ui` - UI components
 - [ ] `packages/validators` - Validation schemas
