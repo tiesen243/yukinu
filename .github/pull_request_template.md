@@ -21,6 +21,7 @@ Brief description of the changes made in this PR.
 - [ ] `packages/auth` - Authentication package
 - [ ] `packages/db` - Database package
 - [ ] `packages/ui` - UI components
+- [ ] `packages/uploader` - File uploader package
 - [ ] `packages/validators` - Validation schemas
 - [ ] `tools/*` - Build tools and configurations
 

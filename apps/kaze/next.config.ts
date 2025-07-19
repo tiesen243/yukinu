@@ -14,6 +14,7 @@ const nextConfig = {
     '@yuki/auth',
     '@yuki/db',
     '@yuki/ui',
+    '@yuki/uploader',
     '@yuki/validators',
   ],
 } satisfies NextConfig

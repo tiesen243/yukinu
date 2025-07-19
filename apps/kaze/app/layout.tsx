@@ -6,6 +6,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import { SessionProvider } from '@yuki/auth/react'
 import { cn, ThemeProvider } from '@yuki/ui'
 import { Toaster } from '@yuki/ui/sonner'
+import { NextSSRPlugin, routerConfig } from '@yuki/uploader/next'
 
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
@@ -47,6 +48,8 @@ export default function RootLayout({
 
           <Toaster />
         </ThemeProvider>
+
+        <NextSSRPlugin routerConfig={routerConfig} />
       </body>
     </html>
   )

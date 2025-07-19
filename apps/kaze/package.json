@@ -22,6 +22,7 @@
     "@yuki/auth": "workspace:*",
     "@yuki/db": "workspace:*",
     "@yuki/ui": "workspace:*",
+    "@yuki/uploader": "workspace:*",
     "@yuki/validators": "workspace:*",
     "next": "15.4.2",
     "nuqs": "^2.4.3",
