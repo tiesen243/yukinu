@@ -97,7 +97,9 @@ export function Auth(opts: AuthOptions) {
 
     const existingUser = await adapter.getUserByEmail(userData.email)
     const userId =
-      existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
+      existingUser?.id ??
+      (await adapter.createUser({ ...userData, role: 'user' }))?.id ??
+      ''
     if (!userId) throw new Error('Failed to create user')
 
     await adapter.createAccount({
