@@ -162,6 +162,7 @@ bun run build
 ```
 
 When adding new features, ensure they:
+
 - Pass TypeScript compilation
 - Follow existing patterns
 - Don't break the build
@@ -229,6 +230,7 @@ bun run build
 ### Bug Reports
 
 Include:
+
 - Clear description of the issue
 - Steps to reproduce
 - Expected vs actual behavior
@@ -238,6 +240,7 @@ Include:
 ### Feature Requests
 
 Include:
+
 - Clear description of the feature
 - Use case and motivation
 - Proposed implementation approach
