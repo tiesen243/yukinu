@@ -27,7 +27,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.1.11",
+    "@tailwindcss/vite": "catalog:tailwind",
     "@vitejs/plugin-vue": "^6.0.0",
     "@yuki/eslint-config": "workspace:*",
     "@yuki/prettier-config": "workspace:*",
@@ -36,6 +36,7 @@
     "eslint": "catalog:",
     "eslint-plugin-vue": "^10.3.0",
     "prettier": "catalog:",
+    "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
     "vite": "^7.0.5",
     "vite-tsconfig-paths": "^5.1.4",

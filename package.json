@@ -15,18 +15,23 @@
       "typescript": "^5.8.3"
     },
     "catalogs": {
-      "react": {
-        "@types/react": "^19.1.8",
-        "@types/react-dom": "^19.1.6",
-        "react": "^19.1.0",
-        "react-dom": "^19.1.0"
-      },
       "api": {
         "@tanstack/react-query": "^5.83.0",
         "@trpc/server": "^11.4.3",
         "@trpc/client": "^11.4.3",
         "@trpc/tanstack-react-query": "^11.4.3",
         "superjson": "^2.2.2"
+      },
+      "react": {
+        "@types/react": "^19.1.8",
+        "@types/react-dom": "^19.1.6",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0"
+      },
+      "tailwind": {
+        "@tailwindcss/postcss": "^4.1.11",
+        "@tailwindcss/vite": "^4.1.11",
+        "tailwindcss": "^4.1.11"
       }
     }
   },
