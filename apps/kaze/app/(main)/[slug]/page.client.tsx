@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import { Badge } from '@yuki/ui/badge'
@@ -20,6 +21,7 @@ import { toast } from '@yuki/ui/sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@yuki/ui/tabs'
 import { Typography } from '@yuki/ui/typography'
 
+import { ProductCard } from '@/app/_components/product-card'
 import { useTRPC } from '@/trpc/react'
 
 export const ProductDetail = ({ id }: { id: string }) => {
@@ -71,8 +73,15 @@ export const ProductDetail = ({ id }: { id: string }) => {
         <section className='space-y-6'>
           <h2 className='sr-only'>Product Details section</h2>
           <section>
-            <Badge variant='secondary' className='mb-2'>
-              {product.category}
+            <Badge variant='secondary' className='mb-2' asChild>
+              <Link
+                href={{
+                  pathname: '/search',
+                  query: { category: product.category.id },
+                }}
+              >
+                {product.category.name}
+              </Link>
             </Badge>
             <Typography variant='h3'>{product.name}</Typography>
             <div className='mb-4 flex items-center gap-2'>
@@ -272,4 +281,24 @@ export const ProductDetail = ({ id }: { id: string }) => {
       </Tabs>
     </>
   )
+}
+
+export const RelativeProducts = ({
+  categoryId,
+  productId,
+}: {
+  categoryId: string
+  productId: string
+}) => {
+  const { trpc } = useTRPC()
+  const { data } = useSuspenseQuery(
+    trpc.product.relativeProducts.queryOptions({
+      categoryId,
+      id: productId,
+    }),
+  )
+
+  return data.map((product) => (
+    <ProductCard key={product.id} product={product} />
+  ))
 }
