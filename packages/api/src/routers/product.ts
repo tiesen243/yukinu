@@ -97,7 +97,10 @@ const productDetail = {
   stock: products.stock,
   price: products.price,
   discount: products.discount,
-  category: categories.name,
+  category: {
+    id: categories.id,
+    name: categories.name,
+  },
 }
 
 const reviews = [

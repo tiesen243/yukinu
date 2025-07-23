@@ -1,7 +1,11 @@
 import { Suspense } from 'react'
 import { notFound } from 'next/navigation'
 
-import { ProductDetail } from '@/app/(main)/[slug]/page.client'
+import { ProductCardSkeleton } from '@/app/_components/product-card'
+import {
+  ProductDetail,
+  RelativeProducts,
+} from '@/app/(main)/[slug]/page.client'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
@@ -11,9 +15,17 @@ export default async function ProductDetailPage({
   const { slug } = await params
   const id = slug.split('-').pop() ?? ''
 
+  const queryClient = getQueryClient()
+
   try {
-    const { product, reviews } = await getQueryClient().ensureQueryData(
+    const { product, reviews } = await queryClient.ensureQueryData(
       trpc.product.byId.queryOptions({ id }),
+    )
+    void queryClient.prefetchQuery(
+      trpc.product.relativeProducts.queryOptions({
+        categoryId: product.category.id,
+        id,
+      }),
     )
 
     const jsonLd = {
@@ -68,6 +80,21 @@ export default async function ProductDetailPage({
           >
             <ProductDetail id={id} />
           </Suspense>
+
+          <section className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            <h2 className='sr-only'>Related Products</h2>
+
+            <Suspense
+              fallback={Array.from({ length: 12 }, (_, idx) => (
+                <ProductCardSkeleton key={idx} />
+              ))}
+            >
+              <RelativeProducts
+                categoryId={product.category.id}
+                productId={product.id}
+              />
+            </Suspense>
+          </section>
         </main>
       </HydrateClient>
     )
