@@ -19,6 +19,7 @@ import {
 import { ShoppingCartIcon } from '@yuki/ui/icons'
 import { toast } from '@yuki/ui/sonner'
 
+import { formatCurrency } from '@/lib/helpers'
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
 
@@ -48,11 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   )
 
   const price = useMemo(
-    () =>
-      new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(product.price - product.price * (product.discount / 100)),
+    () => product.price - product.price * (product.discount / 100),
     [product.price, product.discount],
   )
 
@@ -83,11 +80,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <CardHeader className='px-4'>
           <CardTitle className='line-clamp-1 text-lg'>{product.name}</CardTitle>
           <span className='font-medium'>
-            {price}
+            {formatCurrency(price)}
 
             {product.discount > 0 && (
               <del className='ml-2 text-sm text-muted-foreground'>
-                ${product.price.toFixed(2)}
+                {formatCurrency(product.price)}
               </del>
             )}
           </span>

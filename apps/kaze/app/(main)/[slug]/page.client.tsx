@@ -22,6 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@yuki/ui/tabs'
 import { Typography } from '@yuki/ui/typography'
 
 import { ProductCard } from '@/app/_components/product-card'
+import { formatCurrency } from '@/lib/helpers'
 import { useTRPC } from '@/trpc/react'
 
 export const ProductDetail = ({ id }: { id: string }) => {
@@ -107,15 +108,15 @@ export const ProductDetail = ({ id }: { id: string }) => {
             <h3 className='sr-only'>Product Price section</h3>
             <div className='flex items-center gap-3'>
               <span className='text-3xl font-bold'>
-                ${discountedPrice.toFixed(2)}
+                {formatCurrency(discountedPrice)};
               </span>
               {product.discount > 0 && (
                 <>
                   <span className='text-xl text-muted-foreground line-through'>
-                    ${product.price.toFixed(2)}
+                    {formatCurrency(product.price)}
                   </span>
                   <Badge variant='error'>
-                    Save ${(product.price - discountedPrice).toFixed(2)}
+                    Save {formatCurrency(product.price - discountedPrice)}
                   </Badge>
                 </>
               )}
