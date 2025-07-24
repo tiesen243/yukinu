@@ -9,7 +9,7 @@
     "dev": "bun run with-env vite",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "start": "vite preview",
+    "start": "bun run with-env vite preview",
     "typecheck": "vue-tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },

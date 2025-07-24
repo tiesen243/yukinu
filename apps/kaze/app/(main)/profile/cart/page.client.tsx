@@ -3,6 +3,7 @@
 import { useCallback, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import type { RouterOutputs } from '@yuki/api'
@@ -20,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@yuki/ui/select'
+import { toast } from '@yuki/ui/sonner'
 
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
@@ -28,6 +30,18 @@ export const CardList: React.FC = () => {
   const { trpc } = useTRPC()
   const { data: cart } = useSuspenseQuery(trpc.cart.get.queryOptions())
   const { data: addresses } = useSuspenseQuery(trpc.address.all.queryOptions())
+
+  const router = useRouter()
+  const [addressId, setAddressId] = useState<string>(
+    addresses.find((address) => address.isDefault)?.id ?? '',
+  )
+  const { mutate, isPending } = useMutation({
+    ...trpc.order.create.mutationOptions(),
+    onSuccess: ({ id }) => {
+      toast.success('Order created successfully!')
+      router.push(`/profile/orders/${id}`)
+    },
+  })
 
   return (
     <section className='grid gap-4'>
@@ -48,9 +62,7 @@ export const CardList: React.FC = () => {
           </p>
 
           <div className='grid grid-cols-2 gap-4 pt-4'>
-            <Select
-              defaultValue={addresses.find((address) => address.isDefault)?.id}
-            >
+            <Select defaultValue={addressId} onValueChange={setAddressId}>
               <SelectTrigger className='line-clamp-1 w-full'>
                 <SelectValue placeholder='Select a address' />
               </SelectTrigger>
@@ -82,7 +94,22 @@ export const CardList: React.FC = () => {
               </SelectContent>
             </Select>
 
-            <Button className='w-full'>Proceed to Checkout</Button>
+            <Button
+              className='w-full'
+              onClick={() => {
+                mutate({
+                  addressId,
+                  items: cart.items.map((item) => ({
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    price: item.price,
+                  })),
+                })
+              }}
+              disabled={isPending || !addressId || cart.items.length === 0}
+            >
+              Proceed to Checkout
+            </Button>
           </div>
         </div>
       )}
