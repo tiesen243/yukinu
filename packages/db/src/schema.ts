@@ -201,6 +201,11 @@ export const orders = pgTable(
       .timestamp({ mode: 'date', withTimezone: true })
       .defaultNow()
       .notNull(),
+    updatedAt: t
+      .timestamp({ mode: 'date', withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
   }),
   (t) => [
     index('order_status_idx').on(t.status),
