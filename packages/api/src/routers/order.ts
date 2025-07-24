@@ -92,7 +92,8 @@ export const orderRouter = {
         })
 
       await ctx.db
-        .delete(orders)
+        .update(orders)
+        .set({ status: 'cancelled' })
         .where(and(eq(orders.id, input.id), eq(orders.userId, userId)))
     }),
 } satisfies TRPCRouterRecord
