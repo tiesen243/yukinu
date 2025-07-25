@@ -15,8 +15,11 @@ import {
 } from '@yuki/ui/card'
 import { CalendarDaysIcon, PackageIcon } from '@yuki/ui/icons'
 
+import {
+  MAX_ITEMS_DISPLAY,
+  statusConfig,
+} from '@/app/(main)/profile/orders/_config'
 import { formatCurrency, formatDate } from '@/lib/helpers'
-import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
 
 export const OrderList: React.FC = () => {
@@ -26,29 +29,6 @@ export const OrderList: React.FC = () => {
   return data.map((order) => <OrderPreviewCard key={order.id} order={order} />)
 }
 
-const statusConfig = {
-  pending: {
-    label: 'Pending',
-    variant: 'warning',
-  },
-  paid: {
-    label: 'Paid',
-    variant: 'info',
-  },
-  shipped: {
-    label: 'Shipped',
-    variant: 'info',
-  },
-  delivered: {
-    label: 'Delivered',
-    variant: 'success',
-  },
-  cancelled: {
-    label: 'Cancelled',
-    variant: 'error',
-  },
-} as const
-
 const OrderPreviewCard = ({
   order,
 }: Readonly<{ order: RouterOutputs['order']['getUserOrders'][number] }>) => {
@@ -57,20 +37,19 @@ const OrderPreviewCard = ({
     0,
   )
   const statusInfo = statusConfig[order.status]
-  const MAX_ITEMS_DISPLAY = 2
 
   return (
-    <Card className='h-fit'>
+    <Link
+      href={`/profile/orders/${order.id}`}
+      className='flex h-fit flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm'
+    >
       <CardHeader>
-        <Link
-          href={`/profile/orders/${order.id}`}
-          className='flex items-center justify-between hover:text-muted-foreground'
-        >
+        <div className='flex items-center justify-between hover:text-muted-foreground'>
           <CardTitle className='text-lg font-semibold'>
             Order #{order.id.slice(-8).toUpperCase()}
           </CardTitle>
           <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
-        </Link>
+        </div>
         <div className='flex items-center gap-4'>
           <CardDescription className='flex items-center gap-1'>
             <CalendarDaysIcon className='size-4' />
@@ -86,9 +65,8 @@ const OrderPreviewCard = ({
       <CardContent className='space-y-4'>
         <div className='space-y-3'>
           {order.orderItems.slice(0, MAX_ITEMS_DISPLAY).map((item) => (
-            <Link
+            <div
               key={`${item.orderId}-${item.productId}`}
-              href={`/${slugify(item.product.name)}-${item.product.id}`}
               className='group/item flex items-center gap-3'
             >
               <div className='relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border'>
@@ -112,7 +90,7 @@ const OrderPreviewCard = ({
               <div className='text-sm font-medium'>
                 {formatCurrency(item.quantity * item.price)}
               </div>
-            </Link>
+            </div>
           ))}
 
           {order.orderItems.length > MAX_ITEMS_DISPLAY && (
@@ -131,7 +109,7 @@ const OrderPreviewCard = ({
           </span>
         </div>
       </CardContent>
-    </Card>
+    </Link>
   )
 }
 
