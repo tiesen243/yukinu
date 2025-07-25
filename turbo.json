@@ -17,6 +17,7 @@
     "AUTH_GOOGLE_SECRET",
     "DATABASE_URL",
     "DATABASE_URL_UNPOOLED",
+    "UPLOADTHING_TOKEN",
     "PORT"
   ],
   "globalPassThroughEnv": [
