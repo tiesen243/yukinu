@@ -67,7 +67,7 @@ const OrderPreviewCard = ({
           {order.orderItems.slice(0, MAX_ITEMS_DISPLAY).map((item) => (
             <div
               key={`${item.orderId}-${item.productId}`}
-              className='group/item flex items-center gap-3'
+              className='flex items-center gap-3'
             >
               <div className='relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-md border'>
                 <Image
@@ -79,7 +79,7 @@ const OrderPreviewCard = ({
               </div>
 
               <div className='min-w-0 flex-1'>
-                <h4 className='truncate text-sm font-medium group-hover/item:text-muted-foreground'>
+                <h4 className='truncate text-sm font-medium'>
                   {item.product.name}
                 </h4>
                 <p className='text-xs text-muted-foreground'>
