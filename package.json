@@ -1,6 +1,13 @@
 {
-  "name": "yukinu",
   "private": true,
+  "homepage": "https://yukinu.vercel.app",
+  "bugs": {
+    "url": "https://github.com/tiesen243/yukinu/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiesen243/yukinu.git"
+  },
   "workspaces": {
     "packages": [
       "apps/*",
