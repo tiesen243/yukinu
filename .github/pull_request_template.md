@@ -19,7 +19,6 @@
 - [ ] 🔧 Refactoring (no functional changes)
 - [ ] 🎨 UI/UX improvements
 - [ ] ⚡ Performance improvements
-- [ ] 🧪 Test additions or improvements
 - [ ] 🔒 Security improvements
 
 ## 📦 Affected Packages
