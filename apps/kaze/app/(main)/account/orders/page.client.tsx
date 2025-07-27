@@ -40,11 +40,11 @@ const OrderPreviewCard = ({
 
   return (
     <Link
-      href={`/profile/orders/${order.id}`}
+      href={`/account/orders/${order.id}`}
       className='flex h-fit flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm'
     >
       <CardHeader>
-        <div className='flex items-center justify-between hover:text-muted-foreground'>
+        <div className='flex items-center justify-between'>
           <CardTitle className='text-lg font-semibold'>
             Order #{order.id.slice(-8).toUpperCase()}
           </CardTitle>

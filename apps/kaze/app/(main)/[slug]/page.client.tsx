@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import { Badge } from '@yuki/ui/badge'
@@ -26,6 +27,7 @@ import { formatCurrency } from '@/lib/helpers'
 import { useTRPC } from '@/trpc/react'
 
 export const ProductDetail = ({ id }: { id: string }) => {
+  const router = useRouter()
   const { trpc, queryClient } = useTRPC()
   const {
     data: { product, reviews },
@@ -39,7 +41,9 @@ export const ProductDetail = ({ id }: { id: string }) => {
       toast.success('Item added to cart', {
         action: {
           label: 'View Cart',
-          onClick: () => (window.location.href = '/profile/cart'),
+          onClick: () => {
+            router.push('/account/cart')
+          },
         },
       })
     },

@@ -2,14 +2,13 @@
   "$schema": "../../node_modules/turbo/schema.json",
   "extends": ["//"],
   "tasks": {
-    "build": { 
+    "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
-    "dev:email": { 
+    "dev:email": {
       "cache": false,
       "persistent": true
     }
   }
 }
-

@@ -23,7 +23,7 @@ export default function ProfilePage() {
             My Addresses
           </Typography>
           <Button asChild>
-            <Link href='/profile/address/new'>Add New Address</Link>
+            <Link href='/account/address/new'>Add New Address</Link>
           </Button>
         </div>
 

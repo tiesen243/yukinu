@@ -20,7 +20,7 @@ export default async function OrderDetailPage({
       <section className='grid gap-4'>
         <section className='flex items-center gap-4'>
           <Button variant='ghost' size='icon' asChild>
-            <Link href='/profile/orders'>
+            <Link href='/account/orders'>
               <ArrowLeftIcon />
             </Link>
           </Button>

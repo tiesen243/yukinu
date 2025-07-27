@@ -3,6 +3,7 @@
 import { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 
 import type { RouterOutputs } from '@yuki/api'
@@ -28,6 +29,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const router = useRouter()
   const { trpc, queryClient } = useTRPC()
   const { mutate, isPending } = useMutation({
     ...trpc.cart.update.mutationOptions(),
@@ -37,7 +39,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       toast.success('Item added to cart', {
         action: {
           label: 'View Cart',
-          onClick: () => (window.location.href = '/profile/cart'),
+          onClick: () => {
+            router.push('/account/cart')
+          },
         },
       })
     },

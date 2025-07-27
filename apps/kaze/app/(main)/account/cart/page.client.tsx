@@ -39,7 +39,7 @@ export const CardList: React.FC = () => {
     ...trpc.order.create.mutationOptions(),
     onSuccess: ({ id }) => {
       toast.success('Order created successfully!')
-      router.push(`/profile/orders/${id}`)
+      router.push(`/account/orders/${id}`)
     },
   })
 

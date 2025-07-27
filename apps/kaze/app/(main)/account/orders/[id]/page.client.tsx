@@ -56,7 +56,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
         trpc.order.getUserOrders.queryFilter(),
       )
       toast.success('Order cancelled successfully')
-      router.push('/profile/orders')
+      router.push('/account/orders')
     },
     onError: (error) => toast.error(error.message),
   })
