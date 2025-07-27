@@ -133,34 +133,26 @@ export const authRouter = {
       const user = await ctx.db.query.users.findFirst({
         where: (t, { eq }) => eq(t.email, input.email),
       })
-      if (!user)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'User not found',
-        })
+      if (!user) return
 
       const [verifier] = await ctx.db
         .insert(verifiers)
         .values({
           expiration: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
-          token: crypto.randomBytes(32).toString('hex'),
+          token: crypto.randomUUID(),
           userId: user.id,
         })
         .returning()
-      if (!verifier)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to create reset token',
+      if (verifier)
+        await sendEmail({
+          email: 'ResetPassword',
+          to: input.email,
+          subject: 'Reset your password',
+          data: {
+            name: user.name,
+            token: verifier.token,
+          },
         })
-      await sendEmail({
-        email: 'ResetPassword',
-        to: input.email,
-        subject: 'Reset your password',
-        data: {
-          name: user.name,
-          token: verifier.token,
-        },
-      })
     }),
 
   resetPassword: publicProcedure
