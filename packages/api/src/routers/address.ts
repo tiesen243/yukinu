@@ -28,7 +28,10 @@ export const addressRouter = {
   }),
 
   add: protectedProcedure.input(addSchema).mutation(async ({ ctx, input }) => {
-    const count = await ctx.db.$count(addresses)
+    const count = await ctx.db.$count(
+      addresses,
+      eq(addresses.userId, ctx.session.user.id),
+    )
     await ctx.db.insert(addresses).values({
       ...input,
       isDefault: count === 0,
