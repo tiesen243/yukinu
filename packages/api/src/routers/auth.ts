@@ -59,6 +59,7 @@ export const authRouter = {
         email: 'Welcome',
         to: input.email,
         subject: 'Welcome to Yuki',
+        text: 'Thank you for signing up! We are excited to have you on board.',
         data: { name: input.name },
       })
 
@@ -120,6 +121,7 @@ export const authRouter = {
           email: 'ChangePassword',
           to: ctx.session.user.email,
           subject: 'Your password has been changed',
+          text: 'Your password has been successfully changed.',
           data: { name: ctx.session.user.name, userAgent, ipAddress },
         })
       })
@@ -148,6 +150,7 @@ export const authRouter = {
           email: 'ResetPassword',
           to: input.email,
           subject: 'Reset your password',
+          text: 'You requested a password reset. Click the link below to reset your password.',
           data: {
             name: user.name,
             token: verifier.token,
@@ -196,6 +199,7 @@ export const authRouter = {
         email: 'ChangePassword',
         to: verifier.user.email,
         subject: 'Your password has been reset',
+        text: 'Your password has been successfully reset.',
         data: { name: verifier.user.name, userAgent, ipAddress },
       })
     }),

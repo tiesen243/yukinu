@@ -7,17 +7,19 @@ import * as email from './emails'
 const resend = new Resend(env.RESEND_TOKEN)
 
 export interface SendEmailParams {
+  email: keyof typeof email
   to: string
   subject: string
-  email: keyof typeof email
+  text: string
   data?: Record<string, unknown>
 }
 
 async function sendEmail(params: SendEmailParams) {
   const res = await resend.emails.send({
-    from: 'noreply@tiesen.id.vn',
+    from: 'yukinu@tiesen.id.vn',
     to: params.to,
     subject: params.subject,
+    text: params.text,
     react: email[params.email](params),
   })
 

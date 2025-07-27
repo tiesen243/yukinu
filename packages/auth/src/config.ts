@@ -51,6 +51,7 @@ function getAdapter(): AuthOptions['adapter'] {
         email: 'Welcome',
         to: data.email,
         subject: 'Welcome to Yuki',
+        text: 'Thank you for signing up! We are excited to have you on board.',
         data,
       })
       return user ?? null
