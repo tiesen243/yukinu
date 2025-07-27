@@ -97,6 +97,7 @@ export const orderRouter = {
           email: 'OrderConfirmation',
           to: ctx.session.user.email,
           subject: 'Order Confirmation',
+          text: `Your order #${insertedOrder.id} has been placed successfully.`,
           data: {
             user: ctx.session.user,
             order: {
