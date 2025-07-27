@@ -55,7 +55,7 @@ const navItems = [
     href: '/account/cart',
   },
   {
-    name: 'Sercurity',
+    name: 'Security',
     icon: ShieldIcon,
     href: '/account/security',
   },
