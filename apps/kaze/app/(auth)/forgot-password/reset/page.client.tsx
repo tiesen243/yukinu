@@ -1,26 +1,27 @@
 'use client'
 
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import { useSession } from '@yuki/auth/react'
 import { Button } from '@yuki/ui/button'
 import { useForm } from '@yuki/ui/form'
 import { Input } from '@yuki/ui/input'
 import { toast } from '@yuki/ui/sonner'
-import { signInSchema } from '@yuki/validators/auth'
+import { resetPasswordSchema } from '@yuki/validators/auth'
 
-export const LoginForm: React.FC = () => {
-  const { signIn } = useSession()
+import { useTRPC } from '@/trpc/react'
+
+export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
   const router = useRouter()
-
+  const { trpcClient } = useTRPC()
   const form = useForm({
-    defaultValues: { email: '', password: '' },
-    validator: signInSchema,
-    onSubmit: (values) => signIn('credentials', values),
+    defaultValues: { token, newPassword: '', confirmNewPassword: '' },
+    validator: resetPasswordSchema,
+    onSubmit: trpcClient.auth.resetPassword.mutate,
     onSuccess: () => {
-      toast.success('You have successfully logged in!')
-      router.push('/')
+      toast.success(
+        'Your password has been reset successfully. You can now sign in with your new password.',
+      )
+      router.push('/login')
     },
     onError: (error) => {
       toast.error(error.message)
@@ -37,12 +38,12 @@ export const LoginForm: React.FC = () => {
       }}
     >
       <form.Field
-        name='email'
+        name='newPassword'
         render={({ field, meta }) => (
           <div id={meta.id} className='grid gap-2'>
-            <form.Label>Email</form.Label>
+            <form.Label>New Password</form.Label>
             <form.Control {...field}>
-              <Input type='email' placeholder='yuki@example.com' />
+              <Input type='password' placeholder='Enter your new password' />
             </form.Control>
             <form.Message />
           </div>
@@ -50,25 +51,19 @@ export const LoginForm: React.FC = () => {
       />
 
       <form.Field
-        name='password'
+        name='confirmNewPassword'
         render={({ field, meta }) => (
           <div id={meta.id} className='grid gap-2'>
-            <div className='flex items-center justify-between gap-4'>
-              <form.Label>Password</form.Label>
-
-              <Link href='/forgot-password' className='text-xs hover:underline'>
-                Forgot your password?
-              </Link>
-            </div>
+            <form.Label>Confirm New Password</form.Label>
             <form.Control {...field}>
-              <Input type='password' placeholder='********' />
+              <Input type='password' placeholder='Confirm your new password' />
             </form.Control>
             <form.Message />
           </div>
         )}
       />
 
-      <Button disabled={form.state.isPending}>Login</Button>
+      <Button disabled={form.state.isPending}>Reset Password</Button>
     </form>
   )
 }

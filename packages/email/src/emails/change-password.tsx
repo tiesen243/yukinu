@@ -44,7 +44,7 @@ export default function ChangePasswordEmail({ data }: SendEmailParams) {
           Change Details:
         </Text>
 
-        <Section className=''>
+        <Section className='grid gap-2'>
           <Text className='m-0 text-sm text-gray-600'>
             <span className='font-medium text-gray-800'>Date & Time:</span>{' '}
             {changeDate}
@@ -83,7 +83,7 @@ export default function ChangePasswordEmail({ data }: SendEmailParams) {
           🛡️ Security Tips:
         </Text>
 
-        <Section className=''>
+        <Section className='grid gap-3'>
           <Text className='m-0 text-sm leading-relaxed text-gray-600'>
             • Use a strong, unique password that you don't use anywhere else
           </Text>

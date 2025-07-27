@@ -35,6 +35,21 @@ export const changePasswordSchema = z
     error: 'Passwords do not match',
   })
 
+export const forgotPasswordSchema = z.object({
+  email: z.email(),
+})
+
+export const resetPasswordSchema = z
+  .object({
+    token: z.string(),
+    newPassword: passwordRegex,
+    confirmNewPassword: passwordRegex,
+  })
+  .refine((val) => val.newPassword === val.confirmNewPassword, {
+    path: ['confirmNewPassword'],
+    error: 'Passwords do not match',
+  })
+
 export const deleteAccountSchema = z.object({
   password: passwordRegex,
   confirm: z.string().refine((val) => val === 'Delete my account', {
