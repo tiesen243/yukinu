@@ -40,7 +40,7 @@ import {
   SHIPPING,
   statusConfig,
   TAX,
-} from '@/app/(main)/profile/orders/_config'
+} from '@/app/(main)/account/orders/_config'
 import { formatCurrency, formatDate } from '@/lib/helpers'
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
@@ -56,7 +56,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
         trpc.order.getUserOrders.queryFilter(),
       )
       toast.success('Order cancelled successfully')
-      router.push('/profile/orders')
+      router.push('/account/orders')
     },
     onError: (error) => toast.error(error.message),
   })

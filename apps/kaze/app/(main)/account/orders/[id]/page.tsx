@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@yuki/ui/button'
 import { ArrowLeftIcon, Loader2Icon } from '@yuki/ui/icons'
 
-import { OrderDetail } from '@/app/(main)/profile/orders/[id]/page.client'
+import { OrderDetail } from '@/app/(main)/account/orders/[id]/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export default async function OrderDetailPage({
@@ -20,7 +20,7 @@ export default async function OrderDetailPage({
       <section className='grid gap-4'>
         <section className='flex items-center gap-4'>
           <Button variant='ghost' size='icon' asChild>
-            <Link href='/profile/orders'>
+            <Link href='/account/orders'>
               <ArrowLeftIcon />
             </Link>
           </Button>

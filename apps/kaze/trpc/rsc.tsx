@@ -15,7 +15,7 @@ const createRscContext = cache(async () => {
   const heads = new Headers(await headers())
   heads.set('x-trpc-source', 'rsc')
 
-  return createTRPCContext({ headers: heads })
+  return createTRPCContext({ headers: heads } as Request)
 })
 
 const getQueryClient = cache(createQueryClient)

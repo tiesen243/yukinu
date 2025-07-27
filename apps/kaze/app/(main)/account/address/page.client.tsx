@@ -76,7 +76,7 @@ const AddressCard: React.FC<{
 
       <div className='absolute top-0 right-0 z-10 grid gap-1 p-4'>
         <Button variant='ghost' asChild>
-          <Link href={`/profile/address/${address.id}`}>
+          <Link href={`/account/address/${address.id}`}>
             <PencilIcon />
             <span className='sr-only sm:not-sr-only'>Edit</span>
           </Link>

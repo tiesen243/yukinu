@@ -576,7 +576,7 @@ export default function ShippingPage() {
                     Need to update your delivery address before shipping.
                   </Typography>
                   <Button variant='outline' size='sm' asChild>
-                    <Link href='/profile/address'>Update Address</Link>
+                    <Link href='/account/address'>Update Address</Link>
                   </Button>
                 </div>
               </div>

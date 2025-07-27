@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@yuki/auth'
 
-import { Navigation } from '@/app/(main)/profile/layout.client'
+import { Navigation } from '@/app/(main)/account/layout.client'
 
 export default function ProfileLayout({
   children,

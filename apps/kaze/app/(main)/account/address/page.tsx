@@ -7,7 +7,7 @@ import { Typography } from '@yuki/ui/typography'
 import {
   AddressCardSkeleton,
   AddressList,
-} from '@/app/(main)/profile/address/page.client'
+} from '@/app/(main)/account/address/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export const dynamic = 'force-dynamic'
@@ -23,7 +23,7 @@ export default function ProfilePage() {
             My Addresses
           </Typography>
           <Button asChild>
-            <Link href='/profile/address/new'>Add New Address</Link>
+            <Link href='/account/address/new'>Add New Address</Link>
           </Button>
         </div>
 

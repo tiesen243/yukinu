@@ -7,6 +7,8 @@ import { Button } from '@yuki/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@yuki/ui/card'
 import { Typography } from '@yuki/ui/typography'
 
+import { formatDate } from '@/lib/helpers'
+
 export default async function ProfilePage() {
   const { user } = await auth({ headers: await headers() })
   if (!user) return null
@@ -40,7 +42,7 @@ export default async function ProfilePage() {
       <section className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <h3 className='sr-only'>Profile Actions section</h3>
 
-        {a.map((item) => (
+        {profileActions.map((item) => (
           <Card key={item.link} className='transition-shadow hover:shadow-md'>
             <CardHeader>
               <CardTitle>{item.title}</CardTitle>
@@ -89,11 +91,11 @@ export default async function ProfilePage() {
               <div className='space-y-1 text-sm'>
                 <div className='flex justify-between'>
                   <span className='text-muted-foreground'>Joined:</span>
-                  <span>{user.createdAt.toLocaleDateString()}</span>
+                  <span>{formatDate(user.createdAt)}</span>
                 </div>
                 <div className='flex justify-between'>
                   <span className='text-muted-foreground'>Last Updated:</span>
-                  <span>{user.updatedAt.toLocaleDateString()}</span>
+                  <span>{formatDate(user.updatedAt)}</span>
                 </div>
               </div>
             </div>
@@ -104,29 +106,29 @@ export default async function ProfilePage() {
   )
 }
 
-const a = [
+const profileActions = [
   {
     title: 'Orders',
     description: 'View and track your orders placed on Yuki',
-    link: '/profile/orders',
+    link: '/account/orders',
     linkText: 'View Orders',
   },
   {
     title: 'Address',
     description: 'Manage shipping addresses for your orders',
-    link: '/profile/address',
+    link: '/account/address',
     linkText: 'Manage Address',
   },
   {
     title: 'Shopping Cart',
     description: 'Review items in your cart before checkout',
-    link: '/profile/cart',
+    link: '/account/cart',
     linkText: 'View Cart',
   },
   {
     title: 'Security',
     description: 'Update your password or delete your account',
-    link: '/profile/security',
+    link: '/account/security',
     linkText: 'Security Settings',
   },
 ]

@@ -1,5 +1,5 @@
 {
-  "name": "@yuki/api",
+  "name": "@yuki/email",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
@@ -14,25 +14,25 @@
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "dev": "tsc --watch",
+    "dev:email": "email dev --dir src/emails --port 6969",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@yuki/prettier-config",
   "dependencies": {
-    "@trpc/server": "catalog:api",
-    "@yuki/auth": "workspace:*",
-    "@yuki/db": "workspace:*",
-    "@yuki/email": "workspace:*",
+    "@react-email/components": "^0.3.2",
     "@yuki/validators": "workspace:*",
-    "superjson": "catalog:api"
+    "resend": "^4.7.0"
   },
   "devDependencies": {
+    "@react-email/preview-server": "4.2.4",
     "@yuki/eslint-config": "workspace:*",
     "@yuki/prettier-config": "workspace:*",
     "@yuki/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
+    "react-email": "^4.2.4",
     "typescript": "catalog:"
   }
 }

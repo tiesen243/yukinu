@@ -37,26 +37,26 @@ const navItems = [
   {
     name: 'My Account',
     icon: UserIcon,
-    href: '/profile',
+    href: '/account/profile',
   },
   {
     name: 'My Address',
     icon: MapPinHouseIcon,
-    href: '/profile/address',
+    href: '/account/address',
   },
   {
     name: 'My Orders',
     icon: ShoppingBagIcon,
-    href: '/profile/orders',
+    href: '/account/orders',
   },
   {
     name: 'My Cart',
     icon: ShoppingCartIcon,
-    href: '/profile/cart',
+    href: '/account/cart',
   },
   {
-    name: 'Sercurity',
+    name: 'Security',
     icon: ShieldIcon,
-    href: '/profile/security',
+    href: '/account/security',
   },
 ]

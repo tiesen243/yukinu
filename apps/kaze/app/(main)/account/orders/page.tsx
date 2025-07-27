@@ -3,7 +3,7 @@ import { Suspense } from 'react'
 import {
   OrderCardSkeleton,
   OrderList,
-} from '@/app/(main)/profile/orders/page.client'
+} from '@/app/(main)/account/orders/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export const dynamic = 'force-dynamic'

@@ -3,6 +3,7 @@ import { TRPCError } from '@trpc/server'
 
 import { and, eq } from '@yuki/db'
 import { cartItems, orderItems, orders } from '@yuki/db/schema'
+import { sendEmail } from '@yuki/email'
 import { byIdSchema, createSchema } from '@yuki/validators/order'
 
 import { protectedProcedure } from '../trpc'
@@ -49,6 +50,16 @@ export const orderRouter = {
       )
 
       return ctx.db.transaction(async (tx) => {
+        const address = await tx.query.addresses.findFirst({
+          where: (t, { and, eq }) =>
+            and(eq(t.id, addressId), eq(t.userId, userId)),
+        })
+        if (!address)
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Address not found',
+          })
+
         const [insertedOrder] = await tx
           .insert(orders)
           .values({ addressId, total, userId })
@@ -59,6 +70,20 @@ export const orderRouter = {
             message: 'Order creation failed',
           })
 
+        const productExists = await tx.query.products.findMany({
+          where: (t, { inArray }) =>
+            inArray(
+              t.id,
+              items.map((i) => i.productId),
+            ),
+        })
+        if (productExists.length !== items.length) {
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'One or more products not found',
+          })
+        }
+
         await tx.insert(orderItems).values(
           items.map((item) => ({
             ...item,
@@ -67,6 +92,28 @@ export const orderRouter = {
         )
 
         await tx.delete(cartItems).where(eq(cartItems.userId, userId))
+
+        await sendEmail({
+          email: 'OrderConfirmation',
+          to: ctx.session.user.email,
+          subject: 'Order Confirmation',
+          data: {
+            user: ctx.session.user,
+            order: {
+              id: insertedOrder.id,
+              total: insertedOrder.total,
+              createdAt: insertedOrder.createdAt,
+            },
+            items: productExists.map((p) => ({
+              productId: p.id,
+              productName: p.name,
+              productImage: p.image,
+              productPrice: p.price,
+              quantity: items.find((i) => i.productId === p.id)?.quantity ?? 0,
+            })),
+            address,
+          },
+        })
 
         return insertedOrder
       })

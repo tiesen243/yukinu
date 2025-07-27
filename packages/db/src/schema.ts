@@ -25,6 +25,7 @@ export const users = pgTable(
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
+  verifiers: many(verifiers),
   addresses: many(addresses),
   orders: many(orders),
 }))
@@ -65,6 +66,26 @@ export const sessions = pgTable(
 )
 export const sessionRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
+}))
+
+export const verifiers = pgTable(
+  'verifier',
+  (t) => ({
+    token: t.varchar({ length: 64 }).primaryKey().notNull(),
+    userId: t
+      .varchar({ length: 25 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    expiration: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
+  }),
+  (t) => [
+    index('verifier_user_id_idx').on(t.userId),
+    index('verifier_token_idx').on(t.token),
+  ],
+)
+
+export const verifiersRelations = relations(verifiers, ({ one }) => ({
+  user: one(users, { fields: [verifiers.userId], references: [users.id] }),
 }))
 
 export const addresses = pgTable(
