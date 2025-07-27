@@ -1,4 +1,12 @@
-import { Heading, Hr, Img, Section, Text } from '@react-email/components'
+import {
+  Column,
+  Heading,
+  Hr,
+  Img,
+  Row,
+  Section,
+  Text,
+} from '@react-email/components'
 
 import type { SendEmailParams } from '..'
 import { EmailLayout } from './_layout'
@@ -7,8 +15,8 @@ const SHIPPING = 9.99
 const TAX = 0.08
 
 export default function OrderConfirmation({ data }: SendEmailParams) {
-  const { user, order, items, address } =
-    data as unknown as OrderConfirmationData
+  const { user, order, items, address } = (data ??
+    sampleData) as OrderConfirmationData
 
   const estimatedDelivery = new Date(order.createdAt)
   estimatedDelivery.setDate(
@@ -38,7 +46,7 @@ export default function OrderConfirmation({ data }: SendEmailParams) {
         information once your order ships.
       </Text>
 
-      <Section className='my-6 rounded-lg border border-gray-200 bg-gray-50 p-6'>
+      <Section className='my-6 rounded-lg border border-gray-200 bg-gray-100 p-6'>
         <Text className='mb-4 text-lg font-semibold text-black'>
           📦 Order Details
         </Text>
@@ -82,11 +90,8 @@ export default function OrderConfirmation({ data }: SendEmailParams) {
         </Text>
 
         {items.map((item) => (
-          <Section
-            key={item.productId}
-            className='mb-4 border-b border-gray-200 pb-4 last:mb-0 last:border-b-0'
-          >
-            <Section className='flex gap-4'>
+          <Row key={item.productId} className='mb-4 flex gap-4'>
+            <Column className='pr-4'>
               <Img
                 src={item.productImage}
                 width='80'
@@ -94,50 +99,48 @@ export default function OrderConfirmation({ data }: SendEmailParams) {
                 alt={item.productName}
                 className='rounded-lg object-cover'
               />
-              <Section className='flex-1'>
-                <Text className='m-0 mb-1 text-base font-semibold text-black'>
-                  {item.productName}
-                </Text>
-                <Text className='m-0 mt-2 text-sm text-gray-600'>
-                  Quantity: {item.quantity} ×{' '}
-                  {formatCurrency(item.productPrice)}
-                </Text>
-              </Section>
-              <Section className='text-right'>
-                <Text className='m-0 text-base font-semibold text-black'>
-                  {formatCurrency(item.productPrice * item.quantity)}
-                </Text>
-              </Section>
-            </Section>
-          </Section>
+            </Column>
+
+            <Column className='flex-1'>
+              <Text className='m-0 mb-1 text-base font-semibold text-black'>
+                {item.productName}
+              </Text>
+              <Text className='m-0 mt-2 text-sm text-gray-600'>
+                Quantity: {item.quantity} × {formatCurrency(item.productPrice)}
+              </Text>
+              <Text className='m-0 text-base font-semibold text-black'>
+                {formatCurrency(item.productPrice * item.quantity)}
+              </Text>
+            </Column>
+          </Row>
         ))}
       </Section>
 
-      <Section className='my-6 rounded-lg border border-gray-200 bg-gray-50 p-6'>
+      <Section className='my-6 rounded-lg border border-gray-200 bg-gray-100 p-6'>
         <Text className='mb-4 text-lg font-semibold text-black'>
           💰 Order Summary
         </Text>
 
-        <Section className='space-y-2'>
+        <Section className='grid gap-2'>
           <Section className='flex justify-between'>
             <Text className='m-0 text-base text-gray-600'>Subtotal</Text>
-            <Text className='m-0 text-base text-gray-600'>
+            <Text className='m-0 text-base font-semibold text-black'>
               {formatCurrency(order.total)}
             </Text>
           </Section>
           <Section className='flex justify-between'>
             <Text className='m-0 text-base text-gray-600'>Shipping</Text>
-            <Text className='m-0 text-base text-gray-600'>
+            <Text className='m-0 text-base font-semibold text-black'>
               {formatCurrency(SHIPPING)}
             </Text>
           </Section>
           <Section className='flex justify-between'>
             <Text className='m-0 text-base text-gray-600'>Tax</Text>
-            <Text className='m-0 text-base text-gray-600'>
+            <Text className='m-0 text-base font-semibold text-black'>
               {formatCurrency(order.total * TAX)}
             </Text>
           </Section>
-          <Hr className='my-3 border-gray-300' />
+          <Hr className='my-3 border-gray-400' />
           <Section className='flex justify-between'>
             <Text className='m-0 text-lg font-semibold text-black'>Total</Text>
             <Text className='m-0 text-lg font-semibold text-black'>
@@ -147,7 +150,7 @@ export default function OrderConfirmation({ data }: SendEmailParams) {
         </Section>
       </Section>
 
-      <Section className='my-6 rounded-lg border border-blue-200 bg-blue-50 p-6'>
+      <Section className='my-6 rounded-lg border border-blue-200 bg-blue-100 p-6'>
         <Text className='mb-4 text-lg font-semibold text-black'>
           🚚 Shipping Address
         </Text>
@@ -189,6 +192,42 @@ interface OrderConfirmationData {
     productPrice: number
     quantity: number
   }[]
+}
+
+const sampleData: OrderConfirmationData = {
+  user: {
+    name: 'Yuki',
+    email: 'yuki@example.com',
+  },
+  order: {
+    id: '123456',
+    total: 99.99,
+    createdAt: new Date(),
+  },
+  address: {
+    line1: '123 Main St',
+    line2: null,
+    city: 'Springfield',
+    state: 'IL',
+    postalCode: '62701',
+    country: 'USA',
+  },
+  items: [
+    {
+      productId: 'prod_001',
+      productName: 'Yukinu Plush Toy',
+      productImage: 'https://github.com/tiesen243.png',
+      productPrice: 29.99,
+      quantity: 2,
+    },
+    {
+      productId: 'prod_002',
+      productName: 'Yukinu T-Shirt',
+      productImage: 'https://github.com/tiesen243.png',
+      productPrice: 19.99,
+      quantity: 1,
+    },
+  ],
 }
 
 function formatCurrency(amount: number) {
