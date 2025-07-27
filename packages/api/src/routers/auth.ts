@@ -143,7 +143,7 @@ export const authRouter = {
         .insert(verifiers)
         .values({
           expiration: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
-          token: crypto.randomUUID(),
+          token: crypto.randomBytes(32).toString('hex'),
           userId: user.id,
         })
         .returning()
