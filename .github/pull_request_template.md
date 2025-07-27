@@ -30,6 +30,7 @@
 - [ ] `packages/api` - tRPC API package
 - [ ] `packages/auth` - Authentication package
 - [ ] `packages/db` - Database package
+- [ ] `packages/email` - Email package
 - [ ] `packages/ui` - UI components
 - [ ] `packages/uploader` - File uploader package
 - [ ] `packages/validators` - Validation schemas
