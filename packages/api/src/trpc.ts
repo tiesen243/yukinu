@@ -10,7 +10,7 @@ const isomorphicGetSession = async (headers: Headers) => {
   return auth({ headers })
 }
 
-const createTRPCContext = async (opts: { headers: Headers }) => {
+const createTRPCContext = async (opts: Request) => {
   const session = await isomorphicGetSession(opts.headers)
 
   console.log(
@@ -21,6 +21,7 @@ const createTRPCContext = async (opts: { headers: Headers }) => {
   )
 
   return {
+    req: opts,
     db,
     session,
   }

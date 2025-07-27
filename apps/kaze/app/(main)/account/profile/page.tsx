@@ -7,6 +7,8 @@ import { Button } from '@yuki/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@yuki/ui/card'
 import { Typography } from '@yuki/ui/typography'
 
+import { formatDate } from '@/lib/helpers'
+
 export default async function ProfilePage() {
   const { user } = await auth({ headers: await headers() })
   if (!user) return null
@@ -89,11 +91,11 @@ export default async function ProfilePage() {
               <div className='space-y-1 text-sm'>
                 <div className='flex justify-between'>
                   <span className='text-muted-foreground'>Joined:</span>
-                  <span>{user.createdAt.toLocaleDateString()}</span>
+                  <span>{formatDate(user.createdAt)}</span>
                 </div>
                 <div className='flex justify-between'>
                   <span className='text-muted-foreground'>Last Updated:</span>
-                  <span>{user.updatedAt.toLocaleDateString()}</span>
+                  <span>{formatDate(user.updatedAt)}</span>
                 </div>
               </div>
             </div>

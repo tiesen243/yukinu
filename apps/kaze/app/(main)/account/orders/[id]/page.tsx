@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Button } from '@yuki/ui/button'
 import { ArrowLeftIcon, Loader2Icon } from '@yuki/ui/icons'
 
-import { OrderDetail } from '@/app/(main)/profile/orders/[id]/page.client'
+import { OrderDetail } from '@/app/(main)/account/orders/[id]/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export default async function OrderDetailPage({

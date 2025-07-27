@@ -7,7 +7,7 @@ import { Typography } from '@yuki/ui/typography'
 import {
   AddressCardSkeleton,
   AddressList,
-} from '@/app/(main)/profile/address/page.client'
+} from '@/app/(main)/account/address/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export const dynamic = 'force-dynamic'

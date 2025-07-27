@@ -4,7 +4,7 @@ import {
   ChangePasswordForm,
   DeleteAccountForm,
   SessionList,
-} from '@/app/(main)/profile/security/page.client'
+} from '@/app/(main)/account/security/page.client'
 
 export default function AddressPage() {
   return (

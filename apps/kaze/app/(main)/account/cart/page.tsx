@@ -5,7 +5,7 @@ import { Typography } from '@yuki/ui/typography'
 import {
   CardList,
   CardListSkeleton,
-} from '@/app/(main)/profile/cart/page.client'
+} from '@/app/(main)/account/cart/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export const dynamic = 'force-dynamic'

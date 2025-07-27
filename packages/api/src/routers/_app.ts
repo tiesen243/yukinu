@@ -8,12 +8,15 @@ import { orderRouter } from './order'
 import { productRouter } from './product'
 
 const appRouter = createTRPCRouter({
-  health: publicProcedure.query(() => ({ message: 'OK' })),
   address: addressRouter,
   auth: authRouter,
   cart: cartRouter,
   order: orderRouter,
   product: productRouter,
+
+  health: publicProcedure.query(() => {
+    return { message: 'API is healthy' }
+  }),
 })
 
 type AppRouter = typeof appRouter

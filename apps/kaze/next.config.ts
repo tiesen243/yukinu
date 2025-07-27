@@ -13,6 +13,7 @@ const nextConfig = {
     '@yuki/api',
     '@yuki/auth',
     '@yuki/db',
+    '@yuki/email',
     '@yuki/ui',
     '@yuki/uploader',
     '@yuki/validators',

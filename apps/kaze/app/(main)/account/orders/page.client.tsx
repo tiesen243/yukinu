@@ -18,7 +18,7 @@ import { CalendarDaysIcon, PackageIcon } from '@yuki/ui/icons'
 import {
   MAX_ITEMS_DISPLAY,
   statusConfig,
-} from '@/app/(main)/profile/orders/_config'
+} from '@/app/(main)/account/orders/_config'
 import { formatCurrency, formatDate } from '@/lib/helpers'
 import { useTRPC } from '@/trpc/react'
 

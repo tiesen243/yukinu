@@ -142,21 +142,26 @@ export const UserButton: React.FC = () => {
 }
 
 const userNavItems = [
-  { href: '/profile', label: 'Profile', icon: UserIcon, shortcut: '⌘P' },
   {
-    href: '/profile/cart',
+    href: '/account/profile',
+    label: 'Profile',
+    icon: UserIcon,
+    shortcut: '⌘P',
+  },
+  {
+    href: '/account/cart',
     label: 'Cart',
     icon: ShoppingCartIcon,
     shortcut: '⌘C',
   },
   {
-    href: '/profile/orders',
+    href: '/account/orders',
     label: 'Orders',
     icon: ShoppingBagIcon,
     shortcut: '⌘O',
   },
   {
-    href: '/profile/security',
+    href: '/account/security',
     label: 'Security',
     icon: ShieldIcon,
     shortcut: '⌘S',

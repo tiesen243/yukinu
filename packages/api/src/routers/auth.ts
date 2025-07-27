@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server'
 import { Password } from '@yuki/auth'
 import { and, eq } from '@yuki/db'
 import { accounts, cartItems, sessions, users } from '@yuki/db/schema'
+import { sendEmail } from '@yuki/email'
 import {
   changePasswordSchema,
   deleteAccountSchema,
@@ -46,6 +47,13 @@ export const authRouter = {
         })
       })
 
+      await sendEmail({
+        email: 'Welcome',
+        to: input.email,
+        subject: 'Welcome to Yuki',
+        data: { name: input.name },
+      })
+
       return { message: 'User created successfully' }
     }),
 
@@ -53,6 +61,8 @@ export const authRouter = {
     .input(changePasswordSchema)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id
+      const ua = ctx.req.headers.get('user-agent') ?? 'unknown'
+      const ip = ctx.req.headers.get('x-forwarded-for') ?? 'unknown'
 
       const account = await ctx.db.query.accounts.findFirst({
         where: and(
@@ -97,6 +107,17 @@ export const authRouter = {
 
         if (input.isLogoutAll)
           await tx.delete(sessions).where(eq(sessions.userId, userId))
+
+        await sendEmail({
+          email: 'ChangePassword',
+          to: ctx.session.user.email,
+          subject: 'Your password has been changed',
+          data: {
+            name: ctx.session.user.name,
+            userAgent: ua,
+            ipAddress: ip,
+          },
+        })
       })
 
       return { message: 'Password changed successfully' }

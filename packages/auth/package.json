@@ -33,6 +33,7 @@
   "prettier": "@yuki/prettier-config",
   "dependencies": {
     "@yuki/db": "workspace:*",
+    "@yuki/email": "workspace:*",
     "@yuki/validators": "workspace:*"
   },
   "devDependencies": {

@@ -1,5 +1,6 @@
 import { and, db, eq } from '@yuki/db'
 import { accounts, sessions, users } from '@yuki/db/schema'
+import { sendEmail } from '@yuki/email'
 import { env } from '@yuki/validators/env'
 
 import type { AuthOptions } from './core/types'
@@ -46,6 +47,12 @@ function getAdapter(): AuthOptions['adapter'] {
     },
     createUser: async (data) => {
       const [user] = await db.insert(users).values(data).returning()
+      await sendEmail({
+        email: 'Welcome',
+        to: data.email,
+        subject: 'Welcome to Yuki',
+        data,
+      })
       return user ?? null
     },
     getAccount: async (provider, accountId) => {

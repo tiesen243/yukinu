@@ -40,7 +40,7 @@ import {
   SHIPPING,
   statusConfig,
   TAX,
-} from '@/app/(main)/profile/orders/_config'
+} from '@/app/(main)/account/orders/_config'
 import { formatCurrency, formatDate } from '@/lib/helpers'
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
