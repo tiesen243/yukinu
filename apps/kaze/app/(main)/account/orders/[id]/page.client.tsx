@@ -46,15 +46,16 @@ import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
 
 export const OrderDetail: React.FC<{ id: string }> = (props) => {
-  const router = useRouter()
   const { trpc, queryClient } = useTRPC()
-  const { data } = useSuspenseQuery(trpc.order.getUserOrder.queryOptions(props))
+  const router = useRouter()
+
+  const { data } = useSuspenseQuery(trpc.order.byId.queryOptions(props))
+
   const { mutate, isPending } = useMutation({
-    ...trpc.order.cancel.mutationOptions(),
+    ...trpc.order.update.mutationOptions(),
     onSuccess: async () => {
-      await queryClient.invalidateQueries(
-        trpc.order.getUserOrders.queryFilter(),
-      )
+      await queryClient.invalidateQueries(trpc.order.all.queryFilter())
+      await queryClient.invalidateQueries(trpc.order.byId.queryFilter(props))
       toast.success('Order cancelled successfully')
       router.push('/account/orders')
     },
@@ -288,7 +289,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
                   <Button
                     variant='destructive'
                     onClick={() => {
-                      mutate({ id: data.id })
+                      mutate({ id: data.id, status: 'cancelled' })
                     }}
                     disabled={isPending}
                   >

@@ -7,7 +7,7 @@ import { Button } from '@yuki/ui/button'
 import { useForm } from '@yuki/ui/form'
 import { Input } from '@yuki/ui/input'
 import { toast } from '@yuki/ui/sonner'
-import { updateSchema } from '@yuki/validators/address'
+import { updateAddressSchema } from '@yuki/validators/address'
 
 import { useTRPC } from '@/trpc/react'
 
@@ -23,7 +23,7 @@ export const CreateOrEditAddressForm: React.FC<{
       ...defaultValues,
       id,
     },
-    validator: updateSchema,
+    validator: updateAddressSchema,
     onSubmit:
       id === 'new'
         ? trpcClient.address.add.mutate

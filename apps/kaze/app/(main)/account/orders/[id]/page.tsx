@@ -11,9 +11,7 @@ export default async function OrderDetailPage({
   params,
 }: Readonly<{ params: Promise<{ id: string }> }>) {
   const { id } = await params
-  void getQueryClient().refetchQueries(
-    trpc.order.getUserOrder.queryOptions({ id }),
-  )
+  void getQueryClient().prefetchQuery(trpc.order.byId.queryOptions({ id }))
 
   return (
     <HydrateClient>

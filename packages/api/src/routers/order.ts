@@ -123,6 +123,8 @@ export const orderRouter = {
           address,
         },
       })
+
+      return { id: insertedOrder.id }
     }),
 
   update: protectedProcedure
@@ -147,7 +149,7 @@ export const orderRouter = {
             message: 'Order not found',
           })
 
-        const allowedStatuses = validTransitions[order.status] || []
+        const allowedStatuses = validTransitions[order.status] ?? []
         if (!allowedStatuses.includes(status))
           throw new TRPCError({
             code: 'BAD_REQUEST',
