@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import * as React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -46,20 +46,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       })
     },
   })
-
-  const isNew = useMemo(
+  const [active, setActive] = React.useState(false)
+  const isNew = React.useMemo(
     () => product.createdAt > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
     [product.createdAt],
   )
 
-  const price = useMemo(
+  const price = React.useMemo(
     () => product.price - product.price * (product.discount / 100),
     [product.price, product.discount],
   )
 
   return (
     <Card className='group/product-card h-full overflow-hidden py-4 pt-0 transition-all hover:shadow-md'>
-      <Link href={`/${slugify(product.name)}-${product.id}`}>
+      <Link
+        href={`/${slugify(product.name)}-${product.id}`}
+        prefetch={active ? null : false}
+        onMouseEnter={() => {
+          setActive(true)
+        }}
+      >
         <div className='relative mb-2 aspect-square overflow-hidden rounded-t-xl'>
           <Image
             src={product.image}
