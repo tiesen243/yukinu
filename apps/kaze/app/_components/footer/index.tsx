@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { Alert, AlertDescription, AlertTitle } from '@yuki/ui/alert'
 import { Button } from '@yuki/ui/button'
 import {
   FacebookIcon,
@@ -16,8 +17,8 @@ export const Footer = () => (
   <footer className='border-t bg-card py-12 text-card-foreground'>
     <div className='container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4'>
       <div className='space-y-4'>
-        <Link href='/' className='inline-block'>
-          <h2 className='text-2xl font-bold'>Yukinu</h2>
+        <Link href='/' className='inline-block text-2xl font-bold'>
+          Yukinu
         </Link>
         <p className='max-w-xs text-sm text-muted-foreground'>
           Your complete e-commerce destination for shopping online with a wide
@@ -45,9 +46,9 @@ export const Footer = () => (
       </div>
 
       <div className='space-y-4'>
-        <h3 className='text-sm font-medium tracking-wider uppercase'>
+        <p className='text-sm font-medium tracking-wider uppercase'>
           Quick Links
-        </h3>
+        </p>
         <ul className='space-y-2'>
           {[
             { href: '/home', text: 'Home' },
@@ -67,9 +68,9 @@ export const Footer = () => (
       </div>
 
       <div className='space-y-4'>
-        <h3 className='text-sm font-medium tracking-wider uppercase'>
+        <p className='text-sm font-medium tracking-wider uppercase'>
           Customer Service
-        </h3>
+        </p>
         <ul className='space-y-2'>
           {[
             { href: '/faq', text: 'FAQ' },
@@ -88,10 +89,10 @@ export const Footer = () => (
         </ul>
       </div>
 
-      <div className='space-y-4'>
-        <h3 className='text-sm font-medium tracking-wider uppercase'>
+      <div className='space-y-4 lg:row-span-2'>
+        <p className='text-sm font-medium tracking-wider uppercase'>
           Stay Updated
-        </h3>
+        </p>
         <p className='text-sm text-muted-foreground'>
           Subscribe to our newsletter for exclusive offers and updates.
         </p>
@@ -121,6 +122,14 @@ export const Footer = () => (
           </div>
         </div>
       </div>
+
+      <Alert className='md:col-span-2 lg:col-span-3'>
+        <AlertTitle>Development Notice</AlertTitle>
+        <AlertDescription>
+          This is a personal portfolio project for demonstration purposes only.
+          No actual products are sold.
+        </AlertDescription>
+      </Alert>
     </div>
 
     <hr className='my-8' />
