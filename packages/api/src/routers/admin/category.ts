@@ -1,7 +1,8 @@
 import type { TRPCRouterRecord } from '@trpc/server'
+import { TRPCError } from '@trpc/server'
 
 import { eq } from '@yuki/db'
-import { categories } from '@yuki/db/schema'
+import { categories, products } from '@yuki/db/schema'
 import {
   byCategoryIdSchema,
   updateCategorySchema,
@@ -21,7 +22,19 @@ export const adminCategoryRouter = {
 
   delete: adminProcedure
     .input(byCategoryIdSchema)
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db.delete(categories).where(eq(categories.id, input.id))
-    }),
+    .mutation(async ({ ctx, input }) =>
+      ctx.db.transaction(async (tx) => {
+        const productCount = await tx.$count(
+          products,
+          eq(products.categoryId, input.id),
+        )
+        if (productCount > 0)
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Category in use by products',
+          })
+
+        await ctx.db.delete(categories).where(eq(categories.id, input.id))
+      }),
+    ),
 } satisfies TRPCRouterRecord
