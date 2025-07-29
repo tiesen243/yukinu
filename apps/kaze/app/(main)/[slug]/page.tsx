@@ -7,6 +7,7 @@ import {
   RelativeProducts,
 } from '@/app/(main)/[slug]/page.client'
 import { createMetadata } from '@/lib/metadata'
+import { getBaseUrl } from '@/lib/utils'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export default async function ProductDetailPage({
@@ -35,10 +36,10 @@ export default async function ProductDetailPage({
       image: product.image,
       description: product.description,
       sku: product.id,
-      category: product.category,
+      category: product.category.name,
       offers: {
         '@type': 'Offer',
-        url: `https://yourstore.com/products/${product.id}`,
+        url: `${getBaseUrl()}/${slug}`,
         priceCurrency: 'USD',
         price: (product.price * (1 - product.discount / 100)).toFixed(2),
         priceValidUntil: Date.now() + 30 * 24 * 60 * 60 * 1000,
@@ -48,7 +49,7 @@ export default async function ProductDetailPage({
             : 'https://schema.org/OutOfStock',
         seller: {
           '@type': 'Organization',
-          name: 'Yukinu',
+          name: product.seller.name,
         },
       },
       aggregateRating: {
