@@ -135,8 +135,8 @@ export async function GET(request: NextRequest) {
               <img
                 src={image}
                 style={{
-                  width: '100%',
-                  aspectRatio: '1 / 1',
+                  width: '350px',
+                  height: '350px',
                   borderRadius: '16px',
                   objectFit: 'cover',
                 }}
