@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 
 import type { RouterOutputs } from '@yuki/api'
+import { Alert, AlertDescription, AlertTitle } from '@yuki/ui/alert'
 import { Button } from '@yuki/ui/button'
 import { useForm } from '@yuki/ui/form'
 import { Input } from '@yuki/ui/input'
@@ -51,6 +52,14 @@ export const CreateOrEditAddressForm: React.FC<{
         form.handleSubmit()
       }}
     >
+      <Alert variant='destructive'>
+        <AlertTitle>Development Notice</AlertTitle>
+        <AlertDescription>
+          This is just a personal project. Please don't add your actual address
+          information here.
+        </AlertDescription>
+      </Alert>
+
       <form.Field
         name='name'
         render={({ field, meta }) => (
