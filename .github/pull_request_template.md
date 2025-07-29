@@ -55,7 +55,7 @@
 **Migration commands (if applicable):**
 
 ```bash
-bun run db:migrate
+bun run db:push
 ```
 
 ## 📱 Screenshots/Videos

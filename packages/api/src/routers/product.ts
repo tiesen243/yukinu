@@ -3,12 +3,15 @@ import { TRPCError } from '@trpc/server'
 
 import { and, asc, desc, eq, ilike, ne } from '@yuki/db'
 import { categories, products } from '@yuki/db/schema'
-import { allSchema, byIdSchema } from '@yuki/validators/product'
+import {
+  allProductSchema,
+  byProductIdOrCategoryIdSchema,
+} from '@yuki/validators/product'
 
 import { publicProcedure } from '../trpc'
 
 export const productRouter = {
-  all: publicProcedure.input(allSchema).query(async ({ ctx, input }) => {
+  all: publicProcedure.input(allProductSchema).query(async ({ ctx, input }) => {
     const { page, limit, sort, order, query, category } = input
     const orderBy = order === 'asc' ? asc : desc
 
@@ -35,28 +38,30 @@ export const productRouter = {
     }
   }),
 
-  byId: publicProcedure.input(byIdSchema).query(async ({ ctx, input }) => {
-    const [product] = await ctx.db
-      .select(productDetail)
-      .from(products)
-      .where(eq(products.id, input.id))
-      .innerJoin(categories, eq(products.categoryId, categories.id))
-      .limit(1)
+  byId: publicProcedure
+    .input(byProductIdOrCategoryIdSchema)
+    .query(async ({ ctx, input }) => {
+      const [product] = await ctx.db
+        .select(productDetail)
+        .from(products)
+        .where(eq(products.id, input.id))
+        .innerJoin(categories, eq(products.categoryId, categories.id))
+        .limit(1)
 
-    if (!product)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Product with ID ${input.id} not found`,
-      })
+      if (!product)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Product with ID ${input.id} not found`,
+        })
 
-    return {
-      product,
-      reviews,
-    }
-  }),
+      return {
+        product,
+        reviews,
+      }
+    }),
 
   relativeProducts: publicProcedure
-    .input(byIdSchema)
+    .input(byProductIdOrCategoryIdSchema)
     .query(async ({ ctx, input }) => {
       if (!input.categoryId)
         throw new TRPCError({

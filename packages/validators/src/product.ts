@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 
-export const allSchema = z.object({
+export const allProductSchema = z.object({
   query: z.string().optional(),
   category: z
     .preprocess((val) => {
@@ -16,7 +16,21 @@ export const allSchema = z.object({
   order: z.enum(['asc', 'desc']).default('desc'),
 })
 
-export const byIdSchema = z.object({
+export const byProductIdOrCategoryIdSchema = z.object({
   id: z.cuid2(),
   categoryId: z.cuid2().optional(),
+})
+
+export const createProductSchema = z.object({
+  name: z.string().min(1).max(100),
+  description: z.string().min(1).max(1000),
+  image: z.url(),
+  stock: z.coerce.number().int().min(0).default(0),
+  price: z.coerce.number().min(0).default(0),
+  categoryId: z.cuid2(),
+})
+
+export const updateProductSchema = createProductSchema.extend({
+  id: z.cuid2(),
+  discount: z.coerce.number().int().min(0).default(0),
 })

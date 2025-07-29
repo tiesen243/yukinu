@@ -26,7 +26,7 @@ const AddressCard: React.FC<{
 }> = ({ address }) => {
   const { trpc, queryClient } = useTRPC()
   const { mutate: remove, isPending: isRemoving } = useMutation({
-    ...trpc.address.remove.mutationOptions(),
+    ...trpc.address.delete.mutationOptions(),
     onSuccess: () =>
       queryClient.invalidateQueries(trpc.address.all.queryFilter()),
     onError: (error) => {

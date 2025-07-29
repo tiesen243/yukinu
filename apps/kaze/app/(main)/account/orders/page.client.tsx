@@ -24,14 +24,14 @@ import { useTRPC } from '@/trpc/react'
 
 export const OrderList: React.FC = () => {
   const { trpc } = useTRPC()
-  const { data } = useSuspenseQuery(trpc.order.getUserOrders.queryOptions())
+  const { data } = useSuspenseQuery(trpc.order.all.queryOptions())
 
   return data.map((order) => <OrderPreviewCard key={order.id} order={order} />)
 }
 
 const OrderPreviewCard = ({
   order,
-}: Readonly<{ order: RouterOutputs['order']['getUserOrders'][number] }>) => {
+}: Readonly<{ order: RouterOutputs['order']['all'][number] }>) => {
   const totalItems = order.orderItems.reduce(
     (sum, item) => sum + item.quantity,
     0,

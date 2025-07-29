@@ -1,6 +1,10 @@
 import * as z from 'zod/v4'
 
-export const createSchema = z.object({
+export const byOrderIdSchema = z.object({
+  id: z.cuid2(),
+})
+
+export const createOrderSchema = z.object({
   items: z.array(
     z.object({
       productId: z.cuid2(),
@@ -11,6 +15,6 @@ export const createSchema = z.object({
   addressId: z.cuid2(),
 })
 
-export const byIdSchema = z.object({
-  id: z.cuid2(),
+export const updateOrderSchema = byOrderIdSchema.extend({
+  status: z.enum(['pending', 'paid', 'shipped', 'delivered', 'cancelled']),
 })

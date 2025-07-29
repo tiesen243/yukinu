@@ -21,6 +21,7 @@ async function main() {
         insertedCategories.find(
           (category) => category.name === product.category,
         )?.id ?? '',
+      sellerId: '', // Replace with actual seller ID
     })),
   )
 }

@@ -1,7 +1,7 @@
 import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-export const roles = pgEnum('role', ['user', 'admin'])
+export const roles = pgEnum('role', ['admin', 'seller', 'user'])
 export const users = pgTable(
   'user',
   (t) => ({
@@ -27,7 +27,10 @@ export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   verifiers: many(verifiers),
   addresses: many(addresses),
+  cartItems: many(cartItems),
   orders: many(orders),
+
+  products: many(products),
 }))
 
 export const accounts = pgTable(
@@ -142,6 +145,10 @@ export const products = pgTable(
       .varchar({ length: 25 })
       .notNull()
       .references(() => categories.id, { onDelete: 'cascade' }),
+    sellerId: t
+      .varchar({ length: 25 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
     createdAt: t
       .timestamp({ mode: 'date', withTimezone: true })
       .defaultNow()
@@ -154,6 +161,7 @@ export const products = pgTable(
   }),
   (t) => [
     index('product_name_idx').on(t.name),
+    index('product_seller_id_idx').on(t.sellerId),
     index('product_category_id_idx').on(t.categoryId),
   ],
 )
@@ -163,6 +171,10 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   category: one(categories, {
     fields: [products.categoryId],
     references: [categories.id],
+  }),
+  seller: one(users, {
+    fields: [products.sellerId],
+    references: [users.id],
   }),
 }))
 
