@@ -6,6 +6,7 @@ import { and, eq } from '@yuki/db'
 import {
   accounts,
   cartItems,
+  products,
   sessions,
   users,
   verifiers,
@@ -47,6 +48,7 @@ export const authRouter = {
             image: '',
           })
           .returning({ id: users.id })
+
         await tx.insert(accounts).values({
           provider: 'credentials',
           accountId: newUser?.id ?? '',
@@ -69,9 +71,9 @@ export const authRouter = {
   changePassword: protectedProcedure
     .input(changePasswordSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id
-      const userAgent = ctx.req.headers.get('user-agent') ?? 'unknown'
       const ipAddress = ctx.req.headers.get('x-forwarded-for') ?? 'unknown'
+      const userAgent = ctx.req.headers.get('user-agent') ?? 'unknown'
+      const userId = ctx.session.user.id
 
       const account = await ctx.db.query.accounts.findFirst({
         where: and(
@@ -145,6 +147,7 @@ export const authRouter = {
           userId: user.id,
         })
         .returning()
+
       if (verifier)
         await sendEmail({
           email: 'ResetPassword',
@@ -161,27 +164,22 @@ export const authRouter = {
   resetPassword: publicProcedure
     .input(resetPasswordSchema)
     .mutation(async ({ ctx, input }) => {
-      const userAgent = ctx.req.headers.get('user-agent') ?? 'unknown'
       const ipAddress = ctx.req.headers.get('x-forwarded-for') ?? 'unknown'
+      const userAgent = ctx.req.headers.get('user-agent') ?? 'unknown'
 
-      const verifier = await ctx.db.query.verifiers.findFirst({
-        where: (t, { eq }) => eq(t.token, input.token),
-        with: { user: true },
-      })
-      if (!verifier)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Invalid or expired reset token',
+      const verifier = await ctx.db.transaction(async (tx) => {
+        const verifier = await tx.query.verifiers.findFirst({
+          where: (t, { eq }) => eq(t.token, input.token),
+          with: { user: true },
         })
-      if (verifier.expiration < new Date()) {
-        await ctx.db.delete(verifiers).where(eq(verifiers.token, input.token))
-        throw new TRPCError({
-          code: 'UNAUTHORIZED',
-          message: 'Reset token has expired',
-        })
-      }
+        if (!verifier || verifier.expiration < new Date()) {
+          await tx.delete(verifiers).where(eq(verifiers.token, input.token))
+          throw new TRPCError({
+            code: 'NOT_FOUND',
+            message: 'Invalid or expired reset token',
+          })
+        }
 
-      await ctx.db.transaction(async (tx) => {
         await tx
           .update(accounts)
           .set({ password: await password.hash(input.newPassword) })
@@ -193,6 +191,8 @@ export const authRouter = {
           )
         await tx.delete(verifiers).where(eq(verifiers.userId, verifier.userId))
         await tx.delete(sessions).where(eq(sessions.userId, verifier.userId))
+
+        return verifier
       })
 
       await sendEmail({
@@ -250,6 +250,7 @@ export const authRouter = {
         await tx.delete(accounts).where(eq(accounts.userId, userId))
         await tx.delete(sessions).where(eq(sessions.userId, userId))
         await tx.delete(cartItems).where(eq(cartItems.userId, userId))
+        await tx.delete(products).where(eq(products.sellerId, userId))
       })
     }),
 } satisfies TRPCRouterRecord

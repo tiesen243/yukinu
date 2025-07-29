@@ -1,10 +1,10 @@
 import * as z from 'zod/v4'
 
-export const byIdSchema = z.object({
+export const byAdressIdSchema = z.object({
   id: z.cuid2(),
 })
 
-export const addSchema = z.object({
+export const addAdressSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   phone: z.string().min(1, 'Phone is required'),
   line1: z.string().min(1, 'Address line 1 is required'),
@@ -16,7 +16,6 @@ export const addSchema = z.object({
   isDefault: z.boolean().default(false),
 })
 
-export const updateSchema = z.object({
-  ...byIdSchema.shape,
-  ...addSchema.shape,
-})
+export const updateAddressSchema = byAdressIdSchema.extend(
+  addAdressSchema.shape,
+)

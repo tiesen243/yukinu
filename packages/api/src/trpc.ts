@@ -62,6 +62,19 @@ const protectedProcedure = t.procedure
       },
     })
   })
+const sellerProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role === 'user')
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Seller access required',
+    })
+  return next()
+})
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== 'admin')
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' })
+  return next()
+})
 
 export {
   createCallerFactory,
@@ -69,4 +82,6 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  sellerProcedure,
+  adminProcedure,
 }

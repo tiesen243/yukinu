@@ -44,8 +44,8 @@ export const cartRouter = {
   update: protectedProcedure
     .input(updateCartSchema)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id
       const { productId, quantity, type } = input
+      const userId = ctx.session.user.id
 
       const where = and(
         eq(cartItems.userId, userId),
@@ -55,7 +55,7 @@ export const cartRouter = {
       const [cartItem, product] = await Promise.all([
         ctx.db.query.cartItems.findFirst({ where }),
         ctx.db.query.products.findFirst({
-          where: eq(products.id, productId), // Fixed: use products.id instead of cartItems.productId
+          where: eq(products.id, productId),
         }),
       ])
       if (!product)
@@ -66,7 +66,7 @@ export const cartRouter = {
 
       if (type === 'remove') {
         if (cartItem) await ctx.db.delete(cartItems).where(where)
-        return { success: true }
+        return
       }
 
       const finalQuantity = cartItem
@@ -80,15 +80,12 @@ export const cartRouter = {
           message: 'Insufficient stock available',
         })
 
-      if (!cartItem)
-        await ctx.db
-          .insert(cartItems)
-          .values({ userId, productId, quantity: finalQuantity })
-      else
-        await ctx.db
-          .update(cartItems)
-          .set({ quantity: finalQuantity })
-          .where(where)
-      return { success: true }
+      await ctx.db
+        .insert(cartItems)
+        .values({ userId, productId, quantity: finalQuantity })
+        .onConflictDoUpdate({
+          target: [cartItems.userId, cartItems.productId],
+          set: { quantity: finalQuantity },
+        })
     }),
 } satisfies TRPCRouterRecord
