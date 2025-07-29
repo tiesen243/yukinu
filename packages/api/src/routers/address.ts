@@ -26,7 +26,12 @@ export const addressRouter = {
       const [address] = await ctx.db
         .select()
         .from(addresses)
-        .where(eq(addresses.id, input.id))
+        .where(
+          and(
+            eq(addresses.id, input.id),
+            eq(addresses.userId, ctx.session.user.id),
+          ),
+        )
         .limit(1)
       if (!address)
         throw new TRPCError({ code: 'NOT_FOUND', message: 'Address not found' })
@@ -36,13 +41,13 @@ export const addressRouter = {
   add: protectedProcedure
     .input(addAddressSchema)
     .mutation(async ({ ctx, input }) => {
-      const count = await ctx.db.$count(
+      const addressCount = await ctx.db.$count(
         addresses,
         eq(addresses.userId, ctx.session.user.id),
       )
       await ctx.db.insert(addresses).values({
         ...input,
-        isDefault: count === 0,
+        isDefault: addressCount === 0,
         userId: ctx.session.user.id,
       })
     }),
@@ -51,7 +56,15 @@ export const addressRouter = {
     .input(updateAddressSchema)
     .mutation(async ({ ctx, input: { id, ...values } }) =>
       ctx.db.transaction(async (tx) => {
-        await tx.update(addresses).set(values).where(eq(addresses.id, id))
+        await tx
+          .update(addresses)
+          .set(values)
+          .where(
+            and(
+              eq(addresses.id, id),
+              eq(addresses.userId, ctx.session.user.id),
+            ),
+          )
 
         if (values.isDefault)
           await tx
@@ -70,10 +83,15 @@ export const addressRouter = {
     .input(byAddressIdSchema)
     .mutation(async ({ ctx, input }) =>
       ctx.db.transaction(async (tx) => {
+        const query = and(
+          eq(addresses.id, input.id),
+          eq(addresses.userId, ctx.session.user.id),
+        )
+
         const [address] = await tx
           .select()
           .from(addresses)
-          .where(eq(addresses.id, input.id))
+          .where(query)
           .limit(1)
 
         if (address?.isDefault)
@@ -82,7 +100,7 @@ export const addressRouter = {
             message: 'Change the default address before removing this one',
           })
 
-        await tx.delete(addresses).where(eq(addresses.id, input.id))
+        await tx.delete(addresses).where(query)
       }),
     ),
 } satisfies TRPCRouterRecord
