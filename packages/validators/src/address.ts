@@ -1,6 +1,6 @@
 import * as z from 'zod/v4'
 
-export const byAdressIdSchema = z.object({
+export const byAddressIdSchema = z.object({
   id: z.cuid2(),
 })
 
