@@ -24,7 +24,12 @@ export const sellerProductRouter = {
   update: sellerProcedure
     .input(updateProductSchema)
     .mutation(async ({ ctx, input: { id, ...values } }) => {
-      await ctx.db.update(products).set(values).where(eq(products.id, id))
+      await ctx.db
+        .update(products)
+        .set(values)
+        .where(
+          and(eq(products.id, id), eq(products.sellerId, ctx.session.user.id)),
+        )
     }),
 
   delete: sellerProcedure
@@ -34,8 +39,8 @@ export const sellerProductRouter = {
         .delete(products)
         .where(
           and(
-            eq(products.sellerId, ctx.session.user.id),
             eq(products.id, input.id),
+            eq(products.sellerId, ctx.session.user.id),
           ),
         )
     }),

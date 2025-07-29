@@ -4,8 +4,8 @@ import { TRPCError } from '@trpc/server'
 import { and, desc, eq, ne } from '@yuki/db'
 import { addresses } from '@yuki/db/schema'
 import {
-  addAdressSchema,
-  byAdressIdSchema,
+  addAddressSchema,
+  byAddressIdSchema,
   updateAddressSchema,
 } from '@yuki/validators/address'
 
@@ -21,7 +21,7 @@ export const addressRouter = {
   ),
 
   byId: protectedProcedure
-    .input(byAdressIdSchema)
+    .input(byAddressIdSchema)
     .query(async ({ ctx, input }) => {
       const [address] = await ctx.db
         .select()
@@ -34,7 +34,7 @@ export const addressRouter = {
     }),
 
   add: protectedProcedure
-    .input(addAdressSchema)
+    .input(addAddressSchema)
     .mutation(async ({ ctx, input }) => {
       const count = await ctx.db.$count(
         addresses,
@@ -67,7 +67,7 @@ export const addressRouter = {
     ),
 
   delete: protectedProcedure
-    .input(byAdressIdSchema)
+    .input(byAddressIdSchema)
     .mutation(async ({ ctx, input }) =>
       ctx.db.transaction(async (tx) => {
         const [address] = await tx

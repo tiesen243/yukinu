@@ -12,6 +12,14 @@ import {
 
 import { protectedProcedure } from '../trpc'
 
+const VALID_TRANSITIONS: Record<string, string[]> = {
+  pending: ['processing', 'cancelled'],
+  processing: ['shipped', 'cancelled'],
+  shipped: ['delivered'],
+  delivered: [],
+  cancelled: [],
+}
+
 export const orderRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user.id
@@ -133,14 +141,6 @@ export const orderRouter = {
       const userId = ctx.session.user.id
       const query = and(eq(orders.id, id), eq(orders.userId, userId))
 
-      const validTransitions: Record<string, string[]> = {
-        pending: ['processing', 'cancelled'],
-        processing: ['shipped', 'cancelled'],
-        shipped: ['delivered'],
-        delivered: [],
-        cancelled: [],
-      }
-
       await ctx.db.transaction(async (tx) => {
         const order = await tx.query.orders.findFirst({ where: query })
         if (!order)
@@ -149,7 +149,7 @@ export const orderRouter = {
             message: 'Order not found',
           })
 
-        const allowedStatuses = validTransitions[order.status] ?? []
+        const allowedStatuses = VALID_TRANSITIONS[order.status] ?? []
         if (!allowedStatuses.includes(status))
           throw new TRPCError({
             code: 'BAD_REQUEST',
