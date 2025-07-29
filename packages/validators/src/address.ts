@@ -16,6 +16,6 @@ export const addAddressSchema = z.object({
   isDefault: z.boolean().default(false),
 })
 
-export const updateAddressSchema = byAdressIdSchema.extend(
-  addAdressSchema.shape,
+export const updateAddressSchema = byAddressIdSchema.extend(
+  addAddressSchema.shape,
 )
