@@ -4,7 +4,7 @@ export const byAddressIdSchema = z.object({
   id: z.cuid2(),
 })
 
-export const addAdressSchema = z.object({
+export const addAddressSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   phone: z.string().min(1, 'Phone is required'),
   line1: z.string().min(1, 'Address line 1 is required'),
