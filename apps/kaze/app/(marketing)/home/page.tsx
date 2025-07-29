@@ -83,7 +83,7 @@ export default function HomePage() {
           <div className='relative'>
             <div className='relative z-10'>
               <Image
-                src='/assets/preview.webp'
+                src='/assets/images/preview.webp'
                 alt='Yukinu App Interface'
                 width={1920}
                 height={1080}

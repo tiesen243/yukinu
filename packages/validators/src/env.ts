@@ -6,12 +6,16 @@ export const env = createEnv({
       z.enum(['development', 'production', 'test']),
       'development',
     ),
+
     DATABASE_URL: z.string().check(z.startsWith('postgresql://')),
+
     AUTH_FACEBOOK_ID: z.string(),
     AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
+
     UPLOADTHING_TOKEN: z.string(),
+
     RESEND_TOKEN: z.string(),
 
     // Vercel environment variables

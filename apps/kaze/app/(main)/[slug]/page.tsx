@@ -119,8 +119,8 @@ export const generateMetadata = async ({
       description: product.description,
       openGraph: {
         images: [
-          product.image,
           `/api/og?title=${product.name}&description=${product.description}&image=${product.image}`,
+          product.image,
         ],
       },
     })

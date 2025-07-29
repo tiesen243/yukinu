@@ -9,7 +9,7 @@ export function Header() {
     <header className='sticky inset-0 z-50 flex flex-col justify-center gap-4 border-b bg-background/70 py-4 backdrop-blur-xl backdrop-saturate-150 md:h-16'>
       <Link href='/' className='flex justify-center gap-2 md:hidden'>
         <Image
-          src='/assets/logo.svg'
+          src='/assets/images/logo.svg'
           alt='yukinu-logo'
           width={32}
           height={32}
@@ -23,7 +23,7 @@ export function Header() {
       <div className='container flex items-center justify-between gap-4'>
         <Link href='/' className='hidden items-center gap-2 md:flex'>
           <Image
-            src='/assets/logo.svg'
+            src='/assets/images/logo.svg'
             alt='yukinu-logo'
             width={32}
             height={32}
