@@ -112,7 +112,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
             <h3 className='sr-only'>Product Price section</h3>
             <div className='flex items-center gap-3'>
               <span className='text-3xl font-bold'>
-                {formatCurrency(discountedPrice)};
+                {formatCurrency(discountedPrice)}
               </span>
               {product.discount > 0 && (
                 <>
@@ -257,7 +257,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
             <Card>
               <h3 className='sr-only'>Shipping & Returns Information</h3>
 
-              <CardContent className='pt-6'>
+              <CardContent>
                 <section className='space-y-4'>
                   <div>
                     <h4 className='mb-2 font-semibold'>Shipping Information</h4>

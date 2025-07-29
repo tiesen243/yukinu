@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
 
 import { and, asc, desc, eq, ilike, ne } from '@yuki/db'
-import { categories, products } from '@yuki/db/schema'
+import { categories, products, users } from '@yuki/db/schema'
 import {
   allProductSchema,
   byProductIdOrCategoryIdSchema,
@@ -46,6 +46,7 @@ export const productRouter = {
         .from(products)
         .where(eq(products.id, input.id))
         .innerJoin(categories, eq(products.categoryId, categories.id))
+        .innerJoin(users, eq(products.sellerId, users.id))
         .limit(1)
 
       if (!product)
@@ -102,6 +103,12 @@ const productDetail = {
   stock: products.stock,
   price: products.price,
   discount: products.discount,
+  seller: {
+    id: users.id,
+    name: users.name,
+    email: users.email,
+    image: users.image,
+  },
   category: {
     id: categories.id,
     name: categories.name,
