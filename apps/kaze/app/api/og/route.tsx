@@ -6,8 +6,6 @@ import { ImageResponse } from 'next/og'
 
 import { createMetadata } from '@/lib/metadata'
 
-export const runtime = 'edge'
-
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)

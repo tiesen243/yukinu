@@ -10,8 +10,15 @@ import {
 import type { SendEmailParams } from '..'
 import { EmailLayout } from './_layout'
 
-export default function ResetPasswordEmail({ data }: SendEmailParams) {
-  const { name = 'Yuki', token = '' } = (data ?? {}) as Record<string, string>
+interface ResetPasswordEmailProps extends SendEmailParams {
+  data?: {
+    name: string
+    token: string
+  }
+}
+
+export default function ResetPasswordEmail({ data }: ResetPasswordEmailProps) {
+  const { name, token } = data ?? { name: 'Yuki', token: '' }
   const resetUrl = `https://yukinu.vercel.app/forgot-password/reset?token=${token}`
 
   return (

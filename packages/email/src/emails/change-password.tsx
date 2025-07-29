@@ -3,7 +3,18 @@ import { Button, Heading, Hr, Section, Text } from '@react-email/components'
 import type { SendEmailParams } from '..'
 import { EmailLayout } from './_layout'
 
-export default function ChangePasswordEmail({ data }: SendEmailParams) {
+interface ChangePasswordEmailProps extends SendEmailParams {
+  data: {
+    name?: string
+    ipAddress?: string
+    userAgent?: string
+    changeDate?: string
+  }
+}
+
+export default function ChangePasswordEmail({
+  data,
+}: ChangePasswordEmailProps) {
   const {
     name = 'Yuki',
     ipAddress = 'unknown',
@@ -16,7 +27,7 @@ export default function ChangePasswordEmail({ data }: SendEmailParams) {
       minute: '2-digit',
       hour12: false,
     }).format(Date.now()),
-  } = (data ?? {}) as Record<string, string>
+  } = data
 
   return (
     <EmailLayout previewText='Your password has been changed successfully'>

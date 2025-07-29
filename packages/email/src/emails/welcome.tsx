@@ -3,8 +3,14 @@ import { Button, Heading, Hr, Section, Text } from '@react-email/components'
 import type { SendEmailParams } from '..'
 import { EmailLayout } from './_layout'
 
-export default function Welcome({ data }: SendEmailParams) {
-  const { name = 'Yuki' } = (data ?? {}) as Record<string, string>
+interface WelcomeEmailProps extends SendEmailParams {
+  data?: {
+    name: string
+  }
+}
+
+export default function Welcome({ data }: WelcomeEmailProps) {
+  const { name } = data ?? { name: 'Yuki' }
 
   return (
     <EmailLayout previewText='Welcome to our store - Start shopping today!'>

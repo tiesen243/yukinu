@@ -26,13 +26,13 @@
     "resend": "^4.7.0"
   },
   "devDependencies": {
-    "@react-email/preview-server": "4.2.4",
+    "@react-email/preview-server": "4.2.5",
     "@yuki/eslint-config": "workspace:*",
     "@yuki/prettier-config": "workspace:*",
     "@yuki/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "react-email": "^4.2.4",
+    "react-email": "^4.2.5",
     "typescript": "catalog:"
   }
 }

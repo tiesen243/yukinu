@@ -17,18 +17,18 @@
   "dependencies": {
     "@tanstack/vue-query": "^5.83.0",
     "@trpc/client": "catalog:api",
-    "@vueuse/core": "^13.5.0",
+    "@vueuse/core": "^13.6.0",
     "@yuki/api": "workspace:*",
     "@yuki/ui": "workspace:*",
     "@yuki/validators": "workspace:*",
-    "lucide-vue-next": "^0.526.0",
+    "lucide-vue-next": "^0.533.0",
     "superjson": "catalog:api",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "catalog:tailwind",
-    "@vitejs/plugin-vue": "^6.0.0",
+    "@vitejs/plugin-vue": "^6.0.1",
     "@yuki/eslint-config": "workspace:*",
     "@yuki/prettier-config": "workspace:*",
     "@yuki/tsconfig": "workspace:*",

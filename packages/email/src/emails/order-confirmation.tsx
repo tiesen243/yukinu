@@ -14,9 +14,37 @@ import { EmailLayout } from './_layout'
 const SHIPPING = 9.99
 const TAX = 0.08
 
-export default function OrderConfirmation({ data }: SendEmailParams) {
-  const { user, order, items, address } = (data ??
-    sampleData) as OrderConfirmationData
+interface OrderConfirmationProps extends SendEmailParams {
+  data?: {
+    user: {
+      name: string
+      email: string
+    }
+    order: {
+      id: string
+      total: number
+      createdAt: Date
+    }
+    address: {
+      line1: string
+      line2: string | null
+      city: string
+      state: string
+      postalCode: string
+      country: string
+    }
+    items: {
+      productId: string
+      productName: string
+      productImage: string
+      productPrice: number
+      quantity: number
+    }[]
+  }
+}
+
+export default function OrderConfirmation({ data }: OrderConfirmationProps) {
+  const { user, order, items, address } = data ?? sampleData
 
   const estimatedDelivery = new Date(order.createdAt)
   estimatedDelivery.setDate(
@@ -167,34 +195,7 @@ export default function OrderConfirmation({ data }: SendEmailParams) {
   )
 }
 
-interface OrderConfirmationData {
-  user: {
-    name: string
-    email: string
-  }
-  order: {
-    id: string
-    total: number
-    createdAt: Date
-  }
-  address: {
-    line1: string
-    line2: string | null
-    city: string
-    state: string
-    postalCode: string
-    country: string
-  }
-  items: {
-    productId: string
-    productName: string
-    productImage: string
-    productPrice: number
-    quantity: number
-  }[]
-}
-
-const sampleData: OrderConfirmationData = {
+const sampleData = {
   user: {
     name: 'Yuki',
     email: 'yuki@example.com',

@@ -20,7 +20,7 @@ async function sendEmail(params: SendEmailParams) {
     to: params.to,
     subject: params.subject,
     text: params.text,
-    react: email[params.email](params),
+    react: email[params.email](params as never),
   })
 
   if (env.NODE_ENV === 'development') console.log('Email sent:', res)
