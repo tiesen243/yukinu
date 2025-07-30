@@ -21,7 +21,7 @@
   },
   "prettier": "@yuki/prettier-config",
   "dependencies": {
-    "@react-email/components": "^0.3.2",
+    "@react-email/components": "^0.3.3",
     "@yuki/validators": "workspace:*",
     "resend": "^4.7.0"
   },

@@ -124,7 +124,7 @@ export default function AboutPage() {
 
         <div className='relative'>
           <Image
-            src='/assets/hero-1.webp'
+            src='/assets/images/hero-1.webp'
             alt='Our Mission'
             width={600}
             height={500}
