@@ -31,6 +31,29 @@ export const statusConfig = {
   },
 } as const
 
+export const paymentStatusConfig = {
+  pending: {
+    label: 'Pending',
+    variant: 'warning',
+    description: 'Payment is being processed',
+  },
+  completed: {
+    label: 'Completed',
+    variant: 'success',
+    description: 'Payment has been completed successfully',
+  },
+  failed: {
+    label: 'Failed',
+    variant: 'error',
+    description: 'Payment failed, please try again',
+  },
+  refunded: {
+    label: 'Refunded',
+    variant: 'info',
+    description: 'Payment has been refunded',
+  },
+} as const
+
 export const orderTimeline = {
   pending: [
     { status: 'pending', label: 'Order Placed', completed: true },

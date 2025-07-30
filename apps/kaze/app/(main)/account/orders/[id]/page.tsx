@@ -15,8 +15,8 @@ export default async function OrderDetailPage({
 
   return (
     <HydrateClient>
-      <section className='grid gap-4'>
-        <section className='flex items-center gap-4'>
+      <section className='w-full'>
+        <div className='mb-4 flex items-center gap-4'>
           <Button variant='ghost' size='icon' asChild>
             <Link href='/account/orders'>
               <ArrowLeftIcon />
@@ -24,15 +24,13 @@ export default async function OrderDetailPage({
           </Button>
           <div>
             <h2 className='text-2xl font-bold'>Order Details</h2>
-            <p className='text-muted-foreground'>
-              Order #{id.slice(-8).toUpperCase()}
-            </p>
+            <p className='text-muted-foreground'>Order #{id.toUpperCase()}</p>
           </div>
-        </section>
+        </div>
 
         <Suspense
           fallback={
-            <div className='grid h-[50dvh] w-full place-items-center'>
+            <div className='grid w-full place-items-center py-20'>
               <Loader2Icon className='animate-spin' />
             </div>
           }

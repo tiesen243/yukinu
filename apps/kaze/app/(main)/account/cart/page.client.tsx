@@ -35,6 +35,8 @@ export const CardList: React.FC = () => {
   const [addressId, setAddressId] = useState<string>(
     addresses.find((address) => address.isDefault)?.id ?? '',
   )
+  const [paymentMethod, setPaymentMethod] =
+    useState<(typeof paymentMethods)[number]>('credit_card')
   const { mutate, isPending } = useMutation({
     ...trpc.order.create.mutationOptions(),
     onSuccess: ({ id }) => {
@@ -61,7 +63,7 @@ export const CardList: React.FC = () => {
             Items: {cart.items.length}
           </p>
 
-          <div className='grid grid-cols-2 gap-4 pt-4'>
+          <div className='grid grid-cols-3 gap-4 pt-4'>
             <Select defaultValue={addressId} onValueChange={setAddressId}>
               <SelectTrigger className='line-clamp-1 w-full'>
                 <SelectValue placeholder='Select a address' />
@@ -94,11 +96,32 @@ export const CardList: React.FC = () => {
               </SelectContent>
             </Select>
 
+            <Select
+              defaultValue={paymentMethod}
+              onValueChange={(value) => {
+                setPaymentMethod(value as (typeof paymentMethods)[number])
+              }}
+            >
+              <SelectTrigger className='w-full'>
+                <SelectValue placeholder='Select a payment method' />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {paymentMethods.map((method) => (
+                    <SelectItem key={method} value={method}>
+                      {method.replace(/_/g, ' ')}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+
             <Button
               className='w-full'
               onClick={() => {
                 mutate({
                   addressId,
+                  paymentMethod,
                   items: cart.items.map((item) => ({
                     productId: item.productId,
                     quantity: item.quantity,
@@ -305,3 +328,11 @@ const CartItemSkeleton: React.FC = () => {
     </Card>
   )
 }
+
+const paymentMethods = [
+  'credit_card',
+  'debit_card',
+  'paypal',
+  'bank_transfer',
+  'cash_on_delivery',
+] as const

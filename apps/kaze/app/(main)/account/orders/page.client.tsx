@@ -46,7 +46,7 @@ const OrderPreviewCard = ({
       <CardHeader>
         <div className='flex items-center justify-between'>
           <CardTitle className='text-lg font-semibold'>
-            Order #{order.id.slice(-8).toUpperCase()}
+            Order #{order.id.toUpperCase()}
           </CardTitle>
           <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
         </div>
@@ -105,7 +105,7 @@ const OrderPreviewCard = ({
         <div className='flex items-center justify-between'>
           <span className='font-medium'>Total</span>
           <span className='text-lg font-bold'>
-            {formatCurrency(order.total)}
+            {formatCurrency(order.payment?.amount ?? 0)}
           </span>
         </div>
       </CardContent>

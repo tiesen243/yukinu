@@ -2,10 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import {
+  BanIcon,
   CalendarIcon,
+  CreditCardIcon,
   MapPinIcon,
   PackageIcon,
   PhoneIcon,
@@ -37,6 +38,7 @@ import { toast } from '@yuki/ui/sonner'
 
 import {
   orderTimeline,
+  paymentStatusConfig,
   SHIPPING,
   statusConfig,
   TAX,
@@ -47,7 +49,6 @@ import { useTRPC } from '@/trpc/react'
 
 export const OrderDetail: React.FC<{ id: string }> = (props) => {
   const { trpc, queryClient } = useTRPC()
-  const router = useRouter()
 
   const { data } = useSuspenseQuery(trpc.order.byId.queryOptions(props))
 
@@ -57,7 +58,6 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
       await queryClient.invalidateQueries(trpc.order.all.queryFilter())
       await queryClient.invalidateQueries(trpc.order.byId.queryFilter(props))
       toast.success('Order cancelled successfully')
-      router.push('/account/orders')
     },
     onError: (error) => toast.error(error.message),
   })
@@ -106,6 +106,38 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
                   </span>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className='flex items-center gap-2'>
+              <CreditCardIcon className='size-5' /> Payment Status
+            </CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-3'>
+            <div className='flex items-center justify-between'>
+              <span className='text-sm text-muted-foreground'>Status:</span>
+              <Badge
+                variant={
+                  paymentStatusConfig[data.payment?.status ?? 'pending'].variant
+                }
+              >
+                {paymentStatusConfig[data.payment?.status ?? 'pending'].label}
+              </Badge>
+            </div>
+            <div className='flex items-center justify-between'>
+              <span className='text-sm text-muted-foreground'>Method:</span>
+              <span className='text-sm font-medium'>
+                {data.payment?.method}
+              </span>
+            </div>
+            <div className='flex items-center justify-between'>
+              <span className='text-sm text-muted-foreground'>Amount:</span>
+              <span className='text-sm font-medium'>
+                {formatCurrency(data.payment?.amount ?? 0)}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -216,7 +248,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
 
             <div className='flex justify-between font-semibold'>
               <span>Total</span>
-              <span>{formatCurrency(data.total)}</span>
+              <span>{formatCurrency(data.payment?.amount ?? 0)}</span>
             </div>
           </CardContent>
         </Card>
@@ -244,27 +276,37 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
           </CardContent>
         </Card>
 
-        <div className='space-y-3'>
+        <div className='space-y-3 [&>a]:w-full [&>button]:w-full'>
           {data.status === 'shipped' && (
-            <Button className='w-full'>
-              <TruckIcon className='mr-2 h-4 w-4' />
-              Track Order
+            <Button>
+              <TruckIcon /> Track Order
             </Button>
           )}
-          <Button className='w-full bg-transparent' variant='outline' asChild>
+          {data.payment?.status === 'pending' &&
+            data.payment.method !== 'cash_on_delivery' && (
+              <Button
+                onClick={() => {
+                  mutate({ id: data.id, paymentStatus: 'completed' })
+                }}
+                disabled={isPending}
+              >
+                <CreditCardIcon /> Pay Now
+              </Button>
+            )}
+          <Button variant='outline' asChild>
             <a
               href='https://youtu.be/9lNZ_Rnr7Jc'
               target='_blank'
               rel='noopener noreferrer'
             >
-              Contact Support
+              <PhoneIcon /> Contact Support
             </a>
           </Button>
           {data.status === 'pending' && (
             <ResponsiveDialog>
               <ResponsiveDialogTrigger asChild>
-                <Button className='w-full' variant='destructive'>
-                  Cancel Order
+                <Button variant='destructive'>
+                  <BanIcon /> Cancel Order
                 </Button>
               </ResponsiveDialogTrigger>
 
@@ -280,7 +322,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
                   </ResponsiveDialogDescription>
                 </ResponsiveDialogHeader>
 
-                <ResponsiveDialogFooter>
+                <ResponsiveDialogFooter className='flex-col-reverse'>
                   <ResponsiveDialogClose asChild>
                     <Button variant='secondary' disabled={isPending}>
                       Cancel
@@ -289,7 +331,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
                   <Button
                     variant='destructive'
                     onClick={() => {
-                      mutate({ id: data.id, status: 'cancelled' })
+                      mutate({ id: data.id, orderStatus: 'cancelled' })
                     }}
                     disabled={isPending}
                   >

@@ -178,6 +178,36 @@ export const productsRelations = relations(products, ({ one, many }) => ({
   }),
 }))
 
+export const cartItems = pgTable(
+  'cart_item',
+  (t) => ({
+    userId: t
+      .varchar({ length: 25 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    productId: t
+      .varchar({ length: 25 })
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    quantity: t.integer().notNull(),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.userId, t.productId] }),
+    index('cart_item_user_id_idx').on(t.userId),
+    index('cart_item_product_id_idx').on(t.productId),
+  ],
+)
+export const cartItemsRelations = relations(cartItems, ({ one }) => ({
+  product: one(products, {
+    fields: [cartItems.productId],
+    references: [products.id],
+  }),
+  user: one(users, {
+    fields: [cartItems.userId],
+    references: [users.id],
+  }),
+}))
+
 export const orderItems = pgTable(
   'order_item',
   (t) => ({
@@ -209,6 +239,52 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   }),
 }))
 
+export const paymentMethods = pgEnum('payment_method', [
+  'credit_card',
+  'debit_card',
+  'paypal',
+  'bank_transfer',
+  'cash_on_delivery',
+])
+export const paymentStatus = pgEnum('payment_status', [
+  'pending',
+  'completed',
+  'failed',
+  'refunded',
+])
+export const payments = pgTable(
+  'payment',
+  (t) => ({
+    id: t.varchar({ length: 25 }).primaryKey().$defaultFn(cuid).notNull(),
+    amount: t.real().notNull(),
+    method: paymentMethods().notNull(),
+    status: paymentStatus().default('pending').notNull(),
+    orderId: t
+      .varchar({ length: 25 })
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    createdAt: t
+      .timestamp({ mode: 'date', withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: t
+      .timestamp({ mode: 'date', withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date())
+      .notNull(),
+  }),
+  (t) => [
+    index('payment_order_id_idx').on(t.orderId),
+    index('payment_status_idx').on(t.status),
+  ],
+)
+export const paymentsRelations = relations(payments, ({ one }) => ({
+  order: one(orders, {
+    fields: [payments.orderId],
+    references: [orders.id],
+  }),
+}))
+
 export const orderStatus = pgEnum('order_status', [
   'pending',
   'paid',
@@ -221,7 +297,6 @@ export const orders = pgTable(
   (t) => ({
     id: t.varchar({ length: 25 }).primaryKey().$defaultFn(cuid).notNull(),
     status: orderStatus().default('pending').notNull(),
-    total: t.real().default(0).notNull(),
     userId: t
       .varchar({ length: 25 })
       .notNull()
@@ -256,36 +331,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     fields: [orders.addressId],
     references: [addresses.id],
   }),
-}))
-
-export const cartItems = pgTable(
-  'cart_item',
-  (t) => ({
-    userId: t
-      .varchar({ length: 25 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    productId: t
-      .varchar({ length: 25 })
-      .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
-    quantity: t.integer().notNull(),
-  }),
-  (t) => [
-    primaryKey({ columns: [t.userId, t.productId] }),
-    index('cart_item_user_id_idx').on(t.userId),
-    index('cart_item_product_id_idx').on(t.productId),
-  ],
-)
-export const cartItemsRelations = relations(cartItems, ({ one }) => ({
-  product: one(products, {
-    fields: [cartItems.productId],
-    references: [products.id],
-  }),
-  user: one(users, {
-    fields: [cartItems.userId],
-    references: [users.id],
-  }),
+  payment: one(payments),
 }))
 
 function cuid(): string {
