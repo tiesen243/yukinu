@@ -73,7 +73,7 @@ export const offices = [
     address: '123 Market Street, Suite 400\nSan Francisco, CA 94105',
     phone: '+1 (555) 123-4567',
     email: 'sf@yukinu.com',
-    image: '/assets/hero-2.webp',
+    image: '/assets/images/hero-2.webp',
     isHeadquarters: true,
   },
   {
@@ -82,7 +82,7 @@ export const offices = [
     address: '45 Shoreditch High Street\nLondon E1 6PN',
     phone: '+44 20 7123 4567',
     email: 'london@yukinu.com',
-    image: '/assets/hero-3.webp',
+    image: '/assets/images/hero-3.webp',
     isHeadquarters: false,
   },
   {
@@ -91,7 +91,7 @@ export const offices = [
     address: '1-2-3 Shibuya, Shibuya City\nTokyo 150-0002',
     phone: '+81 3-1234-5678',
     email: 'tokyo@yukinu.com',
-    image: '/assets/hero-4.webp',
+    image: '/assets/images/hero-4.webp',
     isHeadquarters: false,
   },
 ]

@@ -290,18 +290,18 @@ export default function ContactPage() {
               key={office.address}
               className='overflow-hidden border-0 shadow-sm transition-shadow hover:shadow-md'
             >
-              <div className='relative'>
+              <div className='relative h-48 w-full'>
                 <Image
-                  src={office.image || '/placeholder.svg'}
+                  src={office.image}
                   alt={`${office.city} office`}
-                  width={300}
-                  height={200}
-                  className='h-48 w-full object-cover'
+                  className='object-cover object-top'
+                  fill
                 />
                 {office.isHeadquarters && (
                   <Badge className='absolute top-4 left-4'>Headquarters</Badge>
                 )}
               </div>
+
               <CardContent className='p-6'>
                 <Typography variant='h5' className='mb-2'>
                   {office.city}
