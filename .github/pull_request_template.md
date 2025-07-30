@@ -93,6 +93,3 @@ Related to #
 - [ ] No new build warnings
 - [ ] Bundle size impact considered
 
-## 📝 Additional Notes
-
-<!-- Any additional information that reviewers should know -->
