@@ -2,7 +2,7 @@ import type { TRPCRouterRecord } from '@trpc/server'
 import { TRPCError } from '@trpc/server'
 
 import { and, eq } from '@yuki/db'
-import { cartItems, orderItems, orders } from '@yuki/db/schema'
+import { cartItems, orderItems, orders, payments } from '@yuki/db/schema'
 import { sendEmail } from '@yuki/email'
 import {
   byOrderIdSchema,
@@ -12,7 +12,7 @@ import {
 
 import { protectedProcedure } from '../trpc'
 
-const VALID_TRANSITIONS: Record<string, string[]> = {
+const VALID_ORDER_TRANSITIONS: Record<string, string[]> = {
   pending: ['processing', 'cancelled'],
   processing: ['shipped', 'cancelled'],
   shipped: ['delivered'],
@@ -20,12 +20,22 @@ const VALID_TRANSITIONS: Record<string, string[]> = {
   cancelled: [],
 }
 
+const VALID_PAYMENT_TRANSITIONS: Record<string, string[]> = {
+  pending: ['completed', 'failed'],
+  completed: [],
+  failed: ['refunded'],
+  refunded: [],
+}
+
 export const orderRouter = {
   all: protectedProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user.id
     return ctx.db.query.orders.findMany({
       where: (orders, { eq }) => eq(orders.userId, userId),
-      with: { orderItems: { with: { product: true } } },
+      with: {
+        orderItems: { with: { product: true } },
+        payment: { columns: { amount: true } },
+      },
       orderBy: (orders, { desc }) => desc(orders.createdAt),
     })
   }),
@@ -37,7 +47,11 @@ export const orderRouter = {
       const order = await ctx.db.query.orders.findFirst({
         where: (orders, { and, eq }) =>
           and(eq(orders.id, input.id), eq(orders.userId, userId)),
-        with: { address: true, orderItems: { with: { product: true } } },
+        with: {
+          address: true,
+          orderItems: { with: { product: true } },
+          payment: true,
+        },
       })
 
       if (!order) {
@@ -75,13 +89,18 @@ export const orderRouter = {
 
           const [insertedOrder] = await tx
             .insert(orders)
-            .values({ addressId, total, userId })
+            .values({ addressId, userId })
             .returning()
           if (!insertedOrder)
             throw new TRPCError({
               code: 'INTERNAL_SERVER_ERROR',
               message: 'Order creation failed',
             })
+          await tx.insert(payments).values({
+            amount: total,
+            orderId: insertedOrder.id,
+            method: input.paymentMethod,
+          })
 
           const productExists = await tx.query.products.findMany({
             where: (t, { inArray }) =>
@@ -106,7 +125,7 @@ export const orderRouter = {
 
           await tx.delete(cartItems).where(eq(cartItems.userId, userId))
 
-          return { address, insertedOrder, productExists }
+          return { address, insertedOrder, productExists, total }
         })
 
       await sendEmail({
@@ -118,7 +137,7 @@ export const orderRouter = {
           user: ctx.session.user,
           order: {
             id: insertedOrder.id,
-            total: insertedOrder.total,
+            total,
             createdAt: insertedOrder.createdAt,
           },
           items: productExists.map((p) => ({
@@ -137,7 +156,7 @@ export const orderRouter = {
 
   update: protectedProcedure
     .input(updateOrderSchema)
-    .mutation(async ({ ctx, input: { id, status } }) => {
+    .mutation(async ({ ctx, input: { id, orderStatus, paymentStatus } }) => {
       const userId = ctx.session.user.id
       const query = and(eq(orders.id, id), eq(orders.userId, userId))
 
@@ -149,14 +168,51 @@ export const orderRouter = {
             message: 'Order not found',
           })
 
-        const allowedStatuses = VALID_TRANSITIONS[order.status] ?? []
-        if (!allowedStatuses.includes(status))
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: `Cannot change order status from ${order.status} to ${status}`,
-          })
+        if (orderStatus) {
+          const allowedStatuses = VALID_ORDER_TRANSITIONS[order.status] ?? []
+          if (!allowedStatuses.includes(orderStatus))
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: `Cannot change order status from ${order.status} to ${orderStatus}`,
+            })
 
-        await tx.update(orders).set({ status }).where(query)
+          await tx.update(orders).set({ status: orderStatus }).where(query)
+          if (orderStatus === 'cancelled') {
+            const payment = await tx.query.payments.findFirst({
+              where: eq(payments.orderId, id),
+            })
+            if (!payment) return
+
+            const query = eq(payments.id, payment.id)
+            if (payment.status === 'completed')
+              await tx.update(payments).set({ status: 'refunded' }).where(query)
+            else if (payment.status === 'pending')
+              await tx.update(payments).set({ status: 'failed' }).where(query)
+          }
+        }
+
+        if (paymentStatus) {
+          const payment = await tx.query.payments.findFirst({
+            where: eq(payments.orderId, id),
+          })
+          if (!payment)
+            throw new TRPCError({
+              code: 'NOT_FOUND',
+              message: 'Payment not found',
+            })
+          const allowedStatuses =
+            VALID_PAYMENT_TRANSITIONS[payment.status] ?? []
+          if (!allowedStatuses.includes(paymentStatus))
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: `Cannot change payment status from ${payment.status} to ${paymentStatus}`,
+            })
+
+          await tx
+            .update(payments)
+            .set({ status: paymentStatus })
+            .where(eq(payments.id, payment.id))
+        }
       })
     }),
 } satisfies TRPCRouterRecord
