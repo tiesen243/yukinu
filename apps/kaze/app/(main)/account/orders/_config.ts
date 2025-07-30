@@ -9,7 +9,7 @@ export const statusConfig = {
     variant: 'warning',
     description: 'Your order is being processed',
   },
-  paid: {
+  processing: {
     label: 'Paid',
     variant: 'info',
     description: 'Payment confirmed, preparing for shipment',
@@ -57,25 +57,25 @@ export const paymentStatusConfig = {
 export const orderTimeline = {
   pending: [
     { status: 'pending', label: 'Order Placed', completed: true },
-    { status: 'paid', label: 'Payment Confirmed', completed: false },
+    { status: 'processing', label: 'Payment Confirmed', completed: false },
     { status: 'shipped', label: 'Shipped', completed: false },
     { status: 'delivered', label: 'Delivered', completed: false },
   ],
-  paid: [
+  processing: [
     { status: 'pending', label: 'Order Placed', completed: true },
-    { status: 'paid', label: 'Payment Confirmed', completed: true },
+    { status: 'processing', label: 'Payment Confirmed', completed: true },
     { status: 'shipped', label: 'Shipped', completed: false },
     { status: 'delivered', label: 'Delivered', completed: false },
   ],
   shipped: [
     { status: 'pending', label: 'Order Placed', completed: true },
-    { status: 'paid', label: 'Payment Confirmed', completed: true },
+    { status: 'processing', label: 'Payment Confirmed', completed: true },
     { status: 'shipped', label: 'Shipped', completed: true },
     { status: 'delivered', label: 'Delivered', completed: false },
   ],
   delivered: [
     { status: 'pending', label: 'Order Placed', completed: true },
-    { status: 'paid', label: 'Payment Confirmed', completed: true },
+    { status: 'processing', label: 'Payment Confirmed', completed: true },
     { status: 'shipped', label: 'Shipped', completed: true },
     { status: 'delivered', label: 'Delivered', completed: true },
   ],

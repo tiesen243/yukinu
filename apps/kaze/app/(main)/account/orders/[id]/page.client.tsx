@@ -119,24 +119,20 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
           <CardContent className='space-y-3'>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Status:</span>
-              <Badge
-                variant={
-                  paymentStatusConfig[data.payment?.status ?? 'pending'].variant
-                }
-              >
-                {paymentStatusConfig[data.payment?.status ?? 'pending'].label}
+              <Badge variant={paymentStatusConfig[data.payment.status].variant}>
+                {paymentStatusConfig[data.payment.status].label}
               </Badge>
             </div>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Method:</span>
               <span className='text-sm font-medium'>
-                {data.payment?.method.replace(/_/g, ' ')}
+                {data.payment.method.replace(/_/g, ' ')}
               </span>
             </div>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Amount:</span>
               <span className='text-sm font-medium'>
-                {formatCurrency(data.payment?.amount ?? 0)}
+                {formatCurrency(data.payment.amount)}
               </span>
             </div>
           </CardContent>
@@ -248,7 +244,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
 
             <div className='flex justify-between font-semibold'>
               <span>Total</span>
-              <span>{formatCurrency(data.payment?.amount ?? 0)}</span>
+              <span>{formatCurrency(data.payment.amount)}</span>
             </div>
           </CardContent>
         </Card>
@@ -282,7 +278,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
               <TruckIcon /> Track Order
             </Button>
           )}
-          {data.payment?.status === 'pending' &&
+          {data.payment.status === 'pending' &&
             data.payment.method !== 'cash_on_delivery' && (
               <Button
                 onClick={() => {

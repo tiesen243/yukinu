@@ -105,7 +105,7 @@ const OrderPreviewCard = ({
         <div className='flex items-center justify-between'>
           <span className='font-medium'>Total</span>
           <span className='text-lg font-bold'>
-            {formatCurrency(order.payment?.amount ?? 0)}
+            {formatCurrency(order.payment.amount)}
           </span>
         </div>
       </CardContent>
