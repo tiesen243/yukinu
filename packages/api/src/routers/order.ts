@@ -178,7 +178,7 @@ export const orderRouter = {
 
           await tx.update(orders).set({ status: orderStatus }).where(query)
           if (orderStatus === 'cancelled') {
-            const query = and(eq(orders.id, id), eq(payments.orderId, id))
+            const query = eq(payments.orderId, id)
 
             const payment = await tx.query.payments.findFirst({ where: query })
             if (!payment) return
