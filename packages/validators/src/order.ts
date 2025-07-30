@@ -26,7 +26,7 @@ export type CreateOrderSchema = z.infer<typeof createOrderSchema>
 
 export const updateOrderSchema = byOrderIdSchema.extend({
   orderStatus: z
-    .enum(['pending', 'paid', 'shipped', 'delivered', 'cancelled'])
+    .enum(['pending', 'processing', 'shipped', 'delivered', 'cancelled'])
     .optional(),
   paymentStatus: z
     .enum(['pending', 'completed', 'failed', 'refunded'])
