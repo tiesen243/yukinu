@@ -178,11 +178,12 @@ export const orderRouter = {
 
           await tx.update(orders).set({ status: orderStatus }).where(query)
           if (orderStatus === 'cancelled') {
-            const query = eq(payments.orderId, id)
-
-            const payment = await tx.query.payments.findFirst({ where: query })
+            const payment = await tx.query.payments.findFirst({
+              where: eq(payments.orderId, id),
+            })
             if (!payment) return
 
+            const query = eq(payments.id, payment.id)
             if (payment.status === 'completed')
               await tx.update(payments).set({ status: 'refunded' }).where(query)
             else if (payment.status === 'pending')
