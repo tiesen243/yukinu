@@ -130,7 +130,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Method:</span>
               <span className='text-sm font-medium'>
-                {data.payment?.method}
+                {data.payment?.method.replace(/_/g, ' ')}
               </span>
             </div>
             <div className='flex items-center justify-between'>
@@ -286,6 +286,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
             data.payment.method !== 'cash_on_delivery' && (
               <Button
                 onClick={() => {
+                  // TODO: Implement payment logic
                   mutate({ id: data.id, paymentStatus: 'completed' })
                 }}
                 disabled={isPending}

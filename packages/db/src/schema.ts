@@ -139,8 +139,8 @@ export const products = pgTable(
     description: t.text().notNull(),
     image: t.varchar({ length: 500 }).notNull(),
     stock: t.integer().notNull(),
-    price: t.real().notNull(),
-    discount: t.real().default(0).notNull(),
+    price: t.integer().notNull(),
+    discount: t.integer().default(0).notNull(),
     categoryId: t
       .varchar({ length: 25 })
       .notNull()
@@ -256,7 +256,7 @@ export const payments = pgTable(
   'payment',
   (t) => ({
     id: t.varchar({ length: 25 }).primaryKey().$defaultFn(cuid).notNull(),
-    amount: t.real().notNull(),
+    amount: t.integer().notNull(),
     method: paymentMethods().notNull(),
     status: paymentStatus().default('pending').notNull(),
     orderId: t
@@ -287,7 +287,7 @@ export const paymentsRelations = relations(payments, ({ one }) => ({
 
 export const orderStatus = pgEnum('order_status', [
   'pending',
-  'paid',
+  'processing',
   'shipped',
   'delivered',
   'cancelled',
@@ -331,7 +331,10 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     fields: [orders.addressId],
     references: [addresses.id],
   }),
-  payment: one(payments),
+  payment: one(payments, {
+    fields: [orders.id],
+    references: [payments.orderId],
+  }),
 }))
 
 function cuid(): string {
