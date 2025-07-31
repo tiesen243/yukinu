@@ -12,6 +12,9 @@ import {
 
 import { protectedProcedure } from '../trpc'
 
+const SHIPPING = 9.99
+const TAX = 0.1
+
 const VALID_ORDER_TRANSITIONS: Record<string, string[]> = {
   pending: ['processing', 'cancelled'],
   processing: ['shipped', 'cancelled'],
@@ -70,10 +73,11 @@ export const orderRouter = {
       const { addressId, items } = input
       const userId = ctx.session.user.id
 
-      const total = items.reduce(
+      const subtotal = items.reduce(
         (total, item) => total + item.price * item.quantity,
         0,
       )
+      const total = subtotal + SHIPPING + subtotal * TAX
 
       const { address, insertedOrder, productExists } =
         await ctx.db.transaction(async (tx) => {
