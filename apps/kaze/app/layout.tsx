@@ -1,5 +1,6 @@
 import '@/app/globals.css'
 
+import type { Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
@@ -56,3 +57,13 @@ export default function RootLayout({
 }
 
 export const metadata = createMetadata()
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+
+  colorScheme: 'dark light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
+  ],
+}

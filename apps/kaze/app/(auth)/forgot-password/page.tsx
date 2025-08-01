@@ -8,6 +8,7 @@ import {
 } from '@yuki/ui/card'
 
 import { ForgotPasswordForm } from '@/app/(auth)/forgot-password/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function ForgotPasswordPage() {
   return (
@@ -33,3 +34,14 @@ export default function ForgotPasswordPage() {
     </>
   )
 }
+
+export const metadata = createMetadata({
+  title: 'Forgot Password',
+  description: 'Reset your password',
+  openGraph: {
+    images: [
+      `/api/og?title=Forgot%20Password&description=Reset%20your%20password`,
+    ],
+    url: '/forgot-password',
+  },
+})

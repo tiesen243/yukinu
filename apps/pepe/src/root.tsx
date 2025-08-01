@@ -11,6 +11,7 @@ import {
 
 import { SessionProvider } from '@yuki/auth/react'
 import { ThemeProvider } from '@yuki/ui'
+import { Toaster } from '@yuki/ui/sonner'
 
 import type { Route } from './+types/root'
 import { createMetadata } from '@/lib/metadata'
@@ -30,6 +31,8 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
           <TRPCReactProvider>
             <SessionProvider>{children}</SessionProvider>
           </TRPCReactProvider>
+
+          <Toaster />
         </ThemeProvider>
 
         <ScrollRestoration />

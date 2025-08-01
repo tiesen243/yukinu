@@ -8,6 +8,7 @@ import {
 } from '@yuki/ui/card'
 
 import { RegisterForm } from '@/app/(auth)/register/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function RegisterPage() {
   return (
@@ -32,3 +33,14 @@ export default function RegisterPage() {
     </>
   )
 }
+
+export const metadata = createMetadata({
+  title: 'Register',
+  description: 'Register for an account',
+  openGraph: {
+    images: [
+      `/api/og?title=Register&description=Register%20for%20an%20account`,
+    ],
+    url: '/register',
+  },
+})
