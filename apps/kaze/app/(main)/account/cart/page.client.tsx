@@ -23,6 +23,7 @@ import {
 } from '@yuki/ui/select'
 import { toast } from '@yuki/ui/sonner'
 
+import { SHIPPING, TAX } from '@/lib/constants'
 import { formatCurrency } from '@/lib/helpers'
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
@@ -68,12 +69,12 @@ export const CardList: React.FC = () => {
 
             <div className='flex justify-between text-sm text-muted-foreground'>
               <span>Shipping</span>
-              <span>$9.99</span>
+              <span>{formatCurrency(SHIPPING)}</span>
             </div>
 
             <div className='flex justify-between text-sm text-muted-foreground'>
               <span>Tax (10%)</span>
-              <span>{formatCurrency(parseFloat(cart.totalPrice) * 0.1)}</span>
+              <span>{formatCurrency(parseFloat(cart.totalPrice) * TAX)}</span>
             </div>
 
             <div className='flex justify-between border-t pt-3 text-lg font-semibold'>
@@ -81,8 +82,8 @@ export const CardList: React.FC = () => {
               <span>
                 {formatCurrency(
                   parseFloat(cart.totalPrice) +
-                    9.99 +
-                    parseFloat(cart.totalPrice) * 0.1,
+                    SHIPPING +
+                    parseFloat(cart.totalPrice) * TAX,
                 )}
               </span>
             </div>
@@ -307,7 +308,7 @@ export const CardListSkeleton: React.FC = () => {
 
           <div className='flex justify-between text-sm text-muted-foreground'>
             <span>Shipping</span>
-            <span>$9.99</span>
+            <span>{formatCurrency(SHIPPING)}</span>
           </div>
 
           <div className='flex justify-between text-sm text-muted-foreground'>
@@ -317,7 +318,7 @@ export const CardListSkeleton: React.FC = () => {
 
           <div className='flex justify-between border-t pt-3 text-lg font-semibold'>
             <span>Total</span>
-            <span>{formatCurrency(9.99)}</span>
+            <span>{formatCurrency(SHIPPING)}</span>
           </div>
         </div>
 

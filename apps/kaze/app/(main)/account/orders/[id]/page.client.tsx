@@ -39,10 +39,9 @@ import { toast } from '@yuki/ui/sonner'
 import {
   orderTimeline,
   paymentStatusConfig,
-  SHIPPING,
   statusConfig,
-  TAX,
 } from '@/app/(main)/account/orders/_config'
+import { SHIPPING, TAX } from '@/lib/constants'
 import { formatCurrency, formatDate } from '@/lib/helpers'
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'

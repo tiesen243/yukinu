@@ -23,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@yuki/ui/tabs'
 import { Typography } from '@yuki/ui/typography'
 
 import { ProductCard } from '@/app/_components/product-card'
+import { SHIPPING } from '@/lib/constants'
 import { formatCurrency } from '@/lib/helpers'
 import { useTRPC } from '@/trpc/react'
 
@@ -267,7 +268,10 @@ export const ProductDetail = ({ id }: { id: string }) => {
                     <h4 className='mb-2 font-semibold'>Shipping Information</h4>
                     <ul className='space-y-2 text-sm text-muted-foreground'>
                       <li>• Free standard shipping on orders over $50</li>
-                      <li>• Express shipping available for $9.99</li>
+                      <li>
+                        • Express shipping available for{' '}
+                        {formatCurrency(SHIPPING)}
+                      </li>
                       <li>• Orders processed within 1-2 business days</li>
                       <li>• Delivery time: 3-7 business days</li>
                     </ul>

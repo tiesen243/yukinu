@@ -11,9 +11,6 @@ import {
 import type { SendEmailParams } from '..'
 import { EmailLayout } from './_layout'
 
-const SHIPPING = 9.99
-const TAX = 0.1
-
 interface OrderConfirmationProps extends SendEmailParams {
   data?: {
     user: {
@@ -23,6 +20,8 @@ interface OrderConfirmationProps extends SendEmailParams {
     order: {
       id: string
       subtotal: number
+      shipping: number
+      tax: number
       createdAt: Date
     }
     address: {
@@ -159,20 +158,20 @@ export default function OrderConfirmation({ data }: OrderConfirmationProps) {
           <Section className='flex justify-between'>
             <Text className='m-0 text-base text-gray-600'>Shipping</Text>
             <Text className='m-0 text-base font-semibold text-black'>
-              {formatCurrency(SHIPPING)}
+              {formatCurrency(order.shipping)}
             </Text>
           </Section>
           <Section className='flex justify-between'>
             <Text className='m-0 text-base text-gray-600'>Tax (10%)</Text>
             <Text className='m-0 text-base font-semibold text-black'>
-              {formatCurrency(order.subtotal * TAX)}
+              {formatCurrency(order.tax)}
             </Text>
           </Section>
           <Hr className='my-3 border-gray-400' />
           <Section className='flex justify-between'>
             <Text className='m-0 text-lg font-semibold text-black'>Total</Text>
             <Text className='m-0 text-lg font-semibold text-black'>
-              {formatCurrency(order.subtotal + SHIPPING + order.subtotal * TAX)}
+              {formatCurrency(order.subtotal + order.shipping + order.tax)}
             </Text>
           </Section>
         </Section>
@@ -202,7 +201,9 @@ const sampleData = {
   },
   order: {
     id: '123456',
-    subtotal: 89.97,
+    subtotal: 79.97,
+    shipping: 9.99,
+    tax: 97.957,
     createdAt: new Date(),
   },
   address: {
