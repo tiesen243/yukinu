@@ -30,7 +30,11 @@ export const env = createEnv({
     NEXT_PUBLIC_DASHBOARD_URL: z._default(z.url(), 'http://localhost:3001'),
   },
 
-  runtimeEnv: process.env,
+  runtimeEnv: {
+    ...process.env,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
+  },
 
   skipValidation:
     !!process.env.SKIP_ENV_VALIDATION ||

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-properties */
 'use client'
 
 import Link from 'next/link'
@@ -147,7 +146,6 @@ export const UserButton: React.FC = () => {
             <DropdownMenuItem asChild>
               <Link href={env.NEXT_PUBLIC_DASHBOARD_URL}>
                 <LayoutDashboardIcon /> Dashboard
-                {process.env.NEXT_PUBLIC_DASHBOARD_URL}
                 <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
               </Link>
             </DropdownMenuItem>
