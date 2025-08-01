@@ -8,5 +8,4 @@ export default {
   presets: [vercelPreset()],
   // Server-side render by default, to enable SPA mode set this to `false`
   ssr: true,
-  prerender: true,
 } satisfies Config
