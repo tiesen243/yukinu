@@ -145,7 +145,8 @@ export const UserButton: React.FC = () => {
           {session.user.role !== 'user' && (
             <DropdownMenuItem asChild>
               <Link href={env.NEXT_PUBLIC_DASHBOARD_URL}>
-                <LayoutDashboardIcon /> Dashboard
+                <LayoutDashboardIcon /> Dashboard{' '}
+                {env.NEXT_PUBLIC_DASHBOARD_URL}
                 <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
               </Link>
             </DropdownMenuItem>
