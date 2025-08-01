@@ -87,4 +87,16 @@ export const links: Route.LinksFunction = () => [
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
 ]
 
-export const meta: Route.MetaFunction = () => createMetadata()
+export const meta: Route.MetaFunction = () =>
+  createMetadata({
+    title: 'Dashboard',
+    description: 'Your dashboard for managing your account and settings.',
+    openGraph: {
+      images: [
+        {
+          url: `/api/og?title=Dashboard&description=Your%20dashboard%20for%20managing%20your%20account%20and%20settings.`,
+          alt: 'Dashboard',
+        },
+      ],
+    },
+  })

@@ -21,7 +21,9 @@ import {
   DropdownMenuTrigger,
 } from '@yuki/ui/dropdown-menu'
 import {
+  HomeIcon,
   LaptopIcon,
+  LayoutDashboardIcon,
   LogInIcon,
   LogOutIcon,
   MoonIcon,
@@ -32,6 +34,7 @@ import {
   SunMoonIcon,
   UserIcon,
 } from '@yuki/ui/icons'
+import { env } from '@yuki/validators/env'
 
 export const UserButton: React.FC = () => {
   const { status, session, signOut } = useSession()
@@ -61,7 +64,7 @@ export const UserButton: React.FC = () => {
         </Avatar>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align='end'>
+      <DropdownMenuContent align='end' className='min-w-60'>
         <DropdownMenuLabel className='flex flex-col'>
           <p className='text-sm font-medium'>{user.name}</p>
           <p className='text-xs text-muted-foreground'>{user.email}</p>
@@ -132,6 +135,22 @@ export const UserButton: React.FC = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
+          <DropdownMenuItem asChild>
+            <Link href='/home'>
+              <HomeIcon /> Home Page
+              <DropdownMenuShortcut>⌘H</DropdownMenuShortcut>
+            </Link>
+          </DropdownMenuItem>
+
+          {session.user.role !== 'user' && (
+            <DropdownMenuItem asChild>
+              <Link href={env.NEXT_PUBLIC_DASHBOARD_URL}>
+                <LayoutDashboardIcon /> Dashboard
+                <DropdownMenuShortcut>⌘D</DropdownMenuShortcut>
+              </Link>
+            </DropdownMenuItem>
+          )}
+
           <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/' })}>
             <LogOutIcon /> Sign out
           </DropdownMenuItem>

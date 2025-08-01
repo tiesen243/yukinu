@@ -1,5 +1,6 @@
-import { Form, useNavigate } from 'react-router'
+import { Form, redirect, useNavigate } from 'react-router'
 
+import { auth } from '@yuki/auth'
 import { useSession } from '@yuki/auth/react'
 import { Button } from '@yuki/ui/button'
 import {
@@ -16,12 +17,27 @@ import { Input } from '@yuki/ui/input'
 import { toast } from '@yuki/ui/sonner'
 import { signInSchema } from '@yuki/validators/auth'
 
+import type { Route } from './+types/login'
 import { createMetadata } from '@/lib/metadata'
 
 export const meta = createMetadata({
   title: 'Login',
   description: 'Login to your account',
+  openGraph: {
+    images: [
+      {
+        url: `/api/og?title=Login&description=Login%20to%20your%20account`,
+        alt: 'Login to your account',
+      },
+    ],
+    url: '/login',
+  },
 })
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const session = await auth(request)
+  if (session.user) return redirect('/')
+}
 
 export default function AuthPage() {
   const { signIn } = useSession()

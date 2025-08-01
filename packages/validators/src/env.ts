@@ -27,7 +27,7 @@ export const env = createEnv({
 
   client: {
     NEXT_PUBLIC_APP_URL: z._default(z.url(), 'http://localhost:3000'),
-    NEXT_PUBLIC_API_URL: z._default(z.url(), 'http://localhost:3001'),
+    NEXT_PUBLIC_DASHBOARD_URL: z._default(z.url(), 'http://localhost:3001'),
   },
 
   runtimeEnv: process.env,
