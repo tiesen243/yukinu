@@ -8,6 +8,7 @@ import {
 } from '@yuki/ui/card'
 
 import { LoginForm } from '@/app/(auth)/login/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function LoginPage() {
   return (
@@ -32,3 +33,12 @@ export default function LoginPage() {
     </>
   )
 }
+
+export const metadata = createMetadata({
+  title: 'Login',
+  description: 'Login to your account',
+  openGraph: {
+    images: [`/api/og?title=Login&description=Login%20to%20your%20account`],
+    url: '/login',
+  },
+})

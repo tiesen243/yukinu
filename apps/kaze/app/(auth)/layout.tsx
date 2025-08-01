@@ -10,18 +10,18 @@ export default function AuthLayout({
       <Card className='w-full max-w-md'>
         {children}
 
-        <CardFooter className='grid gap-2'>
-          <div className='relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border'>
-            <span className='relative z-10 bg-card px-2 text-muted-foreground'>
-              Or continue with
-            </span>
+        <CardFooter className='flex-col gap-2'>
+          <div className='flex w-full items-center gap-4'>
+            <div className='h-[1px] grow bg-border' />
+            <span className='text-sm'>Or continue with</span>
+            <div className='h-[1px] grow bg-border' />
           </div>
 
-          <form className='grid grid-cols-2 gap-4'>
-            <Button variant='outline' size='sm' formAction='/api/auth/facebook'>
+          <form className='grid grid-cols-2 gap-2'>
+            <Button variant='outline' formAction='/api/auth/facebook'>
               <FacebookIcon /> Facebook
             </Button>
-            <Button variant='outline' size='sm' formAction='/api/auth/google'>
+            <Button variant='outline' formAction='/api/auth/google'>
               <GoogleIcon /> Google
             </Button>
           </form>

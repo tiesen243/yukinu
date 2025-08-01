@@ -235,11 +235,21 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-out: Sign out current session
            */
           if (pathname === '/api/auth/sign-out') {
+            const redirectTo = (await request.formData()).get('redirectTo')
+
             await signOut(request)
-            const response = Response.json({
+
+            let response = Response.json({
               message: 'Signed out successfully',
             })
+            if (redirectTo && typeof redirectTo === 'string')
+              response = new Response(null, {
+                status: 302,
+                headers: { Location: redirectTo },
+              })
+
             cookies.delete(response, cookieKeys.token)
+            return setCorsHeaders(response)
           }
 
           return setCorsHeaders(new Response('Not Found', { status: 404 }))
