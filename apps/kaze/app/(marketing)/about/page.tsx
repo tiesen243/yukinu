@@ -128,7 +128,6 @@ export default function AboutPage() {
             alt='Our Mission'
             width={600}
             height={500}
-            className='rounded-2xl shadow-xl'
           />
         </div>
       </section>

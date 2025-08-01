@@ -79,19 +79,19 @@ export const team = [
     name: 'Tiesen',
     role: 'CTO & Co-Founder',
     bio: 'AI and machine learning expert with 15+ years in building scalable platforms.',
-    image: 'https://github.com/tiesen243.png',
+    image: '/assets/images/hero-1.webp',
   },
   {
     name: 'Tien',
     role: 'Head of Design',
     bio: 'Award-winning designer focused on creating beautiful, accessible user experiences.',
-    image: 'https://github.com/tiesen243.png',
+    image: '/assets/images/hero-2.webp',
   },
   {
     name: 'Tien Tran',
     role: 'VP of Engineering',
     bio: 'Infrastructure expert who ensures our platform scales to serve millions of users globally.',
-    image: 'https://github.com/tiesen243.png',
+    image: '/assets/images/hero-3.webp',
   },
 ]
 

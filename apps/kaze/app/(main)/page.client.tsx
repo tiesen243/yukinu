@@ -100,27 +100,31 @@ const sliders = [
     title: 'Summer Sale Collections',
     description: 'Sale up to 50% off',
     imageUrl: '/assets/images/hero-2.webp',
-    bgColor: 'from-success to-error',
+    bgColor:
+      'from-pink-400 to-yellow-400 dark:from-pink-600 dark:to-yellow-600',
   },
   {
     id: 2,
     title: 'Atumn Sale Collections',
     description: 'Sale up to 50% off',
     imageUrl: '/assets/images/hero-1.webp',
-    bgColor: 'from-error to-info',
+    bgColor:
+      'from-yellow-400 to-indigo-400 dark:from-yellow-600 dark:to-indigo-600',
   },
   {
     id: 3,
     title: 'Winter Sale Collections',
     description: 'Sale up to 50% off',
     imageUrl: '/assets/images/hero-4.webp',
-    bgColor: 'from-info to-warning',
+    bgColor:
+      'from-indigo-400 to-purple-400 dark:from-indigo-600 dark:to-purple-600',
   },
   {
     id: 4,
     title: 'Spring Sale Collections',
     description: 'Sale up to 50% off',
     imageUrl: '/assets/images/hero-3.webp',
-    bgColor: 'from-warning to-success',
+    bgColor:
+      'from-purple-400 to-pink-400 dark:from-purple-600 dark:to-pink-600',
   },
 ]

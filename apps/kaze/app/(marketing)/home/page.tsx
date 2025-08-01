@@ -240,11 +240,10 @@ export default function HomePage() {
 
           <div className='relative'>
             <Image
-              src='/assets/hero-1.webp'
+              src='/assets/images/hero-1.webp'
               alt='Yukinu Technology'
               width={1920}
               height={1080}
-              className='rounded-2xl shadow-xl'
             />
           </div>
         </div>
