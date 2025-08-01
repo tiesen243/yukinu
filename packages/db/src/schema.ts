@@ -139,7 +139,7 @@ export const products = pgTable(
     description: t.text().notNull(),
     image: t.varchar({ length: 500 }).notNull(),
     stock: t.integer().notNull(),
-    price: t.integer().notNull(),
+    price: t.numeric().notNull(),
     discount: t.integer().default(0).notNull(),
     categoryId: t
       .varchar({ length: 25 })
@@ -161,8 +161,8 @@ export const products = pgTable(
   }),
   (t) => [
     index('product_name_idx').on(t.name),
-    index('product_seller_id_idx').on(t.sellerId),
-    index('product_category_id_idx').on(t.categoryId),
+    index('product_seller_idx').on(t.sellerId),
+    index('product_category_idx').on(t.categoryId),
   ],
 )
 export const productsRelations = relations(products, ({ one, many }) => ({
@@ -220,7 +220,7 @@ export const orderItems = pgTable(
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
     quantity: t.integer().notNull(),
-    price: t.real().notNull(),
+    price: t.numeric().notNull(),
   }),
   (t) => [
     primaryKey({ columns: [t.orderId, t.productId] }),
@@ -256,7 +256,7 @@ export const payments = pgTable(
   'payment',
   (t) => ({
     id: t.varchar({ length: 25 }).primaryKey().$defaultFn(cuid).notNull(),
-    amount: t.integer().notNull(),
+    amount: t.numeric().notNull(),
     method: paymentMethods().notNull(),
     status: paymentStatus().default('pending').notNull(),
     orderId: t
@@ -300,7 +300,7 @@ export const orders = pgTable(
     userId: t
       .varchar({ length: 25 })
       .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
+      .references(() => users.id, { onDelete: 'set null' }),
     addressId: t
       .varchar({ length: 25 })
       .notNull()
@@ -331,10 +331,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     fields: [orders.addressId],
     references: [addresses.id],
   }),
-  payment: one(payments, {
-    fields: [orders.id],
-    references: [payments.orderId],
-  }),
+  payment: one(payments),
 }))
 
 function cuid(): string {

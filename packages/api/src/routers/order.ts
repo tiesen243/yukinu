@@ -74,7 +74,7 @@ export const orderRouter = {
       const userId = ctx.session.user.id
 
       const subtotal = items.reduce(
-        (total, item) => total + item.price * item.quantity,
+        (total, item) => total + parseFloat(item.price) * item.quantity,
         0,
       )
       const total = subtotal + SHIPPING + subtotal * TAX
@@ -93,15 +93,16 @@ export const orderRouter = {
 
           const [insertedOrder] = await tx
             .insert(orders)
-            .values({ addressId, userId })
+            .values({ userId, addressId })
             .returning()
           if (!insertedOrder)
             throw new TRPCError({
               code: 'INTERNAL_SERVER_ERROR',
               message: 'Order creation failed',
             })
+
           await tx.insert(payments).values({
-            amount: total,
+            amount: total.toString(),
             orderId: insertedOrder.id,
             method: input.paymentMethod,
           })

@@ -43,6 +43,7 @@ export const CardList: React.FC = () => {
       toast.success('Order created successfully!')
       router.push(`/account/orders/${id}`)
     },
+    onError: ({ message }) => toast.error(message),
   })
 
   return (
@@ -198,7 +199,7 @@ const CartItem: React.FC<{
           {item.productName}
         </h4>
         <p className='line-clamp-2 text-sm text-muted-foreground'>
-          ${item.price.toFixed(2)} each
+          ${item.price} each
         </p>
       </Link>
 
@@ -241,7 +242,7 @@ const CartItem: React.FC<{
 
       <div className='min-w-0 text-right'>
         <p className='text-lg font-semibold'>
-          ${(item.price * item.quantity).toFixed(2)}
+          ${(parseFloat(item.price) * item.quantity).toFixed(2)}
         </p>
       </div>
 

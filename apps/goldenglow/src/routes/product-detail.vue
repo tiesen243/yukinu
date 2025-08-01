@@ -44,7 +44,7 @@
                   : 'text-2xl font-bold text-foreground'
               "
             >
-              ${{ data.price.toFixed(2) }}
+              ${{ data.price }}
             </span>
             <span
               v-if="data.discount > 0"
@@ -87,12 +87,12 @@ const { data, isLoading } = useQuery(productOptions.byId({ id: String(id) }))
 
 const discountedPrice = computed(() => {
   if (!data.value) return 0
-  return data.value.price * (1 - data.value.discount / 100)
+  return parseFloat(data.value.price) * (1 - data.value.discount / 100)
 })
 
 const savings = computed(() => {
   if (!data.value) return 0
-  return data.value.price * (data.value.discount / 100)
+  return parseFloat(data.value.price) * (data.value.discount / 100)
 })
 
 const stockStatus = computed(() => {

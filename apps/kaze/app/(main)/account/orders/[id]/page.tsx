@@ -22,10 +22,7 @@ export default async function OrderDetailPage({
               <ArrowLeftIcon />
             </Link>
           </Button>
-          <div>
-            <h2 className='text-2xl font-bold'>Order Details</h2>
-            <p className='text-muted-foreground'>Order #{id.toUpperCase()}</p>
-          </div>
+          <h2 className='text-2xl font-bold'>Order Details</h2>
         </div>
 
         <Suspense

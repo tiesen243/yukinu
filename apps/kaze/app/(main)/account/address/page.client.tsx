@@ -38,9 +38,7 @@ const AddressCard: React.FC<{
     ...trpc.address.update.mutationOptions(),
     onSuccess: () =>
       queryClient.invalidateQueries(trpc.address.all.queryFilter()),
-    onError: (error) => {
-      toast.error(error.message)
-    },
+    onError: (error) => toast.error(error.message),
   })
 
   return (

@@ -65,9 +65,13 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
   const statusInfo = statusConfig[data.status]
   const timeline = orderTimeline[data.status]
   const subtotal = data.orderItems.reduce(
-    (sum, item) => sum + item.quantity * item.price,
+    (sum, item) => sum + item.quantity * parseFloat(item.price),
     0,
   )
+
+  const paymentAmount = parseFloat(data.payment?.amount ?? '0')
+  const paymentStatus = data.payment?.status ?? 'pending'
+  const paymentMethod = data.payment?.method ?? 'credit_card'
 
   return (
     <section className='grid gap-6 lg:grid-cols-3'>
@@ -119,20 +123,20 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
           <CardContent className='space-y-3'>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Status:</span>
-              <Badge variant={paymentStatusConfig[data.payment.status].variant}>
-                {paymentStatusConfig[data.payment.status].label}
+              <Badge variant={paymentStatusConfig[paymentStatus].variant}>
+                {paymentStatusConfig[paymentStatus].label}
               </Badge>
             </div>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Method:</span>
               <span className='text-sm font-medium'>
-                {data.payment.method.replace(/_/g, ' ')}
+                {data.payment?.method.replace(/_/g, ' ')}
               </span>
             </div>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Amount:</span>
               <span className='text-sm font-medium'>
-                {formatCurrency(data.payment.amount)}
+                {formatCurrency(paymentAmount)}
               </span>
             </div>
           </CardContent>
@@ -176,7 +180,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
 
                 <div className='text-right'>
                   <div className='font-semibold'>
-                    {formatCurrency(item.quantity * item.price)}
+                    {formatCurrency(item.quantity * parseFloat(item.price))}
                   </div>
                 </div>
               </Link>
@@ -244,7 +248,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
 
             <div className='flex justify-between font-semibold'>
               <span>Total</span>
-              <span>{formatCurrency(data.payment.amount)}</span>
+              <span>{formatCurrency(paymentAmount)}</span>
             </div>
           </CardContent>
         </Card>
@@ -278,8 +282,8 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
               <TruckIcon /> Track Order
             </Button>
           )}
-          {data.payment.status === 'pending' &&
-            data.payment.method !== 'cash_on_delivery' && (
+          {paymentStatus === 'pending' &&
+            paymentMethod !== 'cash_on_delivery' && (
               <Button
                 onClick={() => {
                   // TODO: Implement payment logic

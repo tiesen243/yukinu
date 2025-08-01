@@ -15,7 +15,7 @@ async function main() {
       name: product.name,
       description: product.description,
       image: product.image,
-      price: product.price,
+      price: product.price.toString(),
       stock: Math.floor(Math.random() * 100) + 1,
       categoryId:
         insertedCategories.find(

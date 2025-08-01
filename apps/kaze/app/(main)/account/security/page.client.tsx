@@ -146,6 +146,7 @@ const SessionCard: React.FC<{ session: Session }> = ({ session }) => {
       toast.success('Session deleted successfully!')
       await queryClient.invalidateQueries(trpc.auth.listSessions.queryFilter())
     },
+    onError: ({ message }) => toast.error(message),
   })
 
   return (
