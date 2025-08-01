@@ -196,14 +196,14 @@ const CartItem: React.FC<{
     (newQuantity: number) => {
       if (
         newQuantity > 0 &&
-        newQuantity !== item.quantity &&
+        newQuantity !== localQuantity &&
         newQuantity <= item.productStock
       ) {
         setLocalQuantity(newQuantity)
         debouncedUpdate(newQuantity)
       }
     },
-    [debouncedUpdate, item.productStock, item.quantity],
+    [debouncedUpdate, item.productStock, localQuantity],
   )
 
   return (
