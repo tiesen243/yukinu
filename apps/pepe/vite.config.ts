@@ -1,3 +1,4 @@
+import type { Plugin } from 'vite'
 import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, loadEnv } from 'vite'
@@ -10,6 +11,19 @@ export default defineConfig(({ mode }) => {
   return {
     server: { port: 3001 },
     define: { 'process.env': JSON.stringify(process.env) },
-    plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+    plugins: [tailwindcss(), reactRouter(), tsconfigPaths(), removeUseClient()],
   }
 })
+
+function removeUseClient(): Plugin {
+  return {
+    name: 'remove-use-client',
+    transform(code, id) {
+      if (/\.(js|ts|jsx|tsx)$/.test(id)) {
+        const newCode = code.replace(/['"]use client['"];\s*/g, '')
+        return { code: newCode }
+      }
+      return null
+    },
+  }
+}
