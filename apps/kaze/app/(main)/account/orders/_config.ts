@@ -1,8 +1,5 @@
 export const MAX_ITEMS_DISPLAY = 2
 
-export const SHIPPING = 9.99
-export const TAX = 0.1
-
 export const statusConfig = {
   pending: {
     label: 'Pending',

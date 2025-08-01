@@ -143,6 +143,8 @@ export const orderRouter = {
           order: {
             id: insertedOrder.id,
             subtotal,
+            shipping: SHIPPING,
+            tax: subtotal * TAX,
             createdAt: insertedOrder.createdAt,
           },
           items: productExists.map((p) => ({
