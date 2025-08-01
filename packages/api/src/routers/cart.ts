@@ -14,6 +14,7 @@ export const cartRouter = {
     const cartItems = await ctx.db.query.cartItems.findMany({
       where: (t, { eq }) => eq(t.userId, userId),
       with: { product: true },
+      orderBy: (t, { desc }) => desc(t.productId),
     })
 
     const totalPrice = cartItems.reduce((sum, item) => {
