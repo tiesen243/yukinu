@@ -23,6 +23,7 @@ import {
 } from '@yuki/ui/select'
 import { toast } from '@yuki/ui/sonner'
 
+import { formatCurrency } from '@/lib/helpers'
 import { slugify } from '@/lib/utils'
 import { useTRPC } from '@/trpc/react'
 
@@ -59,10 +60,33 @@ export const CardList: React.FC = () => {
         </div>
       ) : (
         <div className='grid gap-1 border-t pt-4'>
-          <p className='font-semibold'>Total: {cart.totalPrice}</p>
-          <p className='text-sm text-muted-foreground'>
-            Items: {cart.items.length}
-          </p>
+          <div className='space-y-3'>
+            <div className='flex justify-between text-sm text-muted-foreground'>
+              <span>Items ({cart.items.length})</span>
+              <span>{formatCurrency(cart.totalPrice)}</span>
+            </div>
+
+            <div className='flex justify-between text-sm text-muted-foreground'>
+              <span>Shipping</span>
+              <span>$9.99</span>
+            </div>
+
+            <div className='flex justify-between text-sm text-muted-foreground'>
+              <span>Tax (10%)</span>
+              <span>{formatCurrency(parseFloat(cart.totalPrice) * 0.1)}</span>
+            </div>
+
+            <div className='flex justify-between border-t pt-3 text-lg font-semibold'>
+              <span>Total</span>
+              <span>
+                {formatCurrency(
+                  parseFloat(cart.totalPrice) +
+                    9.99 +
+                    parseFloat(cart.totalPrice) * 0.1,
+                )}
+              </span>
+            </div>
+          </div>
 
           <div className='grid grid-cols-3 gap-4 pt-4'>
             <Select defaultValue={addressId} onValueChange={setAddressId}>
@@ -275,8 +299,27 @@ export const CardListSkeleton: React.FC = () => {
       ))}
 
       <div className='grid gap-1 border-t pt-4'>
-        <p className='font-semibold'>Total: $0.00</p>
-        <p className='text-sm text-muted-foreground'>Items: 0</p>
+        <div className='space-y-3'>
+          <div className='flex justify-between text-sm text-muted-foreground'>
+            <span>Items (0)</span>
+            <span>{formatCurrency(0)}</span>
+          </div>
+
+          <div className='flex justify-between text-sm text-muted-foreground'>
+            <span>Shipping</span>
+            <span>$9.99</span>
+          </div>
+
+          <div className='flex justify-between text-sm text-muted-foreground'>
+            <span>Tax (10%)</span>
+            <span>{formatCurrency(0)}</span>
+          </div>
+
+          <div className='flex justify-between border-t pt-3 text-lg font-semibold'>
+            <span>Total</span>
+            <span>{formatCurrency(9.99)}</span>
+          </div>
+        </div>
 
         <div className='grid grid-cols-2 gap-4 pt-4'>
           <div className='h-9 w-full animate-pulse rounded-md bg-current' />

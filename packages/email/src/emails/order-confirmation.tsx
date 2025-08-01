@@ -12,7 +12,7 @@ import type { SendEmailParams } from '..'
 import { EmailLayout } from './_layout'
 
 const SHIPPING = 9.99
-const TAX = 0.08
+const TAX = 0.1
 
 interface OrderConfirmationProps extends SendEmailParams {
   data?: {
