@@ -22,7 +22,7 @@ interface OrderConfirmationProps extends SendEmailParams {
     }
     order: {
       id: string
-      total: number
+      subtotal: number
       createdAt: Date
     }
     address: {
@@ -153,7 +153,7 @@ export default function OrderConfirmation({ data }: OrderConfirmationProps) {
           <Section className='flex justify-between'>
             <Text className='m-0 text-base text-gray-600'>Subtotal</Text>
             <Text className='m-0 text-base font-semibold text-black'>
-              {formatCurrency(order.total)}
+              {formatCurrency(order.subtotal)}
             </Text>
           </Section>
           <Section className='flex justify-between'>
@@ -163,16 +163,16 @@ export default function OrderConfirmation({ data }: OrderConfirmationProps) {
             </Text>
           </Section>
           <Section className='flex justify-between'>
-            <Text className='m-0 text-base text-gray-600'>Tax</Text>
+            <Text className='m-0 text-base text-gray-600'>Tax (10%)</Text>
             <Text className='m-0 text-base font-semibold text-black'>
-              {formatCurrency(order.total * TAX)}
+              {formatCurrency(order.subtotal * TAX)}
             </Text>
           </Section>
           <Hr className='my-3 border-gray-400' />
           <Section className='flex justify-between'>
             <Text className='m-0 text-lg font-semibold text-black'>Total</Text>
             <Text className='m-0 text-lg font-semibold text-black'>
-              {formatCurrency(order.total + SHIPPING + order.total * TAX)}
+              {formatCurrency(order.subtotal + SHIPPING + order.subtotal * TAX)}
             </Text>
           </Section>
         </Section>
@@ -202,7 +202,7 @@ const sampleData = {
   },
   order: {
     id: '123456',
-    total: 99.99,
+    subtotal: 89.97,
     createdAt: new Date(),
   },
   address: {

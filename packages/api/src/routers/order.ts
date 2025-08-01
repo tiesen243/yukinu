@@ -130,7 +130,7 @@ export const orderRouter = {
 
           await tx.delete(cartItems).where(eq(cartItems.userId, userId))
 
-          return { address, insertedOrder, productExists, total }
+          return { address, insertedOrder, productExists }
         })
 
       await sendEmail({
@@ -142,7 +142,7 @@ export const orderRouter = {
           user: ctx.session.user,
           order: {
             id: insertedOrder.id,
-            total,
+            subtotal,
             createdAt: insertedOrder.createdAt,
           },
           items: productExists.map((p) => ({
