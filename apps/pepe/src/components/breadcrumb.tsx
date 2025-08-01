@@ -15,7 +15,10 @@ export const Breadcrumb = () => {
     segments.forEach((segment) => {
       currentPath += `/${segment}`
       breadcrumbs.push({
-        label: segment.charAt(0).toUpperCase() + segment.slice(1),
+        label: (segment.charAt(0).toUpperCase() + segment.slice(1)).replaceAll(
+          '-',
+          ' ',
+        ),
         href: currentPath,
         isHome: false,
       })
