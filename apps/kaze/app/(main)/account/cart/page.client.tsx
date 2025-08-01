@@ -235,7 +235,7 @@ const CartItem: React.FC<{
           onClick={() => {
             handleQuantityChange(localQuantity - 1)
           }}
-          disabled={isPending || item.quantity <= 1}
+          disabled={isPending || localQuantity <= 1}
         >
           <MinusIcon />
         </Button>
