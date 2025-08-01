@@ -14,7 +14,10 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
   const cookieHeader = request.headers.get('cookie')
   const sidebarState = cookieHeader
-    ? new URLSearchParams(cookieHeader.replace(/; /g, '&')).get('sidebar_state')
+    ? cookieHeader
+        .split('; ')
+        .find((row) => row.startsWith('sidebar_state='))
+        ?.split('=')[1]
     : null
 
   return { sidebarState: sidebarState === 'true', user: session.user }
