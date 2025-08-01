@@ -38,7 +38,7 @@ export const CardList: React.FC = () => {
     addresses.find((address) => address.isDefault)?.id ?? '',
   )
   const [paymentMethod, setPaymentMethod] =
-    useState<(typeof paymentMethods)[number]>('credit_card')
+    useState<(typeof paymentMethods)[number]>('bank_transfer')
   const { mutate, isPending } = useMutation({
     ...trpc.order.create.mutationOptions(),
     onSuccess: ({ id }) => {
@@ -224,7 +224,7 @@ const CartItem: React.FC<{
           {item.productName}
         </h4>
         <p className='line-clamp-2 text-sm text-muted-foreground'>
-          ${item.price} each
+          {formatCurrency(item.price)} each
         </p>
       </Link>
 
@@ -267,7 +267,7 @@ const CartItem: React.FC<{
 
       <div className='min-w-0 text-right'>
         <p className='text-lg font-semibold'>
-          ${(parseFloat(item.price) * item.quantity).toFixed(2)}
+          {formatCurrency(parseFloat(item.price) * localQuantity)}
         </p>
       </div>
 
@@ -374,10 +374,4 @@ const CartItemSkeleton: React.FC = () => {
   )
 }
 
-const paymentMethods = [
-  'credit_card',
-  'debit_card',
-  'paypal',
-  'bank_transfer',
-  'cash_on_delivery',
-] as const
+const paymentMethods = ['bank_transfer', 'cash_on_delivery'] as const

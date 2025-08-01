@@ -13,13 +13,7 @@ export const createOrderSchema = z.object({
     }),
   ),
   addressId: z.cuid2(),
-  paymentMethod: z.enum([
-    'credit_card',
-    'debit_card',
-    'paypal',
-    'bank_transfer',
-    'cash_on_delivery',
-  ]),
+  paymentMethod: z.enum(['bank_transfer', 'cash_on_delivery']),
 })
 
 export type CreateOrderSchema = z.infer<typeof createOrderSchema>

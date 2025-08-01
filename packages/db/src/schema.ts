@@ -240,9 +240,6 @@ export const orderItemsRelations = relations(orderItems, ({ one }) => ({
 }))
 
 export const paymentMethods = pgEnum('payment_method', [
-  'credit_card',
-  'debit_card',
-  'paypal',
   'bank_transfer',
   'cash_on_delivery',
 ])
