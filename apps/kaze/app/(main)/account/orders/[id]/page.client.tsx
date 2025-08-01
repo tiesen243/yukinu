@@ -56,7 +56,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
     onSuccess: async () => {
       await queryClient.invalidateQueries(trpc.order.all.queryFilter())
       await queryClient.invalidateQueries(trpc.order.byId.queryFilter(props))
-      toast.success('Order cancelled successfully')
+      toast.success('Order updated successfully!')
     },
     onError: (error) => toast.error(error.message),
   })
@@ -70,7 +70,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
 
   const paymentAmount = parseFloat(data.payment?.amount ?? '0')
   const paymentStatus = data.payment?.status ?? 'pending'
-  const paymentMethod = data.payment?.method ?? 'credit_card'
+  const paymentMethod = data.payment?.method ?? 'bank_transfer'
 
   return (
     <section className='grid gap-6 lg:grid-cols-3'>
@@ -128,7 +128,7 @@ export const OrderDetail: React.FC<{ id: string }> = (props) => {
             </div>
             <div className='flex items-center justify-between'>
               <span className='text-sm text-muted-foreground'>Method:</span>
-              <span className='text-sm font-medium'>
+              <span className='text-sm font-medium capitalize'>
                 {data.payment?.method.replace(/_/g, ' ')}
               </span>
             </div>
