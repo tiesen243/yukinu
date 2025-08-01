@@ -41,7 +41,10 @@ export default async function ProductDetailPage({
         '@type': 'Offer',
         url: `${getBaseUrl()}/${slug}`,
         priceCurrency: 'USD',
-        price: (product.price * (1 - product.discount / 100)).toFixed(2),
+        price: (
+          parseFloat(product.price) *
+          (1 - product.discount / 100)
+        ).toFixed(2),
         priceValidUntil: Date.now() + 30 * 24 * 60 * 60 * 1000,
         availability:
           product.stock > 0

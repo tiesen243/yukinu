@@ -9,7 +9,7 @@ export const createOrderSchema = z.object({
     z.object({
       productId: z.cuid2(),
       quantity: z.number().int().positive(),
-      price: z.number().positive(),
+      price: z.coerce.string().min(0).default('0'),
     }),
   ),
   addressId: z.cuid2(),

@@ -17,7 +17,7 @@ export const cartRouter = {
     })
 
     const totalPrice = cartItems.reduce((sum, item) => {
-      const price = item.product.price * item.quantity
+      const price = parseFloat(item.product.price) * item.quantity
       const discount = item.product.discount / 100
       return sum + price * (1 - discount)
     }, 0)
@@ -33,7 +33,7 @@ export const cartRouter = {
         price: item.product.price,
         discount: item.product.discount,
         totalPrice: (
-          item.product.price *
+          parseFloat(item.product.price) *
           item.quantity *
           (1 - item.product.discount / 100)
         ).toFixed(2),

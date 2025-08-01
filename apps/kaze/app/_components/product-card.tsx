@@ -33,7 +33,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { trpc, queryClient } = useTRPC()
   const { mutate, isPending } = useMutation({
     ...trpc.cart.update.mutationOptions(),
-    onError: (error) => toast.error(error.message),
     onSuccess: () => {
       void queryClient.invalidateQueries(trpc.cart.get.queryFilter())
       toast.success('Item added to cart', {
@@ -45,6 +44,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         },
       })
     },
+    onError: (error) => toast.error(error.message),
   })
   const [active, setActive] = React.useState(false)
   const isNew = React.useMemo(
@@ -53,7 +53,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   )
 
   const price = React.useMemo(
-    () => product.price - product.price * (product.discount / 100),
+    () =>
+      parseFloat(product.price) -
+      parseFloat(product.price) * (product.discount / 100),
     [product.price, product.discount],
   )
 

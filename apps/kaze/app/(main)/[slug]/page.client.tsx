@@ -47,6 +47,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
         },
       })
     },
+    onError: ({ message }) => toast.error(message),
   })
 
   const rating = useMemo(
@@ -56,7 +57,7 @@ export const ProductDetail = ({ id }: { id: string }) => {
     [reviews],
   )
   const discountedPrice = useMemo(
-    () => product.price * (1 - product.discount / 100),
+    () => parseFloat(product.price) * (1 - product.discount / 100),
     [product.price, product.discount],
   )
 
@@ -120,7 +121,10 @@ export const ProductDetail = ({ id }: { id: string }) => {
                     {formatCurrency(product.price)}
                   </span>
                   <Badge variant='error'>
-                    Save {formatCurrency(product.price - discountedPrice)}
+                    Save{' '}
+                    {formatCurrency(
+                      parseFloat(product.price) - discountedPrice,
+                    )}
                   </Badge>
                 </>
               )}

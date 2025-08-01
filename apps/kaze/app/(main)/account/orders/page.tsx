@@ -13,7 +13,7 @@ export default function AddressPage() {
 
   return (
     <HydrateClient>
-      <section className='grid w-full gap-4'>
+      <section className='w-full space-y-4'>
         <Suspense
           fallback={Array.from({ length: 3 }, (_, index) => (
             <OrderCardSkeleton key={index} />
