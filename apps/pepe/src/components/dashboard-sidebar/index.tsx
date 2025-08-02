@@ -74,7 +74,7 @@ const navigation = [
   },
   {
     name: 'All Orders',
-    href: '/all-orders',
+    href: '/orders/all',
     icon: BaggageClaimIcon,
     isAdmin: true,
   },
@@ -86,7 +86,7 @@ const navigation = [
   },
   {
     name: 'All Products',
-    href: '/all-products',
+    href: '/products/all',
     icon: PackageSearchIcon,
     isAdmin: true,
   },

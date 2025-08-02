@@ -3,6 +3,7 @@ import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 import { createTRPCRouter, publicProcedure } from '../trpc'
 import { addressRouter } from './address'
 import { adminCategoryRouter } from './admin/category'
+import { adminProductRouter } from './admin/product'
 import { authRouter } from './auth'
 import { cartRouter } from './cart'
 import { orderRouter } from './order'
@@ -24,6 +25,7 @@ const appRouter = createTRPCRouter({
 
   admin: createTRPCRouter({
     category: adminCategoryRouter,
+    product: adminProductRouter,
   }),
 
   health: publicProcedure.query(() => {

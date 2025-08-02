@@ -26,14 +26,7 @@ export const NavMain: React.FC<{
           {navigation.map((item) =>
             item.isAdmin && !isAdmin ? null : (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton
-                  isActive={
-                    item.href === '/'
-                      ? pathname === '/'
-                      : pathname.startsWith(item.href)
-                  }
-                  asChild
-                >
+                <SidebarMenuButton isActive={item.href === pathname} asChild>
                   <Link to={item.href}>
                     <item.icon />
                     {item.name}

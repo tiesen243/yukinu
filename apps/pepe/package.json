@@ -19,6 +19,7 @@
     "@react-router/node": "^7.7.1",
     "@react-router/serve": "^7.7.1",
     "@tanstack/react-query": "catalog:api",
+    "@tanstack/react-table": "^8.21.3",
     "@trpc/client": "catalog:api",
     "@trpc/tanstack-react-query": "catalog:api",
     "@yuki/api": "workspace:*",
