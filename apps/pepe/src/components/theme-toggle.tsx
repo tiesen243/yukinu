@@ -1,9 +1,15 @@
+import * as React from 'react'
+
 import { useTheme } from '@yuki/ui'
 import { Button } from '@yuki/ui/button'
+import { useIsMounted } from '@yuki/ui/hooks/use-is-mounted'
 import { MoonIcon, SunIcon } from '@yuki/ui/icons'
 
 export const ThemeToggle = () => {
   const { resolvedTheme, setTheme } = useTheme()
+
+  const isMounted = useIsMounted()
+  if (!isMounted) return
 
   return (
     <Button

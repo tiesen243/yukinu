@@ -6,6 +6,12 @@ import { createCategorySchema } from '@yuki/validators/category'
 import { sellerProcedure } from '../../trpc'
 
 export const sellerCategoryRouter = {
+  all: sellerProcedure.query(async ({ ctx }) => {
+    return ctx.db
+      .select({ id: categories.id, name: categories.name })
+      .from(categories)
+  }),
+
   create: sellerProcedure
     .input(createCategorySchema)
     .mutation(async ({ ctx, input }) => {
