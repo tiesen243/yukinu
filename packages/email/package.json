@@ -21,18 +21,18 @@
   },
   "prettier": "@yuki/prettier-config",
   "dependencies": {
-    "@react-email/components": "^0.3.3",
+    "@react-email/components": "^0.4.0",
     "@yuki/validators": "workspace:*",
     "resend": "^4.7.0"
   },
   "devDependencies": {
-    "@react-email/preview-server": "4.2.5",
+    "@react-email/preview-server": "4.2.7",
     "@yuki/eslint-config": "workspace:*",
     "@yuki/prettier-config": "workspace:*",
     "@yuki/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "react-email": "^4.2.5",
+    "react-email": "^4.2.7",
     "typescript": "catalog:"
   }
 }

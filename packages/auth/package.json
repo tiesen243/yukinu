@@ -34,7 +34,8 @@
   "dependencies": {
     "@yuki/db": "workspace:*",
     "@yuki/email": "workspace:*",
-    "@yuki/validators": "workspace:*"
+    "@yuki/validators": "workspace:*",
+    "react": "catalog:react"
   },
   "devDependencies": {
     "@yuki/eslint-config": "workspace:*",
