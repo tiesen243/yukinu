@@ -23,19 +23,22 @@ export function UploadButton({
   ...props
 }: UploadButtonProps) {
   const [progress, setProgress] = React.useState(0)
-  const { isUploading, startUpload } = useUploadThing((r) => r[endpoint], {
-    onUploadBegin: () => {
-      setProgress(0)
+  const { routeConfig, isUploading, startUpload } = useUploadThing(
+    (r) => r[endpoint],
+    {
+      onUploadBegin: () => {
+        setProgress(0)
+      },
+      onUploadProgress: (progress) => {
+        setProgress(progress)
+      },
+      onClientUploadComplete,
+      onUploadError: (error) => {
+        console.error(`Upload error for endpoint: ${endpoint}`, error)
+        setProgress(0)
+      },
     },
-    onUploadProgress: (progress) => {
-      setProgress(progress)
-    },
-    onClientUploadComplete,
-    onUploadError: (error) => {
-      console.error(`Upload error for endpoint: ${endpoint}`, error)
-      setProgress(0)
-    },
-  })
+  )
   const inputRef = React.useRef<HTMLInputElement>(null)
 
   const handleUpload = React.useCallback(
@@ -47,10 +50,13 @@ export function UploadButton({
     [startUpload],
   )
 
+  console.log(routeConfig)
+
   return (
-    <div>
+    <div className='flex flex-col gap-2'>
       <input ref={inputRef} type='file' onChange={handleUpload} hidden />
       <Button
+        type='button'
         disabled={isUploading}
         onClick={() => {
           inputRef.current?.click()
@@ -59,6 +65,11 @@ export function UploadButton({
       >
         {isUploading ? `${progress}%` : 'Upload File'}
       </Button>
+
+      <p className='text-sm text-muted-foreground'>
+        Images up to {routeConfig?.image?.maxFileSize}, max{' '}
+        {routeConfig?.image?.maxFileCount}
+      </p>
     </div>
   )
 }
