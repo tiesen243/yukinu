@@ -10,7 +10,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   return { categories }
 }
 
-export default function NewProductsPage({ loaderData }: Route.ComponentProps) {
+export default function NewProductPage({ loaderData }: Route.ComponentProps) {
   return (
     <main className='container py-4'>
       <CreateProductForm categories={loaderData.categories} />
