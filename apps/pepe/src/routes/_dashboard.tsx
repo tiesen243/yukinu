@@ -11,6 +11,10 @@ import { ThemeToggle } from '@/components/theme-toggle'
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const session = await auth({ headers: request.headers })
   if (!session.user) return redirect('/login')
+  if (session.user.role === 'user') return redirect('/deny')
+
+  if (session.user.role !== 'admin' && request.url.includes('/admin'))
+    return redirect('/')
 
   const cookieHeader = request.headers.get('cookie')
   const sidebarState = cookieHeader

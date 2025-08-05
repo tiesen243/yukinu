@@ -1,5 +1,6 @@
-import { Link, useLocation } from 'react-router'
+import { NavLink } from 'react-router'
 
+import { Loader2Icon } from '@yuki/ui/icons'
 import {
   SidebarContent,
   SidebarGroup,
@@ -14,24 +15,24 @@ export const NavMain: React.FC<{
     name: string
     href: string
     icon: React.ComponentType
-    isAdmin: boolean
   }[]
 }> = ({ isAdmin, navigation }) => {
-  const { pathname } = useLocation()
-
   return (
     <SidebarContent>
       <SidebarGroup>
         <SidebarMenu>
           {navigation.map((item) =>
-            item.isAdmin && !isAdmin ? null : (
+            item.href.startsWith('/admin') && !isAdmin ? null : (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton isActive={item.href === pathname} asChild>
-                  <Link to={item.href}>
-                    <item.icon />
-                    {item.name}
-                  </Link>
-                </SidebarMenuButton>
+                <NavLink to={item.href}>
+                  {({ isActive, isPending }) => (
+                    <SidebarMenuButton isActive={isActive}>
+                      <item.icon />
+                      {item.name}
+                      {isPending && <Loader2Icon className='animate-spin' />}
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
               </SidebarMenuItem>
             ),
           )}
