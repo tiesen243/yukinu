@@ -6,7 +6,11 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@react-router/types/*": [
+        ".react-router/types/src/+types/*",
+        ".react-router/types/src/routes/+types/*"
+      ]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".react-router/types/**/*"],

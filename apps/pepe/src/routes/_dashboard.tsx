@@ -1,9 +1,9 @@
+import type { Route } from '@react-router/types/_dashboard'
 import { Outlet, redirect } from 'react-router'
 
 import { auth } from '@yuki/auth'
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@yuki/ui/sidebar'
 
-import type { Route } from './+types/_dashboard'
 import { Breadcrumb } from '@/components/breadcrumb'
 import { DashboardSidebar } from '@/components/dashboard-sidebar'
 import { ThemeToggle } from '@/components/theme-toggle'

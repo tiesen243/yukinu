@@ -1,6 +1,6 @@
-import { handlers } from '@yuki/auth'
+import type { Route } from '@react-router/types/api.auth.$'
 
-import type { Route } from './+types/api.auth.$'
+import { handlers } from '@yuki/auth'
 
 const { GET, POST } = handlers
 export const loader = ({ request }: Route.LoaderArgs) => GET(request)

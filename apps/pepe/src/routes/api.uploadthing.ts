@@ -1,6 +1,6 @@
-import { GET, POST } from '@yuki/uploader'
+import type { Route } from '@react-router/types/api.uploadthing'
 
-import type { Route } from './+types/api.uploadthing'
+import { GET, POST } from '@yuki/uploader'
 
 export const loader = async ({ request }: Route.LoaderArgs) =>
   GET(request as never)

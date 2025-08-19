@@ -1,3 +1,4 @@
+import type { Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig, loadEnv } from 'vite'
@@ -10,6 +11,19 @@ export default defineConfig(({ mode }) => {
   return {
     server: { port: 3002 },
     define: { 'process.env': JSON.stringify(process.env) },
-    plugins: [vue(), tailwindcss(), tsconfigPaths()],
+    plugins: [vue(), tailwindcss(), tsconfigPaths(), removeUseClient()],
   }
 })
+
+function removeUseClient(): Plugin {
+  return {
+    name: 'remove-use-client',
+    transform(code, id) {
+      if (/\.(js|ts|jsx|tsx)$/.test(id)) {
+        const newCode = code.replace(/['"]use client['"];\s*/g, '')
+        return { code: newCode }
+      }
+      return null
+    },
+  }
+}

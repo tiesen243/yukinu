@@ -28,10 +28,10 @@
   },
   "prettier": "@yuki/prettier-config",
   "dependencies": {
-    "@uploadthing/react": "^7.3.2",
+    "@uploadthing/react": "^7.3.3",
     "@yuki/auth": "workspace:*",
     "@yuki/validators": "workspace:*",
-    "uploadthing": "^7.7.3"
+    "uploadthing": "^7.7.4"
   },
   "devDependencies": {
     "@yuki/eslint-config": "workspace:*",

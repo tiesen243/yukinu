@@ -1,5 +1,6 @@
 import '@/globals.css'
 
+import type { Route } from '@react-router/types/root'
 import {
   isRouteErrorResponse,
   Links,
@@ -13,7 +14,6 @@ import { SessionProvider } from '@yuki/auth/react'
 import { ThemeProvider } from '@yuki/ui'
 import { Toaster } from '@yuki/ui/sonner'
 
-import type { Route } from './+types/root'
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
 

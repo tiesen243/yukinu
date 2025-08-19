@@ -13,7 +13,8 @@
     "packages": [
       "apps/*",
       "packages/*",
-      "tools/*"
+      "tools/*",
+      "!**/*.bak"
     ],
     "catalog": {
       "@types/node": "^24.1.0",
@@ -59,12 +60,12 @@
   },
   "prettier": "@yuki/prettier-config",
   "devDependencies": {
-    "@turbo/gen": "^2.5.5",
+    "@turbo/gen": "^2.5.6",
     "@yuki/prettier-config": "workspace:*",
     "@yuki/tsconfig": "workspace:*",
-    "turbo": "^2.5.5"
+    "turbo": "^2.5.6"
   },
-  "packageManager": "bun@1.2.19",
+  "packageManager": "bun@1.2.20",
   "engines": {
     "bun": ">=1.2.16",
     "node": ">=22.0.0"

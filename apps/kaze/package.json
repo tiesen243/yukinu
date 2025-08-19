@@ -25,7 +25,7 @@
     "@yuki/ui": "workspace:*",
     "@yuki/uploader": "workspace:*",
     "@yuki/validators": "workspace:*",
-    "next": "^15.4.5",
+    "next": "^15.4.7",
     "nuqs": "^2.4.3",
     "react": "catalog:react",
     "react-dom": "catalog:react"

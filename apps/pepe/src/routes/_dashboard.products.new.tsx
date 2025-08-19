@@ -1,4 +1,5 @@
-import type { Route } from './+types/_dashboard.products.new'
+import type { Route } from '@react-router/types/_dashboard.products.new'
+
 import { CreateProductForm } from '@/components/products/create-form'
 import { createTRPC, getQueryClient } from '@/trpc/rsc'
 
