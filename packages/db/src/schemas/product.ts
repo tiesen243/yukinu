@@ -61,3 +61,43 @@ export const productsRelations = relations(products, ({ one }) => ({
     references: [categories.id],
   }),
 }))
+
+export const productImages = pgTable('product_images', (t) => ({
+  id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+  productId: t
+    .varchar({ length: 24 })
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  imageUrl: t.varchar({ length: 255 }).notNull(),
+  altText: t.varchar({ length: 255 }),
+  isPrimary: t.boolean().default(false).notNull(),
+  createdAt,
+}))
+
+export const productImagesRelations = relations(productImages, ({ one }) => ({
+  product: one(products, {
+    fields: [productImages.productId],
+    references: [products.id],
+  }),
+}))
+
+export const productVariants = pgTable('product_variants', (t) => ({
+  id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+  productId: t
+    .varchar({ length: 24 })
+    .notNull()
+    .references(() => products.id, { onDelete: 'cascade' }),
+  name: t.varchar({ length: 255 }).notNull(),
+  price: t.numeric({ precision: 12, scale: 2 }).notNull(),
+  stock: t.integer().default(0).notNull(),
+}))
+
+export const productVariantsRelations = relations(
+  productVariants,
+  ({ one }) => ({
+    product: one(products, {
+      fields: [productVariants.productId],
+      references: [products.id],
+    }),
+  }),
+)
