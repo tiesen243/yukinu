@@ -25,7 +25,7 @@ export const categories = pgTable(
   ],
 )
 
-export const categoriesRelations = relations(categories, ({ many, one }) => ({
+export const categoriesRelations = relations(categories, ({ one, many }) => ({
   parent: one(categories, {
     fields: [categories.parentId],
     references: [categories.id],
