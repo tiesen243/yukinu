@@ -19,6 +19,7 @@ export const vendors = pgTable(
   'vendors',
   (t) => ({
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
     logoUrl: t.varchar({ length: 255 }),
@@ -27,8 +28,8 @@ export const vendors = pgTable(
     updatedAt,
   }),
   (t) => [
-    index('vendors_name_index').on(t.name),
-    index('vendors_status_index').on(t.status),
+    index('vendors_name_idx').on(t.name),
+    index('vendors_status_idx').on(t.status),
   ],
 )
 
@@ -44,12 +45,13 @@ export const vendorUsers = pgTable(
       .notNull()
       .references(() => vendors.id, { onDelete: 'cascade' }),
     userId: t.varchar({ length: 24 }).notNull(),
+
     role: vendorRoleEnum().default('staff').notNull(),
     createdAt,
   }),
   (t) => [
     primaryKey({ columns: [t.vendorId, t.userId] }),
-    index('vendor_users_user_id_index').on(t.userId),
+    index('vendor_users_user_id_idx').on(t.userId),
   ],
 )
 

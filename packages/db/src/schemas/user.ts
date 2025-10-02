@@ -16,6 +16,7 @@ export const users = pgTable(
   'users',
   (t) => ({
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+
     username: t.varchar({ length: 255 }).unique().notNull(),
     email: t.varchar({ length: 255 }).unique().notNull(),
     emailVerified: t.timestamp({ mode: 'date', withTimezone: true }),
@@ -25,10 +26,10 @@ export const users = pgTable(
     updatedAt,
   }),
   (t) => [
-    index('users_email_index').on(t.email),
-    index('users_username_index').on(t.username),
-    index('users_role_index').on(t.role),
-    index('users_status_index').on(t.status),
+    index('users_email_idx').on(t.email),
+    index('users_username_idx').on(t.username),
+    index('users_role_idx').on(t.role),
+    index('users_status_idx').on(t.status),
   ],
 )
 
@@ -51,11 +52,12 @@ export const accounts = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+
     password: t.varchar({ length: 255 }),
   }),
   (t) => [
     primaryKey({ columns: [t.provider, t.accountId] }),
-    index('account_user_id_index').on(t.userId),
+    index('account_user_id_idx').on(t.userId),
   ],
 )
 
@@ -73,7 +75,7 @@ export const sessions = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
   }),
-  (t) => [index('session_user_id_index').on(t.userId)],
+  (t) => [index('session_user_id_idx').on(t.userId)],
 )
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({

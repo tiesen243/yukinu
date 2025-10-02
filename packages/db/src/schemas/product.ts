@@ -15,11 +15,12 @@ export const categories = pgTable(
   (t) => ({
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
     parentId: t.varchar({ length: 24 }),
+
     name: t.varchar({ length: 255 }).notNull(),
   }),
   (t) => [
-    index('categories_parent_id_index').on(t.parentId),
-    index('categories_name_index').on(t.name),
+    index('categories_parent_id_idx').on(t.parentId),
+    index('categories_name_idx').on(t.name),
   ],
 )
 
@@ -33,23 +34,33 @@ export const categoriesRelations = relations(categories, ({ many, one }) => ({
   products: many(products),
 }))
 
-export const products = pgTable('products', (t) => ({
-  id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-  vendorId: t
-    .varchar({ length: 24 })
-    .notNull()
-    .references(() => vendors.id, { onDelete: 'cascade' }),
-  categoryId: t
-    .varchar({ length: 24 })
-    .references(() => categories.id, { onDelete: 'set null' }),
-  name: t.varchar({ length: 255 }).notNull(),
-  description: t.text(),
-  price: t.numeric({ precision: 12, scale: 2 }).notNull(),
-  stock: t.integer().default(0).notNull(),
-  status: productStatusEnum().default('active').notNull(),
-  createdAt,
-  updatedAt,
-}))
+export const products = pgTable(
+  'products',
+  (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+    vendorId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => vendors.id, { onDelete: 'cascade' }),
+    categoryId: t
+      .varchar({ length: 24 })
+      .references(() => categories.id, { onDelete: 'set null' }),
+
+    name: t.varchar({ length: 255 }).notNull(),
+    description: t.text(),
+    price: t.numeric({ precision: 12, scale: 2 }).notNull(),
+    stock: t.integer().default(0).notNull(),
+    status: productStatusEnum().default('active').notNull(),
+    createdAt,
+    updatedAt,
+  }),
+  (t) => [
+    index('products_vendor_id_idx').on(t.vendorId),
+    index('products_category_id_idx').on(t.categoryId),
+    index('products_name_idx').on(t.name),
+    index('products_status_idx').on(t.status),
+  ],
+)
 
 export const productsRelations = relations(products, ({ one }) => ({
   vendor: one(vendors, {
@@ -68,6 +79,7 @@ export const productImages = pgTable('product_images', (t) => ({
     .varchar({ length: 24 })
     .notNull()
     .references(() => products.id, { onDelete: 'cascade' }),
+
   imageUrl: t.varchar({ length: 255 }).notNull(),
   altText: t.varchar({ length: 255 }),
   isPrimary: t.boolean().default(false).notNull(),
@@ -87,6 +99,7 @@ export const productVariants = pgTable('product_variants', (t) => ({
     .varchar({ length: 24 })
     .notNull()
     .references(() => products.id, { onDelete: 'cascade' }),
+
   name: t.varchar({ length: 255 }).notNull(),
   price: t.numeric({ precision: 12, scale: 2 }).notNull(),
   stock: t.integer().default(0).notNull(),

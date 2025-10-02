@@ -12,13 +12,17 @@ export const profiles = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+
     fullName: t.varchar({ length: 255 }),
     avatarUrl: t.text(),
     bio: t.text(),
+    gender: t.varchar({ length: 50 }),
+    dateOfBirth: t.date(),
+    website: t.varchar({ length: 255 }),
   }),
   (t) => [
-    index('profiles_user_id_index').on(t.userId),
-    index('profiles_full_name_index').on(t.fullName),
+    index('profiles_user_id_idx').on(t.userId),
+    index('profiles_full_name_idx').on(t.fullName),
   ],
 )
 
@@ -34,6 +38,7 @@ export const addresses = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+
     recipientName: t.varchar({ length: 255 }).notNull(),
     phoneNumber: t.varchar({ length: 20 }).notNull(),
     street: t.varchar({ length: 255 }).notNull(),
@@ -43,7 +48,7 @@ export const addresses = pgTable(
     country: t.varchar({ length: 100 }).notNull(),
     isDefault: t.boolean().default(false).notNull(),
   }),
-  (t) => [index('addresses_user_id_index').on(t.userId)],
+  (t) => [index('addresses_user_id_idx').on(t.userId)],
 )
 
 export const addressesRelations = relations(addresses, ({ one }) => ({
