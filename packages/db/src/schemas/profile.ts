@@ -1,8 +1,9 @@
 import { relations } from 'drizzle-orm'
-import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
+import { index, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
 import { orders } from './order'
+import { products } from './product'
 import { users } from './user'
 
 export const profiles = pgTable(
@@ -69,17 +70,16 @@ export const wishlistItems = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    productId: t.varchar({ length: 24 }).notNull(),
+    productId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
     createdAt,
   }),
   (t) => [
     primaryKey({ columns: [t.userId, t.productId] }),
     index('whishlist_items_user_id_idx').on(t.userId),
     index('whishlist_items_product_id_idx').on(t.productId),
-    uniqueIndex('whishlist_items_user_product_unique_idx').on(
-      t.userId,
-      t.productId,
-    ),
   ],
 )
 
