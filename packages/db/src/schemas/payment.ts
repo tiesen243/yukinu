@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { pgEnum, pgTable } from 'drizzle-orm/pg-core'
+import { index, pgEnum, pgTable } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId } from '../utils'
 import { orders } from './order'
@@ -18,19 +18,23 @@ export const paymentStatusEnum = pgEnum('payment_status', [
   'refunded',
 ])
 
-export const payments = pgTable('payments', (t) => ({
-  id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-  orderId: t
-    .varchar({ length: 24 })
-    .notNull()
-    .references(() => orders.id, { onDelete: 'cascade' }),
-  transactionId: t.varchar({ length: 100 }),
+export const payments = pgTable(
+  'payments',
+  (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+    orderId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
+    transactionId: t.varchar({ length: 100 }),
 
-  amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
-  method: paymentMethodEnum().notNull(),
-  status: paymentStatusEnum().default('pending').notNull(),
-  createdAt,
-}))
+    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    method: paymentMethodEnum().notNull(),
+    status: paymentStatusEnum().default('pending').notNull(),
+    createdAt,
+  }),
+  (t) => [index('payments_order_id_idx').on(t.orderId)],
+)
 
 export const paymentRelations = relations(payments, ({ one }) => ({
   order: one(orders, {
@@ -47,19 +51,23 @@ export const shippingStatusEnum = pgEnum('shipping_status', [
   'failed',
 ])
 
-export const shippings = pgTable('shippings', (t) => ({
-  id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-  orderId: t
-    .varchar({ length: 24 })
-    .notNull()
-    .references(() => orders.id, { onDelete: 'cascade' }),
+export const shippings = pgTable(
+  'shippings',
+  (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+    orderId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => orders.id, { onDelete: 'cascade' }),
 
-  carrier: t.varchar({ length: 100 }).notNull(),
-  trackingNumber: t.varchar({ length: 100 }).notNull(),
-  status: shippingStatusEnum().default('pending').notNull(),
-  shippedAt: t.timestamp(),
-  deliveredAt: t.timestamp(),
-}))
+    carrier: t.varchar({ length: 100 }).notNull(),
+    trackingNumber: t.varchar({ length: 100 }).notNull(),
+    status: shippingStatusEnum().default('pending').notNull(),
+    shippedAt: t.timestamp(),
+    deliveredAt: t.timestamp(),
+  }),
+  (t) => [index('shippings_order_id_idx').on(t.orderId)],
+)
 
 export const shippingRelations = relations(shippings, ({ one }) => ({
   order: one(orders, {

@@ -2,6 +2,8 @@ import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
+import { products } from './product'
+import { users } from './user'
 
 export const vendorRoleEnum = pgEnum('vendor_role', [
   'owner',
@@ -35,6 +37,7 @@ export const vendors = pgTable(
 
 export const vendorsRelations = relations(vendors, ({ many }) => ({
   users: many(vendorUsers),
+  products: many(products),
 }))
 
 export const vendorUsers = pgTable(
@@ -51,7 +54,9 @@ export const vendorUsers = pgTable(
   }),
   (t) => [
     primaryKey({ columns: [t.vendorId, t.userId] }),
+    index('vendor_users_vendor_id_idx').on(t.vendorId),
     index('vendor_users_user_id_idx').on(t.userId),
+    index('vendor_users_role_idx').on(t.role),
   ],
 )
 
@@ -59,5 +64,9 @@ export const vendorUsersRelations = relations(vendorUsers, ({ one }) => ({
   vendor: one(vendors, {
     fields: [vendorUsers.vendorId],
     references: [vendors.id],
+  }),
+  user: one(users, {
+    fields: [vendorUsers.userId],
+    references: [users.id],
   }),
 }))

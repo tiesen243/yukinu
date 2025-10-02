@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm'
 import { index, pgTable } from 'drizzle-orm/pg-core'
 
 import { createId } from '../utils'
+import { orders } from './order'
 import { users } from './user'
 
 export const profiles = pgTable(
@@ -48,9 +49,13 @@ export const addresses = pgTable(
     country: t.varchar({ length: 100 }).notNull(),
     isDefault: t.boolean().default(false).notNull(),
   }),
-  (t) => [index('addresses_user_id_idx').on(t.userId)],
+  (t) => [
+    index('addresses_user_id_idx').on(t.userId),
+    index('addresses_user_id_is_default_idx').on(t.userId, t.isDefault),
+  ],
 )
 
-export const addressesRelations = relations(addresses, ({ one }) => ({
+export const addressesRelations = relations(addresses, ({ one, many }) => ({
   user: one(users, { fields: [addresses.userId], references: [users.id] }),
+  orders: many(orders),
 }))
