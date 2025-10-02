@@ -37,6 +37,7 @@ export const vendors = pgTable(
 
 export const vendorsRelations = relations(vendors, ({ many }) => ({
   users: many(vendorUsers),
+  collections: many(vendorCollections),
   products: many(products),
 }))
 
@@ -73,3 +74,67 @@ export const vendorUsersRelations = relations(vendorUsers, ({ one }) => ({
     references: [users.id],
   }),
 }))
+
+export const vendorCollections = pgTable(
+  'vendor_collections',
+  (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+    vendorId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => vendors.id, { onDelete: 'cascade' }),
+
+    name: t.varchar({ length: 255 }).notNull(),
+    description: t.text(),
+    createdAt,
+    updatedAt,
+  }),
+  (t) => [
+    index('vendor_collections_vendor_id_idx').on(t.vendorId),
+    index('vendor_collections_name_idx').on(t.name),
+  ],
+)
+
+export const vendorCollectionsRelations = relations(
+  vendorCollections,
+  ({ one, many }) => ({
+    vendor: one(vendors, {
+      fields: [vendorCollections.vendorId],
+      references: [vendors.id],
+    }),
+    items: many(vendorCollectionItems),
+  }),
+)
+
+export const vendorCollectionItems = pgTable(
+  'vendor_collection_items',
+  (t) => ({
+    collectionId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => vendorCollections.id, { onDelete: 'cascade' }),
+    productId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.collectionId, t.productId] }),
+    index('vendor_collection_items_collection_id_idx').on(t.collectionId),
+    index('vendor_collection_items_product_id_idx').on(t.productId),
+  ],
+)
+
+export const vendorCollectionItemsRelations = relations(
+  vendorCollectionItems,
+  ({ one }) => ({
+    collection: one(vendorCollections, {
+      fields: [vendorCollectionItems.collectionId],
+      references: [vendorCollections.id],
+    }),
+    product: one(products, {
+      fields: [vendorCollectionItems.productId],
+      references: [products.id],
+    }),
+  }),
+)

@@ -3,7 +3,7 @@ import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
 import { orders } from './order'
-import { addresses, profiles } from './profile'
+import { addresses, profiles, wishlistItems } from './profile'
 import { reviews } from './review'
 import { vendorUsers } from './vendor'
 
@@ -35,12 +35,13 @@ export const users = pgTable(
   ],
 )
 
-export const usersRelations = relations(users, ({ many, one }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
 
   profile: one(profiles),
   addresses: many(addresses),
+  wishlistItems: many(wishlistItems),
 
   vendorUsers: many(vendorUsers),
 

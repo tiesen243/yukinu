@@ -1,0 +1,2 @@
+DROP INDEX "whishlist_items_user_product_unique_idx";--> statement-breakpoint
+ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;

@@ -1,8 +1,9 @@
 import { relations } from 'drizzle-orm'
-import { index, pgTable } from 'drizzle-orm/pg-core'
+import { index, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { createId } from '../utils'
+import { createdAt, createId, updatedAt } from '../utils'
 import { orders } from './order'
+import { products } from './product'
 import { users } from './user'
 
 export const profiles = pgTable(
@@ -48,6 +49,8 @@ export const addresses = pgTable(
     postalCode: t.varchar({ length: 20 }).notNull(),
     country: t.varchar({ length: 100 }).notNull(),
     isDefault: t.boolean().default(false).notNull(),
+    createdAt,
+    updatedAt,
   }),
   (t) => [
     index('addresses_user_id_idx').on(t.userId),
@@ -58,4 +61,28 @@ export const addresses = pgTable(
 export const addressesRelations = relations(addresses, ({ one, many }) => ({
   user: one(users, { fields: [addresses.userId], references: [users.id] }),
   orders: many(orders),
+}))
+
+export const wishlistItems = pgTable(
+  'wishlist_items',
+  (t) => ({
+    userId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    productId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    createdAt,
+  }),
+  (t) => [
+    primaryKey({ columns: [t.userId, t.productId] }),
+    index('whishlist_items_user_id_idx').on(t.userId),
+    index('whishlist_items_product_id_idx').on(t.productId),
+  ],
+)
+
+export const wishlistItemsRelations = relations(wishlistItems, ({ one }) => ({
+  user: one(users, { fields: [wishlistItems.userId], references: [users.id] }),
 }))
