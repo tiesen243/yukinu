@@ -6,17 +6,13 @@ export const env = createEnv({
       z.enum(['development', 'production', 'test']),
       'development',
     ),
+    DATABASE_URL: z.string(),
 
-    DATABASE_URL: z.string().check(z.startsWith('postgresql://')),
-
+    // Authentication providers
     AUTH_FACEBOOK_ID: z.string(),
     AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
-
-    UPLOADTHING_TOKEN: z.string(),
-
-    RESEND_TOKEN: z.string(),
 
     // Vercel environment variables
     VERCEL: z.optional(z.string()),
@@ -25,16 +21,9 @@ export const env = createEnv({
     VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
   },
 
-  client: {
-    NEXT_PUBLIC_APP_URL: z._default(z.url(), 'http://localhost:3000'),
-    NEXT_PUBLIC_DASHBOARD_URL: z._default(z.url(), 'http://localhost:3001'),
-  },
+  client: {},
 
-  runtimeEnv: {
-    ...process.env,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
-  },
+  runtimeEnv: process.env,
 
   skipValidation:
     !!process.env.SKIP_ENV_VALIDATION ||
@@ -49,22 +38,26 @@ function createEnv<
   TResult extends {
     [TKey in keyof (TServer & TClient)]: z.infer<(TServer & TClient)[TKey]>
   },
->(opts: {
-  server: {
-    [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
-      ? `${TKey} should not prefix with ${TPrefix}`
-      : TServer[TKey]
-  }
-  client: {
-    [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
-      ? TClient[TKey]
-      : `${TKey extends string ? TKey : never} should prefix with ${TPrefix}`
-  }
-  runtimeEnv:
-    | { [TKey in keyof TResult]: string | undefined }
-    | Record<string, unknown>
-  skipValidation: boolean
-}): TResult {
+  TDeriveEnv extends Record<string, unknown> = Record<string, unknown>,
+>(
+  opts: {
+    server: {
+      [TKey in keyof TServer]: TKey extends `${TPrefix}${string}`
+        ? `${TKey} should not prefix with ${TPrefix}`
+        : TServer[TKey]
+    }
+    client: {
+      [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
+        ? TClient[TKey]
+        : `${TKey extends string ? TKey : never} should prefix with ${TPrefix}`
+    }
+    runtimeEnv:
+      | { [TKey in keyof TResult]: string | undefined }
+      | Record<string, unknown>
+    skipValidation: boolean
+  },
+  deriveEnv: (env: TResult) => TDeriveEnv = () => ({}) as TDeriveEnv,
+): TResult & TDeriveEnv {
   for (const [key, value] of Object.entries(opts.runtimeEnv)) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     if (value === '') delete opts.runtimeEnv[key]
@@ -82,7 +75,9 @@ function createEnv<
     )
 
   const envData = parsedEnvs.success ? parsedEnvs.data : {}
-  return new Proxy(envData as TResult, {
+  Object.assign(envData, deriveEnv(envData as TResult))
+
+  return new Proxy(envData as TResult & TDeriveEnv, {
     get(target, prop) {
       if (!isServer && prop in opts.server)
         throw new Error(

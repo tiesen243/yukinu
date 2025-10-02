@@ -1,7 +1,6 @@
-import { and, db, eq } from '@yuki/db'
-import { accounts, sessions, users } from '@yuki/db/schema'
-import { sendEmail } from '@yuki/email'
-import { env } from '@yuki/validators/env'
+import { and, db, eq } from '@yukinu/db'
+import { accounts, sessions, users } from '@yukinu/db/schema'
+import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions } from './core/types'
 import { encodeHex, hashSecret } from './core/crypto'
@@ -47,13 +46,6 @@ function getAdapter(): AuthOptions['adapter'] {
     },
     createUser: async (data) => {
       const [user] = await db.insert(users).values(data).returning()
-      await sendEmail({
-        email: 'Welcome',
-        to: data.email,
-        subject: 'Welcome to Yuki',
-        text: 'Thank you for signing up! We are excited to have you on board.',
-        data,
-      })
       return user ?? null
     },
     getAccount: async (provider, accountId) => {
@@ -69,8 +61,7 @@ function getAdapter(): AuthOptions['adapter'] {
       return account ?? null
     },
     createAccount: async (data) => {
-      const [account] = await db.insert(accounts).values(data).returning()
-      return account ?? null
+      await db.insert(accounts).values(data)
     },
     getSessionAndUser: async (token) => {
       const [session] = await db
@@ -84,19 +75,25 @@ function getAdapter(): AuthOptions['adapter'] {
       return session ?? null
     },
     createSession: async (data) => {
-      const [session] = await db.insert(sessions).values(data).returning()
-      return session ?? null
+      await db.insert(sessions).values(data)
     },
     updateSession: async (token, data) => {
-      const [updatedSession] = await db
-        .update(sessions)
-        .set(data)
-        .where(eq(sessions.token, token))
-        .returning()
-      return updatedSession ?? null
+      await db.update(sessions).set(data).where(eq(sessions.token, token))
     },
     deleteSession: async (token) => {
       await db.delete(sessions).where(eq(sessions.token, token))
     },
+  }
+}
+
+declare module './core/types.d.ts' {
+  type IUser = typeof users.$inferInsert
+  type ISession = typeof sessions.$inferInsert
+
+  interface User extends IUser {
+    id: string
+  }
+  interface Session extends ISession {
+    token: string
   }
 }

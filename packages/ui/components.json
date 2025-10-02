@@ -11,11 +11,11 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@yuki/ui",
-    "hooks": "@yuki/ui/hooks",
-    "lib": "@yuki/ui/lib",
-    "utils": "@yuki/ui",
-    "ui": "@yuki/ui/components"
+    "components": "@yukinu/ui",
+    "hooks": "@yukinu/ui/hooks",
+    "lib": "@yukinu/ui/lib",
+    "utils": "@yukinu/ui",
+    "ui": "@yukinu/ui/components"
   },
   "iconLibrary": "lucide"
 }

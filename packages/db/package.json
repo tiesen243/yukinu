@@ -1,6 +1,6 @@
 {
-  "name": "@yuki/db",
-  "version": "1.0.0",
+  "name": "@yukinu/db",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -24,17 +24,17 @@
     "typecheck": "tsc --noEmit",
     "with-env": "dotenv -e ../../.env --"
   },
-  "prettier": "@yuki/prettier-config",
+  "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@neondatabase/serverless": "^1.0.1",
-    "drizzle-orm": "^0.44.4"
+    "drizzle-orm": "^0.44.6",
+    "postgres": "^3.4.7"
   },
   "devDependencies": {
-    "@yuki/eslint-config": "workspace:*",
-    "@yuki/prettier-config": "workspace:*",
-    "@yuki/tsconfig": "workspace:*",
+    "@yukinu/eslint-config": "workspace:*",
+    "@yukinu/prettier-config": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
     "dotenv-cli": "catalog:",
-    "drizzle-kit": "^0.31.4",
+    "drizzle-kit": "^0.31.5",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

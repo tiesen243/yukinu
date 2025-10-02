@@ -1,6 +1,6 @@
 {
-  "name": "@yuki/validators",
-  "version": "1.0.0",
+  "name": "@yukinu/validators",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -17,14 +17,14 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@yuki/prettier-config",
+  "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "zod": "^4.0.14"
+    "zod": "^4.1.11"
   },
   "devDependencies": {
-    "@yuki/eslint-config": "workspace:*",
-    "@yuki/prettier-config": "workspace:*",
-    "@yuki/tsconfig": "workspace:*",
+    "@yukinu/eslint-config": "workspace:*",
+    "@yukinu/prettier-config": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

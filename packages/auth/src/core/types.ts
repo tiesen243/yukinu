@@ -17,15 +17,8 @@ export interface OAuth2Token {
   expires_in: number
 }
 
-export interface User {
-  id: string
-  email: string
-  name: string
-  image: string
-  role: 'admin' | 'seller' | 'user'
-  createdAt: Date
-  updatedAt: Date
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface User {}
 
 export interface Account {
   provider: string
@@ -41,12 +34,8 @@ export interface OauthAccount {
   image: string
 }
 
-export interface Session {
-  token: string
-  userAgent: string
-  expires: Date
-  userId: string
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface Session {}
 
 export interface SessionResult {
   user: User | null
@@ -60,11 +49,11 @@ export interface DatabaseAdapter {
   ): Promise<User | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>
-  createAccount(data: Account): Promise<Account | null>
+  createAccount(data: Account): Promise<void>
 
   getSessionAndUser(token: string): Promise<SessionResult | null>
-  createSession(data: Session): Promise<Session | null>
-  updateSession(token: string, data: Partial<Session>): Promise<Session | null>
+  createSession(data: Session): Promise<void>
+  updateSession(token: string, data: Partial<Session>): Promise<void>
   deleteSession(token: string): Promise<void>
 }
 

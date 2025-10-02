@@ -16,7 +16,7 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
         type: 'input',
         name: 'packageName',
         message:
-          'What is the name of the package? (You can skip the `@yuki/` prefix)',
+          'What is the name of the package? (You can skip the `@yukinu/` prefix)',
       },
       {
         type: 'input',
@@ -31,8 +31,8 @@ export default function generator(plop: PlopTypes.NodePlopAPI): void {
           'packageName' in answers &&
           typeof answers.packageName === 'string'
         ) {
-          if (answers.packageName.startsWith('@yuki/'))
-            answers.packageName = answers.packageName.replace('@yuki/', '')
+          if (answers.packageName.startsWith('@yukinu/'))
+            answers.packageName = answers.packageName.replace('@yukinu/', '')
         }
         return 'Config sanitized'
       },

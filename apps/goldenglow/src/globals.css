@@ -1,9 +1,0 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap');
-
-@import '@yuki/ui/tailwind.css';
-@source "../../../packages/ui/src/**/*.tsx";
-
-@theme inline {
-  --font-sans: 'Geist', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
-}

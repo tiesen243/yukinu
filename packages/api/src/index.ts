@@ -14,21 +14,6 @@ const handler = async (request: Request) => {
       req: request,
       router: appRouter,
       createContext: () => createTRPCContext(request),
-      responseMeta(opts) {
-        const { errors, type } = opts
-        const ONE_DAY_IN_SECONDS = 60 * 60 * 24
-
-        if (errors.length === 0 && type === 'query')
-          return {
-            headers: new Headers([
-              [
-                'cache-control',
-                `s-maxage=1, stale-while-revalidate=${ONE_DAY_IN_SECONDS}`,
-              ],
-            ]),
-          }
-        return {}
-      },
     })
 
   response.headers.set('Access-Control-Allow-Origin', '*')

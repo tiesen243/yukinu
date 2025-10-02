@@ -1,16 +1,16 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import { auth, validateSessionToken } from '@yuki/auth'
-import { db } from '@yuki/db'
+import { auth, validateSessionToken } from '@yukinu/auth'
+import { db } from '@yukinu/db'
 
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get('Authorization') ?? null
   if (authToken) return validateSessionToken(authToken)
-  return auth({ headers })
+  return auth({ headers } as Request)
 }
 
-const createTRPCContext = async (opts: Request) => {
+const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await isomorphicGetSession(opts.headers)
 
   console.log(
@@ -21,7 +21,6 @@ const createTRPCContext = async (opts: Request) => {
   )
 
   return {
-    req: opts,
     db,
     session,
   }
@@ -55,26 +54,10 @@ const protectedProcedure = t.procedure
     if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
     return next({
       ctx: {
-        session: {
-          ...ctx.session,
-          user: ctx.session.user,
-        },
+        session: { ...ctx.session, user: ctx.session.user },
       },
     })
   })
-const sellerProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.session.user.role === 'user')
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'Seller access required',
-    })
-  return next()
-})
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.session.user.role !== 'admin')
-    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access required' })
-  return next()
-})
 
 export {
   createCallerFactory,
@@ -82,6 +65,4 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
-  sellerProcedure,
-  adminProcedure,
 }

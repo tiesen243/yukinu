@@ -34,20 +34,10 @@
     }
   },
   "globalEnv": [
-    "AUTH_FACEBOOK_ID",
-    "AUTH_FACEBOOK_SECRET",
-    "AUTH_GOOGLE_ID",
-    "AUTH_GOOGLE_SECRET",
-
+    "AUTH_DISCORD_ID",
+    "AUTH_DISCORD_SECRET",
     "DATABASE_URL",
-    "DATABASE_URL_UNPOOLED",
-
-    "UPLOADTHING_TOKEN",
-    "RESEND_TOKEN",
-
-    "NEXT_PUBLIC_APP_URL",
-    "NEXT_PUBLIC_DASHBOARD_URL",
-
+    "NEXT_PUBLIC_API_URL",
     "PORT"
   ],
   "globalPassThroughEnv": [
@@ -61,3 +51,4 @@
     "npm_lifecycle_event"
   ]
 }
+

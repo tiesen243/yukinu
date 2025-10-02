@@ -1,6 +1,6 @@
 {
-  "name": "@yuki/api",
-  "version": "1.0.0",
+  "name": "@yukinu/api",
+  "version": "0.0.0",
   "private": true,
   "license": "MIT",
   "type": "module",
@@ -18,19 +18,18 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@yuki/prettier-config",
+  "prettier": "@yukinu/prettier-config",
   "dependencies": {
     "@trpc/server": "catalog:api",
-    "@yuki/auth": "workspace:*",
-    "@yuki/db": "workspace:*",
-    "@yuki/email": "workspace:*",
-    "@yuki/validators": "workspace:*",
+    "@yukinu/auth": "workspace:*",
+    "@yukinu/db": "workspace:*",
+    "@yukinu/validators": "workspace:*",
     "superjson": "catalog:api"
   },
   "devDependencies": {
-    "@yuki/eslint-config": "workspace:*",
-    "@yuki/prettier-config": "workspace:*",
-    "@yuki/tsconfig": "workspace:*",
+    "@yukinu/eslint-config": "workspace:*",
+    "@yukinu/prettier-config": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"

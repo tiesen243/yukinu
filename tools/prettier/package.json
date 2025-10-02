@@ -1,6 +1,6 @@
 {
-  "name": "@yuki/prettier-config",
-  "version": "0.0.1",
+  "name": "@yukinu/prettier-config",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -11,13 +11,13 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@yuki/prettier-config",
+  "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.5.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "prettier-plugin-tailwindcss": "^0.6.14"
   },
   "devDependencies": {
-    "@yuki/tsconfig": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
     "prettier": "catalog:",
     "typescript": "catalog:"
   }

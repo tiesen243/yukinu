@@ -18,22 +18,18 @@ export function Auth(opts: AuthOptions) {
 
   const { adapter, cookieKeys, cookieOptions, providers, session } = options
 
-  async function createSession(
-    userId: string,
-    userAgent: string,
-  ): Promise<Session> {
+  async function createSession(userId: string): Promise<Session> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
     await adapter.createSession({
       token: encodeHex(hashToken),
-      userAgent,
       expires,
       userId,
     })
 
-    return { token, userAgent, expires, userId }
+    return { token, userId, expires }
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -41,30 +37,35 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
-    const result = await adapter.getSessionAndUser(hashToken)
-    if (!result) return { user: null, expires: new Date() }
 
-    const now = Date.now()
-    const expiresTime = result.expires.getTime()
+    try {
+      const result = await adapter.getSessionAndUser(hashToken)
+      if (!result) return { user: null, expires: new Date() }
 
-    if (now > expiresTime) {
-      await adapter.deleteSession(hashToken)
+      const now = Date.now()
+      const expiresTime = result.expires.getTime()
+
+      if (now > expiresTime) {
+        await adapter.deleteSession(hashToken)
+        return { user: null, expires: new Date() }
+      }
+
+      if (now >= expiresTime - session.expiresThreshold * 1000) {
+        const newExpires = new Date(now + session.expiresIn * 1000)
+        await adapter.updateSession(hashToken, { expires: newExpires })
+        result.expires = newExpires
+      }
+
+      return result
+    } catch {
       return { user: null, expires: new Date() }
     }
-
-    if (now >= expiresTime - session.expiresThreshold * 1000) {
-      const newExpires = new Date(now + session.expiresIn * 1000)
-      await adapter.updateSession(hashToken, { expires: newExpires })
-      result.expires = newExpires
-    }
-
-    return result
   }
 
-  async function signIn(
-    opts: { email: string; password: string },
-    userAgent = 'unknown',
-  ): Promise<Session> {
+  async function signIn(opts: {
+    email: string
+    password: string
+  }): Promise<Session> {
     const { email, password } = opts
 
     const user = await adapter.getUserByEmail(email)
@@ -73,14 +74,14 @@ export function Auth(opts: AuthOptions) {
     const account = await adapter.getAccount('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
 
-    const isValid = await new Password().verify(account.password, password)
+    const isValid = await Password.verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
-    return createSession(user.id, userAgent)
+    return createSession(user.id)
   }
 
-  async function signOut(request: Request) {
-    const cookies = new Cookies(request)
+  async function signOut(opts: { headers: Headers }): Promise<void> {
+    const cookies = new Cookies(opts as Request)
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
@@ -89,17 +90,14 @@ export function Auth(opts: AuthOptions) {
 
   async function getOrCreateUser(
     opts: Omit<OauthAccount & Account, 'userId'>,
-    userAgent: string,
   ): Promise<Session> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount) return createSession(existingAccount.userId, userAgent)
+    if (existingAccount) return createSession(existingAccount.userId)
 
     const existingUser = await adapter.getUserByEmail(userData.email)
     const userId =
-      existingUser?.id ??
-      (await adapter.createUser({ ...userData, role: 'user' }))?.id ??
-      ''
+      existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
     if (!userId) throw new Error('Failed to create user')
 
     await adapter.createAccount({
@@ -108,7 +106,7 @@ export function Auth(opts: AuthOptions) {
       userId,
       password: null,
     })
-    return createSession(userId, userAgent)
+    return createSession(userId)
   }
 
   return {
@@ -169,8 +167,6 @@ export function Auth(opts: AuthOptions) {
             const instance = options.providers[provider]
             if (!instance) throw new Error(`Provider ${provider} not found`)
 
-            const userAgent = request.headers.get('user-agent') ?? ''
-
             const code = searchParams.get('code') ?? ''
             const state = searchParams.get('state') ?? ''
             const storedState = cookies.get(cookieKeys.state) ?? ''
@@ -180,14 +176,11 @@ export function Auth(opts: AuthOptions) {
               throw new Error('Invalid state or code')
 
             const userData = await instance.fetchUserData(code, codeVerifier)
-            const session = await getOrCreateUser(
-              {
-                ...userData,
-                provider,
-                password: null,
-              },
-              userAgent,
-            )
+            const session = await getOrCreateUser({
+              ...userData,
+              provider,
+              password: null,
+            })
 
             const Location = new URL(redirectTo, request.url).toString()
             const response = new Response(null, {
@@ -220,8 +213,7 @@ export function Auth(opts: AuthOptions) {
            */
           if (pathname === '/api/auth/sign-in') {
             const body = (await request.json()) as never
-            const userAgent = request.headers.get('user-agent') ?? ''
-            const result = await signIn(body, userAgent)
+            const result = await signIn(body)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {
@@ -235,19 +227,10 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-out: Sign out current session
            */
           if (pathname === '/api/auth/sign-out') {
-            const redirectTo = (await request.formData()).get('redirectTo')
-
             await signOut(request)
-
-            let response = Response.json({
+            const response = Response.json({
               message: 'Signed out successfully',
             })
-            if (redirectTo && typeof redirectTo === 'string')
-              response = new Response(null, {
-                status: 302,
-                headers: { Location: redirectTo },
-              })
-
             cookies.delete(response, cookieKeys.token)
             return setCorsHeaders(response)
           }

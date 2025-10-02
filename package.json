@@ -1,14 +1,5 @@
 {
-  "name": "yukinu",
   "private": true,
-  "homepage": "https://yukinu.vercel.app",
-  "bugs": {
-    "url": "https://github.com/tiesen243/yukinu/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tiesen243/yukinu.git"
-  },
   "workspaces": {
     "packages": [
       "apps/*",
@@ -16,30 +7,30 @@
       "tools/*"
     ],
     "catalog": {
-      "@types/node": "^24.1.0",
-      "dotenv-cli": "^9.0.0",
-      "eslint": "^9.32.0",
+      "@types/node": "^24.6.2",
+      "dotenv-cli": "^10.0.0",
+      "eslint": "^9.36.0",
       "prettier": "^3.6.2",
-      "typescript": "^5.9.2"
+      "typescript": "^5.9.3"
     },
     "catalogs": {
-      "api": {
-        "@tanstack/react-query": "^5.84.1",
-        "@trpc/server": "^11.4.3",
-        "@trpc/client": "^11.4.3",
-        "@trpc/tanstack-react-query": "^11.4.3",
-        "superjson": "^2.2.2"
-      },
       "react": {
-        "@types/react": "^19.1.9",
-        "@types/react-dom": "^19.1.7",
-        "react": "^19.1.1",
-        "react-dom": "^19.1.1"
+        "@types/react": "^19.2.0",
+        "@types/react-dom": "^19.2.0",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0"
       },
       "tailwind": {
-        "@tailwindcss/postcss": "^4.1.11",
-        "@tailwindcss/vite": "^4.1.11",
-        "tailwindcss": "^4.1.11"
+        "@tailwindcss/postcss": "^4.1.14",
+        "@tailwindcss/vite": "^4.1.14",
+        "tailwindcss": "^4.1.14"
+      },
+      "api": {
+        "@tanstack/react-query": "^5.90.2",
+        "@trpc/server": "^11.6.0",
+        "@trpc/client": "^11.6.0",
+        "@trpc/tanstack-react-query": "^11.6.0",
+        "superjson": "^2.2.2"
       }
     }
   },
@@ -57,16 +48,19 @@
     "lint:ws": "bunx sherif@latest",
     "typecheck": "turbo run typecheck"
   },
-  "prettier": "@yuki/prettier-config",
+  "prettier": "@yukinu/prettier-config",
   "devDependencies": {
-    "@turbo/gen": "^2.5.5",
-    "@yuki/prettier-config": "workspace:*",
-    "@yuki/tsconfig": "workspace:*",
-    "turbo": "^2.5.5"
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.7",
+    "@turbo/gen": "^2.5.8",
+    "@yukinu/prettier-config": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
+    "turbo": "^2.5.8"
   },
-  "packageManager": "bun@1.2.19",
+  "packageManager": "bun@1.2.23",
   "engines": {
-    "bun": ">=1.2.16",
+    "bun": ">=1.2.23",
     "node": ">=22.0.0"
   }
 }
+

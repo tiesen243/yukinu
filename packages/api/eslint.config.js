@@ -1,4 +1,4 @@
-import baseConfig from '@yuki/eslint-config/base'
+import baseConfig from '@yukinu/eslint-config/base'
 
 /** @type {import('typescript-eslint').Config} */
 export default [

@@ -1,6 +1,6 @@
 {
-  "name": "@yuki/auth",
-  "version": "1.0.0",
+  "name": "@yukinu/auth",
+  "version": "0.0.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -30,17 +30,15 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@yuki/prettier-config",
+  "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@yuki/db": "workspace:*",
-    "@yuki/email": "workspace:*",
-    "@yuki/validators": "workspace:*",
-    "react": "catalog:react"
+    "@yukinu/db": "workspace:*",
+    "@yukinu/validators": "workspace:*"
   },
   "devDependencies": {
-    "@yuki/eslint-config": "workspace:*",
-    "@yuki/prettier-config": "workspace:*",
-    "@yuki/tsconfig": "workspace:*",
+    "@yukinu/eslint-config": "workspace:*",
+    "@yukinu/prettier-config": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
