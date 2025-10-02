@@ -1,5 +1,5 @@
 import { and, db, eq } from '@yukinu/db'
-import { accounts, sessions, users } from '@yukinu/db/schemas/auth'
+import { accounts, sessions, users } from '@yukinu/db/schemas/user'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions } from './core/types'

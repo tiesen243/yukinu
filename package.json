@@ -59,6 +59,7 @@
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@turbo/gen": "^2.5.8",
+    "@types/bun": "^1.2.23",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "turbo": "^2.5.8"
