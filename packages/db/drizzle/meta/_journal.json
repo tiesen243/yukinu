@@ -43,6 +43,13 @@
       "when": 1759418519705,
       "tag": "0005_loud_scarlet_witch",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1759424613402,
+      "tag": "0006_conscious_blob",
+      "breakpoints": true
     }
   ]
 }
