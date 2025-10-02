@@ -50,6 +50,13 @@
       "when": 1759424613402,
       "tag": "0006_conscious_blob",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1759424825332,
+      "tag": "0007_wet_arclight",
+      "breakpoints": true
     }
   ]
 }
