@@ -62,8 +62,8 @@ export const addressesRelations = relations(addresses, ({ one, many }) => ({
   orders: many(orders),
 }))
 
-export const whishlistItems = pgTable(
-  'whishlist_items',
+export const wishlistItems = pgTable(
+  'wishlist_items',
   (t) => ({
     userId: t
       .varchar({ length: 24 })
@@ -83,6 +83,6 @@ export const whishlistItems = pgTable(
   ],
 )
 
-export const whishlistItemsRelations = relations(whishlistItems, ({ one }) => ({
-  user: one(users, { fields: [whishlistItems.userId], references: [users.id] }),
+export const wishlistItemsRelations = relations(wishlistItems, ({ one }) => ({
+  user: one(users, { fields: [wishlistItems.userId], references: [users.id] }),
 }))
