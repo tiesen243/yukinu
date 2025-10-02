@@ -12,7 +12,7 @@ export interface Metadata {
 }
 
 export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
-  const siteName = 'yukinu'
+  const siteName = 'Yukinu'
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName

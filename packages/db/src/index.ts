@@ -1,11 +1,18 @@
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
-import * as schema from './schema'
+import { env } from '@yukinu/validators/env'
 
 const createDrizzleClient = () => {
-  const conn = postgres(process.env.DATABASE_URL ?? '')
-  return drizzle(conn, { schema, casing: 'snake_case' })
+  const conn = postgres({
+    user: env.POSTGRES_USER,
+    password: env.POSTGRES_PASSWORD,
+    database: env.POSTGRES_DB,
+    host: env.POSTGRES_HOST,
+    port: env.POSTGRES_PORT,
+    ssl: env.NODE_ENV === 'production' ? 'require' : false,
+  })
+  return drizzle(conn, { casing: 'snake_case' })
 }
 const globalForDrizzle = globalThis as unknown as {
   db: ReturnType<typeof createDrizzleClient> | undefined

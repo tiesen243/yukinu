@@ -8,14 +8,16 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
-    "./schema": {
-      "types": "./dist/schema.d.ts",
-      "default": "./src/schema.ts"
+    "./schemas/*": {
+      "types": "./dist/schemas/*.d.ts",
+      "default": "./src/schemas/*.ts"
     }
   },
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "db:generate": "bun run with-env drizzle-kit generate",
+    "db:migrate": "bun run with-env drizzle-kit migrate",
     "db:push": "bun run with-env drizzle-kit push",
     "db:studio": "bun run with-env drizzle-kit studio",
     "dev": "tsc --watch",
@@ -26,6 +28,7 @@
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
+    "@yukinu/validators": "workspace:*",
     "drizzle-orm": "^0.44.6",
     "postgres": "^3.4.7"
   },
