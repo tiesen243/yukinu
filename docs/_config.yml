@@ -1,0 +1,10 @@
+remote_theme: mikearnaldi/just-the-docs
+color_scheme: dark
+
+search_enabled: true
+nav_enabled: true
+
+favicon_ico: '/apps/web/public/favicon.ico'
+aux_links:
+  'GitHub':
+    - '//github.com/tiesen243/yukinu'
