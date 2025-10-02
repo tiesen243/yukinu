@@ -15,7 +15,7 @@ const createDrizzleClient = () => {
   const conn = postgres({
     user: env.POSTGRES_USER,
     password: env.POSTGRES_PASSWORD,
-    database: env.POSTGRES_DB,
+    database: env.POSTGRES_DATABASE,
     host: env.POSTGRES_HOST,
     port: env.POSTGRES_PORT,
     ssl: env.NODE_ENV === 'production' ? 'require' : false,
