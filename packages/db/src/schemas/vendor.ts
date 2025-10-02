@@ -5,16 +5,16 @@ import { createdAt, createId, updatedAt } from '../utils'
 import { products } from './product'
 import { users } from './user'
 
-export const vendorRoleEnum = pgEnum('vendor_role', [
-  'owner',
-  'manager',
-  'staff',
-])
-
 export const statusEnum = pgEnum('vendor_status', [
   'pending',
   'approved',
   'suspended',
+])
+
+export const vendorRoleEnum = pgEnum('vendor_role', [
+  'owner',
+  'manager',
+  'staff',
 ])
 
 export const vendors = pgTable(
