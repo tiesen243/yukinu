@@ -3,7 +3,7 @@ import { accounts, sessions, users } from '@yukinu/db/schemas/user'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions } from './core/types'
-import { encodeHex, hashSecret } from './core/crypto'
+import { encodeHex, generateSecureString, hashSecret } from './core/crypto'
 import Facebook from './providers/facebook'
 import Google from './providers/google'
 
@@ -45,7 +45,13 @@ function getAdapter(): AuthOptions['adapter'] {
       return user ?? null
     },
     createUser: async (data) => {
-      const [user] = await db.insert(users).values(data).returning()
+      const [user] = await db
+        .insert(users)
+        .values({
+          ...data,
+          username: generateSecureString(),
+        })
+        .returning()
       return user ?? null
     },
     getAccount: async (provider, accountId) => {
