@@ -45,7 +45,7 @@ export interface SessionResult {
 export interface DatabaseAdapter {
   getUserByEmail(email: string): Promise<User | null>
   createUser(
-    data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
+    data: Omit<User, 'id' | 'username' | 'createdAt' | 'updatedAt'>,
   ): Promise<User | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>

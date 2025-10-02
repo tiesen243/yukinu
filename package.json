@@ -1,6 +1,5 @@
 {
   "name": "yukinu",
-  "version": "0.0.0",
   "private": true,
   "workspaces": {
     "packages": [
@@ -41,6 +40,10 @@
     "bump-deps": "bunx npm-check-updates --deep -u && bun install",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo run clean",
+    "db:generate": "turbo run db:generate -F @yukinu/db",
+    "db:migrate": "turbo run db:migrate -F @yukinu/db",
+    "db:push": "turbo run db:push -F @yukinu/db",
+    "db:studio": "turbo run db:studio -F @yukinu/db",
     "dev": "turbo dev --continue",
     "format": "turbo run format --continue -- --cache --cache-location .cache/prettiercache",
     "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/prettiercache",
@@ -55,6 +58,7 @@
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.7",
     "@turbo/gen": "^2.5.8",
+    "@types/bun": "^1.2.23",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "turbo": "^2.5.8"

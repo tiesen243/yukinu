@@ -6,13 +6,22 @@ export const env = createEnv({
       z.enum(['development', 'production', 'test']),
       'development',
     ),
-    DATABASE_URL: z.string(),
+    // Database configuration
+    POSTGRES_USER: z.string(),
+    POSTGRES_PASSWORD: z.string(),
+    POSTGRES_DATABASE: z.string(),
+    POSTGRES_HOST: z._default(z.string(), 'localhost'),
+    POSTGRES_PORT: z._default(z.coerce.number(), 5432),
 
-    // Authentication providers
+    // OAuth configuration
     AUTH_FACEBOOK_ID: z.string(),
     AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
+
+    // Third-party service API tokens
+    RESEND_TOKEN: z.string(),
+    UPLOADTHING_TOKEN: z.string(),
 
     // Vercel environment variables
     VERCEL: z.optional(z.string()),

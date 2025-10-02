@@ -7,7 +7,7 @@ export interface Metadata extends NextMetadata {
 }
 
 export function createMetadata(override: Metadata = {}): Metadata {
-  const siteName = 'yukinu'
+  const siteName = 'Yukinu'
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName

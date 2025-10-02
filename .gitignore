@@ -71,9 +71,6 @@ yarn-error.log*
 .env*
 !.env.example
 
-# turbo
-.turbo/
-
 # vercel
 .vercel
 
@@ -83,3 +80,6 @@ next-env.d.ts
 
 # vscode
 .vscode/
+
+# Turborepo
+.turbo

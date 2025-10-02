@@ -18,6 +18,8 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
+export const metadata = createMetadata()
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -39,5 +41,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-export const metadata = createMetadata({ title: 'Next.js' })
