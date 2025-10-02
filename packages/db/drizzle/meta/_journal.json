@@ -22,6 +22,13 @@
       "when": 1759414537263,
       "tag": "0002_outgoing_kree",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1759415340844,
+      "tag": "0003_cold_slyde",
+      "breakpoints": true
     }
   ]
 }

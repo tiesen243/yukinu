@@ -2,6 +2,7 @@ import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
+import { payments, shippings } from './payment'
 import { products, productVariants } from './product'
 import { addresses } from './profile'
 import { users } from './user'
@@ -47,6 +48,9 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
     fields: [orders.shippingAddressId],
     references: [addresses.id],
   }),
+
+  payment: one(payments),
+  shipping: one(shippings),
 
   items: many(orderItems),
 }))

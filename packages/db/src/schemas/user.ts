@@ -37,7 +37,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
 
-  profile: one(profiles, { fields: [users.id], references: [profiles.userId] }),
+  profile: one(profiles),
   addresses: many(addresses),
 
   vendorUsers: many(vendorUsers),
