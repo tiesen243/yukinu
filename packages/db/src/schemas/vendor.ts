@@ -47,7 +47,10 @@ export const vendorUsers = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => vendors.id, { onDelete: 'cascade' }),
-    userId: t.varchar({ length: 24 }).notNull(),
+    userId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
 
     role: vendorRoleEnum().default('staff').notNull(),
     createdAt,

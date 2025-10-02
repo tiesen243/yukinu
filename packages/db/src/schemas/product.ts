@@ -49,7 +49,7 @@ export const products = pgTable(
 
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
-    price: t.numeric({ precision: 12, scale: 2 }).notNull(),
+    price: t.numeric({ precision: 10, scale: 2 }).notNull(),
     stock: t.integer().default(0).notNull(),
     status: productStatusEnum().default('active').notNull(),
     createdAt,
@@ -111,7 +111,7 @@ export const productVariants = pgTable(
       .references(() => products.id, { onDelete: 'cascade' }),
 
     name: t.varchar({ length: 255 }).notNull(),
-    price: t.numeric({ precision: 12, scale: 2 }).notNull(),
+    price: t.numeric({ precision: 10, scale: 2 }).notNull(),
     stock: t.integer().default(0).notNull(),
   }),
   (t) => [index('product_variants_product_id_idx').on(t.productId)],

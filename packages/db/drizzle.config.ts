@@ -7,10 +7,10 @@ export default defineConfig({
   dbCredentials: {
     user: env.POSTGRES_USER,
     password: env.POSTGRES_PASSWORD,
-    database: env.POSTGRES_DB,
+    database: env.POSTGRES_DATABASE,
     host: env.POSTGRES_HOST,
     port: env.POSTGRES_PORT,
-    ssl: env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+    ssl: env.NODE_ENV === 'production' ? 'require' : false,
   },
   schema: './src/schemas',
   casing: 'snake_case',

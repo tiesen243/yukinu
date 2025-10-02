@@ -10,7 +10,6 @@ services:
       - '${POSTGRES_PORT:-5432}:5432'
     volumes:
       - pg_data:/var/lib/postgresql/data
-      - ./packages/db/drizzle:/docker-entrypoint-initdb.d
 
 volumes:
   pg_data:
