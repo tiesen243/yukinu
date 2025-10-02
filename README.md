@@ -53,13 +53,12 @@
    ```
 
 3. Set up environment variables:
-   - Copy the example environment files and modify them as needed:
 
-     ```bash
-     cp .env.example .env
-     ```
+   You need to create a `.env` file in the root of the project. You can copy the `.env.example` file and rename it to `.env`.
 
-     - Update the `.env` file with your configuration.
+   ```bash
+   cp .env.example .env
+   ```
 
 4. Start the database using Docker Compose:
 
@@ -79,8 +78,8 @@
    bun run dev
 
    # or
-   bun run dev -F @yukinu/web
-   bun run dev -F @yukinu/dashboard
+   bun run dev -F @yukinu/web...
+   bun run dev -F @yukinu/dashboard...
    ```
 
 7. Open your browser and navigate to:
@@ -93,18 +92,6 @@
 - `bun run build` – Build all apps and packages
 - `bun run lint` – Run linting across the repo
 - `bun run format` – Format code using Prettier
-
-> [!NOTE]
-> You can run commands for specific apps or packages using the `-F` flag. For example, `bun run dev -F @yukinu/web`.
-
-## Contributing
-
-1. Open an issue to discuss your idea or report a bug.
-2. Fork the repo
-3. Create a feature branch (git checkout -b feature/new-thing)
-4. Commit changes (`git commit -m 'Add new thing'`)
-5. Push to branch (`git push origin feature/new-thing`)
-6. Open a Pull Request
 
 ## License
 
