@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.0.3
+
+### Patch Changes
+
+- [`f789753`](https://github.com/tiesen243/yukinu/commit/f789753f539a6ae72585bf2b9b2160bf8dcb299d) Thanks [@tiesen243](https://github.com/tiesen243)! - fix version
+
 ## 0.0.2
 
 ### Patch Changes
