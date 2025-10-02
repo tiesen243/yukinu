@@ -57,6 +57,13 @@
       "when": 1759424825332,
       "tag": "0007_wet_arclight",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1759425881373,
+      "tag": "0008_glossy_micromax",
+      "breakpoints": true
     }
   ]
 }
