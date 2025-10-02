@@ -5,7 +5,10 @@
     <img src="https://github.com/tiesen243/yukinu/actions/workflows/release.yml/badge.svg" alt="Release">
   </a>
   <a href="https://github.com/tiesen243/yukinu/releases">
-    <img src="https://img.shields.io/github/v/release/tiesen243/yukinu" alt="Version">
+    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/web/package.json&label=version@web" alt="Version Web">
+  </a>
+  <a href="https://github.com/tiesen243/yukinu/releases">
+    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Web">
   </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/tiesen243/yukinu" alt="License">
