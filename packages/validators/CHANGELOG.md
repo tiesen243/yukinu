@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.0.2
+
+### Patch Changes
+
+- [#29](https://github.com/tiesen243/yukinu/pull/29) [`6265a97`](https://github.com/tiesen243/yukinu/commit/6265a973b54d6fae4e3d4af29eb9298d01a12252) Thanks [@tiesen243](https://github.com/tiesen243)! - setup drizzle with postgresql and docker
+
 ## 0.0.1
 
 ### Patch Changes
