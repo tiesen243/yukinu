@@ -55,28 +55,28 @@ function getAdapter(): AuthOptions['adapter'] {
         .innerJoin(profiles, eq(profiles.userId, users.id))
       return user ?? null
     },
-    createUser: async (data) => {
-      const [user] = await db
-        .insert(users)
-        .values({
-          username: generateSecureString(),
-          email: data.email,
+    createUser: (data) =>
+      db.transaction(async (tx) => {
+        const [user] = await tx
+          .insert(users)
+          .values({ username: generateSecureString(), email: data.email })
+          .returning()
+        if (!user) return null
+
+        await tx.insert(profiles).values({
+          userId: user.id,
+          fullName: data.name,
+          avatarUrl: data.image,
         })
-        .returning()
-      if (!user) return null
 
-      await db
-        .insert(profiles)
-        .values({ userId: user.id, fullName: data.name, avatarUrl: data.image })
-
-      return {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-        avatarUrl: data.image,
-      }
-    },
+        return {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          avatarUrl: data.image,
+        }
+      }),
     getAccount: async (provider, accountId) => {
       const [account] = await db
         .select()
@@ -109,7 +109,7 @@ function getAdapter(): AuthOptions['adapter'] {
         .from(sessions)
         .where(eq(sessions.token, token))
         .innerJoin(users, eq(sessions.userId, users.id))
-        .innerJoin(profiles, eq(profiles.userId, users.id))
+        .leftJoin(profiles, eq(profiles.userId, users.id))
       return session ?? null
     },
     createSession: async (data) => {

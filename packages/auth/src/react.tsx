@@ -81,6 +81,7 @@ function SessionProvider({
 
   const signOut = React.useCallback(async (opts?: { redirectUrl: string }) => {
     await fetch('/api/auth/sign-out', { method: 'POST' })
+    await refetch()
     if (opts?.redirectUrl) window.location.href = opts.redirectUrl
   }, [])
 
