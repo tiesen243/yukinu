@@ -1,5 +1,18 @@
 # @yukinu/auth
 
+## 0.0.4
+
+### Patch Changes
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`d430a7a`](https://github.com/tiesen243/yukinu/commit/d430a7afbdb6fea29b2bb138b378b329fcf1c81f) Thanks [@tiesen243](https://github.com/tiesen243)! - Store user agent and IP address on session creation to enable login/session list display.
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`402bd12`](https://github.com/tiesen243/yukinu/commit/402bd12b5bb58024e22bd14c779c8b5990c1d12e) Thanks [@tiesen243](https://github.com/tiesen243)! - add register api
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`dbf3e99`](https://github.com/tiesen243/yukinu/commit/dbf3e99d80e89edcf4180cc826707d05c2a62ee9) Thanks [@tiesen243](https://github.com/tiesen243)! - fix copilot error
+
+- Updated dependencies [[`bd6cb3e`](https://github.com/tiesen243/yukinu/commit/bd6cb3e2d3ff2d897c8920acf8a9d49dffa7bc25)]:
+  - @yukinu/db@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes
