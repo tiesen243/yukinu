@@ -76,24 +76,27 @@ function SessionProvider({
         }`
       }
     },
-    [],
+    [refetch],
   )
 
-  const signOut = React.useCallback(async (opts?: { redirectUrl: string }) => {
-    await fetch('/api/auth/sign-out', { method: 'POST' })
-    await refetch()
-    if (opts?.redirectUrl) window.location.href = opts.redirectUrl
-  }, [])
-
-  const blankSession: SessionResult = {
-    user: null,
-    ipAddress: null,
-    userAgent: null,
-    expires: new Date(),
-  }
+  const signOut = React.useCallback(
+    async (opts?: { redirectUrl: string }) => {
+      await fetch('/api/auth/sign-out', { method: 'POST' })
+      await refetch()
+      if (opts?.redirectUrl) window.location.href = opts.redirectUrl
+    },
+    [refetch],
+  )
 
   const value = React.useMemo<SessionContextValue>(() => {
     const valueBase = { signIn, signOut }
+    const blankSession: SessionResult = {
+      user: null,
+      ipAddress: null,
+      userAgent: null,
+      expires: new Date(),
+    }
+
     if (isLoading)
       return { ...valueBase, session: blankSession, status: 'loading' }
     else if (isError || !data?.user)
@@ -108,7 +111,7 @@ function SessionProvider({
         session: { ...data, user: data.user },
         status: 'authenticated',
       }
-  }, [signIn, signOut, isLoading, isError, data, blankSession])
+  }, [data, isError, isLoading, signIn, signOut])
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

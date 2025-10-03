@@ -2,7 +2,7 @@ import { describe, expect, it } from 'bun:test'
 
 import { UserModel } from './user'
 
-describe('UserModel.registerBody passwordSchema', () => {
+describe('UserModel.registerBody', () => {
   const schema = UserModel.registerBody
 
   it('accepts valid password', () => {
@@ -56,6 +56,44 @@ describe('UserModel.registerBody passwordSchema', () => {
       username: 'testuser',
       password: 'Abcdef12',
     })
+    expect(result.success).toBe(false)
+  })
+})
+
+describe('UserModel.loginBody', () => {
+  it('accepts valid email and password', () => {
+    const data = {
+      identifier: 'test@example.com',
+      password: 'password123',
+    }
+    const result = UserModel.loginBody.safeParse(data)
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts valid username and password', () => {
+    const data = {
+      identifier: 'validuser',
+      password: 'password123',
+    }
+    const result = UserModel.loginBody.safeParse(data)
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects short username', () => {
+    const data = {
+      identifier: 'abc',
+      password: 'password123',
+    }
+    const result = UserModel.loginBody.safeParse(data)
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects short password', () => {
+    const data = {
+      identifier: 'test@example.com',
+      password: 'short',
+    }
+    const result = UserModel.loginBody.safeParse(data)
     expect(result.success).toBe(false)
   })
 })
