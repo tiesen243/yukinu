@@ -40,6 +40,8 @@ export interface Session {}
 export interface SessionResult {
   user: User | null
   expires: Date
+  ipAddress: string | null
+  userAgent: string | null
 }
 
 export interface DatabaseAdapter {
@@ -55,7 +57,7 @@ export interface DatabaseAdapter {
   createAccount(data: Account): Promise<void>
 
   getSessionAndUser(token: string): Promise<SessionResult | null>
-  createSession(data: Session): Promise<void>
+  createSession(data: Omit<Session, 'createdAt'>): Promise<void>
   updateSession(token: string, data: Partial<Session>): Promise<void>
   deleteSession(token: string): Promise<void>
 }

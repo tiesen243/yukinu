@@ -60,4 +60,19 @@ export class UserService {
       return { id: created.id }
     })
   }
+
+  public async getProfile(userId: string) {
+    const [profile] = await this._db
+      .select()
+      .from(profiles)
+      .where(eq(profiles.userId, userId))
+      .limit(1)
+    if (!profile)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Profile not found',
+      })
+
+    return profile
+  }
 }

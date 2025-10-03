@@ -22,20 +22,19 @@ export function Auth(opts: AuthOptions) {
     userId: string,
     ipAddress: string | null,
     userAgent: string | null,
-  ): Promise<Session> {
+  ): Promise<Omit<Session, 'createdAt'>> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
+    const sessionData = { expires, userId, ipAddress, userAgent }
+
     await adapter.createSession({
       token: encodeHex(hashToken),
-      expires,
-      userId,
-      ipAddress,
-      userAgent,
+      ...sessionData,
     })
 
-    return { token, userId, expires, ipAddress, userAgent }
+    return { token, ...sessionData }
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -43,10 +42,20 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
+    const ipAddress = opts.headers.get('x-forwarded-for') ?? null
+    const userAgent = opts.headers.get('user-agent') ?? null
 
     try {
       const result = await adapter.getSessionAndUser(hashToken)
       if (!result) return { user: null, expires: new Date() }
+
+      if (
+        (ipAddress && result.ipAddress && ipAddress !== result.ipAddress) ||
+        (userAgent && result.userAgent && userAgent !== result.userAgent)
+      ) {
+        await adapter.deleteSession(hashToken)
+        return { user: null, expires: new Date() }
+      }
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()
@@ -70,9 +79,8 @@ export function Auth(opts: AuthOptions) {
 
   async function signIn(
     opts: { identifier: string; password: string },
-    ipAddress: string | null,
-    userAgent: string | null,
-  ): Promise<Session> {
+    headers: Headers,
+  ): Promise<Omit<Session, 'createdAt'>> {
     const { identifier, password } = opts
 
     const user = await adapter.getUserByEmailOrUsername(identifier)
@@ -84,6 +92,8 @@ export function Auth(opts: AuthOptions) {
     const isValid = await new Password().verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
+    const ipAddress = headers.get('x-forwarded-for') ?? null
+    const userAgent = headers.get('user-agent') ?? null
     return createSession(user.id, ipAddress, userAgent)
   }
 
@@ -99,7 +109,7 @@ export function Auth(opts: AuthOptions) {
     opts: Omit<OauthAccount & Account, 'userId'>,
     ipAddress: string | null,
     userAgent: string | null,
-  ): Promise<Session> {
+  ): Promise<Omit<Session, 'createdAt'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
     if (existingAccount)
@@ -110,12 +120,7 @@ export function Auth(opts: AuthOptions) {
       existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
     if (!userId) throw new Error('Failed to create user')
 
-    await adapter.createAccount({
-      provider,
-      accountId,
-      userId,
-      password: null,
-    })
+    await adapter.createAccount({ provider, accountId, userId, password: null })
     return createSession(userId, ipAddress, userAgent)
   }
 
@@ -228,9 +233,7 @@ export function Auth(opts: AuthOptions) {
             if (!body.identifier || !body.password)
               throw new Error('Invalid credentials')
 
-            const ipAddress = request.headers.get('x-forwarded-for') ?? null
-            const userAgent = request.headers.get('user-agent') ?? null
-            const result = await signIn(body, ipAddress, userAgent)
+            const result = await signIn(body, request.headers)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {
