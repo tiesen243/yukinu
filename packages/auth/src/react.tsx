@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 
+import type { signIn as ServerSignIn } from '.'
 import type { Providers } from './config'
 import type { SessionResult, User } from './core/types'
 
@@ -13,7 +14,7 @@ type SessionContextValue = {
   signIn: <TProvider extends AuthProviders>(
     provider: TProvider,
     ...args: TProvider extends 'credentials'
-      ? [{ email: string; password: string }]
+      ? [Parameters<typeof ServerSignIn>[0]]
       : [{ redirectUrl?: string }?]
   ) => Promise<void>
   signOut: (opts?: { redirectUrl: string }) => Promise<void>
@@ -71,7 +72,7 @@ function SessionProvider({
     async <TProvider extends AuthProviders>(
       provider: TProvider,
       ...args: TProvider extends 'credentials'
-        ? [{ email: string; password: string }]
+        ? [Parameters<typeof ServerSignIn>[0]]
         : [{ redirectUrl?: string }?]
     ): Promise<void> => {
       if (provider === 'credentials') {

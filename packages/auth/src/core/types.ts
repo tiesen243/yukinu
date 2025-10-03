@@ -43,10 +43,13 @@ export interface SessionResult {
 }
 
 export interface DatabaseAdapter {
-  getUserByEmail(email: string): Promise<User | null>
-  createUser(
-    data: Omit<User, 'id' | 'username' | 'createdAt' | 'updatedAt'>,
-  ): Promise<User | null>
+  getUserByEmailOrUsername(identifier: string): Promise<User | null>
+  createUser(data: {
+    email: string
+    name: string
+    password: string | null
+    image: string
+  }): Promise<User | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>
   createAccount(data: Account): Promise<void>

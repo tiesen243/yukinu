@@ -1,4 +1,5 @@
-import { and, db, eq } from '@yukinu/db'
+import { and, db, eq, or } from '@yukinu/db'
+import { profiles } from '@yukinu/db/schemas/profile'
 import { accounts, sessions, users } from '@yukinu/db/schemas/user'
 import { env } from '@yukinu/validators/env'
 
@@ -40,8 +41,11 @@ export async function invalidateSessionToken(token: string) {
 
 function getAdapter(): AuthOptions['adapter'] {
   return {
-    getUserByEmail: async (email) => {
-      const [user] = await db.select().from(users).where(eq(users.email, email))
+    getUserByEmailOrUsername: async (identifier) => {
+      const [user] = await db
+        .select()
+        .from(users)
+        .where(or(eq(users.email, identifier), eq(users.username, identifier)))
       return user ?? null
     },
     createUser: async (data) => {
@@ -52,7 +56,10 @@ function getAdapter(): AuthOptions['adapter'] {
           username: generateSecureString(),
         })
         .returning()
-      return user ?? null
+      if (!user) return null
+
+      await db.insert(profiles).values({ userId: user.id })
+      return user
     },
     getAccount: async (provider, accountId) => {
       const [account] = await db
@@ -93,8 +100,8 @@ function getAdapter(): AuthOptions['adapter'] {
 }
 
 declare module './core/types.d.ts' {
-  type IUser = typeof users.$inferInsert
-  type ISession = typeof sessions.$inferInsert
+  type IUser = typeof users.$inferSelect
+  type ISession = typeof sessions.$inferSelect
 
   interface User extends IUser {
     id: string

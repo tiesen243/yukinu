@@ -4,6 +4,8 @@ import SuperJSON from 'superjson'
 import { auth, validateSessionToken } from '@yukinu/auth'
 import { db } from '@yukinu/db'
 
+import { UserService } from './services/user'
+
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get('Authorization') ?? null
   if (authToken) return validateSessionToken(authToken)
@@ -47,11 +49,37 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const publicProcedure = t.procedure.use(timingMiddleware)
+const registerServiceMiddleware = t.middleware(async ({ ctx, next }) => {
+  return next({
+    ctx: {
+      userService: new UserService(ctx.db),
+    },
+  })
+})
+
+const publicProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(registerServiceMiddleware)
 const protectedProcedure = t.procedure
   .use(timingMiddleware)
+  .use(registerServiceMiddleware)
   .use(({ ctx, next }) => {
     if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
+    return next({
+      ctx: {
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    })
+  })
+const adminProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(registerServiceMiddleware)
+  .use(({ ctx, next }) => {
+    if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
+
+    if (ctx.session.user.role !== 'admin')
+      throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
+
     return next({
       ctx: {
         session: { ...ctx.session, user: ctx.session.user },
@@ -65,4 +93,5 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  adminProcedure,
 }

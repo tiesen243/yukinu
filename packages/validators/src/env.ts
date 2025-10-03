@@ -6,6 +6,7 @@ export const env = createEnv({
       z.enum(['development', 'production', 'test']),
       'development',
     ),
+
     // Database configuration
     POSTGRES_USER: z.string(),
     POSTGRES_PASSWORD: z.string(),
