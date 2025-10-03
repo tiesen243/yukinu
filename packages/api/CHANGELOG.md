@@ -1,5 +1,18 @@
 # @yukinu/api
 
+## 0.0.6
+
+### Patch Changes
+
+- [#49](https://github.com/tiesen243/yukinu/pull/49) [`e9dfb6d`](https://github.com/tiesen243/yukinu/commit/e9dfb6d05d578d778a0149ad143b3c5705f0f7e8) Thanks [@tiesen243](https://github.com/tiesen243)! - remove duplicate mock password
+
+- [#49](https://github.com/tiesen243/yukinu/pull/49) [`7869146`](https://github.com/tiesen243/yukinu/commit/7869146c1d748b394c90d0091200ecb8630e9191) Thanks [@tiesen243](https://github.com/tiesen243)! - add some unit test
+
+- Updated dependencies [[`7869146`](https://github.com/tiesen243/yukinu/commit/7869146c1d748b394c90d0091200ecb8630e9191)]:
+  - @yukinu/validators@0.0.3
+  - @yukinu/auth@0.0.6
+  - @yukinu/db@0.0.5
+
 ## 0.0.5
 
 ### Patch Changes

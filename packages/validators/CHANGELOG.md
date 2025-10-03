@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.0.3
+
+### Patch Changes
+
+- [#49](https://github.com/tiesen243/yukinu/pull/49) [`7869146`](https://github.com/tiesen243/yukinu/commit/7869146c1d748b394c90d0091200ecb8630e9191) Thanks [@tiesen243](https://github.com/tiesen243)! - add some unit test
+
 ## 0.0.2
 
 ### Patch Changes

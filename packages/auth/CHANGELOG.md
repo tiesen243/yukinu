@@ -1,5 +1,13 @@
 # @yukinu/auth
 
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [[`7869146`](https://github.com/tiesen243/yukinu/commit/7869146c1d748b394c90d0091200ecb8630e9191)]:
+  - @yukinu/validators@0.0.3
+  - @yukinu/db@0.0.5
+
 ## 0.0.5
 
 ### Patch Changes
