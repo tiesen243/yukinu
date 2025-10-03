@@ -5,6 +5,8 @@ import {
   CardTitle,
 } from '@yukinu/ui/card'
 
+import { LoginForm } from '@/app/(auth)/_components/login-form'
+
 export default function LoginPage() {
   return (
     <>
@@ -15,7 +17,9 @@ export default function LoginPage() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent></CardContent>
+      <CardContent>
+        <LoginForm />
+      </CardContent>
     </>
   )
 }

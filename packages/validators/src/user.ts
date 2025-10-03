@@ -13,4 +13,10 @@ export namespace UserModel {
     password: passwordSchema,
   })
   export type RegisterBody = z.infer<typeof registerBody>
+
+  export const loginBody = z.object({
+    identifier: z.union([z.email(), z.string().min(4).max(30)]),
+    password: z.string().min(8).max(100),
+  })
+  export type LoginBody = z.infer<typeof loginBody>
 }

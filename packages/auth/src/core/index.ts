@@ -43,10 +43,20 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
+    const ipAddress = opts.headers.get('x-forwarded-for') ?? null
+    const userAgent = opts.headers.get('user-agent') ?? null
 
     try {
       const result = await adapter.getSessionAndUser(hashToken)
       if (!result) return { user: null, expires: new Date() }
+
+      if (
+        (ipAddress && result.ipAddress && ipAddress !== result.ipAddress) ||
+        (userAgent && result.userAgent && userAgent !== result.userAgent)
+      ) {
+        await adapter.deleteSession(hashToken)
+        return { user: null, expires: new Date() }
+      }
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()

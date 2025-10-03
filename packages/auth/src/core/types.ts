@@ -40,6 +40,8 @@ export interface Session {}
 export interface SessionResult {
   user: User | null
   expires: Date
+  ipAddress: string | null
+  userAgent: string | null
 }
 
 export interface DatabaseAdapter {

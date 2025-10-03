@@ -52,13 +52,15 @@ function getAdapter(): AuthOptions['adapter'] {
       const [user] = await db
         .insert(users)
         .values({
-          ...data,
           username: generateSecureString(),
+          email: data.email,
         })
         .returning()
       if (!user) return null
 
-      await db.insert(profiles).values({ userId: user.id })
+      await db
+        .insert(profiles)
+        .values({ userId: user.id, fullName: data.name, avatarUrl: data.image })
       return user
     },
     getAccount: async (provider, accountId) => {
@@ -81,6 +83,8 @@ function getAdapter(): AuthOptions['adapter'] {
         .select({
           user: users,
           expires: sessions.expires,
+          ipAddress: sessions.ipAddress,
+          userAgent: sessions.userAgent,
         })
         .from(sessions)
         .where(eq(sessions.token, token))
