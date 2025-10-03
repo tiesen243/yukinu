@@ -22,20 +22,19 @@ export function Auth(opts: AuthOptions) {
     userId: string,
     ipAddress: string | null,
     userAgent: string | null,
-  ): Promise<Session> {
+  ): Promise<Omit<Session, 'createdAt'>> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
+    const sessionData = { expires, userId, ipAddress, userAgent }
+
     await adapter.createSession({
       token: encodeHex(hashToken),
-      expires,
-      userId,
-      ipAddress,
-      userAgent,
+      ...sessionData,
     })
 
-    return { token, userId, expires, ipAddress, userAgent }
+    return { token, ...sessionData }
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -81,7 +80,7 @@ export function Auth(opts: AuthOptions) {
   async function signIn(
     opts: { identifier: string; password: string },
     headers: Headers,
-  ): Promise<Session> {
+  ): Promise<Omit<Session, 'createdAt'>> {
     const { identifier, password } = opts
 
     const user = await adapter.getUserByEmailOrUsername(identifier)
@@ -110,7 +109,7 @@ export function Auth(opts: AuthOptions) {
     opts: Omit<OauthAccount & Account, 'userId'>,
     ipAddress: string | null,
     userAgent: string | null,
-  ): Promise<Session> {
+  ): Promise<Omit<Session, 'createdAt'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
     if (existingAccount)
@@ -121,12 +120,7 @@ export function Auth(opts: AuthOptions) {
       existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
     if (!userId) throw new Error('Failed to create user')
 
-    await adapter.createAccount({
-      provider,
-      accountId,
-      userId,
-      password: null,
-    })
+    await adapter.createAccount({ provider, accountId, userId, password: null })
     return createSession(userId, ipAddress, userAgent)
   }
 

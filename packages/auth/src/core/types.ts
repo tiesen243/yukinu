@@ -57,7 +57,7 @@ export interface DatabaseAdapter {
   createAccount(data: Account): Promise<void>
 
   getSessionAndUser(token: string): Promise<SessionResult | null>
-  createSession(data: Session): Promise<void>
+  createSession(data: Omit<Session, 'createdAt'>): Promise<void>
   updateSession(token: string, data: Partial<Session>): Promise<void>
   deleteSession(token: string): Promise<void>
 }
