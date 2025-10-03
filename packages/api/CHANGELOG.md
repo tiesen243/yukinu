@@ -1,5 +1,19 @@
 # @yukinu/api
 
+## 0.0.4
+
+### Patch Changes
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`2641fe2`](https://github.com/tiesen243/yukinu/commit/2641fe277d58ea05889bff49d1f608dbe8836a6b) Thanks [@tiesen243](https://github.com/tiesen243)! - add register form
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`adb200e`](https://github.com/tiesen243/yukinu/commit/adb200e655380742ff0ca7f564459faa18ced1a7) Thanks [@tiesen243](https://github.com/tiesen243)! - add admin procedure
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`402bd12`](https://github.com/tiesen243/yukinu/commit/402bd12b5bb58024e22bd14c779c8b5990c1d12e) Thanks [@tiesen243](https://github.com/tiesen243)! - add register api
+
+- Updated dependencies [[`d430a7a`](https://github.com/tiesen243/yukinu/commit/d430a7afbdb6fea29b2bb138b378b329fcf1c81f), [`402bd12`](https://github.com/tiesen243/yukinu/commit/402bd12b5bb58024e22bd14c779c8b5990c1d12e), [`bd6cb3e`](https://github.com/tiesen243/yukinu/commit/bd6cb3e2d3ff2d897c8920acf8a9d49dffa7bc25), [`dbf3e99`](https://github.com/tiesen243/yukinu/commit/dbf3e99d80e89edcf4180cc826707d05c2a62ee9)]:
+  - @yukinu/auth@0.0.4
+  - @yukinu/db@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes

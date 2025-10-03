@@ -1,5 +1,11 @@
 # @yukinu/db
 
+## 0.0.4
+
+### Patch Changes
+
+- [#43](https://github.com/tiesen243/yukinu/pull/43) [`bd6cb3e`](https://github.com/tiesen243/yukinu/commit/bd6cb3e2d3ff2d897c8920acf8a9d49dffa7bc25) Thanks [@tiesen243](https://github.com/tiesen243)! - add userAgent and ipAddress to session
+
 ## 0.0.3
 
 ### Patch Changes
