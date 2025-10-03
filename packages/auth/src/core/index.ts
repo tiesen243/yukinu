@@ -225,12 +225,13 @@ export function Auth(opts: AuthOptions) {
            */
           if (pathname === '/api/auth/sign-in') {
             const body = (await request.json()) as Parameters<typeof signIn>[0]
-            if (!body.identifier || !body.password)
+            const identifier = body.identifier ?? body.email
+            if (!identifier || !body.password)
               throw new Error('Invalid credentials')
 
             const ipAddress = request.headers.get('x-forwarded-for') ?? null
             const userAgent = request.headers.get('user-agent') ?? null
-            const result = await signIn(body, ipAddress, userAgent)
+            const result = await signIn({ ...body, identifier }, ipAddress, userAgent)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {
