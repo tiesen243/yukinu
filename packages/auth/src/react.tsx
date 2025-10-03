@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { useQuery } from '@tanstack/react-query'
 
 import type { signIn as ServerSignIn } from '.'
 import type { Providers } from './config'
@@ -39,34 +40,18 @@ function SessionProvider({
 }: Readonly<{ children: React.ReactNode; session?: SessionResult }>) {
   const hasInitialSession = !!_session
 
-  const [isLoading, startTransition] = React.useTransition()
-  const [session, setSession] = React.useState<SessionResult>(() => {
-    if (hasInitialSession) return _session
-    return { user: null, expires: new Date() }
-  })
-
-  const status = React.useMemo(() => {
-    if (isLoading) return 'loading'
-    return session.user ? 'authenticated' : 'unauthenticated'
-  }, [isLoading, session])
-
-  const fetchSession = React.useCallback(
-    (token?: string) => {
-      startTransition(async () => {
-        const res = await fetch('/api/auth/get-session', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: token ? `Bearer ${token}` : '',
-          },
-        })
-
-        if (!res.ok) setSession({ user: null, expires: new Date() })
-        else setSession((await res.json()) as SessionResult)
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const res = await fetch('/api/auth/get-session', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       })
+      return res.json() as Promise<SessionResult>
     },
-    [startTransition],
-  )
+    enabled: !hasInitialSession,
+    initialData: hasInitialSession ? _session : undefined,
+  })
 
   const signIn = React.useCallback(
     async <TProvider extends AuthProviders>(
@@ -82,13 +67,8 @@ function SessionProvider({
           body: JSON.stringify(args[0]),
         })
 
-        if (!res.ok) {
-          const text = await res.text()
-          throw new Error(text)
-        } else {
-          const json = (await res.json()) as { token: string; expires: string }
-          fetchSession(json.token)
-        }
+        if (!res.ok) throw new Error(await res.text())
+        else await refetch()
       } else {
         const redirectUrl = (args[0] as { redirectUrl?: string }).redirectUrl
         window.location.href = `/api/auth/${provider}${
@@ -96,24 +76,38 @@ function SessionProvider({
         }`
       }
     },
-    [fetchSession],
+    [],
   )
 
   const signOut = React.useCallback(async (opts?: { redirectUrl: string }) => {
     await fetch('/api/auth/sign-out', { method: 'POST' })
-    setSession({ user: null, expires: new Date() })
     if (opts?.redirectUrl) window.location.href = opts.redirectUrl
   }, [])
 
-  React.useEffect(() => {
-    if (hasInitialSession) return
-    fetchSession()
-  }, [hasInitialSession, fetchSession])
+  const blankSession: SessionResult = {
+    user: null,
+    ipAddress: null,
+    userAgent: null,
+    expires: new Date(),
+  }
 
-  const value = React.useMemo(
-    () => ({ status, session, signIn, signOut }),
-    [status, session, signIn, signOut],
-  ) as SessionContextValue
+  const value = React.useMemo<SessionContextValue>(() => {
+    const valueBase = { signIn, signOut }
+    if (isLoading)
+      return { ...valueBase, session: blankSession, status: 'loading' }
+    else if (isError || !data?.user)
+      return {
+        ...valueBase,
+        session: { ...blankSession, user: null },
+        status: 'unauthenticated',
+      }
+    else
+      return {
+        ...valueBase,
+        session: { ...data, user: data.user },
+        status: 'authenticated',
+      }
+  }, [signIn, signOut, isLoading, isError, data, blankSession])
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

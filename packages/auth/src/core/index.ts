@@ -80,8 +80,7 @@ export function Auth(opts: AuthOptions) {
 
   async function signIn(
     opts: { identifier: string; password: string },
-    ipAddress: string | null,
-    userAgent: string | null,
+    headers: Headers,
   ): Promise<Session> {
     const { identifier, password } = opts
 
@@ -94,6 +93,8 @@ export function Auth(opts: AuthOptions) {
     const isValid = await new Password().verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
+    const ipAddress = headers.get('x-forwarded-for') ?? null
+    const userAgent = headers.get('user-agent') ?? null
     return createSession(user.id, ipAddress, userAgent)
   }
 
@@ -238,9 +239,7 @@ export function Auth(opts: AuthOptions) {
             if (!body.identifier || !body.password)
               throw new Error('Invalid credentials')
 
-            const ipAddress = request.headers.get('x-forwarded-for') ?? null
-            const userAgent = request.headers.get('user-agent') ?? null
-            const result = await signIn(body, ipAddress, userAgent)
+            const result = await signIn(body, request.headers)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {

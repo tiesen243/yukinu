@@ -42,5 +42,8 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "catalog:api"
   }
 }

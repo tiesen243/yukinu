@@ -82,6 +82,7 @@ export const sessions = pgTable(
     userAgent: t.text(),
     ipAddress: t.varchar({ length: 45 }),
     expires: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
+    createdAt,
   }),
   (t) => [index('session_user_id_idx').on(t.userId)],
 )

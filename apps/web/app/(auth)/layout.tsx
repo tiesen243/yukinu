@@ -8,7 +8,7 @@ export default function AuthLayout({ children }: LayoutProps<'/'>) {
       <Card className='w-full max-w-xl space-y-4 border-transparent bg-transparent sm:border-border sm:bg-card'>
         {children}
 
-        <div className='-mt-6 -mb-2 flex items-center gap-2 px-6'>
+        <div className='-mt-8 -mb-2 flex items-center gap-2 px-6'>
           <div className='h-0.25 flex-1 bg-border' />
           <span>or</span>
           <div className='h-0.25 flex-1 bg-border' />

@@ -43,9 +43,16 @@ function getAdapter(): AuthOptions['adapter'] {
   return {
     getUserByEmailOrUsername: async (identifier) => {
       const [user] = await db
-        .select()
+        .select({
+          id: users.id,
+          username: users.username,
+          email: users.email,
+          role: users.role,
+          avatarUrl: profiles.avatarUrl,
+        })
         .from(users)
         .where(or(eq(users.email, identifier), eq(users.username, identifier)))
+        .innerJoin(profiles, eq(profiles.userId, users.id))
       return user ?? null
     },
     createUser: async (data) => {
@@ -61,7 +68,14 @@ function getAdapter(): AuthOptions['adapter'] {
       await db
         .insert(profiles)
         .values({ userId: user.id, fullName: data.name, avatarUrl: data.image })
-      return user
+
+      return {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        avatarUrl: data.image,
+      }
     },
     getAccount: async (provider, accountId) => {
       const [account] = await db
@@ -81,14 +95,21 @@ function getAdapter(): AuthOptions['adapter'] {
     getSessionAndUser: async (token) => {
       const [session] = await db
         .select({
-          user: users,
-          expires: sessions.expires,
+          user: {
+            id: users.id,
+            username: users.username,
+            email: users.email,
+            role: users.role,
+            avatarUrl: profiles.avatarUrl,
+          },
           ipAddress: sessions.ipAddress,
           userAgent: sessions.userAgent,
+          expires: sessions.expires,
         })
         .from(sessions)
         .where(eq(sessions.token, token))
         .innerJoin(users, eq(sessions.userId, users.id))
+        .innerJoin(profiles, eq(profiles.userId, users.id))
       return session ?? null
     },
     createSession: async (data) => {
@@ -104,12 +125,16 @@ function getAdapter(): AuthOptions['adapter'] {
 }
 
 declare module './core/types.d.ts' {
-  type IUser = typeof users.$inferSelect
   type ISession = typeof sessions.$inferSelect
 
-  interface User extends IUser {
+  interface User {
     id: string
+    username: string
+    email: string
+    role: 'admin' | 'user'
+    avatarUrl: string | null
   }
+
   interface Session extends ISession {
     token: string
   }

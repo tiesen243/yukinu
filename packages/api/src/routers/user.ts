@@ -1,9 +1,13 @@
 import { UserModel } from '@yukinu/validators/user'
 
-import { createTRPCRouter, publicProcedure } from '../trpc'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = createTRPCRouter({
+  getProfile: protectedProcedure.query(({ ctx }) =>
+    ctx.userService.getProfile(ctx.session.user.id),
+  ),
+
   register: publicProcedure
     .input(UserModel.registerBody)
-    .mutation(async ({ input, ctx }) => ctx.userService.register(input)),
+    .mutation(({ input, ctx }) => ctx.userService.register(input)),
 })
