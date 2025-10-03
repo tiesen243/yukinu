@@ -66,7 +66,11 @@ const adminProcedure = t.procedure
     if (ctx.session.user.role !== 'admin')
       throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
 
-    return next({})
+    return next({
+      ctx: {
+        session: { ...ctx.session, user: ctx.session.user },
+      },
+    })
   })
 
 export {
