@@ -75,11 +75,13 @@ export const sessions = pgTable(
   'sessions',
   (t) => ({
     token: t.varchar({ length: 255 }).primaryKey().notNull(),
-    expires: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+    userAgent: t.text(),
+    ipAddress: t.varchar({ length: 45 }),
+    expires: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
   }),
   (t) => [index('session_user_id_idx').on(t.userId)],
 )

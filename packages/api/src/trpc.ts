@@ -58,6 +58,16 @@ const protectedProcedure = t.procedure
       },
     })
   })
+const adminProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
+
+    if (ctx.session.user.role !== 'admin')
+      throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
+
+    return next({})
+  })
 
 export {
   createCallerFactory,
@@ -65,4 +75,5 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  adminProcedure,
 }
