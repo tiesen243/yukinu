@@ -55,3 +55,14 @@ jobs:
 
       - name: Typecheck
         run: bun typecheck
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup
+        uses: ./tools/github/setup
+
+      - name: Unit Test
+        run: bun test
