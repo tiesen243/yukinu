@@ -57,7 +57,6 @@ bin/
 
 # misc
 .cache/
-.husky/_/
 generated/
 .DS_Store
 *.pem
