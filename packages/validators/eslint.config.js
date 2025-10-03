@@ -6,4 +6,10 @@ export default [
     ignores: ['dist/**'],
   },
   ...baseConfig,
+  {
+    files: ['src/*.ts'],
+    rules: {
+      '@typescript-eslint/no-namespace': 'off',
+    },
+  },
 ]
