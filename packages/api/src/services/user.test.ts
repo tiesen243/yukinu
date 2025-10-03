@@ -3,12 +3,6 @@ import { beforeEach, describe, expect, it, jest, mock } from 'bun:test'
 
 import { UserService } from './user'
 
-const mockHash = jest.fn()
-mock(() => ({
-  Password: jest.fn().mockImplementation(() => ({
-    hash: mockHash,
-  })),
-}))
 const mockTransaction = jest.fn()
 const mockSelect = jest.fn()
 const mockInsert = jest.fn()
@@ -34,7 +28,6 @@ describe('UserService', () => {
 
   describe('register', () => {
     it('registers a new user successfully', async () => {
-      mockHash.mockResolvedValue('hashed')
       mockTransaction.mockImplementation(
         async (cb: (tx: unknown) => Promise<unknown>) => {
           return cb({
@@ -55,7 +48,6 @@ describe('UserService', () => {
     })
 
     it('throws conflict if user exists', () => {
-      mockHash.mockResolvedValue('hashed')
       mockTransaction.mockImplementation(
         async (cb: (tx: unknown) => Promise<unknown>) => {
           return cb({
