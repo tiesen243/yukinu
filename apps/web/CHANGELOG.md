@@ -1,5 +1,17 @@
 # @yukinu/web
 
+## 0.0.6
+
+### Patch Changes
+
+- [#47](https://github.com/tiesen243/yukinu/pull/47) [`278c2da`](https://github.com/tiesen243/yukinu/commit/278c2da8c2bac6495ccf6677a89e38751eafb6b7) Thanks [@tiesen243](https://github.com/tiesen243)! - add login form
+
+- [#47](https://github.com/tiesen243/yukinu/pull/47) [`dcf69bb`](https://github.com/tiesen243/yukinu/commit/dcf69bbdd4394262549d667f6969aa4f435850c3) Thanks [@tiesen243](https://github.com/tiesen243)! - add sign out button
+
+- Updated dependencies [[`e0599b7`](https://github.com/tiesen243/yukinu/commit/e0599b731ca36096bf27d5f105a7863872ffb805), [`ae90fdf`](https://github.com/tiesen243/yukinu/commit/ae90fdfdfe88dfffb8ceecaa59d21377b9602d1b)]:
+  - @yukinu/auth@0.0.5
+  - @yukinu/api@0.0.5
+
 ## 0.0.5
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @yukinu/auth
 
+## 0.0.5
+
+### Patch Changes
+
+- [#47](https://github.com/tiesen243/yukinu/pull/47) [`e0599b7`](https://github.com/tiesen243/yukinu/commit/e0599b731ca36096bf27d5f105a7863872ffb805) Thanks [@tiesen243](https://github.com/tiesen243)! - fix build error
+
+- [#47](https://github.com/tiesen243/yukinu/pull/47) [`ae90fdf`](https://github.com/tiesen243/yukinu/commit/ae90fdfdfe88dfffb8ceecaa59d21377b9602d1b) Thanks [@tiesen243](https://github.com/tiesen243)! - refresh session after logout
+
 ## 0.0.4
 
 ### Patch Changes
