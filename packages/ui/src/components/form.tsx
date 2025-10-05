@@ -1,457 +1,368 @@
-import * as React from 'react'
-import { Slot } from '@radix-ui/react-slot'
+'use client'
 
-import { cn } from '@yukinu/ui'
+import * as React from 'react'
 
 interface FormError<TValue extends Record<string, unknown>> {
-  message?: string
-  issues?: Record<keyof TValue, string>
+  message: string | null
+  errors?: Record<keyof TValue, StandardSchemaV1.Issue[]>
 }
 
-type NoUndefined<T extends StandardSchemaV1> = {
-  [K in keyof Required<InferInput<T>>]: Exclude<
-    Required<InferInput<T>>[K],
-    undefined
-  >
+type ExtractValues<T extends StandardSchemaV1> = {
+  [K in keyof Required<StandardSchemaV1.InferInput<T>>]: Required<
+    StandardSchemaV1.InferInput<T>
+  >[K]
 }
 
-interface Control<TValue extends Record<string, unknown>> {
-  formValueRef: React.RefObject<TValue>
-  formErrorRef: React.RefObject<FormError<TValue> | null>
-  validateField: <TKey extends keyof TValue>(
-    fieldKey?: TKey,
-    fieldValue?: TValue[TKey],
-  ) => Promise<
-    | { isValid: true; data: TValue }
-    | { isValid: false; errors: Record<keyof TValue, string> }
-  >
+interface Control<TValues extends Record<string, unknown>> {
+  valuesRef: React.RefObject<TValues>
+  errorRef: React.RefObject<FormError<TValues>>
   isPending: boolean
   version: number
+  validateValues: (
+    values: TValues,
+  ) => Promise<
+    | { success: true; data: TValues; error: null }
+    | { success: false; data: null; error: FormError<TValues> }
+  >
 }
 
-function useForm<
-  TValue extends Record<string, unknown>,
-  TSchema extends StandardSchemaV1 | ((value: TValue) => TValue),
+const useForm = <
+  TValues extends Record<string, unknown>,
   TData,
-  TError extends FormError<TValue>,
->({
-  defaultValues,
-  validator,
-  onSubmit,
-  onSuccess,
-  onError,
-}: {
-  defaultValues: TValue
-  validator?: TSchema extends StandardSchemaV1
-    ? NoUndefined<TSchema> extends TValue
+  TError extends FormError<TValues>,
+  TSchema extends
+    | StandardSchemaV1
+    | ((value: TValues) => TResults | Promise<TResults>),
+  TResults extends StandardSchemaV1.Result<TValues>,
+>(opts: {
+  defaultValues: TValues
+  schema?: TSchema extends StandardSchemaV1
+    ? ExtractValues<TSchema> extends TValues
       ? TSchema
       : never
-    : (value: TValue) => Result<TValue>
-  onSubmit: (value: TValue) => TData | Promise<TData>
-  onSuccess?: (data: TData) => void | Promise<void>
-  onError?: (error: TError) => void | Promise<void>
-}) {
-  const formValueRef = React.useRef<TValue>(defaultValues)
-  const formDataRef = React.useRef<TData | null>(null)
-  const formErrorRef = React.useRef<TError>(null)
+    : (value: TValues) => TResults | Promise<TResults>
+  onSubmit: (data: TValues) => TData | Promise<TData>
+  onSuccess?: (data: TData) => unknown
+  onError?: (error: TError) => unknown
+}) => {
+  const { defaultValues, schema, onSubmit, onSuccess, onError } = opts
+
+  const valuesRef = React.useRef<TValues>(defaultValues)
+  const dataRef = React.useRef<TData | null>(null)
+  const errorRef = React.useRef<TError>({ message: null, errors: {} } as TError)
+  const [isPending, startTransition] = React.useTransition()
   const [version, setVersion] = React.useState(0)
 
-  const [isPending, startTransition] = React.useTransition()
+  const parseIssues = React.useCallback(
+    (
+      issues: readonly StandardSchemaV1.Issue[],
+    ): Record<string, StandardSchemaV1.Issue[]> => {
+      return issues.reduce<Record<string, StandardSchemaV1.Issue[]>>(
+        (acc, issue) => {
+          if (!issue.path || issue.path.length === 0) return acc
 
-  const validateField = React.useCallback(
-    async <TKey extends keyof TValue>(
-      fieldKey?: TKey,
-      fieldValue?: TValue[TKey],
-    ): Promise<
-      | { isValid: true; data: TValue }
-      | { isValid: false; errors: Record<keyof TValue, string> }
-    > => {
-      const valueToValidate = fieldKey
-        ? { ...formValueRef.current, [fieldKey]: fieldValue }
-        : formValueRef.current
+          const key =
+            typeof issue.path[0] === 'string' ? issue.path[0] : undefined
+          if (!key) return acc
 
-      if (!validator) return { isValid: true, data: valueToValidate }
-
-      let validationResult: Result<TValue> | null = null
-      if (typeof validator === 'function') {
-        validationResult = validator(valueToValidate)
-      } else {
-        validationResult = await (validator as StandardSchemaV1<TValue>)[
-          '~standard'
-        ].validate(valueToValidate)
-      }
-
-      if (validationResult.issues) {
-        const errors = validationResult.issues.reduce(
-          (errorMap, issue) => {
-            errorMap[issue.path as unknown as keyof TValue] = issue.message
-            return errorMap
-          },
-          {} as Record<keyof TValue, string>,
-        )
-        return { isValid: false, errors }
-      }
-      return { isValid: true, data: validationResult.value }
+          acc[key] ??= []
+          acc[key].push(issue)
+          return acc
+        },
+        {},
+      )
     },
-    [validator],
+    [],
+  )
+
+  const validateValues = React.useCallback(
+    async (
+      values: TValues,
+    ): Promise<
+      | { success: true; data: TValues; error: null }
+      | { success: false; data: null; error: TError }
+    > => {
+      if (!schema) return { success: true, data: values, error: null }
+
+      let result: TResults
+      if ('~standard' in schema)
+        result = (await schema['~standard'].validate(values)) as TResults
+      else result = await schema(values)
+
+      if (result.issues)
+        return {
+          success: false,
+          data: null,
+          error: {
+            message: 'Validation error',
+            errors: parseIssues(result.issues),
+          } as TError,
+        }
+
+      return { success: true, data: result.value, error: null }
+    },
+    [parseIssues, schema],
   )
 
   const handleSubmit = React.useCallback(
-    (event: React.FormEvent) => {
+    (e: React.FormEvent) => {
+      e.preventDefault()
+      e.stopPropagation()
+
       startTransition(async () => {
-        event.preventDefault()
-        event.stopPropagation()
+        dataRef.current = null
+        errorRef.current = { message: null, errors: {} } as TError
 
-        formDataRef.current = null
-        formErrorRef.current = null
-
-        const validationResult = await validateField()
-        if (!validationResult.isValid) {
-          formErrorRef.current = { issues: validationResult.errors } as TError
-          return
-        }
+        const { success, data, error } = await validateValues(valuesRef.current)
+        if (!success) return void (errorRef.current = error)
 
         try {
-          const result = await onSubmit(validationResult.data)
-          formDataRef.current = result
-          await onSuccess?.(result)
-        } catch (error) {
-          formDataRef.current = null
-          const message =
-            error instanceof Error ? error.message : 'Unknown error'
-          formErrorRef.current = { message } as TError
-          await onError?.({ message } as TError)
+          dataRef.current = await onSubmit(data)
+          errorRef.current = { message: null, errors: {} } as TError
+          return void onSuccess?.(dataRef.current)
+        } catch (e: unknown) {
+          const message = e instanceof Error ? e.message : String(e)
+          dataRef.current = null
+          errorRef.current = { message, errors: {} } as TError
+          return void onError?.(errorRef.current)
         }
       })
+
+      setVersion((v) => v + 1)
     },
-    [onError, onSubmit, onSuccess, validateField],
+    [onSubmit, onSuccess, onError, validateValues],
   )
 
   const setValue = React.useCallback(
-    <TKey extends keyof TValue>(key: TKey, value: TValue[TKey]) => {
-      formValueRef.current[key] = value
+    <K extends keyof TValues>(key: K, value: TValues[K]) => {
+      valuesRef.current = { ...valuesRef.current, [key]: value }
       setVersion((v) => v + 1)
     },
     [],
   )
 
   const reset = React.useCallback(() => {
-    Object.assign(formValueRef.current, defaultValues)
-    formErrorRef.current = null
-    formDataRef.current = null
+    valuesRef.current = defaultValues
+    dataRef.current = null
+    errorRef.current = { message: null, errors: {} } as TError
     setVersion((v) => v + 1)
   }, [defaultValues])
 
   const control = React.useMemo(
-    () => ({
-      formValueRef,
-      formErrorRef,
-      validateField,
-      isPending,
-      version,
-    }),
-    [isPending, validateField, version],
-  ) satisfies Control<TValue>
+    () => ({ valuesRef, errorRef, isPending, version, validateValues }),
+    [isPending, validateValues, version],
+  )
 
   return React.useMemo(
     () => ({
+      state: {
+        values: valuesRef.current,
+        data: dataRef.current,
+        error: errorRef.current,
+        isPending,
+      },
+      control,
       setValue,
       handleSubmit,
       reset,
-      control,
-
-      state: {
-        isPending,
-        hasError: !!formErrorRef.current,
-        value: formValueRef.current,
-        data: formDataRef.current,
-        error: formErrorRef.current,
-      },
     }),
     [control, handleSubmit, isPending, reset, setValue],
   )
 }
 
-type ChangeEvent =
-  | React.ChangeEvent<HTMLInputElement>
-  | string
-  | number
-  | boolean
-
-interface FormFieldContextValue<
-  TValue extends Record<string, unknown>,
-  TName extends keyof TValue = keyof TValue,
+interface RenderProps<
+  TValues extends Record<string, unknown>,
+  TFieldName extends keyof TValues,
 > {
   field: {
-    name: TName
-    value: TValue[TName]
-    onChange: (event: ChangeEvent) => void
-    onBlur: (event: React.FocusEvent<HTMLInputElement>) => Promise<void> | void
-  }
-  state: {
-    isPending: boolean
-    hasError: boolean
-    error?: string
+    id: string
+    name: TFieldName
+    value: TValues[TFieldName]
+    onChange: (
+      value: React.ChangeEvent<HTMLInputElement> | string | number | boolean,
+    ) => unknown
+    onBlur: (event: React.FocusEvent<HTMLInputElement>) => unknown
   }
   meta: {
-    id: string
-    formItemId: string
-    formDescriptionId: string
-    formMessageId: string
+    fieldId: string
+    errorId: string
+    descriptionId: string
   }
-}
-
-const FormFieldContext = React.createContext<FormFieldContextValue<
-  Record<string, unknown>
-> | null>(null)
-
-function useFormField<
-  TForm extends ReturnType<typeof useForm>,
-  TName extends keyof TForm['state']['value'] = keyof TForm['state']['value'],
->() {
-  const formField = React.use(
-    FormFieldContext,
-  ) as unknown as FormFieldContextValue<TForm['state']['value'], TName> | null
-  if (!formField)
-    throw new Error('useFormField must be used within a FormField')
-  return formField
+  state: {
+    value: TValues[TFieldName]
+    hasError: boolean
+    errors: StandardSchemaV1.Issue[]
+    isPending: boolean
+  }
 }
 
 function FormField<
-  TValue extends Record<string, unknown>,
-  TFieldName extends keyof TValue,
+  TValues extends Record<string, unknown>,
+  TFieldName extends keyof TValues,
 >({
   control,
   name,
   render,
 }: {
-  control: Control<TValue>
+  control: Control<TValues>
   name: TFieldName
-  render: (props: FormFieldContextValue<TValue, TFieldName>) => React.ReactNode
+  render: (props: RenderProps<TValues, TFieldName>) => React.ReactNode
 }) {
-  const { formValueRef, formErrorRef, validateField, isPending, version } =
-    control
-
-  const [value, setValue] = React.useState(formValueRef.current[name])
-  const prevValueRef = React.useRef(value)
-
-  React.useEffect(() => {
-    const newValue = formValueRef.current[name]
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
-    if (newValue !== value) setValue(newValue)
-  }, [formValueRef, name, value, version])
-
-  const [error, setError] = React.useState(
-    formErrorRef.current?.issues?.[name] ?? '',
-  )
-
-  const parseValue = React.useCallback((target: HTMLInputElement) => {
-    switch (target.type) {
-      case 'number':
-        return target.valueAsNumber as TValue[TFieldName]
-      case 'checkbox':
-        return target.checked as TValue[TFieldName]
-      default:
-        return target.value as TValue[TFieldName]
-    }
-  }, [])
-
-  const handleChange = React.useCallback(
-    (event: ChangeEvent) => {
-      const newValue =
-        typeof event === 'object' && 'target' in event
-          ? parseValue(event.target)
-          : (event as TValue[TFieldName])
-
-      setValue(newValue)
-      formValueRef.current[name] = newValue
-    },
-    [name, parseValue, formValueRef],
-  )
-
-  const handleBlur = React.useCallback(async () => {
-    if (prevValueRef.current === value) return
-    prevValueRef.current = value
-
-    const results = await validateField(name, value)
-    if (!results.isValid && results.errors[name]) setError(results.errors[name])
-    else setError('')
-  }, [name, value, validateField])
+  const { valuesRef, isPending, errorRef, validateValues } = control
 
   const id = React.useId()
 
-  const formFieldContextValue = React.useMemo(
-    () =>
-      ({
-        field: { name, value, onChange: handleChange, onBlur: handleBlur },
-        state: { isPending, hasError: !!error, error },
-        meta: {
-          id,
-          formItemId: `${id}-form-item`,
-          formDescriptionId: `${id}-form-item-description`,
-          formMessageId: `${id}-form-item-message`,
-        },
-      }) satisfies FormFieldContextValue<TValue, TFieldName>,
-    [error, handleBlur, handleChange, id, isPending, name, value],
+  const [value, setValue] = React.useState(valuesRef.current[name])
+  const prevValueRef = React.useRef(value)
+
+  const [errors, setErrors] = React.useState<StandardSchemaV1.Issue[]>(
+    errorRef.current.errors?.[name] ?? [],
   )
 
-  return (
-    <FormFieldContext value={formFieldContextValue as never}>
-      {render(formFieldContextValue)}
-    </FormFieldContext>
+  React.useEffect(() => {
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+    setValue(valuesRef.current[name])
+    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
+    setErrors(errorRef.current.errors?.[name] ?? [])
+  }, [errorRef, errorRef.current.errors?.[name], name, valuesRef])
+
+  const handleChange = React.useCallback(
+    (
+      val: Parameters<RenderProps<TValues, TFieldName>['field']['onChange']>[0],
+    ) => {
+      let newValue
+      if (typeof val === 'object' && 'target' in val) {
+        const { type, checked, value, valueAsNumber } = val.target
+        if (type === 'checkbox') newValue = checked
+        else if (type === 'number')
+          newValue = isNaN(valueAsNumber) ? '' : valueAsNumber
+        else newValue = value
+      } else newValue = val
+
+      setValue(newValue as TValues[TFieldName])
+      valuesRef.current[name] = newValue as TValues[TFieldName]
+    },
+    [name, valuesRef],
   )
-}
 
-function FormLabel({ className, ...props }: React.ComponentProps<'label'>) {
-  const { state, meta } = useFormField<never>()
+  const handleBlur = React.useCallback(
+    async (_: React.FocusEvent<HTMLInputElement>) => {
+      if (prevValueRef.current === value) return
+      prevValueRef.current = value
 
-  return (
-    <label
-      data-slot='form-label'
-      htmlFor={meta.formItemId}
-      aria-disabled={state.isPending}
-      aria-invalid={state.hasError}
-      className={cn(
-        'text-sm leading-none font-medium',
-        'aria-disabled:cursor-not-allowed aria-disabled:opacity-70',
-        'aria-invalid:text-destructive',
-        className,
-      )}
-      {...props}
-    />
+      const { success, error } = await validateValues({
+        ...valuesRef.current,
+        [name]: value,
+      })
+
+      if (!success) setErrors(error.errors?.[name] ?? [])
+      else setErrors([])
+    },
+    [name, validateValues, value, valuesRef],
   )
-}
 
-function FormControl({ className, ...props }: React.ComponentProps<'input'>) {
-  const { state, meta } = useFormField()
+  const hasError = errors.length > 0
 
-  return (
-    <Slot
-      data-slot='form-control'
-      id={meta.formItemId}
-      aria-describedby={
-        !state.hasError
-          ? meta.formDescriptionId
-          : `${meta.formDescriptionId} ${meta.formMessageId}`
-      }
-      aria-invalid={state.hasError}
-      aria-disabled={state.isPending}
-      className={cn(
-        'aria-disabled:cursor-not-allowed aria-disabled:opacity-70',
-        className,
-      )}
-      {...props}
-    />
+  const meta = React.useMemo(
+    () => ({
+      fieldId: `${id}-field`,
+      errorId: `${id}-message`,
+      descriptionId: `${id}-description`,
+    }),
+    [id],
   )
-}
 
-function FormDescription({
-  children,
-  className,
-  ...props
-}: React.ComponentProps<'span'>) {
-  const { meta } = useFormField()
-
-  return (
-    <span
-      data-slot='form-description'
-      id={meta.formDescriptionId}
-      className={cn('text-sm text-muted-foreground', className)}
-      {...props}
-    >
-      {children}
-    </span>
+  const props = React.useMemo(
+    () => ({
+      meta,
+      field: {
+        id: meta.fieldId,
+        name,
+        value,
+        onChange: handleChange,
+        onBlur: handleBlur,
+        'aria-describedby': [meta.descriptionId, hasError && meta.errorId]
+          .filter(Boolean)
+          .join(' '),
+      },
+      state: { value, errors, hasError, isPending },
+    }),
+    [errors, handleBlur, handleChange, hasError, isPending, meta, name, value],
   )
+
+  return render(props)
 }
 
-function FormMessage({
-  children,
-  className,
-  ...props
-}: React.ComponentProps<'span'>) {
-  const { state, meta } = useFormField()
-  const body = state.hasError ? String(state.error) : children
-
-  return (
-    <span
-      data-slot='form-message'
-      id={meta.formMessageId}
-      className={cn('text-sm text-destructive', className)}
-      {...props}
-    >
-      {body}
-    </span>
-  )
-}
-
-export {
-  useForm,
-  FormField,
-  FormLabel,
-  FormControl,
-  FormDescription,
-  FormMessage,
-}
+export { useForm, FormField }
 
 /** The Standard Schema interface. */
-interface StandardSchemaV1<Input = unknown, Output = Input> {
+export interface StandardSchemaV1<Input = unknown, Output = Input> {
   /** The Standard Schema properties. */
-  readonly '~standard': Props<Input, Output>
+  readonly '~standard': StandardSchemaV1.Props<Input, Output>
 }
 
-interface Props<Input = unknown, Output = Input> {
-  /** The version number of the standard. */
-  readonly version: 1
-  /** The vendor name of the schema library. */
-  readonly vendor: string
-  /** Validates unknown input values. */
-  readonly validate: (
-    value: unknown,
-  ) => Result<Output> | Promise<Result<Output>>
-  /** Inferred types associated with the schema. */
-  readonly types?: Types<Input, Output> | undefined
+// eslint-disable-next-line @typescript-eslint/no-namespace
+export declare namespace StandardSchemaV1 {
+  /** The Standard Schema properties interface. */
+  export interface Props<Input = unknown, Output = Input> {
+    /** The version number of the standard. */
+    readonly version: 1
+    /** The vendor name of the schema library. */
+    readonly vendor: string
+    /** Validates unknown input values. */
+    readonly validate: (
+      value: unknown,
+    ) => Result<Output> | Promise<Result<Output>>
+    /** Inferred types associated with the schema. */
+    readonly types?: Types<Input, Output> | undefined
+  }
+
+  /** The result interface of the validate function. */
+  export type Result<Output> = SuccessResult<Output> | FailureResult
+
+  /** The result interface if validation succeeds. */
+  export interface SuccessResult<Output> {
+    /** The typed output value. */
+    readonly value: Output
+    /** The non-existent issues. */
+    readonly issues?: undefined
+  }
+
+  /** The result interface if validation fails. */
+  export interface FailureResult {
+    /** The issues of failed validation. */
+    readonly issues: readonly Issue[]
+  }
+
+  /** The issue interface of the failure output. */
+  export interface Issue {
+    /** The error message of the issue. */
+    readonly message: string
+    /** The path of the issue, if any. */
+    readonly path?: readonly (PropertyKey | PathSegment)[] | undefined
+  }
+
+  /** The path segment interface of the issue. */
+  export interface PathSegment {
+    /** The key representing a path segment. */
+    readonly key: PropertyKey
+  }
+
+  /** The Standard Schema types interface. */
+  export interface Types<Input = unknown, Output = Input> {
+    /** The input type of the schema. */
+    readonly input: Input
+    /** The output type of the schema. */
+    readonly output: Output
+  }
+
+  /** Infers the input type of a Standard Schema. */
+  export type InferInput<Schema extends StandardSchemaV1> = NonNullable<
+    Schema['~standard']['types']
+  >['input']
+
+  /** Infers the output type of a Standard Schema. */
+  export type InferOutput<Schema extends StandardSchemaV1> = NonNullable<
+    Schema['~standard']['types']
+  >['output']
 }
-
-/** The result interface of the validate function. */
-type Result<Output> = SuccessResult<Output> | FailureResult
-
-/** The result interface if validation succeeds. */
-interface SuccessResult<Output> {
-  /** The typed output value. */
-  readonly value: Output
-  /** The non-existent issues. */
-  readonly issues?: undefined
-}
-
-/** The result interface if validation fails. */
-interface FailureResult {
-  /** The issues of failed validation. */
-  readonly issues: readonly Issue[]
-}
-
-/** The issue interface of the failure output. */
-interface Issue {
-  /** The error message of the issue. */
-  readonly message: string
-  /** The path of the issue, if any. */
-  readonly path?: readonly (PropertyKey | PathSegment)[] | undefined
-}
-
-/** The path segment interface of the issue. */
-interface PathSegment {
-  /** The key representing a path segment. */
-  readonly key: PropertyKey
-}
-
-/** The Standard Schema types interface. */
-interface Types<Input = unknown, Output = Input> {
-  /** The input type of the schema. */
-  readonly input: Input
-  /** The output type of the schema. */
-  readonly output: Output
-}
-
-/** Infers the input type of a Standard Schema. */
-type InferInput<Schema extends StandardSchemaV1> = NonNullable<
-  Schema['~standard']['types']
->['input']

@@ -1,26 +1,32 @@
 import { Button } from '@yukinu/ui/button'
-import { Card, CardFooter } from '@yukinu/ui/card'
-import { FacebookIcon, GoogleIcon } from '@yukinu/ui/icons'
+import { Card, CardContent, CardFooter } from '@yukinu/ui/card'
+import { FieldSeparator } from '@yukinu/ui/field'
 
 export default function AuthLayout({ children }: LayoutProps<'/'>) {
   return (
     <main className='flex min-h-dvh flex-col items-center justify-center'>
-      <Card className='w-full max-w-xl space-y-4 border-transparent bg-transparent sm:border-border sm:bg-card'>
-        {children}
+      <Card className='w-full max-w-xl border-transparent bg-transparent sm:border-border sm:bg-card'>
+        <CardContent>{children}</CardContent>
 
-        <div className='-mt-8 -mb-2 flex items-center gap-2 px-6'>
-          <div className='h-0.25 flex-1 bg-border' />
-          <span>or</span>
-          <div className='h-0.25 flex-1 bg-border' />
-        </div>
+        <FieldSeparator className='mx-6 [&_[data-slot=field-separator-content]]:sm:bg-card'>
+          or
+        </FieldSeparator>
 
-        <CardFooter className='grid grid-cols-1 gap-4 sm:grid-cols-2' asChild>
+        <CardFooter className='grid grid-cols-1 gap-6 sm:grid-cols-2' asChild>
           <form>
-            <Button variant='outline' formAction='/api/auth/facebook'>
-              <FacebookIcon /> Continue with Facebook
+            <Button
+              type='submit'
+              variant='outline'
+              formAction='/api/auth/google'
+            >
+              Continue with Google
             </Button>
-            <Button variant='outline' formAction='/api/auth/google'>
-              <GoogleIcon /> Continue with Google
+            <Button
+              type='submit'
+              variant='outline'
+              formAction='/api/auth/facebook'
+            >
+              Continue with Facebook
             </Button>
           </form>
         </CardFooter>
