@@ -1,5 +1,13 @@
 # @yukinu/ui
 
+## 0.0.2
+
+### Patch Changes
+
+- [#53](https://github.com/tiesen243/yukinu/pull/53) [`54ebc64`](https://github.com/tiesen243/yukinu/commit/54ebc642142ffde956dbecaecc25367e38270681) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typecheck error
+
+- [#53](https://github.com/tiesen243/yukinu/pull/53) [`6e7bcd1`](https://github.com/tiesen243/yukinu/commit/6e7bcd17b06a4208e0ba772d38db1908653e90d6) Thanks [@tiesen243](https://github.com/tiesen243)! - update form component and register/login form
+
 ## 0.0.1
 
 ### Patch Changes
