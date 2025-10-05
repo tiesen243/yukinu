@@ -4,7 +4,7 @@ import type { VariantProps } from 'class-variance-authority'
 import { useMemo } from 'react'
 import { cva } from 'class-variance-authority'
 
-import type { StandardSchemaV1 } from '@yukinu/ui/components/form'
+import type { StandardSchemaV1 } from '@yukinu/ui/form'
 import { cn } from '@yukinu/ui'
 import { Label } from '@yukinu/ui/label'
 import { Separator } from '@yukinu/ui/separator'
