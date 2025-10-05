@@ -10,6 +10,7 @@ describe('UserModel.registerBody', () => {
       email: 'test@example.com',
       username: 'testuser',
       password: 'Abcdef1!',
+      confirmPassword: 'Abcdef1!',
     })
     expect(result.success).toBe(true)
   })
@@ -58,13 +59,23 @@ describe('UserModel.registerBody', () => {
     })
     expect(result.success).toBe(false)
   })
+
+  it('rejects non-matching confirmPassword', () => {
+    const result = schema.safeParse({
+      email: 'test@example.com',
+      username: 'testuser',
+      password: 'Abcdef1!',
+      confirmPassword: 'Different1!',
+    })
+    expect(result.success).toBe(false)
+  })
 })
 
 describe('UserModel.loginBody', () => {
   it('accepts valid email and password', () => {
     const data = {
       identifier: 'test@example.com',
-      password: 'password123',
+      password: 'Password#123',
     }
     const result = UserModel.loginBody.safeParse(data)
     expect(result.success).toBe(true)
@@ -73,7 +84,7 @@ describe('UserModel.loginBody', () => {
   it('accepts valid username and password', () => {
     const data = {
       identifier: 'validuser',
-      password: 'password123',
+      password: 'Password#123',
     }
     const result = UserModel.loginBody.safeParse(data)
     expect(result.success).toBe(true)

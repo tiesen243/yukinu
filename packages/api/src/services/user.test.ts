@@ -43,6 +43,7 @@ describe('UserService', () => {
         email: 'test@example.com',
         username: 'testuser',
         password: 'password',
+        confirmPassword: 'password',
       })
       expect(result).toEqual({ id: 'user-id' })
     })
@@ -61,7 +62,12 @@ describe('UserService', () => {
       )
 
       expect(
-        service.register({ email: '', username: '', password: '' }),
+        service.register({
+          email: '',
+          username: '',
+          password: '',
+          confirmPassword: '',
+        }),
       ).rejects.toThrow(TRPCError)
     })
   })
