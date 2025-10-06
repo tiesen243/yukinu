@@ -4,7 +4,10 @@ color_scheme: dark
 search_enabled: true
 nav_enabled: true
 
+title: Yukinu
 favicon_ico: '/apps/web/public/favicon.ico'
 aux_links:
   'GitHub':
     - '//github.com/tiesen243/yukinu'
+
+nav_sort: case_insensitive
