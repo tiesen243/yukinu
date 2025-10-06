@@ -1,5 +1,14 @@
 # @yukinu/web
 
+## 0.0.9
+
+### Patch Changes
+
+- [#56](https://github.com/tiesen243/yukinu/pull/56) [`3cba84a`](https://github.com/tiesen243/yukinu/commit/3cba84ae4aa52c75e0703fdbeb40ab0c62580dd9) Thanks [@tiesen243](https://github.com/tiesen243)! - add theme switcher to user button
+
+- Updated dependencies [[`3cba84a`](https://github.com/tiesen243/yukinu/commit/3cba84ae4aa52c75e0703fdbeb40ab0c62580dd9)]:
+  - @yukinu/ui@0.0.3
+
 ## 0.0.8
 
 ### Patch Changes

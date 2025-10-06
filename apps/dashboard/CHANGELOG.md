@@ -1,5 +1,12 @@
 # @yukinu/dashboard
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated dependencies [[`3cba84a`](https://github.com/tiesen243/yukinu/commit/3cba84ae4aa52c75e0703fdbeb40ab0c62580dd9)]:
+  - @yukinu/ui@0.0.3
+
 ## 0.0.8
 
 ### Patch Changes
