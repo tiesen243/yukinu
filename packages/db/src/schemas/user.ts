@@ -1,5 +1,5 @@
-import { relations } from 'drizzle-orm'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { eq, relations } from 'drizzle-orm'
+import { index, pgEnum, pgTable, pgView, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
 import { orders } from './order'
@@ -90,3 +90,17 @@ export const sessions = pgTable(
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }))
+
+export const userView = pgView('user_view').as((qb) =>
+  qb
+    .select({
+      id: users.id,
+      username: users.username,
+      email: users.email,
+      role: users.role,
+      avatarUrl: profiles.avatarUrl,
+    })
+    .from(users)
+    .innerJoin(profiles, eq(users.id, profiles.id))
+    .where(eq(users.status, 'active')),
+)

@@ -85,6 +85,13 @@
       "when": 1759509557627,
       "tag": "0011_strong_catseye",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1759743695634,
+      "tag": "0012_acoustic_jackal",
+      "breakpoints": true
     }
   ]
 }
