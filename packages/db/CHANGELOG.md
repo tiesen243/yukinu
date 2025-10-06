@@ -1,5 +1,15 @@
 # @yukinu/db
 
+## 0.0.6
+
+### Patch Changes
+
+- [#59](https://github.com/tiesen243/yukinu/pull/59) [`f866063`](https://github.com/tiesen243/yukinu/commit/f86606371dd41ca96bf33138d2fc4e0185589c77) Thanks [@tiesen243](https://github.com/tiesen243)! - fix view error
+
+- [#59](https://github.com/tiesen243/yukinu/pull/59) [`95c3305`](https://github.com/tiesen243/yukinu/commit/95c330566838c1801d3566993fc5b4304dfc30a7) Thanks [@tiesen243](https://github.com/tiesen243)! - add user view to db
+
+- [#59](https://github.com/tiesen243/yukinu/pull/59) [`5ba7db0`](https://github.com/tiesen243/yukinu/commit/5ba7db0ebf3ddce45b59753f520a1db83605fbee) Thanks [@tiesen243](https://github.com/tiesen243)! - add missing type of usersView.avatarUrl
+
 ## 0.0.5
 
 ### Patch Changes
