@@ -70,7 +70,7 @@ export const RegisterForm: React.FC = () => {
             render={({ meta, field, state }) => (
               <Field data-invalid={state.hasError}>
                 <FieldLabel htmlFor={meta.fieldId}>Username</FieldLabel>
-                <Input {...field} placeholder='yukinu' />
+                <Input {...field} placeholder='yourusername' />
                 <FieldError id={meta.errorId} errors={state.errors} />
               </Field>
             )}
@@ -82,7 +82,11 @@ export const RegisterForm: React.FC = () => {
             render={({ meta, field, state }) => (
               <Field data-invalid={state.hasError}>
                 <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-                <Input {...field} type='password' />
+                <Input
+                  {...field}
+                  type='password'
+                  placeholder='Enter your password'
+                />
                 <FieldError id={meta.errorId} errors={state.errors} />
               </Field>
             )}
@@ -94,7 +98,11 @@ export const RegisterForm: React.FC = () => {
             render={({ meta, field, state }) => (
               <Field data-invalid={state.hasError}>
                 <FieldLabel htmlFor={meta.fieldId}>Confirm Password</FieldLabel>
-                <Input {...field} type='password' />
+                <Input
+                  {...field}
+                  type='password'
+                  placeholder='Re-enter your password'
+                />
                 <FieldError id={meta.errorId} errors={state.errors} />
               </Field>
             )}
