@@ -21,6 +21,7 @@
     "@tanstack/react-query": "catalog:api",
     "@trpc/client": "catalog:api",
     "@trpc/tanstack-react-query": "catalog:api",
+    "@vercel/react-router": "^1.2.3",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",

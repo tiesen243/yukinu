@@ -1,3 +1,8 @@
+---
+title: Yukinu - E-commerce Platform Monorepo
+nav_order: 1
+---
+
 # Yukinu
 
 <p align="center">

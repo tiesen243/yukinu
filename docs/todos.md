@@ -2,13 +2,13 @@
 
 ## 1. User Management
 
-- [ ] User registration (username, email, password)
-- [ ] User login/logout
+- [x] User registration (username, email, password)
+- [x] User login/logout
 - [ ] Email verification (`emailVerified`)
 - [ ] Profile management (`profiles`)
 - [ ] Roles & permissions (`user_role`: admin, user)
 - [ ] Account status management (`user_status`: active, inactive, banned)
-- [ ] Login with third-party providers (Google, Facebook, etc.)
+- [x] Login with third-party providers (Google, Facebook, etc.)
 
 ## 2. Address Management
 
