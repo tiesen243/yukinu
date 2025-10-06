@@ -9,9 +9,9 @@ import { users } from './user'
 export const profiles = pgTable(
   'profiles',
   (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-    userId: t
+    id: t
       .varchar({ length: 24 })
+      .primaryKey()
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
 
@@ -22,14 +22,11 @@ export const profiles = pgTable(
     dateOfBirth: t.date(),
     website: t.varchar({ length: 255 }),
   }),
-  (t) => [
-    index('profiles_user_id_idx').on(t.userId),
-    index('profiles_full_name_idx').on(t.fullName),
-  ],
+  (t) => [index('profiles_full_name_idx').on(t.fullName)],
 )
 
 export const profilesRelations = relations(profiles, ({ one }) => ({
-  user: one(users, { fields: [profiles.userId], references: [users.id] }),
+  user: one(users, { fields: [profiles.id], references: [users.id] }),
 }))
 
 export const addresses = pgTable(
