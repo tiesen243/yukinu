@@ -130,6 +130,26 @@ export const RegisterForm: React.FC = () => {
             </Button>
           </FieldDescription>
         </FieldGroup>
+
+        <FieldDescription>
+          By creating an account, you agree to our{' '}
+          <a
+            href='https://tiesen243.github.io/yukinu/legal/term-of-service.html'
+            target='_blank'
+            rel='noreferrer'
+          >
+            Terms of Service
+          </a>
+          {' and '}
+          <a
+            href='https://tiesen243.github.io/yukinu/legal/privacy-policy.html'
+            target='_blank'
+            rel='noreferrer'
+          >
+            Privacy Policy
+          </a>
+          .
+        </FieldDescription>
       </FieldSet>
     </form>
   )

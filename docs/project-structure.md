@@ -23,7 +23,7 @@ The repository is organized as a monorepo, containing multiple applications and 
 
 Applications are user-facing projects (websites, dashboards, etc):
 
-````plaintext
+```plaintext
 apps/
 ├── web/
 │   ├── app/                           (Next.js app directory)
@@ -45,6 +45,7 @@ apps/
     ├── vite.config.ts
     ├── [...other config files]
     └── package.json
+```
 
 ## Packages (`packages/`)
 
@@ -83,4 +84,4 @@ packages/
 │   ├── components.json                (shadcn/ui config)
 │   └── package.json
 └── [...other shared packages]
-````
+```
