@@ -71,34 +71,4 @@ describe('UserService', () => {
       ).rejects.toThrow(TRPCError)
     })
   })
-
-  describe('getProfile', () => {
-    it('returns profile if found', async () => {
-      const mockProfile = {
-        id: 'id1',
-        userId: 'user-id',
-        fullName: 'Test User',
-        avatarUrl: null,
-        bio: null,
-        gender: null,
-        dateOfBirth: null,
-        website: null,
-      }
-
-      mockDb.select.mockReturnValue({
-        from: () => ({ where: () => ({ limit: () => [mockProfile] }) }),
-      })
-
-      const result = await service.getProfile('user-id')
-      expect(result).toEqual(mockProfile)
-    })
-
-    it('throws not found if profile missing', () => {
-      mockDb.select.mockReturnValue({
-        from: () => ({ where: () => ({ limit: () => [] }) }),
-      })
-
-      expect(service.getProfile('missing')).rejects.toThrow(TRPCError)
-    })
-  })
 })

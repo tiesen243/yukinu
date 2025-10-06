@@ -26,12 +26,11 @@ export class UserService {
         .where(
           or(eq(users.email, input.email), eq(users.username, input.username)),
         )
-      if (existing) {
+      if (existing)
         throw new TRPCError({
           code: 'CONFLICT',
           message: 'User already exists',
         })
-      }
 
       const [created] = await tx
         .insert(users)
@@ -54,25 +53,10 @@ export class UserService {
       })
 
       await tx.insert(profiles).values({
-        userId: created.id,
+        id: created.id,
       })
 
       return { id: created.id }
     })
-  }
-
-  public async getProfile(userId: string) {
-    const [profile] = await this._db
-      .select()
-      .from(profiles)
-      .where(eq(profiles.userId, userId))
-      .limit(1)
-    if (!profile)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'Profile not found',
-      })
-
-    return profile
   }
 }

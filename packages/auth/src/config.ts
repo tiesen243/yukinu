@@ -1,6 +1,7 @@
 import { and, db, eq, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schemas/profile'
 import { accounts, sessions, users } from '@yukinu/db/schemas/user'
+import { usersView } from '@yukinu/db/schemas/view'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions } from './core/types'
@@ -43,16 +44,14 @@ function getAdapter(): AuthOptions['adapter'] {
   return {
     getUserByEmailOrUsername: async (identifier) => {
       const [user] = await db
-        .select({
-          id: users.id,
-          username: users.username,
-          email: users.email,
-          role: users.role,
-          avatarUrl: profiles.avatarUrl,
-        })
-        .from(users)
-        .where(or(eq(users.email, identifier), eq(users.username, identifier)))
-        .innerJoin(profiles, eq(profiles.userId, users.id))
+        .select()
+        .from(usersView)
+        .where(
+          or(
+            eq(usersView.email, identifier),
+            eq(usersView.username, identifier),
+          ),
+        )
       return user ?? null
     },
     createUser: (data) =>
@@ -64,18 +63,12 @@ function getAdapter(): AuthOptions['adapter'] {
         if (!user) return null
 
         await tx.insert(profiles).values({
-          userId: user.id,
+          id: user.id,
           fullName: data.name,
           avatarUrl: data.image,
         })
 
-        return {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          role: user.role,
-          avatarUrl: data.image,
-        }
+        return { ...user, avatarUrl: data.image }
       }),
     getAccount: async (provider, accountId) => {
       const [account] = await db
@@ -96,11 +89,11 @@ function getAdapter(): AuthOptions['adapter'] {
       const [session] = await db
         .select({
           user: {
-            id: users.id,
-            username: users.username,
-            email: users.email,
-            role: users.role,
-            avatarUrl: profiles.avatarUrl,
+            id: usersView.id,
+            username: usersView.username,
+            email: usersView.email,
+            role: usersView.role,
+            avatarUrl: usersView.avatarUrl,
           },
           ipAddress: sessions.ipAddress,
           userAgent: sessions.userAgent,
@@ -108,8 +101,7 @@ function getAdapter(): AuthOptions['adapter'] {
         })
         .from(sessions)
         .where(eq(sessions.token, token))
-        .innerJoin(users, eq(sessions.userId, users.id))
-        .leftJoin(profiles, eq(profiles.userId, users.id))
+        .innerJoin(usersView, eq(sessions.userId, usersView.id))
       return session ?? null
     },
     createSession: async (data) => {
@@ -126,13 +118,10 @@ function getAdapter(): AuthOptions['adapter'] {
 
 declare module './core/types.d.ts' {
   type ISession = typeof sessions.$inferSelect
+  type IUser = typeof usersView.$inferSelect
 
-  interface User {
+  interface User extends IUser {
     id: string
-    username: string
-    email: string
-    role: 'admin' | 'user'
-    avatarUrl: string | null
   }
 
   interface Session extends ISession {

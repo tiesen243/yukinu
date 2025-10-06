@@ -1,5 +1,5 @@
 {
-  "id": "a57d494c-205e-46ea-96b1-d78f4a0609ba",
+  "id": "c1505b2b-fbcb-41af-bd11-bf8da66cfbd7",
   "prevId": "3eb03082-64bd-46b4-ab60-18e35a1cabca",
   "version": "7",
   "dialect": "postgresql",
@@ -1871,7 +1871,7 @@
   "roles": {},
   "policies": {},
   "views": {
-    "public.user_view": {
+    "public.users_view": {
       "columns": {
         "id": {
           "name": "id",
@@ -1879,14 +1879,14 @@
           "primaryKey": true,
           "notNull": true
         },
-        "username": {
-          "name": "username",
+        "email": {
+          "name": "email",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
         },
-        "email": {
-          "name": "email",
+        "username": {
+          "name": "username",
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true
@@ -1898,16 +1898,10 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'user'"
-        },
-        "avatarUrl": {
-          "name": "avatarUrl",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         }
       },
-      "definition": "select \"users\".\"id\", \"users\".\"username\", \"users\".\"email\", \"users\".\"role\", \"profiles\".\"avatar_url\" from \"users\" inner join \"profiles\" on \"users\".\"id\" = \"profiles\".\"id\" where \"users\".\"status\" = 'active'",
-      "name": "user_view",
+      "definition": "select \"users\".\"id\", \"users\".\"email\", \"users\".\"username\", \"users\".\"role\", \"profiles\".\"avatar_url\" as \"avatar_url\" from \"users\" left join \"profiles\" on \"profiles\".\"id\" = \"users\".\"id\" where \"users\".\"status\" = 'active'",
+      "name": "users_view",
       "schema": "public",
       "isExisting": false,
       "materialized": false
