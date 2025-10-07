@@ -24,8 +24,8 @@ export const ProfileDetails: React.FC = () => {
             src={data.avatarUrl ?? ''}
             alt={data.fullName ?? data.username}
           />
-          <AvatarFallback className='bg-accent text-xl text-accent-foreground'>
-            {data.fullName}
+          <AvatarFallback>
+            {data.username.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
         <div>
@@ -51,7 +51,7 @@ export const ProfileDetailsSkeleton: React.FC = () => (
       <h3 className='sr-only'>User Avatar and Name</h3>
 
       <Avatar className='size-20 border-2 border-border'>
-        <AvatarFallback className='animate-pulse bg-accent text-xl text-accent-foreground' />
+        <AvatarFallback className='animate-pulse' />
       </Avatar>
       <div>
         <h4 className='w-80 animate-pulse rounded-md bg-current text-3xl font-bold'>
