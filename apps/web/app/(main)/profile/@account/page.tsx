@@ -1,6 +1,15 @@
 import { Suspense } from 'react'
+import Link from 'next/link'
 
-import { Card, CardDescription, CardHeader, CardTitle } from '@yukinu/ui/card'
+import { Button } from '@yukinu/ui/button'
+import {
+  Card,
+  CardAction,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@yukinu/ui/card'
+import { SettingsIcon } from '@yukinu/ui/icons'
 
 import {
   BasicInformation,
@@ -23,6 +32,15 @@ export default function AccountPage() {
             <CardDescription>
               Your account details and preferences
             </CardDescription>
+
+            <CardAction>
+              <Button variant='outline' asChild>
+                <Link href='/profile/edit'>
+                  <SettingsIcon />
+                  <span className='sr-only sm:not-sr-only'>Edit Profile</span>
+                </Link>
+              </Button>
+            </CardAction>
           </CardHeader>
 
           <Suspense fallback={<BasicInformationSkeleton />}>
