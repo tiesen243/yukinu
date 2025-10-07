@@ -50,11 +50,8 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 })
 
 const registerServiceMiddleware = t.middleware(async ({ ctx, next }) => {
-  return next({
-    ctx: {
-      userService: new UserService(ctx.db),
-    },
-  })
+  const userService = new UserService(ctx.db)
+  return next({ ctx: { userService } })
 })
 
 const publicProcedure = t.procedure

@@ -25,6 +25,7 @@ export const vendors = pgTable(
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
     logoUrl: t.varchar({ length: 255 }),
+    website: t.varchar({ length: 255 }),
     status: statusEnum().default('pending').notNull(),
     createdAt,
     updatedAt,

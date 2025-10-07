@@ -1,4 +1,5 @@
 import { cache } from 'react'
+import { headers } from 'next/headers'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
@@ -6,16 +7,12 @@ import { appRouter, createCallerFactory, createTRPCContext } from '@yukinu/api'
 
 import { createQueryClient } from '@/trpc/query-client'
 
-interface Options {
-  headers: Headers
-}
-
 /**
  * This wraps the `createTRPCContext` helper and provides the required context for the tRPC API when
  * handling a tRPC call from a React Server Component.
  */
-const createRscContext = cache((opts: Options) => {
-  const heads = new Headers(opts.headers)
+const createRscContext = cache(async () => {
+  const heads = new Headers(await headers())
   heads.set('x-trpc-source', 'rsc')
 
   return createTRPCContext({ headers: heads })
@@ -23,15 +20,13 @@ const createRscContext = cache((opts: Options) => {
 
 const getQueryClient = cache(createQueryClient)
 
-const createApi = (opts: Options) =>
-  createCallerFactory(appRouter)(() => createRscContext(opts))
+const api = createCallerFactory(appRouter)(() => createRscContext())
 
-const createTRPC = (opts: Options) =>
-  createTRPCOptionsProxy({
-    ctx: () => createRscContext(opts),
-    queryClient: getQueryClient,
-    router: appRouter,
-  })
+const trpc = createTRPCOptionsProxy({
+  ctx: () => createRscContext(),
+  queryClient: getQueryClient,
+  router: appRouter,
+})
 
 function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = getQueryClient()
@@ -43,4 +38,4 @@ function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {
   )
 }
 
-export { createApi, createTRPC, getQueryClient, HydrateClient }
+export { api, trpc, getQueryClient, HydrateClient }

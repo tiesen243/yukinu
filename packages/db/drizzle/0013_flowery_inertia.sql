@@ -1,0 +1,1 @@
+ALTER TABLE "vendors" ADD COLUMN "website" varchar(255);

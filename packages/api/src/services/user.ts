@@ -3,9 +3,9 @@ import { TRPCError } from '@trpc/server'
 import type { db } from '@yukinu/db'
 import type { UserModel } from '@yukinu/validators/user'
 import { Password } from '@yukinu/auth'
-import { eq, or } from '@yukinu/db'
+import { desc, eq, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schemas/profile'
-import { accounts, users } from '@yukinu/db/schemas/user'
+import { accounts, sessions, users } from '@yukinu/db/schemas/user'
 
 export class UserService {
   private _password: Password
@@ -58,5 +58,33 @@ export class UserService {
 
       return { id: created.id }
     })
+  }
+
+  public async getProfile(userId: string) {
+    const [profile] = await this._db
+      .select({
+        id: users.id,
+        email: users.email,
+        username: users.username,
+        fullName: profiles.fullName,
+        avatarUrl: profiles.avatarUrl,
+        bio: profiles.bio,
+        dateOfBirth: profiles.dateOfBirth,
+        gender: profiles.gender,
+        website: profiles.website,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
+        lastSeen: sessions.createdAt,
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .innerJoin(profiles, eq(profiles.id, users.id))
+      .leftJoin(sessions, eq(sessions.userId, users.id))
+      .orderBy(desc(sessions.createdAt))
+      .limit(1)
+    if (!profile)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    return profile
   }
 }

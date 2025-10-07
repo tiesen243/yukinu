@@ -67,7 +67,7 @@ export const UserButton: React.FC = () => {
 
         <DropdownMenuGroup>
           <DropdownMenuItem asChild>
-            <Link href='/#'>
+            <Link href='/profile'>
               <User2Icon /> Profile
             </Link>
           </DropdownMenuItem>
