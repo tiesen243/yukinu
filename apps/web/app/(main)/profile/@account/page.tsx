@@ -6,9 +6,14 @@ import {
   BasicInformation,
   BasicInformationSkeleton,
 } from '@/app/(main)/profile/@account/page.client'
-import { HydrateClient } from '@/trpc/rsc'
+import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
+
+export const dynamic = 'force-dynamic'
 
 export default function AccountPage() {
+  const queryClient = getQueryClient()
+  void queryClient.prefetchQuery(trpc.user.profile.queryOptions())
+
   return (
     <HydrateClient>
       <Card asChild>
