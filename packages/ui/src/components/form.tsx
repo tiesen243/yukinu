@@ -170,7 +170,7 @@ const useForm = <
   )
 }
 
-type InputElement = HTMLInputElement | HTMLTextAreaElement
+type FormInputElement = HTMLInputElement | HTMLTextAreaElement
 
 interface RenderProps<
   TValues extends Record<string, unknown>,
@@ -181,9 +181,9 @@ interface RenderProps<
     name: TFieldName
     value: TValues[TFieldName]
     onChange: (
-      value: React.ChangeEvent<InputElement> | string | number | boolean,
+      value: React.ChangeEvent<FormInputElement> | string | number | boolean,
     ) => unknown
-    onBlur: (event: React.FocusEvent<InputElement>) => unknown
+    onBlur: (event: React.FocusEvent<FormInputElement>) => unknown
   }
   meta: {
     fieldId: string
