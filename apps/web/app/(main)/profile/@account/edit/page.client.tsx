@@ -125,18 +125,30 @@ export const EditAccountForm: React.FC = () => {
           )}
         />
 
-        <Field>
-          <FieldLabel>Website</FieldLabel>
-          <Input type='url' placeholder='https://example.com' />
-          <FieldError />
-        </Field>
+        <FormField
+          control={form.control}
+          name='website'
+          render={({ meta, field, state }) => (
+            <Field data-invalid={state.hasError}>
+              <FieldLabel htmlFor={meta.fieldId}>Website</FieldLabel>
+              <Input {...field} type='url' placeholder='https://example.com' />
+              <FieldError errors={state.errors} />
+            </Field>
+          )}
+        />
       </FieldGroup>
 
-      <Field>
-        <FieldLabel>Bio</FieldLabel>
-        <Textarea placeholder='Tell us about yourself' />
-        <FieldError />
-      </Field>
+      <FormField
+        control={form.control}
+        name='bio'
+        render={({ meta, field, state }) => (
+          <Field data-invalid={state.hasError}>
+            <FieldLabel htmlFor={meta.fieldId}>Bio</FieldLabel>
+            <Textarea {...field} placeholder='Tell us about yourself' />
+            <FieldError errors={state.errors} />
+          </Field>
+        )}
+      />
 
       <Button
         type='submit'
