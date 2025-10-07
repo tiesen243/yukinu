@@ -1,5 +1,11 @@
 import Link from 'next/link'
 
+import {
+  CreditCardIcon,
+  MapPinIcon,
+  PackageIcon,
+  UserIcon,
+} from '@yukinu/ui/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@yukinu/ui/tabs'
 
 export default function ProfileLayout({
@@ -21,16 +27,24 @@ export default function ProfileLayout({
 
           <TabsList className='w-full sm:w-fit'>
             <TabsTrigger value='account' asChild>
-              <Link href='/profile'>Account</Link>
+              <Link href='/profile'>
+                <UserIcon /> Account
+              </Link>
             </TabsTrigger>
             <TabsTrigger value='addresses' asChild>
-              <Link href='/profile/addresses'>Addresses</Link>
+              <Link href='/profile/addresses'>
+                <MapPinIcon /> Addresses
+              </Link>
             </TabsTrigger>
             <TabsTrigger value='orders' asChild>
-              <Link href='/profile/orders'>Orders</Link>
+              <Link href='/profile/orders'>
+                <PackageIcon /> Orders
+              </Link>
             </TabsTrigger>
             <TabsTrigger value='payment' asChild>
-              <Link href='/profile/payment'>Payment Methods</Link>
+              <Link href='/profile/payment'>
+                <CreditCardIcon /> Payment Methods
+              </Link>
             </TabsTrigger>
           </TabsList>
 
