@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
@@ -8,7 +9,7 @@ import { SettingsIcon } from '@yukinu/ui/icons'
 
 import { useTRPC } from '@/trpc/react'
 
-export const ProfileDetails: React.FC = () => {
+export const ProfileHeader: React.FC = () => {
   const trpc = useTRPC()
   const { data } = useSuspenseQuery(trpc.user.profile.queryOptions())
 
@@ -36,14 +37,16 @@ export const ProfileDetails: React.FC = () => {
         </div>
       </section>
 
-      <Button variant='outline'>
-        <SettingsIcon /> Edit Profile
+      <Button variant='outline' asChild>
+        <Link href='/profile/edit'>
+          <SettingsIcon /> Edit Profile
+        </Link>
       </Button>
     </section>
   )
 }
 
-export const ProfileDetailsSkeleton: React.FC = () => (
+export const ProfileHeaderSkeleton: React.FC = () => (
   <section className='mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between'>
     <h2 className='sr-only'>Profile Details of Loading...</h2>
 

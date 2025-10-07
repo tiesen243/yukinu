@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 
 import {
-  ProfileDetails,
-  ProfileDetailsSkeleton,
+  ProfileHeader,
+  ProfileHeaderSkeleton,
 } from '@/app/(main)/profile/default.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
@@ -12,8 +12,8 @@ export default function ProfilePage(_: PageProps<'/profile'>) {
 
   return (
     <HydrateClient>
-      <Suspense fallback={<ProfileDetailsSkeleton />}>
-        <ProfileDetails />
+      <Suspense fallback={<ProfileHeaderSkeleton />}>
+        <ProfileHeader />
       </Suspense>
     </HydrateClient>
   )
