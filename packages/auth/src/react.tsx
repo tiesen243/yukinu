@@ -60,7 +60,7 @@ function SessionProvider({
         ? [Parameters<typeof ServerSignIn>[0]]
         : [{ redirectUrl?: string }?]
     ): Promise<void> => {
-      if (provider === 'credentials') {
+      if (provider === "credentials") {
         const res = await fetch('/api/auth/sign-in', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
