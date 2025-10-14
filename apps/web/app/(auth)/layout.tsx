@@ -18,6 +18,7 @@ export default async function AuthLayout({ children }: LayoutProps<'/'>) {
           <FieldSeparator className='[&_[data-slot=field-separator-content]]:bg-card'>
             or
           </FieldSeparator>
+
           <Field className='grid gap-4 sm:grid-cols-2'>
             <Button variant='outline' formAction='/api/auth/facebook'>
               Continue with Facebook
