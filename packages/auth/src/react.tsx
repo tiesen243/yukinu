@@ -23,6 +23,13 @@ type SessionContextValue = {
   | { status: 'authenticated'; session: SessionResult & { user: User } }
 )
 
+const nullSessionResult: SessionResult = {
+  user: null,
+  userAgent: null,
+  ipAddress: null,
+  expires: new Date(),
+}
+
 const SessionContext = React.createContext<SessionContextValue | null>(null)
 
 function useSession() {
@@ -41,7 +48,7 @@ function SessionProvider({
   const [isLoading, startTransition] = React.useTransition()
   const [session, setSession] = React.useState<SessionResult>(() => {
     if (hasInitialSession) return _session
-    return { user: null, expires: new Date() }
+    return nullSessionResult
   })
 
   const status = React.useMemo(() => {
@@ -50,7 +57,7 @@ function SessionProvider({
   }, [isLoading, session])
 
   const fetchSession = React.useCallback(
-    (token?: string) => {
+    (token?: string, abortController?: AbortController) => {
       startTransition(async () => {
         const res = await fetch('/api/auth/get-session', {
           method: 'GET',
@@ -58,9 +65,10 @@ function SessionProvider({
             'Content-Type': 'application/json',
             Authorization: token ? `Bearer ${token}` : '',
           },
+          signal: abortController?.signal,
         })
 
-        if (!res.ok) setSession({ user: null, expires: new Date() })
+        if (!res.ok) setSession(nullSessionResult)
         else setSession((await res.json()) as SessionResult)
       })
     },
@@ -75,6 +83,8 @@ function SessionProvider({
         : [{ redirectUrl?: string }?]
     ): Promise<void> => {
       if (provider === 'credentials') {
+        const abortController = new AbortController()
+
         const res = await fetch('/api/auth/sign-in', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -83,10 +93,11 @@ function SessionProvider({
 
         if (!res.ok) {
           const text = await res.text()
+          abortController.abort()
           throw new Error(text)
         } else {
           const json = (await res.json()) as { token: string; expires: string }
-          fetchSession(json.token)
+          fetchSession(json.token, abortController)
         }
       } else {
         const redirectUrl = (args[0] as { redirectUrl?: string }).redirectUrl
@@ -100,13 +111,19 @@ function SessionProvider({
 
   const signOut = React.useCallback(async (opts?: { redirectUrl: string }) => {
     await fetch('/api/auth/sign-out', { method: 'POST' })
-    setSession({ user: null, expires: new Date() })
+    setSession(nullSessionResult)
     if (opts?.redirectUrl) window.location.href = opts.redirectUrl
   }, [])
 
   React.useEffect(() => {
     if (hasInitialSession) return
-    fetchSession()
+
+    const abortController = new AbortController()
+    fetchSession(undefined, abortController)
+
+    return () => {
+      abortController.abort()
+    }
   }, [hasInitialSession, fetchSession])
 
   const value = React.useMemo(

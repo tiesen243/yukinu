@@ -17,7 +17,7 @@ const createTRPCContext = async (opts: { headers: Headers }) => {
     '>>> tRPC Request from',
     opts.headers.get('x-trpc-source') ?? 'unknown',
     'by',
-    session?.user?.name ?? 'anonymous',
+    session?.user?.username ?? 'anonymous',
   )
 
   return {
@@ -58,6 +58,11 @@ const protectedProcedure = t.procedure
       },
     })
   })
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== 'admin')
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
+  return next()
+})
 
 export {
   createCallerFactory,
@@ -65,4 +70,5 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  adminProcedure,
 }

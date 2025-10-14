@@ -44,20 +44,48 @@
     }
   },
   "globalEnv": [
-    "AUTH_DISCORD_ID",
-    "AUTH_DISCORD_SECRET",
-    "DATABASE_URL",
-    "NEXT_PUBLIC_API_URL",
+    "POSTGRES_HOST",
+    "POSTGRES_PORT",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+    "POSTGRES_DATABASE",
+
+    "AUTH_FACEBOOK_ID",
+    "AUTH_FACEBOOK_SECRET",
+    "AUTH_GOOGLE_ID",
+    "AUTH_GOOGLE_SECRET",
+
+    "RESEND_TOKEN",
+    "UPLOADTHING_TOKEN",
+
+    "NEXT_PUBLIC_WEB_URL",
+    "NEXT_PUBLIC_DASHBOARD_URL",
     "PORT"
   ],
   "globalPassThroughEnv": [
     "CI",
     "NODE_ENV",
     "SKIP_ENV_VALIDATION",
+
     "VERCEL",
     "VERCEL_ENV",
     "VERCEL_URL",
     "VERCEL_PROJECT_PRODUCTION_URL",
+
+    "POSTGRES_URL",
+    "POSTGRES_PRISMA_URL",
+    "DATABASE_URL_UNPOOLED",
+    "POSTGRES_URL_NON_POOLING",
+    "PGHOST",
+    "DATABASE_URL",
+    "POSTGRES_DATABASE",
+    "PGPASSWORD",
+    "PGDATABASE",
+    "PGHOST_UNPOOLED",
+    "PGUSER",
+    "POSTGRES_URL_NO_SSL",
+    "NEON_PROJECT_ID",
+
     "npm_lifecycle_event"
   ]
 }
