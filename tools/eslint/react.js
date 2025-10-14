@@ -13,7 +13,6 @@ export default defineConfig({
   },
   rules: {
     ...reactPlugin.configs['recommended-type-checked'].rules,
-    // @ts-ignore
     ...hooksPlugin.configs.recommended.rules,
     ...a11yPlugin.flatConfigs.strict.rules,
 
