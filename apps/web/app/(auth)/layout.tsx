@@ -11,24 +11,25 @@ export default async function AuthLayout({ children }: LayoutProps<'/'>) {
 
   return (
     <main className='grid min-h-dvh place-items-center px-4'>
-      <form className='w-full max-w-xl rounded-xl border border-transparent bg-background p-6 text-card-foreground sm:border-border sm:bg-card sm:shadow-sm'>
-        <FieldSet>
-          {children}
+      <div className='w-full max-w-xl rounded-xl border border-transparent bg-background p-6 text-card-foreground sm:border-border sm:bg-card sm:shadow-sm'>
+        {children}
 
-          <FieldSeparator className='[&_[data-slot=field-separator-content]]:bg-card'>
-            or
-          </FieldSeparator>
-
-          <Field className='grid gap-4 sm:grid-cols-2'>
-            <Button variant='outline' formAction='/api/auth/facebook'>
-              Continue with Facebook
-            </Button>
-            <Button variant='outline' formAction='/api/auth/google'>
-              Continue with Google
-            </Button>
-          </Field>
-        </FieldSet>
-      </form>
+        <form className='mt-6'>
+          <FieldSet>
+            <FieldSeparator className='[&_[data-slot=field-separator-content]]:bg-card'>
+              or
+            </FieldSeparator>
+            <Field className='grid gap-4 sm:grid-cols-2'>
+              <Button variant='outline' formAction='/api/auth/facebook'>
+                Continue with Facebook
+              </Button>
+              <Button variant='outline' formAction='/api/auth/google'>
+                Continue with Google
+              </Button>
+            </Field>
+          </FieldSet>
+        </form>
+      </div>
     </main>
   )
 }

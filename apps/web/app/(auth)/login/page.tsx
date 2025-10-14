@@ -1,4 +1,4 @@
-import { FieldDescription, FieldLegend } from '@yukinu/ui/field'
+import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { LoginForm } from '@/app/(auth)/login/page.client'
 import { createMetadata } from '@/lib/metadata'
@@ -11,12 +11,14 @@ export const metadata = createMetadata({
 
 export default function LoginPage() {
   return (
-    <>
-      <FieldLegend>Login to your account</FieldLegend>
-      <FieldDescription>
-        Fill in your credentials to access your account.
-      </FieldDescription>
-      <LoginForm />
-    </>
+    <form>
+      <FieldSet>
+        <FieldLegend>Login to your account</FieldLegend>
+        <FieldDescription>
+          Fill in your credentials to access your account.
+        </FieldDescription>
+        <LoginForm />
+      </FieldSet>
+    </form>
   )
 }
