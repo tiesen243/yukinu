@@ -1,36 +1,35 @@
+import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
+
+import { auth } from '@yukinu/auth'
 import { Button } from '@yukinu/ui/button'
-import { Card, CardContent, CardFooter } from '@yukinu/ui/card'
-import { FieldSeparator } from '@yukinu/ui/field'
+import { Field, FieldSeparator, FieldSet } from '@yukinu/ui/field'
 
-export default function AuthLayout({ children }: LayoutProps<'/'>) {
+export default async function AuthLayout({ children }: LayoutProps<'/'>) {
+  const session = await auth({ headers: await headers() })
+  if (session.user) redirect('/')
+
   return (
-    <main className='flex min-h-dvh flex-col items-center justify-center'>
-      <Card className='w-full max-w-xl border-transparent bg-transparent sm:border-border sm:bg-card'>
-        <CardContent>{children}</CardContent>
+    <main className='grid min-h-dvh place-items-center px-4'>
+      <div className='w-full max-w-xl rounded-xl border border-transparent bg-background p-6 text-card-foreground sm:border-border sm:bg-card sm:shadow-sm'>
+        {children}
 
-        <FieldSeparator className='mx-6 [&_[data-slot=field-separator-content]]:sm:bg-card'>
-          or
-        </FieldSeparator>
-
-        <CardFooter className='grid grid-cols-1 gap-6 sm:grid-cols-2' asChild>
-          <form>
-            <Button
-              type='submit'
-              variant='outline'
-              formAction='/api/auth/google'
-            >
-              Continue with Google
-            </Button>
-            <Button
-              type='submit'
-              variant='outline'
-              formAction='/api/auth/facebook'
-            >
-              Continue with Facebook
-            </Button>
-          </form>
-        </CardFooter>
-      </Card>
+        <form className='mt-6'>
+          <FieldSet>
+            <FieldSeparator className='[&_[data-slot=field-separator-content]]:bg-card'>
+              or
+            </FieldSeparator>
+            <Field className='grid gap-4 sm:grid-cols-2'>
+              <Button variant='outline' formAction='/api/auth/facebook'>
+                Continue with Facebook
+              </Button>
+              <Button variant='outline' formAction='/api/auth/google'>
+                Continue with Google
+              </Button>
+            </Field>
+          </FieldSet>
+        </form>
+      </div>
     </main>
   )
 }

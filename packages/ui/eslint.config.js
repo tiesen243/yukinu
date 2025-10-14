@@ -1,11 +1,12 @@
+import { defineConfig } from 'eslint/config'
+
 import baseConfig from '@yukinu/eslint-config/base'
 import reactConfig from '@yukinu/eslint-config/react'
 
-/** @type {import('typescript-eslint').Config} */
-export default [
+export default defineConfig(
   {
     ignores: ['dist/**'],
   },
   ...baseConfig,
   ...reactConfig,
-]
+)

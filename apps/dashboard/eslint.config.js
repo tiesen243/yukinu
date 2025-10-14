@@ -1,12 +1,13 @@
+import { defineConfig } from 'eslint/config'
+
 import baseConfig, { restrictEnvAccess } from '@yukinu/eslint-config/base'
 import reactConfig from '@yukinu/eslint-config/react'
 
-/** @type {import('typescript-eslint').Config} */
-export default [
+export default defineConfig(
   {
     ignores: ['.react-router/**', 'build/**'],
   },
   ...baseConfig,
   ...reactConfig,
   ...restrictEnvAccess,
-]
+)

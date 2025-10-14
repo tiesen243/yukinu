@@ -16,9 +16,6 @@ import type { Route } from './+types/root'
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
 
-export const meta: Route.MetaFunction = () =>
-  createMetadata({ title: 'Dashboard' })
-
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang='en' suppressHydrationWarning>
@@ -86,3 +83,6 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
 ]
+
+export const meta: Route.MetaFunction = () =>
+  createMetadata({ title: 'Dashboard' })

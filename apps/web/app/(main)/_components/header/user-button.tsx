@@ -23,20 +23,22 @@ import {
   LaptopIcon,
   LogOutIcon,
   MoonIcon,
+  ShoppingBagIcon,
+  ShoppingCartIcon,
   SunIcon,
   SunMoonIcon,
-  User2Icon,
+  UserIcon,
 } from '@yukinu/ui/icons'
 
 export const UserButton: React.FC = () => {
   const { session, status, signOut } = useSession()
 
   if (status === 'loading')
-    return <div className='size-8 animate-pulse rounded-full bg-current' />
+    return <div className='size-9 animate-pulse rounded-full bg-muted' />
 
   if (status === 'unauthenticated')
     return (
-      <Button variant='outline' size='sm' asChild>
+      <Button variant='ghost' asChild>
         <Link href='/login'>Sign In</Link>
       </Button>
     )
@@ -45,40 +47,38 @@ export const UserButton: React.FC = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        className='rounded-full outline-none focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:ring-offset-1 focus-visible:ring-offset-background'
-        asChild
-      >
-        <Avatar className='size-8 cursor-pointer'>
+      <DropdownMenuTrigger>
+        <Avatar className='size-9 ring-1 ring-transparent ring-offset-1 ring-offset-transparent hover:ring-ring'>
           <AvatarImage src={user.avatarUrl ?? ''} alt={user.username} />
-          <AvatarFallback>
-            {user.username.charAt(0).toUpperCase()}
-          </AvatarFallback>
+          <AvatarFallback>{user.username[0]?.toUpperCase()}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align='end'>
-        <DropdownMenuLabel className='flex flex-col gap-0.5'>
-          <p className='text-sm font-medium'>{user.username}</p>
-          <p className='text-xs text-muted-foreground'>{user.email}</p>
+        <DropdownMenuLabel className='flex flex-col gap-1'>
+          <span>{user.username}</span>
+          <span className='text-muted-foreground'>{user.email}</span>
         </DropdownMenuLabel>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href='/#'>
-              <User2Icon /> Profile
-            </Link>
+          <DropdownMenuItem>
+            <UserIcon /> Profile
           </DropdownMenuItem>
-
-          <ThemeSwitcher />
+          <DropdownMenuItem>
+            <ShoppingCartIcon /> Cart
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <ShoppingBagIcon /> Orders
+          </DropdownMenuItem>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/' })}>
+          <ThemeChanger />
+          <DropdownMenuItem onClick={() => signOut()}>
             <LogOutIcon /> Sign Out
           </DropdownMenuItem>
         </DropdownMenuGroup>
@@ -87,7 +87,7 @@ export const UserButton: React.FC = () => {
   )
 }
 
-const ThemeSwitcher: React.FC = () => {
+const ThemeChanger: React.FC = () => {
   const { theme, setTheme } = useTheme()
 
   return (
@@ -98,26 +98,29 @@ const ThemeSwitcher: React.FC = () => {
       <DropdownMenuPortal>
         <DropdownMenuSubContent>
           <DropdownMenuItem
-            className={theme === 'light' ? '' : 'text-muted-foreground'}
             onClick={() => {
               setTheme('light')
             }}
+            aria-checked={theme === 'light'}
+            role='menuitemradio'
           >
             <SunIcon /> Light
           </DropdownMenuItem>
           <DropdownMenuItem
-            className={theme === 'dark' ? '' : 'text-muted-foreground'}
             onClick={() => {
               setTheme('dark')
             }}
+            aria-checked={theme === 'dark'}
+            role='menuitemradio'
           >
             <MoonIcon /> Dark
           </DropdownMenuItem>
           <DropdownMenuItem
-            className={theme === 'system' ? '' : 'text-muted-foreground'}
             onClick={() => {
               setTheme('system')
             }}
+            aria-checked={theme === 'system'}
+            role='menuitemradio'
           >
             <LaptopIcon /> System
           </DropdownMenuItem>

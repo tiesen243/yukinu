@@ -8,21 +8,17 @@ export const env = createEnv({
     ),
 
     // Database configuration
+    POSTGRES_HOST: z.string(),
+    POSTGRES_PORT: z._default(z.coerce.number(), 5432),
     POSTGRES_USER: z.string(),
     POSTGRES_PASSWORD: z.string(),
     POSTGRES_DATABASE: z.string(),
-    POSTGRES_HOST: z._default(z.string(), 'localhost'),
-    POSTGRES_PORT: z._default(z.coerce.number(), 5432),
 
     // OAuth configuration
     AUTH_FACEBOOK_ID: z.string(),
     AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
-
-    // Third-party service API tokens
-    RESEND_TOKEN: z.string(),
-    UPLOADTHING_TOKEN: z.string(),
 
     // Vercel environment variables
     VERCEL: z.optional(z.string()),
@@ -31,6 +27,7 @@ export const env = createEnv({
     VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
   },
 
+  clientPrefix: 'NEXT_PUBLIC_',
   client: {},
 
   runtimeEnv: process.env,
@@ -42,7 +39,7 @@ export const env = createEnv({
 })
 
 function createEnv<
-  TPrefix extends 'NEXT_PUBLIC_',
+  TPrefix extends string,
   TServer extends Record<string, z.ZodMiniType>,
   TClient extends Record<string, z.ZodMiniType>,
   TResult extends {
@@ -56,6 +53,7 @@ function createEnv<
         ? `${TKey} should not prefix with ${TPrefix}`
         : TServer[TKey]
     }
+    clientPrefix: TPrefix
     client: {
       [TKey in keyof TClient]: TKey extends `${TPrefix}${string}`
         ? TClient[TKey]
@@ -73,9 +71,13 @@ function createEnv<
     if (value === '') delete opts.runtimeEnv[key]
   }
 
+  const globalThisForWindow = globalThis as unknown as {
+    window: Record<string, unknown> | undefined
+  }
+  const isServer = typeof globalThisForWindow.window === 'undefined'
+
   const _server = typeof opts.server === 'object' ? opts.server : {}
   const _client = typeof opts.client === 'object' ? opts.client : {}
-  const isServer = typeof window === 'undefined'
   const envs = isServer ? { ..._server, ..._client } : { ..._client }
 
   const parsedEnvs = z.object(envs).safeParse(opts.runtimeEnv)

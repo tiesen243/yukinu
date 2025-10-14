@@ -4,7 +4,6 @@ import type { VariantProps } from 'class-variance-authority'
 import { useMemo } from 'react'
 import { cva } from 'class-variance-authority'
 
-import type { StandardSchemaV1 } from '@yukinu/ui/form'
 import { cn } from '@yukinu/ui'
 import { Label } from '@yukinu/ui/label'
 import { Separator } from '@yukinu/ui/separator'
@@ -189,12 +188,20 @@ function FieldError({
   errors,
   ...props
 }: React.ComponentProps<'div'> & {
-  errors?: (StandardSchemaV1.Issue | undefined)[]
+  errors?: ({ message?: string } | undefined)[]
 }) {
   const content = useMemo(() => {
-    if (children) return children
-    if (!errors) return null
-    if (errors.length === 1 && errors[0]?.message) return errors[0].message
+    if (children) {
+      return children
+    }
+
+    if (!errors?.length) {
+      return null
+    }
+
+    if (errors.length == 1) {
+      return errors[0]?.message
+    }
 
     return (
       <ul className='ml-4 flex list-disc flex-col gap-1'>

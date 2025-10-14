@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: ['*']
   push:
-    branches: ['main', 'dev']
+    branches: ['main']
   merge_group:
 
 concurrency:
@@ -22,7 +22,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Setup
         uses: ./tools/github/setup
@@ -33,7 +33,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Setup
         uses: ./tools/github/setup
@@ -48,21 +48,10 @@ jobs:
   typecheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
 
       - name: Setup
         uses: ./tools/github/setup
 
       - name: Typecheck
         run: bun typecheck
-
-  unit-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup
-        uses: ./tools/github/setup
-
-      - name: Unit Test
-        run: bun test

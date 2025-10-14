@@ -4,8 +4,6 @@ import SuperJSON from 'superjson'
 import { auth, validateSessionToken } from '@yukinu/auth'
 import { db } from '@yukinu/db'
 
-import { UserService } from './services/user'
-
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get('Authorization') ?? null
   if (authToken) return validateSessionToken(authToken)
@@ -41,6 +39,8 @@ const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
 
+const createTRPCMiddleware = t.middleware
+
 const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now()
   const result = await next()
@@ -49,20 +49,9 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const registerServiceMiddleware = t.middleware(async ({ ctx, next }) => {
-  return next({
-    ctx: {
-      userService: new UserService(ctx.db),
-    },
-  })
-})
-
-const publicProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(registerServiceMiddleware)
+const publicProcedure = t.procedure.use(timingMiddleware)
 const protectedProcedure = t.procedure
   .use(timingMiddleware)
-  .use(registerServiceMiddleware)
   .use(({ ctx, next }) => {
     if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
     return next({
@@ -71,26 +60,17 @@ const protectedProcedure = t.procedure
       },
     })
   })
-const adminProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(registerServiceMiddleware)
-  .use(({ ctx, next }) => {
-    if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
-
-    if (ctx.session.user.role !== 'admin')
-      throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
-
-    return next({
-      ctx: {
-        session: { ...ctx.session, user: ctx.session.user },
-      },
-    })
-  })
+const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== 'admin')
+    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
+  return next()
+})
 
 export {
   createCallerFactory,
   createTRPCContext,
   createTRPCRouter,
+  createTRPCMiddleware,
   publicProcedure,
   protectedProcedure,
   adminProcedure,

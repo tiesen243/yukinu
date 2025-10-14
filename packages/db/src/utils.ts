@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from 'crypto'
+import { createHash, randomBytes } from 'node:crypto'
 import { timestamp } from 'drizzle-orm/pg-core'
 
 const alphabet = 'abcdefghijklmnopqrstuvwxyz'

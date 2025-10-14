@@ -34,33 +34,30 @@
       "persistent": true
     },
     "format": {
-      "dependsOn": ["^format"],
-      "outputs": [".cache/prettiercache"],
       "outputLogs": "new-only"
     },
     "lint": {
-      "dependsOn": ["^lint"],
-      "outputs": [".cache/eslintcache"],
       "outputLogs": "new-only"
     },
     "typecheck": {
-      "dependsOn": ["^typecheck"],
-      "outputs": [".cache/tsbuildinfo.json"],
       "outputLogs": "new-only"
     }
   },
   "globalEnv": [
-    "POSTGRES_USER",
-    "POSTGRES_PASSWORD",
-    "POSTGRES_DB",
     "POSTGRES_HOST",
     "POSTGRES_PORT",
+    "POSTGRES_USER",
+    "POSTGRES_PASSWORD",
+    "POSTGRES_DATABASE",
+
     "AUTH_FACEBOOK_ID",
     "AUTH_FACEBOOK_SECRET",
     "AUTH_GOOGLE_ID",
     "AUTH_GOOGLE_SECRET",
+
     "RESEND_TOKEN",
     "UPLOADTHING_TOKEN",
+
     "NEXT_PUBLIC_WEB_URL",
     "NEXT_PUBLIC_DASHBOARD_URL",
     "PORT"
@@ -69,6 +66,7 @@
     "CI",
     "NODE_ENV",
     "SKIP_ENV_VALIDATION",
+
     "VERCEL",
     "VERCEL_ENV",
     "VERCEL_URL",

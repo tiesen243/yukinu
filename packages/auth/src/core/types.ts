@@ -39,19 +39,14 @@ export interface Session {}
 
 export interface SessionResult {
   user: User | null
-  expires: Date
-  ipAddress: string | null
   userAgent: string | null
+  ipAddress: string | null
+  expires: Date
 }
 
 export interface DatabaseAdapter {
-  getUserByEmailOrUsername(identifier: string): Promise<User | null>
-  createUser(data: {
-    email: string
-    name: string
-    password: string | null
-    image: string
-  }): Promise<User | null>
+  getUserByIndentifier(indentifier: string): Promise<User | null>
+  createUser(data: Omit<OauthAccount, 'accountId'>): Promise<User['id'] | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>
   createAccount(data: Account): Promise<void>

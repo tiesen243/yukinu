@@ -1,4 +1,10 @@
-import type { Account, AuthOptions, OauthAccount, Session } from './types'
+import type {
+  Account,
+  AuthOptions,
+  OauthAccount,
+  Session,
+  SessionResult,
+} from './types'
 import Cookies from './cookies'
 import {
   encodeHex,
@@ -20,21 +26,23 @@ export function Auth(opts: AuthOptions) {
 
   async function createSession(
     userId: string,
-    ipAddress: string | null,
-    userAgent: string | null,
+    headers: Headers = new Headers(),
   ): Promise<Omit<Session, 'createdAt'>> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
-    const sessionData = { expires, userId, ipAddress, userAgent }
+    const userAgent = headers.get('user-agent') ?? ''
+    const ipAddress = headers.get('x-forwarded-for') ?? ''
 
+    const sessionData = { token, userAgent, ipAddress, userId, expires }
     await adapter.createSession({
-      token: encodeHex(hashToken),
       ...sessionData,
+      token: encodeHex(hashToken),
+      userId,
     })
 
-    return { token, ...sessionData }
+    return sessionData
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -42,27 +50,23 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
-    const ipAddress = opts.headers.get('x-forwarded-for') ?? null
-    const userAgent = opts.headers.get('user-agent') ?? null
+    const nullSession: SessionResult = {
+      user: null,
+      userAgent: null,
+      ipAddress: null,
+      expires: new Date(),
+    }
 
     try {
       const result = await adapter.getSessionAndUser(hashToken)
-      if (!result) return { user: null, expires: new Date() }
-
-      if (
-        (ipAddress && result.ipAddress && ipAddress !== result.ipAddress) ||
-        (userAgent && result.userAgent && userAgent !== result.userAgent)
-      ) {
-        await adapter.deleteSession(hashToken)
-        return { user: null, expires: new Date() }
-      }
+      if (!result) return nullSession
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()
 
       if (now > expiresTime) {
         await adapter.deleteSession(hashToken)
-        return { user: null, expires: new Date() }
+        return nullSession
       }
 
       if (now >= expiresTime - session.expiresThreshold * 1000) {
@@ -73,17 +77,20 @@ export function Auth(opts: AuthOptions) {
 
       return result
     } catch {
-      return { user: null, expires: new Date() }
+      return nullSession
     }
   }
 
   async function signIn(
-    opts: { identifier: string; password: string },
-    headers: Headers,
+    opts: {
+      indentifier: string
+      password: string
+    },
+    headers: Headers = new Headers(),
   ): Promise<Omit<Session, 'createdAt'>> {
-    const { identifier, password } = opts
+    const { indentifier, password } = opts
 
-    const user = await adapter.getUserByEmailOrUsername(identifier)
+    const user = await adapter.getUserByIndentifier(indentifier)
     if (!user) throw new Error('Invalid credentials')
 
     const account = await adapter.getAccount('credentials', user.id)
@@ -92,9 +99,7 @@ export function Auth(opts: AuthOptions) {
     const isValid = await new Password().verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
-    const ipAddress = headers.get('x-forwarded-for') ?? null
-    const userAgent = headers.get('user-agent') ?? null
-    return createSession(user.id, ipAddress, userAgent)
+    return createSession(user.id, headers)
   }
 
   async function signOut(opts: { headers: Headers }): Promise<void> {
@@ -107,21 +112,24 @@ export function Auth(opts: AuthOptions) {
 
   async function getOrCreateUser(
     opts: Omit<OauthAccount & Account, 'userId'>,
-    ipAddress: string | null,
-    userAgent: string | null,
+    headers: Headers,
   ): Promise<Omit<Session, 'createdAt'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount)
-      return createSession(existingAccount.userId, ipAddress, userAgent)
+    if (existingAccount) return createSession(existingAccount.userId, headers)
 
-    const existingUser = await adapter.getUserByEmailOrUsername(userData.email)
+    const existingUser = await adapter.getUserByIndentifier(userData.email)
     const userId =
-      existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
+      existingUser?.id ?? (await adapter.createUser(userData)) ?? ''
     if (!userId) throw new Error('Failed to create user')
 
-    await adapter.createAccount({ provider, accountId, userId, password: null })
-    return createSession(userId, ipAddress, userAgent)
+    await adapter.createAccount({
+      provider,
+      accountId,
+      userId,
+      password: null,
+    })
+    return createSession(userId, headers)
   }
 
   return {
@@ -191,12 +199,9 @@ export function Auth(opts: AuthOptions) {
               throw new Error('Invalid state or code')
 
             const userData = await instance.fetchUserData(code, codeVerifier)
-            const ipAddress = request.headers.get('x-forwarded-for') ?? null
-            const userAgent = request.headers.get('user-agent') ?? null
             const session = await getOrCreateUser(
               { ...userData, provider, password: null },
-              ipAddress,
-              userAgent,
+              request.headers,
             )
 
             const Location = new URL(redirectTo, request.url).toString()
@@ -229,10 +234,7 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-in: Sign in with email and password
            */
           if (pathname === '/api/auth/sign-in') {
-            const body = (await request.json()) as Parameters<typeof signIn>[0]
-            if (!body.identifier || !body.password)
-              throw new Error('Invalid credentials')
-
+            const body = (await request.json()) as never
             const result = await signIn(body, request.headers)
 
             const response = Response.json(result)

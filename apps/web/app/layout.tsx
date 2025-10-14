@@ -19,8 +19,6 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 })
 
-export const metadata = createMetadata()
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -38,9 +36,11 @@ export default function RootLayout({
             <SessionProvider>{children}</SessionProvider>
           </TRPCReactProvider>
 
-          <Toaster />
+          <Toaster richColors />
         </ThemeProvider>
       </body>
     </html>
   )
 }
+
+export const metadata = createMetadata()
