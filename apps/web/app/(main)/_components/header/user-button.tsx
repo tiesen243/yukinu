@@ -33,7 +33,7 @@ import {
 export const UserButton: React.FC = () => {
   const { session, status, signOut } = useSession()
 
-  if (status === 'loading' || !session.user)
+  if (status === 'loading')
     return <div className='size-9 animate-pulse rounded-full bg-muted' />
 
   if (status === 'unauthenticated')
