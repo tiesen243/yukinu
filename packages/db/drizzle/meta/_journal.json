@@ -15,6 +15,13 @@
       "when": 1760439851024,
       "tag": "0001_safe_the_professor",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1760440664272,
+      "tag": "0002_chubby_black_bird",
+      "breakpoints": true
     }
   ]
 }

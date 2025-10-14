@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { index, pgEnum, pgTable } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
 import { payments } from './payment'
@@ -42,6 +42,7 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
 export const orderItems = pgTable(
   'order_items',
   (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
     orderId: t
       .varchar({ length: 24 })
       .notNull()
@@ -57,8 +58,9 @@ export const orderItems = pgTable(
     price: t.numeric({ precision: 10, scale: 2 }).notNull(),
   }),
   (t) => [
-    primaryKey({ columns: [t.orderId, t.productId, t.variantId] }),
     index('order_items_order_id_idx').on(t.orderId),
+    index('order_items_product_id_idx').on(t.productId),
+    index('order_items_variant_id_idx').on(t.variantId),
   ],
 )
 
