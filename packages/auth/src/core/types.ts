@@ -40,24 +40,19 @@ export interface Session {}
 export interface SessionResult {
   user: User | null
   expires: Date
-  ipAddress: string | null
-  userAgent: string | null
 }
 
 export interface DatabaseAdapter {
-  getUserByEmailOrUsername(identifier: string): Promise<User | null>
-  createUser(data: {
-    email: string
-    name: string
-    password: string | null
-    image: string
-  }): Promise<User | null>
+  getUserByEmail(email: string): Promise<User | null>
+  createUser(
+    data: Omit<User, 'id' | 'createdAt' | 'updatedAt'>,
+  ): Promise<User | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>
   createAccount(data: Account): Promise<void>
 
   getSessionAndUser(token: string): Promise<SessionResult | null>
-  createSession(data: Omit<Session, 'createdAt'>): Promise<void>
+  createSession(data: Session): Promise<void>
   updateSession(token: string, data: Partial<Session>): Promise<void>
   deleteSession(token: string): Promise<void>
 }

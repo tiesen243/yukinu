@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/validators",
-  "version": "0.0.3",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -28,5 +28,10 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "catalog:",
+    "@types/node": "catalog:",
+    "prettier-plugin-tailwindcss": "catalog:"
   }
 }

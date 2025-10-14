@@ -1,15 +1,10 @@
+import { defineConfig } from 'eslint/config'
+
 import baseConfig from '@yukinu/eslint-config/base'
 
-/** @type {import('typescript-eslint').Config} */
-export default [
+export default defineConfig(
   {
     ignores: ['dist/**'],
   },
   ...baseConfig,
-  {
-    files: ['src/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-namespace': 'off',
-    },
-  },
-]
+)

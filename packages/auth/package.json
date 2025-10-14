@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/auth",
-  "version": "0.0.7",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -44,6 +44,10 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "catalog:api"
+    "@ianvs/prettier-plugin-sort-imports": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:react",
+    "prettier-plugin-tailwindcss": "catalog:",
+    "react": "catalog:react"
   }
 }

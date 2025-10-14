@@ -18,23 +18,18 @@ export function Auth(opts: AuthOptions) {
 
   const { adapter, cookieKeys, cookieOptions, providers, session } = options
 
-  async function createSession(
-    userId: string,
-    ipAddress: string | null,
-    userAgent: string | null,
-  ): Promise<Omit<Session, 'createdAt'>> {
+  async function createSession(userId: string): Promise<Session> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
-    const sessionData = { expires, userId, ipAddress, userAgent }
-
     await adapter.createSession({
       token: encodeHex(hashToken),
-      ...sessionData,
+      expires,
+      userId,
     })
 
-    return { token, ...sessionData }
+    return { token, userId, expires }
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -42,20 +37,10 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
-    const ipAddress = opts.headers.get('x-forwarded-for') ?? null
-    const userAgent = opts.headers.get('user-agent') ?? null
 
     try {
       const result = await adapter.getSessionAndUser(hashToken)
       if (!result) return { user: null, expires: new Date() }
-
-      if (
-        (ipAddress && result.ipAddress && ipAddress !== result.ipAddress) ||
-        (userAgent && result.userAgent && userAgent !== result.userAgent)
-      ) {
-        await adapter.deleteSession(hashToken)
-        return { user: null, expires: new Date() }
-      }
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()
@@ -77,24 +62,22 @@ export function Auth(opts: AuthOptions) {
     }
   }
 
-  async function signIn(
-    opts: { identifier: string; password: string },
-    headers: Headers,
-  ): Promise<Omit<Session, 'createdAt'>> {
-    const { identifier, password } = opts
+  async function signIn(opts: {
+    email: string
+    password: string
+  }): Promise<Session> {
+    const { email, password } = opts
 
-    const user = await adapter.getUserByEmailOrUsername(identifier)
+    const user = await adapter.getUserByEmail(email)
     if (!user) throw new Error('Invalid credentials')
 
     const account = await adapter.getAccount('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
 
-    const isValid = await new Password().verify(account.password, password)
+    const isValid = await Password.verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
-    const ipAddress = headers.get('x-forwarded-for') ?? null
-    const userAgent = headers.get('user-agent') ?? null
-    return createSession(user.id, ipAddress, userAgent)
+    return createSession(user.id)
   }
 
   async function signOut(opts: { headers: Headers }): Promise<void> {
@@ -107,21 +90,23 @@ export function Auth(opts: AuthOptions) {
 
   async function getOrCreateUser(
     opts: Omit<OauthAccount & Account, 'userId'>,
-    ipAddress: string | null,
-    userAgent: string | null,
-  ): Promise<Omit<Session, 'createdAt'>> {
+  ): Promise<Session> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount)
-      return createSession(existingAccount.userId, ipAddress, userAgent)
+    if (existingAccount) return createSession(existingAccount.userId)
 
-    const existingUser = await adapter.getUserByEmailOrUsername(userData.email)
+    const existingUser = await adapter.getUserByEmail(userData.email)
     const userId =
       existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
     if (!userId) throw new Error('Failed to create user')
 
-    await adapter.createAccount({ provider, accountId, userId, password: null })
-    return createSession(userId, ipAddress, userAgent)
+    await adapter.createAccount({
+      provider,
+      accountId,
+      userId,
+      password: null,
+    })
+    return createSession(userId)
   }
 
   return {
@@ -191,13 +176,11 @@ export function Auth(opts: AuthOptions) {
               throw new Error('Invalid state or code')
 
             const userData = await instance.fetchUserData(code, codeVerifier)
-            const ipAddress = request.headers.get('x-forwarded-for') ?? null
-            const userAgent = request.headers.get('user-agent') ?? null
-            const session = await getOrCreateUser(
-              { ...userData, provider, password: null },
-              ipAddress,
-              userAgent,
-            )
+            const session = await getOrCreateUser({
+              ...userData,
+              provider,
+              password: null,
+            })
 
             const Location = new URL(redirectTo, request.url).toString()
             const response = new Response(null, {
@@ -229,11 +212,8 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-in: Sign in with email and password
            */
           if (pathname === '/api/auth/sign-in') {
-            const body = (await request.json()) as Parameters<typeof signIn>[0]
-            if (!body.identifier || !body.password)
-              throw new Error('Invalid credentials')
-
-            const result = await signIn(body, request.headers)
+            const body = (await request.json()) as never
+            const result = await signIn(body)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {

@@ -5,14 +5,14 @@ import { env } from '@yukinu/validators/env'
 export default defineConfig({
   dialect: 'postgresql',
   dbCredentials: {
+    host: env.POSTGRES_HOST,
+    port: env.POSTGRES_PORT,
     user: env.POSTGRES_USER,
     password: env.POSTGRES_PASSWORD,
     database: env.POSTGRES_DATABASE,
-    host: env.POSTGRES_HOST,
-    port: env.POSTGRES_PORT,
     ssl: env.NODE_ENV === 'production' ? 'require' : false,
   },
-  schema: './src/schemas',
+  schema: './src/schema',
   casing: 'snake_case',
   strict: true,
 })

@@ -1,11 +1,9 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
-import { lazy } from '@trpc/server'
 
 import { createTRPCRouter, publicProcedure } from '../trpc'
 
 const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => ({ message: 'OK' })),
-  user: lazy(() => import('./user')),
 })
 
 type AppRouter = typeof appRouter

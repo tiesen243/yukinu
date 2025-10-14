@@ -1,3 +1,6 @@
 {
-  "extends": "@yukinu/tsconfig/base.json"
+  "extends": "@yukinu/tsconfig/base.json",
+  "compilerOptions": {
+    "types": []
+  }
 }

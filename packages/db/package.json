@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/db",
-  "version": "0.0.6",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -8,23 +8,22 @@
       "types": "./dist/index.d.ts",
       "default": "./src/index.ts"
     },
-    "./schemas/*": {
-      "types": "./dist/schemas/*.d.ts",
-      "default": "./src/schemas/*.ts"
+    "./schema/*": {
+      "types": "./dist/schema/*.d.ts",
+      "default": "./src/schema/*.ts"
     }
   },
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "db:generate": "bun run with-env drizzle-kit generate",
-    "db:migrate": "bun run with-env drizzle-kit migrate",
-    "db:push": "bun run with-env drizzle-kit push",
-    "db:studio": "bun run with-env drizzle-kit studio",
+    "db:generate": "bun run --env-file ../../.env drizzle-kit generate",
+    "db:migrate": "bun run --env-file ../../.env drizzle-kit migrate",
+    "db:push": "bun run --env-file ../../.env drizzle-kit push",
+    "db:studio": "bun run --env-file ../../.env drizzle-kit studio",
     "dev": "tsc --watch",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "typecheck": "tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
@@ -36,10 +35,14 @@
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
-    "dotenv-cli": "catalog:",
     "drizzle-kit": "^0.31.5",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "catalog:",
+    "@types/node": "catalog:",
+    "prettier-plugin-tailwindcss": "catalog:"
   }
 }

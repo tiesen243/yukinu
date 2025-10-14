@@ -1,9 +1,10 @@
+import { defineConfig } from 'eslint/config'
+
 import baseConfig, { restrictEnvAccess } from '@yukinu/eslint-config/base'
 import nextConfig from '@yukinu/eslint-config/next'
 import reactConfig from '@yukinu/eslint-config/react'
 
-/** @type {import('typescript-eslint').Config} */
-export default [
+export default defineConfig(
   {
     ignores: ['.next/**', 'next-env.d.ts'],
   },
@@ -11,4 +12,4 @@ export default [
   ...reactConfig,
   ...nextConfig,
   ...restrictEnvAccess,
-]
+)

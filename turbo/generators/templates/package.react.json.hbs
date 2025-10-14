@@ -1,5 +1,5 @@
 {
-  "name": "@yukinu/api",
+  "name": "@yukinu/{{ packageName }}",
   "version": "0.0.1",
   "private": true,
   "license": "MIT",
@@ -19,13 +19,7 @@
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
-  "dependencies": {
-    "@trpc/server": "catalog:trpc",
-    "@yukinu/auth": "workspace:*",
-    "@yukinu/db": "workspace:*",
-    "@yukinu/validators": "workspace:*",
-    "superjson": "catalog:trpc"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
@@ -35,8 +29,7 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
-    "@types/node": "catalog:",
-    "prettier-plugin-tailwindcss": "catalog:"
+    "@types/react": "catalog:react",
+    "react": "catalog:react"
   }
 }
