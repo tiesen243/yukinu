@@ -1,5 +1,5 @@
-import { relations } from 'drizzle-orm'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { relations, sql } from 'drizzle-orm'
+import { check, index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
 import { orderItems } from './order'
@@ -32,12 +32,10 @@ export const products = pgTable(
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
     vendorId: t
       .varchar({ length: 24 })
-      .notNull()
-      .references(() => vendors.id, { onDelete: 'cascade' }),
+      .references(() => vendors.id, { onDelete: 'set null' }),
     categoryId: t
       .varchar({ length: 24 })
-      .notNull()
-      .references(() => categories.id, { onDelete: 'cascade' }),
+      .references(() => categories.id, { onDelete: 'set null' }),
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
     price: t.numeric({ precision: 10, scale: 2 }).notNull(),
@@ -139,6 +137,10 @@ export const productReviews = pgTable(
     primaryKey({ columns: [t.productId, t.userId] }),
     index('product_reviews_product_id_idx').on(t.productId),
     index('product_reviews_user_id_idx').on(t.userId),
+    check(
+      'product_reviews_rating_check',
+      sql`${t.rating} >= 1 AND ${t.rating} <= 5`,
+    ),
   ],
 )
 

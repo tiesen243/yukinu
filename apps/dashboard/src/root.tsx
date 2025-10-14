@@ -85,4 +85,4 @@ export const links: Route.LinksFunction = () => [
 ]
 
 export const meta: Route.MetaFunction = () =>
-  createMetadata({ title: 'React Router' })
+  createMetadata({ title: 'Dashboard' })
