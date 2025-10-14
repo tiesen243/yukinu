@@ -7,11 +7,12 @@ export interface Metadata extends NextMetadata {
 }
 
 export function createMetadata(override: Metadata = {}): Metadata {
-  const siteName = 'yukinu'
+  const siteName = 'Yukinu'
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
-  const description = 'Generate by Create Yuki Stack'
+  const description =
+    ' Yukinu is an e-commerce platform built as a monorepo with Turborepo. It includes both a customer-facing storefront and an admin dashboard, sharing code for UI, API, and database.'
   const url = override.openGraph?.url
     ? `${baseUrl}${override.openGraph.url}`
     : baseUrl

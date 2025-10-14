@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 
 import { SessionProvider } from '@yukinu/auth/react'
 import { cn, ThemeProvider } from '@yukinu/ui'
+import { Toaster } from '@yukinu/ui/sonner'
 
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
@@ -34,10 +35,12 @@ export default function RootLayout({
           <TRPCReactProvider>
             <SessionProvider>{children}</SessionProvider>
           </TRPCReactProvider>
+
+          <Toaster richColors />
         </ThemeProvider>
       </body>
     </html>
   )
 }
 
-export const metadata = createMetadata({ title: 'Next.js' })
+export const metadata = createMetadata()

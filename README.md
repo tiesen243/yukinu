@@ -1,122 +1,98 @@
-# yukinu
+# Yukinu
 
-A modern full-stack application built with TypeScript and Turbo.
+<p align="center">
+  <a href="https://github.com/tiesen243/yukinu/actions/workflows/release.yml">
+    <img src="https://github.com/tiesen243/yukinu/actions/workflows/release.yml/badge.svg" alt="Release">
+  </a>
+  <a href="https://github.com/tiesen243/yukinu/releases">
+    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/web/package.json&label=version@web" alt="Version Web">
+  </a>
+  <a href="https://github.com/tiesen243/yukinu/releases">
+    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Web">
+  </a>
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/tiesen243/yukinu" alt="License">
+  </a>
+  <a href="https://github.com/tiesen243/yukinu/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/tiesen243/yukinu" alt="Contributors">
+  </a>
+</p>
+
+**Yukinu** is an e-commerce platform built as a **monorepo** with [Turborepo](https://turbo.build/repo). It includes both a **customer-facing storefront** and an **admin dashboard**, sharing code for UI, API, and database.
 
 ## Tech Stack
 
-### Frontend
-
-- **Next.js** - React framework for production
-- **React Router** - Declarative routing for React
-
-- **tRPC** - End-to-end typesafe APIs
-
-### Database
-
-- **Drizzle ORM** - TypeScript ORM with SQL-like syntax
-
-### Authentication
-
-- **Basic Auth** - Simple authentication implementation
-
-### Build Tools
-
-- **Turbo** - High-performance build system for JavaScript and TypeScript
-- **TypeScript** - JavaScript with syntax for types
-- **ESLint** - Linting utility for JavaScript and TypeScript
-- **Prettier** - Opinionated code formatter
-- **Bun** - Package manager
+- **Runtime & Package Manager**: [Bun](https://bun.sh/)
+- **Monorepo Management**: [Turborepo](https://turbo.build/repo)
+- **Frontend**: [Next.js](https://nextjs.org/), [React Router](https://reactrouter.com/), [React](https://reactjs.org/), [Tailwind CSS](https://tailwindcss.com/)
+- **Backend**: [tRPC](https://trpc.io/), [Drizzle ORM](https://orm.drizzle.team/), [PostgreSQL](https://www.postgresql.org/)
+- **UI Components**: [Radix UI](https://www.radix-ui.com/), [Shadcn UI](https://ui.shadcn.com/)
 
 ## Getting Started
 
-1. Clone the repository
+### Prerequisites
 
-```bash
-git clone git@github.com:your-username/yukinu.git
-cd yukinu
-```
+- [Node.js](https://nodejs.org/) (version 20 or higher)
+- [Bun](https://bun.sh/) (version 1.2.20 or higher)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-2. Install dependencies:
+### Installation
 
-```bash
-bun install
-```
+1. Clone the repository:
 
-3. Set up your environment variables:
+   ```bash
+   git clone https://github.com/tiesen243/yukinu.git
+   cd yukinu
+   ```
 
-```bash
-cp .env.example .env
-```
+2. Install dependencies using Bun:
 
-4. Set up the database:
+   ```bash
+   bun install
+   ```
 
-```bash
-bun run db:push
-```
+3. Set up environment variables:
 
-5. Start the development server:
+   You need to create a `.env` file in the root of the project. You can copy the `.env.example` file and rename it to `.env`.
 
-```bash
-bun run dev
-```
+   ```bash
+   cp .env.example .env
+   ```
 
-## Project Structure
+4. Start the database using Docker Compose:
 
-```text
-yukinu/
-├── apps/                    # Applications
-│   ├── nextjs/              # Nextjs app
-│   └── react-router/        # React-router app
-├── packages/                # Shared packages
-│   ├── api/                 # tRPC API package
-│   ├── db/                  # Database package
-│   ├── ui/                  # Shared shadcn/ui components
-│   └── validators/          # Shared validation schemas
-├── tools/                   # Build tools and configurations
-│   ├── eslint/              # ESLint configuration
-│   ├── github/              # GitHub Actions workflows for CI/CD
-│   ├── prettier/            # Prettier configuration
-│   └── typescript/          # TypeScript configuration
-├── turbo.json               # Turbo configuration
-└── package.json             # Root package.json
-```
+   ```bash
+   docker-compose up db -d
+   ```
 
-## Database
+5. Run database migrations:
 
-This project uses Drizzle ORM for database operations.
+   ```bash
+   bun run db:migrate
+   ```
 
-### Database Commands
+6. Start the development server:
 
-```bash
-# Push schema changes to database
-cd packages/db
-bun run db:push
+   ```bash
+   bun run dev
 
-# Open Drizzle Studio
-cd packages/db
-bun run db:studio
-```
+   # or
+   bun run dev -F @yukinu/web...
+   bun run dev -F @yukinu/dashboard...
+   ```
 
-## Authentication
+7. Open your browser and navigate to:
+   - Web: `http://localhost:3000`
+   - Dashboard: `http://localhost:3001`
 
-Basic authentication implementation for simple use cases.
+## Available Commands
 
-## Additional Features
+- `bun run dev` – Run all apps in dev mode
+- `bun run build` – Build all apps and packages
+- `bun run lint` – Run linting across the repo
+- `bun run format` – Format code using Prettier
 
-- **GitHub Actions** - CI/CD pipeline with type checking, linting, and formatting
+## License
 
-## Scripts
-
-```bash
-# Development
-bun run dev          # Start development server
-bun run build        # Build for production
-
-# Code Quality
-bun run lint         # Run ESLint
-bun run typecheck    # Run TypeScript checks
-
-# Database
-bun run db:push       # Push schema changes
-bun run db:studio     # Open database studio
-```
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

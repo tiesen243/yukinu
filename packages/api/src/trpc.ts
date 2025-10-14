@@ -39,6 +39,8 @@ const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
 
+const createTRPCMiddleware = t.middleware
+
 const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now()
   const result = await next()
@@ -68,6 +70,7 @@ export {
   createCallerFactory,
   createTRPCContext,
   createTRPCRouter,
+  createTRPCMiddleware,
   publicProcedure,
   protectedProcedure,
   adminProcedure,

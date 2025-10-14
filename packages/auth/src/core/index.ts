@@ -1,4 +1,10 @@
-import type { Account, AuthOptions, OauthAccount, Session } from './types'
+import type {
+  Account,
+  AuthOptions,
+  OauthAccount,
+  Session,
+  SessionResult,
+} from './types'
 import Cookies from './cookies'
 import {
   encodeHex,
@@ -44,17 +50,23 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
+    const nullSession: SessionResult = {
+      user: null,
+      userAgent: null,
+      ipAddress: null,
+      expires: new Date(),
+    }
 
     try {
       const result = await adapter.getSessionAndUser(hashToken)
-      if (!result) return { user: null, expires: new Date() }
+      if (!result) return nullSession
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()
 
       if (now > expiresTime) {
         await adapter.deleteSession(hashToken)
-        return { user: null, expires: new Date() }
+        return nullSession
       }
 
       if (now >= expiresTime - session.expiresThreshold * 1000) {
@@ -65,7 +77,7 @@ export function Auth(opts: AuthOptions) {
 
       return result
     } catch {
-      return { user: null, expires: new Date() }
+      return nullSession
     }
   }
 
@@ -84,7 +96,7 @@ export function Auth(opts: AuthOptions) {
     const account = await adapter.getAccount('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
 
-    const isValid = await Password.verify(account.password, password)
+    const isValid = await new Password().verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
     return createSession(user.id, headers)

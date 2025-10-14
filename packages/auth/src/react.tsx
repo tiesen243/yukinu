@@ -13,7 +13,7 @@ type SessionContextValue = {
   signIn: <TProvider extends AuthProviders>(
     provider: TProvider,
     ...args: TProvider extends 'credentials'
-      ? [{ email: string; password: string }]
+      ? [{ indentifier: string; password: string }]
       : [{ redirectUrl?: string }?]
   ) => Promise<void>
   signOut: (opts?: { redirectUrl: string }) => Promise<void>
@@ -23,7 +23,7 @@ type SessionContextValue = {
   | { status: 'authenticated'; session: SessionResult & { user: User } }
 )
 
-const nullSessionResult: SessionResult = {
+const nullSession: SessionResult = {
   user: null,
   userAgent: null,
   ipAddress: null,
@@ -48,7 +48,7 @@ function SessionProvider({
   const [isLoading, startTransition] = React.useTransition()
   const [session, setSession] = React.useState<SessionResult>(() => {
     if (hasInitialSession) return _session
-    return nullSessionResult
+    return nullSession
   })
 
   const status = React.useMemo(() => {
@@ -68,7 +68,7 @@ function SessionProvider({
           signal: abortController?.signal,
         })
 
-        if (!res.ok) setSession(nullSessionResult)
+        if (!res.ok) setSession(nullSession)
         else setSession((await res.json()) as SessionResult)
       })
     },
@@ -79,7 +79,7 @@ function SessionProvider({
     async <TProvider extends AuthProviders>(
       provider: TProvider,
       ...args: TProvider extends 'credentials'
-        ? [{ email: string; password: string }]
+        ? [{ indentifier: string; password: string }]
         : [{ redirectUrl?: string }?]
     ): Promise<void> => {
       if (provider === 'credentials') {
@@ -111,7 +111,7 @@ function SessionProvider({
 
   const signOut = React.useCallback(async (opts?: { redirectUrl: string }) => {
     await fetch('/api/auth/sign-out', { method: 'POST' })
-    setSession(nullSessionResult)
+    setSession(nullSession)
     if (opts?.redirectUrl) window.location.href = opts.redirectUrl
   }, [])
 
