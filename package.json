@@ -22,8 +22,8 @@
     "lint": "turbo run lint --continue -- --cache --cache-location .cache/eslintcache",
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/eslintcache",
     "lint:ws": "bunx sherif@latest",
-    "typecheck": "turbo run typecheck",
-    "prepare": "husky"
+    "prepare": "husky",
+    "typecheck": "turbo run typecheck"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [
@@ -48,6 +48,10 @@
     "lint-staged": "^16.2.4",
     "prettier": "catalog:",
     "turbo": "^2.5.8"
+  },
+  "peerDependencies": {
+    "@ianvs/prettier-plugin-sort-imports": "catalog:",
+    "prettier-plugin-tailwindcss": "catalog:"
   },
   "packageManager": "bun@1.3.0",
   "catalog": {

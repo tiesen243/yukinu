@@ -16,6 +16,10 @@
         "prettier": "catalog:",
         "turbo": "^2.5.8",
       },
+      "peerDependencies": {
+        "@ianvs/prettier-plugin-sort-imports": "catalog:",
+        "prettier-plugin-tailwindcss": "catalog:",
+      },
     },
     "apps/dashboard": {
       "name": "@yukinu/dashboard",

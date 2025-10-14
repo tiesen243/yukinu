@@ -2,6 +2,10 @@ import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
+import { orders } from './order'
+import { productReviews } from './product'
+import { addresses, profiles, wishlistItems } from './profile'
+import { vendorMembers } from './vendor'
 
 export const userRoleEnum = pgEnum('user_role', ['admin', 'user'])
 export const userStatusEnum = pgEnum('user_status', [
@@ -14,7 +18,6 @@ export const users = pgTable(
   'users',
   (t) => ({
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-
     username: t.varchar({ length: 255 }).unique().notNull(),
     email: t.varchar({ length: 255 }).unique().notNull(),
     emailVerified: t.timestamp({ mode: 'date', withTimezone: true }),
@@ -31,9 +34,18 @@ export const users = pgTable(
   ],
 )
 
-export const usersRelations = relations(users, ({ many }) => ({
+export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
+
+  profile: one(profiles, { fields: [users.id], references: [profiles.id] }),
+  addresses: many(addresses),
+
+  wishlistItems: many(wishlistItems),
+  reviews: many(productReviews),
+  orders: many(orders),
+
+  vendorMembers: many(vendorMembers),
 }))
 
 export const accounts = pgTable(
@@ -45,7 +57,6 @@ export const accounts = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-
     password: t.varchar({ length: 255 }),
   }),
   (t) => [
@@ -66,7 +77,7 @@ export const sessions = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    userAgent: t.text(),
+    userAgent: t.varchar({ length: 512 }),
     ipAddress: t.varchar({ length: 45 }),
     expires: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
     createdAt,
