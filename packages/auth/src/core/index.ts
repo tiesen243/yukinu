@@ -18,18 +18,25 @@ export function Auth(opts: AuthOptions) {
 
   const { adapter, cookieKeys, cookieOptions, providers, session } = options
 
-  async function createSession(userId: string): Promise<Session> {
+  async function createSession(
+    userId: string,
+    headers: Headers = new Headers(),
+  ): Promise<Omit<Session, 'createdAt'>> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
 
+    const userAgent = headers.get('user-agent') ?? ''
+    const ipAddress = headers.get('x-forwarded-for') ?? ''
+
+    const sessionData = { token, userAgent, ipAddress, userId, expires }
     await adapter.createSession({
+      ...sessionData,
       token: encodeHex(hashToken),
-      expires,
       userId,
     })
 
-    return { token, userId, expires }
+    return sessionData
   }
 
   async function auth(opts: { headers: Headers }) {
@@ -62,13 +69,16 @@ export function Auth(opts: AuthOptions) {
     }
   }
 
-  async function signIn(opts: {
-    email: string
-    password: string
-  }): Promise<Session> {
-    const { email, password } = opts
+  async function signIn(
+    opts: {
+      indentifier: string
+      password: string
+    },
+    headers: Headers = new Headers(),
+  ): Promise<Omit<Session, 'createdAt'>> {
+    const { indentifier, password } = opts
 
-    const user = await adapter.getUserByEmail(email)
+    const user = await adapter.getUserByIndentifier(indentifier)
     if (!user) throw new Error('Invalid credentials')
 
     const account = await adapter.getAccount('credentials', user.id)
@@ -77,7 +87,7 @@ export function Auth(opts: AuthOptions) {
     const isValid = await Password.verify(account.password, password)
     if (!isValid) throw new Error('Invalid credentials')
 
-    return createSession(user.id)
+    return createSession(user.id, headers)
   }
 
   async function signOut(opts: { headers: Headers }): Promise<void> {
@@ -90,14 +100,15 @@ export function Auth(opts: AuthOptions) {
 
   async function getOrCreateUser(
     opts: Omit<OauthAccount & Account, 'userId'>,
-  ): Promise<Session> {
+    headers: Headers,
+  ): Promise<Omit<Session, 'createdAt'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount) return createSession(existingAccount.userId)
+    if (existingAccount) return createSession(existingAccount.userId, headers)
 
-    const existingUser = await adapter.getUserByEmail(userData.email)
+    const existingUser = await adapter.getUserByIndentifier(userData.email)
     const userId =
-      existingUser?.id ?? (await adapter.createUser(userData))?.id ?? ''
+      existingUser?.id ?? (await adapter.createUser(userData)) ?? ''
     if (!userId) throw new Error('Failed to create user')
 
     await adapter.createAccount({
@@ -106,7 +117,7 @@ export function Auth(opts: AuthOptions) {
       userId,
       password: null,
     })
-    return createSession(userId)
+    return createSession(userId, headers)
   }
 
   return {
@@ -176,11 +187,10 @@ export function Auth(opts: AuthOptions) {
               throw new Error('Invalid state or code')
 
             const userData = await instance.fetchUserData(code, codeVerifier)
-            const session = await getOrCreateUser({
-              ...userData,
-              provider,
-              password: null,
-            })
+            const session = await getOrCreateUser(
+              { ...userData, provider, password: null },
+              request.headers,
+            )
 
             const Location = new URL(redirectTo, request.url).toString()
             const response = new Response(null, {
@@ -213,7 +223,7 @@ export function Auth(opts: AuthOptions) {
            */
           if (pathname === '/api/auth/sign-in') {
             const body = (await request.json()) as never
-            const result = await signIn(body)
+            const result = await signIn(body, request.headers)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {
