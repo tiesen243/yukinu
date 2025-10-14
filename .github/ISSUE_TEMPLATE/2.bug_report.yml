@@ -1,0 +1,32 @@
+name: Report an issue
+description: Report a Yukinu issue.
+title: '[bug]: '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thanks for taking the time to create a bug report! Please search open/closed issues before submitting, as the issue may have already been reported or addressed.
+
+  - type: textarea
+    attributes:
+      label: To Reproduce
+      description: A step-by-step description of how to reproduce the issue, based on the linked reproduction. Screenshots can be provided in the issue body below. If using code blocks, make sure that [syntax highlighting is correct](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-and-highlighting-code-blocks#syntax-highlighting) and double check that the rendered preview is not broken.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Current vs. Expected behavior
+      description: |
+        A clear and concise description of what the bug is (e.g., screenshots, logs, etc.), and what you expected to happen.
+
+        **Skipping this/failure to provide complete information of the bug will result in the issue being closed.**
+      placeholder: 'Following the steps from the previous section, I expected A to happen, but I observed B instead.'
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: Additional context
+      description: |
+        Provide any extra information that might help us investigate this issue. This could include browser details, environment information, related issues, configuration files, or anything else you think is relevant.
+      placeholder: 'e.g., browser name and version, OS, steps tried, screenshots, or links to related issues/discussions'
