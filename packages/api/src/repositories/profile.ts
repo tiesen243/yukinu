@@ -1,15 +1,6 @@
-import type { Database, Transaction } from '@yukinu/db'
+import type { profiles } from '@yukinu/db/schema/profile'
 
-export interface IProfileRepository {
-  create(
-    data: IProfileRepository.CreateParams,
-    tx?: Database | Transaction,
-  ): Promise<boolean>
-}
+import type { IBaseRepository } from './base'
 
-export declare namespace IProfileRepository {
-  export interface CreateParams {
-    userId: string
-    fullName: string
-  }
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IProfileRepository extends IBaseRepository<typeof profiles> {}
