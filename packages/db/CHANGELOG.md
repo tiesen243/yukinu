@@ -1,5 +1,11 @@
 # @yukinu/db
 
+## 0.0.3
+
+### Patch Changes
+
+- [#71](https://github.com/tiesen243/yukinu/pull/71) [`eb70024`](https://github.com/tiesen243/yukinu/commit/eb700249c0d7b7c2e146f1b6c6d1fecae815d78c) Thanks [@tiesen243](https://github.com/tiesen243)! - using suggestion
+
 ## 0.0.2
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @yukinu/auth
 
+## 0.0.3
+
+### Patch Changes
+
+- [#71](https://github.com/tiesen243/yukinu/pull/71) [`286ffc5`](https://github.com/tiesen243/yukinu/commit/286ffc5c7736b61c44afed412facf8e29344ae13) Thanks [@tiesen243](https://github.com/tiesen243)! - decrease session token expires
+
+- Updated dependencies [[`eb70024`](https://github.com/tiesen243/yukinu/commit/eb700249c0d7b7c2e146f1b6c6d1fecae815d78c)]:
+  - @yukinu/db@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
