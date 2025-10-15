@@ -1,33 +1,17 @@
-import type { db } from '@yukinu/db'
-import { Password } from '@yukinu/auth'
+import type { Database, Transaction } from '@yukinu/db'
 import { accounts } from '@yukinu/db/schema/user'
 
-import { AbstractRepository } from './abstract.repository'
+import type { IAccountRepository } from './account'
 
-export class AccountRepository extends AbstractRepository {
-  private readonly password: Password
-
-  constructor(_db: typeof db) {
-    super(_db)
-    this.password = new Password()
-  }
+export class AccountRepository implements IAccountRepository {
+  constructor(private readonly _db: Database) {}
 
   async create(
-    userId: string,
-    provider: string,
-    accountId: string,
-    password?: string,
-  ) {
-    let hashedPassword: string | null = null
-    if (password) hashedPassword = await this.password.hash(password)
-
+    data: IAccountRepository.CreateParams,
+    tx: Database | Transaction = this._db,
+  ): Promise<boolean> {
     try {
-      await this._db.insert(accounts).values({
-        userId,
-        provider,
-        accountId,
-        password: hashedPassword,
-      })
+      await tx.insert(accounts).values(data)
       return true
     } catch {
       return false

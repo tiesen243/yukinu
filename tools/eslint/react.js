@@ -6,13 +6,12 @@ import { defineConfig } from 'eslint/config'
 
 export default defineConfig({
   files: ['**/*.ts', '**/*.tsx'],
+  extends: [reactPlugin.configs['recommended-type-checked']],
   plugins: {
-    ...reactPlugin.configs.all.plugins,
     'react-hooks': hooksPlugin,
     'jsx-a11y': a11yPlugin,
   },
   rules: {
-    ...reactPlugin.configs['recommended-type-checked'].rules,
     ...hooksPlugin.configs.recommended.rules,
     ...a11yPlugin.flatConfigs.strict.rules,
 

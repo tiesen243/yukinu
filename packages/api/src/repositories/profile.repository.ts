@@ -1,13 +1,19 @@
+import type { Database, Transaction } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 
-import { AbstractRepository } from './abstract.repository'
+import type { IProfileRepository } from './profile'
 
-export class ProfileRepository extends AbstractRepository {
-  async create(userId: string, name: string) {
+export class ProfileRepository implements IProfileRepository {
+  constructor(private readonly _db: Database) {}
+
+  async create(
+    data: IProfileRepository.CreateParams,
+    tx: Database | Transaction = this._db,
+  ): Promise<boolean> {
     try {
-      await this._db.insert(profiles).values({
-        id: userId,
-        fullName: name,
+      await tx.insert(profiles).values({
+        id: data.userId,
+        fullName: data.fullName,
       })
       return true
     } catch {

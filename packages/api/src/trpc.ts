@@ -1,30 +1,7 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import { auth, validateSessionToken } from '@yukinu/auth'
-import { db } from '@yukinu/db'
-
-const isomorphicGetSession = async (headers: Headers) => {
-  const authToken = headers.get('Authorization') ?? null
-  if (authToken) return validateSessionToken(authToken)
-  return auth({ headers } as Request)
-}
-
-const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await isomorphicGetSession(opts.headers)
-
-  console.log(
-    '>>> tRPC Request from',
-    opts.headers.get('x-trpc-source') ?? 'unknown',
-    'by',
-    session?.user?.username ?? 'anonymous',
-  )
-
-  return {
-    db,
-    session,
-  }
-}
+import type { createTRPCContext } from './context'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: SuperJSON,
@@ -38,8 +15,6 @@ const t = initTRPC.context<typeof createTRPCContext>().create({
 const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
-
-const createTRPCMiddleware = t.middleware
 
 const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now()
@@ -68,9 +43,7 @@ const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
 
 export {
   createCallerFactory,
-  createTRPCContext,
   createTRPCRouter,
-  createTRPCMiddleware,
   publicProcedure,
   protectedProcedure,
   adminProcedure,

@@ -53,6 +53,7 @@ export default defineConfig(
         'error',
         { checksVoidReturn: { attributes: false } },
       ],
+      '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/no-unnecessary-condition': [
         'error',
         { allowConstantLoopConditions: true },

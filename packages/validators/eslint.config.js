@@ -7,10 +7,4 @@ export default defineConfig(
     ignores: ['dist/**'],
   },
   ...baseConfig,
-  {
-    files: ['src/**/*.ts'],
-    rules: {
-      '@typescript-eslint/no-namespace': 'off',
-    },
-  },
 )
