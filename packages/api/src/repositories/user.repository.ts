@@ -3,10 +3,12 @@ import { eq, or } from '@yukinu/db'
 import { users } from '@yukinu/db/schema/user'
 
 import type { IUserRepository } from './user'
+import { BaseRepository } from './base.repository'
 
-export class UserRepository implements IUserRepository {
-  constructor(private readonly _db: Database) {}
-
+export class UserRepository
+  extends BaseRepository<typeof users>
+  implements IUserRepository
+{
   async findByIdentifier(
     data: IUserRepository.FindByIndentifierParams,
     tx: Database | Transaction = this._db,
@@ -26,23 +28,5 @@ export class UserRepository implements IUserRepository {
 
     if (!user) return null
     return user.id
-  }
-
-  async create(
-    data: IUserRepository.CreateParams,
-    tx: Database | Transaction = this._db,
-  ): Promise<string | null> {
-    const { username, email } = data
-
-    try {
-      const [newUser] = await tx
-        .insert(users)
-        .values({ username, email })
-        .returning({ id: users.id })
-      if (!newUser) return null
-      return newUser.id
-    } catch {
-      return null
-    }
   }
 }

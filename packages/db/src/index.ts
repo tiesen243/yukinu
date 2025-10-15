@@ -1,5 +1,9 @@
 import type { ExtractTablesWithRelations } from 'drizzle-orm'
-import type { PgTransaction } from 'drizzle-orm/pg-core'
+import type {
+  AnyPgColumn,
+  PgTableWithColumns,
+  PgTransaction,
+} from 'drizzle-orm/pg-core'
 import type {
   PostgresJsDatabase,
   PostgresJsQueryResultHKT,
@@ -8,8 +12,6 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
 import { env } from '@yukinu/validators/env'
-
-import * as schema from './schema'
 
 const createDrizzleClient = () => {
   const conn = postgres({
@@ -20,7 +22,7 @@ const createDrizzleClient = () => {
     database: env.POSTGRES_DATABASE,
     ssl: env.NODE_ENV === 'production' ? 'require' : false,
   })
-  return drizzle(conn, { schema, casing: 'snake_case' })
+  return drizzle(conn, { casing: 'snake_case' })
 }
 const globalForDrizzle = globalThis as unknown as {
   db: ReturnType<typeof createDrizzleClient> | undefined
@@ -28,12 +30,20 @@ const globalForDrizzle = globalThis as unknown as {
 export const db = globalForDrizzle.db ?? createDrizzleClient()
 if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
 
-export * from 'drizzle-orm'
+type Database = PostgresJsDatabase
 
-export type Database = PostgresJsDatabase<typeof schema>
+type Table = PgTableWithColumns<{
+  name: string
+  schema: undefined
+  dialect: 'pg'
+  columns: { id: AnyPgColumn<{ data: string }> }
+}>
 
-export type Transaction = PgTransaction<
+type Transaction = PgTransaction<
   PostgresJsQueryResultHKT,
-  typeof schema,
-  ExtractTablesWithRelations<typeof schema>
+  Record<string, never>,
+  ExtractTablesWithRelations<Record<string, never>>
 >
+
+export type { Database, Table, Transaction }
+export * from 'drizzle-orm'

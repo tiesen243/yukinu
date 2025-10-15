@@ -13,8 +13,8 @@ const adapter = getAdapter()
 export const authOptions = {
   adapter,
   session: {
-    expiresIn: 60 * 60 * 24 * 30, // 30 days
-    expiresThreshold: 60 * 60 * 24 * 7, // 7 days
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    expiresThreshold: 60 * 60 * 24 * 1, // 1 days
   },
   providers: {
     facebook: new Facebook({

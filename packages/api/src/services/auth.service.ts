@@ -20,7 +20,7 @@ export class AuthService {
     this._password = new Password()
   }
 
-  async register(data: AuthModel.RegisterBody) {
+  async register(data: AuthModel.RegisterBody): Promise<{ id: string }> {
     const { username, email } = data
 
     const userExists = await this._userRepo.findByIdentifier({
@@ -34,8 +34,8 @@ export class AuthService {
       })
 
     return this._db.transaction(async (tx) => {
-      const userId = await this._userRepo.create(data, tx)
-      if (!userId)
+      const user = await this._userRepo.create({ username, email }, tx)
+      if (!user)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create user',
@@ -44,7 +44,7 @@ export class AuthService {
       const password = await this._password.hash(data.password)
       const provider = 'credentials'
       const account = await this._accountRepo.create(
-        { userId, provider, accountId: userId, password },
+        { userId: user.id, provider, accountId: user.id, password },
         tx,
       )
       if (!account)
@@ -54,7 +54,7 @@ export class AuthService {
         })
 
       const profile = await this._profileRepo.create(
-        { userId: userId, fullName: username },
+        { id: user.id, fullName: username },
         tx,
       )
       if (!profile)
@@ -63,7 +63,7 @@ export class AuthService {
           message: 'Failed to create profile',
         })
 
-      return userId
+      return user
     })
   }
 }

@@ -1,5 +1,7 @@
 import { auth, validateSessionToken } from '@yukinu/auth'
 import { db } from '@yukinu/db'
+import { profiles } from '@yukinu/db/schema/profile'
+import { accounts, users } from '@yukinu/db/schema/user'
 
 import { AccountRepository } from './repositories/account.repository'
 import { ProfileRepository } from './repositories/profile.repository'
@@ -15,9 +17,9 @@ const isomorphicGetSession = async (headers: Headers) => {
 export const createTRPCContext = async (opts: { headers: Headers }) => {
   const session = await isomorphicGetSession(opts.headers)
 
-  const accountRepo = new AccountRepository(db)
-  const profileRepo = new ProfileRepository(db)
-  const userRepo = new UserRepository(db)
+  const accountRepo = new AccountRepository(db, accounts)
+  const profileRepo = new ProfileRepository(db, profiles)
+  const userRepo = new UserRepository(db, users)
 
   const authService = new AuthService(db, accountRepo, profileRepo, userRepo)
 

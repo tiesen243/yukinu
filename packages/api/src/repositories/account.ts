@@ -1,17 +1,9 @@
 import type { Database, Transaction } from '@yukinu/db'
+import type { accounts } from '@yukinu/db/schema/user'
 
 export interface IAccountRepository {
   create(
-    data: IAccountRepository.CreateParams,
+    data: typeof accounts.$inferInsert,
     tx?: Database | Transaction,
-  ): Promise<boolean>
-}
-
-export declare namespace IAccountRepository {
-  export interface CreateParams {
-    userId: string
-    provider: string
-    accountId: string
-    password: string
-  }
+  ): Promise<{ userId: string } | null>
 }
