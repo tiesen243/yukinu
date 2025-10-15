@@ -7,7 +7,7 @@ import type { IUserRepository } from './user'
 export class UserRepository implements IUserRepository {
   constructor(private readonly _db: Database) {}
 
-  async findByIndentifier(
+  async findByIdentifier(
     data: IUserRepository.FindByIndentifierParams,
     tx: Database | Transaction = this._db,
   ): Promise<string | null> {

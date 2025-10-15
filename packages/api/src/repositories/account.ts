@@ -12,6 +12,6 @@ export declare namespace IAccountRepository {
     userId: string
     provider: string
     accountId: string
-    password?: string
+    password: string
   }
 }

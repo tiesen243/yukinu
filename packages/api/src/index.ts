@@ -1,7 +1,8 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 
+import { createTRPCContext } from './context'
 import { appRouter } from './routers/_app'
-import { createCallerFactory, createTRPCContext } from './trpc'
+import { createCallerFactory } from './trpc'
 
 const handler = async (request: Request) => {
   let response: Response

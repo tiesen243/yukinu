@@ -23,7 +23,7 @@ export class AuthService {
   async register(data: AuthModel.RegisterBody) {
     const { username, email } = data
 
-    const userExists = await this._userRepo.findByIndentifier({
+    const userExists = await this._userRepo.findByIdentifier({
       username,
       email,
     })

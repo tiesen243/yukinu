@@ -1,14 +1,14 @@
 import type { Database, Transaction } from '@yukinu/db'
 
 export interface IUserRepository {
-  findByIndentifier(
+  findByIdentifier(
     data: IUserRepository.FindByIndentifierParams,
     tx?: Database | Transaction,
   ): Promise<string | null>
 
   create(
     data: IUserRepository.CreateParams,
-    tx: Database | Transaction,
+    tx?: Database | Transaction,
   ): Promise<string | null>
 }
 
