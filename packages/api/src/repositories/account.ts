@@ -4,6 +4,6 @@ import type { accounts } from '@yukinu/db/schema/user'
 export interface IAccountRepository {
   create(
     data: typeof accounts.$inferInsert,
-    tx: Database | Transaction,
+    tx?: Database | Transaction,
   ): Promise<{ userId: string } | null>
 }

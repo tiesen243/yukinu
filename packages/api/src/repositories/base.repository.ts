@@ -1,4 +1,4 @@
-import type { Database, Table } from '@yukinu/db'
+import type { Database, Table, Transaction } from '@yukinu/db'
 import { eq } from '@yukinu/db'
 
 import type { IBaseRepository } from './base'
@@ -11,7 +11,9 @@ export abstract class BaseRepository<TTable extends Table>
     protected readonly _table: TTable,
   ) {}
 
-  async findAll(tx = this._db): Promise<TTable['$inferSelect'][]> {
+  async findAll(
+    tx: Database | Transaction = this._db,
+  ): Promise<TTable['$inferSelect'][]> {
     // @ts-expect-error [drizzle-generic] - Drizzle cannot infer generic `TTable` in `.from()`; requires a concrete table type
     const records = await tx.select().from(this._table)
     return records
@@ -19,7 +21,7 @@ export abstract class BaseRepository<TTable extends Table>
 
   async findById(
     id: string,
-    tx = this._db,
+    tx: Database | Transaction = this._db,
   ): Promise<TTable['$inferSelect'] | null> {
     const [record] = await tx
       .select()
@@ -31,7 +33,7 @@ export abstract class BaseRepository<TTable extends Table>
 
   async create(
     data: TTable['$inferInsert'],
-    tx = this._db,
+    tx: Database | Transaction = this._db,
   ): Promise<{ id: string } | null> {
     try {
       // @ts-expect-error [drizzle-generic] - Insert type not inferable in generic context; safe to ignore
@@ -48,7 +50,7 @@ export abstract class BaseRepository<TTable extends Table>
   async update(
     id: string,
     data: Partial<TTable['$inferInsert']>,
-    tx = this._db,
+    tx: Database | Transaction = this._db,
   ): Promise<{ id: string } | null> {
     try {
       const [record] = await tx
@@ -64,7 +66,10 @@ export abstract class BaseRepository<TTable extends Table>
     }
   }
 
-  async delete(id: string, tx = this._db): Promise<{ id: string } | null> {
+  async delete(
+    id: string,
+    tx: Database | Transaction = this._db,
+  ): Promise<{ id: string } | null> {
     try {
       const [record] = await tx
         .delete(this._table)

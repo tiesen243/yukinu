@@ -34,7 +34,7 @@ export class AuthService {
       })
 
     return this._db.transaction(async (tx) => {
-      const user = await this._userRepo.create(data, tx)
+      const user = await this._userRepo.create({ username, email }, tx)
       if (!user)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',

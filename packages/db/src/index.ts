@@ -1,6 +1,6 @@
 import type { ExtractTablesWithRelations } from 'drizzle-orm'
 import type {
-  PgColumn,
+  AnyPgColumn,
   PgTableWithColumns,
   PgTransaction,
 } from 'drizzle-orm/pg-core'
@@ -13,8 +13,6 @@ import postgres from 'postgres'
 
 import { env } from '@yukinu/validators/env'
 
-import * as schema from './schema'
-
 const createDrizzleClient = () => {
   const conn = postgres({
     host: env.POSTGRES_HOST,
@@ -24,7 +22,7 @@ const createDrizzleClient = () => {
     database: env.POSTGRES_DATABASE,
     ssl: env.NODE_ENV === 'production' ? 'require' : false,
   })
-  return drizzle(conn, { schema, casing: 'snake_case' })
+  return drizzle(conn, { casing: 'snake_case' })
 }
 const globalForDrizzle = globalThis as unknown as {
   db: ReturnType<typeof createDrizzleClient> | undefined
@@ -32,34 +30,19 @@ const globalForDrizzle = globalThis as unknown as {
 export const db = globalForDrizzle.db ?? createDrizzleClient()
 if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
 
-type Database = PostgresJsDatabase<typeof schema>
+type Database = PostgresJsDatabase
 
 type Table = PgTableWithColumns<{
   name: string
   schema: undefined
   dialect: 'pg'
-  columns: {
-    id: PgColumn<{
-      name: 'id'
-      tableName: string
-      dataType: 'string'
-      columnType: 'PgVarchar'
-      data: string
-      driverParam: string
-      notNull: boolean
-      hasDefault: boolean
-      isPrimaryKey: boolean
-      isAutoincrement: boolean
-      hasRuntimeDefault: boolean
-      enumValues: [string, ...string[]]
-    }>
-  }
+  columns: { id: AnyPgColumn<{ data: string }> }
 }>
 
 type Transaction = PgTransaction<
   PostgresJsQueryResultHKT,
-  typeof schema,
-  ExtractTablesWithRelations<typeof schema>
+  Record<string, never>,
+  ExtractTablesWithRelations<Record<string, never>>
 >
 
 export type { Database, Table, Transaction }

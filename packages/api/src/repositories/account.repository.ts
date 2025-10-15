@@ -1,4 +1,4 @@
-import type { Database } from '@yukinu/db'
+import type { Database, Transaction } from '@yukinu/db'
 import type { accounts } from '@yukinu/db/schema/user'
 
 import type { IAccountRepository } from './account'
@@ -11,7 +11,7 @@ export class AccountRepository implements IAccountRepository {
 
   async create(
     data: typeof accounts.$inferInsert,
-    tx = this._db,
+    tx: Database | Transaction = this._db,
   ): Promise<{ userId: string } | null> {
     try {
       const [record] = await tx
