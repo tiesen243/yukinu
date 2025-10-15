@@ -11,13 +11,21 @@ export class UserRepository implements IUserRepository {
     data: IUserRepository.FindByIndentifierParams,
     tx: Database | Transaction = this._db,
   ): Promise<string | null> {
-    const { username = '', email = '' } = data
+    const { username, email } = data
+    if (!username && !email) return null
 
     const [user] = await tx
       .select({ id: users.id })
       .from(users)
-      .where(or(eq(users.username, username), eq(users.email, email)))
-    return user?.id ?? null
+      .where(
+        or(
+          username ? eq(users.username, username) : undefined,
+          email ? eq(users.email, email) : undefined,
+        ),
+      )
+
+    if (!user) return null
+    return user.id
   }
 
   async create(
