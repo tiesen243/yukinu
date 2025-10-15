@@ -4,6 +4,8 @@ import SuperJSON from 'superjson'
 import { auth, validateSessionToken } from '@yukinu/auth'
 import { db } from '@yukinu/db'
 
+import { assignServices } from './services'
+
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get('Authorization') ?? null
   if (authToken) return validateSessionToken(authToken)
@@ -49,9 +51,10 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const publicProcedure = t.procedure.use(timingMiddleware)
+const publicProcedure = t.procedure.use(timingMiddleware).use(assignServices)
 const protectedProcedure = t.procedure
   .use(timingMiddleware)
+  .use(assignServices)
   .use(({ ctx, next }) => {
     if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
     return next({

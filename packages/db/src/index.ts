@@ -1,6 +1,9 @@
 import type { ExtractTablesWithRelations } from 'drizzle-orm'
 import type { PgTransaction } from 'drizzle-orm/pg-core'
-import type { PostgresJsQueryResultHKT } from 'drizzle-orm/postgres-js'
+import type {
+  PostgresJsDatabase,
+  PostgresJsQueryResultHKT,
+} from 'drizzle-orm/postgres-js'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
@@ -27,7 +30,9 @@ if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
 
 export * from 'drizzle-orm'
 
-export type DrizlzeTransaction = PgTransaction<
+export type Database = PostgresJsDatabase<typeof schema>
+
+export type Transaction = PgTransaction<
   PostgresJsQueryResultHKT,
   typeof schema,
   ExtractTablesWithRelations<typeof schema>

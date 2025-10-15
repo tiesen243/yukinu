@@ -2,27 +2,31 @@ import { TRPCError } from '@trpc/server'
 
 import type { db } from '@yukinu/db'
 import type { AuthModel } from '@yukinu/validators/auth'
+import { Password } from '@yukinu/auth'
 
-import { AccountRepository } from '../repositories/account.repository'
-import { ProfileRepository } from '../repositories/profile.repository'
-import { UserRepository } from '../repositories/user.repository'
+import type { IAccountRepository } from '../repositories/account'
+import type { ProfileRepository } from '../repositories/profile.repository'
+import type { IUserRepository } from '../repositories/user'
 
 export class AuthService {
-  private readonly accountRepo: AccountRepository
-  private readonly userRepo: UserRepository
-  private readonly profileRepo: ProfileRepository
+  private readonly _password: Password
 
-  constructor(private readonly _db: typeof db) {
-    this.accountRepo = new AccountRepository(this._db)
-    this.userRepo = new UserRepository(this._db)
-    this.profileRepo = new ProfileRepository(this._db)
+  constructor(
+    private readonly _db: typeof db,
+    private readonly _accountRepo: IAccountRepository,
+    private readonly _profileRepo: ProfileRepository,
+    private readonly _userRepo: IUserRepository,
+  ) {
+    this._password = new Password()
   }
 
   async register(data: AuthModel.RegisterBody) {
-    const userExists = await this.userRepo.findByIndentifier(
-      data.username,
-      data.email,
-    )
+    const { username, email } = data
+
+    const userExists = await this._userRepo.findByIndentifier({
+      username,
+      email,
+    })
     if (userExists)
       throw new TRPCError({
         code: 'CONFLICT',
@@ -30,34 +34,36 @@ export class AuthService {
       })
 
     return this._db.transaction(async (tx) => {
-      const user = await this.userRepo
-        .setTransaction(tx)
-        .create(data.username, data.email)
-      if (!user)
+      const userId = await this._userRepo.create(data, tx)
+      if (!userId)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create user',
         })
 
-      const accountResult = await this.accountRepo
-        .setTransaction(tx)
-        .create(user.id, 'credentials', user.id, data.password)
-      if (!accountResult)
+      const password = await this._password.hash(data.password)
+      const provider = 'credentials'
+      const account = await this._accountRepo.create(
+        { userId, provider, accountId: userId, password },
+        tx,
+      )
+      if (!account)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create account',
         })
 
-      const profileResult = await this.profileRepo
-        .setTransaction(tx)
-        .create(user.id, user.username)
-      if (!profileResult)
+      const profile = await this._profileRepo.create(
+        { userId: userId, fullName: username },
+        tx,
+      )
+      if (!profile)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create profile',
         })
 
-      return user
+      return userId
     })
   }
 }
