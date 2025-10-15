@@ -34,7 +34,7 @@ export abstract class BaseRepository<TTable extends Table>
   async create(
     data: TTable['$inferInsert'],
     tx: Database | Transaction = this._db,
-  ): Promise<{ id: string } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
     try {
       // @ts-expect-error [drizzle-generic] - Insert type not inferable in generic context; safe to ignore
       const [record] = await tx.insert(this._table).values(data).returning({
@@ -51,7 +51,7 @@ export abstract class BaseRepository<TTable extends Table>
     id: string,
     data: Partial<TTable['$inferInsert']>,
     tx: Database | Transaction = this._db,
-  ): Promise<{ id: string } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
     try {
       const [record] = await tx
         .update(this._table)
@@ -69,7 +69,7 @@ export abstract class BaseRepository<TTable extends Table>
   async delete(
     id: string,
     tx: Database | Transaction = this._db,
-  ): Promise<{ id: string } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
     try {
       const [record] = await tx
         .delete(this._table)
