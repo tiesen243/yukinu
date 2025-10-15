@@ -36,3 +36,5 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     },
   }
 }
+
+export type { AuthService }

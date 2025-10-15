@@ -24,5 +24,6 @@ const handler = async (request: Request) => {
   return response
 }
 
+export type * from './context'
 export type { AppRouter, RouterInputs, RouterOutputs } from './routers/_app'
 export { appRouter, createCallerFactory, createTRPCContext, handler }
