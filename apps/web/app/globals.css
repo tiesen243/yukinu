@@ -1,5 +1,5 @@
 @import '@yukinu/ui/tailwind.css';
-@source "../../../packages/ui/src/**/*.tsx";
+@source '../../../packages/ui/src/**/*.tsx';
 
 @theme inline {
   --font-sans: var(--font-geist-sans), sans-serif;
