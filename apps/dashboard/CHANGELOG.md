@@ -1,5 +1,18 @@
 # @yukinu/dashboard
 
+## 0.0.2
+
+### Patch Changes
+
+- [#68](https://github.com/tiesen243/yukinu/pull/68) [`78d2537`](https://github.com/tiesen243/yukinu/commit/78d25377a035afb7206938654c89e30fe441ddce) Thanks [@tiesen243](https://github.com/tiesen243)! - add interface for repositories
+
+- Updated dependencies [[`9597edb`](https://github.com/tiesen243/yukinu/commit/9597edb18c4cb466ded894d82480841ee0402018), [`78d2537`](https://github.com/tiesen243/yukinu/commit/78d25377a035afb7206938654c89e30fe441ddce), [`e482f2f`](https://github.com/tiesen243/yukinu/commit/e482f2f57fc51021f05049078289ca86402263a9)]:
+  - @yukinu/api@0.0.2
+  - @yukinu/validators@0.0.2
+  - @yukinu/db@0.0.2
+  - @yukinu/ui@0.0.2
+  - @yukinu/auth@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes

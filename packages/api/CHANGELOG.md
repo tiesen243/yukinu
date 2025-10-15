@@ -1,5 +1,20 @@
 # @yukinu/api
 
+## 0.0.2
+
+### Patch Changes
+
+- [#68](https://github.com/tiesen243/yukinu/pull/68) [`9597edb`](https://github.com/tiesen243/yukinu/commit/9597edb18c4cb466ded894d82480841ee0402018) Thanks [@tiesen243](https://github.com/tiesen243)! - fix build error
+
+- [#68](https://github.com/tiesen243/yukinu/pull/68) [`78d2537`](https://github.com/tiesen243/yukinu/commit/78d25377a035afb7206938654c89e30fe441ddce) Thanks [@tiesen243](https://github.com/tiesen243)! - add interface for repositories
+
+- [#68](https://github.com/tiesen243/yukinu/pull/68) [`e482f2f`](https://github.com/tiesen243/yukinu/commit/e482f2f57fc51021f05049078289ca86402263a9) Thanks [@tiesen243](https://github.com/tiesen243)! - Validate that at least one identifier is provided
+
+- Updated dependencies [[`78d2537`](https://github.com/tiesen243/yukinu/commit/78d25377a035afb7206938654c89e30fe441ddce)]:
+  - @yukinu/validators@0.0.2
+  - @yukinu/db@0.0.2
+  - @yukinu/auth@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
