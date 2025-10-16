@@ -22,7 +22,7 @@
     },
     "apps/dashboard": {
       "name": "@yukinu/dashboard",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@react-router/fs-routes": "^7.9.4",
         "@react-router/node": "^7.9.4",
@@ -64,7 +64,7 @@
     },
     "apps/web": {
       "name": "@yukinu/web",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@tanstack/react-query": "catalog:",
         "@trpc/client": "catalog:trpc",
@@ -99,7 +99,7 @@
     },
     "packages/api": {
       "name": "@yukinu/api",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@trpc/server": "catalog:trpc",
         "@yukinu/auth": "workspace:*",
@@ -123,7 +123,7 @@
     },
     "packages/auth": {
       "name": "@yukinu/auth",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@yukinu/db": "workspace:*",
         "@yukinu/validators": "workspace:*",
@@ -138,6 +138,7 @@
       },
       "peerDependencies": {
         "@ianvs/prettier-plugin-sort-imports": "catalog:",
+        "@tanstack/react-query": "catalog:",
         "@types/node": "catalog:",
         "@types/react": "catalog:react",
         "prettier-plugin-tailwindcss": "catalog:",
@@ -146,7 +147,7 @@
     },
     "packages/db": {
       "name": "@yukinu/db",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@yukinu/validators": "workspace:*",
         "drizzle-orm": "^0.44.6",
@@ -178,7 +179,7 @@
         "@radix-ui/react-slot": "^1.2.3",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
-        "lucide-react": "^0.545.0",
+        "lucide-react": "^0.546.0",
         "next-themes": "^0.4.6",
         "sonner": "^2.0.7",
         "tailwind-merge": "^3.3.1",
@@ -1449,7 +1450,7 @@
 
     "lru-cache": ["lru-cache@5.1.1", "", { "dependencies": { "yallist": "^3.0.2" } }, "sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w=="],
 
-    "lucide-react": ["lucide-react@0.545.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-7r1/yUuflQDSt4f1bpn5ZAocyIxcTyVyBBChSVtBKn5M+392cPmI5YJMWOJKk/HUWGm5wg83chlAZtCcGbEZtw=="],
+    "lucide-react": ["lucide-react@0.546.0", "", { "peerDependencies": { "react": "^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-Z94u6fKT43lKeYHiVyvyR8fT7pwCzDu7RyMPpTvh054+xahSgj4HFQ+NmflvzdXsoAjYGdCguGaFKYuvq0ThCQ=="],
 
     "magic-string": ["magic-string@0.30.19", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.5" } }, "sha512-2N21sPY9Ws53PZvsEpVtNuSW+ScYbQdp4b9qUaL+9QkHUrGFKo56Lg9Emg5s9V/qrtNBmiR01sYhUOwu3H+VOw=="],
 

@@ -16,7 +16,6 @@ type ExtractValues<T extends StandardSchemaV1> = {
 interface RenderProps<
   TValue extends Record<string, unknown>,
   TFieldName extends keyof TValue,
-  TElement extends HTMLElement = HTMLInputElement,
 > {
   meta: {
     fieldId: string
@@ -29,8 +28,12 @@ interface RenderProps<
     id: string
     name: TFieldName
     value: TValue[TFieldName]
-    onChange: (event: React.ChangeEvent<TElement>) => void
-    onBlur: (event: React.FocusEvent<TElement>) => Promise<void>
+    onChange: (
+      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => void
+    onBlur: (
+      event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+    ) => Promise<void>
     'aria-describedby': string
     'aria-invalid': boolean
   }
@@ -150,14 +153,9 @@ const useForm = <
   )
 
   const Field = React.useCallback(
-    function FormField<
-      TFieldName extends keyof TValues,
-      TElement extends HTMLElement = HTMLInputElement,
-    >(props: {
+    function FormField<TFieldName extends keyof TValues>(props: {
       name: TFieldName
-      render: (
-        props: RenderProps<TValues, TFieldName, TElement>,
-      ) => React.ReactNode
+      render: (props: RenderProps<TValues, TFieldName>) => React.ReactNode
     }) {
       const [localValue, setLocalValue] = React.useState<TValues[TFieldName]>(
         valuesRef.current[props.name],
@@ -167,7 +165,9 @@ const useForm = <
       )
       const prevLocalValueRef = React.useRef(localValue)
 
-      const handleChange = (event: React.ChangeEvent<TElement>) => {
+      const handleChange = (
+        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      ) => {
         event.persist()
         setErrors([])
 
@@ -183,7 +183,9 @@ const useForm = <
         setValue(props.name, newValue as TValues[TFieldName])
       }
 
-      const handleBlur = async (event: React.FocusEvent<TElement>) => {
+      const handleBlur = async (
+        event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+      ) => {
         event.persist()
         if (prevLocalValueRef.current === localValue) return
         prevLocalValueRef.current = localValue

@@ -63,8 +63,14 @@ export function Auth(opts: AuthOptions) {
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()
+      const userAgent = opts.headers.get('user-agent') ?? ''
+      const ipAddress = opts.headers.get('x-forwarded-for') ?? ''
 
-      if (now > expiresTime) {
+      if (
+        now > expiresTime ||
+        result.userAgent !== userAgent ||
+        result.ipAddress !== ipAddress
+      ) {
         await adapter.deleteSession(hashToken)
         return nullSession
       }

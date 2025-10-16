@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 
-import type { db } from '@yukinu/db'
+import type { Database } from '@yukinu/db'
 import type { AuthModel } from '@yukinu/validators/auth'
 import { Password } from '@yukinu/auth'
 
@@ -12,7 +12,7 @@ export class AuthService {
   private readonly _password: Password
 
   constructor(
-    private readonly _db: typeof db,
+    private readonly _db: Database,
     private readonly _accountRepo: IAccountRepository,
     private readonly _profileRepo: ProfileRepository,
     private readonly _userRepo: IUserRepository,

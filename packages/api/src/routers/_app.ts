@@ -6,6 +6,7 @@ import { createTRPCRouter, publicProcedure } from '../trpc'
 const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => ({ message: 'OK' })),
   auth: lazy(() => import('./auth.router')),
+  user: lazy(() => import('./user.router')),
 })
 
 type AppRouter = typeof appRouter
