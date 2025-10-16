@@ -7,8 +7,8 @@ import { UserButton } from '@/app/(main)/_components/header/user-button'
 export const Header: React.FC = () => {
   return (
     <header className='sticky inset-0 z-50 border-b bg-background/60 backdrop-blur-xl backdrop-saturate-150'>
-      <div className='container flex h-14 items-center justify-between gap-4'>
-        <Link href='/' className='flex items-center gap-2'>
+      <div className='container flex h-14 items-center gap-4'>
+        <Link href='/' className='flex items-center gap-2 sm:basis-1/6'>
           <Image
             src='/assets/logo.svg'
             alt='Logo'
@@ -16,7 +16,7 @@ export const Header: React.FC = () => {
             height={28}
             className='dark:invert'
           />
-          <span className='sr-only text-lg font-bold sm:not-sr-only'>
+          <span className='sr-only text-2xl font-bold sm:not-sr-only'>
             Yukinu
           </span>
         </Link>

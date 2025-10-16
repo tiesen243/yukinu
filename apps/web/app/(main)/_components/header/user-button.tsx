@@ -23,12 +23,18 @@ import {
   LaptopIcon,
   LogOutIcon,
   MoonIcon,
-  ShoppingBagIcon,
+  ReceiptTextIcon,
   ShoppingCartIcon,
   SunIcon,
   SunMoonIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
+
+const navItems = [
+  { label: 'Profile', href: '/user/account/profile', icon: UserIcon },
+  { label: 'Cart', href: '/user/cart', icon: ShoppingCartIcon },
+  { label: 'Purchases', href: '/user/purchase', icon: ReceiptTextIcon },
+] as const
 
 export const UserButton: React.FC = () => {
   const { session, status, signOut } = useSession()
@@ -47,8 +53,8 @@ export const UserButton: React.FC = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Avatar className='size-9 ring-1 ring-transparent ring-offset-1 ring-offset-transparent hover:ring-ring'>
+      <DropdownMenuTrigger className='rounded-full focus-visible:ring-1 focus-visible:ring-primary focus-visible:outline-none'>
+        <Avatar className='size-9'>
           <AvatarImage src={user.avatarUrl ?? ''} alt={user.username} />
           <AvatarFallback>{user.username[0]?.toUpperCase()}</AvatarFallback>
         </Avatar>
@@ -63,15 +69,13 @@ export const UserButton: React.FC = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <UserIcon /> Profile
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <ShoppingCartIcon /> Cart
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <ShoppingBagIcon /> Orders
-          </DropdownMenuItem>
+          {navItems.map((item) => (
+            <DropdownMenuItem key={item.href} asChild>
+              <Link href={item.href}>
+                <item.icon /> {item.label}
+              </Link>
+            </DropdownMenuItem>
+          ))}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
