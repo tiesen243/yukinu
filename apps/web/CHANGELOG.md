@@ -1,5 +1,19 @@
 # @yukinu/web
 
+## 0.0.4
+
+### Patch Changes
+
+- [#73](https://github.com/tiesen243/yukinu/pull/73) [`a0fdd62`](https://github.com/tiesen243/yukinu/commit/a0fdd623e72ade945b3b9efb2e68f06f63a180e5) Thanks [@tiesen243](https://github.com/tiesen243)! - added profile page and change profile information form
+
+- [#73](https://github.com/tiesen243/yukinu/pull/73) [`3a892c5`](https://github.com/tiesen243/yukinu/commit/3a892c57022e7e805039c4f60cc3fdea0d069273) Thanks [@tiesen243](https://github.com/tiesen243)! - create user layout
+
+- [#73](https://github.com/tiesen243/yukinu/pull/73) [`3680ab1`](https://github.com/tiesen243/yukinu/commit/3680ab1d27b94b94e8acd8c29666d018ad296572) Thanks [@tiesen243](https://github.com/tiesen243)! - add skeleton loading
+
+- Updated dependencies [[`e3cde4d`](https://github.com/tiesen243/yukinu/commit/e3cde4d14e4293586fd0196faeda747196619b03), [`c599a28`](https://github.com/tiesen243/yukinu/commit/c599a28ecedcdc55b877f6082f27a3aaae3fc8f4)]:
+  - @yukinu/api@0.0.4
+  - @yukinu/auth@0.0.4
+
 ## 0.0.3
 
 ### Patch Changes

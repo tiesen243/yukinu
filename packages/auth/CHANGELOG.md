@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.0.4
+
+### Patch Changes
+
+- [#73](https://github.com/tiesen243/yukinu/pull/73) [`c599a28`](https://github.com/tiesen243/yukinu/commit/c599a28ecedcdc55b877f6082f27a3aaae3fc8f4) Thanks [@tiesen243](https://github.com/tiesen243)! - added checks for user agent and IP address to enhance session security
+
 ## 0.0.3
 
 ### Patch Changes
