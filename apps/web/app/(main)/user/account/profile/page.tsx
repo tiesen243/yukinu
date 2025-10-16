@@ -1,6 +1,11 @@
 import { Suspense } from 'react'
 
-import { ProfileInfo } from '@/app/(main)/user/account/profile/page.client'
+import {
+  ProfileAccount,
+  ProfileAccountSkeleton,
+  ProfileInfo,
+  ProfileInfoSkeleton,
+} from '@/app/(main)/user/account/profile/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export default function ProfilePage() {
@@ -13,7 +18,13 @@ export default function ProfilePage() {
         <h3 className='px-4 text-lg font-medium'>My Profile</h3>
         <hr className='my-4' />
 
-        <Suspense fallback={<p className='px-4'>Loading...</p>}>
+        <Suspense fallback={<ProfileAccountSkeleton />}>
+          <ProfileAccount />
+        </Suspense>
+
+        <hr className='my-4' />
+
+        <Suspense fallback={<ProfileInfoSkeleton />}>
           <ProfileInfo />
         </Suspense>
       </section>
