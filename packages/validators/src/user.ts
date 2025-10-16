@@ -4,17 +4,15 @@ export namespace UserModel {
   export const updateProfileBody = z.object({
     fullName: z
       .string()
-      .min(1, 'Full name is required')
-      .max(100, 'Full name is too long')
-      .optional(),
+      .min(1, 'Full name cannot be empty')
+      .max(100, 'Full name is too long'),
     gender: z
       .string()
-      .min(1, 'Gender is required')
-      .max(50, 'Gender is too long')
-      .optional(),
-    dateOfBirth: z.iso.date('Invalid date format').optional(),
-    website: z.url('Invalid URL').optional(),
-    bio: z.string().max(160, 'Bio is too long').optional(),
+      .min(1, 'Gender cannot be empty')
+      .max(50, 'Gender is too long'),
+    dateOfBirth: z.iso.date('Invalid date format'),
+    website: z.url('Invalid URL'),
+    bio: z.string().max(160, 'Bio is too long'),
   })
   export type UpdateProfileBody = z.infer<typeof updateProfileBody>
 }

@@ -200,7 +200,7 @@
     color: var(--foreground);
     letter-spacing: var(--tracking-normal);
 
-    ::selection {
+    &::selection {
       background-color: var(--primary);
       color: var(--primary-foreground);
     }
