@@ -82,7 +82,7 @@ export const UserButton: React.FC = () => {
 
         <DropdownMenuGroup>
           <ThemeChanger />
-          <DropdownMenuItem onClick={() => signOut()}>
+          <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/' })}>
             <LogOutIcon /> Sign Out
           </DropdownMenuItem>
         </DropdownMenuGroup>

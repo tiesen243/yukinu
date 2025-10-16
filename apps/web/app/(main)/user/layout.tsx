@@ -56,7 +56,7 @@ export default async function UserLayout({ children }: LayoutProps<'/user'>) {
         </nav>
       </aside>
 
-      <section className='w-full flex-1 rounded-lg border bg-card p-4 text-card-foreground shadow-sm'>
+      <section className='w-full flex-1 rounded-lg border bg-card py-4 text-card-foreground shadow-sm'>
         <h2 className='sr-only'>Content</h2>
         {children}
       </section>
