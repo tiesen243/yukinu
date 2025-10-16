@@ -7,6 +7,7 @@ import { AccountRepository } from './repositories/account.repository'
 import { ProfileRepository } from './repositories/profile.repository'
 import { UserRepository } from './repositories/user.repository'
 import { AuthService } from './services/auth.service'
+import { UserService } from './services/user.service'
 
 const isomorphicGetSession = async (headers: Headers) => {
   const authToken = headers.get('Authorization') ?? null
@@ -22,6 +23,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
   const userRepo = new UserRepository(db, users)
 
   const authService = new AuthService(db, accountRepo, profileRepo, userRepo)
+  const userService = new UserService(db, profileRepo, userRepo)
 
   console.log(
     '>>> tRPC Request from',
@@ -35,6 +37,7 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     session,
     services: {
       auth: authService,
+      user: userService,
     },
   }
 }
