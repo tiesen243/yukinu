@@ -21,15 +21,15 @@ export abstract class BaseRepositoryMock<TTable extends Table>
     _tx: Database | Transaction,
   ): Promise<TTable['$inferSelect'] | null> {
     if (id === 'find-fail') return Promise.resolve(null)
-    return Promise.resolve({ id } as TTable['$inferSelect'])
+    return Promise.resolve({ id })
   }
 
   async create(
     data: TTable['$inferInsert'],
     _tx: Database | Transaction,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    // @ts-expect-error - just for testing purposes
-    if (data.id === 'create-fail') return Promise.resolve(null)
+    if ('_mockFail' in data && data._mockFail === true)
+      return Promise.resolve(null)
     return Promise.resolve({ id: 'mock-id' })
   }
 

@@ -38,7 +38,9 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
     ctx.headers.get('x-forwarded-for') ??
     ctx.headers.get('x-real-ip') ??
     'unknown'
-  const allowed = ratelimiters.consume(ip, ratelimitConsume[type])
+
+  const key = `${ctx.session?.user?.id ?? 'unknown'}:${ip.split(',').at(0)?.trim() ?? 'unknown'}`
+  const allowed = ratelimiters.consume(key, ratelimitConsume[type])
   if (!allowed)
     throw new TRPCError({
       code: 'TOO_MANY_REQUESTS',
