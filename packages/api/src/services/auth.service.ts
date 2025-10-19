@@ -5,7 +5,7 @@ import type { AuthModel } from '@yukinu/validators/auth'
 import { Password } from '@yukinu/auth'
 
 import type { IAccountRepository } from '../repositories/account'
-import type { ProfileRepository } from '../repositories/profile.repository'
+import type { IProfileRepository } from '../repositories/profile'
 import type { IUserRepository } from '../repositories/user'
 
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
   constructor(
     private readonly _db: Database,
     private readonly _accountRepo: IAccountRepository,
-    private readonly _profileRepo: ProfileRepository,
+    private readonly _profileRepo: IProfileRepository,
     private readonly _userRepo: IUserRepository,
   ) {
     this._password = new Password()

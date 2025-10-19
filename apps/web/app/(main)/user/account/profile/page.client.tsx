@@ -110,7 +110,9 @@ export const ProfileInfo: React.FC = () => {
       <div className='flex flex-col items-center justify-center gap-8'>
         <Avatar className='size-64'>
           <AvatarImage src={data.avatarUrl ?? ''} alt={data.username} />
-          <AvatarFallback>{data.username[0]?.toUpperCase()}</AvatarFallback>
+          <AvatarFallback>
+            {data.username.charAt(0).toUpperCase()}
+          </AvatarFallback>
         </Avatar>
 
         <Button>Change Avatar</Button>

@@ -5,14 +5,33 @@ import type { IBaseRepository } from './base'
 
 export interface IUserRepository extends IBaseRepository<typeof users> {
   findByIdentifier(
-    data: IUserRepository.FindByIndentifierParams,
+    data: IUserRepository.FindByIdentifierParams,
     tx?: Database | Transaction,
-  ): Promise<string | null>
+  ): Promise<Pick<typeof users.$inferSelect, 'id'> | null>
+
+  findUserWithProfileById(
+    userId: string,
+    tx?: Database | Transaction,
+  ): Promise<IUserRepository.UserWithProfile | null>
 }
 
 export declare namespace IUserRepository {
-  export interface FindByIndentifierParams {
+  export interface FindByIdentifierParams {
     username?: string
     email?: string
+  }
+
+  export interface UserWithProfile
+    extends Pick<
+      typeof users.$inferSelect,
+      'id' | 'username' | 'email' | 'emailVerified' | 'createdAt' | 'updatedAt'
+    > {
+    emailVerified: Date | null
+    fullName: string | null
+    gender: string | null
+    dateOfBirth: string | null
+    website: string | null
+    bio: string | null
+    avatarUrl: string | null
   }
 }

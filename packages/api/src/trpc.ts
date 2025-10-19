@@ -1,6 +1,8 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
+import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
+
 import type { createTRPCContext } from './context'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
@@ -24,11 +26,41 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const publicProcedure = t.procedure.use(timingMiddleware)
+const ratelimiters = new TokenBucketRateLimit<string>(5, 60)
+const ratelimitConsume = {
+  query: 1,
+  mutation: 5,
+  subscription: 1,
+} as const
+
+const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
+  const ip =
+    ctx.headers.get('x-forwarded-for') ??
+    ctx.headers.get('x-real-ip') ??
+    'unknown'
+
+  const key = `${ctx.session?.user?.id ?? 'unknown'}:${ip.split(',').at(0)?.trim() ?? 'unknown'}`
+  const allowed = ratelimiters.consume(key, ratelimitConsume[type])
+  if (!allowed)
+    throw new TRPCError({
+      code: 'TOO_MANY_REQUESTS',
+      message: 'Rate limit exceeded',
+    })
+  return next()
+})
+
+const publicProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(rateLimitMiddleware)
 const protectedProcedure = t.procedure
   .use(timingMiddleware)
+  .use(rateLimitMiddleware)
   .use(({ ctx, next }) => {
-    if (!ctx.session?.user) throw new TRPCError({ code: 'UNAUTHORIZED' })
+    if (!ctx.session?.user)
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'User not authenticated',
+      })
     return next({
       ctx: {
         session: { ...ctx.session, user: ctx.session.user },
