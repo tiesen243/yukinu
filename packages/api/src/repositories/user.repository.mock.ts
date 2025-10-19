@@ -9,14 +9,14 @@ export class UserRepositoryMock
   implements IUserRepository
 {
   async findByIdentifier(
-    data: IUserRepository.FindByIndentifierParams,
+    data: IUserRepository.FindByIdentifierParams,
     _tx: Database | Transaction,
   ): Promise<Pick<typeof users.$inferSelect, 'id'> | null> {
     if (data.username === 'find-fail') return Promise.resolve(null)
     return Promise.resolve({ id: 'mock-id' })
   }
 
-  async findWithProfileById(
+  async findUserWithProfileById(
     userId: string,
     _tx: Database | Transaction,
   ): Promise<IUserRepository.UserWithProfile | null> {

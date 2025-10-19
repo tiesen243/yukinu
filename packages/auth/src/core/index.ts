@@ -140,12 +140,12 @@ export function Auth(opts: AuthOptions) {
   }
 
   const ratelimiters = new TokenBucketRateLimit(10, 60)
-  const ratelimitMiddleware = (request: Request, comsume: number) => {
+  const ratelimitMiddleware = (request: Request, consume: number) => {
     const ip =
       request.headers.get('x-forwarded-for') ??
       request.headers.get('x-real-ip') ??
       'unknown'
-    const allowed = ratelimiters.consume(ip, comsume)
+    const allowed = ratelimiters.consume(ip, consume)
     return allowed
   }
 

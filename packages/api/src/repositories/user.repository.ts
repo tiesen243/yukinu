@@ -11,7 +11,7 @@ export class UserRepository
   implements IUserRepository
 {
   async findByIdentifier(
-    data: IUserRepository.FindByIndentifierParams,
+    data: IUserRepository.FindByIdentifierParams,
     tx: Database | Transaction = this._db,
   ): Promise<Pick<typeof users.$inferSelect, 'id'> | null> {
     const { username, email } = data
@@ -31,7 +31,7 @@ export class UserRepository
     return user
   }
 
-  async findWithProfileById(
+  async findUserWithProfileById(
     userId: string,
     tx: Database | Transaction = this._db,
   ): Promise<IUserRepository.UserWithProfile | null> {

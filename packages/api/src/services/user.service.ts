@@ -14,7 +14,7 @@ export class UserService {
   ) {}
 
   async getUserInfo(user: { id: string }) {
-    const profile = await this._userRepo.findWithProfileById(user.id)
+    const profile = await this._userRepo.findUserWithProfileById(user.id)
     if (!profile)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
     return { ...user, ...profile }
