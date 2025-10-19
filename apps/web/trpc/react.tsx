@@ -44,9 +44,6 @@ function TRPCReactProvider({
               headers.set('x-trpc-source', 'react-nextjs')
               return headers
             },
-            fetch(input, init) {
-              return fetch(input, { ...init, credentials: 'include' })
-            },
           }),
           true: httpSubscriptionLink({
             transformer: SuperJSON,
