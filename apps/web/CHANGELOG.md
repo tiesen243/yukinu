@@ -1,5 +1,15 @@
 # @yukinu/web
 
+## 0.0.5
+
+### Patch Changes
+
+- [#75](https://github.com/tiesen243/yukinu/pull/75) [`e957c56`](https://github.com/tiesen243/yukinu/commit/e957c56583297f6f40abe3431abe372f637e4cda) Thanks [@tiesen243](https://github.com/tiesen243)! - added rate limit for trpc route
+
+- Updated dependencies [[`e957c56`](https://github.com/tiesen243/yukinu/commit/e957c56583297f6f40abe3431abe372f637e4cda), [`fdf2695`](https://github.com/tiesen243/yukinu/commit/fdf2695c1d56bcb758020e46a838fffbd696577d), [`7bc37f0`](https://github.com/tiesen243/yukinu/commit/7bc37f0bf39ad956cacef3d31813ed3adc948c93)]:
+  - @yukinu/api@0.0.5
+  - @yukinu/auth@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes

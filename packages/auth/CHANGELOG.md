@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.0.5
+
+### Patch Changes
+
+- [#75](https://github.com/tiesen243/yukinu/pull/75) [`fdf2695`](https://github.com/tiesen243/yukinu/commit/fdf2695c1d56bcb758020e46a838fffbd696577d) Thanks [@tiesen243](https://github.com/tiesen243)! - added rate limit for auth's api routes
+
 ## 0.0.4
 
 ### Patch Changes
