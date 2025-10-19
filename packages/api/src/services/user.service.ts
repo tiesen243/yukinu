@@ -13,8 +13,8 @@ export class UserService {
     private readonly _userRepo: IUserRepository,
   ) {}
 
-  async getUserInfo(user: { id: string; email: string; username: string }) {
-    const profile = await this._profileRepo.findById(user.id)
+  async getUserInfo(user: { id: string }) {
+    const profile = await this._userRepo.findWithProfileById(user.id)
     if (!profile)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
     return { ...user, ...profile }
