@@ -26,7 +26,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const ratelimit = new TokenBucketRateLimit<string>(5, 60)
+const ratelimiters = new TokenBucketRateLimit<string>(5, 60)
 const ratelimitConsume = {
   query: 1,
   mutation: 5,
@@ -38,7 +38,7 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
     ctx.headers.get('x-forwarded-for') ??
     ctx.headers.get('x-real-ip') ??
     'unknown'
-  const allowed = ratelimit.consume(ip, ratelimitConsume[type])
+  const allowed = ratelimiters.consume(ip, ratelimitConsume[type])
   if (!allowed)
     throw new TRPCError({
       code: 'TOO_MANY_REQUESTS',

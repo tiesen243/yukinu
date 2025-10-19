@@ -5,6 +5,7 @@ import type {
   Session,
   SessionResult,
 } from './types'
+import { TokenBucketRateLimit } from '../rate-limit'
 import Cookies from './cookies'
 import {
   encodeHex,
@@ -138,12 +139,28 @@ export function Auth(opts: AuthOptions) {
     return createSession(userId, headers)
   }
 
+  const ratelimiters = new TokenBucketRateLimit(10, 60)
+  const ratelimitMiddleware = (request: Request, comsume: number) => {
+    const ip =
+      request.headers.get('x-forwarded-for') ??
+      request.headers.get('x-real-ip') ??
+      'unknown'
+    const allowed = ratelimiters.consume(ip, comsume)
+    return allowed
+  }
+
   return {
     auth,
     signIn,
     signOut,
     handlers: {
       GET: async (request: Request) => {
+        const allowed = ratelimitMiddleware(request, 1)
+        if (!allowed)
+          return setCorsHeaders(
+            new Response('Too Many Requests', { status: 429 }),
+          )
+
         const { pathname, searchParams } = new URL(request.url)
         const cookies = new Cookies(request)
 
@@ -232,6 +249,12 @@ export function Auth(opts: AuthOptions) {
         }
       },
       POST: async (request: Request) => {
+        const allowed = ratelimitMiddleware(request, 2)
+        if (!allowed)
+          return setCorsHeaders(
+            new Response('Too Many Requests', { status: 429 }),
+          )
+
         const cookies = new Cookies(request)
         const { pathname } = new URL(request.url)
 

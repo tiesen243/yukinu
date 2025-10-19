@@ -4,4 +4,4 @@
 '@yukinu/web': patch
 ---
 
-added ratelimit for trpc route
+added rate limit for trpc route
