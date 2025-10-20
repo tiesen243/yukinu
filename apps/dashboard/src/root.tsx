@@ -39,7 +39,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   )
 }
 
-export default function App() {
+export default function App(_: Route.ComponentProps) {
   return <Outlet />
 }
 

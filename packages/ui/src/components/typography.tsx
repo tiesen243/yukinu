@@ -4,7 +4,7 @@ import { cva } from 'class-variance-authority'
 
 import { cn } from '@yukinu/ui'
 
-const typographyVariants = cva('mb-1 text-base leading-7 font-normal', {
+const typographyVariants = cva('mb-1 leading-7 font-normal', {
   variants: {
     variant: {
       h1: 'mb-8 scroll-m-20 text-7xl font-extrabold tracking-tight text-balance lg:text-8xl',

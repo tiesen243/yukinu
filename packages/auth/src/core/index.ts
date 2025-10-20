@@ -65,7 +65,10 @@ export function Auth(opts: AuthOptions) {
       const now = Date.now()
       const expiresTime = result.expires.getTime()
       const userAgent = opts.headers.get('user-agent') ?? ''
-      const ipAddress = opts.headers.get('x-forwarded-for') ?? ''
+      const ipAddress =
+        opts.headers.get('x-forwarded-for') ??
+        opts.headers.get('x-real-ip') ??
+        ''
 
       if (
         now > expiresTime ||
