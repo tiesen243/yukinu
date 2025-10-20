@@ -11,6 +11,7 @@ export const usersView = pgView('users_view').as((qb) =>
       email: users.email,
       username: users.username,
       role: users.role,
+      status: users.status,
       avatarUrl: sql<string | null>`${profiles.avatarUrl}`.as('avatar_url'),
     })
     .from(users)

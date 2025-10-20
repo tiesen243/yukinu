@@ -103,6 +103,9 @@ export function Auth(opts: AuthOptions) {
     const user = await adapter.getUserByIndentifier(indentifier)
     if (!user) throw new Error('Invalid credentials')
 
+    if (user.status !== 'active')
+      throw new Error('User is suspended or inactive')
+
     const account = await adapter.getAccount('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
 
@@ -121,12 +124,16 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function getOrCreateUser(
-    opts: Omit<OauthAccount & Account, 'userId'>,
+    opts: Omit<OauthAccount & Account, 'userId' | 'status'>,
     headers: Headers,
   ): Promise<Omit<Session, 'createdAt'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount) return createSession(existingAccount.userId, headers)
+    if (existingAccount) {
+      if (existingAccount.status !== 'active')
+        throw new Error('Account is suspended or inactive')
+      return createSession(existingAccount.userId, headers)
+    }
 
     const existingUser = await adapter.getUserByIndentifier(userData.email)
     const userId =

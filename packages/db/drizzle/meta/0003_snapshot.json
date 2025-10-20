@@ -1,6 +1,6 @@
 {
-  "id": "0792253f-b9ca-45f8-8d9e-3999a46fcb33",
-  "prevId": "a72078d4-813c-44a1-830b-90faca8c73a7",
+  "id": "851d24a1-8e8b-4c82-822d-d50a58152e59",
+  "prevId": "d5361f57-4921-4252-bef0-b643cd6e2de8",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -678,6 +678,12 @@
       "name": "order_items",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
         "order_id": {
           "name": "order_id",
           "type": "varchar(24)",
@@ -725,6 +731,36 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "order_items_product_id_idx": {
+          "name": "order_items_product_id_idx",
+          "columns": [
+            {
+              "expression": "product_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "order_items_variant_id_idx": {
+          "name": "order_items_variant_id_idx",
+          "columns": [
+            {
+              "expression": "variant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -756,12 +792,7 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "order_items_order_id_product_id_variant_id_pk": {
-          "name": "order_items_order_id_product_id_variant_id_pk",
-          "columns": ["order_id", "product_id", "variant_id"]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -1648,9 +1679,17 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'user'"
+        },
+        "status": {
+          "name": "status",
+          "type": "user_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'active'"
         }
       },
-      "definition": "select \"users\".\"id\", \"users\".\"email\", \"users\".\"username\", \"users\".\"role\", \"profiles\".\"avatar_url\" as \"avatar_url\" from \"users\" inner join \"profiles\" on \"users\".\"id\" = \"profiles\".\"id\" where \"users\".\"status\" = 'active'",
+      "definition": "select \"users\".\"id\", \"users\".\"email\", \"users\".\"username\", \"users\".\"role\", \"users\".\"status\", \"profiles\".\"avatar_url\" as \"avatar_url\" from \"users\" inner join \"profiles\" on \"users\".\"id\" = \"profiles\".\"id\" where \"users\".\"status\" = 'active'",
       "name": "users_view",
       "schema": "public",
       "isExisting": false,

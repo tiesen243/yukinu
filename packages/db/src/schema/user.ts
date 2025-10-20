@@ -8,11 +8,7 @@ import { addresses, profiles, wishlistItems } from './profile'
 import { vendorMembers } from './vendor'
 
 export const userRoleEnum = pgEnum('user_role', ['admin', 'user'])
-export const userStatusEnum = pgEnum('user_status', [
-  'active',
-  'inactive',
-  'banned',
-])
+export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
 
 export const users = pgTable(
   'users',

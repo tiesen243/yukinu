@@ -25,6 +25,7 @@ export interface Account {
   accountId: string
   userId: string
   password: string | null
+  status: 'active' | 'inactive' | 'banned'
 }
 
 export interface OauthAccount {
@@ -49,7 +50,7 @@ export interface DatabaseAdapter {
   createUser(data: Omit<OauthAccount, 'accountId'>): Promise<User['id'] | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>
-  createAccount(data: Account): Promise<void>
+  createAccount(data: Omit<Account, 'status'>): Promise<void>
 
   getSessionAndUser(token: string): Promise<SessionResult | null>
   createSession(data: Omit<Session, 'createdAt'>): Promise<void>

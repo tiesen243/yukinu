@@ -3,7 +3,7 @@ CREATE TYPE "public"."payment_method" AS ENUM('credit_card', 'bank_transfer', 'c
 CREATE TYPE "public"."payment_status" AS ENUM('pending', 'completed', 'failed', 'refunded');--> statement-breakpoint
 CREATE TYPE "public"."product_status" AS ENUM('active', 'inactive', 'out_of_stock');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('admin', 'user');--> statement-breakpoint
-CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive', 'banned');--> statement-breakpoint
+CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive');--> statement-breakpoint
 CREATE TYPE "public"."vendor_status" AS ENUM('pending', 'approved', 'suspended');--> statement-breakpoint
 CREATE TYPE "public"."vendor_role" AS ENUM('owner', 'manager', 'staff');--> statement-breakpoint
 CREATE TABLE "order_items" (

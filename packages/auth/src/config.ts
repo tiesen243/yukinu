@@ -72,7 +72,13 @@ function getAdapter(): AuthOptions['adapter'] {
     },
     getAccount: async (provider, accountId) => {
       const [account] = await db
-        .select()
+        .select({
+          userId: accounts.userId,
+          provider: accounts.provider,
+          accountId: accounts.accountId,
+          password: accounts.password,
+          status: users.status,
+        })
         .from(accounts)
         .where(
           and(
@@ -80,6 +86,7 @@ function getAdapter(): AuthOptions['adapter'] {
             eq(accounts.accountId, accountId),
           ),
         )
+        .innerJoin(users, eq(accounts.userId, users.id))
       return account ?? null
     },
     createAccount: async (data) => {
@@ -93,6 +100,7 @@ function getAdapter(): AuthOptions['adapter'] {
             email: usersView.email,
             username: usersView.username,
             role: usersView.role,
+            status: usersView.status,
             avatarUrl: usersView.avatarUrl,
           },
           userAgent: sessions.userAgent,
