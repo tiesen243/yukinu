@@ -1,5 +1,5 @@
 import type { Database, Transaction } from '@yukinu/db'
-import { eq, or } from '@yukinu/db'
+import { desc, eq, ilike, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 import { users } from '@yukinu/db/schema/user'
 
@@ -10,6 +10,42 @@ export class UserRepository
   extends BaseRepository<typeof users>
   implements IUserRepository
 {
+  async findUsersBySearchWithPagination(
+    search = '',
+    page = 1,
+    limit = 10,
+    tx: Database | Transaction = this._db,
+  ): Promise<IUserRepository.Users> {
+    const filters = or(
+      ilike(users.username, `%${search}%`),
+      ilike(users.email, `%${search}%`),
+    )
+
+    const userList = await tx
+      .select({
+        id: users.id,
+        username: users.username,
+        email: users.email,
+        role: users.role,
+        status: users.status,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
+      })
+      .from(users)
+      .where(search ? filters : undefined)
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .orderBy(desc(users.createdAt))
+
+    const total = await tx.$count(users, search ? filters : undefined)
+    const totalPages = Math.ceil(total / limit)
+
+    return {
+      users: userList,
+      pagination: { total, page, limit, totalPages },
+    }
+  }
+
   async findByIdentifier(
     data: IUserRepository.FindByIdentifierParams,
     tx: Database | Transaction = this._db,

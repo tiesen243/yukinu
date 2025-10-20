@@ -1,6 +1,24 @@
 import * as z from 'zod'
 
 export namespace UserModel {
+  export const findUsersBySearchWithPaginationQuery = z.object({
+    search: z.string().max(100, 'Search query is too long'),
+    page: z
+      .number()
+      .int('Page must be an integer')
+      .min(1, 'Page must be at least 1')
+      .default(1),
+    limit: z
+      .number()
+      .int('Limit must be an integer')
+      .min(1, 'Limit must be at least 1')
+      .max(100, 'Limit cannot exceed 100')
+      .default(10),
+  })
+  export type FindUsersBySearchWithPaginationQuery = z.infer<
+    typeof findUsersBySearchWithPaginationQuery
+  >
+
   export const updateProfileBody = z.object({
     fullName: z
       .string()

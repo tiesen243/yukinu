@@ -13,6 +13,16 @@ export class UserService {
     private readonly _userRepo: IUserRepository,
   ) {}
 
+  async getUsers(query: UserModel.FindUsersBySearchWithPaginationQuery) {
+    const { search, page, limit } = query
+    const users = await this._userRepo.findUsersBySearchWithPagination(
+      search,
+      page,
+      limit,
+    )
+    return users
+  }
+
   async getUserInfo(user: { id: string }) {
     const profile = await this._userRepo.findUserWithProfileById(user.id)
     if (!profile)
