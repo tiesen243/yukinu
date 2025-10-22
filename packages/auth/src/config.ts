@@ -40,6 +40,10 @@ export async function invalidateSessionToken(token: string) {
   await adapter.deleteSession(hashToken)
 }
 
+export async function invalidateSessionTokens(userId: string) {
+  await adapter.deleteSessionsByUserId(userId)
+}
+
 function getAdapter(): AuthOptions['adapter'] {
   return {
     getUserByIndentifier: async (indentifier) => {
@@ -70,6 +74,7 @@ function getAdapter(): AuthOptions['adapter'] {
 
       return user.id
     },
+
     getAccount: async (provider, accountId) => {
       const [account] = await db
         .select({
@@ -92,6 +97,7 @@ function getAdapter(): AuthOptions['adapter'] {
     createAccount: async (data) => {
       await db.insert(accounts).values(data)
     },
+
     getSessionAndUser: async (token) => {
       const [session] = await db
         .select({
@@ -120,6 +126,9 @@ function getAdapter(): AuthOptions['adapter'] {
     },
     deleteSession: async (token) => {
       await db.delete(sessions).where(eq(sessions.token, token))
+    },
+    deleteSessionsByUserId: async (userId) => {
+      await db.delete(sessions).where(eq(sessions.userId, userId))
     },
   }
 }

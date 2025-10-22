@@ -29,8 +29,21 @@ export namespace AuthModel {
       confirmPassword: passwordSchema,
     })
     .refine((data) => data.password === data.confirmPassword, {
-      message: 'Passwords do not match',
+      error: 'Passwords do not match',
       path: ['confirmPassword'],
     })
   export type RegisterBody = z.infer<typeof registerBody>
+
+  export const changePasswordBody = z
+    .object({
+      currentPassword: z.string().optional(),
+      newPassword: passwordSchema,
+      confirmNewPassword: passwordSchema,
+      isLogOutOtherSessions: z.boolean(),
+    })
+    .refine((data) => data.newPassword === data.confirmNewPassword, {
+      error: 'New passwords do not match',
+      path: ['confirmNewPassword'],
+    })
+  export type ChangePasswordBody = z.infer<typeof changePasswordBody>
 }

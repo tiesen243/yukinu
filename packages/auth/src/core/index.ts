@@ -65,15 +65,15 @@ export function Auth(opts: AuthOptions) {
       const now = Date.now()
       const expiresTime = result.expires.getTime()
       const userAgent = opts.headers.get('user-agent') ?? ''
-      const ipAddress =
-        opts.headers.get('x-forwarded-for') ??
-        opts.headers.get('x-real-ip') ??
-        ''
+      // const ipAddress =
+      //   opts.headers.get('x-forwarded-for') ??
+      //   opts.headers.get('x-real-ip') ??
+      //   ''
 
       if (
         now > expiresTime ||
-        result.userAgent !== userAgent ||
-        result.ipAddress !== ipAddress
+        result.userAgent !== userAgent
+        // result.ipAddress !== ipAddress
       ) {
         await adapter.deleteSession(hashToken)
         return nullSession
@@ -103,8 +103,10 @@ export function Auth(opts: AuthOptions) {
     const user = await adapter.getUserByIndentifier(indentifier)
     if (!user) throw new Error('Invalid credentials')
 
-    if (user.status !== 'active')
-      throw new Error('User is suspended or inactive')
+    if (user.status === 'inactive')
+      throw new Error(
+        'Your account has been suspended. Please contact support for assistance.',
+      )
 
     const account = await adapter.getAccount('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
@@ -130,8 +132,11 @@ export function Auth(opts: AuthOptions) {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
     if (existingAccount) {
-      if (existingAccount.status !== 'active')
-        throw new Error('Account is suspended or inactive')
+      if (existingAccount.status === 'inactive')
+        throw new Error(
+          'Your account has been suspended. Please contact support for assistance.',
+        )
+
       return createSession(existingAccount.userId, headers)
     }
 

@@ -7,15 +7,6 @@ const nextConfig = {
   reactStrictMode: true,
   images: { unoptimized: true },
   typescript: { ignoreBuildErrors: true },
-  eslint: { ignoreDuringBuilds: true },
-
-  // rewrites: async () => [
-  //   {
-  //     source: '/dashboard/:path*',
-  //     destination: `${env.NEXT_PUBLIC_DASHBOARD_URL}/dashboard/:path*`,
-  //     locale: false,
-  //   },
-  // ],
 
   transpilePackages: [
     '@yukinu/api',

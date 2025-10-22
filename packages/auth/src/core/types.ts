@@ -56,6 +56,7 @@ export interface DatabaseAdapter {
   createSession(data: Omit<Session, 'createdAt'>): Promise<void>
   updateSession(token: string, data: Partial<Session>): Promise<void>
   deleteSession(token: string): Promise<void>
+  deleteSessionsByUserId(userId: string): Promise<void>
 }
 
 export interface AuthOptions {

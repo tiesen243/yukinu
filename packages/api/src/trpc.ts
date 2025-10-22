@@ -26,7 +26,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const ratelimiters = new TokenBucketRateLimit<string>(5, 60)
+const ratelimiters = new TokenBucketRateLimit<string>(50, 60)
 const ratelimitConsume = {
   query: 1,
   mutation: 5,
