@@ -15,6 +15,5 @@ export const usersView = pgView('users_view').as((qb) =>
       avatarUrl: sql<string | null>`${profiles.avatarUrl}`.as('avatar_url'),
     })
     .from(users)
-    .where(eq(users.status, 'active'))
     .innerJoin(profiles, eq(users.id, profiles.id)),
 )
