@@ -1,5 +1,11 @@
 # @yukinu/db
 
+## 0.0.4
+
+### Patch Changes
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`2e95758`](https://github.com/tiesen243/yukinu/commit/2e95758f794db48466d359f9a57539e58482e361) Thanks [@tiesen243](https://github.com/tiesen243)! - include inactive user to user view
+
 ## 0.0.3
 
 ### Patch Changes

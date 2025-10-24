@@ -1,5 +1,23 @@
 # @yukinu/dashboard
 
+## 0.0.6
+
+### Patch Changes
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`dd2f80d`](https://github.com/tiesen243/yukinu/commit/dd2f80d7a7e9361a839a67a5697ce7d3f0cae714) Thanks [@tiesen243](https://github.com/tiesen243)! - added dashboard layout
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`cc01fe9`](https://github.com/tiesen243/yukinu/commit/cc01fe9e4999656b4783c4e8702e59e732c0e08c) Thanks [@tiesen243](https://github.com/tiesen243)! - added role management
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`366953f`](https://github.com/tiesen243/yukinu/commit/366953f44a6538ee2902dca0b5aa1676c341f72e) Thanks [@tiesen243](https://github.com/tiesen243)! - added customers table
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`d3cfcd1`](https://github.com/tiesen243/yukinu/commit/d3cfcd1eaeed12b182272b045fb2f76cc352ea0b) Thanks [@tiesen243](https://github.com/tiesen243)! - added RBAC
+
+- Updated dependencies [[`37abc59`](https://github.com/tiesen243/yukinu/commit/37abc59a7ab98f678765651735cf31872833f192), [`2e95758`](https://github.com/tiesen243/yukinu/commit/2e95758f794db48466d359f9a57539e58482e361), [`f9d789e`](https://github.com/tiesen243/yukinu/commit/f9d789ebd6e6cdc5547bc739d9603ef53ffd4b8c), [`cf821bb`](https://github.com/tiesen243/yukinu/commit/cf821bb74f68217f55fcfa2b3f83c28bdf4497b4)]:
+  - @yukinu/auth@0.0.6
+  - @yukinu/db@0.0.4
+  - @yukinu/api@0.0.6
+  - @yukinu/ui@0.0.3
+
 ## 0.0.5
 
 ### Patch Changes
