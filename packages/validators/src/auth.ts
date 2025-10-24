@@ -16,7 +16,7 @@ export namespace AuthModel {
     )
 
   export const loginBody = z.object({
-    indentifier: z.union([usernameSchema, z.email('Invalid email address')]),
+    identifier: z.union([usernameSchema, z.email('Invalid email address')]),
     password: passwordSchema,
   })
   export type LoginBody = z.infer<typeof loginBody>

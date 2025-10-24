@@ -65,6 +65,7 @@ export function Auth(opts: AuthOptions) {
       const now = Date.now()
       const expiresTime = result.expires.getTime()
       const userAgent = opts.headers.get('user-agent') ?? ''
+      // disable ip check for now due to react router dont have ip info in header
       // const ipAddress =
       //   opts.headers.get('x-forwarded-for') ??
       //   opts.headers.get('x-real-ip') ??
@@ -92,15 +93,12 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function signIn(
-    opts: {
-      indentifier: string
-      password: string
-    },
+    opts: { identifier: string; password: string },
     headers: Headers = new Headers(),
   ): Promise<Omit<Session, 'createdAt'>> {
-    const { indentifier, password } = opts
+    const { identifier, password } = opts
 
-    const user = await adapter.getUserByIndentifier(indentifier)
+    const user = await adapter.getUserByIndentifier(identifier)
     if (!user) throw new Error('Invalid credentials')
 
     if (user.status === 'inactive')

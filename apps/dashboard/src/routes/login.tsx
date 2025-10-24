@@ -46,7 +46,7 @@ const LoginForm: React.FC = () => {
   const { signIn } = useSession()
 
   const form = useForm({
-    defaultValues: { indentifier: '', password: '' },
+    defaultValues: { identifier: '', password: '' },
     schema: AuthModel.loginBody,
     onSubmit: (data) => signIn('credentials', data),
     onSuccess: () => {
@@ -59,7 +59,7 @@ const LoginForm: React.FC = () => {
   return (
     <FieldGroup>
       <form.Field
-        name='indentifier'
+        name='identifier'
         render={({ meta, field }) => (
           <Field data-invalid={meta.errors.length > 0}>
             <FieldLabel htmlFor={meta.fieldId}>Email or Username</FieldLabel>
