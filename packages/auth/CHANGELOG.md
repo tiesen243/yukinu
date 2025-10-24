@@ -1,5 +1,16 @@
 # @yukinu/auth
 
+## 0.0.6
+
+### Patch Changes
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`37abc59`](https://github.com/tiesen243/yukinu/commit/37abc59a7ab98f678765651735cf31872833f192) Thanks [@tiesen243](https://github.com/tiesen243)! - improve handling of login attempts by inactive users
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`f9d789e`](https://github.com/tiesen243/yukinu/commit/f9d789ebd6e6cdc5547bc739d9603ef53ffd4b8c) Thanks [@tiesen243](https://github.com/tiesen243)! - added change password form
+
+- Updated dependencies [[`2e95758`](https://github.com/tiesen243/yukinu/commit/2e95758f794db48466d359f9a57539e58482e361)]:
+  - @yukinu/db@0.0.4
+
 ## 0.0.5
 
 ### Patch Changes

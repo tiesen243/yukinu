@@ -1,5 +1,11 @@
 # @yukinu/ui
 
+## 0.0.3
+
+### Patch Changes
+
+- [#77](https://github.com/tiesen243/yukinu/pull/77) [`cf821bb`](https://github.com/tiesen243/yukinu/commit/cf821bb74f68217f55fcfa2b3f83c28bdf4497b4) Thanks [@tiesen243](https://github.com/tiesen243)! - change theme to brand theme
+
 ## 0.0.2
 
 ### Patch Changes
