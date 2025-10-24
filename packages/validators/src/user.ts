@@ -19,6 +19,12 @@ export namespace UserModel {
     typeof findUsersBySearchWithPaginationQuery
   >
 
+  export const updateUserRoleBody = z.object({
+    userId: z.cuid2('Invalid user ID'),
+    role: z.enum(['user', 'admin'], { error: 'Invalid role' }).optional(),
+  })
+  export type UpdateUserRoleBody = z.infer<typeof updateUserRoleBody>
+
   export const updateProfileBody = z.object({
     fullName: z
       .string()

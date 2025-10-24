@@ -58,4 +58,13 @@ export class UserRepositoryMock
       updatedAt: new Date(),
     })
   }
+
+  countUsersByField<TField extends keyof IUserRepository.User>(
+    field: TField,
+    value: IUserRepository.User[TField],
+    _tx?: Database | Transaction,
+  ): Promise<number> {
+    if (field === 'role' && value === 'admin') return Promise.resolve(3)
+    return Promise.resolve(0)
+  }
 }

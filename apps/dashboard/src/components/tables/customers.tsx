@@ -3,7 +3,19 @@ import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
 import type { RouterInputs, RouterOutputs } from '@yukinu/api'
 import { Button } from '@yukinu/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@yukinu/ui/dialog'
+import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
+import { useForm } from '@yukinu/ui/hooks/use-form'
 import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
+import { Select, SelectOption } from '@yukinu/ui/select'
+import { toast } from '@yukinu/ui/sonner'
 import {
   Table,
   TableBody,
@@ -13,8 +25,9 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { UserModel } from '@yukinu/validators/user'
 
-import { useTRPC } from '@/trpc/react'
+import { useTRPC, useTRPCClient } from '@/trpc/react'
 
 export const CustomersTable: React.FC = () => {
   const [query, setQuery] = useQueryStates({
@@ -103,9 +116,7 @@ const CustomersTableRow: React.FC<{
     <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
     <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
     <TableCell className='flex w-fit items-center gap-2'>
-      <Button variant='ghost' size='sm'>
-        Edit
-      </Button>
+      <EditCustomerButton userId={user.id} />
       <Button
         variant='ghost'
         size='sm'
@@ -167,5 +178,66 @@ export const CustomersTableFooter: React.FC<{
         </div>
       </TableCell>
     </TableRow>
+  )
+}
+
+const EditCustomerButton: React.FC<{
+  userId: string
+}> = ({ userId }) => {
+  const trpc = useTRPCClient()
+
+  const form = useForm({
+    defaultValues: {
+      userId,
+      role: undefined as UserModel.UpdateUserRoleBody['role'],
+    },
+    schema: UserModel.updateUserRoleBody,
+    onSubmit: trpc.user.updateRole.mutate,
+    onError: (error) => toast.error(error.message),
+    onSuccess: () => toast.success('User role updated successfully'),
+  })
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant='ghost' size='sm'>
+          Edit
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit Customer {userId}</DialogTitle>
+          <DialogDescription>
+            Here you can edit the customer details.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form onSubmit={form.handleSubmit}>
+          <FieldSet>
+            <form.Field
+              name='role'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Role</FieldLabel>
+                  <Select {...field}>
+                    <SelectOption value=''>Select a role</SelectOption>
+                    <SelectOption value='user'>User</SelectOption>
+                    <SelectOption value='admin'>Admin</SelectOption>
+                  </Select>
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <Field>
+              <Button type='submit' disabled={form.state.isPending}>
+                Save Changes
+              </Button>
+            </Field>
+          </FieldSet>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }

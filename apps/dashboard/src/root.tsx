@@ -35,7 +35,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
             </TRPCReactProvider>
           </NuqsAdapter>
 
-          <Toaster />
+          <Toaster richColors />
         </ThemeProvider>
 
         <ScrollRestoration />

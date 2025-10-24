@@ -30,13 +30,17 @@ interface RenderProps<
     value: TValue[TFieldName]
     onChange: (
       event:
-        | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        | React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+          >
         | string
         | number
         | boolean,
     ) => void
     onBlur: (
-      event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+      event: React.FocusEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
     ) => Promise<void>
     'aria-describedby': string
     'aria-invalid': boolean
@@ -171,7 +175,9 @@ const useForm = <
 
       const handleChange = (
         event:
-          | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+          | React.ChangeEvent<
+              HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
           | string
           | number
           | boolean,
@@ -198,7 +204,9 @@ const useForm = <
       }
 
       const handleBlur = async (
-        event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+        event: React.FocusEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >,
       ) => {
         event.persist()
         if (prevLocalValueRef.current === localValue) return

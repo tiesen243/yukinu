@@ -94,4 +94,14 @@ export class UserRepository
     if (!user) return null
     return user
   }
+
+  countUsersByField<TField extends keyof IUserRepository.User>(
+    field: TField,
+    value: IUserRepository.User[TField],
+    tx: Database | Transaction = this._db,
+  ): Promise<number> {
+    // @ts-expect-error: Dynamic field access
+    const count = tx.$count(this._table, eq(this._table[field], value))
+    return count
+  }
 }

@@ -20,6 +20,12 @@ export interface IUserRepository extends IBaseRepository<typeof users> {
     limit: number,
     tx?: Database | Transaction,
   ): Promise<IUserRepository.Users>
+
+  countUsersByField<TField extends keyof IUserRepository.User>(
+    field: TField,
+    value: IUserRepository.User[TField],
+    tx?: Database | Transaction,
+  ): Promise<number>
 }
 
 export declare namespace IUserRepository {
