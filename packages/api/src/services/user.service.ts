@@ -30,12 +30,27 @@ export class UserService {
     return { ...user, ...profile }
   }
 
-  async updateUserRole(data: UserModel.UpdateUserRoleBody) {
+  async updateUserRole(
+    data: UserModel.UpdateUserRoleBody,
+    actingUser: { id: string; role: UserModel.UpdateUserRoleBody['role'] },
+  ) {
     const { userId, role } = data
 
     const user = await this._userRepo.findById(userId)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    if (actingUser.id === userId)
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'Users cannot change their own role',
+      })
+
+    if (actingUser.role === 'manager' && user.role === 'admin')
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'Managers cannot change the role of an admin',
+      })
 
     if (user.role === role)
       throw new TRPCError({

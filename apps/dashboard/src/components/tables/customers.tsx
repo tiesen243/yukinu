@@ -1,7 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
-import type { RouterInputs, RouterOutputs } from '@yukinu/api'
+import type { RouterOutputs } from '@yukinu/api'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -29,34 +29,25 @@ import { UserModel } from '@yukinu/validators/user'
 
 import { useTRPC, useTRPCClient } from '@/trpc/react'
 
-export const CustomersTable: React.FC = () => {
-  const [query, setQuery] = useQueryStates({
-    search: parseAsString.withDefault(''),
-    page: parseAsInteger.withDefault(1),
-    limit: parseAsInteger.withDefault(10),
-  })
-
-  const handlePagination = async (page: number) => {
-    await setQuery({ page })
-  }
-
-  return (
-    <Table>
-      <CustomersTableHeader />
-
-      <TableBody>
-        <CustomersTableBody query={query} />
-      </TableBody>
-
-      <TableFooter>
-        <CustomersTableFooter
-          query={query}
-          handlePagination={handlePagination}
-        />
-      </TableFooter>
-    </Table>
-  )
+const queryParsers = {
+  search: parseAsString.withDefault(''),
+  page: parseAsInteger.withDefault(1),
+  limit: parseAsInteger.withDefault(10),
 }
+
+export const CustomersTable: React.FC = () => (
+  <Table>
+    <CustomersTableHeader />
+
+    <TableBody>
+      <CustomersTableBody />
+    </TableBody>
+
+    <TableFooter>
+      <CustomersTableFooter />
+    </TableFooter>
+  </Table>
+)
 
 const CustomersTableHeader: React.FC = () => (
   <TableHeader>
@@ -73,14 +64,13 @@ const CustomersTableHeader: React.FC = () => (
   </TableHeader>
 )
 
-const CustomersTableBody: React.FC<{
-  query: RouterInputs['user']['getUsers']
-}> = ({ query }) => {
+const CustomersTableBody: React.FC = () => {
+  const [query] = useQueryStates(queryParsers)
   const trpc = useTRPC()
   const { data, isLoading } = useQuery(trpc.user.getUsers.queryOptions(query))
 
   if (isLoading)
-    return Array.from({ length: 10 }, (_, index) => (
+    return Array.from({ length: query.limit }, (_, index) => (
       <TableRow key={index}>
         {Array.from({ length: 8 }, (_, index) => (
           <TableCell key={index}>
@@ -135,12 +125,14 @@ const CustomersTableRow: React.FC<{
   </TableRow>
 )
 
-export const CustomersTableFooter: React.FC<{
-  query: RouterInputs['user']['getUsers']
-  handlePagination: (page: number) => void
-}> = ({ query, handlePagination }) => {
+export const CustomersTableFooter: React.FC = () => {
+  const [query, setQuery] = useQueryStates(queryParsers)
   const trpc = useTRPC()
+
   const { data, isLoading } = useQuery(trpc.user.getUsers.queryOptions(query))
+  const handlePagination = async (newPage: number) => {
+    await setQuery({ ...query, page: newPage })
+  }
 
   if (isLoading || !data?.pagination) return null
 
@@ -154,9 +146,7 @@ export const CustomersTableFooter: React.FC<{
             variant='outline'
             size='sm'
             disabled={page <= 1}
-            onClick={() => {
-              handlePagination(page - 1)
-            }}
+            onClick={() => handlePagination(page - 1)}
           >
             <ChevronLeftIcon />
             <span className='sr-only'>Previous</span>
@@ -168,9 +158,7 @@ export const CustomersTableFooter: React.FC<{
             variant='outline'
             size='sm'
             disabled={page >= totalPages}
-            onClick={() => {
-              handlePagination(page + 1)
-            }}
+            onClick={() => handlePagination(page + 1)}
           >
             <ChevronRightIcon />
             <span className='sr-only'>Next</span>
@@ -181,17 +169,21 @@ export const CustomersTableFooter: React.FC<{
   )
 }
 
-const EditCustomerButton: React.FC<{
-  userId: string
-}> = ({ userId }) => {
-  const trpc = useTRPCClient()
+const EditCustomerButton: React.FC<{ userId: string }> = ({ userId }) => {
+  const [query] = useQueryStates(queryParsers)
+  const queryClient = useQueryClient()
+  const trpcClient = useTRPCClient()
+  const trpc = useTRPC()
 
   const form = useForm({
     defaultValues: { userId, role: 'user' },
     schema: UserModel.updateUserRoleBody,
-    onSubmit: trpc.user.updateRole.mutate,
+    onSubmit: trpcClient.user.updateRole.mutate,
     onError: (error) => toast.error(error.message),
-    onSuccess: () => toast.success('User role updated successfully'),
+    onSuccess: () => {
+      void queryClient.invalidateQueries(trpc.user.getUsers.queryFilter(query))
+      toast.success('User role updated successfully')
+    },
   })
 
   return (

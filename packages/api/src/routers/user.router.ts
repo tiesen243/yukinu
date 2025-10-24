@@ -1,9 +1,9 @@
 import { UserModel } from '@yukinu/validators/user'
 
-import { adminProcedure, createTRPCRouter, protectedProcedure } from '../trpc'
+import { createTRPCRouter, managerProcedure, protectedProcedure } from '../trpc'
 
 export const userRouter = createTRPCRouter({
-  getUsers: adminProcedure
+  getUsers: managerProcedure
     .input(UserModel.findUsersBySearchWithPaginationQuery)
     .query(({ ctx: { services }, input }) => services.user.getUsers(input)),
 
@@ -11,10 +11,10 @@ export const userRouter = createTRPCRouter({
     services.user.getUserInfo(session.user),
   ),
 
-  updateRole: adminProcedure
+  updateRole: managerProcedure
     .input(UserModel.updateUserRoleBody)
-    .mutation(({ ctx: { services }, input }) =>
-      services.user.updateUserRole(input),
+    .mutation(({ ctx: { services, session }, input }) =>
+      services.user.updateUserRole(input, session.user),
     ),
 
   updateInfo: protectedProcedure

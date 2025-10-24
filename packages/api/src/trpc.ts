@@ -67,9 +67,12 @@ const protectedProcedure = t.procedure
       },
     })
   })
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.session.user.role !== 'admin')
-    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
+const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== 'admin' && ctx.session.user.role !== 'manager')
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Admin or manager access only',
+    })
   return next()
 })
 
@@ -78,5 +81,5 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
-  adminProcedure,
+  managerProcedure,
 }
