@@ -43,19 +43,17 @@ export class UserService {
         message: 'User already has this role',
       })
 
-    if (user.role === 'admin' && role !== 'admin') {
-      const adminCount = await this._userRepo.countUsersByField('role', 'admin')
-      if (adminCount <= 1)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'At least one admin is required',
-        })
-      else if (adminCount >= 5)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Maximum number of admins reached',
-        })
-    }
+    const adminCount = await this._userRepo.countUsersByField('role', 'admin')
+    if (user.role === 'admin' && role !== 'admin' && adminCount === 1)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'At least one admin is required',
+      })
+    else if (user.role !== 'admin' && role === 'admin' && adminCount >= 5)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Maximum number of admins reached',
+      })
 
     const result = await this._userRepo.update(userId, { role })
     if (!result)
