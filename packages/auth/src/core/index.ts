@@ -168,12 +168,6 @@ export function Auth(opts: AuthOptions) {
     signOut,
     handlers: {
       GET: async (request: Request) => {
-        const allowed = ratelimitMiddleware(request, 1)
-        if (!allowed)
-          return setCorsHeaders(
-            new Response('Too Many Requests', { status: 429 }),
-          )
-
         const { pathname, searchParams } = new URL(request.url)
         const cookies = new Cookies(request)
 
@@ -185,6 +179,12 @@ export function Auth(opts: AuthOptions) {
             const session = await auth(request)
             return setCorsHeaders(Response.json(session))
           }
+
+          const allowed = ratelimitMiddleware(request, 1)
+          if (!allowed)
+            return setCorsHeaders(
+              new Response('Too Many Requests', { status: 429 }),
+            )
 
           /**
            * [GET] /api/auth/:provider: Start OAuth flow
