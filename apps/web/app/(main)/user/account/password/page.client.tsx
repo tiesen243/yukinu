@@ -55,7 +55,11 @@ export const ChangePasswordForm: React.FC = () => {
             render={({ field, meta }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Current Password</FieldLabel>
-                <Input {...field} type='password' />
+                <Input
+                  {...field}
+                  type='password'
+                  autoComplete='current-password'
+                />
                 <FieldDescription>
                   Leave blank if you registered using a social account.
                 </FieldDescription>
@@ -69,7 +73,7 @@ export const ChangePasswordForm: React.FC = () => {
             render={({ field, meta }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>New Password</FieldLabel>
-                <Input {...field} type='password' />
+                <Input {...field} type='password' autoComplete='new-password' />
                 <FieldError errors={meta.errors} />
               </Field>
             )}
@@ -82,7 +86,7 @@ export const ChangePasswordForm: React.FC = () => {
                 <FieldLabel htmlFor={meta.fieldId}>
                   Confirm New Password
                 </FieldLabel>
-                <Input {...field} type='password' />
+                <Input {...field} type='password' autoComplete='new-password' />
                 <FieldError errors={meta.errors} />
               </Field>
             )}

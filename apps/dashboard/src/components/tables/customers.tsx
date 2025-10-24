@@ -187,10 +187,7 @@ const EditCustomerButton: React.FC<{
   const trpc = useTRPCClient()
 
   const form = useForm({
-    defaultValues: {
-      userId,
-      role: undefined as UserModel.UpdateUserRoleBody['role'],
-    },
+    defaultValues: { userId, role: 'user' },
     schema: UserModel.updateUserRoleBody,
     onSubmit: trpc.user.updateRole.mutate,
     onError: (error) => toast.error(error.message),
