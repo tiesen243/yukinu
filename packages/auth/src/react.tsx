@@ -14,7 +14,7 @@ type SessionContextValue = {
   signIn: <TProvider extends AuthProviders>(
     provider: TProvider,
     ...args: TProvider extends 'credentials'
-      ? [{ indentifier: string; password: string }]
+      ? [{ identifier: string; password: string }]
       : [{ redirectUrl?: string }?]
   ) => Promise<void>
   signOut: (opts?: { redirectUrl: string }) => Promise<void>
@@ -72,7 +72,7 @@ function SessionProvider({
     async <TProvider extends AuthProviders>(
       provider: TProvider,
       ...args: TProvider extends 'credentials'
-        ? [{ indentifier: string; password: string }]
+        ? [{ identifier: string; password: string }]
         : [{ redirectUrl?: string }?]
     ): Promise<void> => {
       if (provider === 'credentials') {

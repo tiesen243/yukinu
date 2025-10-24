@@ -1,6 +1,8 @@
 'use client'
 
+import type { UrlObject } from 'url'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import { useSession } from '@yukinu/auth/react'
 import { useTheme } from '@yukinu/ui'
@@ -21,6 +23,7 @@ import {
 } from '@yukinu/ui/dropdown-menu'
 import {
   LaptopIcon,
+  LayoutDashboardIcon,
   LogOutIcon,
   MoonIcon,
   ReceiptTextIcon,
@@ -29,15 +32,22 @@ import {
   SunMoonIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
+import { env } from '@yukinu/validators/env'
 
 const navItems = [
   { label: 'Profile', href: '/user/account/profile', icon: UserIcon },
+  {
+    label: 'Dashboard',
+    href: `${env.NEXT_PUBLIC_DASHBOARD_URL}/dashboard`,
+    icon: LayoutDashboardIcon,
+  },
   { label: 'Cart', href: '/user/cart', icon: ShoppingCartIcon },
   { label: 'Purchases', href: '/user/purchase', icon: ReceiptTextIcon },
 ] as const
 
 export const UserButton: React.FC = () => {
   const { session, status, signOut } = useSession()
+  const router = useRouter()
 
   if (status === 'loading')
     return <div className='size-9 animate-pulse rounded-full bg-muted' />
@@ -71,7 +81,7 @@ export const UserButton: React.FC = () => {
         <DropdownMenuGroup>
           {navItems.map((item) => (
             <DropdownMenuItem key={item.href} asChild>
-              <Link href={item.href}>
+              <Link href={item.href as unknown as UrlObject}>
                 <item.icon /> {item.label}
               </Link>
             </DropdownMenuItem>
@@ -82,7 +92,12 @@ export const UserButton: React.FC = () => {
 
         <DropdownMenuGroup>
           <ThemeChanger />
-          <DropdownMenuItem onClick={() => signOut({ redirectUrl: '/' })}>
+          <DropdownMenuItem
+            onClick={async () => {
+              await signOut()
+              router.push('/')
+            }}
+          >
             <LogOutIcon /> Sign Out
           </DropdownMenuItem>
         </DropdownMenuGroup>

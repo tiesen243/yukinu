@@ -43,3 +43,6 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
 }
 
 export type { AuthService, UserService }
+export type { IAccountRepository } from './repositories/account'
+export type { IProfileRepository } from './repositories/profile'
+export type { IUserRepository } from './repositories/user'

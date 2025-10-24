@@ -8,6 +8,28 @@ export class UserRepositoryMock
   extends BaseRepositoryMock<typeof users>
   implements IUserRepository
 {
+  findUsersBySearchWithPagination(
+    _search: string,
+    _page: number,
+    _limit: number,
+    _tx?: Database | Transaction,
+  ): Promise<IUserRepository.Users> {
+    return Promise.resolve({
+      users: [
+        {
+          id: 'mock-id',
+          username: 'mock-username',
+          email: 'mock-email',
+          role: 'user',
+          status: 'active',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      pagination: { total: 1, page: 1, limit: 10, totalPages: 1 },
+    })
+  }
+
   async findByIdentifier(
     data: IUserRepository.FindByIdentifierParams,
     _tx: Database | Transaction,
@@ -35,5 +57,14 @@ export class UserRepositoryMock
       createdAt: new Date(),
       updatedAt: new Date(),
     })
+  }
+
+  countUsersByField<TField extends keyof IUserRepository.User>(
+    field: TField,
+    value: IUserRepository.User[TField],
+    _tx?: Database | Transaction,
+  ): Promise<number> {
+    if (field === 'role' && value === 'admin') return Promise.resolve(3)
+    return Promise.resolve(0)
   }
 }

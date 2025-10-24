@@ -65,12 +65,16 @@ export function Auth(opts: AuthOptions) {
       const now = Date.now()
       const expiresTime = result.expires.getTime()
       const userAgent = opts.headers.get('user-agent') ?? ''
-      const ipAddress = opts.headers.get('x-forwarded-for') ?? ''
+      // disable ip check for now due to react router dont have ip info in header
+      // const ipAddress =
+      //   opts.headers.get('x-forwarded-for') ??
+      //   opts.headers.get('x-real-ip') ??
+      //   ''
 
       if (
         now > expiresTime ||
-        result.userAgent !== userAgent ||
-        result.ipAddress !== ipAddress
+        result.userAgent !== userAgent
+        // result.ipAddress !== ipAddress
       ) {
         await adapter.deleteSession(hashToken)
         return nullSession
@@ -89,16 +93,18 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function signIn(
-    opts: {
-      indentifier: string
-      password: string
-    },
+    opts: { identifier: string; password: string },
     headers: Headers = new Headers(),
   ): Promise<Omit<Session, 'createdAt'>> {
-    const { indentifier, password } = opts
+    const { identifier, password } = opts
 
-    const user = await adapter.getUserByIndentifier(indentifier)
+    const user = await adapter.getUserByIndentifier(identifier)
     if (!user) throw new Error('Invalid credentials')
+
+    if (user.status === 'inactive')
+      throw new Error(
+        'Your account has been suspended. Please contact support for assistance.',
+      )
 
     const account = await adapter.getAccount('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
@@ -118,12 +124,19 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function getOrCreateUser(
-    opts: Omit<OauthAccount & Account, 'userId'>,
+    opts: Omit<OauthAccount & Account, 'userId' | 'status'>,
     headers: Headers,
   ): Promise<Omit<Session, 'createdAt'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
-    if (existingAccount) return createSession(existingAccount.userId, headers)
+    if (existingAccount) {
+      if (existingAccount.status === 'inactive')
+        throw new Error(
+          'Your account has been suspended. Please contact support for assistance.',
+        )
+
+      return createSession(existingAccount.userId, headers)
+    }
 
     const existingUser = await adapter.getUserByIndentifier(userData.email)
     const userId =
@@ -155,12 +168,6 @@ export function Auth(opts: AuthOptions) {
     signOut,
     handlers: {
       GET: async (request: Request) => {
-        const allowed = ratelimitMiddleware(request, 1)
-        if (!allowed)
-          return setCorsHeaders(
-            new Response('Too Many Requests', { status: 429 }),
-          )
-
         const { pathname, searchParams } = new URL(request.url)
         const cookies = new Cookies(request)
 
@@ -172,6 +179,12 @@ export function Auth(opts: AuthOptions) {
             const session = await auth(request)
             return setCorsHeaders(Response.json(session))
           }
+
+          const allowed = ratelimitMiddleware(request, 1)
+          if (!allowed)
+            return setCorsHeaders(
+              new Response('Too Many Requests', { status: 429 }),
+            )
 
           /**
            * [GET] /api/auth/:provider: Start OAuth flow

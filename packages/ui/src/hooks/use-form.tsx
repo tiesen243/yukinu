@@ -29,10 +29,18 @@ interface RenderProps<
     name: TFieldName
     value: TValue[TFieldName]
     onChange: (
-      event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+      event:
+        | React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+          >
+        | string
+        | number
+        | boolean,
     ) => void
     onBlur: (
-      event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+      event: React.FocusEvent<
+        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+      >,
     ) => Promise<void>
     'aria-describedby': string
     'aria-invalid': boolean
@@ -166,11 +174,23 @@ const useForm = <
       const prevLocalValueRef = React.useRef(localValue)
 
       const handleChange = (
-        event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+        event:
+          | React.ChangeEvent<
+              HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+            >
+          | string
+          | number
+          | boolean,
       ) => {
-        event.persist()
         setErrors([])
 
+        if (typeof event !== 'object') {
+          setLocalValue(event as TValues[TFieldName])
+          setValue(props.name, event as TValues[TFieldName])
+          return
+        }
+
+        event.persist()
         let newValue
         const { type, checked, value, valueAsNumber } =
           event.target as unknown as HTMLInputElement
@@ -184,7 +204,9 @@ const useForm = <
       }
 
       const handleBlur = async (
-        event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+        event: React.FocusEvent<
+          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >,
       ) => {
         event.persist()
         if (prevLocalValueRef.current === localValue) return

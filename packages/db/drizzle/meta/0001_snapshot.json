@@ -1613,7 +1613,7 @@
     "public.user_status": {
       "name": "user_status",
       "schema": "public",
-      "values": ["active", "inactive", "banned"]
+      "values": ["active", "inactive"]
     }
   },
   "schemas": {},

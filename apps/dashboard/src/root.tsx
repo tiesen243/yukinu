@@ -1,5 +1,6 @@
 import '@/globals.css'
 
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import {
   isRouteErrorResponse,
   Links,
@@ -11,6 +12,7 @@ import {
 
 import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
+import { Toaster } from '@yukinu/ui/sonner'
 
 import type { Route } from './+types/root'
 import { createMetadata } from '@/lib/metadata'
@@ -27,9 +29,13 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
       </head>
       <body className='flex min-h-dvh flex-col font-sans antialiased'>
         <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
-          <TRPCReactProvider>
-            <SessionProvider>{children}</SessionProvider>
-          </TRPCReactProvider>
+          <NuqsAdapter>
+            <TRPCReactProvider>
+              <SessionProvider>{children}</SessionProvider>
+            </TRPCReactProvider>
+          </NuqsAdapter>
+
+          <Toaster richColors />
         </ThemeProvider>
 
         <ScrollRestoration />
@@ -39,7 +45,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   )
 }
 
-export default function App() {
+export default function App(_: Route.ComponentProps) {
   return <Outlet />
 }
 

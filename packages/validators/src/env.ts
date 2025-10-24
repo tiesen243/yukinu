@@ -28,9 +28,17 @@ export const env = createEnv({
   },
 
   clientPrefix: 'NEXT_PUBLIC_',
-  client: {},
+  client: {
+    // Application settings
+    NEXT_PUBLIC_WEB_URL: z.url(),
+    NEXT_PUBLIC_DASHBOARD_URL: z.url(),
+  },
 
-  runtimeEnv: process.env,
+  runtimeEnv: {
+    ...process.env,
+    NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
+    NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
+  },
 
   skipValidation:
     !!process.env.SKIP_ENV_VALIDATION ||

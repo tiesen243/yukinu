@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
 import type { AuthModel } from '@yukinu/validators/auth'
-import { Password } from '@yukinu/auth'
+import { invalidateSessionTokens, Password } from '@yukinu/auth'
 
 import type { IAccountRepository } from '../repositories/account'
 import type { IProfileRepository } from '../repositories/profile'
@@ -65,5 +65,60 @@ export class AuthService {
 
       return user
     })
+  }
+
+  async changePassword(
+    userId: string,
+    data: AuthModel.ChangePasswordBody,
+  ): Promise<{ userId: string }> {
+    const newPassword = await this._password.hash(data.newPassword)
+    const account = await this._accountRepo.findByIdAndProvider(
+      userId,
+      'credentials',
+    )
+
+    let result: { userId: string } | null = null
+    if (!account?.password)
+      result = await this._accountRepo.create({
+        userId,
+        provider: 'credentials',
+        accountId: userId,
+        password: newPassword,
+      })
+    else {
+      if (!data.currentPassword)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Current password is required',
+        })
+
+      const isCurrentPasswordValid = await this._password.verify(
+        account.password,
+        data.currentPassword,
+      )
+      if (!isCurrentPasswordValid)
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Current password is incorrect',
+        })
+
+      if (data.currentPassword === data.newPassword)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'New password must be different from current password',
+        })
+
+      result = await this._accountRepo.updatePassword(userId, newPassword)
+    }
+
+    if (!result)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to change password',
+      })
+
+    if (data.isLogOutOtherSessions) await invalidateSessionTokens(userId)
+
+    return result
   }
 }

@@ -26,7 +26,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   return result
 })
 
-const ratelimiters = new TokenBucketRateLimit<string>(5, 60)
+const ratelimiters = new TokenBucketRateLimit<string>(50, 60)
 const ratelimitConsume = {
   query: 1,
   mutation: 5,
@@ -67,9 +67,12 @@ const protectedProcedure = t.procedure
       },
     })
   })
-const adminProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.session.user.role !== 'admin')
-    throw new TRPCError({ code: 'FORBIDDEN', message: 'Admin access only' })
+const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
+  if (ctx.session.user.role !== 'admin' && ctx.session.user.role !== 'manager')
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Admin or manager access only',
+    })
   return next()
 })
 
@@ -78,5 +81,5 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
-  adminProcedure,
+  managerProcedure,
 }
