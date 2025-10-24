@@ -219,8 +219,10 @@ const EditCustomerButton: React.FC<{
                   <FieldLabel htmlFor={meta.fieldId}>Role</FieldLabel>
                   <Select {...field}>
                     <SelectOption value=''>Select a role</SelectOption>
-                    <SelectOption value='user'>User</SelectOption>
                     <SelectOption value='admin'>Admin</SelectOption>
+                    <SelectOption value='manager'>Manager</SelectOption>
+                    <SelectOption value='vendor'>Vendor</SelectOption>
+                    <SelectOption value='user'>User</SelectOption>
                   </Select>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>

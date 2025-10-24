@@ -21,7 +21,9 @@ export namespace UserModel {
 
   export const updateUserRoleBody = z.object({
     userId: z.cuid2('Invalid user ID'),
-    role: z.enum(['user', 'admin'], { error: 'Invalid role' }),
+    role: z.enum(['admin', 'user', 'manager', 'vendor'], {
+      error: 'Invalid role',
+    }),
   })
   export type UpdateUserRoleBody = z.infer<typeof updateUserRoleBody>
 
