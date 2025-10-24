@@ -6,10 +6,10 @@ import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
 
+import { cn } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { useMediaQuery } from '@yukinu/ui/hooks/use-media-query'
 import { Input } from '@yukinu/ui/input'
-import { cn } from '@yukinu/ui/lib/utils'
 import { Separator } from '@yukinu/ui/separator'
 import {
   Sheet,
