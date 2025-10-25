@@ -30,8 +30,8 @@ export const env = createEnv({
   clientPrefix: 'NEXT_PUBLIC_',
   client: {
     // Application settings
-    NEXT_PUBLIC_WEB_URL: z._default(z.url(), 'http://localhost:3000'),
-    NEXT_PUBLIC_DASHBOARD_URL: z._default(z.url(), 'http://localhost:3001'),
+    NEXT_PUBLIC_WEB_URL: z.optional(z.string()),
+    NEXT_PUBLIC_DASHBOARD_URL: z.optional(z.string()),
   },
 
   runtimeEnv: {
