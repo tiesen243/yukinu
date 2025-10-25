@@ -23,8 +23,9 @@ RUN bun install --no-save
 
 COPY --from=pruner /prune/out/full .
 COPY .env .env
-ENV POSTGRES_HOST=db
-RUN bun run build
+ENV POSTGRES_HOST: 'db'
+RUN bun run build \ 
+    && find apps/dashboard/build/client/assets -type f -name 'manifest-*.js' -exec sed -i 's|/dashboard|/dashboard/dashboard|g' {} +
 
 # ===========================================
 # Stage 3: Production image
@@ -37,4 +38,5 @@ COPY --from=builder /build/apps/dashboard/node_modules ./apps/dashboard/node_mod
 COPY --from=builder /build/node_modules ./node_modules
 
 WORKDIR /app/apps/dashboard
+ENV PORT=3000
 CMD ["bun", "react-router-serve", "build/server/index.js"]

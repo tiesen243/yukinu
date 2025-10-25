@@ -2,15 +2,12 @@ import { Outlet } from 'react-router'
 
 import { SidebarInset, SidebarProvider } from '@yukinu/ui/sidebar'
 
-import type { Route } from './+types/dashboard'
+import type { Route } from './+types/_dashboard'
 import { AppSidebar } from '@/components/app-sidebar'
 import { Header } from '@/components/header'
 
 export const loader = ({ request }: Route.LoaderArgs) => {
   const cookieHeader = request.headers.get('Cookie') ?? ''
-
-  // const session = await auth(request)
-  // if (!session.user) return redirect('/login')
 
   const sidebarState = cookieHeader
     .split('; ')

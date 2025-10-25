@@ -22,8 +22,9 @@ COPY --from=pruner /prune/out/bun.lock .
 RUN bun install --no-save
 
 COPY --from=pruner /prune/out/full .
+COPY .env .env
 ENV NEXT_BUILD_OUTPUT=standalone
-ENV SKIP_ENV_VALIDATION=true
+ENV POSTGRES_HOST=db
 RUN bun run build
 
 # ===========================================
@@ -37,5 +38,7 @@ COPY --from=builder /build/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /build/apps/web/public ./apps/web/public
 COPY --from=builder /build/apps/web/node_modules ./node_modules
 
+COPY .env .env
+ENV POSTGRES_HOST=db
 ENV PORT=3000
 CMD ["bun", "apps/web/server.js"]

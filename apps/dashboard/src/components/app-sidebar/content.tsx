@@ -42,12 +42,12 @@ export const AppSidebarContent: React.FC = () => {
                 <SidebarMenuButton
                   isActive={
                     item.href === ''
-                      ? location.pathname === '/dashboard'
-                      : location.pathname.startsWith(`/dashboard/${item.href}`)
+                      ? location.pathname === '/'
+                      : location.pathname.startsWith(`/${item.href}`)
                   }
                   asChild
                 >
-                  <Link to={`/dashboard/${item.href}`}>
+                  <Link to={item.href}>
                     <item.icon /> {item.title}
                   </Link>
                 </SidebarMenuButton>
@@ -91,43 +91,43 @@ const mainMenuItems = [
   {
     title: 'Products',
     icon: PackageIcon,
-    href: 'products',
+    href: '/products',
     roles: ['admin', 'manager', 'vendor'],
   },
   {
     title: 'Orders',
     icon: ShoppingCartIcon,
-    href: 'orders',
+    href: '/orders',
     roles: ['admin', 'manager', 'vendor'],
   },
   {
     title: 'Customers',
     icon: Users2Icon,
-    href: 'customers',
+    href: '/customers',
     roles: ['admin', 'manager'],
   },
   {
     title: 'Vendors',
     icon: UsersIcon,
-    href: 'vendors',
+    href: '/vendors',
     roles: ['admin', 'manager'],
   },
   {
     title: 'Promotions',
     icon: TagIcon,
-    href: 'promotions',
+    href: '/promotions',
     roles: ['admin', 'manager'],
   },
   {
     title: 'Reviews',
     icon: StarIcon,
-    href: 'reviews',
+    href: '/reviews',
     roles: ['admin', 'manager', 'vendor'],
   },
   {
     title: 'Settings',
     icon: SettingsIcon,
-    href: 'settings',
+    href: '/settings',
     roles: ['admin', 'manager', 'vendor', 'user'],
   },
 ]
@@ -136,25 +136,25 @@ const reportMenuItems = [
   {
     title: 'Analytics',
     icon: BarChart3Icon,
-    href: 'reports/analytics',
+    href: '/reports/analytics',
     roles: ['admin', 'manager'],
   },
   {
     title: 'Sales Reports',
     icon: DollarSignIcon,
-    href: 'reports/sales',
+    href: '/reports/sales',
     roles: ['admin', 'manager'],
   },
   {
     title: 'Vendor Performance',
     icon: UsersIcon,
-    href: 'reports/vendors',
+    href: '/reports/vendors',
     roles: ['admin', 'manager'],
   },
   {
     title: 'Support Tickets',
     icon: LifeBuoyIcon,
-    href: 'reports/support',
+    href: '/reports/support',
     roles: ['admin', 'manager', 'vendor'],
   },
 ]

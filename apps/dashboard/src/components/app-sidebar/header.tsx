@@ -12,7 +12,7 @@ export const AppSidebarHeader: React.FC = () => (
     <SidebarMenu>
       <SidebarMenuItem>
         <SidebarMenuButton size='lg' asChild>
-          <Link to='/dashboard'>
+          <Link to='/'>
             <div className='flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground'>
               <img
                 src='/assets/logo.svg'
