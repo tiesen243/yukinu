@@ -3,6 +3,9 @@
   "workspaces": {
     "": {
       "name": "yukinu",
+      "dependencies": {
+        "@react-router/node": "^7.9.4",
+      },
       "devDependencies": {
         "@changesets/changelog-github": "^0.5.1",
         "@changesets/cli": "^2.29.7",
@@ -27,7 +30,6 @@
       "dependencies": {
         "@react-router/fs-routes": "^7.9.4",
         "@react-router/node": "^7.9.4",
-        "@react-router/serve": "^7.9.4",
         "@tanstack/react-query": "catalog:",
         "@trpc/client": "catalog:trpc",
         "@trpc/tanstack-react-query": "catalog:trpc",
@@ -45,6 +47,7 @@
       },
       "devDependencies": {
         "@react-router/dev": "^7.9.4",
+        "@react-router/serve": "^7.9.4",
         "@tailwindcss/vite": "catalog:tailwind",
         "@types/node": "catalog:",
         "@types/react": "catalog:react",
@@ -254,6 +257,10 @@
     "tools/github": {
       "name": "@yukinu/github",
       "version": "0.0.2",
+    },
+    "tools/nginx": {
+      "name": "@yukinu/nginx",
+      "version": "0.0.0",
     },
     "tools/prettier": {
       "name": "@yukinu/prettier-config",
@@ -867,6 +874,8 @@
     "@yukinu/eslint-config": ["@yukinu/eslint-config@workspace:tools/eslint"],
 
     "@yukinu/github": ["@yukinu/github@workspace:tools/github"],
+
+    "@yukinu/nginx": ["@yukinu/nginx@workspace:tools/nginx"],
 
     "@yukinu/prettier-config": ["@yukinu/prettier-config@workspace:tools/prettier"],
 

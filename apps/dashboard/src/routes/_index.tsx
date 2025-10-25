@@ -1,10 +1,8 @@
-import { env } from '@yukinu/validators/env'
-
-export const loader = () => {
-  console.log(env)
-  return null
-}
-
 export default function HomePage() {
-  return <div>Welcome to Yukinu Dashboard!</div>
+  return (
+    <div>
+      <h1>Welcome to the Dashboard</h1>
+      <p>This is the home page of your dashboard application.</p>
+    </div>
+  )
 }

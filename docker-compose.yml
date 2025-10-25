@@ -7,20 +7,31 @@ services:
     env_file: .env
     environment:
       POSTGRES_HOST: 'db'
-    ports:
-      - '3000:3000'
+    expose:
+      - '3000'
     depends_on:
       - db
 
-  dashboard:
-    build:
-      context: .
-      dockerfile: ./apps/dashboard/Dockerfile
+  # dashboard:
+  #   build:
+  #     context: .
+  #     dockerfile: ./apps/dashboard/Dockerfile
+  #   restart: unless-stopped
+  #   expose:
+  #     - '3001'
+  #   depends_on:
+  #     - db
+
+  nginx:
+    image: nginx:latest
     restart: unless-stopped
     ports:
-      - '3001:3001'
+      - '80:80'
+      - '443:443'
     depends_on:
-      - db
+      - web
+    volumes:
+      - ./tools/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
 
   db:
     image: postgres:18

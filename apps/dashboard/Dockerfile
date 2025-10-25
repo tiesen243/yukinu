@@ -37,5 +37,4 @@ COPY --from=builder /build/apps/dashboard/node_modules ./apps/dashboard/node_mod
 COPY --from=builder /build/node_modules ./node_modules
 
 WORKDIR /app/apps/dashboard
-ENV PORT=3001
-CMD ["bun", "react-router-serve", "./build/server/index.js"]
+CMD ["bun", "react-router-serve", "build/server/index.js"]
