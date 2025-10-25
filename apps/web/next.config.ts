@@ -15,6 +15,12 @@ const nextConfig = {
     '@yukinu/ui',
     '@yukinu/validators',
   ],
+
+  // Enable standalone build output if specified (for Docker deployment)
+  ...(process.env.NEXT_BUILD_OUTPUT === 'standalone' && {
+    output: 'standalone',
+    outputFileTracing: true,
+  }),
 } satisfies NextConfig
 
 export default nextConfig
