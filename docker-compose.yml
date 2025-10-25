@@ -31,6 +31,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - web
+      - dashboard
 
   db:
     image: postgres:18

@@ -23,9 +23,7 @@ RUN bun install --no-save
 
 COPY --from=pruner /prune/out/full .
 COPY .env .env
-ENV POSTGRES_HOST: 'db'
-RUN bun run build \ 
-    && find apps/dashboard/build/client/assets -type f -name 'manifest-*.js' -exec sed -i 's|/dashboard|/dashboard/dashboard|g' {} +
+RUN bun run build
 
 # ===========================================
 # Stage 3: Production image
