@@ -43,6 +43,7 @@ function TRPCReactProvider({
             headers() {
               const headers = new Headers()
               headers.set('x-trpc-source', 'react-nextjs')
+              headers.set('trpc-accept', 'application/json')
               return headers
             },
           }),
