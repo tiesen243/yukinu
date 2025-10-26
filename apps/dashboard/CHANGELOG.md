@@ -1,5 +1,15 @@
 # @yukinu/dashboard
 
+## 0.1.0
+
+### Minor Changes
+
+- [#79](https://github.com/tiesen243/yukinu/pull/79) [`4dd92ab`](https://github.com/tiesen243/yukinu/commit/4dd92ab71695079a9ba7631e51478adb78221cb4) Thanks [@tiesen243](https://github.com/tiesen243)! - frist deploy
+
+### Patch Changes
+
+- [#79](https://github.com/tiesen243/yukinu/pull/79) [`1d37ae1`](https://github.com/tiesen243/yukinu/commit/1d37ae1a120a632dfa9cc8280362f12040996f68) Thanks [@tiesen243](https://github.com/tiesen243)! - build app with docker
+
 ## 0.0.6
 
 ### Patch Changes
