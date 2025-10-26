@@ -36,7 +36,7 @@ COPY --from=builder /build/apps/web/.next/standalone ./
 COPY --from=builder /build/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder /build/apps/web/public ./apps/web/public
 COPY --from=builder /build/apps/web/node_modules ./node_modules
-
 COPY .env .env
+
 ENV PORT=3000
-CMD ["bun", "apps/web/server.js"]
+CMD ["bun", "--env-file=.env", "apps/web/server.js"]

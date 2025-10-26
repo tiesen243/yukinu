@@ -1,11 +1,16 @@
 import type { QueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import {
+  createTRPCClient,
+  httpBatchLink,
+  httpBatchStreamLink,
+} from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
+import { env } from '@yukinu/validators/env'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'
@@ -37,8 +42,9 @@ function TRPCReactProvider({
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
       links:
-        // env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true' ? [httpBatchStreamLink(configs)] :
-        [httpBatchLink(configs)],
+        env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true'
+          ? [httpBatchStreamLink(configs)]
+          : [httpBatchLink(configs)],
     }),
   )
 
