@@ -6,13 +6,14 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import {
   createTRPCClient,
   httpBatchLink,
-  httpSubscriptionLink,
+  httpBatchStreamLink,
   splitLink,
 } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
+import { env } from '@yukinu/validators/env'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'
@@ -35,7 +36,7 @@ function TRPCReactProvider({
     createTRPCClient<AppRouter>({
       links: [
         splitLink({
-          condition: (op) => op.type === 'subscription',
+          condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
           false: httpBatchLink({
             transformer: SuperJSON,
             url: getBaseUrl() + '/api/trpc',
@@ -45,13 +46,13 @@ function TRPCReactProvider({
               return headers
             },
           }),
-          true: httpSubscriptionLink({
+          true: httpBatchStreamLink({
             transformer: SuperJSON,
             url: getBaseUrl() + '/api/trpc',
-            eventSourceOptions() {
+            headers() {
               const headers = new Headers()
               headers.set('x-trpc-source', 'react-nextjs')
-              return { headers }
+              return headers
             },
           }),
         }),
