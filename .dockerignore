@@ -55,7 +55,7 @@ logs/
 *.log*
 
 # local env files
-.env*
+# .env*
 !.env.example
 
 # turbo
@@ -76,6 +76,3 @@ expo-env.d.ts
 .project
 .classpath
 *.iml
-
-# Turborepo
-.turbo

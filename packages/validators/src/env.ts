@@ -8,11 +8,12 @@ export const env = createEnv({
     ),
 
     // Database configuration
-    POSTGRES_HOST: z.string(),
+    POSTGRES_HOST: z._default(z.string(), '127.0.0.1'),
     POSTGRES_PORT: z._default(z.coerce.number(), 5432),
     POSTGRES_USER: z.string(),
     POSTGRES_PASSWORD: z.string(),
     POSTGRES_DATABASE: z.string(),
+    POSTGRES_SSL_MODE: z._default(z.enum(['true', 'false']), 'false'),
 
     // OAuth configuration
     AUTH_FACEBOOK_ID: z.string(),
@@ -30,14 +31,19 @@ export const env = createEnv({
   clientPrefix: 'NEXT_PUBLIC_',
   client: {
     // Application settings
-    NEXT_PUBLIC_WEB_URL: z.url(),
-    NEXT_PUBLIC_DASHBOARD_URL: z.url(),
+    NEXT_PUBLIC_WEB_URL: z.optional(z.string()),
+    NEXT_PUBLIC_DASHBOARD_URL: z.optional(z.string()),
+    NEXT_PUBLIC_TRPC_USE_STREAMING: z._default(
+      z.enum(['true', 'false']),
+      'true',
+    ),
   },
 
   runtimeEnv: {
     ...process.env,
     NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
     NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
+    NEXT_PUBLIC_TRPC_USE_STREAMING: process.env.NEXT_PUBLIC_TRPC_USE_STREAMING,
   },
 
   skipValidation:

@@ -5,14 +5,14 @@ import * as React from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import {
   createTRPCClient,
+  httpBatchLink,
   httpBatchStreamLink,
-  httpSubscriptionLink,
-  splitLink,
 } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
+import { env } from '@yukinu/validators/env'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'
@@ -30,32 +30,23 @@ function TRPCReactProvider({
 }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = getQueryClient()
 
+  const configs = {
+    transformer: SuperJSON,
+    url: getBaseUrl() + '/api/trpc',
+    headers() {
+      const headers = new Headers()
+      headers.set('x-trpc-source', 'react-nextjs')
+      return headers
+    },
+  }
+
   // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
-      links: [
-        splitLink({
-          condition: (op) => op.type === 'subscription',
-          false: httpBatchStreamLink({
-            transformer: SuperJSON,
-            url: getBaseUrl() + '/api/trpc',
-            headers() {
-              const headers = new Headers()
-              headers.set('x-trpc-source', 'react-nextjs')
-              return headers
-            },
-          }),
-          true: httpSubscriptionLink({
-            transformer: SuperJSON,
-            url: getBaseUrl() + '/api/trpc',
-            eventSourceOptions() {
-              const headers = new Headers()
-              headers.set('x-trpc-source', 'react-nextjs')
-              return { headers }
-            },
-          }),
-        }),
-      ],
+      links:
+        env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true'
+          ? [httpBatchStreamLink(configs)]
+          : [httpBatchLink(configs)],
     }),
   )
 

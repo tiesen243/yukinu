@@ -32,15 +32,10 @@ import {
   SunMoonIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
-import { env } from '@yukinu/validators/env'
 
 const navItems = [
   { label: 'Profile', href: '/user/account/profile', icon: UserIcon },
-  {
-    label: 'Dashboard',
-    href: `${env.NEXT_PUBLIC_DASHBOARD_URL}/dashboard`,
-    icon: LayoutDashboardIcon,
-  },
+  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboardIcon },
   { label: 'Cart', href: '/user/cart', icon: ShoppingCartIcon },
   { label: 'Purchases', href: '/user/purchase', icon: ReceiptTextIcon },
 ] as const

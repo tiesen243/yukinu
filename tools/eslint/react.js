@@ -8,6 +8,7 @@ export default defineConfig({
   files: ['**/*.ts', '**/*.tsx'],
   extends: [reactPlugin.configs['recommended-type-checked']],
   plugins: {
+    // @ts-ignore
     'react-hooks': hooksPlugin,
     'jsx-a11y': a11yPlugin,
   },

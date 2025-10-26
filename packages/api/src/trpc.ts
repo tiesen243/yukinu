@@ -7,11 +7,6 @@ import type { createTRPCContext } from './context'
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: SuperJSON,
-  sse: {
-    maxDurationMs: 1_000 * 60 * 5, // 5 minutes
-    ping: { enabled: true, intervalMs: 3_000 },
-    client: { reconnectAfterInactivityMs: 5_000 },
-  },
 })
 
 const createCallerFactory = t.createCallerFactory

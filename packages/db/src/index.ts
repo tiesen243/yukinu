@@ -20,7 +20,7 @@ const createDrizzleClient = () => {
     user: env.POSTGRES_USER,
     password: env.POSTGRES_PASSWORD,
     database: env.POSTGRES_DATABASE,
-    ssl: env.NODE_ENV === 'production' ? 'require' : false,
+    ssl: env.POSTGRES_SSL_MODE === 'true' ? 'require' : false,
   })
   return drizzle(conn, { casing: 'snake_case' })
 }
