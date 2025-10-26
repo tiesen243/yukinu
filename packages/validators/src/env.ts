@@ -13,6 +13,7 @@ export const env = createEnv({
     POSTGRES_USER: z.string(),
     POSTGRES_PASSWORD: z.string(),
     POSTGRES_DATABASE: z.string(),
+    POSTGRES_SSL_MODE: z._default(z.enum(['true', 'false']), 'false'),
 
     // OAuth configuration
     AUTH_FACEBOOK_ID: z.string(),
