@@ -4,6 +4,7 @@ services:
       context: .
       dockerfile: ./apps/web/Dockerfile
     restart: unless-stopped
+    env_file: .env
     expose:
       - '3000'
     depends_on:
@@ -14,6 +15,7 @@ services:
       context: .
       dockerfile: ./apps/dashboard/Dockerfile
     restart: unless-stopped
+    env_file: .env
     expose:
       - '3000'
     depends_on:
