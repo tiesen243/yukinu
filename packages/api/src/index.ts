@@ -1,5 +1,7 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 
+import { env } from '@yukinu/validators/env'
+
 import { createTRPCContext } from './context'
 import { appRouter } from './routers/_app'
 import { createCallerFactory } from './trpc'
@@ -17,7 +19,13 @@ const handler = async (request: Request) => {
       createContext: () => createTRPCContext(request),
     })
 
-  response.headers.set('Access-Control-Allow-Origin', '*')
+  const protocal = env.NODE_ENV === 'production' ? 'https' : 'http'
+  const allowedOrigins = [
+    `${protocal}://${env.NEXT_PUBLIC_DASHBOARD_URL}`,
+    `${protocal}://${env.NEXT_PUBLIC_WEB_URL}`,
+  ]
+
+  response.headers.set('Access-Control-Allow-Origin', allowedOrigins.join(', '))
   response.headers.set('Access-Control-Request-Method', '*')
   response.headers.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
   response.headers.set('Access-Control-Allow-Headers', '*')

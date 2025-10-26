@@ -19,7 +19,9 @@ const nextConfig = {
   redirects: async () => [
     {
       source: '/dashboard',
-      destination: env.NEXT_PUBLIC_DASHBOARD_URL,
+      destination: `${
+        env.NODE_ENV === 'production' ? 'https' : 'http'
+      }://${env.NEXT_PUBLIC_DASHBOARD_URL}`,
       permanent: true,
     },
   ],
