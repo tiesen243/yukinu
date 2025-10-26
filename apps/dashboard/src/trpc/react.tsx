@@ -1,12 +1,11 @@
 import type { QueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { createTRPCClient, httpBatchStreamLink, httpLink } from '@trpc/client'
+import { createTRPCClient, httpBatchLink } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
-import { env } from '@yukinu/validators/env'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'
@@ -27,30 +26,17 @@ function TRPCReactProvider({
   // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
-      links:
-        env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true'
-          ? [
-              httpBatchStreamLink({
-                transformer: SuperJSON,
-                url: getBaseUrl() + '/api/trpc',
-                headers() {
-                  const headers = new Headers()
-                  headers.set('x-trpc-source', 'react-router')
-                  return headers
-                },
-              }),
-            ]
-          : [
-              httpLink({
-                transformer: SuperJSON,
-                url: getBaseUrl() + '/api/trpc',
-                headers() {
-                  const headers = new Headers()
-                  headers.set('x-trpc-source', 'react-router')
-                  return headers
-                },
-              }),
-            ],
+      links: [
+        httpBatchLink({
+          transformer: SuperJSON,
+          url: getBaseUrl() + '/api/trpc',
+          headers() {
+            const headers = new Headers()
+            headers.set('x-trpc-source', 'react-router')
+            return headers
+          },
+        }),
+      ],
     }),
   )
 
