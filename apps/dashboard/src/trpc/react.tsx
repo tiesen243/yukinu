@@ -5,7 +5,6 @@ import {
   createTRPCClient,
   httpBatchLink,
   httpBatchStreamLink,
-  splitLink,
 } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
@@ -42,13 +41,10 @@ function TRPCReactProvider({
   // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
-      links: [
-        splitLink({
-          condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
-          true: httpBatchStreamLink(configs),
-          false: httpBatchLink(configs),
-        }),
-      ],
+      links:
+        env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true'
+          ? [httpBatchStreamLink(configs)]
+          : [httpBatchLink(configs)],
     }),
   )
 
