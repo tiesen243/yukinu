@@ -3,8 +3,8 @@ import * as React from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import {
   createTRPCClient,
-  httpBatchLink,
   httpBatchStreamLink,
+  httpLink,
   splitLink,
 } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
@@ -35,7 +35,7 @@ function TRPCReactProvider({
       links: [
         splitLink({
           condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
-          false: httpBatchLink({
+          false: httpLink({
             transformer: SuperJSON,
             url: getBaseUrl() + '/api/trpc',
             headers() {

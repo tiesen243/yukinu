@@ -338,7 +338,9 @@ const DEFAULT_OPTIONS = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'Lax',
-    domain: `.${env.NEXT_PUBLIC_WEB_URL}`,
+    ...(env.NODE_ENV === 'production' && {
+      domain: `.${env.NEXT_PUBLIC_WEB_URL}`,
+    }),
   },
 } as const satisfies Omit<
   Required<AuthOptions>,
