@@ -4,6 +4,7 @@ import { useSession } from '@yukinu/auth/react'
 import {
   BarChart3Icon,
   DollarSignIcon,
+  HomeIcon,
   LayoutDashboardIcon,
   LifeBuoyIcon,
   PackageIcon,
@@ -43,7 +44,7 @@ export const AppSidebarContent: React.FC = () => {
                   isActive={
                     item.href === ''
                       ? location.pathname === '/'
-                      : location.pathname.startsWith(`/${item.href}`)
+                      : location.pathname.startsWith(item.href)
                   }
                   asChild
                 >
@@ -64,9 +65,7 @@ export const AppSidebarContent: React.FC = () => {
             .map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
-                  isActive={location.pathname.startsWith(
-                    `/dashboard/${item.href}`,
-                  )}
+                  isActive={location.pathname.startsWith(item.href)}
                   asChild
                 >
                   <Link to={`/dashboard/${item.href}`}>
@@ -82,6 +81,12 @@ export const AppSidebarContent: React.FC = () => {
 }
 
 const mainMenuItems = [
+  {
+    title: 'Home',
+    icon: HomeIcon,
+    href: '/web',
+    roles: ['admin', 'manager', 'vendor', 'user'],
+  },
   {
     title: 'Dashboard',
     icon: LayoutDashboardIcon,
