@@ -30,11 +30,11 @@ export class UserService {
     return { ...user, ...profile }
   }
 
-  async updateUserRole(
-    data: UserModel.UpdateUserRoleBody,
-    actingUser: { id: string; role: UserModel.UpdateUserRoleBody['role'] },
+  async updateUser(
+    data: UserModel.UpdateUserBody,
+    actingUser: Pick<UserModel.User, 'id' | 'role' | 'status'>,
   ) {
-    const { userId, role } = data
+    const { userId, role, status } = data
 
     const user = await this._userRepo.findById(userId)
     if (!user)
@@ -43,41 +43,31 @@ export class UserService {
     if (actingUser.id === userId)
       throw new TRPCError({
         code: 'FORBIDDEN',
-        message: 'Users cannot change their own role',
+        message: 'Users cannot change their own role or status',
       })
 
     if (actingUser.role === 'manager' && user.role === 'admin')
       throw new TRPCError({
         code: 'FORBIDDEN',
-        message: 'Managers cannot change the role of an admin',
+        message: 'Managers cannot change the role or status of an admin',
       })
 
-    if (user.role === role)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'User already has this role',
-      })
+    if (user.role === 'admin' && role !== 'admin') {
+      const adminCount = await this._userRepo.countUsersByField('role', 'admin')
+      if (adminCount <= 1)
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'There must be at least one admin user',
+        })
+    }
 
-    const adminCount = await this._userRepo.countUsersByField('role', 'admin')
-    if (user.role === 'admin' && role !== 'admin' && adminCount === 1)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'At least one admin is required',
-      })
-    else if (user.role !== 'admin' && role === 'admin' && adminCount >= 5)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Maximum number of admins reached',
-      })
-
-    const result = await this._userRepo.update(userId, { role })
-    if (!result)
+    const updatedUser = await this._userRepo.update(userId, { role, status })
+    if (!updatedUser)
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to update user role',
+        message: 'Failed to update user',
       })
-
-    return result
+    return updatedUser
   }
 
   async updateUserInfo(userId: string, data: UserModel.UpdateProfileBody) {

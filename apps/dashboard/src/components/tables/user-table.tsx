@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
 import type { RouterOutputs } from '@yukinu/api'
+import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -14,6 +16,7 @@ import {
 import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
+import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import {
@@ -35,21 +38,21 @@ const queryParsers = {
   limit: parseAsInteger.withDefault(10),
 }
 
-export const CustomersTable: React.FC = () => (
+export const UserTable: React.FC = () => (
   <Table>
-    <CustomersTableHeader />
+    <UserTableHeader />
 
     <TableBody>
-      <CustomersTableBody />
+      <UserTableBody />
     </TableBody>
 
     <TableFooter>
-      <CustomersTableFooter />
+      <UserTableFooter />
     </TableFooter>
   </Table>
 )
 
-const CustomersTableHeader: React.FC = () => (
+const UserTableHeader: React.FC = () => (
   <TableHeader>
     <TableRow>
       <TableHead className='w-[100px]'>ID</TableHead>
@@ -64,7 +67,7 @@ const CustomersTableHeader: React.FC = () => (
   </TableHeader>
 )
 
-const CustomersTableBody: React.FC = () => {
+const UserTableBody: React.FC = () => {
   const [query] = useQueryStates(queryParsers)
   const trpc = useTRPC()
   const { data, isLoading } = useQuery(trpc.user.getUsers.queryOptions(query))
@@ -89,12 +92,10 @@ const CustomersTableBody: React.FC = () => {
       </TableRow>
     )
 
-  return data.users.map((user) => (
-    <CustomersTableRow key={user.id} user={user} />
-  ))
+  return data.users.map((user) => <UserTableRow key={user.id} user={user} />)
 }
 
-const CustomersTableRow: React.FC<{
+const UserTableRow: React.FC<{
   user: RouterOutputs['user']['getUsers']['users'][number]
 }> = ({ user }) => (
   <TableRow key={user.id}>
@@ -102,18 +103,15 @@ const CustomersTableRow: React.FC<{
     <TableCell>{user.username}</TableCell>
     <TableCell>{user.email}</TableCell>
     <TableCell>{user.role}</TableCell>
-    <TableCell>{user.status}</TableCell>
+    <TableCell>
+      <Badge variant={user.status === 'active' ? 'success' : 'warning'}>
+        {user.status}
+      </Badge>
+    </TableCell>
     <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
     <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
     <TableCell className='flex w-fit items-center gap-2'>
-      <EditCustomerButton userId={user.id} />
-      <Button
-        variant='ghost'
-        size='sm'
-        className='text-warning hover:bg-warning/10 hover:text-warning dark:hover:bg-warning/10'
-      >
-        Suspend
-      </Button>
+      <EditUserButton userId={user.id} />
       <Button
         variant='ghost'
         size='sm'
@@ -125,7 +123,7 @@ const CustomersTableRow: React.FC<{
   </TableRow>
 )
 
-export const CustomersTableFooter: React.FC = () => {
+export const UserTableFooter: React.FC = () => {
   const [query, setQuery] = useQueryStates(queryParsers)
   const trpc = useTRPC()
 
@@ -169,25 +167,27 @@ export const CustomersTableFooter: React.FC = () => {
   )
 }
 
-const EditCustomerButton: React.FC<{ userId: string }> = ({ userId }) => {
+const EditUserButton: React.FC<{ userId: string }> = ({ userId }) => {
   const [query] = useQueryStates(queryParsers)
+  const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
   const trpcClient = useTRPCClient()
   const trpc = useTRPC()
 
   const form = useForm({
-    defaultValues: { userId, role: 'user' },
-    schema: UserModel.updateUserRoleBody,
-    onSubmit: trpcClient.user.updateRole.mutate,
+    defaultValues: { userId, role: 'user', status: 'active' },
+    schema: UserModel.updateUserBody,
+    onSubmit: trpcClient.user.update.mutate,
     onError: (error) => toast.error(error.message),
     onSuccess: () => {
       void queryClient.invalidateQueries(trpc.user.getUsers.queryFilter(query))
       toast.success('User role updated successfully')
+      setIsOpen(false)
     },
   })
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant='ghost' size='sm'>
           Edit
@@ -217,6 +217,29 @@ const EditCustomerButton: React.FC<{ userId: string }> = ({ userId }) => {
                     <SelectOption value='user'>User</SelectOption>
                   </Select>
                   <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <form.Field
+              name='status'
+              render={({ meta, field }) => (
+                <Field>
+                  <FieldLabel htmlFor={meta.fieldId}>Status</FieldLabel>
+                  <RadioGroup
+                    className='grid grid-cols-2 gap-4'
+                    value={field.value}
+                    onValueChange={field.onChange}
+                  >
+                    <div className='flex items-center gap-3'>
+                      <RadioGroupItem id='active' value='active' />
+                      <FieldLabel htmlFor='active'>Active</FieldLabel>
+                    </div>
+                    <div className='flex items-center gap-3'>
+                      <RadioGroupItem id='inactive' value='inactive' />
+                      <FieldLabel htmlFor='inactive'>Inactive</FieldLabel>
+                    </div>
+                  </RadioGroup>
                 </Field>
               )}
             />

@@ -11,10 +11,10 @@ export const userRouter = createTRPCRouter({
     services.user.getUserInfo(session.user),
   ),
 
-  updateRole: managerProcedure
-    .input(UserModel.updateUserRoleBody)
+  update: managerProcedure
+    .input(UserModel.updateUserBody)
     .mutation(({ ctx: { services, session }, input }) =>
-      services.user.updateUserRole(input, session.user),
+      services.user.updateUser(input, session.user),
     ),
 
   updateInfo: protectedProcedure
