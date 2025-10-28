@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.0.7
+
+### Patch Changes
+
+- [#81](https://github.com/tiesen243/yukinu/pull/81) [`c88fe6c`](https://github.com/tiesen243/yukinu/commit/c88fe6c5f266e25d7bb6f7a17f752da0b11806a1) Thanks [@tiesen243](https://github.com/tiesen243)! - bump @yukinu/auth version
+
 ## 0.0.6
 
 ### Patch Changes
