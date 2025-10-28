@@ -1,5 +1,13 @@
 # @yukinu/dashboard
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`c88fe6c`](https://github.com/tiesen243/yukinu/commit/c88fe6c5f266e25d7bb6f7a17f752da0b11806a1)]:
+  - @yukinu/auth@0.0.7
+  - @yukinu/api@0.0.7
+
 ## 0.1.0
 
 ### Minor Changes
