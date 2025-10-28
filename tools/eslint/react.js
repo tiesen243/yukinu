@@ -1,5 +1,5 @@
+// @ts-nocheck
 import reactPlugin from '@eslint-react/eslint-plugin'
-// @ts-ignore
 import a11yPlugin from 'eslint-plugin-jsx-a11y'
 import hooksPlugin from 'eslint-plugin-react-hooks'
 import { defineConfig } from 'eslint/config'
@@ -8,7 +8,6 @@ export default defineConfig({
   files: ['**/*.ts', '**/*.tsx'],
   extends: [reactPlugin.configs['recommended-type-checked']],
   plugins: {
-    // @ts-ignore
     'react-hooks': hooksPlugin,
     'jsx-a11y': a11yPlugin,
   },
@@ -28,5 +27,4 @@ export default defineConfig({
       { rule: 'PascalCase', allowAllCaps: true },
     ],
   },
-  settings: reactPlugin.configs['recommended-typescript'].settings,
 })

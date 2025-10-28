@@ -32,7 +32,7 @@
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
     "@yukinu/validators": "workspace:*",
-    "drizzle-orm": "^0.44.6",
+    "drizzle-orm": "^0.44.7",
     "postgres": "^3.4.7"
   },
   "devDependencies": {

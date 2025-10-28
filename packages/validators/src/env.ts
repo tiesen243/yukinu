@@ -31,8 +31,8 @@ export const env = createEnv({
   clientPrefix: 'NEXT_PUBLIC_',
   client: {
     // Application settings
-    NEXT_PUBLIC_WEB_URL: z.optional(z.string()),
-    NEXT_PUBLIC_DASHBOARD_URL: z.optional(z.string()),
+    NEXT_PUBLIC_WEB_URL: z._default(z.string(), 'localhost:3000'),
+    NEXT_PUBLIC_DASHBOARD_URL: z._default(z.string(), 'localhost:5173'),
     NEXT_PUBLIC_TRPC_USE_STREAMING: z._default(
       z.enum(['true', 'false']),
       'true',
