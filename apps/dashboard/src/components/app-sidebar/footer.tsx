@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router'
 import { useSession } from '@yukinu/auth/react'
 import { useTheme } from '@yukinu/ui'
 import { useMounted } from '@yukinu/ui/hooks/use-mounted'
-import { LogOutIcon, MoonIcon, SunIcon } from '@yukinu/ui/icons'
+import { HeadsetIcon, LogOutIcon, MoonIcon, SunIcon } from '@yukinu/ui/icons'
 import {
   SidebarFooter,
   SidebarMenu,
@@ -17,6 +17,12 @@ export const AppSidebarFooter: React.FC = () => {
       <SidebarMenu>
         <SidebarMenuItem>
           <ToggleThemeButton />
+        </SidebarMenuItem>
+
+        <SidebarMenuItem>
+          <SidebarMenuButton>
+            <HeadsetIcon /> Contact Support
+          </SidebarMenuButton>
         </SidebarMenuItem>
 
         <SidebarMenuItem>
@@ -52,8 +58,17 @@ const ToggleThemeButton: React.FC = () => {
 }
 
 const LogOutButton: React.FC = () => {
-  const { signOut } = useSession()
+  const { signOut, status } = useSession()
   const navigate = useNavigate()
+
+  if (status === 'loading')
+    return (
+      <SidebarMenuButton className='animate-pulse bg-sidebar-accent'>
+        &nbsp;
+      </SidebarMenuButton>
+    )
+
+  if (status !== 'authenticated') return null
 
   return (
     <SidebarMenuButton
