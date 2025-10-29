@@ -1,6 +1,15 @@
 import * as z from 'zod'
 
 export namespace UserModel {
+  export interface User {
+    id: string
+    email: string
+    role: 'admin' | 'user' | 'manager' | 'vendor'
+    status: 'active' | 'inactive'
+    createdAt: Date
+    updatedAt: Date
+  }
+
   export const findUsersBySearchWithPaginationQuery = z.object({
     search: z.string().max(100, 'Search query is too long'),
     page: z
@@ -19,13 +28,16 @@ export namespace UserModel {
     typeof findUsersBySearchWithPaginationQuery
   >
 
-  export const updateUserRoleBody = z.object({
+  export const updateUserBody = z.object({
     userId: z.cuid2('Invalid user ID'),
     role: z.enum(['admin', 'user', 'manager', 'vendor'], {
       error: 'Invalid role',
     }),
+    status: z.enum(['active', 'inactive'], {
+      error: 'Invalid status',
+    }),
   })
-  export type UpdateUserRoleBody = z.infer<typeof updateUserRoleBody>
+  export type UpdateUserBody = z.infer<typeof updateUserBody>
 
   export const updateProfileBody = z.object({
     fullName: z

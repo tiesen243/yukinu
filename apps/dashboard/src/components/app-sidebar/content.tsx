@@ -106,9 +106,9 @@ const mainMenuItems = [
     roles: ['admin', 'manager', 'vendor'],
   },
   {
-    title: 'Customers',
+    title: 'Users',
     icon: Users2Icon,
-    href: '/customers',
+    href: '/users',
     roles: ['admin', 'manager'],
   },
   {
