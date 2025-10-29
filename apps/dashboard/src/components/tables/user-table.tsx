@@ -46,7 +46,7 @@ export const UserTable: React.FC = () => (
       <UserTableBody />
     </TableBody>
 
-    <TableFooter>
+    <TableFooter className='bg-transparent'>
       <UserTableFooter />
     </TableFooter>
   </Table>
