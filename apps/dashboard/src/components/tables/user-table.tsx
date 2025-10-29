@@ -87,7 +87,7 @@ const UserTableBody: React.FC = () => {
     return (
       <TableRow>
         <TableCell colSpan={8} className='text-center'>
-          No customers found.
+          No users found.
         </TableCell>
       </TableRow>
     )
@@ -200,7 +200,7 @@ const EditUserButton: React.FC<{
         <DialogHeader>
           <DialogTitle>Edit User #{user.id}</DialogTitle>
           <DialogDescription>
-            Here you can edit the customer details.
+            Here you can edit the user details.
           </DialogDescription>
         </DialogHeader>
 

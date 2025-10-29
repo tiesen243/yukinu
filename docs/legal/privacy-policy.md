@@ -1,41 +1,66 @@
 # Privacy Policy
 
-_Last updated: 2025-10-03_
+_Last updated: October 29, 2025_
 
-Yukinu ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use our multi-vendor e-commerce platform.
+This Privacy Policy applies only to the Yukinu demonstration project (“the Project”). This Project is created for educational and non-commercial purposes. No real transactions, payments, or personal data collection are intended.
 
-> **Note:** This is a learning project. This platform is for educational purposes only and no actual products or services are sold here.
+By using this Project, you acknowledge that the system is a study prototype and not a real commercial service.
 
-## 1. Information We Collect
+## 1. Information Collected
 
-- **Account Information:** When you register, we may collect your name, email address, and other relevant details.
-- **Usage Data:** We may collect information about how you access and use the platform, such as IP address, browser type, and device information.
-- **Cookies:** We may use cookies to enhance your experience.
+This Project does **not** actively collect or store real personal information. Any data input into the system is considered **test data**.
 
-## 2. How We Use Your Information
+Example of test data types:
 
-We use your information to:
+- Demo usernames
+- Fake vendor profiles
+- Sample product listings
+- Mock order records
 
-- Provide and maintain our services
-- Improve and personalize your experience
-- Communicate with you about updates or support
+If a user voluntarily enters real personal information, they do so at their own discretion.
 
-## 3. Sharing Your Information
+## 2. Use of Data
 
-We do not sell or rent your personal information to third parties. We may share information with service providers who assist us in operating the platform, subject to confidentiality agreements.
+All test data entered into this Project is used only for:
+
+- Demonstration of software features
+- Testing database operations
+- Academic learning purposes
+
+No data will be:
+
+- Sold
+- Shared with third parties
+- Used for marketing
+
+## 3. Cookies and Tracking
+
+This Project may use minimal technical cookies solely for:
+
+- Session handling
+- Login persistence during a browser session
+
+No tracking, analytics, or advertising cookies are used.
 
 ## 4. Data Security
 
-We implement reasonable measures to protect your information. However, no method of transmission over the Internet is 100% secure.
+While basic security measures may be implemented, this Project is not hardened for production. Users should **not** store sensitive personal data.
 
 ## 5. Children's Privacy
 
-Our platform is not intended for children under 13. We do not knowingly collect personal information from children.
+This Project is not intended for real end users, including children. No data about minors is knowingly processed.
 
-## 6. Changes to This Policy
+## 6. External Services
 
-We may update this Privacy Policy from time to time. Changes will be posted on this page.
+If external services (e.g., authentication providers, cloud database) are used for educational purposes, applicable policies from those providers will apply independently.
 
-## 7. Contact Us
+## 7. Changes to This Policy
 
-If you have any questions about this Privacy Policy, please contact us at [ttien56906@gmail.com](mailto:ttien56906@gmail.com).
+This Privacy Policy may be updated to reflect improvements during development.
+
+Revisions will maintain the core statement that the Project is **non-commercial**.
+
+## 8. Contact
+
+Since this is an academic project, no formal support channel exists.
+For inquiries related to learning or project usage, please contact the developer directly.
