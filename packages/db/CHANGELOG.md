@@ -1,5 +1,14 @@
 # @yukinu/db
 
+## 0.0.5
+
+### Patch Changes
+
+- [#83](https://github.com/tiesen243/yukinu/pull/83) [`a270b4e`](https://github.com/tiesen243/yukinu/commit/a270b4e19caa1683e362c1d46d0a6dd8bdff9ff4) Thanks [@tiesen243](https://github.com/tiesen243)! - bump drizzle version
+
+- Updated dependencies []:
+  - @yukinu/validators@0.0.2
+
 ## 0.0.4
 
 ### Patch Changes

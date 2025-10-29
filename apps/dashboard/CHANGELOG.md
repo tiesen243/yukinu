@@ -1,5 +1,18 @@
 # @yukinu/dashboard
 
+## 0.1.2
+
+### Patch Changes
+
+- [#83](https://github.com/tiesen243/yukinu/pull/83) [`3f832d8`](https://github.com/tiesen243/yukinu/commit/3f832d861266df0e11f423313823eeb5caa57568) Thanks [@tiesen243](https://github.com/tiesen243)! - added user status manager
+
+- Updated dependencies [[`a270b4e`](https://github.com/tiesen243/yukinu/commit/a270b4e19caa1683e362c1d46d0a6dd8bdff9ff4), [`a270b4e`](https://github.com/tiesen243/yukinu/commit/a270b4e19caa1683e362c1d46d0a6dd8bdff9ff4), [`533339c`](https://github.com/tiesen243/yukinu/commit/533339c9851bf3783e7c942544269a6e181663c3), [`3f832d8`](https://github.com/tiesen243/yukinu/commit/3f832d861266df0e11f423313823eeb5caa57568)]:
+  - @yukinu/db@0.0.5
+  - @yukinu/api@0.0.8
+  - @yukinu/auth@0.0.8
+  - @yukinu/ui@0.0.3
+  - @yukinu/validators@0.0.2
+
 ## 0.1.1
 
 ### Patch Changes
