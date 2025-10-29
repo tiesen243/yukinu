@@ -3,101 +3,57 @@ title: Yukinu - E-commerce Platform Monorepo
 nav_order: 1
 ---
 
-# Yukinu
+# Yukinu Documentation
 
-<p align="center">
-  <a href="https://github.com/tiesen243/yukinu/actions/workflows/release.yml">
-    <img src="https://github.com/tiesen243/yukinu/actions/workflows/release.yml/badge.svg" alt="Release">
-  </a>
-  <a href="https://github.com/tiesen243/yukinu/releases">
-    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/web/package.json&label=version@web" alt="Version Web">
-  </a>
-  <a href="https://github.com/tiesen243/yukinu/releases">
-    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Web">
-  </a>
-  <a href="LICENSE">
-    <img src="https://img.shields.io/github/license/tiesen243/yukinu" alt="License">
-  </a>
-  <a href="https://github.com/tiesen243/yukinu/graphs/contributors">
-    <img src="https://img.shields.io/github/contributors/tiesen243/yukinu" alt="Contributors">
-  </a>
-</p>
+Welcome to the official documentation for **Yukinu** — a modern **multi-vendor e-commerce platform** that enables buyers to shop from multiple sellers in a unified marketplace experience.
 
-**Yukinu** is an e-commerce platform built as a **monorepo** with [Turborepo](https://turbo.build/repo). It includes both a **customer-facing storefront** and an **admin dashboard**, sharing code for UI, API, and database.
+This documentation provides complete technical and product information for the Yukinu ecosystem, including:
 
-## Tech Stack
+- System architecture
+- Frontend applications (Web & Vendor Dashboard)
+- API and service integrations
+- Data schema & database management
+- Deployment & DevOps guides
+- Security, compliance, and operational management
 
-- **Runtime & Package Manager**: [Bun](https://bun.sh/)
-- **Monorepo Management**: [Turborepo](https://turbo.build/repo)
-- **Frontend**: [Next.js](https://nextjs.org/), [React Router](https://reactrouter.com/), [React](https://reactjs.org/), [Tailwind CSS](https://tailwindcss.com/)
-- **Backend**: [tRPC](https://trpc.io/), [Drizzle ORM](https://orm.drizzle.team/), [PostgreSQL](https://www.postgresql.org/)
-- **UI Components**: [Radix UI](https://www.radix-ui.com/), [Shadcn UI](https://ui.shadcn.com/)
+## About Yukinu
 
-## Getting Started
+Yukinu is built as a **monorepo** using **Turborepo** to manage all apps and shared packages efficiently.  
+It is designed to support:
 
-### Prerequisites
+- Multi-vendor product management
+- Order processing & inventory mechanics
+- Secure authentication & user roles
+- Wishlists, reviews, profiles & more
+- Scalable deployment using Docker & NGINX
 
-- [Node.js](https://nodejs.org/) (version 20 or higher)
-- [Bun](https://bun.sh/) (version 1.2.20 or higher)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+## Tech Stack Overview
 
-### Installation
+| Layer              | Technology                                  |
+| ------------------ | ------------------------------------------- |
+| Frontend – Web App | Next.js, React, TailwindCSS                 |
+| Vendor Dashboard   | React, React Router, TailwindCSS            |
+| Backend API        | tRPC, TypeScript                            |
+| Database & ORM     | PostgreSQL + Drizzle ORM                    |
+| Authentication     | Custom auth + Accounts & Sessions system    |
+| Validation         | Zod                                         |
+| Email Services     | Resend                                      |
+| Deployment         | Docker, docker-compose, NGINX Reverse Proxy |
 
-1. Clone the repository:
+## Project Structure
 
-   ```bash
-   git clone https://github.com/tiesen243/yukinu.git
-   cd yukinu
-   ```
+The repository contains three main sections:
 
-2. Install dependencies using Bun:
+- **apps/** — Web App (Marketplace) + Vendor Dashboard
+- **packages/** — Shared modules: API, Auth, Database, UI, Validators
+- **tools/** — Dev infrastructure: ESLint, Prettier, TypeScript, NGINX, CI/CD scripts
 
-   ```bash
-   bun install
-   ```
+> More details: [Project Structure](./project-structure.md)
 
-3. Set up environment variables:
+## Contributing
 
-   You need to create a `.env` file in the root of the project. You can copy the `.env.example` file and rename it to `.env`.
-
-   ```bash
-   cp .env.example .env
-   ```
-
-4. Start the database using Docker Compose:
-
-   ```bash
-   docker-compose up db -d
-   ```
-
-5. Run database migrations:
-
-   ```bash
-   bun run db:migrate
-   ```
-
-6. Start the development server:
-
-   ```bash
-   bun run dev
-
-   # or
-   bun run dev -F @yukinu/web...
-   bun run dev -F @yukinu/dashboard...
-   ```
-
-7. Open your browser and navigate to:
-   - Web: `http://localhost:3000`
-   - Dashboard: `http://localhost:3001`
-
-## Available Commands
-
-- `bun run dev` – Run all apps in dev mode
-- `bun run build` – Build all apps and packages
-- `bun run lint` – Run linting across the repo
-- `bun run format` – Format code using Prettier
+Guidelines for reporting issues and contributing improvements will be provided later.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the terms of the [LICENSE](../LICENSE).

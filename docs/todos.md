@@ -1,76 +1,63 @@
-# Todos
+# Todo List for Multi-Vendor E-commerce Platform
 
-## 1. User Management
+## Guest
 
-- [x] User registration (username, email, password)
-- [x] User login/logout
-- [ ] Email verification (`emailVerified`)
-- [ ] Profile management (`profiles`)
-- [ ] Roles & permissions (`user_role`: admin, user)
-- [ ] Account status management (`user_status`: active, inactive, banned)
-- [x] Login with third-party providers (Google, Facebook, etc.)
+- [x] Register an account
+- [x] Login
+- [ ] Browse product list
+- [ ] View product details
+- [ ] Search and filter products
+- [ ] View vendors list
+- [ ] View products by vendor
+- [ ] Reset password (forgot password)
 
-## 2. Address Management
+## User (Customer)
 
-- [ ] Add new shipping address
-- [ ] Edit existing address
-- [ ] Delete address
-- [ ] Set default address (`isDefault`)
-- [ ] List all addresses per user
-
-## 3. Product Catalog
-
-- [ ] Product management (`products`)
-- [ ] Product variants (`product_variants`)
-- [ ] Product images (`product_images`)
-- [ ] Category management (`categories`)
-- [ ] Product reviews (`reviews`)
-- [ ] List products by category, vendor, status
-
-## 4. Vendor / Marketplace
-
-- [ ] Vendor management (`vendors`)
-- [ ] Vendor user management (`vendor_users`)
-- [ ] Vendor collections (`vendor_collections`)
-- [ ] Vendor collection items (`vendor_collection_items`)
-- [ ] Link products to vendor and collections
-
-## 5. Wishlist / Favorites
-
-- [ ] Add product to wishlist (`wishlist_items`)
+- [x] Update personal profile
+- [ ] Manage shipping addresses (CRUD)
+- [ ] Add product to wishlist
 - [ ] Remove product from wishlist
-- [ ] List wishlist items per user
+- [ ] Add product to cart _(if available)_
+- [ ] Place an order (checkout)
+- [ ] Make payment
+- [ ] Track order status
+- [ ] Cancel order (if not processed yet)
+- [ ] Review products
+- [ ] View order history
 
-## 6. Order Management
+## Vendor Owner / Manager
 
-- [ ] Create order (`orders`)
-  - [ ] Multiple items per order (`order_items`)
-  - [ ] Link to user and shipping address
-- [ ] Track order status (`order_status`: new, pending, paid, shipped, completed, cancelled, refunded)
-- [ ] Calculate total amount
+- [ ] Apply to become a vendor
+- [ ] Manage store information
+- [ ] Manage products (CRUD)
+- [ ] Manage product images
+- [ ] Manage product variants (size, color, etc.)
+- [ ] Manage product inventory
+- [ ] Manage vendor-specific orders
+- [ ] Update order status (processing → shipped → delivered)
+- [ ] Manage vendor product collections (CRUD)
+- [ ] Manage vendor members (add / assign roles / remove)
+- [ ] View & reply to product reviews _(optional)_
 
-## 7. Payment
+## Admin
 
-- [ ] Payment for orders (`payments`)
-- [ ] Support multiple payment methods (`payment_method`: COD, Credit Card, PayPal, Bank Transfer)
-- [ ] Track payment status (`payment_status`: pending, success, failed, refunded)
-- [ ] Store transaction ID and amount
-- [ ] Timestamp of payment
+- [x] Manage users (activate / deactivate)
+- [ ] Manage vendors (approve / suspend)
+- [ ] Manage product categories (CRUD)
+- [ ] Moderate products across the system
+- [ ] System analytics & dashboards
+- [x] Manage roles & permissions _(optional)_
 
-## 8. Shipping / Delivery Tracking
+## Payment System Integration
 
-- [ ] Shipping information (`shippings`)
-- [ ] Carrier, tracking number
-- [ ] Track shippedAt and deliveredAt
-- [ ] Shipping status (`shipping_status`: pending, shipped, in_transit, delivered, failed)
+- [ ] Initialize payment transaction
+- [ ] Confirm successful payment
+- [ ] Handle failed or refunded payments
 
-## 9. Multi-Vendor Features
+## Optional Enhancements
 
-- [ ] Vendor onboarding & verification (registration, approval, KYC)
-- [ ] Vendor dashboard (sales analytics, reports, notifications)
-- [ ] Dispute & support system (order disputes, support tickets)
-- [ ] Product moderation (admin approval, content flagging)
-- [ ] Tax management (per vendor/location, automated calculation)
-- [ ] Bulk operations (bulk product upload, price/stock updates)
-- [ ] Vendor performance & ratings (metrics, reviews)
-- [ ] Marketing tools (discounts/coupons, featured vendors/products, banners)
+- [ ] Integrate shipping provider (tracking)
+- [ ] Messaging/chat between user & vendor
+- [ ] Vendor payout system
+- [ ] Coupon / voucher management
+- [ ] Email notifications & marketing automation

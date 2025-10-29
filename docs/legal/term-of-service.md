@@ -1,43 +1,57 @@
 # Terms of Service
 
-_Last updated: 2025-10-03_
+_Last updated: October 29, 2025_
 
-> **Note:** This is a learning project. This platform is for educational purposes only and no actual products or services are sold here.
+This Terms of Service document applies to the **Yukinu Multi‑Vendor E‑Commerce Application**. Please note that this application is currently a **learning and experimental project**. The system does not represent a real business, real transactions, or real commercial operations.
 
-Welcome to Yukinu! These Terms of Service ("Terms") govern your use of our multi-vendor e-commerce platform and related services ("Services"). By accessing or using our Services, you agree to be bound by these Terms.
+## 1. Purpose of the Application
 
-## 1. Use of Services
+Yukinu is built for development and educational purposes only, including:
 
-You must be at least 18 years old or have legal parental or guardian consent to use our Services. You agree to provide accurate and complete information when creating an account and making purchases.
+- Practicing full‑stack web development
+- Learning monorepo architecture
+- Exploring database modeling for e‑commerce
+- Experimenting with deployment and DevOps
 
-## 2. Orders and Payment
+There is **no real product ordering**, **no financial payments**, and **no vendor onboarding** for commercial use.
 
-All orders are subject to acceptance and availability. Prices and product descriptions are subject to change without notice. Payment must be made in full before orders are processed and shipped.
+## 2. User Responsibilities
 
-## 3. Shipping and Delivery
+By using this project, users acknowledge and agree to the following:
 
-We will make reasonable efforts to deliver products within the estimated timeframes. However, delays may occur due to unforeseen circumstances. We are not liable for any delays or losses caused by third-party shipping providers.
+- Any data input is considered **test data**
+- You must not attempt malicious actions such as hacking, exploiting vulnerabilities, or disrupting system functionality
+- You must not rely on this application for real commercial purposes
 
-## 4. Returns and Refunds
+## 3. Intellectual Property
 
-Please refer to our Return and Refund Policy for details on returns, exchanges, and refunds.
+The source code belongs to the project developer. Users may reference or contribute to the code depending on the project's open‑source licensing terms.
 
-## 5. User Conduct
+## 4. Disclaimer
 
-You agree not to use our Services for any unlawful purpose or to violate any applicable laws or regulations.
+This project is provided **as‑is** with **no warranties** of any kind. The developer is **not responsible** for any data loss, errors, or misuse of the system.
 
-## 6. Intellectual Property
+The developer does not guarantee:
 
-All content on our platform, including text, images, logos, and software, is the property of Yukinu or its licensors and is protected by intellectual property laws.
+- Uptime or service stability
+- Security against cyber threats
+- Accuracy or completeness of data
 
-## 7. Limitation of Liability
+## 5. Prohibited Use
 
-To the fullest extent permitted by law, Yukinu is not liable for any indirect, incidental, or consequential damages arising from your use of our Services.
+Users must not:
 
-## 8. Changes to Terms
+- Conduct real financial transactions
+- Upload harmful or illegal content
+- Pretend that the system is a real marketplace
+- Misrepresent data as real products or business operations
 
-We reserve the right to update these Terms at any time. Continued use of our Services constitutes acceptance of the revised Terms.
+## 6. Privacy & Data Usage
 
-## 9. Contact Us
+Any stored data is strictly for **testing and educational analysis**. No personal data will be shared or used for commercial purposes.
 
-If you have any questions about these Terms, please contact us at [ttien56906@gmail.com](mailto:ttien56906@gmail.com).
+## 7. Changes to This Terms Document
+
+These terms may be updated while the project evolves. Continued usage indicates your acceptance of updated terms.
+
+If you have questions about this Terms of Service document, please open an issue at [https://github.com/tiesen243/yukinu/issues](https://github.com/tiesen243/yukinu/issues).

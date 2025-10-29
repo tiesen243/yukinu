@@ -1,87 +1,112 @@
 # Project Structure
 
-This document describes the structure of the Yukinu monorepo, including the organization of applications and shared packages.
+This document provides an overview of the directory structure for the Yukinu monorepo.  
+The project is managed using Turborepo to optimize task execution, caching, and code sharing.
 
-## Monorepo Overview
+## 1. Top-Level Layout
 
-The repository is organized as a monorepo, containing multiple applications and shared packages:
-
-```plaintext
-. (git root)
-├── apps/
-│   ├── web/
-│   │    └── package.json              (name: '@yukinu/web')
-│   └── [...other apps]
-├── packages/
-│   ├── api/
-│   │    └── package.json              (name: '@yukinu/api')
-│   └── [...other shared packages]
-└── package.json
+```plain
+(root)
+├── apps/               # Frontend user-facing applications
+├── packages/           # Shared internal packages (API, Auth, DB, UI, Validators)
+├── tools/              # Development tools and configurations
+├── docs/               # Project documentation
+├── docker-compose.yml  # Deployment configuration using Docker
+├── turbo.json          # Turborepo workspace configuration
+├── package.json        # Root dependencies and task runners
+└── README.md           # Project overview
 ```
 
-## Applications (`apps/`)
+## 2. Applications
 
-Applications are user-facing projects (websites, dashboards, etc):
+### `apps/web`
 
-```plaintext
-apps/
-├── web/
-│   ├── app/                           (Next.js app directory)
-│   ├── lib/                           (shared utilities)
-│   ├── public/                        (framework optional static assets)
-│   ├── trpc/                          (tRPC client and hooks)
-│   ├── next.config.ts
-│   ├── [...other config files]
-│   └── package.json
-└── dashboard/
-    ├── public/                        (framework optional static assets)
-    ├── src/
-    │   ├── components/                (React components)
-    │   ├── lib/                       (shared utilities)
-    │   ├── routes/                    (React Router routes)
-    │   ├── trpc/                      (tRPC client and hooks)
-    │   ├── root.tsx                   (app entry point)
-    │   └── routes.ts                  (route definitions)
-    ├── vite.config.ts
-    ├── [...other config files]
-    └── package.json
-```
+- Marketplace frontend for customers
+- Built with Next.js, React, TailwindCSS, Shadcn/UI components
+- Includes routing under `app/`
+- Communicates with backend via tRPC client
 
-## Packages (`packages/`)
+### `apps/dashboard`
 
-Packages provide shared logic, APIs, database, and UI components:
+- Vendor management dashboard (admin UI)
+- Built with React and React Router
+- Vendor roles: owner, manager, staff
+- Inventory, collections, and order management support
 
-```plaintext
-packages/
-├── api/
-│   ├── src/
-│   │   ├── routers/                   (tRPC routers)
-│   │   ├── services/                  (business logic)
-│   │   ├── index.ts                   (entry point)
-│   │   └── trpc.ts                    (tRPC server setup)
-│   └── package.json
-├── auth/
-│   ├── src/
-│   │   ├── core/                      (authentication logic)
-│   │   ├── providers/                 (oauth providers)
-│   │   ├── config.ts                  (auth configuration)
-│   │   ├── index.ts                   (entry point)
-│   │   └── react.tsx                  (react hooks)
-│   └── package.json
-├── db/
-│   ├── drizzle/                       (database migrations)
-│   ├── src/
-│   │   ├── schemas/                   (database schema definitions)
-│   │   ├── index.ts                   (entry point)
-│   │   └── utils.ts                   (db utilities)
-│   └── package.json
-├── ui/
-│   ├── src/
-│   │   ├── components/                (shared UI components)
-│   │   ├── hooks/                     (custom React hooks)
-│   │   ├── lib/                       (shared utilities)
-│   │   └── tailwind.css               (Tailwind CSS setup with shadcn/ui)
-│   ├── components.json                (shadcn/ui config)
-│   └── package.json
-└── [...other shared packages]
-```
+## 3. Shared Packages
+
+Shared code reused across both applications.
+
+| Package               | Purpose                                               |
+| --------------------- | ----------------------------------------------------- |
+| `packages/api`        | tRPC api, business logic, route handlers              |
+| `packages/auth`       | Authentication utilities, session helpers             |
+| `packages/db`         | Drizzle ORM models, migrations, PostgreSQL connection |
+| `packages/ui`         | Shared React UI components, styling                   |
+| `packages/validators` | Zod validation schemas                                |
+
+All packages follow the same structure:  
+`src/` for code and `tsconfig.json`, `eslint.config.js`, and versioned CHANGELOG.
+
+## 4. Tools
+
+Contains build and development infrastructure.
+
+| Directory          | Purpose                                             |
+| ------------------ | --------------------------------------------------- |
+| `tools/eslint`     | Shared ESLint configurations for all workspaces     |
+| `tools/prettier`   | Code formatting configuration                       |
+| `tools/typescript` | Shared tsconfig base presets                        |
+| `tools/github`     | CI/CD workflow scripts (e.g., build, deploy)        |
+| `tools/nginx`      | Reverse proxy configuration and certificates folder |
+
+## 5. Documentation
+
+Located inside `docs/`:
+
+| File/Folder            | Description                      |
+| ---------------------- | -------------------------------- |
+| `legal/`               | Legal documents                  |
+| `architecture.md`      | System architecture overview     |
+| `database.md`          | Database schema and details      |
+| `deploy.md`            | Deployment steps                 |
+| `docker.md`            | Container setup                  |
+| `env.md`               | Environment variable reference   |
+| `features.md`          | Feature descriptions             |
+| `getting-started.md`   | Quickstart and setup guide       |
+| `index.md`             | Home page of documentation       |
+| `project-structure.md` | Current document                 |
+| `roadmap.md`           | Feature roadmap and future plans |
+| `todos.md`             | Pending tasks and todos          |
+
+## 6. Build and Deployment
+
+The system is containerized with Docker:
+
+- Web + Dashboard + API packages deployed independently
+- NGINX acts as a reverse proxy
+- PostgreSQL database service included in docker-compose
+- Resend used for transactional email
+
+More details in: `docs/deploy.md` and `docs/docker.md`
+
+## 7. Turborepo
+
+The monorepo uses Turborepo for:
+
+- Task running and caching
+- Workspace linking
+- Isolation of build steps by packages/apps
+
+Configuration file: `turbo.json`
+
+## Summary
+
+Yukinu is structured for:
+
+- Modular development
+- Code reusability between applications
+- Clean separation of responsibility
+- Scalable deployment and CI/CD automation
+
+This structure ensures the system remains maintainable and extensible as new features are added.

@@ -18,80 +18,87 @@
   </a>
 </p>
 
-**Yukinu** is an e-commerce platform built as a **monorepo** with [Turborepo](https://turbo.build/repo). It includes both a **customer-facing storefront** and an **admin dashboard**, sharing code for UI, API, and database.
+This project is a **Multi-Vendor E-commerce Platform** built using a **Turborepo** monorepo architecture.
+It includes multiple applications and shared packages for efficient development, scalability, and maintainability.
 
 ## Tech Stack
 
-- **Runtime & Package Manager**: [Bun](https://bun.sh/)
-- **Monorepo Management**: [Turborepo](https://turbo.build/repo)
-- **Frontend**: [Next.js](https://nextjs.org/), [React Router](https://reactrouter.com/), [React](https://reactjs.org/), [Tailwind CSS](https://tailwindcss.com/)
-- **Backend**: [tRPC](https://trpc.io/), [Drizzle ORM](https://orm.drizzle.team/), [PostgreSQL](https://www.postgresql.org/)
-- **UI Components**: [Radix UI](https://www.radix-ui.com/), [Shadcn UI](https://ui.shadcn.com/)
+### Apps
 
-## Getting Started
+- **Web App**
+  - Next.js, React.js, TailwindCSS
+  - tRPC client integration
+  - Dockerized for deployment
+- **Dashboard**
+  - React, React Router, TailwindCSS
+  - Admin vendor dashboard
+  - Dockerized for deployment
 
-### Prerequisites
+### Backend & Shared Services
 
-- [Node.js](https://nodejs.org/) (version 20 or higher)
-- [Bun](https://bun.sh/) (version 1.2.20 or higher)
-- [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
+- **API**: tRPC (type-safe communication)
+- **ORM**: Drizzle ORM + PostgreSQL
+- **Validation**: Zod
+- **Email Service**: Resend
+- **Deployment**: Docker + Nginx Reverse Proxy
 
-### Installation
+## Monorepo Structure
 
-1. Clone the repository:
+```
+(root)
+├── apps
+│   ├── dashboard        # Vendor/Admin dashboard
+│   └── web              # Customer-facing web app
+├── packages
+│   ├── api              # tRPC API package
+│   ├── auth             # Authentication utilities
+│   ├── db               # Drizzle + DB models + queries
+│   ├── ui               # Shared UI components (shadcn)
+│   └── validators       # Zod validators
+├── tools
+│   ├── eslint           # ESLint configs
+│   ├── github           # Github workflows/scripts
+│   ├── nginx            # Deployment config
+│   ├── prettier         # Prettier configs
+│   └── typescript       # TS base configs
+├── docs                 # Developer & legal documentation
+└── docker-compose.yml   # Local deployment (NGINX + Postgres + Apps)
+```
 
-   ```bash
-   git clone https://github.com/tiesen243/yukinu.git
-   cd yukinu
-   ```
+## Package Management
 
-2. Install dependencies using Bun:
+This repo uses **Turborepo** for task running and **Bun** for package management.
 
-   ```bash
-   bun install
-   ```
+Useful commands:
 
-3. Set up environment variables:
+```sh
+bun install
+bun run dev
+bun run build
+bun run lint
+```
 
-   You need to create a `.env` file in the root of the project. You can copy the `.env.example` file and rename it to `.env`.
+## Deployment
 
-   ```bash
-   cp .env.example .env
-   ```
+This system is deployed using Docker Compose & Nginx reverse proxy.
 
-4. Start the database using Docker Compose:
+Config files:
 
-   ```bash
-   docker-compose up db -d
-   ```
+- docker-compose.yml
+- tools/nginx/default.conf
 
-5. Run database migrations:
+## Security & Validation
 
-   ```bash
-   bun run db:migrate
-   ```
+- Zod is used across API and data models for **type-safe validation**
+- Shared authentication logic stored in `packages/auth`
 
-6. Start the development server:
+## Documentation
 
-   ```bash
-   bun run dev
+Located in `/docs` folder:
 
-   # or
-   bun run dev -F @yukinu/web...
-   bun run dev -F @yukinu/dashboard...
-   ```
-
-7. Open your browser and navigate to:
-   - Web: `http://localhost:3000`
-   - Dashboard: `http://localhost:3001`
-
-## Available Commands
-
-- `bun run dev` – Run all apps in dev mode
-- `bun run build` – Build all apps and packages
-- `bun run lint` – Run linting across the repo
-- `bun run format` – Format code using Prettier
+- Deployment guide
+- Project structure
+- Privacy Policy & Terms of Service
 
 ## License
 
