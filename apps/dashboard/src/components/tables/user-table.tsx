@@ -111,7 +111,7 @@ const UserTableRow: React.FC<{
     <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
     <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
     <TableCell className='flex w-fit items-center gap-2'>
-      <EditUserButton userId={user.id} />
+      <EditUserButton user={user} />
       <Button
         variant='ghost'
         size='sm'
@@ -167,7 +167,9 @@ export const UserTableFooter: React.FC = () => {
   )
 }
 
-const EditUserButton: React.FC<{ userId: string }> = ({ userId }) => {
+const EditUserButton: React.FC<{
+  user: RouterOutputs['user']['getUsers']['users'][number]
+}> = ({ user }) => {
   const [query] = useQueryStates(queryParsers)
   const [isOpen, setIsOpen] = useState(false)
   const queryClient = useQueryClient()
@@ -175,13 +177,13 @@ const EditUserButton: React.FC<{ userId: string }> = ({ userId }) => {
   const trpc = useTRPC()
 
   const form = useForm({
-    defaultValues: { userId, role: 'user', status: 'active' },
+    defaultValues: { userId: user.id, role: user.role, status: user.status },
     schema: UserModel.updateUserBody,
     onSubmit: trpcClient.user.update.mutate,
     onError: (error) => toast.error(error.message),
     onSuccess: () => {
       void queryClient.invalidateQueries(trpc.user.getUsers.queryFilter(query))
-      toast.success('User role updated successfully')
+      toast.success('User updated successfully')
       setIsOpen(false)
     },
   })
@@ -196,7 +198,7 @@ const EditUserButton: React.FC<{ userId: string }> = ({ userId }) => {
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit Customer {userId}</DialogTitle>
+          <DialogTitle>Edit User #{user.id}</DialogTitle>
           <DialogDescription>
             Here you can edit the customer details.
           </DialogDescription>

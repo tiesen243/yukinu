@@ -57,7 +57,7 @@ export class UserService {
       if (adminCount <= 1)
         throw new TRPCError({
           code: 'FORBIDDEN',
-          message: 'There must be at least one admin user',
+          message: 'There must be at least one active admin user',
         })
     }
 

@@ -1,5 +1,5 @@
 import type { Database, Transaction } from '@yukinu/db'
-import { desc, eq, ilike, or } from '@yukinu/db'
+import { and, desc, eq, ilike, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 import { users } from '@yukinu/db/schema/user'
 
@@ -100,8 +100,11 @@ export class UserRepository
     value: IUserRepository.User[TField],
     tx: Database | Transaction = this._db,
   ): Promise<number> {
-    // @ts-expect-error: Dynamic field access
-    const count = tx.$count(this._table, eq(this._table[field], value))
+    const count = tx.$count(
+      this._table,
+      // @ts-expect-error: Dynamic field access
+      and(eq(this._table[field], value), eq(this._table.status, 'active')),
+    )
     return count
   }
 }
