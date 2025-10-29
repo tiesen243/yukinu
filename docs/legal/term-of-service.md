@@ -1,3 +1,7 @@
+---
+nav_order: 13
+---
+
 # Terms of Service
 
 _Last updated: October 29, 2025_
@@ -54,4 +58,4 @@ Any stored data is strictly for **testing and educational analysis**. No persona
 
 These terms may be updated while the project evolves. Continued usage indicates your acceptance of updated terms.
 
-If you have questions about this Terms of Service document, please open an issue at [https://github.com/tiesen243/yukinu/issues](https://github.com/tiesen243/yukinu/issues).
+If you have questions about this Terms of Service document, please open an issue at [here](https://github.com/tiesen243/yukinu/issues).

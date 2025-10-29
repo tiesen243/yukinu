@@ -1,3 +1,7 @@
+---
+nav_order: 10
+---
+
 # Environment Variables Guide
 
 Below are all the required environment variables for Yukinu application.

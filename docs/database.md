@@ -1,3 +1,7 @@
+---
+nav_order: 7
+---
+
 # Database Documentation
 
 This document provides an overview of Yukinu's PostgreSQL database design and implementation using Drizzle ORM.

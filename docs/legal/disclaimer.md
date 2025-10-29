@@ -1,3 +1,7 @@
+---
+nav_order: 14
+---
+
 # Disclaimer
 
 Yukinu is a personal project built for educational and research purposes, specifically to explore multi-vendor e-commerce system development. The project **is not intended for commercial use**, and **does not support real financial transactions**.

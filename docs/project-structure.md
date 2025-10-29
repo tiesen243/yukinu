@@ -1,3 +1,7 @@
+---
+nav_order: 3
+---
+
 # Project Structure
 
 This document provides an overview of the directory structure for the Yukinu monorepo.  
@@ -88,7 +92,7 @@ The system is containerized with Docker:
 - PostgreSQL database service included in docker-compose
 - Resend used for transactional email
 
-More details in: `docs/deploy.md` and `docs/docker.md`
+More details in: [docs/deploy.md](./deploy.md) and [docs/docker.md](./docker.md)
 
 ## 7. Turborepo
 

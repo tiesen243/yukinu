@@ -29,16 +29,16 @@ It is designed to support:
 
 ## Tech Stack Overview
 
-| Layer              | Technology                                  |
-| ------------------ | ------------------------------------------- |
-| Frontend – Web App | Next.js, React, TailwindCSS                 |
-| Vendor Dashboard   | React, React Router, TailwindCSS            |
-| Backend API        | tRPC, TypeScript                            |
-| Database & ORM     | PostgreSQL + Drizzle ORM                    |
-| Authentication     | Custom auth + Accounts & Sessions system    |
-| Validation         | Zod                                         |
-| Email Services     | Resend                                      |
-| Deployment         | Docker, docker-compose, NGINX Reverse Proxy |
+| Layer          | Technology                                  |
+| -------------- | ------------------------------------------- |
+| Web App        | Next.js, React, TailwindCSS                 |
+| Dashboard      | React, React Router, TailwindCSS            |
+| Backend API    | tRPC, TypeScript                            |
+| Database & ORM | PostgreSQL + Drizzle ORM                    |
+| Authentication | Custom auth + Accounts & Sessions system    |
+| Validation     | Zod                                         |
+| Email Services | Resend                                      |
+| Deployment     | Docker, docker-compose, NGINX Reverse Proxy |
 
 ## Project Structure
 
@@ -56,4 +56,4 @@ Guidelines for reporting issues and contributing improvements will be provided l
 
 ## License
 
-This project is licensed under the terms of the [LICENSE](../LICENSE).
+This project is licensed under the terms of the [LICENSE](https://raw.githubusercontent.com/tiesen243/yukinu/refs/heads/main/LICENSE).

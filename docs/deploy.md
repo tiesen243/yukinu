@@ -1,3 +1,7 @@
+---
+nav_order: 8
+---
+
 # Deployment Guide
 
 This guide explains the simplest deployment workflow for Yukinu.
@@ -10,14 +14,14 @@ This guide explains the simplest deployment workflow for Yukinu.
 
 ## Steps
 
-### 1️⃣ Clone the Repository
+### 1. Clone the Repository
 
 ```bash
 git clone https://github.com/tiesen243/yukinu.git
 cd yukinu
 ```
 
-### 2️⃣ Configure Environment Variables
+### 2. Configure Environment Variables
 
 Copy example environment file:
 
@@ -33,13 +37,13 @@ vi .env
 
 (Or use any editor you prefer)
 
-### 3️⃣ Run Services with Docker Compose
+### 3. Run Services with Docker Compose
 
 ```bash
 docker compose up -d --build
 ```
 
-### 4️⃣ Verify Deployment
+### 4. Verify Deployment
 
 Check running containers:
 

@@ -1,3 +1,7 @@
+---
+nav_order: 9
+---
+
 # Docker Setup Guide
 
 This document explains how to build and run Yukinu services using Docker and Docker Compose.

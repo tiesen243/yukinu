@@ -1,3 +1,7 @@
+---
+nav_order: 6
+---
+
 # Getting Started
 
 Welcome to Yukinu — a learning project showcasing a multi-vendor e-commerce system using a modern web stack (Next.js, React, tRPC, PostgreSQL, Docker, etc.).
@@ -20,7 +24,7 @@ git clone https://github.com/tiesen243/yukinu.git
 cd yukinu
 ```
 
-3. Configure Environment Variables
+## 3. Configure Environment Variables
 
 Copy the example environment file:
 
@@ -34,9 +38,9 @@ Then edit `.env` to match your setup:
 - OAuth credentials (optional for testing)
 - App URLs
 
-More details can be found in: [docs/env.md](../env.md)
+More details can be found in: [docs/env.md](./env.md)
 
-4. Start With Docker
+## 4. Start With Docker
 
 Simply run:
 
@@ -51,7 +55,7 @@ This will start:
 - PostgreSQL database
 - Nginx reverse proxy
 
-5. Database Migration (If Needed)
+## 5. Database Migration (If Needed)
 
 If migrating manually:
 
@@ -59,7 +63,7 @@ If migrating manually:
 bun --filter @yukinu/db db:migrate
 ```
 
-6. Development Mode (Alternative)
+## 6. Development Mode (Alternative)
 
 If you want to run without Docker:
 
@@ -73,7 +77,7 @@ bun dev
 bun --filter @yukinu/web dev
 ```
 
-7. Testing Login Features
+## 7. Testing Login Features
 
 You can test authentication using:
 

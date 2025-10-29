@@ -1,3 +1,7 @@
+---
+nav_order: 12
+---
+
 # Privacy Policy
 
 _Last updated: October 29, 2025_

@@ -1,3 +1,7 @@
+---
+nav_order: 15
+---
+
 # Frequently Asked Questions (FAQ)
 
 ## 1. What is Yukinu?
@@ -19,11 +23,9 @@ You can disable OAuth and use basic email login during development if needed.
 ## 4. Why do I see limited features?
 
 Because the project is still under development.  
-You can check the current feature list here:  
-➡ `docs/features.md`
+You can check the current feature list here: [docs/features.md](../features.md)
 
-Upcoming improvements are listed in the roadmap:  
-➡ `docs/roadmap.md`
+Upcoming improvements are listed in the todo list: [docs/todo.md](../todos.md)
 
 ## 5. I'm running this project locally — why does the database fail to connect?
 
@@ -34,9 +36,10 @@ Check these common issues:
 - Docker hasn’t finished initializing the DB
 - SSL mode should be disabled locally (`POSTGRES_SSL_MODE=false`)
 
-More info:  
-➡ `docs/env.md`  
-➡ `docs/docker.md`
+More info:
+
+- [docs/env.md](../env.md)
+- [docs/docker.md](../docker.md)
 
 ## 6. How do I become a vendor?
 
@@ -77,7 +80,7 @@ docker compose up --build -d
 
 This resets the database and all persisted data in volumes.
 
-10. Who maintains Yukinu?
+## 10. Who maintains Yukinu?
 
 This project is created and maintained by Trần Tiến for educational purposes.
 
