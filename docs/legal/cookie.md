@@ -1,3 +1,7 @@
+---
+nav_order: 11
+---
+
 # Cookie Policy
 
 This Cookie Policy explains how Yukinu uses cookies and similar technologies in this educational project.

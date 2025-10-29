@@ -1,4 +1,8 @@
-# Yukinu – Features Overview
+---
+nav_order: 4
+---
+
+# Features Overview
 
 Yukinu is a multi-vendor e-commerce application designed for learning and experimentation.  
 Some features are fully implemented, while others are under development.
