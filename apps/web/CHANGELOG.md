@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.1.3
+
+### Patch Changes
+
+- [#87](https://github.com/tiesen243/yukinu/pull/87) [`b300602`](https://github.com/tiesen243/yukinu/commit/b3006020941221bc3bc73b7b941165c98e4fa112) Thanks [@tiesen243](https://github.com/tiesen243)! - added missing html for of update profile fields
+
 ## 0.1.2
 
 ### Patch Changes
