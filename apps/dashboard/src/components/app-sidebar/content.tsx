@@ -68,7 +68,7 @@ export const AppSidebarContent: React.FC = () => {
                   isActive={location.pathname.startsWith(item.href)}
                   asChild
                 >
-                  <Link to={`/dashboard/${item.href}`}>
+                  <Link to={item.href}>
                     <item.icon /> {item.title}
                   </Link>
                 </SidebarMenuButton>

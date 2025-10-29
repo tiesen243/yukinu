@@ -89,7 +89,7 @@ export const ProfileInfo: React.FC = () => {
               name={name}
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel>{label}</FieldLabel>
+                  <FieldLabel htmlFor={meta.fieldId}>{label}</FieldLabel>
                   {type === 'textarea' ? (
                     <Textarea {...field} />
                   ) : (
