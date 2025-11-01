@@ -6,20 +6,20 @@ export abstract class BaseRepository<TTable extends Table>
   implements IBaseRepository<TTable>
 {
   protected _table: TTable = {} as TTable
-  private data: TTable['$inferSelect'][] = []
-  private idCounter = 1
+  protected _data: TTable['$inferSelect'][] = []
+  private _idCounter = 1
 
   constructor(protected _db: Database = {} as Database) {}
 
   async all(_tx = this._db): Promise<TTable['$inferSelect'][]> {
-    return Promise.resolve([...this.data])
+    return Promise.resolve([...this._data])
   }
 
   async find(
     id: TTable['$inferSelect']['id'],
     _tx = this._db,
   ): Promise<TTable['$inferSelect'] | null> {
-    const row = this.data.filter(
+    const row = this._data.filter(
       (item) => item.id === id,
     ) as unknown as TTable['$inferSelect'][]
     return Promise.resolve(row[0] ?? null)
@@ -29,9 +29,9 @@ export abstract class BaseRepository<TTable extends Table>
     data: TTable['$inferInsert'],
     _tx = this._db,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    const id = String(this.idCounter++) as TTable['$inferSelect']['id']
+    const id = String(this._idCounter++) as TTable['$inferSelect']['id']
     const row = { ...data, id } as TTable['$inferSelect']
-    this.data.push(row)
+    this._data.push(row)
 
     return Promise.resolve({ id })
   }
@@ -41,11 +41,11 @@ export abstract class BaseRepository<TTable extends Table>
     data: Partial<TTable['$inferInsert']>,
     _tx = this._db,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    const idx = this.data.findIndex(
+    const idx = this._data.findIndex(
       (row: TTable['$inferSelect']) => row.id === id,
     )
     if (idx === -1) return null
-    this.data[idx] = { ...this.data[idx], ...data } as TTable['$inferSelect']
+    this._data[idx] = { ...this._data[idx], ...data } as TTable['$inferSelect']
 
     return Promise.resolve({ id })
   }
@@ -54,11 +54,11 @@ export abstract class BaseRepository<TTable extends Table>
     id: TTable['$inferSelect']['id'],
     _tx = this._db,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    const idx = this.data.findIndex(
+    const idx = this._data.findIndex(
       (row: TTable['$inferSelect']) => row.id === id,
     )
     if (idx === -1) return null
-    this.data.splice(idx, 1)
+    this._data.splice(idx, 1)
 
     return Promise.resolve({ id })
   }

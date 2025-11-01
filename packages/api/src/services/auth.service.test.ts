@@ -1,0 +1,69 @@
+import { beforeEach, describe, expect, it } from 'bun:test'
+
+import type { Database } from '@yukinu/db/types'
+
+import type { IAuthService } from '../contracts/services/auth.service'
+import { AccountRepository } from '../repositories/account.repository.mock'
+import { UserRepository } from '../repositories/user.repository.mock'
+import { AuthService } from './auth.service'
+
+describe('AuthService', () => {
+  let authService: IAuthService
+
+  beforeEach(() => {
+    const db = {
+      transaction: async (fn: (tx: unknown) => unknown) => {
+        const tx = { rollback: () => undefined }
+        return await fn(tx)
+      },
+    } as unknown as Database
+    const accountRepo = new AccountRepository(db)
+    const userRepo = new UserRepository(db)
+    authService = new AuthService(db, accountRepo, userRepo)
+  })
+
+  it('registers a new user', async () => {
+    const data = {
+      username: 'newuser',
+      email: 'new@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    }
+    const result = await authService.register(data)
+    expect(result).toHaveProperty('id')
+  })
+
+  it('throws CONFLICT if user exists', () => {
+    const data = {
+      username: 'mockuser',
+      email: 'user@mock.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    }
+    expect(authService.register(data)).rejects.toThrow(
+      'Username or email already exists',
+    )
+  })
+
+  it('changes password for existing account', async () => {
+    const data = {
+      currentPassword: 'oldpass',
+      newPassword: 'newpass',
+      confirmNewPassword: 'newpass',
+      isLogOutOtherSessions: true,
+    }
+    const result = await authService.changePassword('user-1', data)
+    expect(result).toHaveProperty('id')
+  })
+
+  it('creates password for account if not exists', async () => {
+    const data = {
+      currentPassword: '',
+      newPassword: 'newpass',
+      confirmNewPassword: 'newpass',
+      isLogOutOtherSessions: false,
+    }
+    const result = await authService.changePassword('user-2', data)
+    expect(result).toHaveProperty('id')
+  })
+})
