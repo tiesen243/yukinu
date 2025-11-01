@@ -81,7 +81,9 @@ export class AuthService implements IAuthService {
             code: 'INTERNAL_SERVER_ERROR',
             message: 'Failed to add password to account',
           })
-        return { id: newAccount.id }
+
+        if (isLogOutOtherSessions) await invalidateSessionTokens(userId)
+        return { id: userId }
       }
 
       if (!account.password)
@@ -117,7 +119,7 @@ export class AuthService implements IAuthService {
       if (!updatedAccount) throw new Error('Failed to change password')
 
       if (isLogOutOtherSessions) await invalidateSessionTokens(userId)
-      return { id: updatedAccount.id }
+      return { id: userId }
     })
   }
 }

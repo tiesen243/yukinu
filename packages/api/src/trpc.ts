@@ -19,7 +19,8 @@ interface TRPCContext {
 const t = initTRPC.context<TRPCContext>().create({
   transformer: SuperJSON,
   errorFormatter({ path, shape }) {
-    console.error(`[tRPC] ${path ?? 'unknown path'}:`, shape)
+    if (!shape.message.startsWith('No procedure found on path'))
+      console.error(`[tRPC] ${path}: ${shape.message}`)
 
     if (shape.message.startsWith('Failed query: '))
       shape.message =
