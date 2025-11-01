@@ -1,5 +1,14 @@
 # @yukinu/auth
 
+## 0.0.9
+
+### Patch Changes
+
+- [#105](https://github.com/tiesen243/yukinu/pull/105) [`7cfca64`](https://github.com/tiesen243/yukinu/commit/7cfca6422129cf4ad79e3f6ce6c59191f6bf7790) Thanks [@tiesen243](https://github.com/tiesen243)! - update auth utils
+
+- Updated dependencies [[`6dec520`](https://github.com/tiesen243/yukinu/commit/6dec5209f221900d6789c3bfc7a5777f8c704d27)]:
+  - @yukinu/db@0.0.6
+
 ## 0.0.8
 
 ### Patch Changes

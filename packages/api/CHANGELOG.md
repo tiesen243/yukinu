@@ -1,5 +1,19 @@
 # @yukinu/api
 
+## 0.0.9
+
+### Patch Changes
+
+- [#105](https://github.com/tiesen243/yukinu/pull/105) [`881d38f`](https://github.com/tiesen243/yukinu/commit/881d38f57da5e86d4bfd274835f7e3b458d3cab8) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
+- [#105](https://github.com/tiesen243/yukinu/pull/105) [`fc0b008`](https://github.com/tiesen243/yukinu/commit/fc0b008f1eab97c906f80223c03368c7e5b284b1) Thanks [@tiesen243](https://github.com/tiesen243)! - re-structure api package
+
+- [#105](https://github.com/tiesen243/yukinu/pull/105) [`f5051d1`](https://github.com/tiesen243/yukinu/commit/f5051d13ab4473471d28b6ba1f026221023d22d5) Thanks [@tiesen243](https://github.com/tiesen243)! - added unit test
+
+- Updated dependencies [[`6dec520`](https://github.com/tiesen243/yukinu/commit/6dec5209f221900d6789c3bfc7a5777f8c704d27), [`7cfca64`](https://github.com/tiesen243/yukinu/commit/7cfca6422129cf4ad79e3f6ce6c59191f6bf7790)]:
+  - @yukinu/db@0.0.6
+  - @yukinu/auth@0.0.9
+
 ## 0.0.8
 
 ### Patch Changes
