@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.0.10
+
+### Patch Changes
+
+- [#107](https://github.com/tiesen243/yukinu/pull/107) [`aa561d4`](https://github.com/tiesen243/yukinu/commit/aa561d41244455fb6c878dd4f0554c995e7f6c12) Thanks [@tiesen243](https://github.com/tiesen243)! - database transaction error
+
 ## 0.0.9
 
 ### Patch Changes
