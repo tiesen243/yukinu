@@ -13,13 +13,13 @@ export class AccountRepository
     _tx = this._db,
   ): Promise<IAccountRepository.FindByAccountIdAndProviderResult> {
     if (
-      params.provider === 'creadentials' &&
+      params.provider === 'credentials' &&
       params.accountId === 'mockAccountId'
     ) {
       return Promise.resolve({
         id: 'mockId',
         userId: 'mockUserId',
-        provider: 'creadentials',
+        provider: 'credentials',
         accountId: 'mockAccountId',
         password: await new Password().hash('mockPassword'),
       })

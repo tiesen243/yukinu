@@ -65,40 +65,47 @@ export class AuthService implements IAuthService {
     userId: string,
     data: AuthValidator.ChangePasswordBody,
   ): Promise<{ id: string }> {
+    const { currentPassword, newPassword } = data
+
     const account = await this._accountRepo.findByAccountIdAndProvider({
       accountId: userId,
       provider: 'credentials',
     })
 
     const provider = 'credentials'
-    const newPassword = await this._password.hash(data.newPassword)
 
     return this._db.transaction(async (tx) => {
       try {
         if (!account) {
+          const newPasswordHash = await this._password.hash(newPassword)
           const newAccount = await this._accountRepo.create(
-            { userId, provider, accountId: userId, password: newPassword },
+            { userId, provider, accountId: userId, password: newPasswordHash },
             tx,
           )
           if (!newAccount) throw new Error('Failed to add password to account')
           return { id: newAccount.id }
         }
 
-        if (
-          account.password !== null &&
-          data.currentPassword &&
-          (await this._password.verify(account.password, data.currentPassword))
-        )
+        if (!account.password)
+          throw new Error(
+            'Password change is not allowed for accounts without a password',
+          )
+
+        if (!currentPassword)
+          throw new Error('Current password is required to change password')
+
+        if (!(await this._password.verify(account.password, currentPassword)))
           throw new Error('Current password is incorrect')
 
-        if (account.password === newPassword)
+        if (await this._password.verify(account.password, newPassword))
           throw new Error(
             'New password must be different from the current password',
           )
 
+        const newPasswordHash = await this._password.hash(newPassword)
         const updatedAccount = await this._accountRepo.update(
           account.id,
-          { password: newPassword },
+          { password: newPasswordHash },
           tx,
         )
         if (!updatedAccount) throw new Error('Failed to change password')
