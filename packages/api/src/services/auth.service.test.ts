@@ -50,7 +50,7 @@ describe('AuthService', () => {
       currentPassword: 'oldpass',
       newPassword: 'newpass',
       confirmNewPassword: 'newpass',
-      isLogOutOtherSessions: true,
+      isLogOutOtherSessions: false,
     }
     const result = await authService.changePassword('user-1', data)
     expect(result).toHaveProperty('id')
