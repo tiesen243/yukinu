@@ -21,6 +21,8 @@ export const categories = pgTable(
   }),
   (t) => [index('categories_name_idx').on(t.name)],
 )
+export type Category = typeof categories.$inferSelect
+export type NewCategory = typeof categories.$inferInsert
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
   products: many(products),
@@ -51,6 +53,8 @@ export const products = pgTable(
     index('products_status_idx').on(t.status),
   ],
 )
+export type Product = typeof products.$inferSelect
+export type NewProduct = typeof products.$inferInsert
 
 export const productsRelations = relations(products, ({ one, many }) => ({
   category: one(categories, {
@@ -85,6 +89,8 @@ export const productImages = pgTable(
   }),
   (t) => [index('product_images_product_id_idx').on(t.productId)],
 )
+export type ProductImage = typeof productImages.$inferSelect
+export type NewProductImage = typeof productImages.$inferInsert
 
 export const productImagesRelations = relations(productImages, ({ one }) => ({
   product: one(products, {
@@ -107,6 +113,8 @@ export const productVariants = pgTable(
   }),
   (t) => [index('product_variants_product_id_idx').on(t.productId)],
 )
+export type ProductVariant = typeof productVariants.$inferSelect
+export type NewProductVariant = typeof productVariants.$inferInsert
 
 export const productVariantsRelations = relations(
   productVariants,
@@ -143,6 +151,8 @@ export const productReviews = pgTable(
     ),
   ],
 )
+export type ProductReview = typeof productReviews.$inferSelect
+export type NewProductReview = typeof productReviews.$inferInsert
 
 export const productReviewsRelations = relations(productReviews, ({ one }) => ({
   product: one(products, {

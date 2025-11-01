@@ -1,13 +1,3 @@
-import type { ExtractTablesWithRelations } from 'drizzle-orm'
-import type {
-  AnyPgColumn,
-  PgTableWithColumns,
-  PgTransaction,
-} from 'drizzle-orm/pg-core'
-import type {
-  PostgresJsDatabase,
-  PostgresJsQueryResultHKT,
-} from 'drizzle-orm/postgres-js'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
@@ -29,21 +19,4 @@ const globalForDrizzle = globalThis as unknown as {
 }
 export const db = globalForDrizzle.db ?? createDrizzleClient()
 if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
-
-type Database = PostgresJsDatabase
-
-type Table = PgTableWithColumns<{
-  name: string
-  schema: undefined
-  dialect: 'pg'
-  columns: { id: AnyPgColumn<{ data: string }> }
-}>
-
-type Transaction = PgTransaction<
-  PostgresJsQueryResultHKT,
-  Record<string, never>,
-  ExtractTablesWithRelations<Record<string, never>>
->
-
-export type { Database, Table, Transaction }
 export * from 'drizzle-orm'

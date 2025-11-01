@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createdAt, createId, updatedAt } from '../utils'
 import { orders } from './order'
@@ -9,8 +9,9 @@ import { vendorMembers } from './vendor'
 
 export const userRoleEnum = pgEnum('user_role', [
   'admin',
-  'manager',
-  'vendor',
+  'moderator',
+  'vendor_owner',
+  'vendor_staff',
   'user',
 ])
 export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
@@ -34,6 +35,8 @@ export const users = pgTable(
     index('users_status_idx').on(t.status),
   ],
 )
+export type User = typeof users.$inferSelect
+export type NewUser = typeof users.$inferInsert
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
@@ -52,6 +55,7 @@ export const usersRelations = relations(users, ({ one, many }) => ({
 export const accounts = pgTable(
   'accounts',
   (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
     provider: t.varchar({ length: 255 }).notNull(),
     accountId: t.varchar({ length: 255 }).notNull(),
     userId: t
@@ -61,10 +65,12 @@ export const accounts = pgTable(
     password: t.varchar({ length: 255 }),
   }),
   (t) => [
-    primaryKey({ columns: [t.provider, t.accountId] }),
+    uniqueIndex('account_provider_account_id_idx').on(t.provider, t.accountId),
     index('account_user_id_idx').on(t.userId),
   ],
 )
+export type Account = typeof accounts.$inferSelect
+export type NewAccount = typeof accounts.$inferInsert
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
@@ -85,6 +91,8 @@ export const sessions = pgTable(
   }),
   (t) => [index('session_user_id_idx').on(t.userId)],
 )
+export type Session = typeof sessions.$inferSelect
+export type NewSession = typeof sessions.$inferInsert
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),

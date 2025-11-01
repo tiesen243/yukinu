@@ -22,6 +22,8 @@ export const profiles = pgTable(
   }),
   (t) => [index('profiles_full_name_idx').on(t.fullName)],
 )
+export const Profile = typeof profiles.$inferSelect
+export const NewProfile = typeof profiles.$inferInsert
 
 export const profilesRelations = relations(profiles, ({ one }) => ({
   user: one(users, { fields: [profiles.id], references: [users.id] }),
@@ -49,6 +51,8 @@ export const addresses = pgTable(
     index('addresses_is_default_idx').on(t.isDefault),
   ],
 )
+export const Address = typeof addresses.$inferSelect
+export const NewAddress = typeof addresses.$inferInsert
 
 export const addressesRelations = relations(addresses, ({ one }) => ({
   user: one(users, { fields: [addresses.userId], references: [users.id] }),
@@ -72,6 +76,8 @@ export const wishlistItems = pgTable(
     index('wishlist_user_id_idx').on(t.userId),
   ],
 )
+export const WishlistItem = typeof wishlistItems.$inferSelect
+export const NewWishlistItem = typeof wishlistItems.$inferInsert
 
 export const wishlistItemsRelations = relations(wishlistItems, ({ one }) => ({
   user: one(users, { fields: [wishlistItems.userId], references: [users.id] }),
