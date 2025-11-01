@@ -53,19 +53,13 @@ export class UserService implements IUserService {
       })
 
     return this._db.transaction(async (tx) => {
-      try {
-        const updatedUser = await this._userRepo.update(data.userId, data, tx)
-        if (!updatedUser) throw new Error('Failed to update user')
-        return updatedUser
-      } catch (error) {
-        tx.rollback()
-        console.error('Transaction error:', error)
+      const updatedUser = await this._userRepo.update(data.userId, data, tx)
+      if (!updatedUser)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message:
-            error instanceof Error ? error.message : 'Failed to update user',
+          message: 'Failed to update user',
         })
-      }
+      return updatedUser
     })
   }
 
@@ -78,19 +72,13 @@ export class UserService implements IUserService {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
 
     return this._db.transaction(async (tx) => {
-      try {
-        const updatedProfile = await this._profileRepo.update(userId, data, tx)
-        if (!updatedProfile) throw new Error('Failed to update profile')
-        return updatedProfile
-      } catch (error) {
-        tx.rollback()
-        console.error('Transaction error:', error)
+      const updatedProfile = await this._profileRepo.update(userId, data, tx)
+      if (!updatedProfile)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message:
-            error instanceof Error ? error.message : 'Failed to update profile',
+          message: 'Failed to update profile',
         })
-      }
+      return updatedProfile
     })
   }
 }

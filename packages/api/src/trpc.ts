@@ -18,6 +18,15 @@ interface TRPCContext {
 
 const t = initTRPC.context<TRPCContext>().create({
   transformer: SuperJSON,
+  errorFormatter({ path, shape }) {
+    if (!shape.message.startsWith('No procedure found on path'))
+      console.error(`[tRPC] ${path}: ${shape.message}`)
+
+    if (shape.message.startsWith('Failed query: '))
+      shape.message =
+        'An error occurred. Please try again later or contact the administrator.'
+    return shape
+  },
 })
 
 const createCallerFactory = t.createCallerFactory
@@ -28,7 +37,7 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
   const start = Date.now()
   const result = await next()
   const end = Date.now()
-  console.log(`[tRPC] ${path} took ${end - start}ms to execute`)
+  console.log(`[tRPC] ${path}: took ${end - start}ms to execute`)
   return result
 })
 
