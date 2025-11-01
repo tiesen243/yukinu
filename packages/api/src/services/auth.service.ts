@@ -2,8 +2,7 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db/types'
 import type { AuthValidator } from '@yukinu/validators/auth'
-import { Password } from '@yukinu/auth'
-import { DrizzleError } from '@yukinu/db'
+import { invalidateSessionTokens, Password } from '@yukinu/auth'
 
 import type { IAccountRepository } from '../contracts/repositories/account.repository'
 import type { IUserRepository } from '../contracts/repositories/user.repository'
@@ -34,30 +33,26 @@ export class AuthService implements IAuthService {
       })
 
     return this._db.transaction(async (tx) => {
-      try {
-        const user = await this._userRepo.create({ username, email }, tx)
-        if (!user) throw new Error('Failed to create user')
-
-        const provider = 'credentials'
-        const password = await this._password.hash(data.password)
-        const account = await this._accountRepo.create(
-          { userId: user.id, provider, accountId: user.id, password },
-          tx,
-        )
-        if (!account) throw new Error('Failed to create account')
-
-        return { id: user.id }
-      } catch (error) {
-        tx.rollback()
-        console.error('Transaction error:', error)
+      const user = await this._userRepo.create({ username, email }, tx)
+      if (!user)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message:
-            error instanceof Error && !(error instanceof DrizzleError)
-              ? error.message
-              : 'Failed to register user',
+          message: 'Failed to create user',
         })
-      }
+
+      const provider = 'credentials'
+      const password = await this._password.hash(data.password)
+      const account = await this._accountRepo.create(
+        { userId: user.id, provider, accountId: user.id, password },
+        tx,
+      )
+      if (!account)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create account',
+        })
+
+      return { id: user.id }
     })
   }
 
@@ -65,7 +60,7 @@ export class AuthService implements IAuthService {
     userId: string,
     data: AuthValidator.ChangePasswordBody,
   ): Promise<{ id: string }> {
-    const { currentPassword, newPassword } = data
+    const { currentPassword, newPassword, isLogOutOtherSessions } = data
 
     const account = await this._accountRepo.findByAccountIdAndProvider({
       accountId: userId,
@@ -75,53 +70,54 @@ export class AuthService implements IAuthService {
     const provider = 'credentials'
 
     return this._db.transaction(async (tx) => {
-      try {
-        if (!account) {
-          const newPasswordHash = await this._password.hash(newPassword)
-          const newAccount = await this._accountRepo.create(
-            { userId, provider, accountId: userId, password: newPasswordHash },
-            tx,
-          )
-          if (!newAccount) throw new Error('Failed to add password to account')
-          return { id: newAccount.id }
-        }
-
-        if (!account.password)
-          throw new Error(
-            'Password change is not allowed for accounts without a password',
-          )
-
-        if (!currentPassword)
-          throw new Error('Current password is required to change password')
-
-        if (!(await this._password.verify(account.password, currentPassword)))
-          throw new Error('Current password is incorrect')
-
-        if (await this._password.verify(account.password, newPassword))
-          throw new Error(
-            'New password must be different from the current password',
-          )
-
+      if (!account) {
         const newPasswordHash = await this._password.hash(newPassword)
-        const updatedAccount = await this._accountRepo.update(
-          account.id,
-          { password: newPasswordHash },
+        const newAccount = await this._accountRepo.create(
+          { userId, provider, accountId: userId, password: newPasswordHash },
           tx,
         )
-        if (!updatedAccount) throw new Error('Failed to change password')
-
-        return { id: updatedAccount.id }
-      } catch (error) {
-        tx.rollback()
-        console.error('Transaction error:', error)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message:
-            error instanceof Error && !(error instanceof DrizzleError)
-              ? error.message
-              : 'Failed to change password',
-        })
+        if (!newAccount)
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Failed to add password to account',
+          })
+        return { id: newAccount.id }
       }
+
+      if (!account.password)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Account does not have a password set',
+        })
+
+      if (!currentPassword)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Current password is required to change password',
+        })
+
+      if (!(await this._password.verify(account.password, currentPassword)))
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Current password is incorrect',
+        })
+
+      if (await this._password.verify(account.password, newPassword))
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'New password must be different from the current password',
+        })
+
+      const newPasswordHash = await this._password.hash(newPassword)
+      const updatedAccount = await this._accountRepo.update(
+        account.id,
+        { password: newPasswordHash },
+        tx,
+      )
+      if (!updatedAccount) throw new Error('Failed to change password')
+
+      if (isLogOutOtherSessions) await invalidateSessionTokens(userId)
+      return { id: updatedAccount.id }
     })
   }
 }
