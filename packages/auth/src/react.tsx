@@ -4,11 +4,12 @@ import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import type { Providers } from './config'
-import type { SessionResult, User } from './core/types'
+import type { Session, User } from './core/types'
 
 type AuthProviders =
   | 'credentials'
   | (Providers extends never ? undefined : Providers)
+type SessionResult = Omit<Session, 'token' | 'userAgent' | 'ipAddress'>
 
 type SessionContextValue = {
   signIn: <TProvider extends AuthProviders>(
@@ -23,13 +24,6 @@ type SessionContextValue = {
   | { status: 'unauthenticated'; session: SessionResult & { user: null } }
   | { status: 'authenticated'; session: SessionResult & { user: User } }
 )
-
-const nullSession: SessionResult = {
-  user: null,
-  userAgent: null,
-  ipAddress: null,
-  expires: new Date(),
-}
 
 const SessionContext = React.createContext<SessionContextValue | null>(null)
 
@@ -56,7 +50,8 @@ function SessionProvider({
         headers: { 'Content-Type': 'application/json' },
         signal,
       })
-      if (!res.ok) return nullSession
+      if (!res.ok) return { user: null, expires: new Date() }
+
       return (await res.json()) as SessionResult
     },
     initialData: _session ?? undefined,

@@ -26,17 +26,19 @@ const hash = (input: string) => {
   return bufToBigInt(hashBuf).toString(36)
 }
 
-export function createId(): string {
+function createId(): string {
   const time = Date.now().toString(36)
   const salt = createEntropy(24)
   const hashInput = time + salt
   return `${randomLetter()}${hash(hashInput).substring(1, 24)}`
 }
 
-export const createdAt = timestamp({ mode: 'date', withTimezone: true })
+const createdAt = timestamp({ mode: 'date', withTimezone: true })
   .defaultNow()
   .notNull()
-export const updatedAt = timestamp({ mode: 'date', withTimezone: true })
+const updatedAt = timestamp({ mode: 'date', withTimezone: true })
   .defaultNow()
   .$onUpdateFn(() => new Date())
   .notNull()
+
+export { createId, createdAt, updatedAt }

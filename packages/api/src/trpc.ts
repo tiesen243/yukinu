@@ -1,11 +1,22 @@
+import type { TRPCRouterCallerFactory } from '@trpc/server'
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
+import type { Session } from '@yukinu/auth'
 import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
 
-import type { createTRPCContext } from './context'
+import type { IAuthService } from './contracts/services/auth.service'
+import type { IUserService } from './contracts/services/user.service'
 
-const t = initTRPC.context<typeof createTRPCContext>().create({
+interface TRPCContext {
+  headers: Headers
+  session: Omit<Session, 'token'> | null
+
+  authService: IAuthService
+  userService: IUserService
+}
+
+const t = initTRPC.context<TRPCContext>().create({
   transformer: SuperJSON,
 })
 
@@ -63,14 +74,15 @@ const protectedProcedure = t.procedure
     })
   })
 const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (ctx.session.user.role !== 'admin' && ctx.session.user.role !== 'manager')
+  if (!['admin', 'moderator'].includes(ctx.session.user.role))
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'Admin or manager access only',
+      message: 'User does not have sufficient permissions',
     })
   return next()
 })
 
+export type { TRPCContext, TRPCRouterCallerFactory }
 export {
   createCallerFactory,
   createTRPCRouter,

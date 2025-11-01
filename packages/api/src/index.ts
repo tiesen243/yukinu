@@ -1,7 +1,5 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 
-import { env } from '@yukinu/validators/env'
-
 import { createTRPCContext } from './context'
 import { appRouter } from './routers/_app'
 import { createCallerFactory } from './trpc'
@@ -19,19 +17,16 @@ const handler = async (request: Request) => {
       createContext: () => createTRPCContext(request),
     })
 
-  const protocal = env.NODE_ENV === 'production' ? 'https' : 'http'
-  const allowedOrigins = [
-    `${protocal}://${env.NEXT_PUBLIC_DASHBOARD_URL}`,
-    `${protocal}://${env.NEXT_PUBLIC_WEB_URL}`,
-  ]
-
-  response.headers.set('Access-Control-Allow-Origin', allowedOrigins.join(', '))
+  response.headers.set('Access-Control-Allow-Origin', '*')
   response.headers.set('Access-Control-Request-Method', '*')
   response.headers.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
   response.headers.set('Access-Control-Allow-Headers', '*')
   return response
 }
 
-export type * from './context'
+const createCaller = createCallerFactory(appRouter)
+
 export type { AppRouter, RouterInputs, RouterOutputs } from './routers/_app'
-export { appRouter, createCallerFactory, createTRPCContext, handler }
+export type { TRPCContext } from './trpc'
+export { appRouter, createCaller, handler }
+export { createTRPCContext }

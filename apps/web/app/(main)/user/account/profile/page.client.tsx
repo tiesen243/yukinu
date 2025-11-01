@@ -16,13 +16,13 @@ import {
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
-import { UserModel } from '@yukinu/validators/user'
+import { UserValidator } from '@yukinu/validators/user'
 
 import { useTRPC, useTRPCClient } from '@/trpc/react'
 
 export const ProfileAccount: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.user.getInfo.queryOptions())
+  const { data } = useSuspenseQuery(trpc.user.profile.queryOptions())
 
   return (
     <section className='px-4'>
@@ -61,18 +61,19 @@ export const ProfileAccount: React.FC = () => {
 export const ProfileInfo: React.FC = () => {
   const trpc = useTRPC()
   const trpcClient = useTRPCClient()
-  const { data } = useSuspenseQuery(trpc.user.getInfo.queryOptions())
+  const { data } = useSuspenseQuery(trpc.user.profile.queryOptions())
 
   const form = useForm({
     defaultValues: {
-      fullName: data.fullName ?? '',
-      gender: data.gender ?? '',
-      dateOfBirth: data.dateOfBirth ?? '',
-      website: data.website ?? '',
-      bio: data.bio ?? '',
+      avatarUrl: data.profile.avatarUrl ?? '',
+      fullName: data.profile.fullName ?? '',
+      bio: data.profile.bio ?? '',
+      gender: data.profile.gender ?? '',
+      dateOfBirth: data.profile.dateOfBirth ?? '',
+      website: data.profile.website ?? '',
     },
-    schema: UserModel.updateProfileBody,
-    onSubmit: trpcClient.user.updateInfo.mutate,
+    schema: UserValidator.updateProfileBody,
+    onSubmit: trpcClient.user.updateProfile.mutate,
     onSuccess: () => toast.success('Profile updated successfully'),
     onError: (error) => toast.error(error.message),
   })
@@ -109,7 +110,7 @@ export const ProfileInfo: React.FC = () => {
 
       <div className='flex flex-col items-center justify-center gap-8'>
         <Avatar className='size-64'>
-          <AvatarImage src={data.avatarUrl ?? ''} alt={data.username} />
+          <AvatarImage src={data.profile.avatarUrl ?? ''} alt={data.username} />
           <AvatarFallback>
             {data.username.charAt(0).toUpperCase()}
           </AvatarFallback>
@@ -170,6 +171,7 @@ export const ProfileInfoSkeleton: React.FC = () => (
 )
 
 const fields = [
+  { name: 'avatarUrl', label: 'Avatar URL', type: 'url' },
   { name: 'fullName', label: 'Full Name', type: 'text' },
   { name: 'gender', label: 'Gender', type: 'text' },
   { name: 'dateOfBirth', label: 'Date of Birth', type: 'date' },

@@ -1,25 +1,25 @@
-import { UserModel } from '@yukinu/validators/user'
+import { UserValidator } from '@yukinu/validators/user'
 
 import { createTRPCRouter, managerProcedure, protectedProcedure } from '../trpc'
 
 export const userRouter = createTRPCRouter({
-  getUsers: managerProcedure
-    .input(UserModel.findUsersBySearchWithPaginationQuery)
-    .query(({ ctx: { services }, input }) => services.user.getUsers(input)),
+  all: managerProcedure
+    .input(UserValidator.findByQueryWithPaginationQuery)
+    .query(({ ctx, input }) => ctx.userService.getUsers(input)),
 
-  getInfo: protectedProcedure.query(({ ctx: { services, session } }) =>
-    services.user.getUserInfo(session.user),
+  profile: protectedProcedure.query(({ ctx }) =>
+    ctx.userService.getUserProfile(ctx.session.user),
   ),
 
   update: managerProcedure
-    .input(UserModel.updateUserBody)
-    .mutation(({ ctx: { services, session }, input }) =>
-      services.user.updateUser(input, session.user),
+    .input(UserValidator.updateUserBody)
+    .mutation(({ ctx, input }) =>
+      ctx.userService.updateUser(input, ctx.session.user),
     ),
 
-  updateInfo: protectedProcedure
-    .input(UserModel.updateProfileBody)
-    .mutation(({ ctx: { services, session }, input }) =>
-      services.user.updateUserInfo(session.user.id, input),
+  updateProfile: protectedProcedure
+    .input(UserValidator.updateProfileBody)
+    .mutation(({ ctx, input }) =>
+      ctx.userService.updateUserProfile(ctx.session.user.id, input),
     ),
 })

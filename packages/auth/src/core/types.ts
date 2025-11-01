@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import type BaseProvider from '../providers/base'
 
 export interface CookieOptions {
@@ -17,16 +18,11 @@ export interface OAuth2Token {
   expires_in: number
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface User {}
-
-export interface Account {
-  provider: string
-  accountId: string
-  userId: string
-  password: string | null
-  status: 'active' | 'inactive' | 'banned'
-}
+export interface Account {}
+export interface NewAccount {}
+export interface Session {}
+export interface NewSession {}
 
 export interface OauthAccount {
   accountId: string
@@ -35,26 +31,16 @@ export interface OauthAccount {
   image: string
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface Session {}
-
-export interface SessionResult {
-  user: User | null
-  userAgent: string | null
-  ipAddress: string | null
-  expires: Date
-}
-
 export interface DatabaseAdapter {
   getUserByIndentifier(indentifier: string): Promise<User | null>
   createUser(data: Omit<OauthAccount, 'accountId'>): Promise<User['id'] | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>
-  createAccount(data: Omit<Account, 'status'>): Promise<void>
+  createAccount(data: NewAccount): Promise<void>
 
-  getSessionAndUser(token: string): Promise<SessionResult | null>
-  createSession(data: Omit<Session, 'createdAt'>): Promise<void>
-  updateSession(token: string, data: Partial<Session>): Promise<void>
+  getSessionAndUser(token: string): Promise<Omit<Session, 'token'> | null>
+  createSession(data: NewSession): Promise<void>
+  updateSession(token: string, data: Partial<NewSession>): Promise<void>
   deleteSession(token: string): Promise<void>
   deleteSessionsByUserId(userId: string): Promise<void>
 }

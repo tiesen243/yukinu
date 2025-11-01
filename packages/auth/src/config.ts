@@ -1,3 +1,5 @@
+import type * as UserTypes from '@yukinu/db/schema/user'
+import type * as ViewTypes from '@yukinu/db/schema/view'
 import { and, db, eq, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 import { accounts, sessions, users } from '@yukinu/db/schema/user'
@@ -58,6 +60,7 @@ function getAdapter(): AuthOptions['adapter'] {
         )
       return user ?? null
     },
+
     createUser: async (data) => {
       const username = generateSecureString().slice(0, 8)
       const [user] = await db
@@ -78,6 +81,7 @@ function getAdapter(): AuthOptions['adapter'] {
     getAccount: async (provider, accountId) => {
       const [account] = await db
         .select({
+          id: accounts.id,
           userId: accounts.userId,
           provider: accounts.provider,
           accountId: accounts.accountId,
@@ -94,6 +98,7 @@ function getAdapter(): AuthOptions['adapter'] {
         .innerJoin(users, eq(accounts.userId, users.id))
       return account ?? null
     },
+
     createAccount: async (data) => {
       await db.insert(accounts).values(data)
     },
@@ -134,13 +139,24 @@ function getAdapter(): AuthOptions['adapter'] {
 }
 
 declare module './core/types.d.ts' {
-  type IUser = typeof usersView.$inferSelect
-  type ISession = typeof sessions.$inferSelect
-
-  interface User extends IUser {
+  interface User extends ViewTypes.UserView {
     id: string
   }
-  interface Session extends ISession {
+
+  interface Account extends UserTypes.Account {
+    id: string
+    status: UserTypes.User['status']
+  }
+
+  interface NewAccount extends UserTypes.NewAccount {
+    userId: string
+  }
+
+  interface Session extends Omit<UserTypes.Session, 'userId' | 'createdAt'> {
+    user: User | null
+  }
+
+  interface NewSession extends UserTypes.NewSession {
     token: string
   }
 }

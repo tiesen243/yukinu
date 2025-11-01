@@ -1,16 +1,26 @@
 import * as z from 'zod'
 
-export namespace UserModel {
+export namespace UserValidator {
+  export const roles = [
+    'admin',
+    'moderator',
+    'vendor_owner',
+    'vendor_staff',
+    'user',
+  ] as const
+  export type Role = (typeof roles)[number]
+
+  export const statuses = ['active', 'inactive'] as const
+  export type Status = (typeof statuses)[number]
+
   export interface User {
     id: string
     email: string
-    role: 'admin' | 'user' | 'manager' | 'vendor'
-    status: 'active' | 'inactive'
-    createdAt: Date
-    updatedAt: Date
+    role: Role
+    status: Status
   }
 
-  export const findUsersBySearchWithPaginationQuery = z.object({
+  export const findByQueryWithPaginationQuery = z.object({
     search: z.string().max(100, 'Search query is too long'),
     page: z
       .number()
@@ -24,22 +34,19 @@ export namespace UserModel {
       .max(100, 'Limit cannot exceed 100')
       .default(10),
   })
-  export type FindUsersBySearchWithPaginationQuery = z.infer<
-    typeof findUsersBySearchWithPaginationQuery
+  export type FindByQueryWithPaginationQuery = z.infer<
+    typeof findByQueryWithPaginationQuery
   >
 
   export const updateUserBody = z.object({
     userId: z.cuid2('Invalid user ID'),
-    role: z.enum(['admin', 'user', 'manager', 'vendor'], {
-      error: 'Invalid role',
-    }),
-    status: z.enum(['active', 'inactive'], {
-      error: 'Invalid status',
-    }),
+    role: z.enum(roles, { error: 'Invalid role' }),
+    status: z.enum(statuses, { error: 'Invalid status' }),
   })
   export type UpdateUserBody = z.infer<typeof updateUserBody>
 
   export const updateProfileBody = z.object({
+    avatarUrl: z.url('Invalid avatar URL'),
     fullName: z
       .string()
       .min(1, 'Full name cannot be empty')

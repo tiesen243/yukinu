@@ -1,52 +1,65 @@
-import type { Database, Table, Transaction } from '@yukinu/db'
+import type { Database, Table } from '@yukinu/db/types'
 
-import type { IBaseRepository } from './base'
+import type { IBaseRepository } from '../contracts/repositories/base.repository'
 
-export abstract class BaseRepositoryMock<TTable extends Table>
+export abstract class BaseRepository<TTable extends Table>
   implements IBaseRepository<TTable>
 {
-  constructor(
-    protected readonly _db: Database,
-    protected readonly _table: TTable,
-  ) {}
+  protected _table: TTable = {} as TTable
+  protected _data: TTable['$inferSelect'][] = []
+  private _idCounter = 1
 
-  async findAll(
-    _tx?: Database | Transaction,
-  ): Promise<TTable['$inferSelect'][]> {
-    return Promise.resolve([])
+  constructor(protected _db: Database = {} as Database) {}
+
+  async all(_tx = this._db): Promise<TTable['$inferSelect'][]> {
+    return Promise.resolve([...this._data])
   }
 
-  async findById(
-    id: string,
-    _tx: Database | Transaction,
+  async find(
+    id: TTable['$inferSelect']['id'],
+    _tx = this._db,
   ): Promise<TTable['$inferSelect'] | null> {
-    if (id === 'find-fail') return Promise.resolve(null)
-    return Promise.resolve({ id })
+    const row = this._data.filter(
+      (item) => item.id === id,
+    ) as unknown as TTable['$inferSelect'][]
+    return Promise.resolve(row[0] ?? null)
   }
 
   async create(
     data: TTable['$inferInsert'],
-    _tx: Database | Transaction,
+    _tx = this._db,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    if ('_mockFail' in data && data._mockFail === true)
-      return Promise.resolve(null)
-    return Promise.resolve({ id: 'mock-id' })
+    const id = String(this._idCounter++) as TTable['$inferSelect']['id']
+    const row = { ...data, id } as TTable['$inferSelect']
+    this._data.push(row)
+
+    return Promise.resolve({ id })
   }
 
   async update(
-    id: string,
-    _data: Partial<TTable['$inferInsert']>,
-    _tx: Database | Transaction,
+    id: TTable['$inferSelect']['id'],
+    data: Partial<TTable['$inferInsert']>,
+    _tx = this._db,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    if (id === 'update-fail') return Promise.resolve(null)
+    const idx = this._data.findIndex(
+      (row: TTable['$inferSelect']) => row.id === id,
+    )
+    if (idx === -1) return null
+    this._data[idx] = { ...this._data[idx], ...data } as TTable['$inferSelect']
+
     return Promise.resolve({ id })
   }
 
   async delete(
-    id: string,
-    _tx: Database | Transaction,
+    id: TTable['$inferSelect']['id'],
+    _tx = this._db,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
-    if (id === 'delete-fail') return Promise.resolve(null)
+    const idx = this._data.findIndex(
+      (row: TTable['$inferSelect']) => row.id === id,
+    )
+    if (idx === -1) return null
+    this._data.splice(idx, 1)
+
     return Promise.resolve({ id })
   }
 }

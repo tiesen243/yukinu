@@ -1,61 +1,29 @@
-import type { Database, Transaction } from '@yukinu/db'
-import type { accounts } from '@yukinu/db/schema/user'
 import { and, eq } from '@yukinu/db'
+import { accounts } from '@yukinu/db/schema/user'
 
-import type { IAccountRepository } from './account'
+import type { IAccountRepository } from '../contracts/repositories/account.repository'
+import { BaseRepository } from './base.repository'
 
-export class AccountRepository implements IAccountRepository {
-  constructor(
-    private readonly _db: Database,
-    private readonly _table: typeof accounts,
-  ) {}
+export class AccountRepository
+  extends BaseRepository<typeof accounts>
+  implements IAccountRepository
+{
+  protected override _table = accounts
 
-  async findByIdAndProvider(
-    id: string,
-    provider: string,
-    tx: Database | Transaction = this._db,
-  ): Promise<IAccountRepository.Accounts | null> {
+  async findByAccountIdAndProvider(
+    params: IAccountRepository.FindByAccountIdAndProviderParams,
+    tx = this._db,
+  ): Promise<IAccountRepository.FindByAccountIdAndProviderResult> {
+    const whereClause = and(
+      eq(this._table.provider, params.provider),
+      eq(this._table.accountId, params.accountId),
+    )
+
     const [record] = await tx
       .select()
       .from(this._table)
-      .where(
-        and(eq(this._table.accountId, id), eq(this._table.provider, provider)),
-      )
+      .where(whereClause)
+      .limit(1)
     return record ?? null
-  }
-
-  async create(
-    data: typeof accounts.$inferInsert,
-    tx: Database | Transaction = this._db,
-  ): Promise<{ userId: string } | null> {
-    try {
-      const [record] = await tx
-        .insert(this._table)
-        .values(data)
-        .returning({ userId: this._table.userId })
-      if (!record?.userId) return null
-      return { userId: record.userId }
-    } catch {
-      return null
-    }
-  }
-
-  async updatePassword(
-    id: string,
-    newPassword: string,
-    tx: Database | Transaction = this._db,
-  ): Promise<{ userId: string } | null> {
-    const [record] = await tx
-      .update(this._table)
-      .set({ password: newPassword })
-      .where(
-        and(
-          eq(this._table.accountId, id),
-          eq(this._table.provider, 'credentials'),
-        ),
-      )
-      .returning({ userId: this._table.userId })
-    if (!record?.userId) return null
-    return { userId: record.userId }
   }
 }

@@ -28,7 +28,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
-import { UserModel } from '@yukinu/validators/user'
+import { UserValidator } from '@yukinu/validators/user'
 
 import { useTRPC, useTRPCClient } from '@/trpc/react'
 
@@ -70,7 +70,7 @@ const UserTableHeader: React.FC = () => (
 const UserTableBody: React.FC = () => {
   const [query] = useQueryStates(queryParsers)
   const trpc = useTRPC()
-  const { data, isLoading } = useQuery(trpc.user.getUsers.queryOptions(query))
+  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
 
   if (isLoading)
     return Array.from({ length: query.limit }, (_, index) => (
@@ -96,7 +96,7 @@ const UserTableBody: React.FC = () => {
 }
 
 const UserTableRow: React.FC<{
-  user: RouterOutputs['user']['getUsers']['users'][number]
+  user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => (
   <TableRow key={user.id}>
     <TableCell>{user.id}</TableCell>
@@ -127,7 +127,7 @@ export const UserTableFooter: React.FC = () => {
   const [query, setQuery] = useQueryStates(queryParsers)
   const trpc = useTRPC()
 
-  const { data, isLoading } = useQuery(trpc.user.getUsers.queryOptions(query))
+  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
   const handlePagination = async (newPage: number) => {
     await setQuery({ ...query, page: newPage })
   }
@@ -168,7 +168,7 @@ export const UserTableFooter: React.FC = () => {
 }
 
 const EditUserButton: React.FC<{
-  user: RouterOutputs['user']['getUsers']['users'][number]
+  user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => {
   const [query] = useQueryStates(queryParsers)
   const [isOpen, setIsOpen] = useState(false)
@@ -178,11 +178,11 @@ const EditUserButton: React.FC<{
 
   const form = useForm({
     defaultValues: { userId: user.id, role: user.role, status: user.status },
-    schema: UserModel.updateUserBody,
+    schema: UserValidator.updateUserBody,
     onSubmit: trpcClient.user.update.mutate,
     onError: (error) => toast.error(error.message),
     onSuccess: () => {
-      void queryClient.invalidateQueries(trpc.user.getUsers.queryFilter(query))
+      void queryClient.invalidateQueries(trpc.user.all.queryFilter(query))
       toast.success('User updated successfully')
       setIsOpen(false)
     },
@@ -213,10 +213,11 @@ const EditUserButton: React.FC<{
                   <FieldLabel htmlFor={meta.fieldId}>Role</FieldLabel>
                   <Select {...field}>
                     <SelectOption value=''>Select a role</SelectOption>
-                    <SelectOption value='admin'>Admin</SelectOption>
-                    <SelectOption value='manager'>Manager</SelectOption>
-                    <SelectOption value='vendor'>Vendor</SelectOption>
-                    <SelectOption value='user'>User</SelectOption>
+                    {UserValidator.roles.map((role) => (
+                      <SelectOption key={role} value={role}>
+                        {role.replace(/_/g, ' ')}
+                      </SelectOption>
+                    ))}
                   </Select>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
@@ -233,14 +234,14 @@ const EditUserButton: React.FC<{
                     value={field.value}
                     onValueChange={field.onChange}
                   >
-                    <div className='flex items-center gap-3'>
-                      <RadioGroupItem id='active' value='active' />
-                      <FieldLabel htmlFor='active'>Active</FieldLabel>
-                    </div>
-                    <div className='flex items-center gap-3'>
-                      <RadioGroupItem id='inactive' value='inactive' />
-                      <FieldLabel htmlFor='inactive'>Inactive</FieldLabel>
-                    </div>
+                    {UserValidator.statuses.map((status) => (
+                      <div key={status} className='flex items-center gap-3'>
+                        <RadioGroupItem id={status} value={status} />
+                        <FieldLabel htmlFor={status} className='capitalize'>
+                          {status}
+                        </FieldLabel>
+                      </div>
+                    ))}
                   </RadioGroup>
                 </Field>
               )}

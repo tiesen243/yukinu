@@ -1,15 +1,15 @@
-import { AuthModel } from '@yukinu/validators/auth'
+import { AuthValidator } from '@yukinu/validators/auth'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 export const authRouter = createTRPCRouter({
   register: publicProcedure
-    .input(AuthModel.registerBody)
-    .mutation(({ ctx: { services }, input }) => services.auth.register(input)),
+    .input(AuthValidator.registerBody)
+    .mutation(({ ctx, input }) => ctx.authService.register(input)),
 
   changePassword: protectedProcedure
-    .input(AuthModel.changePasswordBody)
-    .mutation(({ ctx: { session, services }, input }) =>
-      services.auth.changePassword(session.user.id, input),
+    .input(AuthValidator.changePasswordBody)
+    .mutation(({ ctx, input }) =>
+      ctx.authService.changePassword(ctx.session.user.id, input),
     ),
 })

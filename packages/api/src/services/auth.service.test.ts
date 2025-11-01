@@ -1,52 +1,69 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
-import { TRPCError } from '@trpc/server'
 
-import { db } from '@yukinu/db/mock'
-import { profiles } from '@yukinu/db/schema/profile'
-import { accounts, users } from '@yukinu/db/schema/user'
+import type { Database } from '@yukinu/db/types'
 
-import { AccountRepositoryMock } from '../repositories/account.repository.mock'
-import { ProfileRepositoryMock } from '../repositories/profile.repository.mock'
-import { UserRepositoryMock } from '../repositories/user.repository.mock'
+import type { IAuthService } from '../contracts/services/auth.service'
+import { AccountRepository } from '../repositories/account.repository.mock'
+import { UserRepository } from '../repositories/user.repository.mock'
 import { AuthService } from './auth.service'
 
-const mockAccountRepo = new AccountRepositoryMock(db, accounts)
-const mockProfileRepo = new ProfileRepositoryMock(db, profiles)
-const mockUserRepo = new UserRepositoryMock(db, users)
-
 describe('AuthService', () => {
-  let service: AuthService
+  let authService: IAuthService
 
   beforeEach(() => {
-    service = new AuthService(
-      db,
-      mockAccountRepo,
-      mockProfileRepo,
-      mockUserRepo,
+    const db = {
+      transaction: async (fn: (tx: unknown) => unknown) => {
+        const tx = { rollback: () => undefined }
+        return await fn(tx)
+      },
+    } as unknown as Database
+    const accountRepo = new AccountRepository(db)
+    const userRepo = new UserRepository(db)
+    authService = new AuthService(db, accountRepo, userRepo)
+  })
+
+  it('registers a new user', async () => {
+    const data = {
+      username: 'newuser',
+      email: 'new@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    }
+    const result = await authService.register(data)
+    expect(result).toHaveProperty('id')
+  })
+
+  it('throws CONFLICT if user exists', () => {
+    const data = {
+      username: 'mockuser',
+      email: 'user@mock.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    }
+    expect(authService.register(data)).rejects.toThrow(
+      'Username or email already exists',
     )
   })
 
-  it('should throw CONFLICT if user exists', () => {
-    expect(service.register(registerBody)).rejects.toThrowError(
-      new TRPCError({
-        code: 'CONFLICT',
-        message: 'Username or email already exists',
-      }),
-    )
+  it('changes password for existing account', async () => {
+    const data = {
+      currentPassword: 'oldpass',
+      newPassword: 'newpass',
+      confirmNewPassword: 'newpass',
+      isLogOutOtherSessions: true,
+    }
+    const result = await authService.changePassword('user-1', data)
+    expect(result).toHaveProperty('id')
   })
 
-  it('should return user on success', async () => {
-    const result = await service.register({
-      ...registerBody,
-      username: 'find-fail',
-    })
-    expect(result).toEqual({ id: 'mock-id' })
+  it('creates password for account if not exists', async () => {
+    const data = {
+      currentPassword: '',
+      newPassword: 'newpass',
+      confirmNewPassword: 'newpass',
+      isLogOutOtherSessions: false,
+    }
+    const result = await authService.changePassword('user-2', data)
+    expect(result).toHaveProperty('id')
   })
 })
-
-const registerBody = {
-  username: 'newuser',
-  email: 'foo@test.com',
-  password: 'password123',
-  confirmPassword: 'password123',
-}

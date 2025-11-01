@@ -1,12 +1,7 @@
+import type { NewAccount } from '@yukinu/db/schema/user'
 import { env } from '@yukinu/validators/env'
 
-import type {
-  Account,
-  AuthOptions,
-  OauthAccount,
-  Session,
-  SessionResult,
-} from './types'
+import type { AuthOptions, OauthAccount, Session } from './types'
 import { TokenBucketRateLimit } from '../rate-limit'
 import Cookies from './cookies'
 import {
@@ -30,7 +25,7 @@ export function Auth(opts: AuthOptions) {
   async function createSession(
     userId: string,
     headers: Headers = new Headers(),
-  ): Promise<Omit<Session, 'createdAt'>> {
+  ): Promise<Omit<Session, 'user'>> {
     const token = generateSecureString()
     const hashToken = await hashSecret(token)
     const expires = new Date(Date.now() + session.expiresIn * 1000)
@@ -53,25 +48,20 @@ export function Auth(opts: AuthOptions) {
     const token = cookies.get(cookieKeys.token) ?? ''
 
     const hashToken = encodeHex(await hashSecret(token))
-    const nullSession: SessionResult = {
-      user: null,
-      userAgent: null,
-      ipAddress: null,
-      expires: new Date(),
-    }
 
     try {
       const result = await adapter.getSessionAndUser(hashToken)
-      if (!result) return nullSession
+      if (!result) throw new Error('Session not found')
 
       const now = Date.now()
       const expiresTime = result.expires.getTime()
       const userAgent = opts.headers.get('user-agent') ?? ''
-      // disable ip check for now due to react router dont have ip info in header
-      // const ipAddress =
-      //   opts.headers.get('x-forwarded-for') ??
-      //   opts.headers.get('x-real-ip') ??
-      //   ''
+      /*
+       * disable ip check for now due to react router dont have ip info in header
+       * const ipAddress =
+       *  opts.headers.get('x-forwarded-for') ??
+       * opts.headers.get('x-real-ip') ?? ''
+       */
 
       if (
         now > expiresTime ||
@@ -79,7 +69,7 @@ export function Auth(opts: AuthOptions) {
         // result.ipAddress !== ipAddress
       ) {
         await adapter.deleteSession(hashToken)
-        return nullSession
+        throw new Error('Session expired')
       }
 
       if (now >= expiresTime - session.expiresThreshold * 1000) {
@@ -90,14 +80,14 @@ export function Auth(opts: AuthOptions) {
 
       return result
     } catch {
-      return nullSession
+      return { user: null, userAgent: '', ipAddress: '', expires: new Date(0) }
     }
   }
 
   async function signIn(
     opts: { identifier: string; password: string },
     headers: Headers = new Headers(),
-  ): Promise<Omit<Session, 'createdAt'>> {
+  ): Promise<Omit<Session, 'user'>> {
     const { identifier, password } = opts
 
     const user = await adapter.getUserByIndentifier(identifier)
@@ -126,9 +116,9 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function getOrCreateUser(
-    opts: Omit<OauthAccount & Account, 'userId' | 'status'>,
+    opts: Omit<OauthAccount & NewAccount, 'userId'>,
     headers: Headers,
-  ): Promise<Omit<Session, 'createdAt'>> {
+  ): Promise<Omit<Session, 'user'>> {
     const { provider, accountId, ...userData } = opts
     const existingAccount = await adapter.getAccount(provider, accountId)
     if (existingAccount) {
@@ -145,12 +135,7 @@ export function Auth(opts: AuthOptions) {
       existingUser?.id ?? (await adapter.createUser(userData)) ?? ''
     if (!userId) throw new Error('Failed to create user')
 
-    await adapter.createAccount({
-      provider,
-      accountId,
-      userId,
-      password: null,
-    })
+    await adapter.createAccount({ userId, provider, accountId, password: null })
     return createSession(userId, headers)
   }
 
