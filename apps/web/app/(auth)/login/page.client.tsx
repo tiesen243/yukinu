@@ -14,7 +14,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthModel } from '@yukinu/validators/auth'
+import { AuthValidator } from '@yukinu/validators/auth'
 
 export const LoginForm: React.FC = () => {
   const router = useRouter()
@@ -22,7 +22,7 @@ export const LoginForm: React.FC = () => {
 
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
-    schema: AuthModel.loginBody,
+    schema: AuthValidator.loginBody,
     onSubmit: (data) => signIn('credentials', data),
     onSuccess: () => {
       router.push('/')

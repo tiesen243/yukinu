@@ -9,7 +9,7 @@ export interface IUserService {
 
   getUserProfile(user: {
     id: IUserRepository.UserType['id']
-  }): Promise<IUserRepository.FindByIdWithProfileResult>
+  }): Promise<NonNullable<IUserRepository.FindByIdWithProfileResult>>
 
   updateUser(
     data: UserValidator.UpdateUserBody,

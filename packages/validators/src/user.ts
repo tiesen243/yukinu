@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 export namespace UserValidator {
-  const roles = [
+  export const roles = [
     'admin',
     'moderator',
     'vendor_owner',
@@ -10,7 +10,7 @@ export namespace UserValidator {
   ] as const
   export type Role = (typeof roles)[number]
 
-  const statuses = ['active', 'inactive'] as const
+  export const statuses = ['active', 'inactive'] as const
   export type Status = (typeof statuses)[number]
 
   export interface User {
@@ -46,6 +46,7 @@ export namespace UserValidator {
   export type UpdateUserBody = z.infer<typeof updateUserBody>
 
   export const updateProfileBody = z.object({
+    avatarUrl: z.url('Invalid avatar URL'),
     fullName: z
       .string()
       .min(1, 'Full name cannot be empty')

@@ -1,3 +1,4 @@
+import type { TRPCRouterCallerFactory } from '@trpc/server'
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
@@ -81,7 +82,7 @@ const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
   return next()
 })
 
-export type { TRPCContext }
+export type { TRPCContext, TRPCRouterCallerFactory }
 export {
   createCallerFactory,
   createTRPCRouter,

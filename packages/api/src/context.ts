@@ -8,9 +8,9 @@ import { UserRepository } from './repositories/user.repository'
 import { AuthService } from './services/auth.service'
 import { UserService } from './services/user.service'
 
-export const createTRPCContext = async (
-  request: Request,
-): Promise<TRPCContext> => {
+export const createTRPCContext = async (request: {
+  headers: Headers
+}): Promise<TRPCContext> => {
   const headers = request.headers
   const session = await auth(request)
 

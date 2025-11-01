@@ -23,8 +23,10 @@ export class UserService implements IUserService {
 
   async getUserProfile(user: {
     id: IUserRepository.UserType['id']
-  }): Promise<IUserRepository.FindByIdWithProfileResult> {
+  }): Promise<NonNullable<IUserRepository.FindByIdWithProfileResult>> {
     const profile = await this._userRepo.findByIdWithProfile(user.id)
+    if (!profile)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
     return profile
   }
 
@@ -36,13 +38,15 @@ export class UserService implements IUserService {
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
 
-    const isSelf = actingUser.id === data.userId
+    if (actingUser.id === data.userId)
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You cannot update yourself',
+      })
+
     const isAdmin = actingUser.role === 'admin'
     const isModerator = actingUser.role === 'moderator'
-    if (
-      (!isSelf && !isAdmin && !isModerator) ||
-      (isModerator && user.role === 'admin' && !isSelf)
-    )
+    if ((!isAdmin && !isModerator) || (isModerator && user.role === 'admin'))
       throw new TRPCError({
         code: 'FORBIDDEN',
         message: 'You do not have permission to update this user',
