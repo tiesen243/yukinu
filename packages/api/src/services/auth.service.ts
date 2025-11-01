@@ -69,7 +69,7 @@ export class AuthService implements IAuthService {
 
     const provider = 'credentials'
 
-    return this._db.transaction(async (tx) => {
+    const result = await this._db.transaction(async (tx) => {
       if (!account) {
         const newPasswordHash = await this._password.hash(newPassword)
         const newAccount = await this._accountRepo.create(
@@ -82,7 +82,6 @@ export class AuthService implements IAuthService {
             message: 'Failed to add password to account',
           })
 
-        if (isLogOutOtherSessions) await invalidateSessionTokens(userId)
         return { id: userId }
       }
 
@@ -116,10 +115,16 @@ export class AuthService implements IAuthService {
         { password: newPasswordHash },
         tx,
       )
-      if (!updatedAccount) throw new Error('Failed to change password')
+      if (!updatedAccount)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to change password',
+        })
 
-      if (isLogOutOtherSessions) await invalidateSessionTokens(userId)
       return { id: userId }
     })
+
+    if (isLogOutOtherSessions) await invalidateSessionTokens(userId)
+    return result
   }
 }
