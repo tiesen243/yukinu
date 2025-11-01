@@ -1,5 +1,11 @@
 # @yukinu/db
 
+## 0.0.6
+
+### Patch Changes
+
+- [#105](https://github.com/tiesen243/yukinu/pull/105) [`6dec520`](https://github.com/tiesen243/yukinu/commit/6dec5209f221900d6789c3bfc7a5777f8c704d27) Thanks [@tiesen243](https://github.com/tiesen243)! - update database tables
+
 ## 0.0.5
 
 ### Patch Changes
