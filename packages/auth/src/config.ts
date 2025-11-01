@@ -1,5 +1,5 @@
-import type UserTypes from '@yukinu/db/schema/user'
-import type ViewTypes from '@yukinu/db/schema/view'
+import type * as UserTypes from '@yukinu/db/schema/user'
+import type * as ViewTypes from '@yukinu/db/schema/view'
 import { and, db, eq, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 import { accounts, sessions, users } from '@yukinu/db/schema/user'
