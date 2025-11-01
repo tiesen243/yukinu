@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-export namespace AuthModel {
+export namespace AuthValidator {
   const usernameSchema = z
     .string()
     .trim()

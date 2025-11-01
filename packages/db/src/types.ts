@@ -19,6 +19,26 @@ export type Transaction = PgTransaction<
 export type Table = PgTableWithColumns<{
   name: string
   schema: undefined
-  columns: { id: PgColumn<{ name: 'id'; dataType: string }, unknown, unknown> }
+  columns: {
+    id: PgColumn<
+      {
+        name: 'id'
+        tableName: string
+        dataType: 'string'
+        columnType: 'PgVarchar'
+        data: string
+        driverParam: string
+        notNull: boolean
+        hasDefault: boolean
+        isPrimaryKey: boolean
+        isAutoincrement: boolean
+        hasRuntimeDefault: boolean
+        enumValues: [string, ...string[]]
+        generated: undefined
+      },
+      object,
+      object
+    >
+  }
   dialect: 'pg'
 }>

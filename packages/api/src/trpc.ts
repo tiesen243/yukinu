@@ -4,12 +4,18 @@ import SuperJSON from 'superjson'
 import type { Session } from '@yukinu/auth'
 import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
 
-interface Context {
+import type { IAuthService } from './contracts/services/auth.service'
+import type { IUserService } from './contracts/services/user.service'
+
+interface TRPCContext {
   headers: Headers
-  session: Session | null
+  session: Omit<Session, 'token'> | null
+
+  authService: IAuthService
+  userService: IUserService
 }
 
-const t = initTRPC.context<Context>().create({
+const t = initTRPC.context<TRPCContext>().create({
   transformer: SuperJSON,
 })
 
@@ -75,6 +81,7 @@ const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
   return next()
 })
 
+export type { TRPCContext }
 export {
   createCallerFactory,
   createTRPCRouter,

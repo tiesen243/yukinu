@@ -64,13 +64,8 @@ export default defineConfig(
       ],
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       '@typescript-eslint/restrict-template-expressions': 'off',
+      '@typescript-eslint/unified-signatures': 'off',
       'import/no-anonymous-default-export': 'warn',
-    },
-  },
-  {
-    files: ['next-env.d.ts'],
-    rules: {
-      '@typescript-eslint/triple-slash-reference': 'off',
     },
   },
   {

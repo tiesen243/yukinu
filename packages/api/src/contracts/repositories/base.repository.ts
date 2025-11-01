@@ -1,10 +1,10 @@
-import type { Database, Table, Transaction } from '@yukinu/db'
+import type { Database, Table, Transaction } from '@yukinu/db/types'
 
 export interface IBaseRepository<TTable extends Table> {
-  findAll(tx?: Database | Transaction): Promise<TTable['$inferSelect'][]>
+  all(tx?: Database | Transaction): Promise<TTable['$inferSelect'][]>
 
-  findById(
-    id: Table['$inferSelect']['id'],
+  find(
+    id: TTable['$inferSelect']['id'],
     tx?: Database | Transaction,
   ): Promise<TTable['$inferSelect'] | null>
 
@@ -14,13 +14,13 @@ export interface IBaseRepository<TTable extends Table> {
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null>
 
   update(
-    id: Table['$inferSelect']['id'],
+    id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
     tx?: Database | Transaction,
-  ): Promise<{ id: Table['$inferSelect']['id'] } | null>
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null>
 
   delete(
-    id: Table['$inferSelect']['id'],
+    id: TTable['$inferSelect']['id'],
     tx?: Database | Transaction,
-  ): Promise<{ id: Table['$inferSelect']['id'] } | null>
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null>
 }

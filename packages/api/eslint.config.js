@@ -4,7 +4,7 @@ import baseConfig from '@yukinu/eslint-config/base'
 
 export default defineConfig(
   {
-    ignores: ['dist/**', 'src.bak/**'],
+    ignores: ['dist/**'],
   },
   ...baseConfig,
 )
