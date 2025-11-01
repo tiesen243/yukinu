@@ -19,7 +19,11 @@ export class AccountRepository
       eq(this._table.accountId, params.accountId),
     )
 
-    const row = await tx.select().from(this._table).where(whereClause).limit(1)
-    return row[0] ?? null
+    const [record] = await tx
+      .select()
+      .from(this._table)
+      .where(whereClause)
+      .limit(1)
+    return record ?? null
   }
 }

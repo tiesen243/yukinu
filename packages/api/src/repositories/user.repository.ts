@@ -21,7 +21,7 @@ export class UserRepository
       ilike(this._table.email, `%${params.search}%`),
     )
 
-    const rows = await tx
+    const records = await tx
       .select()
       .from(this._table)
       .where(whereClause)
@@ -32,7 +32,7 @@ export class UserRepository
     const totalPages = Math.ceil(total / params.limit)
 
     return {
-      users: rows,
+      users: records,
       pagination: { page: params.page, total, totalPages },
     }
   }
@@ -46,15 +46,19 @@ export class UserRepository
       eq(this._table.email, params.email),
     )
 
-    const row = await tx.select().from(this._table).where(whereClause).limit(1)
-    return row[0] ?? null
+    const [record] = await tx
+      .select()
+      .from(this._table)
+      .where(whereClause)
+      .limit(1)
+    return record ?? null
   }
 
   async findByIdWithProfile(
     userId: string,
     tx = this._db,
   ): Promise<IUserRepository.FindByIdWithProfileResult> {
-    const row = await tx
+    const [record] = await tx
       .select({
         id: this._table.id,
         username: this._table.username,
@@ -76,6 +80,6 @@ export class UserRepository
       .innerJoin(profiles, eq(profiles.id, this._table.id))
       .limit(1)
 
-    return row[0] ?? null
+    return record ?? null
   }
 }
