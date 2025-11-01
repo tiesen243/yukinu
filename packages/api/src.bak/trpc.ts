@@ -1,15 +1,11 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import type { Session } from '@yukinu/auth'
 import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
 
-interface Context {
-  headers: Headers
-  session: Session | null
-}
+import type { createTRPCContext } from './context'
 
-const t = initTRPC.context<Context>().create({
+const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: SuperJSON,
 })
 
@@ -67,10 +63,10 @@ const protectedProcedure = t.procedure
     })
   })
 const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (!['admin', 'moderator'].includes(ctx.session.user.role))
+  if (ctx.session.user.role !== 'admin' && ctx.session.user.role !== 'manager')
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'User does not have sufficient permissions',
+      message: 'Admin or manager access only',
     })
   return next()
 })

@@ -1,7 +1,7 @@
 import { authOptions } from './config'
 import { Auth } from './core'
 
-export type { Session, SessionResult, User } from './core/types'
+export type { Session, User } from './core/types'
 export {
   validateSessionToken,
   invalidateSessionToken,
