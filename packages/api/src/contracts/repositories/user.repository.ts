@@ -29,6 +29,7 @@ export declare namespace IUserRepository {
     page: number
     limit: number
   }
+
   export interface FindByQueryWithPaginationResult {
     users: User[]
     pagination: { page: number; total: number; totalPages: number }

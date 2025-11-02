@@ -2,4 +2,4 @@
 '@yukinu/api': patch
 ---
 
-format error
+format error logging message

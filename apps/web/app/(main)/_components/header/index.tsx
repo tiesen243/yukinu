@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
+import { env } from '@yukinu/validators/env'
+
 import { SearchBox } from '@/app/(main)/_components/header/search-box'
 import { UserButton } from '@/app/(main)/_components/header/user-button'
 
@@ -17,7 +19,7 @@ export const Header: React.FC = () => {
             className='dark:invert'
           />
           <span className='sr-only text-2xl font-bold sm:not-sr-only'>
-            Yukinu
+            {env.NEXT_PUBLIC_APP_NAME}
           </span>
         </Link>
 

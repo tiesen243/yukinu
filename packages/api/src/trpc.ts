@@ -95,7 +95,11 @@ const authMiddleware = t.middleware(({ meta, ctx, next }) => {
       message: 'User not authenticated',
     })
 
-  if (meta?.roles && !meta.roles.includes(ctx.session.user.role))
+  if (
+    meta?.roles &&
+    meta.roles.length > 0 &&
+    !meta.roles.includes(ctx.session.user.role)
+  )
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'User does not have sufficient permissions',

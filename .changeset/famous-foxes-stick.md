@@ -2,4 +2,4 @@
 '@yukinu/dashboard': patch
 ---
 
-disable 'use client' warning when build
+suppress SOURCEMAP_ERROR warnings during build

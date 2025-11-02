@@ -1,5 +1,7 @@
 import type { MetaDescriptor } from 'react-router'
 
+import { env } from '@yukinu/validators/env'
+
 import { getBaseUrl } from '@/lib/utils'
 
 export interface Metadata {
@@ -12,23 +14,26 @@ export interface Metadata {
 }
 
 export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
-  const siteName = 'Yukinu'
+  const siteName = env.NEXT_PUBLIC_APP_NAME
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
-  const description =
-    override.description ??
-    'Yukinu is an e-commerce platform built as a monorepo with Turborepo. It includes both a customer-facing storefront and an admin dashboard, sharing code for UI, API, and database.'
+  const description = override.description ?? env.NEXT_PUBLIC_APP_DESCRIPTION
   const url = override.openGraph?.url
     ? `${baseUrl}${override.openGraph.url}`
     : baseUrl
 
   return [
     { charSet: 'utf-8' },
-    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    {
+      name: 'viewport',
+      content: 'width=device-width, initial-scale=1, color-scheme=light dark',
+    },
     { title },
     { name: 'description', content: description },
     { name: 'application-name', content: siteName },
+    { name: 'referrer', content: 'origin-when-cross-origin' },
+    { name: 'robots', content: 'index, follow' },
     // Open Graph
     { property: 'og:title', content: title },
     { property: 'og:description', content: description },
@@ -41,7 +46,30 @@ export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
           alt: image.alt,
         }))
       : []),
+    { property: 'og:locale', content: 'en_US' },
+    { property: 'og:type', content: 'website' },
     // Twitter
     { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:site', content: '@tiesen243' },
+    { name: 'twitter:creator', content: '@tiesen243' },
+
+    // Canonical Link
+    { rel: 'canonical', href: url },
+
+    // Keywords
+    {
+      name: 'keywords',
+      content: ['yukinu', 'e-commerce', 'multi-vendor'].join(', '),
+    },
+
+    // Generator
+    { name: 'generator', content: 'React Router' },
+
+    // Webmaster verifications
+    {
+      name: 'google-site-verification',
+      content: '4RdL7KE5n9APOEKSsoadxz84wz5KfEIQNG0ZRothDLw',
+    },
+    { property: 'fb:app_id', content: '523462826928110' },
   ]
 }

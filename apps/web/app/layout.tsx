@@ -44,3 +44,13 @@ export default function RootLayout({
 }
 
 export const metadata = createMetadata()
+
+export const viewPort = {
+  width: 'device-width',
+  initialScale: 1,
+  colorScheme: 'light dark',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#16134a' },
+    { media: '(prefers-color-scheme: dark)', color: '#e3e0f9' },
+  ],
+}

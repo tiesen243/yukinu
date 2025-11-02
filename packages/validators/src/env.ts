@@ -31,6 +31,11 @@ export const env = createEnv({
   clientPrefix: 'NEXT_PUBLIC_',
   client: {
     // Application settings
+    NEXT_PUBLIC_APP_NAME: z._default(z.string(), 'My App'),
+    NEXT_PUBLIC_APP_DESCRIPTION: z._default(
+      z.string(),
+      'This is my awesome application.',
+    ),
     NEXT_PUBLIC_WEB_URL: z._default(z.string(), 'localhost:3000'),
     NEXT_PUBLIC_DASHBOARD_URL: z._default(z.string(), 'localhost:5173'),
     NEXT_PUBLIC_TRPC_USE_STREAMING: z._default(
@@ -41,6 +46,10 @@ export const env = createEnv({
 
   runtimeEnv: {
     ...process.env,
+    // Explicitly define client environment variables here because Next.js does not
+    // make them available on process.env at runtime for the client bundle.
+    NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    NEXT_PUBLIC_APP_DESCRIPTION: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
     NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
     NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
     NEXT_PUBLIC_TRPC_USE_STREAMING: process.env.NEXT_PUBLIC_TRPC_USE_STREAMING,

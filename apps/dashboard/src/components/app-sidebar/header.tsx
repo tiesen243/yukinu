@@ -6,6 +6,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
+import { env } from '@yukinu/validators/env'
 
 export const AppSidebarHeader: React.FC = () => (
   <SidebarHeader className='h-16 border-b border-sidebar-border'>
@@ -21,8 +22,10 @@ export const AppSidebarHeader: React.FC = () => (
               />
             </div>
             <div className='grid flex-1 text-left text-sm leading-tight'>
-              <span className='truncate font-medium'>Yukinu</span>
-              <span className='truncate text-xs'>Commerce</span>
+              <span className='truncate font-medium'>
+                {env.NEXT_PUBLIC_APP_NAME}
+              </span>
+              <span className='truncate text-xs'>Multi-vendor E-Commerce</span>
             </div>
           </Link>
         </SidebarMenuButton>
