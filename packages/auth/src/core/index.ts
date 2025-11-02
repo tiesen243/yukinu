@@ -301,13 +301,7 @@ export function Auth(opts: AuthOptions) {
 }
 
 function setCorsHeaders(response: Response): Response {
-  const protocal = env.NODE_ENV === 'production' ? 'https' : 'http'
-  const allowedOrigins = [
-    `${protocal}://${env.NEXT_PUBLIC_DASHBOARD_URL}`,
-    `${protocal}://${env.NEXT_PUBLIC_WEB_URL}`,
-  ]
-
-  response.headers.set('Access-Control-Allow-Origin', allowedOrigins.join(', '))
+  response.headers.set('Access-Control-Allow-Origin', '*')
   response.headers.set('Access-Control-Request-Method', '*')
   response.headers.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
   response.headers.set('Access-Control-Allow-Headers', '*')
