@@ -21,13 +21,6 @@ export const createTRPCContext = async (request: {
   const authService = new AuthService(db, accountRepo, userRepo)
   const userService = new UserService(db, profileRepo, userRepo)
 
-  console.log(
-    '[tRPC] >>> Request from',
-    headers.get('x-trpc-source') ?? 'unknown',
-    'by',
-    session.user?.id ?? 'guest',
-  )
-
   return {
     headers,
     session,
