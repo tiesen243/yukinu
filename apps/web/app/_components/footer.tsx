@@ -1,11 +1,9 @@
-import { Suspense } from 'react'
 import Link from 'next/link'
 
+import { CopyrightIcon } from '@yukinu/ui/icons'
+import { env } from '@yukinu/validators/env'
+
 import { Brand } from '@/app/_components/brand'
-import {
-  Copyright,
-  CopyrightSkeleton,
-} from '@/app/_components/footer/copyright'
 
 export function Footer() {
   return (
@@ -24,7 +22,7 @@ export function Footer() {
 
           {navItems.map((item) => (
             <div key={item.title} className='space-y-4'>
-              <h2 className='font-semibold'>{item.title}</h2>
+              <h3 className='font-semibold'>{item.title}</h3>
               <ul className='space-y-2 text-sm text-muted-foreground'>
                 {item.links.map((link) => (
                   <li key={link.title}>
@@ -45,9 +43,10 @@ export function Footer() {
         </div>
 
         <div className='flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground md:flex-row'>
-          <Suspense fallback={<CopyrightSkeleton />}>
-            <Copyright />
-          </Suspense>
+          <p className='flex items-center gap-1 [&_svg]:size-4'>
+            <CopyrightIcon /> {new Date().getFullYear()}{' '}
+            {env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
+          </p>
 
           <div className='flex gap-6'>
             {socialLinks.map((link) => (

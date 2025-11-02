@@ -12,13 +12,11 @@ export function HeroSection() {
         <div className='absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 opacity-30 blur-3xl' />
       </div>
 
-      <section className='container grid items-center gap-12 md:grid-cols-2'>
-        <h3 className='sr-only'>Hero Content and Image section</h3>
-
+      <div className='container grid items-center gap-12 md:grid-cols-2'>
         <section className='flex flex-col gap-6'>
-          <h4 className='text-5xl leading-tight font-bold text-balance md:text-6xl'>
+          <h3 className='text-5xl leading-tight font-bold text-balance md:text-6xl'>
             The fastest platform to build your multi-vendor marketplace.
-          </h4>
+          </h3>
 
           <p className='max-w-xl text-lg leading-relaxed text-muted-foreground'>
             Empower vendors to grow while you scale effortlessly. Build, deploy,
@@ -45,7 +43,7 @@ export function HeroSection() {
         </section>
 
         <section>
-          <h4 className='sr-only'>Hero Image section</h4>
+          <h3 className='sr-only'>Hero Image section</h3>
 
           <div className='rounded-lg border border-border bg-card p-8 shadow-xl'>
             <div className='grid grid-cols-2 gap-4'>
@@ -56,7 +54,7 @@ export function HeroSection() {
             </div>
           </div>
         </section>
-      </section>
+      </div>
     </section>
   )
 }

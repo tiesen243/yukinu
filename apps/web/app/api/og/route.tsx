@@ -4,6 +4,8 @@ import { ImageResponse } from 'next/og'
 
 import { createMetadata } from '@/lib/metadata'
 
+export const runtime = 'edge'
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
@@ -79,7 +81,7 @@ export async function GET(request: NextRequest) {
 
             <h1
               style={{
-                fontFamily: 'GeistMedium, sans-serif',
+                fontFamily: 'Geist-Medium, sans-serif',
                 fontSize: '28px',
                 fontWeight: '500',
                 color: foregroundColor,
@@ -112,7 +114,7 @@ export async function GET(request: NextRequest) {
             >
               <h2
                 style={{
-                  fontFamily: 'GeistBold, sans-serif',
+                  fontFamily: 'Geist-Bold, sans-serif',
                   fontSize: '48px',
                   lineHeight: '1.1',
                   fontWeight: '700',
@@ -125,7 +127,7 @@ export async function GET(request: NextRequest) {
               </h2>
               <p
                 style={{
-                  fontFamily: 'GeistRegular, sans-serif',
+                  fontFamily: 'Geist-Regular, sans-serif',
                   fontSize: '24px',
                   lineHeight: '1.2',
                   fontWeight: '400',
@@ -183,7 +185,7 @@ export async function GET(request: NextRequest) {
               />
               <p
                 style={{
-                  fontFamily: 'GeistMedium, sans-serif',
+                  fontFamily: 'Geist-Medium, sans-serif',
                   fontSize: '16px',
                   fontWeight: '500',
                   color: foregroundColor,

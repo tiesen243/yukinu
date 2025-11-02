@@ -45,7 +45,7 @@ export default function RootLayout({
 
 export const metadata = createMetadata()
 
-export const viewPort = {
+export const viewport = {
   width: 'device-width',
   initialScale: 1,
   colorScheme: 'light dark',

@@ -2,6 +2,7 @@ import {
   BarChart3Icon,
   CheckCircle2Icon,
   GlobeIcon,
+  PlugIcon,
   UsersIcon,
   ZapIcon,
 } from '@yukinu/ui/icons'
@@ -70,7 +71,7 @@ const features = [
       'Security, reliability, and compliance features designed for enterprise needs.',
   },
   {
-    icon: ZapIcon,
+    icon: PlugIcon,
     title: 'Easy Integration',
     description:
       'RESTful APIs and webhooks to integrate with your existing tools and systems.',

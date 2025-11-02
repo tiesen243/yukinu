@@ -3,10 +3,8 @@ import type { NextConfig } from 'next'
 import { env } from '@yukinu/validators/env'
 
 const nextConfig = {
-  logging: false,
   typedRoutes: true,
   reactStrictMode: true,
-  cacheComponents: true,
   images: { unoptimized: true },
   typescript: { ignoreBuildErrors: true },
 
