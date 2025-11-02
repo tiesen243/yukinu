@@ -6,9 +6,9 @@ import { Brand } from '@/app/_components/brand'
 
 export function Header() {
   return (
-    <header className='sticky inset-0 z-50 border-b bg-card/70 backdrop-blur-sm'>
+    <header className='sticky inset-0 z-50 border-b bg-card/60 backdrop-blur-xl backdrop-saturate-150'>
       <nav className='container flex h-14 items-center justify-between gap-6'>
-        <Brand />
+        <Brand logoContainerClassName='size-9' logoClassName='size-7' />
 
         <div className='hidden items-center gap-8 md:flex'>
           {navItems.map((item) => (
