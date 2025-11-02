@@ -97,7 +97,7 @@ export const meta: Route.MetaFunction = () =>
     openGraph: {
       images: [
         {
-          url: `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}/api/og?title=Dashboard`,
+          url: `${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}/api/og?title=Dashboard`,
           alt: 'Dashboard - Yukinu',
         },
       ],

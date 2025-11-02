@@ -57,21 +57,20 @@ const loggingMiddleware = t.middleware(
     const result = await next()
     const end = performance.now()
     console.log(`[tRPC] took ${(end - start).toFixed(2)}ms to execute`)
-    if (result.ok)
+
+    if (result.ok) {
+      const codeMap = { query: 200, mutation: 201, subscription: 200 } as const
       console.log(
-        `[tRPC] <<< [${type}] ${path} 200: ${meta?.message ?? 'Success'}`,
+        `[tRPC] <<< [${type}] ${path} ${codeMap[type]}: ${meta?.message ?? 'Success'}`,
       )
+    }
+
     return result
   },
 )
 
 const ratelimiters = new TokenBucketRateLimit<string>(50, 60)
-const ratelimitConsume = {
-  query: 1,
-  mutation: 5,
-  subscription: 1,
-} as const
-
+const ratelimitConsume = { query: 1, mutation: 5, subscription: 1 } as const
 const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
   const ip =
     ctx.headers.get('x-forwarded-for') ??
