@@ -124,11 +124,11 @@ const navItems = [
       { label: 'Home', href: '/home' },
       { label: 'About Us', href: '/about' },
       { label: 'Contact Us', href: '/contact' },
+      { label: 'Careers', href: '/careers' },
       {
         label: 'FAQ',
         href: 'https://tiesen243.github.io/yukinu/legal/faq.html',
       },
-      { label: 'Careers', href: '/careers' },
     ],
   },
   {

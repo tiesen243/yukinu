@@ -1,8 +1,8 @@
 import { createMetadata } from '@/lib/metadata'
 
-const TITLE = 'Explore Top Products from Multiple Vendors'
+const TITLE = 'Careers'
 const DESCRIPTION =
-  'Browse our curated selection of products from trusted vendors. Find the best deals, compare options, and enjoy a seamless shopping experience on our multi-vendor marketplace.'
+  'Explore exciting career opportunities and become part of our dynamic team. Help shape the future of online shopping on our multi-vendor e-commerce platform.'
 
 export const metadata = createMetadata({
   title: TITLE,
@@ -11,16 +11,15 @@ export const metadata = createMetadata({
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(TITLE)}&description=${encodeURIComponent(DESCRIPTION)}`,
-        alt: 'Our Products',
+        alt: 'Careers',
       },
     ],
   },
 })
-
-export default function ProductPage() {
+export default function CareersPage() {
   return (
     <main className='container flex-1 py-4'>
-      <h1 className='mb-4 text-3xl font-bold'>Our Products</h1>
+      <h1 className='mb-4 text-3xl font-bold'>Careers</h1>
     </main>
   )
 }

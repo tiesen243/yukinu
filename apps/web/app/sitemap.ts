@@ -7,7 +7,14 @@ export const revalidate = false
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = (path: string): string => new URL(path, getBaseUrl()).toString()
 
-  const statics: string[] = ['/home']
+  const statics: string[] = [
+    '/',
+    '/home',
+    '/about',
+    '/contact',
+    '/product',
+    '/careers',
+  ]
 
   return Promise.resolve([
     {
