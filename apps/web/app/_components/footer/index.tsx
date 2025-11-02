@@ -1,7 +1,11 @@
+import { Suspense } from 'react'
 import Link from 'next/link'
 
 import { Brand } from '@/app/_components/brand'
-import { Copyright } from '@/app/_components/footer/copyright'
+import {
+  Copyright,
+  CopyrightSkeleton,
+} from '@/app/_components/footer/copyright'
 
 export function Footer() {
   return (
@@ -41,7 +45,9 @@ export function Footer() {
         </div>
 
         <div className='flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground md:flex-row'>
-          <Copyright />
+          <Suspense fallback={<CopyrightSkeleton />}>
+            <Copyright />
+          </Suspense>
 
           <div className='flex gap-6'>
             {socialLinks.map((link) => (

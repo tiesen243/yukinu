@@ -11,3 +11,11 @@ export function Copyright() {
     </p>
   )
 }
+
+export function CopyrightSkeleton() {
+  return (
+    <p className='flex items-center gap-1 [&_svg]:size-4'>
+      <CopyrightIcon /> 0000 {env.NEXT_PUBLIC_APP_NAME}. All rights reserved.
+    </p>
+  )
+}
