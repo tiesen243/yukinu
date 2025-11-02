@@ -14,4 +14,13 @@ export default defineConfig(({ mode }) => ({
   ...(mode === 'production'
     ? { resolve: { alias: { 'react-dom/server': 'react-dom/server.node' } } }
     : {}),
+
+  build: {
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'SOURCEMAP_ERROR') return
+        warn(warning)
+      },
+    },
+  },
 }))

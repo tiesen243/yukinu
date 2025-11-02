@@ -27,6 +27,5 @@ const handler = async (request: Request) => {
 const createCaller = createCallerFactory(appRouter)
 
 export type { AppRouter, RouterInputs, RouterOutputs } from './routers/_app'
-export type { TRPCContext } from './trpc'
-export { appRouter, createCaller, handler }
-export { createTRPCContext }
+export type { TRPCContext, TRPCMeta } from './trpc'
+export { appRouter, createCaller, createTRPCContext, handler }

@@ -1,7 +1,7 @@
 import { Footer } from '@/app/_components/footer'
-import { Header } from '@/app/_components/header-main'
+import { Header } from '@/app/_components/header-marketing'
 
-export default function MainLayout({ children }: LayoutProps<'/'>) {
+export default function MarketingLayout({ children }: LayoutProps<'/'>) {
   return (
     <>
       <Header />

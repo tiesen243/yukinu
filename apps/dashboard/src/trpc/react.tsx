@@ -33,7 +33,7 @@ function TRPCReactProvider({
     url: getBaseUrl() + '/api/trpc',
     headers() {
       const headers = new Headers()
-      headers.set('x-trpc-source', 'react-router')
+      headers.set('x-trpc-source', 'dashboard')
       return headers
     },
   }

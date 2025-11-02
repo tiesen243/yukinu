@@ -13,6 +13,7 @@ import {
 import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
 import { Toaster } from '@yukinu/ui/sonner'
+import { env } from '@yukinu/validators/env'
 
 import type { Route } from './+types/root'
 import { createMetadata } from '@/lib/metadata'
@@ -91,4 +92,14 @@ export const links: Route.LinksFunction = () => [
 ]
 
 export const meta: Route.MetaFunction = () =>
-  createMetadata({ title: 'Dashboard' })
+  createMetadata({
+    title: 'Dashboard',
+    openGraph: {
+      images: [
+        {
+          url: `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}/api/og?title=Dashboard`,
+          alt: 'Dashboard - Yukinu',
+        },
+      ],
+    },
+  })

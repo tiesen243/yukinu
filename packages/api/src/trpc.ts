@@ -1,8 +1,8 @@
-import type { TRPCRouterCallerFactory } from '@trpc/server'
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
 import type { Session } from '@yukinu/auth'
+import type { UserValidator } from '@yukinu/validators/user'
 import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
 
 import type { IAuthService } from './contracts/services/auth.service'
@@ -16,30 +16,54 @@ interface TRPCContext {
   userService: IUserService
 }
 
-const t = initTRPC.context<TRPCContext>().create({
-  transformer: SuperJSON,
-  errorFormatter({ path, shape }) {
-    if (!shape.message.startsWith('No procedure found on path'))
-      console.error(`[tRPC] ${path}: ${shape.message}`)
+interface TRPCMeta {
+  message?: string
+  roles?: UserValidator.Role[]
+}
 
-    if (shape.message.startsWith('Failed query: '))
-      shape.message =
-        'An error occurred. Please try again later or contact the administrator.'
-    return shape
-  },
-})
+const t = initTRPC
+  .meta<TRPCMeta>()
+  .context<TRPCContext>()
+  .create({
+    transformer: SuperJSON,
+    errorFormatter({ type, path, shape }) {
+      if (shape.message !== `No procedure found on path "${path}"`)
+        console.error(
+          `[tRPC] <<< [${type}] ${path} ${shape.data.httpStatus}: ${shape.message}`,
+        )
+
+      if (shape.message.startsWith('Failed query: '))
+        shape.message =
+          'An error occurred. Please try again later or contact the administrator.'
+      return shape
+    },
+  })
 
 const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
 
-const timingMiddleware = t.middleware(async ({ next, path }) => {
-  const start = Date.now()
-  const result = await next()
-  const end = Date.now()
-  console.log(`[tRPC] ${path}: took ${end - start}ms to execute`)
-  return result
-})
+const loggingMiddleware = t.middleware(
+  async ({ ctx, next, type, path, meta }) => {
+    console.log(
+      '[tRPC] >>> Request from',
+      ctx.headers.get('x-trpc-source') ?? 'unknown',
+      'by',
+      ctx.session?.user?.id ?? 'guest',
+      `at ${path}`,
+    )
+
+    const start = performance.now()
+    const result = await next()
+    const end = performance.now()
+    console.log(`[tRPC] took ${(end - start).toFixed(2)}ms to execute`)
+    if (result.ok)
+      console.log(
+        `[tRPC] <<< [${type}] ${path} 200: ${meta?.message ?? 'Success'}`,
+      )
+    return result
+  },
+)
 
 const ratelimiters = new TokenBucketRateLimit<string>(50, 60)
 const ratelimitConsume = {
@@ -64,38 +88,43 @@ const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
   return next()
 })
 
-const publicProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(rateLimitMiddleware)
-const protectedProcedure = t.procedure
-  .use(timingMiddleware)
-  .use(rateLimitMiddleware)
-  .use(({ ctx, next }) => {
-    if (!ctx.session?.user)
-      throw new TRPCError({
-        code: 'UNAUTHORIZED',
-        message: 'User not authenticated',
-      })
-    return next({
-      ctx: {
-        session: { ...ctx.session, user: ctx.session.user },
-      },
+const authMiddleware = t.middleware(({ meta, ctx, next }) => {
+  if (!ctx.session?.user)
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'User not authenticated',
     })
-  })
-const managerProcedure = protectedProcedure.use(({ ctx, next }) => {
-  if (!['admin', 'moderator'].includes(ctx.session.user.role))
+
+  if (
+    meta?.roles &&
+    meta.roles.length > 0 &&
+    !meta.roles.includes(ctx.session.user.role)
+  )
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'User does not have sufficient permissions',
     })
-  return next()
+
+  return next({
+    ctx: {
+      session: { ...ctx.session, user: ctx.session.user },
+    },
+  })
 })
 
-export type { TRPCContext, TRPCRouterCallerFactory }
+const publicProcedure = t.procedure
+  .use(loggingMiddleware)
+  .use(rateLimitMiddleware)
+
+const protectedProcedure = t.procedure
+  .use(loggingMiddleware)
+  .use(rateLimitMiddleware)
+  .use(authMiddleware)
+
+export type { TRPCContext, TRPCMeta }
 export {
   createCallerFactory,
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
-  managerProcedure,
 }

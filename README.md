@@ -1,4 +1,4 @@
-# Yukinu
+# Yukinu – Multi-Vendor E-commerce Platform
 
 <p align="center">
   <a href="https://github.com/tiesen243/yukinu/actions/workflows/release.yml">
@@ -18,8 +18,7 @@
   </a>
 </p>
 
-This project is a **Multi-Vendor E-commerce Platform** built using a **Turborepo** monorepo architecture.
-It includes multiple applications and shared packages for efficient development, scalability, and maintainability.
+Yukinu is a scalable multi-vendor e-commerce platform built with a modern monorepo architecture. It features dedicated apps for customers and vendors, unified APIs, and robust shared packages for authentication, UI, and validation.
 
 ## Tech Stack
 

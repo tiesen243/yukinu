@@ -47,7 +47,7 @@ function TRPCReactProvider({
     url: getBaseUrl() + '/api/trpc',
     headers() {
       const headers = new Headers()
-      headers.set('x-trpc-source', 'react-nextjs')
+      headers.set('x-trpc-source', 'web')
       return headers
     },
   }

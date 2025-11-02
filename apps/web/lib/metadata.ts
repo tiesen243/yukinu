@@ -1,5 +1,7 @@
 import type { Metadata as NextMetadata } from 'next'
 
+import { env } from '@yukinu/validators/env'
+
 import { getBaseUrl } from '@/lib/utils'
 
 export interface Metadata extends NextMetadata {
@@ -7,12 +9,12 @@ export interface Metadata extends NextMetadata {
 }
 
 export function createMetadata(override: Metadata = {}): Metadata {
-  const siteName = 'Yukinu'
+  const siteName = env.NEXT_PUBLIC_APP_NAME
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
-  const description =
-    'Yukinu is an e-commerce platform built as a monorepo with Turborepo. It includes both a customer-facing storefront and an admin dashboard, sharing code for UI, API, and database.'
+  const description = override.description ?? env.NEXT_PUBLIC_APP_DESCRIPTION
+
   const url = override.openGraph?.url
     ? `${baseUrl}${override.openGraph.url}`
     : baseUrl
@@ -32,6 +34,9 @@ export function createMetadata(override: Metadata = {}): Metadata {
     applicationName: siteName,
     title,
     description,
+    authors: { name: 'Tiesen', url: 'https://tiesen.id.vn' },
+    referrer: 'origin-when-cross-origin',
+    robots: 'index, follow',
     openGraph: {
       ...override.openGraph,
       title,
@@ -39,12 +44,31 @@ export function createMetadata(override: Metadata = {}): Metadata {
       siteName,
       url,
       images,
+      locale: override.openGraph?.locale ?? 'en_US',
+      type: 'website',
     },
     twitter: {
       ...override.twitter,
       card: 'summary_large_image',
+      site: '@tiesen243',
+      creator: '@tiesen243',
     },
     icons: { icon: '/favicon.ico' },
     alternates: { ...override.alternates, canonical: url },
+    keywords: [
+      ...(Array.isArray(override.keywords)
+        ? override.keywords
+        : override.keywords
+          ? [override.keywords]
+          : []),
+      'yukinu',
+      'e-commerce',
+      'multi-vendor',
+    ],
+    generator: 'Next.js',
+
+    // Webmaster verifications
+    verification: { google: '4RdL7KE5n9APOEKSsoadxz84wz5KfEIQNG0ZRothDLw' },
+    facebook: { appId: '523462826928110' },
   }
 }
