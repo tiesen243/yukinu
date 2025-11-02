@@ -1,5 +1,22 @@
 # @yukinu/api
 
+## 0.1.0
+
+### Minor Changes
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`43fa6ec`](https://github.com/tiesen243/yukinu/commit/43fa6ec5b5cb5b21d09903edf418a716062da70e) Thanks [@tiesen243](https://github.com/tiesen243)! - bump all package to v0.1.x
+
+### Patch Changes
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`e894621`](https://github.com/tiesen243/yukinu/commit/e89462190943d52ae06e1634e96fe0eb5a2316cb) Thanks [@tiesen243](https://github.com/tiesen243)! - implement RBAC check middleware
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`8b02228`](https://github.com/tiesen243/yukinu/commit/8b02228d381806e8dcb1e16db81ed29b60c0f2c6) Thanks [@tiesen243](https://github.com/tiesen243)! - format error logging message
+
+- Updated dependencies [[`43fa6ec`](https://github.com/tiesen243/yukinu/commit/43fa6ec5b5cb5b21d09903edf418a716062da70e)]:
+  - @yukinu/auth@0.1.0
+  - @yukinu/db@0.1.0
+  - @yukinu/validators@0.1.0
+
 ## 0.0.10
 
 ### Patch Changes

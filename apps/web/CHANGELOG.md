@@ -1,5 +1,20 @@
 # @yukinu/web
 
+## 0.1.6
+
+### Patch Changes
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`7c804b8`](https://github.com/tiesen243/yukinu/commit/7c804b8719f295e8494e1796a3897702b3ae3398) Thanks [@tiesen243](https://github.com/tiesen243)! - improve metadata handling, add verification features, and update the Open Graph image generator.
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`608c01e`](https://github.com/tiesen243/yukinu/commit/608c01edd545148c097c8b96f039de5ad2705a1f) Thanks [@tiesen243](https://github.com/tiesen243)! - added landing page
+
+- Updated dependencies [[`e894621`](https://github.com/tiesen243/yukinu/commit/e89462190943d52ae06e1634e96fe0eb5a2316cb), [`8b02228`](https://github.com/tiesen243/yukinu/commit/8b02228d381806e8dcb1e16db81ed29b60c0f2c6), [`43fa6ec`](https://github.com/tiesen243/yukinu/commit/43fa6ec5b5cb5b21d09903edf418a716062da70e)]:
+  - @yukinu/api@0.1.0
+  - @yukinu/auth@0.1.0
+  - @yukinu/db@0.1.0
+  - @yukinu/ui@0.1.0
+  - @yukinu/validators@0.1.0
+
 ## 0.1.5
 
 ### Patch Changes
