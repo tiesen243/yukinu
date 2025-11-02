@@ -8,6 +8,7 @@ export const metadata = createMetadata({
   title: TITLE,
   description: DESCRIPTION,
   openGraph: {
+    url: '/product',
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(TITLE)}&description=${encodeURIComponent(DESCRIPTION)}`,

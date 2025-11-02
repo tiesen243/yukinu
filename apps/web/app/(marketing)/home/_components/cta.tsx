@@ -29,7 +29,7 @@ export function CTASection() {
               target='_blank'
               rel='noopener noreferrer'
             >
-              Learn More
+              Learn more about Yukinu platform
             </a>
           </Button>
         </section>
