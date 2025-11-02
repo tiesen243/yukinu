@@ -70,6 +70,7 @@
   "globalPassThroughEnv": [
     "CI",
     "NODE_ENV",
+    "MODE",
     "SKIP_ENV_VALIDATION",
 
     "VERCEL",
