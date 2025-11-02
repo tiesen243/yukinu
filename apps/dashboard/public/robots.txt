@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://dashboard.yukinu.tiesen.id.vn/sitemap.xml
