@@ -68,7 +68,7 @@ export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
     // Webmaster verifications
     {
       name: 'google-site-verification',
-      content: '4RdL7KE5n9APOEKSsoadxz84wz5KfEIQNG0ZRothDLw',
+      content: 'dfsGgsTDdq4IwdTzb4p69XHyrPXvzFNmUMRxpuV4M8Q',
     },
     { property: 'fb:app_id', content: '523462826928110' },
   ]

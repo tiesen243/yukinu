@@ -68,7 +68,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
     generator: 'Next.js',
 
     // Webmaster verifications
-    verification: { google: '4RdL7KE5n9APOEKSsoadxz84wz5KfEIQNG0ZRothDLw' },
+    verification: { google: 'dfsGgsTDdq4IwdTzb4p69XHyrPXvzFNmUMRxpuV4M8Q' },
     facebook: { appId: '523462826928110' },
   }
 }
