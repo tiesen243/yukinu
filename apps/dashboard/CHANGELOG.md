@@ -1,5 +1,20 @@
 # @yukinu/dashboard
 
+## 0.1.5
+
+### Patch Changes
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`443a4f5`](https://github.com/tiesen243/yukinu/commit/443a4f58a74a1b71a4704fbbf8b8b217f15e8e26) Thanks [@tiesen243](https://github.com/tiesen243)! - suppress SOURCEMAP_ERROR warnings during build
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`7c804b8`](https://github.com/tiesen243/yukinu/commit/7c804b8719f295e8494e1796a3897702b3ae3398) Thanks [@tiesen243](https://github.com/tiesen243)! - improve metadata handling, add verification features, and update the Open Graph image generator.
+
+- Updated dependencies [[`e894621`](https://github.com/tiesen243/yukinu/commit/e89462190943d52ae06e1634e96fe0eb5a2316cb), [`8b02228`](https://github.com/tiesen243/yukinu/commit/8b02228d381806e8dcb1e16db81ed29b60c0f2c6), [`43fa6ec`](https://github.com/tiesen243/yukinu/commit/43fa6ec5b5cb5b21d09903edf418a716062da70e)]:
+  - @yukinu/api@0.1.0
+  - @yukinu/auth@0.1.0
+  - @yukinu/db@0.1.0
+  - @yukinu/ui@0.1.0
+  - @yukinu/validators@0.1.0
+
 ## 0.1.4
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @yukinu/auth
 
+## 0.1.0
+
+### Minor Changes
+
+- [#109](https://github.com/tiesen243/yukinu/pull/109) [`43fa6ec`](https://github.com/tiesen243/yukinu/commit/43fa6ec5b5cb5b21d09903edf418a716062da70e) Thanks [@tiesen243](https://github.com/tiesen243)! - bump all package to v0.1.x
+
+### Patch Changes
+
+- Updated dependencies [[`43fa6ec`](https://github.com/tiesen243/yukinu/commit/43fa6ec5b5cb5b21d09903edf418a716062da70e)]:
+  - @yukinu/db@0.1.0
+  - @yukinu/validators@0.1.0
+
 ## 0.0.9
 
 ### Patch Changes
