@@ -1,3 +1,16 @@
+import { CTASection } from '@/app/(marketting)/home/_components/cta'
+import { FeaturesSection } from '@/app/(marketting)/home/_components/features'
+import { HeroSection } from '@/app/(marketting)/home/_components/hero'
+import { StatisticsSection } from '@/app/(marketting)/home/_components/statistics'
+
 export default function HomePage() {
-  return <div>Marketting Home Page</div>
+  return (
+    <main className='flex-1'>
+      <h1 className='sr-only'>Yukinu Home Page</h1>
+      <HeroSection />
+      <StatisticsSection />
+      <FeaturesSection />
+      <CTASection />
+    </main>
+  )
 }

@@ -13,11 +13,11 @@ export default async function UserLayout({ children }: LayoutProps<'/user'>) {
   const { user } = session
 
   return (
-    <main className='container flex flex-col items-start gap-4 py-4 sm:flex-row'>
+    <main className='container flex flex-1 flex-col items-start gap-4 py-4 sm:flex-row'>
       <h1 className='sr-only'>User Account</h1>
 
       <aside className='flex basis-1/6 flex-col gap-6'>
-        <h2 className='sr-only'>Sidebar</h2>
+        <h2 className='sr-only'>Sidebar Navigation</h2>
 
         <section className='flex items-center gap-2 sm:flex-col md:flex-row'>
           <Avatar>
