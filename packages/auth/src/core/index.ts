@@ -171,7 +171,10 @@ export function Auth(opts: AuthOptions) {
            * [GET] /api/auth/set-cookie: Set a test cookie (for dashboard use)
            */
           if (pathname === '/api/auth/set-session') {
-            const response = Response.redirect('/', 302)
+            const response = new Response(null, {
+              status: 302,
+              headers: { Location: '/' },
+            })
             const token = searchParams.get('token') ?? ''
             const expires = searchParams.get('expires') ?? ''
             cookies.set(response, cookieKeys.token, token, {
