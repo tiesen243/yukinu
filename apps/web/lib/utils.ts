@@ -2,10 +2,8 @@ import { env } from '@yukinu/validators/env'
 
 export function getBaseUrl(): string {
   if (typeof window !== 'undefined') return window.location.origin
-  else if (env.NEXT_PUBLIC_WEB_URL) return `https://${env.NEXT_PUBLIC_WEB_URL}`
-  else if (env.VERCEL_PROJECT_PRODUCTION_URL)
-    return `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-  else if (env.VERCEL_URL) return `https://${env.VERCEL_URL}`
-  // eslint-disable-next-line no-restricted-properties
-  return `http://localhost:${process.env.PORT ?? 3000}`
+  else if (env.VERCEL_ENV === 'preview') return `https://${env.VERCEL_URL}`
+
+  const protocol = env.NODE_ENV === 'production' ? 'https' : 'http'
+  return `${protocol}://${env.NEXT_PUBLIC_WEB_URL}`
 }
