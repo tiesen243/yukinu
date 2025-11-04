@@ -9,22 +9,22 @@ export class ProfileRepository
 {
   protected override _data = [
     {
-      id: 'admin-1',
-      fullName: 'Mock Admin',
-      avatarUrl: 'https://mock.com/avatar/admin.png',
-      bio: 'This is a mock admin user.',
-      gender: 'other',
-      dateOfBirth: '1990-01-01',
-      website: 'https://mockadmin.com',
+      id: '1',
+      fullName: 'Alice Smith',
+      avatarUrl: 'https://example.com/avatars/alice.jpg',
+      bio: 'Software developer and tech enthusiast.',
+      gender: 'female',
+      dateOfBirth: '1990-05-15',
+      website: 'https://alicesmith.dev',
     },
     {
-      id: 'user-1',
-      fullName: 'Mock User',
-      avatarUrl: 'https://mock.com/avatar/user.png',
-      bio: 'This is a mock regular user.',
-      gender: 'other',
-      dateOfBirth: '1995-05-15',
-      website: 'https://mockuser.com',
+      id: '2',
+      fullName: 'Bob Johnson',
+      avatarUrl: 'https://example.com/avatars/bob.jpg',
+      bio: 'Digital artist and illustrator.',
+      gender: 'male',
+      dateOfBirth: '1985-09-22',
+      website: 'https://bobjohnsonart.com',
     },
   ]
 }

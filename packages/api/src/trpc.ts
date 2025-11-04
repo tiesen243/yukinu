@@ -2,6 +2,7 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
 import type { Session } from '@yukinu/auth'
+import type { Database } from '@yukinu/db/types'
 import type { UserValidator } from '@yukinu/validators/user'
 import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
 
@@ -12,6 +13,7 @@ interface TRPCContext {
   headers: Headers
   session: Omit<Session, 'token'> | null
 
+  db: Database
   authService: IAuthService
   userService: IUserService
 }
