@@ -5,6 +5,7 @@ import type { AuthValidator } from '@yukinu/validators/auth'
 import { invalidateSessionTokens, Password } from '@yukinu/auth'
 
 import type { IAccountRepository } from '../contracts/repositories/account.repository'
+import type { IProfileRepository } from '../contracts/repositories/profile.repository'
 import type { IUserRepository } from '../contracts/repositories/user.repository'
 import type { IAuthService } from '../contracts/services/auth.service'
 
@@ -14,6 +15,7 @@ export class AuthService implements IAuthService {
   constructor(
     private readonly _db: Database,
     private readonly _accountRepo: IAccountRepository,
+    private readonly _profileRepo: IProfileRepository,
     private readonly _userRepo: IUserRepository,
   ) {
     this._password = new Password()
@@ -22,11 +24,7 @@ export class AuthService implements IAuthService {
   async register(data: AuthValidator.RegisterBody): Promise<{ id: string }> {
     const { username, email } = data
 
-    const userExists = await this._userRepo.findByIdentifier({
-      username,
-      email,
-    })
-    if (userExists)
+    if (await this._userRepo.findByIdentifier({ username, email }))
       throw new TRPCError({
         code: 'CONFLICT',
         message: 'Username or email already exists',
@@ -34,23 +32,20 @@ export class AuthService implements IAuthService {
 
     return this._db.transaction(async (tx) => {
       const user = await this._userRepo.create({ username, email }, tx)
-      if (!user)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to create user',
-        })
+      if (!user) return tx.rollback()
 
       const provider = 'credentials'
       const password = await this._password.hash(data.password)
-      const account = await this._accountRepo.create(
+
+      await this._accountRepo.create(
         { userId: user.id, provider, accountId: user.id, password },
         tx,
       )
-      if (!account)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to create account',
-        })
+
+      await this._profileRepo.create(
+        { id: user.id, fullName: data.username },
+        tx,
+      )
 
       return { id: user.id }
     })
@@ -68,20 +63,14 @@ export class AuthService implements IAuthService {
     })
 
     const provider = 'credentials'
+    const newPasswordHash = await this._password.hash(newPassword)
 
     const result = await this._db.transaction(async (tx) => {
       if (!account) {
-        const newPasswordHash = await this._password.hash(newPassword)
-        const newAccount = await this._accountRepo.create(
+        await this._accountRepo.create(
           { userId, provider, accountId: userId, password: newPasswordHash },
           tx,
         )
-        if (!newAccount)
-          throw new TRPCError({
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Failed to add password to account',
-          })
-
         return { id: userId }
       }
 
@@ -109,18 +98,11 @@ export class AuthService implements IAuthService {
           message: 'New password must be different from the current password',
         })
 
-      const newPasswordHash = await this._password.hash(newPassword)
-      const updatedAccount = await this._accountRepo.update(
+      await this._accountRepo.update(
         account.id,
         { password: newPasswordHash },
         tx,
       )
-      if (!updatedAccount)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to change password',
-        })
-
       return { id: userId }
     })
 

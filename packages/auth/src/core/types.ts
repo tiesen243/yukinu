@@ -32,7 +32,9 @@ export interface OauthAccount {
 }
 
 export interface DatabaseAdapter {
-  getUserByIndentifier(indentifier: string): Promise<User | null>
+  getUserByIndentifier(
+    indentifier: string,
+  ): Promise<Pick<User, 'id' | 'status'> | null>
   createUser(data: Omit<OauthAccount, 'accountId'>): Promise<User['id'] | null>
 
   getAccount(provider: string, accountId: string): Promise<Account | null>

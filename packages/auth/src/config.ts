@@ -49,33 +49,34 @@ export async function invalidateSessionTokens(userId: string) {
 function getAdapter(): AuthOptions['adapter'] {
   return {
     getUserByIndentifier: async (indentifier) => {
+      const whereClause = or(
+        eq(users.email, indentifier),
+        eq(users.username, indentifier),
+      )
       const [user] = await db
-        .select()
-        .from(usersView)
-        .where(
-          or(
-            eq(usersView.email, indentifier),
-            eq(usersView.username, indentifier),
-          ),
-        )
+        .select({ id: users.id, status: users.status })
+        .from(users)
+        .where(whereClause)
       return user ?? null
     },
 
     createUser: async (data) => {
       const username = generateSecureString().slice(0, 8)
-      const [user] = await db
-        .insert(users)
-        .values({ email: data.email, username })
-        .returning({ id: users.id })
-      if (!user) return null
+      return db.transaction(async (tx) => {
+        const [user] = await tx
+          .insert(users)
+          .values({ email: data.email, username })
+          .returning({ id: users.id })
+        if (!user?.id) {
+          tx.rollback()
+          return null
+        }
 
-      await db.insert(profiles).values({
-        id: user.id,
-        fullName: data.name,
-        avatarUrl: data.image,
+        await tx
+          .insert(profiles)
+          .values({ id: user.id, fullName: data.name, avatarUrl: data.image })
+        return user.id
       })
-
-      return user.id
     },
 
     getAccount: async (provider, accountId) => {

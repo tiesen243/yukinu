@@ -4,6 +4,7 @@ import type { Database } from '@yukinu/db/types'
 
 import type { IAuthService } from '../contracts/services/auth.service'
 import { AccountRepository } from '../repositories/account.repository.mock'
+import { ProfileRepository } from '../repositories/profile.repository.mock'
 import { UserRepository } from '../repositories/user.repository.mock'
 import { AuthService } from './auth.service'
 
@@ -18,8 +19,9 @@ describe('AuthService', () => {
       },
     } as unknown as Database
     const accountRepo = new AccountRepository(db)
+    const profileRepo = new ProfileRepository(db)
     const userRepo = new UserRepository(db)
-    authService = new AuthService(db, accountRepo, userRepo)
+    authService = new AuthService(db, accountRepo, profileRepo, userRepo)
   })
 
   it('registers a new user', async () => {
