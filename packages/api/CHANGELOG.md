@@ -1,5 +1,13 @@
 # @yukinu/api
 
+## 0.1.1
+
+### Patch Changes
+
+- [#122](https://github.com/tiesen243/yukinu/pull/122) [`b42579b`](https://github.com/tiesen243/yukinu/commit/b42579b0c3522eb1c8963bdf2ef58029104afad5) Thanks [@tiesen243](https://github.com/tiesen243)! - added findBy method to base repository
+
+- [#122](https://github.com/tiesen243/yukinu/pull/122) [`f135320`](https://github.com/tiesen243/yukinu/commit/f1353201fa0cf51ff563b49f5284e1901cfbf59f) Thanks [@tiesen243](https://github.com/tiesen243)! - check valid new password using verify
+
 ## 0.1.0
 
 ### Minor Changes
