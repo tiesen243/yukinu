@@ -75,7 +75,7 @@ const LogOutButton: React.FC = () => {
       role='button'
       onClick={async () => {
         await signOut()
-        await navigate('/web')
+        await navigate(0)
       }}
     >
       <LogOutIcon /> Logout

@@ -12,12 +12,15 @@ type AuthProviders =
 type SessionResult = Omit<Session, 'token' | 'userAgent' | 'ipAddress'>
 
 type SessionContextValue = {
-  signIn: <TProvider extends AuthProviders>(
+  signIn: <
+    TProvider extends AuthProviders,
+    TData extends { token: string; expires: string },
+  >(
     provider: TProvider,
     ...args: TProvider extends 'credentials'
       ? [{ identifier: string; password: string }]
       : [{ redirectUrl?: string }?]
-  ) => Promise<void>
+  ) => Promise<TData | null>
   signOut: (opts?: { redirectUrl: string }) => Promise<void>
 } & (
   | { status: 'loading'; session: SessionResult }
@@ -64,12 +67,15 @@ function SessionProvider({
   }, [isLoading, session])
 
   const signIn = React.useCallback(
-    async <TProvider extends AuthProviders>(
+    async <
+      TProvider extends AuthProviders,
+      TData extends { token: string; expires: string },
+    >(
       provider: TProvider,
       ...args: TProvider extends 'credentials'
         ? [{ identifier: string; password: string }]
         : [{ redirectUrl?: string }?]
-    ): Promise<void> => {
+    ): Promise<TData | null> => {
       if (provider === 'credentials') {
         const res = await fetch('/api/auth/sign-in', {
           method: 'POST',
@@ -82,12 +88,15 @@ function SessionProvider({
           throw new Error(text)
         } else {
           await refetch()
+          const json = (await res.json()) as TData
+          return json
         }
       } else {
         const redirectUrl = (args[0] as { redirectUrl?: string }).redirectUrl
         window.location.href = `/api/auth/${provider}${
           redirectUrl ? `?redirectUrl=${encodeURIComponent(redirectUrl)}` : ''
         }`
+        return null
       }
     },
     [refetch],
