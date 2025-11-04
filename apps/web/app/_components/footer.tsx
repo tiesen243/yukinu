@@ -179,5 +179,5 @@ const socialLinks = [
 const contactInfos = [
   { icon: MapPinIcon, label: '67 Skibidi St., Ligma City, Goon' },
   { icon: MailIcon, label: 'support@yukinu.tiesen.id.vn' },
-  { icon: PhoneIcon, label: '+69 (727) 555-1834' },
+  { icon: PhoneIcon, label: '+69 (727) 034-1836' },
 ]
