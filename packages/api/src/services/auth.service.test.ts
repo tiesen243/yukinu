@@ -18,9 +18,9 @@ describe('AuthService', () => {
         return await fn(tx)
       },
     } as unknown as Database
-    const accountRepo = new AccountRepository(db)
-    const profileRepo = new ProfileRepository(db)
-    const userRepo = new UserRepository(db)
+    const accountRepo = new AccountRepository()
+    const profileRepo = new ProfileRepository()
+    const userRepo = new UserRepository(profileRepo)
     authService = new AuthService(db, accountRepo, profileRepo, userRepo)
   })
 
@@ -37,8 +37,8 @@ describe('AuthService', () => {
 
   it('throws CONFLICT if user exists', () => {
     const data = {
-      username: 'mockuser',
-      email: 'user@mock.com',
+      username: 'alice',
+      email: 'alice@example.com',
       password: 'password123',
       confirmPassword: 'password123',
     }

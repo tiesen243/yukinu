@@ -24,7 +24,8 @@ export class AuthService implements IAuthService {
   async register(data: AuthValidator.RegisterBody): Promise<{ id: string }> {
     const { username, email } = data
 
-    if (await this._userRepo.findByIdentifier({ username, email }))
+    const [user] = await this._userRepo.findBy([{ username }, { email }], {}, 1)
+    if (user)
       throw new TRPCError({
         code: 'CONFLICT',
         message: 'Username or email already exists',
@@ -57,16 +58,17 @@ export class AuthService implements IAuthService {
   ): Promise<{ id: string }> {
     const { currentPassword, newPassword, isLogOutOtherSessions } = data
 
-    const account = await this._accountRepo.findByAccountIdAndProvider({
-      accountId: userId,
-      provider: 'credentials',
-    })
+    const [existedAccount] = await this._accountRepo.findBy(
+      [{ accountId: userId, provider: 'credentials' }],
+      {},
+      1,
+    )
 
     const provider = 'credentials'
     const newPasswordHash = await this._password.hash(newPassword)
 
     const result = await this._db.transaction(async (tx) => {
-      if (!account) {
+      if (!existedAccount) {
         await this._accountRepo.create(
           { userId, provider, accountId: userId, password: newPasswordHash },
           tx,
@@ -74,35 +76,26 @@ export class AuthService implements IAuthService {
         return { id: userId }
       }
 
-      if (!account.password)
+      const { id, password } = existedAccount
+      if (password === null || !currentPassword)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Account does not have a password set',
+          message: 'Current password is required',
         })
 
-      if (!currentPassword)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Current password is required to change password',
-        })
-
-      if (!(await this._password.verify(account.password, currentPassword)))
+      if (!(await this._password.verify(password, currentPassword)))
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Current password is incorrect',
         })
 
-      if (await this._password.verify(account.password, newPassword))
+      if (currentPassword === newPassword)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'New password must be different from the current password',
         })
 
-      await this._accountRepo.update(
-        account.id,
-        { password: newPasswordHash },
-        tx,
-      )
+      await this._accountRepo.update(id, { password: newPasswordHash }, tx)
       return { id: userId }
     })
 

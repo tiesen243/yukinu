@@ -14,17 +14,29 @@ export class UserService implements IUserService {
     private readonly _userRepo: IUserRepository,
   ) {}
 
-  async getUsers(
-    query: UserValidator.FindByQueryWithPaginationQuery,
-  ): Promise<IUserRepository.FindByQueryWithPaginationResult> {
-    const users = await this._userRepo.findByQueryWithPagination(query)
-    return users
+  async getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{
+    users: IUserRepository.UserType[]
+    pagination: { page: number; total: number; totalPages: number }
+  }> {
+    const { search, page, limit } = query
+    const offset = (page - 1) * limit
+
+    const criteria = search
+      ? [{ username: `%${search}%` }, { email: `%${search}%` }]
+      : []
+    const orderBy = { createdAt: 'desc' as const }
+
+    const users = await this._userRepo.findBy(criteria, orderBy, limit, offset)
+    const total = await this._userRepo.count(criteria)
+    const totalPages = Math.ceil(total / limit)
+
+    return { users, pagination: { page, total, totalPages } }
   }
 
   async getUserProfile(user: {
     id: IUserRepository.UserType['id']
-  }): Promise<NonNullable<IUserRepository.FindByIdWithProfileResult>> {
-    const profile = await this._userRepo.findByIdWithProfile(user.id)
+  }): Promise<IUserRepository.UserWithProfile> {
+    const profile = await this._userRepo.findWithProfile(user.id)
     if (!profile)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
     return profile

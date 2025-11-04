@@ -1,5 +1,7 @@
 import type { users } from '@yukinu/db/schema/user'
+import type { Database, Transaction } from '@yukinu/db/types'
 
+import type { IProfileRepository } from '../contracts/repositories/profile.repository'
 import type { IUserRepository } from '../contracts/repositories/user.repository'
 import { BaseRepository } from './base.repository.mock'
 
@@ -7,73 +9,46 @@ export class UserRepository
   extends BaseRepository<typeof users>
   implements IUserRepository
 {
+  constructor(private _profileRepo: IProfileRepository) {
+    super()
+  }
+
   protected override _data = [
     {
-      id: 'admin-1',
-      username: 'mockadmin',
-      email: 'admin@mock.com',
-      emailVerified: new Date(),
-      role: 'admin' as const,
-      status: 'active' as const,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    },
-    {
-      id: 'user-1',
-      username: 'mockuser',
-      email: 'user@mock.com',
-      emailVerified: new Date(),
+      id: '1',
+      username: 'alice',
+      email: 'alice@example.com',
+      emailVerified: new Date('2023-01-01T00:00:00Z'),
       role: 'user' as const,
       status: 'active' as const,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: new Date('2023-01-01T00:00:00Z'),
+      updatedAt: new Date('2023-01-01T00:00:00Z'),
+    },
+    {
+      id: '2',
+      username: 'bob',
+      email: 'bob@example.com',
+      emailVerified: null,
+      role: 'admin' as const,
+      status: 'active' as const,
+      createdAt: new Date('2023-02-01T00:00:00Z'),
+      updatedAt: new Date('2023-02-01T00:00:00Z'),
     },
   ]
 
-  async findByQueryWithPagination(
-    params: IUserRepository.FindByQueryWithPaginationParams,
-    _tx = this._db,
-  ): Promise<IUserRepository.FindByQueryWithPaginationResult> {
-    return Promise.resolve({
-      users: [...this._data],
-      pagination: {
-        page: params.page,
-        total: 1,
-        totalPages: 1,
-      },
-    })
-  }
-
-  async findByIdentifier(
-    params: IUserRepository.FindByIdentifierParams,
-    _tx = this._db,
-  ): Promise<IUserRepository.FindByIdentifierResult> {
-    const user = this._data.find(
-      (u) => u.username === params.username || u.email === params.email,
-    )
-    return Promise.resolve(user ?? null)
-  }
-
-  async findByIdWithProfile(
+  async findWithProfile(
     userId: string,
-    _tx = this._db,
-  ): Promise<IUserRepository.FindByIdWithProfileResult> {
+    _tx?: Database | Transaction,
+  ): Promise<IUserRepository.UserWithProfile | null> {
     const user = this._data.find((u) => u.id === userId)
-    if (user) {
-      return Promise.resolve({
-        ...user,
-        joinedAt: user.createdAt,
-        profile: {
-          avatarUrl: 'https://example.com/avatar.png',
-          fullName: 'Mock User',
-          bio: 'This is a mock user.',
-          gender: 'other',
-          dateOfBirth: '2000-01-01',
-          website: 'https://example.com',
-        },
-      })
-    }
+    if (!user) return Promise.resolve(null)
+    const profile = await this._profileRepo.find(userId)
+    if (!profile) return Promise.resolve(null)
 
-    return Promise.resolve(null)
+    return Promise.resolve({
+      ...user,
+      joinedAt: user.createdAt,
+      profile: profile,
+    })
   }
 }

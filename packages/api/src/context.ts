@@ -25,6 +25,7 @@ export const createTRPCContext = async (request: {
     headers,
     session,
 
+    db,
     authService,
     userService,
   }

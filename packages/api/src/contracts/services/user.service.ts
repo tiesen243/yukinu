@@ -3,13 +3,14 @@ import type { UserValidator } from '@yukinu/validators/user'
 import type { IUserRepository } from '../repositories/user.repository'
 
 export interface IUserService {
-  getUsers(
-    query: UserValidator.FindByQueryWithPaginationQuery,
-  ): Promise<IUserRepository.FindByQueryWithPaginationResult>
+  getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{
+    users: IUserRepository.UserType[]
+    pagination: { page: number; total: number; totalPages: number }
+  }>
 
   getUserProfile(user: {
     id: IUserRepository.UserType['id']
-  }): Promise<NonNullable<IUserRepository.FindByIdWithProfileResult>>
+  }): Promise<IUserRepository.UserWithProfile>
 
   updateUser(
     data: UserValidator.UpdateUserBody,

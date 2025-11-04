@@ -1,20 +1,8 @@
-import type { Account, accounts } from '@yukinu/db/schema/user'
-import type { Database, Transaction } from '@yukinu/db/types'
+import type { accounts } from '@yukinu/db/schema/user'
 
 import type { IBaseRepository } from './base.repository'
 
-export interface IAccountRepository extends IBaseRepository<typeof accounts> {
-  findByAccountIdAndProvider(
-    params: IAccountRepository.FindByAccountIdAndProviderParams,
-    tx?: Database | Transaction,
-  ): Promise<IAccountRepository.FindByAccountIdAndProviderResult>
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface IAccountRepository extends IBaseRepository<typeof accounts> {}
 
-export declare namespace IAccountRepository {
-  export interface FindByAccountIdAndProviderParams {
-    accountId: string
-    provider: string
-  }
-
-  export type FindByAccountIdAndProviderResult = Account | null
-}
+export declare namespace IAccountRepository {}
