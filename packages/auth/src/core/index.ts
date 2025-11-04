@@ -318,9 +318,9 @@ const DEFAULT_OPTIONS = {
   cookieOptions: {
     path: '/',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.VERCEL_ENV === 'production',
     sameSite: 'Lax',
-    ...(env.NODE_ENV === 'production' && {
+    ...(process.env.VERCEL_ENV === 'production' && {
       domain: `.${env.NEXT_PUBLIC_WEB_URL}`,
     }),
   },
