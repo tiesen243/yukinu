@@ -18,7 +18,7 @@ export const createTRPCContext = async (request: {
   const profileRepo = new ProfileRepository(db)
   const userRepo = new UserRepository(db)
 
-  const authService = new AuthService(db, accountRepo, userRepo)
+  const authService = new AuthService(db, accountRepo, profileRepo, userRepo)
   const userService = new UserService(db, profileRepo, userRepo)
 
   return {
