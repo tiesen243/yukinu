@@ -3,13 +3,7 @@
 import { useRouter } from 'next/navigation'
 
 import { Button } from '@yukinu/ui/button'
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@yukinu/ui/field'
+import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
@@ -92,21 +86,6 @@ export const RegisterForm: React.FC = () => {
           {form.state.isPending ? 'Registering...' : 'Register'}
         </Button>
       </Field>
-
-      <FieldDescription>
-        Already have an account?{' '}
-        <Button
-          type='button'
-          variant='link'
-          size='sm'
-          tabIndex={-1}
-          onClick={() => {
-            router.push('/login')
-          }}
-        >
-          Login
-        </Button>
-      </FieldDescription>
     </FieldGroup>
   )
 }
