@@ -2,7 +2,7 @@ import type { SQL } from '@yukinu/db'
 import type { Database, Table, Transaction } from '@yukinu/db/types'
 import { and, asc, desc, eq, ilike, or } from '@yukinu/db'
 
-import type { IBaseRepository } from '../contracts/repositories/base.repository'
+import type { IBaseRepository } from '@/types'
 
 export abstract class BaseRepository<TTable extends Table>
   implements IBaseRepository<TTable>

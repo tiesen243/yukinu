@@ -1,7 +1,7 @@
 import type { accounts } from '@yukinu/db/schema/user'
 
-import type { IAccountRepository } from '../contracts/repositories/account.repository'
-import { BaseRepository } from './base.repository.mock'
+import type { IAccountRepository } from '@/types'
+import { BaseRepository } from '@/repositories/base.repository.mock'
 
 export class AccountRepository
   extends BaseRepository<typeof accounts>

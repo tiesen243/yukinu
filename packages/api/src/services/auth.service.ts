@@ -4,10 +4,12 @@ import type { Database } from '@yukinu/db/types'
 import type { AuthValidator } from '@yukinu/validators/auth'
 import { invalidateSessionTokens, Password } from '@yukinu/auth'
 
-import type { IAccountRepository } from '../contracts/repositories/account.repository'
-import type { IProfileRepository } from '../contracts/repositories/profile.repository'
-import type { IUserRepository } from '../contracts/repositories/user.repository'
-import type { IAuthService } from '../contracts/services/auth.service'
+import type {
+  IAccountRepository,
+  IAuthService,
+  IProfileRepository,
+  IUserRepository,
+} from '@/types'
 
 export class AuthService implements IAuthService {
   private readonly _password: Password

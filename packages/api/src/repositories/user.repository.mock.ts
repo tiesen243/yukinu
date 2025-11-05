@@ -1,9 +1,8 @@
 import type { users } from '@yukinu/db/schema/user'
 import type { Database, Transaction } from '@yukinu/db/types'
 
-import type { IProfileRepository } from '../contracts/repositories/profile.repository'
-import type { IUserRepository } from '../contracts/repositories/user.repository'
-import { BaseRepository } from './base.repository.mock'
+import type { IProfileRepository, IUserRepository } from '@/types'
+import { BaseRepository } from '@/repositories/base.repository.mock'
 
 export class UserRepository
   extends BaseRepository<typeof users>

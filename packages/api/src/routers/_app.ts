@@ -1,13 +1,15 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 import { lazy } from '@trpc/server'
 
-import { createTRPCRouter, publicProcedure } from '../trpc'
+import { db } from '@yukinu/db'
+
+import { createTRPCRouter, publicProcedure } from '@/trpc'
 
 const appRouter = createTRPCRouter({
-  auth: lazy(() => import('./auth.router')),
-  user: lazy(() => import('./user.router')),
+  auth: lazy(() => import('@/routers/auth.router')),
+  user: lazy(() => import('@/routers/user.router')),
 
-  health: publicProcedure.query(async ({ ctx }) => {
+  health: publicProcedure.query(async () => {
     const health = {
       status: 'ok',
       database: 'connected',
@@ -16,7 +18,7 @@ const appRouter = createTRPCRouter({
     }
 
     try {
-      await ctx.db.execute('SELECT 1')
+      await db.execute('SELECT 1')
     } catch {
       health.database = 'disconnected'
     }

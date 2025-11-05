@@ -1,27 +1,9 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import type { Session } from '@yukinu/auth'
-import type { Database } from '@yukinu/db/types'
-import type { UserValidator } from '@yukinu/validators/user'
 import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
 
-import type { IAuthService } from './contracts/services/auth.service'
-import type { IUserService } from './contracts/services/user.service'
-
-interface TRPCContext {
-  headers: Headers
-  session: Omit<Session, 'token'> | null
-
-  db: Database
-  authService: IAuthService
-  userService: IUserService
-}
-
-interface TRPCMeta {
-  message?: string
-  roles?: UserValidator.Role[]
-}
+import type { TRPCContext, TRPCMeta } from '@/types'
 
 const t = initTRPC
   .meta<TRPCMeta>()
@@ -122,7 +104,6 @@ const protectedProcedure = t.procedure
   .use(rateLimitMiddleware)
   .use(authMiddleware)
 
-export type { TRPCContext, TRPCMeta }
 export {
   createCallerFactory,
   createTRPCRouter,

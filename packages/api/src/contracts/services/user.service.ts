@@ -1,6 +1,6 @@
 import type { UserValidator } from '@yukinu/validators/user'
 
-import type { IUserRepository } from '../repositories/user.repository'
+import type { IUserRepository } from '@/types'
 
 export interface IUserService {
   getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{

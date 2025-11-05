@@ -1,6 +1,6 @@
 import type { Database, Table, Transaction } from '@yukinu/db/types'
 
-import type { IBaseRepository } from '../contracts/repositories/base.repository'
+import type { IBaseRepository } from '@/types'
 
 export abstract class BaseRepository<TTable extends Table>
   implements IBaseRepository<TTable>
