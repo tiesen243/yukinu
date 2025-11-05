@@ -33,9 +33,6 @@ jobs:
       - name: Setup
         uses: ./tools/github/setup
 
-      - name: Install NPM Dependencies
-        run: bun ci
-
       - name: Create Version PR
         id: changesets
         uses: changesets/action@v1
