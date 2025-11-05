@@ -223,6 +223,7 @@
         "@yukinu/tsconfig": "workspace:*",
         "eslint": "catalog:",
         "prettier": "catalog:",
+        "tsdown": "catalog:",
         "typescript": "catalog:",
       },
       "peerDependencies": {
