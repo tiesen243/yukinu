@@ -1,15 +1,13 @@
-import type * as UserTypes from '@yukinu/db/schema/user'
-import type * as ViewTypes from '@yukinu/db/schema/view'
 import { and, db, eq, or } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 import { accounts, sessions, users } from '@yukinu/db/schema/user'
 import { usersView } from '@yukinu/db/schema/view'
 import { env } from '@yukinu/validators/env'
 
-import type { AuthOptions } from './core/types'
-import { encodeHex, generateSecureString, hashSecret } from './core/crypto'
-import Facebook from './providers/facebook'
-import Google from './providers/google'
+import type { AuthOptions } from '@/types'
+import { encodeHex, generateSecureString, hashSecret } from '@/core/crypto'
+import Facebook from '@/providers/facebook'
+import Google from '@/providers/google'
 
 const adapter = getAdapter()
 export const authOptions = {
@@ -136,28 +134,5 @@ function getAdapter(): AuthOptions['adapter'] {
     deleteSessionsByUserId: async (userId) => {
       await db.delete(sessions).where(eq(sessions.userId, userId))
     },
-  }
-}
-
-declare module './core/types.d.ts' {
-  interface User extends ViewTypes.UserView {
-    id: string
-  }
-
-  interface Account extends UserTypes.Account {
-    id: string
-    status: UserTypes.User['status']
-  }
-
-  interface NewAccount extends UserTypes.NewAccount {
-    userId: string
-  }
-
-  interface Session extends Omit<UserTypes.Session, 'userId' | 'createdAt'> {
-    user: User | null
-  }
-
-  interface NewSession extends UserTypes.NewSession {
-    token: string
   }
 }

@@ -1,7 +1,7 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import { TokenBucketRateLimit } from '@yukinu/auth/rate-limit'
+import { TokenBucketRateLimit } from '@yukinu/auth'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
 

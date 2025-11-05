@@ -1,5 +1,7 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-import type BaseProvider from '../providers/base'
+import type * as UserTypes from '@yukinu/db/schema/user'
+import type * as ViewTypes from '@yukinu/db/schema/view'
+
+import type BaseProvider from '@/providers/base'
 
 export interface CookieOptions {
   domain?: string
@@ -18,11 +20,27 @@ export interface OAuth2Token {
   expires_in: number
 }
 
-export interface User {}
-export interface Account {}
-export interface NewAccount {}
-export interface Session {}
-export interface NewSession {}
+export interface User extends ViewTypes.UserView {
+  id: string
+}
+
+export interface Account extends UserTypes.Account {
+  id: string
+  status: UserTypes.User['status']
+}
+
+export interface NewAccount extends UserTypes.NewAccount {
+  userId: string
+}
+
+export interface Session
+  extends Omit<UserTypes.Session, 'userId' | 'createdAt'> {
+  user: User | null
+}
+
+export interface NewSession extends UserTypes.NewSession {
+  token: string
+}
 
 export interface OauthAccount {
   accountId: string

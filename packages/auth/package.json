@@ -5,27 +5,19 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./src/index.ts",
-      "react-server": "./src/index.rsc.ts"
+      "default": "./dist/index.mjs",
+      "react-server": "./dist/index.rsc.mjs"
     },
-    "./react": {
-      "types": "./dist/react.d.ts",
-      "default": "./src/react.tsx"
-    },
-    "./csrf": {
-      "types": "./dist/csrf.d.ts",
-      "default": "./src/csrf.ts"
-    },
-    "./rate-limit": {
-      "types": "./dist/rate-limit.d.ts",
-      "default": "./src/rate-limit.ts"
-    }
+    "./react": "./dist/react.mjs",
+    "./package.json": "./package.json"
   },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "scripts": {
-    "build": "tsc",
+    "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "tsc --watch",
+    "dev": "tsdown --watch ./src",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
     "typecheck": "tsc --noEmit"
@@ -41,6 +33,7 @@
     "@yukinu/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
+    "tsdown": "^0.16.0",
     "typescript": "catalog:"
   },
   "peerDependencies": {

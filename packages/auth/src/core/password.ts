@@ -1,6 +1,6 @@
 import { scrypt } from 'node:crypto'
 
-import { constantTimeEqual, decodeHex, encodeHex } from './crypto'
+import { constantTimeEqual, decodeHex, encodeHex } from '@/core/crypto'
 
 export class Password {
   private dkLen = 64

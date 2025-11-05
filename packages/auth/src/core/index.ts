@@ -1,16 +1,16 @@
 import type { NewAccount } from '@yukinu/db/schema/user'
 import { env } from '@yukinu/validators/env'
 
-import type { AuthOptions, OauthAccount, Session } from './types'
-import { TokenBucketRateLimit } from '../rate-limit'
-import Cookies from './cookies'
+import type { AuthOptions, OauthAccount, Session } from '@/types'
+import Cookies from '@/core/cookies'
 import {
   encodeHex,
   generateSecureString,
   generateStateOrCode,
   hashSecret,
-} from './crypto'
-import { Password } from './password'
+} from '@/core/crypto'
+import { Password } from '@/core/password'
+import { TokenBucketRateLimit } from '@/rate-limit'
 
 export function Auth(opts: AuthOptions) {
   const options = {

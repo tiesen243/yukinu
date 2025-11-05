@@ -3,8 +3,8 @@
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
 
-import type { Providers } from './config'
-import type { Session, User } from './core/types'
+import type { Providers } from '@/config'
+import type { Session, User } from '@/types'
 
 type AuthProviders =
   | 'credentials'
