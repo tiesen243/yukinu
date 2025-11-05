@@ -1,7 +1,7 @@
 import { accounts } from '@yukinu/db/schema/user'
 
-import type { IAccountRepository } from '../contracts/repositories/account.repository'
-import { BaseRepository } from './base.repository'
+import type { IAccountRepository } from '@/types'
+import { BaseRepository } from '@/repositories/base.repository'
 
 export class AccountRepository
   extends BaseRepository<typeof accounts>

@@ -1,8 +1,8 @@
 import { relations } from 'drizzle-orm'
 import { pgEnum, pgTable } from 'drizzle-orm/pg-core'
 
-import { createdAt, createId } from '../utils'
-import { orders } from './order'
+import { orders } from '@/schema/order'
+import { createdAt, createId } from '@/utils'
 
 export const paymentMethodEnum = pgEnum('payment_method', [
   'credit_card',

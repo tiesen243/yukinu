@@ -1,12 +1,12 @@
 import { auth } from '@yukinu/auth'
 import { db } from '@yukinu/db'
 
-import type { TRPCContext } from './trpc'
-import { AccountRepository } from './repositories/account.repository'
-import { ProfileRepository } from './repositories/profile.repository'
-import { UserRepository } from './repositories/user.repository'
-import { AuthService } from './services/auth.service'
-import { UserService } from './services/user.service'
+import type { TRPCContext } from '@/types'
+import { AccountRepository } from '@/repositories/account.repository'
+import { ProfileRepository } from '@/repositories/profile.repository'
+import { UserRepository } from '@/repositories/user.repository'
+import { AuthService } from '@/services/auth.service'
+import { UserService } from '@/services/user.service'
 
 export const createTRPCContext = async (request: {
   headers: Headers
@@ -25,7 +25,6 @@ export const createTRPCContext = async (request: {
     headers,
     session,
 
-    db,
     authService,
     userService,
   }

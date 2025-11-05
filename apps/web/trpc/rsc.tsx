@@ -21,12 +21,11 @@ const api: ReturnType<typeof createCaller> = createCaller(() =>
   createRscContext(),
 )
 
-const trpc: ReturnType<typeof createTRPCOptionsProxy<AppRouter>> =
-  createTRPCOptionsProxy({
-    ctx: () => createRscContext(),
-    queryClient: getQueryClient,
-    router: appRouter,
-  })
+const trpc = createTRPCOptionsProxy<AppRouter>({
+  ctx: () => createRscContext(),
+  queryClient: getQueryClient,
+  router: appRouter,
+})
 
 function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = getQueryClient()

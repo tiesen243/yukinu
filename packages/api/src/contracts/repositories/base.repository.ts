@@ -1,6 +1,6 @@
-import type { Database, Table, Transaction } from '@yukinu/db/types'
+import type { Database, PgTable, Transaction } from '@yukinu/db'
 
-export interface IBaseRepository<TTable extends Table> {
+export interface IBaseRepository<TTable extends PgTable> {
   findAll(tx?: Database | Transaction): Promise<TTable['$inferSelect'][]>
 
   find(

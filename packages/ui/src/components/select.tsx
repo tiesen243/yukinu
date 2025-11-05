@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { ChevronDownIcon } from 'lucide-react'
 
-import { cn } from '@yukinu/ui'
+import { cn } from '@/utils'
 
 function Select({ className, ...props }: React.ComponentProps<'select'>) {
   return (

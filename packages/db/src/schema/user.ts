@@ -1,11 +1,11 @@
 import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { createdAt, createId, updatedAt } from '../utils'
-import { orders } from './order'
-import { productReviews } from './product'
-import { addresses, profiles, wishlistItems } from './profile'
-import { vendorMembers } from './vendor'
+import { orders } from '@/schema/order'
+import { productReviews } from '@/schema/product'
+import { addresses, profiles, wishlistItems } from '@/schema/profile'
+import { vendorMembers } from '@/schema/vendor'
+import { createdAt, createId, updatedAt } from '@/utils'
 
 export const userRoleEnum = pgEnum('user_role', [
   'admin',

@@ -1,8 +1,8 @@
 import { eq, sql } from 'drizzle-orm'
 import { pgView } from 'drizzle-orm/pg-core'
 
-import { profiles } from './profile'
-import { users } from './user'
+import { profiles } from '@/schema/profile'
+import { users } from '@/schema/user'
 
 export const usersView = pgView('users_view').as((qb) =>
   qb

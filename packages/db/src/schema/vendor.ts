@@ -1,9 +1,9 @@
 import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { createdAt, createId, updatedAt } from '../utils'
-import { products } from './product'
-import { users } from './user'
+import { products } from '@/schema/product'
+import { users } from '@/schema/user'
+import { createdAt, createId, updatedAt } from '@/utils'
 
 export const statusEnum = pgEnum('vendor_status', [
   'pending',

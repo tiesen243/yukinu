@@ -1,7 +1,6 @@
 'use client'
 
 import type { QueryClient } from '@tanstack/react-query'
-import type { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import * as React from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
 import {
@@ -24,18 +23,7 @@ const getQueryClient = () => {
   else return (clientQueryClientSingleton ??= createQueryClient())
 }
 
-const { TRPCProvider, useTRPC, useTRPCClient } =
-  createTRPCContext<AppRouter>() as {
-    TRPCProvider: React.FC<
-      Readonly<{
-        children: React.ReactNode
-        queryClient: QueryClient
-        trpcClient: ReturnType<typeof createTRPCClient<AppRouter>>
-      }>
-    >
-    useTRPC: () => ReturnType<typeof createTRPCOptionsProxy<AppRouter>>
-    useTRPCClient: () => ReturnType<typeof createTRPCClient<AppRouter>>
-  }
+const { TRPCProvider, useTRPC, useTRPCClient } = createTRPCContext<AppRouter>()
 
 function TRPCReactProvider({
   children,

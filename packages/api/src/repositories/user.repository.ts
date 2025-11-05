@@ -2,8 +2,8 @@ import { eq } from '@yukinu/db'
 import { profiles } from '@yukinu/db/schema/profile'
 import { users } from '@yukinu/db/schema/user'
 
-import type { IUserRepository } from '../contracts/repositories/user.repository'
-import { BaseRepository } from './base.repository'
+import type { IUserRepository } from '@/types'
+import { BaseRepository } from '@/repositories/base.repository'
 
 export class UserRepository
   extends BaseRepository<typeof users>

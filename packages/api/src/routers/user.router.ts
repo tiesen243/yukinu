@@ -1,6 +1,6 @@
 import { UserValidator } from '@yukinu/validators/user'
 
-import { createTRPCRouter, protectedProcedure } from '../trpc'
+import { createTRPCRouter, protectedProcedure } from '@/trpc'
 
 export const userRouter = createTRPCRouter({
   all: protectedProcedure

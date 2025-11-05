@@ -1,9 +1,9 @@
 import { relations } from 'drizzle-orm'
 import { index, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { createId } from '../utils'
-import { products } from './product'
-import { users } from './user'
+import { products } from '@/schema/product'
+import { users } from '@/schema/user'
+import { createId } from '@/utils'
 
 export const profiles = pgTable(
   'profiles',

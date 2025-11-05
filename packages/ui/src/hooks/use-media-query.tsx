@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { useIsomorphicLayoutEffect } from '@yukinu/ui/hooks/use-isomorphic-layout-effect'
+import { useIsomorphicLayoutEffect } from '@/hooks/use-isomorphic-layout-effect'
 
 interface UseMediaQueryOptions {
   defaultValue?: boolean

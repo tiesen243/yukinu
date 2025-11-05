@@ -6,25 +6,25 @@ import { Slot } from '@radix-ui/react-slot'
 import { cva } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
 
-import { cn } from '@yukinu/ui'
-import { Button } from '@yukinu/ui/button'
-import { useMediaQuery } from '@yukinu/ui/hooks/use-media-query'
-import { Input } from '@yukinu/ui/input'
-import { Separator } from '@yukinu/ui/separator'
+import { Button } from '@/components/button'
+import { Input } from '@/components/input'
+import { Separator } from '@/components/separator'
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@yukinu/ui/sheet'
-import { Skeleton } from '@yukinu/ui/skeleton'
+} from '@/components/sheet'
+import { Skeleton } from '@/components/skeleton'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@yukinu/ui/tooltip'
+} from '@/components/tooltip'
+import { useMediaQuery } from '@/hooks/use-media-query'
+import { cn } from '@/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

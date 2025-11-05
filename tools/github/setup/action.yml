@@ -5,7 +5,7 @@ runs:
   using: composite
   steps:
     - uses: oven-sh/setup-bun@v2
-    - uses: actions/setup-node@v4
+    - uses: actions/setup-node@v6
       with:
         node-version-file: '.nvmrc'
 
@@ -13,4 +13,7 @@ runs:
       run: bun add -g turbo
 
     - shell: bash
-      run: bun install
+      run: bun ci
+
+    - shell: bash
+      run: bun run build -F './packages/*'
