@@ -1,5 +1,13 @@
 # @yukinu/validators
 
+## 0.1.1
+
+### Patch Changes
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`08bdaf9`](https://github.com/tiesen243/yukinu/commit/08bdaf998db1696e1e11c867c2762f683f628e38) Thanks [@tiesen243](https://github.com/tiesen243)! - exported type definitions from all affected packages for improved type safety and external usage.
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`d48f746`](https://github.com/tiesen243/yukinu/commit/d48f7460151dfe22e7c5b10372feacd7765ca218) Thanks [@tiesen243](https://github.com/tiesen243)! - switch validators package build system to tsdown for improved TypeScript support
+
 ## 0.1.0
 
 ### Minor Changes

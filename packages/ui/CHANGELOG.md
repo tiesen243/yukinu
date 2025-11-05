@@ -1,5 +1,15 @@
 # @yukinu/ui
 
+## 0.1.1
+
+### Patch Changes
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`a4d13f7`](https://github.com/tiesen243/yukinu/commit/a4d13f7a575722af9aca05c581e1e55f42e628c1) Thanks [@tiesen243](https://github.com/tiesen243)! - added custom badge variants
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`08bdaf9`](https://github.com/tiesen243/yukinu/commit/08bdaf998db1696e1e11c867c2762f683f628e38) Thanks [@tiesen243](https://github.com/tiesen243)! - exported type definitions from all affected packages for improved type safety and external usage.
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`b90b9cd`](https://github.com/tiesen243/yukinu/commit/b90b9cd750bbd0325983df2ee2702edf9bf7a976) Thanks [@tiesen243](https://github.com/tiesen243)! - switch ui package build system to tsdown for improved TypeScript support
+
 ## 0.1.0
 
 ### Minor Changes
