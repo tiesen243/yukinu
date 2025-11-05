@@ -8,6 +8,7 @@ import { createTRPCRouter, publicProcedure } from '@/trpc'
 const appRouter = createTRPCRouter({
   auth: lazy(() => import('@/routers/auth.router')),
   user: lazy(() => import('@/routers/user.router')),
+  vendor: lazy(() => import('@/routers/vendor.router')),
 
   health: publicProcedure.query(async () => {
     const health = {

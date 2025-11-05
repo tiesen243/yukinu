@@ -1,5 +1,11 @@
 import { relations } from 'drizzle-orm'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import {
+  index,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core'
 
 import { products } from '@/schema/product'
 import { users } from '@/schema/user'
@@ -15,8 +21,13 @@ export const vendors = pgTable(
   'vendors',
   (t) => ({
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
+    ownerId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
+    imageUrl: t.varchar({ length: 512 }),
     website: t.varchar({ length: 255 }),
     status: statusEnum().default('pending').notNull(),
     createdAt,
@@ -30,7 +41,8 @@ export const vendors = pgTable(
 export type Vendor = typeof vendors.$inferSelect
 export type NewVendor = typeof vendors.$inferInsert
 
-export const vendorsRelations = relations(vendors, ({ many }) => ({
+export const vendorsRelations = relations(vendors, ({ many, one }) => ({
+  owner: one(users, { fields: [vendors.ownerId], references: [users.id] }),
   members: many(vendorMembers),
   collections: many(vendorCollections),
   products: many(products),
@@ -39,6 +51,7 @@ export const vendorsRelations = relations(vendors, ({ many }) => ({
 export const vendorMembers = pgTable(
   'vendor_members',
   (t) => ({
+    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
     vendorId: t
       .varchar({ length: 24 })
       .notNull()
@@ -53,7 +66,11 @@ export const vendorMembers = pgTable(
       .notNull(),
   }),
   (t) => [
-    primaryKey({ columns: [t.vendorId, t.userId] }),
+    uniqueIndex('vendor_members_vendor_id_user_id_key').on(
+      t.vendorId,
+      t.userId,
+    ),
+    index('vendor_members_vendor_id_idx').on(t.vendorId),
     index('vendor_members_user_id_idx').on(t.userId),
   ],
 )

@@ -1,4 +1,4 @@
-import type { Database, PgTable, Transaction } from '@yukinu/db'
+import type { Database, PgTable } from '@yukinu/db'
 
 import type { IBaseRepository } from '@/types'
 
@@ -8,13 +8,13 @@ export abstract class BaseRepository<TTable extends PgTable>
   protected _data: TTable['$inferSelect'][] = []
   protected static _idCounter = 1
 
-  findAll(_tx?: Database | Transaction): Promise<TTable['$inferSelect'][]> {
+  findAll(_tx?: Database): Promise<TTable['$inferSelect'][]> {
     return Promise.resolve(this._data)
   }
 
   find(
     id: TTable['$inferSelect']['id'],
-    _tx?: Database | Transaction,
+    _tx?: Database,
   ): Promise<TTable['$inferSelect'] | null> {
     const record = this._data.find((item) => item.id === id) ?? null
     return Promise.resolve(record)
@@ -25,7 +25,7 @@ export abstract class BaseRepository<TTable extends PgTable>
     _orderBy?: Partial<Record<keyof TTable['$inferSelect'], 'asc' | 'desc'>>,
     limit?: number,
     _offset?: number,
-    _tx?: Database | Transaction,
+    _tx?: Database,
   ): Promise<TTable['$inferSelect'][]> {
     const records = this._data.filter((item) =>
       criteria.every((criterion) =>
@@ -40,7 +40,7 @@ export abstract class BaseRepository<TTable extends PgTable>
 
   count(
     criteria: Partial<TTable['$inferSelect']>[],
-    _tx?: Database | Transaction,
+    _tx?: Database,
   ): Promise<number> {
     const records = this._data.filter((item) =>
       criteria.every((criterion) =>
@@ -55,7 +55,7 @@ export abstract class BaseRepository<TTable extends PgTable>
 
   create(
     data: TTable['$inferInsert'],
-    _tx?: Database | Transaction,
+    _tx?: Database,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
     const id = String(BaseRepository._idCounter++)
     this._data.push({ ...data, id })
@@ -65,7 +65,7 @@ export abstract class BaseRepository<TTable extends PgTable>
   update(
     id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
-    _tx?: Database | Transaction,
+    _tx?: Database,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
     const recordIndex = this._data.findIndex((item) => item.id === id)
     if (recordIndex === -1) return Promise.resolve(null)
@@ -77,9 +77,10 @@ export abstract class BaseRepository<TTable extends PgTable>
 
     return Promise.resolve({ id })
   }
+
   delete(
     id: TTable['$inferSelect']['id'],
-    _tx?: Database | Transaction,
+    _tx?: Database,
   ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
     const recordIndex = this._data.findIndex((item) => item.id === id)
     if (recordIndex === -1) return Promise.resolve(null)

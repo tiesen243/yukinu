@@ -57,6 +57,20 @@
       "when": 1761969281080,
       "tag": "0007_cool_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1762350383381,
+      "tag": "0008_tearful_bloodscream",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1762363022855,
+      "tag": "0009_amused_blackheart",
+      "breakpoints": true
     }
   ]
 }

@@ -1,18 +1,19 @@
-import type { Database, Transaction } from '@yukinu/db'
+import type { Database } from '@yukinu/db'
 import type { Profile } from '@yukinu/db/schema/profile'
-import type { User, users } from '@yukinu/db/schema/user'
+import type { NewUser, User, users } from '@yukinu/db/schema/user'
 
 import type { IBaseRepository } from '@/types'
 
 export interface IUserRepository extends IBaseRepository<typeof users> {
   findWithProfile(
     userId: string,
-    tx?: Database | Transaction,
+    tx?: Database,
   ): Promise<IUserRepository.UserWithProfile | null>
 }
 
 export declare namespace IUserRepository {
   export type UserType = User
+  export type NewUserType = NewUser
 
   export interface UserWithProfile {
     id: User['id']
