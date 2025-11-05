@@ -1,12 +1,12 @@
 'use client'
 
 import type { VariantProps } from 'class-variance-authority'
-import { useMemo } from 'react'
+import { Activity, useMemo } from 'react'
 import { cva } from 'class-variance-authority'
 
-import { cn } from '@yukinu/ui'
-import { Label } from '@yukinu/ui/label'
-import { Separator } from '@yukinu/ui/separator'
+import { Label } from '@/components/label'
+import { Separator } from '@/components/separator'
+import { cn } from '@/lib/utils'
 
 function FieldSet({ className, ...props }: React.ComponentProps<'fieldset'>) {
   return (
@@ -172,12 +172,14 @@ function FieldSeparator({
       {...props}
     >
       <Separator className='absolute inset-0 top-1/2' />
-      <span
-        className='relative mx-auto block w-fit bg-background px-2 text-muted-foreground'
-        data-slot='field-separator-content'
-      >
-        {children}
-      </span>
+      <Activity mode={children ? 'visible' : 'hidden'}>
+        <span
+          className='relative mx-auto block w-fit bg-background px-2 text-muted-foreground'
+          data-slot='field-separator-content'
+        >
+          {children}
+        </span>
+      </Activity>
     </div>
   )
 }
@@ -199,13 +201,17 @@ function FieldError({
       return null
     }
 
-    if (errors.length == 1) {
-      return errors[0]?.message
+    const uniqueErrors = [
+      ...new Map(errors.map((error) => [error?.message, error])).values(),
+    ]
+
+    if (uniqueErrors.length == 1) {
+      return uniqueErrors[0]?.message
     }
 
     return (
       <ul className='ml-4 flex list-disc flex-col gap-1'>
-        {errors.map(
+        {uniqueErrors.map(
           (error, index) =>
             // eslint-disable-next-line @eslint-react/no-array-index-key
             error?.message && <li key={index}>{error.message}</li>,
