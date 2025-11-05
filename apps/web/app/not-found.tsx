@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { buttonVariants } from '@yukinu/ui/button'
-import { Typography } from '@yukinu/ui/typography'
 
 export default function DocsNotFoundError() {
   return (
@@ -17,13 +16,13 @@ export default function DocsNotFoundError() {
         priority
       />
 
-      <Typography variant='h2' className='text-center'>
+      <h1 className='text-center text-4xl font-bold text-balance'>
         404 - Page Not Found
-      </Typography>
+      </h1>
 
-      <Typography className='text-center text-muted-foreground'>
+      <p className='text-center text-lg text-pretty text-muted-foreground'>
         Sorry, the page you are looking for does not exist.
-      </Typography>
+      </p>
 
       <Link href='/' className={buttonVariants({ size: 'lg' })}>
         Take me home

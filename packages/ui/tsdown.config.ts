@@ -3,6 +3,7 @@ import { defineConfig } from 'tsdown'
 export default defineConfig({
   entry: ['./src/lib/utils.ts', './src/components/*.tsx', './src/hooks/*.tsx'],
   copy: ['./src/tailwind.css'],
+  clean: process.env.NODE_ENV === 'production',
   dts: true,
   shims: true,
   exports: {
