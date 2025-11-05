@@ -1,5 +1,11 @@
 # @yukinu/github
 
+## 0.1.1
+
+### Patch Changes
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`b3e0d5a`](https://github.com/tiesen243/yukinu/commit/b3e0d5aaff3dc45e5be5c9c9861068f6d2ffe119) Thanks [@tiesen243](https://github.com/tiesen243)! - include build step in setup action for improved workflow
+
 ## 0.1.0
 
 ### Minor Changes

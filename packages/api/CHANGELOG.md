@@ -1,5 +1,18 @@
 # @yukinu/api
 
+## 0.1.2
+
+### Patch Changes
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`e3b3f31`](https://github.com/tiesen243/yukinu/commit/e3b3f3109f2d2263d16609a913564d1bdd3efec4) Thanks [@tiesen243](https://github.com/tiesen243)! - switch api package build system to tsdown for improved TypeScript support
+
+- [#124](https://github.com/tiesen243/yukinu/pull/124) [`08bdaf9`](https://github.com/tiesen243/yukinu/commit/08bdaf998db1696e1e11c867c2762f683f628e38) Thanks [@tiesen243](https://github.com/tiesen243)! - exported type definitions from all affected packages for improved type safety and external usage.
+
+- Updated dependencies [[`12bd139`](https://github.com/tiesen243/yukinu/commit/12bd139081ebdc0f6ace71e74d5b5982c9a8e924), [`c429fca`](https://github.com/tiesen243/yukinu/commit/c429fca20348ae322d4f025e9f6108f9fd2dcf7b), [`08bdaf9`](https://github.com/tiesen243/yukinu/commit/08bdaf998db1696e1e11c867c2762f683f628e38), [`d48f746`](https://github.com/tiesen243/yukinu/commit/d48f7460151dfe22e7c5b10372feacd7765ca218)]:
+  - @yukinu/db@0.1.1
+  - @yukinu/auth@0.1.1
+  - @yukinu/validators@0.1.1
+
 ## 0.1.1
 
 ### Patch Changes
