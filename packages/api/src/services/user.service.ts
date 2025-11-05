@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 
-import type { Database } from '@yukinu/db/types'
+import type { Database } from '@yukinu/db'
 import type { UserValidator } from '@yukinu/validators/user'
 
 import type { IProfileRepository, IUserRepository, IUserService } from '@/types'

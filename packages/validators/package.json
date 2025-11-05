@@ -4,7 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./*": "./dist/*.mjs",
+    "./*": {
+      "default": "./dist/*.mjs",
+      "types": "./dist/*.d.mts"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

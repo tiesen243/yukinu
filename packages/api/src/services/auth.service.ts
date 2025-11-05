@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 
-import type { Database } from '@yukinu/db/types'
+import type { Database } from '@yukinu/db'
 import type { AuthValidator } from '@yukinu/validators/auth'
 import { invalidateSessionTokens, Password } from '@yukinu/auth'
 

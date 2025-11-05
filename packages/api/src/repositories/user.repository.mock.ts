@@ -1,5 +1,5 @@
+import type { Database, Transaction } from '@yukinu/db'
 import type { users } from '@yukinu/db/schema/user'
-import type { Database, Transaction } from '@yukinu/db/types'
 
 import type { IProfileRepository, IUserRepository } from '@/types'
 import { BaseRepository } from '@/repositories/base.repository.mock'

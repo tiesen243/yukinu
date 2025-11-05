@@ -1,11 +1,11 @@
 import { relations, sql } from 'drizzle-orm'
 import { check, index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { createdAt, createId, updatedAt } from '../utils'
-import { orderItems } from './order'
-import { wishlistItems } from './profile'
-import { users } from './user'
-import { vendorCollectionItems, vendors } from './vendor'
+import { orderItems } from '@/schema/order'
+import { wishlistItems } from '@/schema/profile'
+import { users } from '@/schema/user'
+import { vendorCollectionItems, vendors } from '@/schema/vendor'
+import { createdAt, createId, updatedAt } from '@/utils'
 
 export const productStatusEnum = pgEnum('product_status', [
   'active',

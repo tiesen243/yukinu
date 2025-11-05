@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsdown'
 
 export default defineConfig({
-  entry: ['./src/index.ts', './src/types.ts', './src/schema/*.ts'],
+  entry: ['./src/index.ts', './src/schema/*.ts'],
   dts: true,
   shims: true,
   exports: {
@@ -10,7 +10,12 @@ export default defineConfig({
         if (key.startsWith('./schema/') && key !== './schema/*')
           delete exports[key]
       })
-      exports['./schema/*'] = './dist/schema/*.mjs'
+
+      exports['./schema/*'] = {
+        default: './dist/schema/*.mjs',
+        types: './dist/schema/*.d.mts',
+      }
+
       return exports
     },
   },

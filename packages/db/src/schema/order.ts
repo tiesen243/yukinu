@@ -1,10 +1,10 @@
 import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable } from 'drizzle-orm/pg-core'
 
-import { createdAt, createId, updatedAt } from '../utils'
-import { payments } from './payment'
-import { products, productVariants } from './product'
-import { users } from './user'
+import { payments } from '@/schema/payment'
+import { products, productVariants } from '@/schema/product'
+import { users } from '@/schema/user'
+import { createdAt, createId, updatedAt } from '@/utils'
 
 export const orderStatusEnum = pgEnum('order_status', [
   'pending',

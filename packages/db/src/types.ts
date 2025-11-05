@@ -16,7 +16,7 @@ export type Transaction = PgTransaction<
   ExtractTablesWithRelations<Record<string, never>>
 >
 
-export type Table = PgTableWithColumns<{
+export type PgTable = PgTableWithColumns<{
   name: string
   schema: undefined
   columns: {

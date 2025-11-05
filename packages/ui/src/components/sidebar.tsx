@@ -24,7 +24,7 @@ import {
   TooltipTrigger,
 } from '@/components/tooltip'
 import { useMediaQuery } from '@/hooks/use-media-query'
-import { cn } from '@/lib/utils'
+import { cn } from '@/utils'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -92,8 +92,8 @@ function SidebarProvider({
 
   // Helper to toggle the sidebar.
   const toggleSidebar = React.useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
+    if (isMobile) setOpenMobile((open) => !open)
+    else setOpen((open) => !open)
   }, [isMobile, setOpen, setOpenMobile])
 
   // Adds a keyboard shortcut to toggle the sidebar.

@@ -8,7 +8,10 @@
       "default": "./dist/index.mjs",
       "react-server": "./dist/index.rsc.mjs"
     },
-    "./react": "./dist/react.mjs",
+    "./react": {
+      "default": "./dist/react.mjs",
+      "types": "./dist/react.d.mts"
+    },
     "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",

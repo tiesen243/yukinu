@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'bun:test'
 
-import type { Database } from '@yukinu/db/types'
+import type { Database } from '@yukinu/db'
 
 import type { IUserService } from '../contracts/services/user.service'
 import { ProfileRepository } from '../repositories/profile.repository.mock'

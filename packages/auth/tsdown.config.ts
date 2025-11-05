@@ -13,6 +13,11 @@ export default defineConfig({
       }
       delete exports['./index.rsc']
 
+      exports['./react'] = {
+        default: './dist/react.mjs',
+        types: './dist/react.d.mts',
+      }
+
       return exports
     },
   },

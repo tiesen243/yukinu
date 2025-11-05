@@ -4,15 +4,21 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./dist/lib/utils.mjs",
-    "./*": "./dist/components/*.mjs",
-    "./hooks/*": "./dist/hooks/*.mjs",
+    ".": "./dist/index.mjs",
+    "./*": {
+      "default": "./dist/components/*.mjs",
+      "types": "./dist/components/*.d.mts"
+    },
+    "./hooks/*": {
+      "default": "./dist/hooks/*.mjs",
+      "types": "./dist/hooks/*.d.mts"
+    },
     "./tailwind.css": "./src/tailwind.css",
     "./package.json": "./package.json"
   },
-  "main": "./dist/utils.mjs",
-  "module": "./dist/utils.mjs",
-  "types": "./dist/utils.d.mts",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",

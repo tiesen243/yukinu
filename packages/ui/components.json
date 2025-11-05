@@ -13,8 +13,8 @@
   "aliases": {
     "components": "@/components",
     "hooks": "@/hooks",
-    "lib": "@/lib",
-    "utils": "@/lib/utils",
+    "lib": "@",
+    "utils": "@/utils",
     "ui": "@/components"
   },
   "iconLibrary": "lucide"

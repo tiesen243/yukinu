@@ -1,8 +1,8 @@
-import type { Database, Table, Transaction } from '@yukinu/db/types'
+import type { Database, PgTable, Transaction } from '@yukinu/db'
 
 import type { IBaseRepository } from '@/types'
 
-export abstract class BaseRepository<TTable extends Table>
+export abstract class BaseRepository<TTable extends PgTable>
   implements IBaseRepository<TTable>
 {
   protected _data: TTable['$inferSelect'][] = []

@@ -1,6 +1,6 @@
 import { pgEnum, pgTable } from 'drizzle-orm/pg-core'
 
-import { createdAt, createId, updatedAt } from '../utils'
+import { createdAt, createId, updatedAt } from '@/utils'
 
 export const ticketStatusEnum = pgEnum('ticket_status', [
   'open',
