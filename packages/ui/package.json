@@ -7,7 +7,7 @@
     ".": "./dist/lib/utils.mjs",
     "./*": "./dist/components/*.mjs",
     "./hooks/*": "./dist/hooks/*.mjs",
-    "./tailwind.css": "./dist/tailwind.css",
+    "./tailwind.css": "./src/tailwind.css",
     "./package.json": "./package.json"
   },
   "main": "./dist/utils.mjs",

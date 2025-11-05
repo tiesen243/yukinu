@@ -2,9 +2,9 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   entry: ['./src/index.ts', './src/index.rsc.ts', './src/react.tsx'],
-  clean: process.env.NODE_ENV === 'production',
   dts: true,
   shims: true,
+  external: ['@tanstack/react-query', 'react', 'react/jsx-runtime'],
   exports: {
     customExports(exports) {
       exports['.'] = {
