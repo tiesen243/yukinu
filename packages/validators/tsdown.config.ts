@@ -7,6 +7,7 @@ export default defineConfig({
   exports: {
     customExports() {
       return {
+        '.': './dist/index.mjs',
         './*': {
           default: './dist/*.mjs',
           types: './dist/*.d.mts',

@@ -3,7 +3,6 @@ import { headers } from 'next/headers'
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 
-import type { AppRouter } from '@yukinu/api'
 import { appRouter, createCaller, createTRPCContext } from '@yukinu/api'
 
 import { createQueryClient } from '@/trpc/query-client'
@@ -17,11 +16,9 @@ const createRscContext = cache(async () => {
 
 const getQueryClient = cache(createQueryClient)
 
-const api: ReturnType<typeof createCaller> = createCaller(() =>
-  createRscContext(),
-)
+const api = createCaller(() => createRscContext())
 
-const trpc = createTRPCOptionsProxy<AppRouter>({
+const trpc = createTRPCOptionsProxy({
   ctx: () => createRscContext(),
   queryClient: getQueryClient,
   router: appRouter,

@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    ".": "./dist/index.mjs",
     "./*": {
       "default": "./dist/*.mjs",
       "types": "./dist/*.d.mts"
@@ -35,5 +36,8 @@
     "@ianvs/prettier-plugin-sort-imports": "catalog:",
     "@types/node": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:"
-  }
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts"
 }
