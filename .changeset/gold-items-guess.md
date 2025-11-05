@@ -2,4 +2,4 @@
 '@yukinu/api': patch
 ---
 
-build api package using tsdown
+switch api package build system to tsdown for improved TypeScript support

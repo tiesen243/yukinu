@@ -138,7 +138,7 @@
         "@yukinu/tsconfig": "workspace:*",
         "eslint": "catalog:",
         "prettier": "catalog:",
-        "tsdown": "^0.16.0",
+        "tsdown": "catalog:",
         "typescript": "catalog:",
       },
       "peerDependencies": {
@@ -165,6 +165,7 @@
         "drizzle-kit": "^0.31.6",
         "eslint": "catalog:",
         "prettier": "catalog:",
+        "tsdown": "catalog:",
         "typescript": "catalog:",
       },
       "peerDependencies": {

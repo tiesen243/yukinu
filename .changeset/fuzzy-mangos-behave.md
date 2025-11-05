@@ -2,4 +2,4 @@
 '@yukinu/auth': patch
 ---
 
-build auth package using tsdown
+switch auth package build system to tsdown for improved TypeScript support
