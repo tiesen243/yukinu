@@ -20,7 +20,7 @@ describe('AuthService', () => {
     } as unknown as Database
     const accountRepo = new AccountRepository()
     const profileRepo = new ProfileRepository()
-    const userRepo = new UserRepository(profileRepo)
+    const userRepo = new UserRepository()
     authService = new AuthService(db, accountRepo, profileRepo, userRepo)
   })
 
