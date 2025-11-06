@@ -1,3 +1,4 @@
+//#region imports
 import { Outlet, redirect } from 'react-router'
 
 import { auth } from '@yukinu/auth'
@@ -8,7 +9,10 @@ import type { Route } from './+types/_dashboard'
 import { AppSidebar } from '@/components/app-sidebar'
 import { Header } from '@/components/header'
 
+//#endregion
+
 export const loader = async ({ request }: Route.LoaderArgs) => {
+  await new Promise((resolve) => setTimeout(resolve, 1000))
   const cookieHeader = request.headers.get('Cookie') ?? ''
 
   const session = await auth(request)

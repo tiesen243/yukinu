@@ -1,3 +1,4 @@
+//#region imports
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
@@ -15,6 +16,8 @@ import { Textarea } from '@yukinu/ui/textarea'
 import { VendorValidator } from '@yukinu/validators/vendor'
 
 import { useTRPCClient } from '@/trpc/react'
+
+//#endregion
 
 export default function RegisterShopPage() {
   return (
@@ -95,7 +98,7 @@ function RegisterShopForm() {
           />
 
           <Field>
-            <Button type='submit'>
+            <Button type='submit' disabled={form.state.isPending}>
               {form.state.isPending ? 'Registering...' : 'Register Shop'}
             </Button>
           </Field>
