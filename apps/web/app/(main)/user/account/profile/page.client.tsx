@@ -1,5 +1,6 @@
 'use client'
 
+//#region imports
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
@@ -20,6 +21,9 @@ import { UserValidator } from '@yukinu/validators/user'
 
 import { useTRPC, useTRPCClient } from '@/trpc/react'
 
+//#endregion
+
+//#region components
 export const ProfileAccount: React.FC = () => {
   const trpc = useTRPC()
   const { data } = useSuspenseQuery(trpc.user.profile.queryOptions())
@@ -121,7 +125,9 @@ export const ProfileInfo: React.FC = () => {
     </section>
   )
 }
+//#endregion
 
+//#region skeletons
 export const ProfileAccountSkeleton: React.FC = () => (
   <section className='px-4'>
     <h4 className='sr-only'>Account Information</h4>
@@ -169,6 +175,7 @@ export const ProfileInfoSkeleton: React.FC = () => (
     </div>
   </section>
 )
+//#endregion
 
 const fields = [
   { name: 'avatarUrl', label: 'Avatar URL', type: 'url' },

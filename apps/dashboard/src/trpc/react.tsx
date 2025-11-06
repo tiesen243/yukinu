@@ -1,3 +1,4 @@
+//#region imports
 import type { QueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -14,6 +15,8 @@ import { env } from '@yukinu/validators/env'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'
+
+//#endregion
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {
