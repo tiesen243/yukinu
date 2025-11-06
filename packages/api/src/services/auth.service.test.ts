@@ -113,7 +113,7 @@ describe('AuthService', () => {
       )
     })
 
-    it('should change password and logout other sessions', async () => {
+    it('should change password', async () => {
       const password = 'oldpass'
       const user = await service.register({
         email: 'testuser@example.com',
