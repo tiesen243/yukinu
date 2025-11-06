@@ -1,8 +1,8 @@
-import '@/globals.css'
-
+//#region imports
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import {
   isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   Outlet,
@@ -12,12 +12,17 @@ import {
 
 import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
+import { Button } from '@yukinu/ui/button'
+import { Loader2Icon } from '@yukinu/ui/icons'
 import { Toaster } from '@yukinu/ui/sonner'
 import { env } from '@yukinu/validators/env'
 
 import type { Route } from './+types/root'
+import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
+
+//#endregion
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -58,9 +63,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? '404' : 'Error'
     details =
-      error.status === 404
-        ? 'The requested page could not be found.'
-        : error.statusText || details
+      error.status === 404 ? 'Page Not Found' : error.statusText || details
   } else if (
     // eslint-disable-next-line no-restricted-properties
     process.env.NODE_ENV === 'development' &&
@@ -72,9 +75,24 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className='container mx-auto p-4 pt-16'>
-      <h1>{message}</h1>
-      <p>{details}</p>
+    <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
+      <img
+        src={`${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}/assets/images/yuki.webp`}
+        alt='Yukinu Mascot'
+        className='size-48 object-cover select-none'
+        draggable={false}
+      />
+
+      <div className='flex items-center gap-4'>
+        <h1 className='text-2xl font-bold'>{message}</h1>
+        <hr className='h-9 w-0.5 bg-muted' />
+        <p className='text-lg font-medium'>{details}</p>
+      </div>
+
+      <Button size='sm' asChild>
+        <Link to='/'>Take me home</Link>
+      </Button>
+
       {stack && (
         <pre className='w-full overflow-x-auto p-4'>
           <code>{stack}</code>
@@ -84,11 +102,21 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   )
 }
 
+export function HydrateFallback() {
+  return (
+    <main className='container grid flex-1 place-items-center'>
+      <Loader2Icon className='animate-spin' />
+      <span className='sr-only'>Loading...</span>
+    </main>
+  )
+}
+
 // prettier-ignore
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
+  { rel: 'stylesheet', href: globalsCss },
 ]
 
 export const meta: Route.MetaFunction = () =>
