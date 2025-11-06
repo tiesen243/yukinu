@@ -74,6 +74,20 @@ export class VendorService implements IVendorService {
           message: 'Vendor not found',
         })
 
+      if (vendor.status === status) return
+      if (
+        (vendor.status === 'pending' && status === 'suspended') ||
+        (vendor.status === 'suspended' && status === 'pending') ||
+        (vendor.status === 'approved' && status === 'pending')
+      ) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Invalid status transition',
+        })
+      }
+
+      await this._vendorRepo.update(vendorId, { status: status }, tx)
+
       const user = await this._userRepo.find(vendor.ownerId, tx)
       if (!user)
         throw new TRPCError({
@@ -81,7 +95,6 @@ export class VendorService implements IVendorService {
           message: 'Vendor owner not found',
         })
 
-      await this._vendorRepo.update(vendorId, { status: status }, tx)
       if (
         vendor.status === 'pending' &&
         status === 'approved' &&
@@ -92,6 +105,9 @@ export class VendorService implements IVendorService {
           { role: 'vendor_owner' },
           tx,
         )
+
+      if (status === 'suspended' && user.role === 'vendor_owner')
+        await this._userRepo.update(vendor.ownerId, { role: 'user' }, tx)
     })
   }
 
