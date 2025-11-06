@@ -114,7 +114,7 @@ const VendorTableBody: React.FC = () => {
   if (isLoading)
     return Array.from({ length: query.limit }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 8 }, (_, index) => (
+        {Array.from({ length: 6 }, (_, index) => (
           <TableCell key={index}>
             <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
           </TableCell>
@@ -136,7 +136,7 @@ const VendorTableBody: React.FC = () => {
         <Badge variant={statusMap[vendor.status]}>{vendor.status}</Badge>
       </TableCell>
       <TableCell>{vendor.createdAt.toDateString()}</TableCell>
-      <TableCell>{vendor.createdAt.toDateString()}</TableCell>
+      <TableCell>{vendor.updatedAt.toDateString()}</TableCell>
       <TableCell className='space-x-4'>
         <EditVendorModal vendor={vendor} />
         <DeleteVendorModal vendor={vendor} />

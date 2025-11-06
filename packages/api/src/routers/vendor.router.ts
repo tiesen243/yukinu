@@ -20,7 +20,7 @@ export const vendorRouter = createTRPCRouter({
 
   update: protectedProcedure
     .meta({
-      message: 'Vendor approved successfully',
+      message: 'Vendor updated successfully',
       roles: ['admin', 'moderator'],
     })
     .input(VendorValidator.updateBody)

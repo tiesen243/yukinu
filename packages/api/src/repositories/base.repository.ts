@@ -73,7 +73,6 @@ export abstract class BaseRepository<TTable extends PgTable>
       .insert(this._table as never)
       .values(data)
       .returning({ id: this._table.id })
-      .onConflictDoUpdate({ target: this._table.id, set: data })
     return result ?? null
   }
 

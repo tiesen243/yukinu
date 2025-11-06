@@ -153,7 +153,7 @@ export class VendorService implements IVendorService {
 
       await this._vendorRepo.addMember(vendorId, user.id, tx)
       if (user.role === 'user')
-        await this._userRepo.update(user.id, { role: 'vendor_staff' })
+        await this._userRepo.update(user.id, { role: 'vendor_staff' }, tx)
     })
   }
 }
