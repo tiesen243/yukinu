@@ -15,12 +15,20 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { signIn } = useSession()
 
   const form = useForm({
-    defaultValues: { identifier: '', password: '' },
+    defaultValues: {
+      identifier: '',
+      password: '',
+      setSession: !redirectTo.startsWith('http'),
+    },
     schema: AuthValidator.loginBody,
     onSubmit: (data) => signIn('credentials', data),
     onSuccess: (data) => {
-      if (redirectTo.startsWith('http') && data)
-        redirectTo += `?token=${data.token}&expires=${data.expires}`
+      if (redirectTo.startsWith('http') && data) {
+        const url = new URL(redirectTo)
+        url.searchParams.set('token', data.token)
+        url.searchParams.set('expires', new Date(data.expires).toISOString())
+        redirectTo = url.toString()
+      }
       router.push(redirectTo as never)
       toast.success('Successfully logged in')
     },

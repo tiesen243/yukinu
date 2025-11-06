@@ -1,3 +1,4 @@
+import type { AuthValidator } from '@yukinu/validators/auth'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions, NewAccount, OauthAccount, Session } from '@/types'
@@ -233,7 +234,7 @@ export function Auth(opts: AuthOptions) {
             const state = searchParams.get('state') ?? ''
             const storedState = cookies.get(cookieKeys.state) ?? ''
             const codeVerifier = cookies.get(cookieKeys.code) ?? ''
-            const redirectTo = cookies.get(cookieKeys.redirect) ?? '/'
+            let redirectTo = cookies.get(cookieKeys.redirect) ?? '/'
             if (state !== storedState || !code || !codeVerifier)
               throw new Error('Invalid state or code')
 
@@ -243,6 +244,13 @@ export function Auth(opts: AuthOptions) {
               request.headers,
             )
 
+            if (redirectTo.startsWith('http')) {
+              const url = new URL(redirectTo)
+              url.searchParams.set('token', session.token)
+              url.searchParams.set('expires', session.expires.toISOString())
+              redirectTo = url.toString()
+            }
+
             const Location = new URL(
               redirectTo,
               `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}`,
@@ -251,12 +259,15 @@ export function Auth(opts: AuthOptions) {
               status: 302,
               headers: { Location },
             })
+
+            if (!redirectTo.startsWith('http'))
+              cookies.set(response, cookieKeys.token, session.token, {
+                ...cookieOptions,
+                expires: session.expires,
+              })
+
             for (const key of Object.values(cookieKeys))
               cookies.delete(response, key)
-            cookies.set(response, cookieKeys.token, session.token, {
-              ...cookieOptions,
-              expires: session.expires,
-            })
             return setCorsHeaders(response)
           }
 
@@ -282,14 +293,15 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-in: Sign in with email and password
            */
           if (pathname === '/api/auth/sign-in') {
-            const body = (await request.json()) as never
+            const body = (await request.json()) as AuthValidator.LoginBody
             const result = await signIn(body, request.headers)
 
             const response = Response.json(result)
-            cookies.set(response, cookieKeys.token, result.token, {
-              ...cookieOptions,
-              expires: result.expires,
-            })
+            if (body.setSession)
+              cookies.set(response, cookieKeys.token, result.token, {
+                ...cookieOptions,
+                expires: result.expires,
+              })
             return setCorsHeaders(response)
           }
 

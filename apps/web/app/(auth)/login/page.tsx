@@ -42,7 +42,7 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
       </form>
 
       <div className='mt-6'>
-        <FieldSeparator className='[&_[data-slot=field-separator-content]]:bg-card'>
+        <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
           or
         </FieldSeparator>
         <Field className='mt-6 grid gap-4 sm:grid-cols-2'>
