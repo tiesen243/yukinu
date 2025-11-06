@@ -9,12 +9,13 @@ import type {
   PostgresJsQueryResultHKT,
 } from 'drizzle-orm/postgres-js'
 
-export type Database = PostgresJsDatabase
-export type Transaction = PgTransaction<
-  PostgresJsQueryResultHKT,
-  Record<string, never>,
-  ExtractTablesWithRelations<Record<string, never>>
->
+export type Database =
+  | PostgresJsDatabase
+  | PgTransaction<
+      PostgresJsQueryResultHKT,
+      Record<string, never>,
+      ExtractTablesWithRelations<Record<string, never>>
+    >
 
 export type PgTable = PgTableWithColumns<{
   name: string

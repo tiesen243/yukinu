@@ -23,7 +23,9 @@ export class AuthService implements IAuthService {
     this._password = new Password()
   }
 
-  async register(data: AuthValidator.RegisterBody): Promise<{ id: string }> {
+  async register(
+    data: AuthValidator.RegisterBody,
+  ): Promise<{ id: IUserRepository.UserType['id'] }> {
     const { username, email } = data
 
     const [user] = await this._userRepo.findBy([{ username }, { email }], {}, 1)
@@ -57,7 +59,7 @@ export class AuthService implements IAuthService {
   async changePassword(
     userId: string,
     data: AuthValidator.ChangePasswordBody,
-  ): Promise<{ id: string }> {
+  ): Promise<{ id: IUserRepository.UserType['id'] }> {
     const { currentPassword, newPassword, isLogOutOtherSessions } = data
 
     const [existedAccount] = await this._accountRepo.findBy(

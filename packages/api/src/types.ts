@@ -3,6 +3,7 @@ import type { UserValidator } from '@yukinu/validators/user'
 
 import type { IAuthService } from '@/contracts/services/auth.service'
 import type { IUserService } from '@/contracts/services/user.service'
+import type { IVendorService } from '@/contracts/services/vendor.service'
 
 export interface TRPCMeta {
   message?: string
@@ -15,6 +16,7 @@ export interface TRPCContext {
 
   authService: IAuthService
   userService: IUserService
+  vendorService: IVendorService
 }
 
 export type { AppRouter, RouterInputs, RouterOutputs } from '@/routers/_app'
@@ -23,6 +25,8 @@ export type { IAccountRepository } from '@/contracts/repositories/account.reposi
 export type { IBaseRepository } from '@/contracts/repositories/base.repository'
 export type { IProfileRepository } from '@/contracts/repositories/profile.repository'
 export type { IUserRepository } from '@/contracts/repositories/user.repository'
+export type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 
 export type { IAuthService } from '@/contracts/services/auth.service'
 export type { IUserService } from '@/contracts/services/user.service'
+export type { IVendorService } from '@/contracts/services/vendor.service'

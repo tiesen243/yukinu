@@ -8,4 +8,21 @@ export class AccountRepository
   implements IAccountRepository
 {
   protected override _table = accounts
+
+  override async create(
+    data: IAccountRepository.NewAccountType,
+    tx = this._db,
+  ): Promise<{ id: string } | null> {
+    const [result] = await tx
+      .insert(this._table)
+      .values(data)
+      .returning({ id: this._table.id })
+      .onConflictDoUpdate({
+        target: [this._table.provider, this._table.accountId],
+        set: data,
+      })
+    if (!result) return null
+
+    return result
+  }
 }

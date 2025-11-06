@@ -20,7 +20,7 @@ export namespace UserValidator {
     status: Status
   }
 
-  export const findByQueryWithPaginationQuery = z.object({
+  export const allParams = z.object({
     search: z.string().max(100, 'Search query is too long'),
     page: z
       .number()
@@ -34,14 +34,21 @@ export namespace UserValidator {
       .max(100, 'Limit cannot exceed 100')
       .default(10),
   })
-  export type FindByQueryWithPaginationQuery = z.infer<
-    typeof findByQueryWithPaginationQuery
-  >
+  export type AllParams = z.infer<typeof allParams>
+
+  export const oneParams = z.object({
+    userId: z.cuid2('Invalid user ID'),
+  })
+  export type OneParams = z.infer<typeof oneParams>
 
   export const updateUserBody = z.object({
     userId: z.cuid2('Invalid user ID'),
     role: z.enum(roles, { error: 'Invalid role' }),
     status: z.enum(statuses, { error: 'Invalid status' }),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long')
+      .optional(),
   })
   export type UpdateUserBody = z.infer<typeof updateUserBody>
 
@@ -56,7 +63,7 @@ export namespace UserValidator {
       .min(1, 'Gender cannot be empty')
       .max(50, 'Gender is too long'),
     dateOfBirth: z.iso.date('Invalid date format'),
-    website: z.url('Invalid URL'),
+    website: z.url('Invalid URL').optional(),
     bio: z.string().max(160, 'Bio is too long'),
   })
   export type UpdateProfileBody = z.infer<typeof updateProfileBody>

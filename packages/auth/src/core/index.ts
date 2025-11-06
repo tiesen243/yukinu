@@ -1,7 +1,6 @@
-import type { NewAccount } from '@yukinu/db/schema/user'
 import { env } from '@yukinu/validators/env'
 
-import type { AuthOptions, OauthAccount, Session } from '@/types'
+import type { AuthOptions, NewAccount, OauthAccount, Session } from '@/types'
 import Cookies from '@/core/cookies'
 import {
   encodeHex,

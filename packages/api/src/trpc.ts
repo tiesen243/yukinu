@@ -1,3 +1,4 @@
+//#region imports
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
@@ -5,6 +6,9 @@ import { TokenBucketRateLimit } from '@yukinu/auth'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
 
+//#endregion
+
+//#region tRPC Initialization
 const t = initTRPC
   .meta<TRPCMeta>()
   .context<TRPCContext>()
@@ -22,11 +26,15 @@ const t = initTRPC
       return shape
     },
   })
+//#endregion
 
+//#region tRPC Helpers
 const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
+//#endregion
 
+//#region tRPC Middlewares
 const loggingMiddleware = t.middleware(
   async ({ ctx, next, type, path, meta }) => {
     console.log(
@@ -94,7 +102,9 @@ const authMiddleware = t.middleware(({ meta, ctx, next }) => {
     },
   })
 })
+//#endregion
 
+//#region tRPC Procedures
 const publicProcedure = t.procedure
   .use(loggingMiddleware)
   .use(rateLimitMiddleware)
@@ -103,10 +113,13 @@ const protectedProcedure = t.procedure
   .use(loggingMiddleware)
   .use(rateLimitMiddleware)
   .use(authMiddleware)
+//#endregion
 
+//#region exports
 export {
   createCallerFactory,
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
 }
+//#endregion

@@ -1,4 +1,4 @@
-import type { Database, PgTable, SQL, Transaction } from '@yukinu/db'
+import type { Database, PgTable, SQL } from '@yukinu/db'
 import { and, asc, desc, eq, ilike, or } from '@yukinu/db'
 
 import type { IBaseRepository } from '@/types'
@@ -15,13 +15,13 @@ export abstract class BaseRepository<TTable extends PgTable>
   }
 
   async find(
-    id: TTable['id']['dataType'],
+    id: TTable['$inferSelect']['id'],
     tx = this._db,
   ): Promise<TTable['$inferSelect'] | null> {
     const [record] = (await tx
       .select()
       .from(this._table as never)
-      .where(eq(this._table.id, id))
+      .where(eq(this._table.id, id as unknown as string))
       .limit(1)) as unknown as TTable['$inferSelect'][]
     return record ?? null
   }
@@ -31,9 +31,9 @@ export abstract class BaseRepository<TTable extends PgTable>
     orderBy?: Partial<Record<keyof TTable['$inferSelect'], 'asc' | 'desc'>>,
     limit?: number,
     offset?: number,
-    tx?: Database | Transaction,
+    tx = this._db,
   ): Promise<TTable['$inferSelect'][]> {
-    const query = (tx ?? this._db)
+    const query = tx
       .select()
       .from(this._table as never)
       .$dynamic()
@@ -68,35 +68,35 @@ export abstract class BaseRepository<TTable extends PgTable>
   public async create(
     data: TTable['$inferInsert'],
     tx = this._db,
-  ): Promise<{ id: TTable['id']['dataType'] } | null> {
-    const [result] = (await tx
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+    const [result] = await tx
       .insert(this._table as never)
       .values(data)
-      .returning({ id: this._table.id })) as { id: TTable['id']['dataType'] }[]
+      .returning({ id: this._table.id })
     return result ?? null
   }
 
   public async update(
-    id: TTable['id']['dataType'],
+    id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
     tx = this._db,
-  ): Promise<{ id: TTable['id']['dataType'] } | null> {
-    const [result] = (await tx
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+    const [result] = await tx
       .update(this._table as never)
       .set(data)
-      .where(eq(this._table.id, id))
-      .returning({ id: this._table.id })) as { id: TTable['id']['dataType'] }[]
+      .where(eq(this._table.id, id as unknown as string))
+      .returning({ id: this._table.id })
     return result ?? null
   }
 
   public async delete(
-    id: TTable['id']['dataType'],
-    tx?: Database | Transaction,
-  ): Promise<{ id: TTable['id']['dataType'] } | null> {
-    const [result] = (await (tx ?? this._db)
+    id: TTable['$inferSelect']['id'],
+    tx = this._db,
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+    const [result] = await tx
       .delete(this._table as never)
-      .where(eq(this._table.id, id))
-      .returning({ id: this._table.id })) as { id: TTable['id']['dataType'] }[]
+      .where(eq(this._table.id, id as unknown as string))
+      .returning({ id: this._table.id })
     return result ?? null
   }
 

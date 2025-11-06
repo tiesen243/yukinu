@@ -2,17 +2,28 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
 import type { UserValidator } from '@yukinu/validators/user'
+import { Password } from '@yukinu/auth'
 
-import type { IProfileRepository, IUserRepository, IUserService } from '@/types'
+import type {
+  IAccountRepository,
+  IProfileRepository,
+  IUserRepository,
+  IUserService,
+} from '@/types'
 
 export class UserService implements IUserService {
+  private readonly _password: Password
+
   constructor(
     private readonly _db: Database,
+    private readonly _accountRepo: IAccountRepository,
     private readonly _profileRepo: IProfileRepository,
     private readonly _userRepo: IUserRepository,
-  ) {}
+  ) {
+    this._password = new Password()
+  }
 
-  async getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{
+  async getUsers(query: UserValidator.AllParams): Promise<{
     users: IUserRepository.UserType[]
     pagination: { page: number; total: number; totalPages: number }
   }> {
@@ -43,7 +54,7 @@ export class UserService implements IUserService {
   async updateUser(
     data: UserValidator.UpdateUserBody,
     actingUser: UserValidator.User,
-  ): Promise<{ id: IUserRepository.UserType['id'] }> {
+  ): Promise<void> {
     const user = await this._userRepo.find(data.userId)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
@@ -69,14 +80,54 @@ export class UserService implements IUserService {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to update user',
         })
-      return updatedUser
+
+      if (data.password)
+        await this._accountRepo.create(
+          {
+            userId: data.userId,
+            provider: 'credentials',
+            accountId: data.userId,
+            password: await this._password.hash(data.password),
+          },
+          tx,
+        )
+    })
+  }
+
+  async deleteUser(
+    data: UserValidator.OneParams,
+    actingUser: UserValidator.User,
+  ): Promise<void> {
+    const user = await this._userRepo.find(data.userId)
+    if (!user)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    if (actingUser.id === data.userId)
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You cannot delete yourself',
+      })
+
+    if (actingUser.role === 'moderator' && user.role === 'admin')
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You do not have permission to delete this user',
+      })
+
+    return this._db.transaction(async (tx) => {
+      const deleted = await this._userRepo.delete(user.id, tx)
+      if (!deleted)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to delete user',
+        })
     })
   }
 
   async updateUserProfile(
     userId: IUserRepository.UserType['id'],
     data: UserValidator.UpdateProfileBody,
-  ): Promise<{ id: IUserRepository.UserType['id'] }> {
+  ): Promise<void> {
     const profile = await this._profileRepo.find(userId)
     if (!profile)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
@@ -88,7 +139,6 @@ export class UserService implements IUserService {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to update profile',
         })
-      return updatedProfile
     })
   }
 }

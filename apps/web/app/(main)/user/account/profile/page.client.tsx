@@ -70,7 +70,7 @@ export const ProfileInfo: React.FC = () => {
       bio: data.profile.bio ?? '',
       gender: data.profile.gender ?? '',
       dateOfBirth: data.profile.dateOfBirth ?? '',
-      website: data.profile.website ?? '',
+      website: data.profile.website ?? undefined,
     },
     schema: UserValidator.updateProfileBody,
     onSubmit: trpcClient.user.updateProfile.mutate,

@@ -4,6 +4,9 @@
   "tasks": {
     "build": {
       "outputs": [".next/**", "!.next/cache/**", "next-env.d.ts"]
+    },
+    "dev": {
+      "dependsOn": ["@yukinu/validators#build"]
     }
   }
 }
