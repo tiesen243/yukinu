@@ -1,5 +1,17 @@
 # @yukinu/web
 
+## 0.1.9
+
+### Patch Changes
+
+- [#126](https://github.com/tiesen243/yukinu/pull/126) [`f48b04b`](https://github.com/tiesen243/yukinu/commit/f48b04b4ac94fe3e780c3864efe7e887211d03d2) Thanks [@tiesen243](https://github.com/tiesen243)! - add vendor registration and management system with admin approval workflow
+
+- Updated dependencies [[`f06df81`](https://github.com/tiesen243/yukinu/commit/f06df811685b5f23a4c0d57b2cd79628e99595a4), [`f48b04b`](https://github.com/tiesen243/yukinu/commit/f48b04b4ac94fe3e780c3864efe7e887211d03d2), [`7bcd5a5`](https://github.com/tiesen243/yukinu/commit/7bcd5a5627f85d73903f69ee6135bda4e83e97a0), [`f4b8eba`](https://github.com/tiesen243/yukinu/commit/f4b8eba0b440bfe00d0f357b1aa480774b218f8d), [`292957a`](https://github.com/tiesen243/yukinu/commit/292957a2752332060f73d419517d887bb11841f6), [`06822af`](https://github.com/tiesen243/yukinu/commit/06822af6baa3f0b88672bec44e2a1673f92d9627), [`1c3ec10`](https://github.com/tiesen243/yukinu/commit/1c3ec10ebdec64d4b3e05cd33491dc65754d981e)]:
+  - @yukinu/api@0.1.3
+  - @yukinu/validators@0.1.2
+  - @yukinu/db@0.1.2
+  - @yukinu/auth@0.1.2
+
 ## 0.1.8
 
 ### Patch Changes

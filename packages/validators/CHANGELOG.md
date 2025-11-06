@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.1.2
+
+### Patch Changes
+
+- [#126](https://github.com/tiesen243/yukinu/pull/126) [`f48b04b`](https://github.com/tiesen243/yukinu/commit/f48b04b4ac94fe3e780c3864efe7e887211d03d2) Thanks [@tiesen243](https://github.com/tiesen243)! - add vendor registration and management system with admin approval workflow
+
 ## 0.1.1
 
 ### Patch Changes
