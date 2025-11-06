@@ -6,4 +6,4 @@
 '@yukinu/web': patch
 ---
 
-fix typo
+add vendor registration and management system with admin approval workflow
