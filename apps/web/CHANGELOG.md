@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.1.10
+
+### Patch Changes
+
+- [#131](https://github.com/tiesen243/yukinu/pull/131) [`b234122`](https://github.com/tiesen243/yukinu/commit/b234122e88951b9c32eafe1c2193f130229c2174) Thanks [@tiesen243](https://github.com/tiesen243)! - added loading, error pages
+
 ## 0.1.9
 
 ### Patch Changes
