@@ -177,6 +177,6 @@ const reportMenuItems = [
     title: 'Support Tickets',
     icon: LifeBuoyIcon,
     href: '/reports/support',
-    roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+    roles: ['admin', 'moderator'],
   },
 ]
