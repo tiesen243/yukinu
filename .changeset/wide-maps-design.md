@@ -3,4 +3,4 @@
 '@yukinu/api': patch
 ---
 
-added delete user
+add seed data for users and profiles

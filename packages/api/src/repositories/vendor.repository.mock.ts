@@ -59,12 +59,11 @@ export class VendorRepository
 
   addMember(
     vendorId: string,
-    userId: string,
+    _userId: string,
     _tx?: Database,
   ): Promise<{ id: string } | null> {
     const vendor = this._data.find((v) => v.id === vendorId)
-    if (vendor?.ownerId === userId)
-      return Promise.resolve({ id: 'new-member-1' })
-    return Promise.resolve(null)
+    if (!vendor) return Promise.resolve(null)
+    return Promise.resolve({ id: 'new-member-1' })
   }
 }

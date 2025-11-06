@@ -45,7 +45,10 @@ export namespace UserValidator {
     userId: z.cuid2('Invalid user ID'),
     role: z.enum(roles, { error: 'Invalid role' }),
     status: z.enum(statuses, { error: 'Invalid status' }),
-    password: z.string().optional(),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long')
+      .optional(),
   })
   export type UpdateUserBody = z.infer<typeof updateUserBody>
 
