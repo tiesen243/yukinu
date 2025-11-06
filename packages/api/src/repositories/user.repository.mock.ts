@@ -3,13 +3,17 @@ import type { users } from '@yukinu/db/schema/user'
 
 import type { IProfileRepository, IUserRepository } from '@/types'
 import { BaseRepository } from '@/repositories/base.repository.mock'
+import { ProfileRepository } from '@/repositories/profile.repository.mock'
 
 export class UserRepository
   extends BaseRepository<typeof users>
   implements IUserRepository
 {
-  constructor(private _profileRepo: IProfileRepository) {
+  private _profileRepo: IProfileRepository
+
+  constructor() {
     super()
+    this._profileRepo = new ProfileRepository()
   }
 
   protected override _data = [

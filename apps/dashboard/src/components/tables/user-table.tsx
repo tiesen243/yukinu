@@ -9,8 +9,10 @@ import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -62,9 +64,16 @@ export function useUserTable() {
       void refetch()
       toast.success('User updated successfully')
     },
-    onError: (error) => {
-      toast.error(error.message)
+    onError: (error) => toast.error(error.message),
+  })
+
+  const { mutate: deleteUser, isPending: isDeleting } = useMutation({
+    ...trpc.user.delete.mutationOptions(),
+    onSuccess: () => {
+      void refetch()
+      toast.success('User deleted successfully')
     },
+    onError: (error) => toast.error(error.message),
   })
 
   const handlePagination = React.useCallback(
@@ -72,7 +81,15 @@ export function useUserTable() {
     [query, setQuery],
   )
 
-  return { data, isLoading, query, handlePagination, updateUser }
+  return {
+    data,
+    isLoading,
+    query,
+    handlePagination,
+    updateUser,
+    deleteUser,
+    isDeleting,
+  }
 }
 //#endregion
 
@@ -125,36 +142,26 @@ const UserTableBody: React.FC = () => {
       </TableRow>
     )
 
-  return data.users.map((user) => <UserTableRow key={user.id} user={user} />)
+  return data.users.map((user) => (
+    <TableRow key={user.id}>
+      <TableCell>{user.id}</TableCell>
+      <TableCell>{user.username}</TableCell>
+      <TableCell>{user.email}</TableCell>
+      <TableCell>{user.role}</TableCell>
+      <TableCell>
+        <Badge variant={user.status === 'active' ? 'success' : 'warning'}>
+          {user.status}
+        </Badge>
+      </TableCell>
+      <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
+      <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
+      <TableCell className='flex w-fit items-center gap-2'>
+        <EditUserModal user={user} />
+        <DeleteUserModal user={user} />
+      </TableCell>
+    </TableRow>
+  ))
 }
-
-const UserTableRow: React.FC<{
-  user: RouterOutputs['user']['all']['users'][number]
-}> = ({ user }) => (
-  <TableRow key={user.id}>
-    <TableCell>{user.id}</TableCell>
-    <TableCell>{user.username}</TableCell>
-    <TableCell>{user.email}</TableCell>
-    <TableCell>{user.role}</TableCell>
-    <TableCell>
-      <Badge variant={user.status === 'active' ? 'success' : 'warning'}>
-        {user.status}
-      </Badge>
-    </TableCell>
-    <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
-    <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
-    <TableCell className='flex w-fit items-center gap-2'>
-      <EditUserButton user={user} />
-      <Button
-        variant='ghost'
-        size='sm'
-        className='text-destructive hover:bg-destructive/10 hover:text-destructive dark:hover:bg-destructive/10'
-      >
-        Delete
-      </Button>
-    </TableCell>
-  </TableRow>
-)
 
 export const UserTableFooter: React.FC = () => {
   const { data, isLoading, handlePagination } = useUserTable()
@@ -194,8 +201,8 @@ export const UserTableFooter: React.FC = () => {
 }
 //#endregion
 
-//#region edit user button component
-const EditUserButton: React.FC<{
+//#region edit user modal component
+const EditUserModal: React.FC<{
   user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => {
   const [isOpen, setIsOpen] = React.useState(false)
@@ -219,7 +226,7 @@ const EditUserButton: React.FC<{
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button variant='ghost' size='sm'>
+        <Button variant='outline' size='sm'>
           Edit
         </Button>
       </DialogTrigger>
@@ -293,11 +300,16 @@ const EditUserButton: React.FC<{
               )}
             />
 
-            <Field>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button type='button' variant='secondary'>
+                  Cancel
+                </Button>
+              </DialogClose>
               <Button type='submit' disabled={form.state.isPending}>
                 Save Changes
               </Button>
-            </Field>
+            </DialogFooter>
           </FieldSet>
         </form>
       </DialogContent>
@@ -305,3 +317,43 @@ const EditUserButton: React.FC<{
   )
 }
 //#endregion
+
+//#region delete user modal
+export const DeleteUserModal: React.FC<{
+  user: RouterOutputs['user']['all']['users'][number]
+}> = ({ user }) => {
+  const { deleteUser, isDeleting } = useUserTable()
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant='destructive' size='sm'>
+          Delete
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Delete User: {user.username}</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete this user? This action cannot be
+            undone.
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant='secondary'>Cancel</Button>
+          </DialogClose>
+          <Button
+            variant='destructive'
+            onClick={() => {
+              deleteUser({ userId: user.id })
+            }}
+            disabled={isDeleting}
+          >
+            {isDeleting ? 'Deleting...' : 'Delete'}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}

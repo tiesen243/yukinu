@@ -23,7 +23,7 @@ export class UserService implements IUserService {
     this._password = new Password()
   }
 
-  async getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{
+  async getUsers(query: UserValidator.AllParams): Promise<{
     users: IUserRepository.UserType[]
     pagination: { page: number; total: number; totalPages: number }
   }> {
@@ -54,7 +54,7 @@ export class UserService implements IUserService {
   async updateUser(
     data: UserValidator.UpdateUserBody,
     actingUser: UserValidator.User,
-  ): Promise<{ id: IUserRepository.UserType['id'] }> {
+  ): Promise<void> {
     const user = await this._userRepo.find(data.userId)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
@@ -91,15 +91,43 @@ export class UserService implements IUserService {
           },
           tx,
         )
+    })
+  }
 
-      return updatedUser
+  async deleteUser(
+    data: UserValidator.OneParams,
+    actingUser: UserValidator.User,
+  ): Promise<void> {
+    const user = await this._userRepo.find(data.userId)
+    if (!user)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    if (actingUser.id === data.userId)
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You cannot delete yourself',
+      })
+
+    if (actingUser.role === 'moderator' && user.role === 'admin')
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You do not have permission to delete this user',
+      })
+
+    return this._db.transaction(async (tx) => {
+      const deleted = await this._userRepo.delete(user.id, tx)
+      if (!deleted)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to delete user',
+        })
     })
   }
 
   async updateUserProfile(
     userId: IUserRepository.UserType['id'],
     data: UserValidator.UpdateProfileBody,
-  ): Promise<{ id: IUserRepository.UserType['id'] }> {
+  ): Promise<void> {
     const profile = await this._profileRepo.find(userId)
     if (!profile)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
@@ -111,7 +139,6 @@ export class UserService implements IUserService {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to update profile',
         })
-      return updatedProfile
     })
   }
 }

@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it } from 'bun:test'
 import type { Database } from '@yukinu/db'
 
 import type { IUserService } from '../contracts/services/user.service'
+import { AccountRepository } from '@/repositories/account.repository.mock'
 import { ProfileRepository } from '../repositories/profile.repository.mock'
 import { UserRepository } from '../repositories/user.repository.mock'
 import { UserService } from './user.service'
@@ -17,9 +18,10 @@ describe('UserService', () => {
         return await fn(tx)
       },
     } as unknown as Database
+    const accountRepo = new AccountRepository()
     const profileRepo = new ProfileRepository()
-    const userRepo = new UserRepository(profileRepo)
-    userService = new UserService(db, profileRepo, userRepo)
+    const userRepo = new UserRepository()
+    userService = new UserService(db, accountRepo, profileRepo, userRepo)
   })
 
   it('should get users with pagination', async () => {
@@ -42,11 +44,10 @@ describe('UserService', () => {
     )
   })
 
-  it('should update user if permissions are correct', async () => {
+  it('should update user if permissions are correct', () => {
     const data = { userId: '1', role: 'user', status: 'active' } as const
     const actingUser = { role: 'admin' } as never
-    const result = await userService.updateUser(data, actingUser)
-    expect(result).toHaveProperty('id', data.userId)
+    expect(userService.updateUser(data, actingUser)).resolves.toBeUndefined()
   })
 
   it('should throw FORBIDDEN if acting user tries to update self', () => {
@@ -64,10 +65,9 @@ describe('UserService', () => {
     )
   })
 
-  it('should update user profile', async () => {
+  it('should update user profile', () => {
     const data = { fullName: 'Updated Name' } as never
-    const result = await userService.updateUserProfile('1', data)
-    expect(result).toHaveProperty('id', '1')
+    expect(userService.updateUserProfile('1', data)).resolves.toBeUndefined()
   })
 
   it('should throw NOT_FOUND if profile does not exist on update', () => {

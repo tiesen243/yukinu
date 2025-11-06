@@ -20,7 +20,7 @@ export namespace UserValidator {
     status: Status
   }
 
-  export const findByQueryWithPaginationQuery = z.object({
+  export const allParams = z.object({
     search: z.string().max(100, 'Search query is too long'),
     page: z
       .number()
@@ -34,9 +34,12 @@ export namespace UserValidator {
       .max(100, 'Limit cannot exceed 100')
       .default(10),
   })
-  export type FindByQueryWithPaginationQuery = z.infer<
-    typeof findByQueryWithPaginationQuery
-  >
+  export type AllParams = z.infer<typeof allParams>
+
+  export const oneParams = z.object({
+    userId: z.cuid2('Invalid user ID'),
+  })
+  export type OneParams = z.infer<typeof oneParams>
 
   export const updateUserBody = z.object({
     userId: z.cuid2('Invalid user ID'),

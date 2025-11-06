@@ -8,7 +8,7 @@ export interface IUserService {
    * @param query - The query parameters for searching and pagination
    * @returns A list of users and pagination info
    */
-  getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{
+  getUsers(query: UserValidator.AllParams): Promise<{
     users: IUserRepository.UserType[]
     pagination: { page: number; total: number; totalPages: number }
   }>
@@ -25,22 +25,41 @@ export interface IUserService {
   /**
    * Update a user's information
    * @param data - The data to update the user with
+   * @example
+   * {
+   *   userId: 'user-uuid',
+   *   role: 'admin',
+   *   status: 'active',
+   *   password: 'newPassword123' // optional
+   * }
    * @param actingUser - The user performing the update
-   * @returns The ID of the updated user
    */
   updateUser(
     data: UserValidator.UpdateUserBody,
     actingUser: UserValidator.User,
-  ): Promise<{ id: IUserRepository.UserType['id'] }>
+  ): Promise<void>
+
+  /**
+   * Delete a user
+   * @param data - The data containing the user ID to delete
+   * @example
+   * {
+   *   userId: 'user-uuid'
+   * }
+   * @param actingUser - The user performing the deletion
+   */
+  deleteUser(
+    data: UserValidator.OneParams,
+    actingUser: UserValidator.User,
+  ): Promise<void>
 
   /**
    * Update a user's profile
    * @param userId - The ID of the user whose profile is to be updated
    * @param data - The data to update the profile with
-   * @returns The ID of the user whose profile was updated
    */
   updateUserProfile(
     userId: IUserRepository.UserType['id'],
     data: UserValidator.UpdateProfileBody,
-  ): Promise<{ id: IUserRepository.UserType['id'] }>
+  ): Promise<void>
 }

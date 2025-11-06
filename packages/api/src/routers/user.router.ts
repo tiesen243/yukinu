@@ -8,7 +8,7 @@ export const userRouter = createTRPCRouter({
       message: 'Fetched users successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(UserValidator.findByQueryWithPaginationQuery)
+    .input(UserValidator.allParams)
     .query(({ ctx, input }) => ctx.userService.getUsers(input)),
 
   profile: protectedProcedure
@@ -23,6 +23,16 @@ export const userRouter = createTRPCRouter({
     .input(UserValidator.updateUserBody)
     .mutation(({ ctx, input }) =>
       ctx.userService.updateUser(input, ctx.session.user),
+    ),
+
+  delete: protectedProcedure
+    .meta({
+      message: 'User deleted successfully',
+      roles: ['admin', 'moderator'],
+    })
+    .input(UserValidator.oneParams)
+    .mutation(({ ctx, input }) =>
+      ctx.userService.deleteUser(input, ctx.session.user),
     ),
 
   updateProfile: protectedProcedure
