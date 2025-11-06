@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router'
+import { Activity } from 'react'
+import { NavLink } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
 import {
@@ -7,6 +8,7 @@ import {
   HomeIcon,
   LayoutDashboardIcon,
   LifeBuoyIcon,
+  Loader2Icon,
   PackageIcon,
   SettingsIcon,
   ShoppingCartIcon,
@@ -26,7 +28,6 @@ import {
 } from '@yukinu/ui/sidebar'
 
 export const AppSidebarContent: React.FC = () => {
-  const location = useLocation()
   const { session, status } = useSession()
 
   if (status === 'loading') return <SidebarContent></SidebarContent>
@@ -41,18 +42,18 @@ export const AppSidebarContent: React.FC = () => {
             .filter((item) => item.roles.includes(session.user.role))
             .map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton
-                  isActive={
-                    item.href === ''
-                      ? location.pathname === '/'
-                      : location.pathname.startsWith(item.href)
-                  }
-                  asChild
-                >
-                  <Link to={item.href}>
-                    <item.icon /> {item.title}
-                  </Link>
-                </SidebarMenuButton>
+                <NavLink to={item.href}>
+                  {({ isActive, isPending }) => (
+                    <SidebarMenuButton isActive={isActive} asChild>
+                      <span>
+                        <item.icon /> {item.title}
+                        <Activity mode={isPending ? 'visible' : 'hidden'}>
+                          <Loader2Icon className='animate-spin' />
+                        </Activity>
+                      </span>
+                    </SidebarMenuButton>
+                  )}
+                </NavLink>
               </SidebarMenuItem>
             ))}
         </SidebarMenu>
@@ -68,14 +69,18 @@ export const AppSidebarContent: React.FC = () => {
               .filter((item) => item.roles.includes(session.user.role))
               .map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    isActive={location.pathname.startsWith(item.href)}
-                    asChild
-                  >
-                    <Link to={item.href}>
-                      <item.icon /> {item.title}
-                    </Link>
-                  </SidebarMenuButton>
+                  <NavLink to={item.href}>
+                    {({ isActive, isPending }) => (
+                      <SidebarMenuButton isActive={isActive} asChild>
+                        <span>
+                          <item.icon /> {item.title}
+                          <Activity mode={isPending ? 'visible' : 'hidden'}>
+                            <Loader2Icon className='animate-spin' />
+                          </Activity>
+                        </span>
+                      </SidebarMenuButton>
+                    )}
+                  </NavLink>
                 </SidebarMenuItem>
               ))}
           </SidebarMenu>

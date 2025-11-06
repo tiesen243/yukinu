@@ -21,10 +21,10 @@
     "db:migrate": "bun run --env-file ../../.env drizzle-kit migrate",
     "db:push": "bun run --env-file ../../.env drizzle-kit push",
     "db:studio": "bun run --env-file ../../.env drizzle-kit studio",
-    "dev": "tsdown --watch ./src",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "~dev": "tsdown --watch ./src"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
