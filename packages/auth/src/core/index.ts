@@ -1,3 +1,4 @@
+import type { AuthValidator } from '@yukinu/validators/auth'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions, NewAccount, OauthAccount, Session } from '@/types'
@@ -258,12 +259,15 @@ export function Auth(opts: AuthOptions) {
               status: 302,
               headers: { Location },
             })
+
+            if (!redirectTo.startsWith('http'))
+              cookies.set(response, cookieKeys.token, session.token, {
+                ...cookieOptions,
+                expires: session.expires,
+              })
+
             for (const key of Object.values(cookieKeys))
               cookies.delete(response, key)
-            cookies.set(response, cookieKeys.token, session.token, {
-              ...cookieOptions,
-              expires: session.expires,
-            })
             return setCorsHeaders(response)
           }
 
@@ -289,14 +293,15 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-in: Sign in with email and password
            */
           if (pathname === '/api/auth/sign-in') {
-            const body = (await request.json()) as never
+            const body = (await request.json()) as AuthValidator.LoginBody
             const result = await signIn(body, request.headers)
 
             const response = Response.json(result)
-            cookies.set(response, cookieKeys.token, result.token, {
-              ...cookieOptions,
-              expires: result.expires,
-            })
+            if (body.setSession)
+              cookies.set(response, cookieKeys.token, result.token, {
+                ...cookieOptions,
+                expires: result.expires,
+              })
             return setCorsHeaders(response)
           }
 

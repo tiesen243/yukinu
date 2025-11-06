@@ -15,7 +15,11 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { signIn } = useSession()
 
   const form = useForm({
-    defaultValues: { identifier: '', password: '' },
+    defaultValues: {
+      identifier: '',
+      password: '',
+      setSession: !redirectTo.startsWith('http'),
+    },
     schema: AuthValidator.loginBody,
     onSubmit: (data) => signIn('credentials', data),
     onSuccess: (data) => {
