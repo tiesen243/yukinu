@@ -152,14 +152,18 @@ export const EditVendorModal: React.FC<{
   vendor: RouterOutputs['vendor']['all']['vendors'][number]
 }> = ({ vendor }) => {
   const { updateVendor } = useVendorTable()
+  const [open, setOpen] = React.useState(false)
   const form = useForm({
     defaultValues: { vendorId: vendor.id, status: vendor.status },
     schema: VendorValidator.updateBody,
     onSubmit: updateVendor,
+    onSuccess: () => {
+      setOpen(false)
+    },
   })
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='outline' size='sm'>
           Edit

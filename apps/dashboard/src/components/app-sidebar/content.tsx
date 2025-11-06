@@ -126,7 +126,13 @@ const mainMenuItems = [
     title: 'Register Shop',
     icon: StoreIcon,
     href: '/register-shop',
-    roles: ['admin', 'moderator', 'vendor_staff', 'user'],
+    roles: ['user'],
+  },
+  {
+    title: 'My Shop',
+    icon: StoreIcon,
+    href: '/my-shop',
+    roles: ['vendor_owner', 'vendor_staff'],
   },
   {
     title: 'Vendors',
