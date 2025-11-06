@@ -18,13 +18,21 @@ export const vendorRouter = createTRPCRouter({
       ctx.vendorService.register({ ...input, ownerId: ctx.session.user.id }),
     ),
 
-  approve: protectedProcedure
+  update: protectedProcedure
     .meta({
       message: 'Vendor approved successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(VendorValidator.approveBody)
-    .mutation(({ ctx, input }) => ctx.vendorService.approve(input)),
+    .input(VendorValidator.updateBody)
+    .mutation(({ ctx, input }) => ctx.vendorService.update(input)),
+
+  delete: protectedProcedure
+    .meta({
+      message: 'Vendor deleted successfully',
+      roles: ['admin', 'moderator'],
+    })
+    .input(VendorValidator.oneParams)
+    .mutation(({ ctx, input }) => ctx.vendorService.delete(input)),
 
   invite: protectedProcedure
     .meta({

@@ -14,20 +14,26 @@ export class VendorService implements IVendorService {
     private readonly _vendorRepo: IVendorRepository,
   ) {}
 
-  all(
-    data: VendorValidator.AllParams,
-  ): Promise<IVendorRepository.VendorType[]> {
+  async all(data: VendorValidator.AllParams): Promise<{
+    vendors: IVendorRepository.FindWithOwnerResult[]
+    pagination: { page: number; total: number; totalPages: number }
+  }> {
     const { status, page, limit } = data
     const offset = (page - 1) * limit
+    const criteria = status ? [{ status }] : []
 
-    const vendors = this._vendorRepo.findBy(
-      status ? [{ status }] : [],
-      { createdAt: 'desc' },
+    const vendors = await this._vendorRepo.findWithOwner(
+      criteria,
       limit,
       offset,
     )
+    const total = await this._vendorRepo.count(criteria)
+    const totalPages = Math.ceil(total / limit)
 
-    return vendors
+    return {
+      vendors,
+      pagination: { page, total, totalPages },
+    }
   }
 
   register(
@@ -57,15 +63,50 @@ export class VendorService implements IVendorService {
     })
   }
 
-  approve(data: VendorValidator.ApproveBody): Promise<void> {
+  update(data: VendorValidator.UpdateBody): Promise<void> {
+    const { vendorId, status } = data
+
+    return this._db.transaction(async (tx) => {
+      const vendor = await this._vendorRepo.find(vendorId, tx)
+      if (!vendor)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Vendor not found',
+        })
+
+      const user = await this._userRepo.find(vendor.ownerId, tx)
+      if (!user)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Vendor owner not found',
+        })
+
+      await this._vendorRepo.update(vendorId, { status: status }, tx)
+      if (
+        vendor.status === 'pending' &&
+        status === 'approved' &&
+        user.role === 'user'
+      )
+        await this._userRepo.update(
+          vendor.ownerId,
+          { role: 'vendor_owner' },
+          tx,
+        )
+    })
+  }
+
+  delete(data: VendorValidator.OneParams): Promise<void> {
     const { vendorId } = data
 
     return this._db.transaction(async (tx) => {
       const vendor = await this._vendorRepo.find(vendorId, tx)
-      if (!vendor) return tx.rollback()
+      if (!vendor)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Vendor not found',
+        })
 
-      await this._vendorRepo.update(vendorId, { status: 'approved' }, tx)
-      await this._userRepo.update(vendor.ownerId, { role: 'vendor_owner' }, tx)
+      await this._vendorRepo.delete(vendorId, tx)
     })
   }
 
@@ -95,6 +136,8 @@ export class VendorService implements IVendorService {
         })
 
       await this._vendorRepo.addMember(vendorId, user.id, tx)
+      if (user.role === 'user')
+        await this._userRepo.update(user.id, { role: 'vendor_staff' })
     })
   }
 }

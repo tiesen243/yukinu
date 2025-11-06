@@ -1,4 +1,5 @@
-//#region Imports
+//#region imports
+
 import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
@@ -42,7 +43,7 @@ import { useTRPC } from '@/trpc/react'
 
 //#endregion
 
-//#region Hooks
+//#region hooks
 export function useUserTable() {
   const trpc = useTRPC()
 
@@ -75,10 +76,21 @@ export function useUserTable() {
 }
 //#endregion
 
-//#region User Table Component
+//#region user table component
 export const UserTable: React.FC = () => (
   <Table>
-    <UserTableHeader />
+    <TableHeader>
+      <TableRow>
+        <TableHead className='w-[100px]'>ID</TableHead>
+        <TableHead>Username</TableHead>
+        <TableHead>Email</TableHead>
+        <TableHead>Role</TableHead>
+        <TableHead>Status</TableHead>
+        <TableHead>Created At</TableHead>
+        <TableHead>Updated At</TableHead>
+        <TableHead>Actions</TableHead>
+      </TableRow>
+    </TableHeader>
 
     <TableBody>
       <UserTableBody />
@@ -88,21 +100,6 @@ export const UserTable: React.FC = () => (
       <UserTableFooter />
     </TableFooter>
   </Table>
-)
-
-const UserTableHeader: React.FC = () => (
-  <TableHeader>
-    <TableRow>
-      <TableHead className='w-[100px]'>ID</TableHead>
-      <TableHead>Username</TableHead>
-      <TableHead>Email</TableHead>
-      <TableHead>Role</TableHead>
-      <TableHead>Status</TableHead>
-      <TableHead>Created At</TableHead>
-      <TableHead>Updated At</TableHead>
-      <TableHead>Actions</TableHead>
-    </TableRow>
-  </TableHeader>
 )
 
 const UserTableBody: React.FC = () => {
@@ -197,7 +194,7 @@ export const UserTableFooter: React.FC = () => {
 }
 //#endregion
 
-//#region Edit User Button Component
+//#region edit user button component
 const EditUserButton: React.FC<{
   user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => {

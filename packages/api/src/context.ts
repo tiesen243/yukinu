@@ -1,3 +1,4 @@
+//#region imports
 import { auth } from '@yukinu/auth'
 import { db } from '@yukinu/db'
 
@@ -9,6 +10,8 @@ import { VendorRepository } from '@/repositories/vendor.repository'
 import { AuthService } from '@/services/auth.service'
 import { UserService } from '@/services/user.service'
 import { VendorService } from '@/services/vendor.service'
+
+//#endregion
 
 export const createTRPCContext = async (request: {
   headers: Headers
