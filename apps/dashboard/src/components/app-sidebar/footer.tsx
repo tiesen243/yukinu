@@ -1,3 +1,4 @@
+//#region imports
 import { useNavigate } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
@@ -10,6 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
+
+//#endregion
 
 export const AppSidebarFooter: React.FC = () => {
   return (

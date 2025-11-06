@@ -1,3 +1,4 @@
+//#region imports
 import { Link } from 'react-router'
 
 import {
@@ -7,6 +8,8 @@ import {
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
 import { env } from '@yukinu/validators/env'
+
+//#endregion
 
 export const AppSidebarHeader: React.FC = () => (
   <SidebarHeader className='h-16 border-b border-sidebar-border'>

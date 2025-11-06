@@ -13,7 +13,6 @@ import {
 import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
-import { Loader2Icon } from '@yukinu/ui/icons'
 import { Toaster } from '@yukinu/ui/sonner'
 import { env } from '@yukinu/validators/env'
 
@@ -98,15 +97,6 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
           <code>{stack}</code>
         </pre>
       )}
-    </main>
-  )
-}
-
-export function HydrateFallback() {
-  return (
-    <main className='container grid flex-1 place-items-center'>
-      <Loader2Icon className='animate-spin' />
-      <span className='sr-only'>Loading...</span>
     </main>
   )
 }
