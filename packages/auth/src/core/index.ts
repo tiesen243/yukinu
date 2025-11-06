@@ -233,7 +233,7 @@ export function Auth(opts: AuthOptions) {
             const state = searchParams.get('state') ?? ''
             const storedState = cookies.get(cookieKeys.state) ?? ''
             const codeVerifier = cookies.get(cookieKeys.code) ?? ''
-            const redirectTo = cookies.get(cookieKeys.redirect) ?? '/'
+            let redirectTo = cookies.get(cookieKeys.redirect) ?? '/'
             if (state !== storedState || !code || !codeVerifier)
               throw new Error('Invalid state or code')
 
@@ -242,6 +242,13 @@ export function Auth(opts: AuthOptions) {
               { ...userData, provider, password: null },
               request.headers,
             )
+
+            if (redirectTo.startsWith('http')) {
+              const url = new URL(redirectTo)
+              url.searchParams.set('token', session.token)
+              url.searchParams.set('expires', session.expires.toISOString())
+              redirectTo = url.toString()
+            }
 
             const Location = new URL(
               redirectTo,
