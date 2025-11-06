@@ -15,13 +15,13 @@ export abstract class BaseRepository<TTable extends PgTable>
   }
 
   async find(
-    id: TTable['id']['dataType'],
+    id: TTable['$inferSelect']['id'],
     tx = this._db,
   ): Promise<TTable['$inferSelect'] | null> {
     const [record] = (await tx
       .select()
       .from(this._table as never)
-      .where(eq(this._table.id, id))
+      .where(eq(this._table.id, id as unknown as string))
       .limit(1)) as unknown as TTable['$inferSelect'][]
     return record ?? null
   }
@@ -68,35 +68,36 @@ export abstract class BaseRepository<TTable extends PgTable>
   public async create(
     data: TTable['$inferInsert'],
     tx = this._db,
-  ): Promise<{ id: TTable['id']['dataType'] } | null> {
-    const [result] = (await tx
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+    const [result] = await tx
       .insert(this._table as never)
       .values(data)
-      .returning({ id: this._table.id })) as { id: TTable['id']['dataType'] }[]
+      .returning({ id: this._table.id })
+      .onConflictDoUpdate({ target: this._table.id, set: data })
     return result ?? null
   }
 
   public async update(
-    id: TTable['id']['dataType'],
+    id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
     tx = this._db,
-  ): Promise<{ id: TTable['id']['dataType'] } | null> {
-    const [result] = (await tx
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+    const [result] = await tx
       .update(this._table as never)
       .set(data)
-      .where(eq(this._table.id, id))
-      .returning({ id: this._table.id })) as { id: TTable['id']['dataType'] }[]
+      .where(eq(this._table.id, id as unknown as string))
+      .returning({ id: this._table.id })
     return result ?? null
   }
 
   public async delete(
-    id: TTable['id']['dataType'],
+    id: TTable['$inferSelect']['id'],
     tx = this._db,
-  ): Promise<{ id: TTable['id']['dataType'] } | null> {
-    const [result] = (await tx
+  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+    const [result] = await tx
       .delete(this._table as never)
-      .where(eq(this._table.id, id))
-      .returning({ id: this._table.id })) as { id: TTable['id']['dataType'] }[]
+      .where(eq(this._table.id, id as unknown as string))
+      .returning({ id: this._table.id })
     return result ?? null
   }
 

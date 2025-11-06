@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 export namespace VendorValidator {
-  const vendorStatus = ['pending', 'approved', 'suspended'] as const
+  export const vendorStatus = ['pending', 'approved', 'suspended'] as const
   export type VendorStatus = (typeof vendorStatus)[number]
 
   export const allParams = z.object({

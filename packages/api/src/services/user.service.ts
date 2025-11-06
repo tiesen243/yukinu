@@ -2,15 +2,26 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
 import type { UserValidator } from '@yukinu/validators/user'
+import { Password } from '@yukinu/auth'
 
-import type { IProfileRepository, IUserRepository, IUserService } from '@/types'
+import type {
+  IAccountRepository,
+  IProfileRepository,
+  IUserRepository,
+  IUserService,
+} from '@/types'
 
 export class UserService implements IUserService {
+  private readonly _password: Password
+
   constructor(
     private readonly _db: Database,
+    private readonly _accountRepo: IAccountRepository,
     private readonly _profileRepo: IProfileRepository,
     private readonly _userRepo: IUserRepository,
-  ) {}
+  ) {
+    this._password = new Password()
+  }
 
   async getUsers(query: UserValidator.FindByQueryWithPaginationQuery): Promise<{
     users: IUserRepository.UserType[]
@@ -69,6 +80,18 @@ export class UserService implements IUserService {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to update user',
         })
+
+      if (data.password)
+        await this._accountRepo.create(
+          {
+            userId: data.userId,
+            provider: 'credentials',
+            accountId: data.userId,
+            password: await this._password.hash(data.password),
+          },
+          tx,
+        )
+
       return updatedUser
     })
   }

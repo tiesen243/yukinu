@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+//#region Imports
+import * as React from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
 import type { RouterOutputs } from '@yukinu/api'
@@ -13,9 +14,16 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@yukinu/ui/dialog'
-import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+  FieldSet,
+} from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
+import { Input } from '@yukinu/ui/input'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
@@ -30,14 +38,44 @@ import {
 } from '@yukinu/ui/table'
 import { UserValidator } from '@yukinu/validators/user'
 
-import { useTRPC, useTRPCClient } from '@/trpc/react'
+import { useTRPC } from '@/trpc/react'
 
-const queryParsers = {
-  search: parseAsString.withDefault(''),
-  page: parseAsInteger.withDefault(1),
-  limit: parseAsInteger.withDefault(10),
+//#endregion
+
+//#region Hooks
+export function useUserTable() {
+  const trpc = useTRPC()
+
+  const [query, setQuery] = useQueryStates({
+    search: parseAsString.withDefault(''),
+    page: parseAsInteger.withDefault(1),
+    limit: parseAsInteger.withDefault(10),
+  })
+
+  const { data, isLoading, refetch } = useQuery(
+    trpc.user.all.queryOptions(query),
+  )
+  const { mutateAsync: updateUser } = useMutation({
+    ...trpc.user.update.mutationOptions(),
+    onSuccess: () => {
+      void refetch()
+      toast.success('User updated successfully')
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    },
+  })
+
+  const handlePagination = React.useCallback(
+    async (newPage: number) => setQuery({ ...query, page: newPage }),
+    [query, setQuery],
+  )
+
+  return { data, isLoading, query, handlePagination, updateUser }
 }
+//#endregion
 
+//#region User Table Component
 export const UserTable: React.FC = () => (
   <Table>
     <UserTableHeader />
@@ -68,9 +106,7 @@ const UserTableHeader: React.FC = () => (
 )
 
 const UserTableBody: React.FC = () => {
-  const [query] = useQueryStates(queryParsers)
-  const trpc = useTRPC()
-  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
+  const { data, query, isLoading } = useUserTable()
 
   if (isLoading)
     return Array.from({ length: query.limit }, (_, index) => (
@@ -124,14 +160,7 @@ const UserTableRow: React.FC<{
 )
 
 export const UserTableFooter: React.FC = () => {
-  const [query, setQuery] = useQueryStates(queryParsers)
-  const trpc = useTRPC()
-
-  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
-  const handlePagination = async (newPage: number) => {
-    await setQuery({ ...query, page: newPage })
-  }
-
+  const { data, isLoading, handlePagination } = useUserTable()
   if (isLoading || !data?.pagination) return null
 
   const { page, totalPages } = data.pagination
@@ -166,25 +195,27 @@ export const UserTableFooter: React.FC = () => {
     </TableRow>
   )
 }
+//#endregion
 
+//#region Edit User Button Component
 const EditUserButton: React.FC<{
   user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => {
-  const [query] = useQueryStates(queryParsers)
-  const [isOpen, setIsOpen] = useState(false)
-  const queryClient = useQueryClient()
-  const trpcClient = useTRPCClient()
-  const trpc = useTRPC()
+  const [isOpen, setIsOpen] = React.useState(false)
+  const { updateUser } = useUserTable()
 
   const form = useForm({
-    defaultValues: { userId: user.id, role: user.role, status: user.status },
+    defaultValues: {
+      userId: user.id,
+      role: user.role,
+      status: user.status,
+      password: '',
+    },
     schema: UserValidator.updateUserBody,
-    onSubmit: trpcClient.user.update.mutate,
-    onError: (error) => toast.error(error.message),
+    onSubmit: updateUser,
     onSuccess: () => {
-      void queryClient.invalidateQueries(trpc.user.all.queryFilter(query))
-      toast.success('User updated successfully')
       setIsOpen(false)
+      form.setValue('password', '')
     },
   })
 
@@ -247,6 +278,24 @@ const EditUserButton: React.FC<{
               )}
             />
 
+            <form.Field
+              name='password'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
+                  <Input
+                    {...field}
+                    type='password'
+                    placeholder='Enter new password'
+                  />
+                  <FieldDescription id={meta.descriptionId}>
+                    Leave blank to keep the current password.
+                  </FieldDescription>
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
             <Field>
               <Button type='submit' disabled={form.state.isPending}>
                 Save Changes
@@ -258,3 +307,4 @@ const EditUserButton: React.FC<{
     </Dialog>
   )
 }
+//#endregion
