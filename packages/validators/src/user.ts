@@ -60,7 +60,7 @@ export namespace UserValidator {
       .min(1, 'Gender cannot be empty')
       .max(50, 'Gender is too long'),
     dateOfBirth: z.iso.date('Invalid date format'),
-    website: z.url('Invalid URL'),
+    website: z.url('Invalid URL').optional(),
     bio: z.string().max(160, 'Bio is too long'),
   })
   export type UpdateProfileBody = z.infer<typeof updateProfileBody>

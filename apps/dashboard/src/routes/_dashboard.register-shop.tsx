@@ -28,7 +28,11 @@ function RegisterShopForm() {
   const trpc = useTRPCClient()
 
   const form = useForm({
-    defaultValues: { name: '', description: '', website: '' },
+    defaultValues: {
+      name: '',
+      description: '',
+      website: undefined as string | undefined,
+    },
     schema: VendorValidator.registerBody,
     onSubmit: trpc.vendor.register.mutate,
     onError: ({ message }) => toast.error(message),
