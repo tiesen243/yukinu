@@ -34,6 +34,19 @@ export class VendorService implements IVendorService {
     data: IVendorRepository.NewVendorType,
   ): Promise<{ id: IVendorRepository.VendorType['id'] }> {
     return this._db.transaction(async (tx) => {
+      const [existingVendor] = await this._vendorRepo.findBy(
+        [{ ownerId: data.ownerId }],
+        {},
+        1,
+        0,
+        tx,
+      )
+      if (existingVendor)
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'You already has a registered vendor',
+        })
+
       const vendor = await this._vendorRepo.create(
         { ...data, status: 'pending' },
         tx,
