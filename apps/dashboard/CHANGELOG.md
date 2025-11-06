@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.1.9
+
+### Patch Changes
+
+- [#129](https://github.com/tiesen243/yukinu/pull/129) [`1c7d5bb`](https://github.com/tiesen243/yukinu/commit/1c7d5bbe7b5865f3c0a0f62158be3de05e706958) Thanks [@tiesen243](https://github.com/tiesen243)! - added loading spinner in sidebar navigation
+
 ## 0.1.8
 
 ### Patch Changes
