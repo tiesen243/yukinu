@@ -6,7 +6,7 @@
   "scripts": {
     "build": "bun run --env-file ../../.env next build",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
-    "dev": "bun run --env-file ../../.env next dev --turbopack",
+    "dev": "bun run --env-file ../../.env next dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "bun --env-file ../../.env next typegen && eslint",
     "start": "bun run --env-file ../../.env next start",

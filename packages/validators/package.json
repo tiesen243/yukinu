@@ -11,13 +11,16 @@
     },
     "./package.json": "./package.json"
   },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "dev": "tsdown --watch ./src",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "~dev": "tsdown --watch ./src"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
@@ -36,8 +39,5 @@
     "@ianvs/prettier-plugin-sort-imports": "catalog:",
     "@types/node": "catalog:",
     "prettier-plugin-tailwindcss": "catalog:"
-  },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts"
+  }
 }

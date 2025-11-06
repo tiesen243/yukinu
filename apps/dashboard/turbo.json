@@ -6,7 +6,7 @@
       "outputs": ["build/**", ".react-router/**"]
     },
     "dev": {
-      "dependsOn": ["@yukinu/validators#build"]
+      "dependsOn": ["^build"]
     }
   }
 }
