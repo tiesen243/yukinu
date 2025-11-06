@@ -9,7 +9,7 @@ import { UserRepository } from '../repositories/user.repository.mock'
 import { AuthService } from './auth.service'
 
 describe('AuthService', () => {
-  let authService: IAuthService
+  let service: IAuthService
 
   beforeEach(() => {
     const db = {
@@ -21,51 +21,113 @@ describe('AuthService', () => {
     const accountRepo = new AccountRepository()
     const profileRepo = new ProfileRepository()
     const userRepo = new UserRepository()
-    authService = new AuthService(db, accountRepo, profileRepo, userRepo)
+    service = new AuthService(db, accountRepo, profileRepo, userRepo)
   })
 
-  it('registers a new user', async () => {
-    const data = {
-      username: 'newuser',
-      email: 'new@example.com',
-      password: 'password123',
-      confirmPassword: 'password123',
-    }
-    const result = await authService.register(data)
-    expect(result).toHaveProperty('id')
+  describe('AuthService.register', () => {
+    it('should register a new user', async () => {
+      const result = await service.register({
+        username: 'newuser',
+        email: 'newuser@example.com',
+        password: 'password123',
+        confirmPassword: 'password123',
+      })
+      expect(result).toHaveProperty('id')
+    })
+
+    it('should throw CONFLICT if username or email exists', () => {
+      expect(
+        service.register({
+          username: 'alice',
+          email: 'alice@example.com',
+          password: 'password123',
+          confirmPassword: 'password123',
+        }),
+      ).rejects.toThrow('Username or email already exists')
+    })
   })
 
-  it('throws CONFLICT if user exists', () => {
-    const data = {
-      username: 'alice',
-      email: 'alice@example.com',
-      password: 'password123',
-      confirmPassword: 'password123',
-    }
-    expect(authService.register(data)).rejects.toThrow(
-      'Username or email already exists',
-    )
-  })
+  describe('changePassword', () => {
+    it('should create account if not existed', async () => {
+      const result = await service.changePassword('not-exist', {
+        currentPassword: '',
+        newPassword: 'newpass',
+        confirmNewPassword: 'newpass',
+        isLogOutOtherSessions: false,
+      })
+      expect(result).toHaveProperty('id', 'not-exist')
+    })
 
-  it('changes password for existing account', async () => {
-    const data = {
-      currentPassword: 'oldpass',
-      newPassword: 'newpass',
-      confirmNewPassword: 'newpass',
-      isLogOutOtherSessions: false,
-    }
-    const result = await authService.changePassword('user-1', data)
-    expect(result).toHaveProperty('id')
-  })
+    it('should throw BAD_REQUEST if current password is missing', async () => {
+      const user = await service.register({
+        email: 'testuser@example.com',
+        username: 'testuser',
+        password: 'oldpass',
+        confirmPassword: 'oldpass',
+      })
+      expect(
+        service.changePassword(user.id, {
+          currentPassword: '',
+          newPassword: 'newpass',
+          confirmNewPassword: 'newpass',
+          isLogOutOtherSessions: false,
+        }),
+      ).rejects.toThrow('Current password is required')
+    })
 
-  it('creates password for account if not exists', async () => {
-    const data = {
-      currentPassword: '',
-      newPassword: 'newpass',
-      confirmNewPassword: 'newpass',
-      isLogOutOtherSessions: false,
-    }
-    const result = await authService.changePassword('user-2', data)
-    expect(result).toHaveProperty('id')
+    it('should throw BAD_REQUEST if current password is incorrect', async () => {
+      const user = await service.register({
+        email: 'test@example.com',
+        username: 'testuser',
+        password: 'correct',
+        confirmPassword: 'correct',
+      })
+      expect(
+        service.changePassword(user.id, {
+          currentPassword: 'wrong',
+          newPassword: 'newpass',
+          confirmNewPassword: 'newpass',
+          isLogOutOtherSessions: false,
+        }),
+      ).rejects.toThrow('Current password is incorrect')
+    })
+
+    it('should throw BAD_REQUEST if new password is same as current', async () => {
+      const password = 'samepass'
+      const user = await service.register({
+        email: 'test@example.com',
+        username: 'testuser',
+        password,
+        confirmPassword: password,
+      })
+
+      expect(
+        service.changePassword(user.id, {
+          currentPassword: password,
+          newPassword: password,
+          confirmNewPassword: password,
+          isLogOutOtherSessions: false,
+        }),
+      ).rejects.toThrow(
+        'New password must be different from the current password',
+      )
+    })
+
+    it('should change password and logout other sessions', async () => {
+      const password = 'oldpass'
+      const user = await service.register({
+        email: 'testuser@example.com',
+        username: 'testuser',
+        password,
+        confirmPassword: password,
+      })
+      const result = await service.changePassword(user.id, {
+        currentPassword: password,
+        newPassword: 'newpass',
+        confirmNewPassword: 'newpass',
+        isLogOutOtherSessions: true,
+      })
+      expect(result).toHaveProperty('id', user.id)
+    })
   })
 })

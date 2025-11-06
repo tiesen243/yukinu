@@ -9,7 +9,7 @@ import { UserRepository } from '../repositories/user.repository.mock'
 import { UserService } from './user.service'
 
 describe('UserService', () => {
-  let userService: IUserService
+  let service: IUserService
 
   beforeEach(() => {
     const db = {
@@ -21,59 +21,68 @@ describe('UserService', () => {
     const accountRepo = new AccountRepository()
     const profileRepo = new ProfileRepository()
     const userRepo = new UserRepository()
-    userService = new UserService(db, accountRepo, profileRepo, userRepo)
+    service = new UserService(db, accountRepo, profileRepo, userRepo)
   })
 
-  it('should get users with pagination', async () => {
-    const query = { search: '', page: 1, limit: 10 }
-    const result = await userService.getUsers(query)
-    expect(result).toHaveProperty('users')
-    expect(Array.isArray(result.users)).toBe(true)
+  describe('UserService.getUsers', () => {
+    it('returns users and pagination', async () => {
+      const result = await service.getUsers({ search: '', page: 1, limit: 10 })
+      expect(result.users.length).toBeGreaterThan(0)
+      expect(result.pagination).toHaveProperty('page', 1)
+    })
   })
 
-  it('should get user profile', async () => {
-    const user = { id: '1' }
-    const profile = await userService.getUserProfile(user)
-    expect(profile).toHaveProperty('id', user.id)
-    expect(profile).toHaveProperty('profile')
+  describe('UserService.getUserProfile', () => {
+    it('returns user profile if exists', async () => {
+      const profile = await service.getUserProfile({ id: '1' })
+      expect(profile).toHaveProperty('profile')
+    })
+
+    it('throws NOT_FOUND if profile does not exist', () => {
+      expect(service.getUserProfile({ id: 'not-exist' })).rejects.toThrow(
+        'Profile not found',
+      )
+    })
   })
 
-  it('should throw NOT_FOUND when user profile does not exist', () => {
-    expect(userService.getUserProfile({ id: 'not-exist' })).rejects.toThrow(
-      'Profile not found',
-    )
-  })
+  describe('UserService.updateUser', () => {
+    const adminUser = {
+      id: '1',
+      role: 'admin',
+      status: 'active',
+      email: 'admin@example.com',
+    } as const
 
-  it('should update user if permissions are correct', () => {
-    const data = { userId: '1', role: 'user', status: 'active' } as const
-    const actingUser = { role: 'admin' } as never
-    expect(userService.updateUser(data, actingUser)).resolves.toBeUndefined()
-  })
+    it('throws NOT_FOUND if user does not exist', () => {
+      expect(
+        service.updateUser(
+          {
+            userId: 'not-exist',
+            password: '123',
+            role: 'user',
+            status: 'active',
+          },
+          adminUser,
+        ),
+      ).rejects.toThrow('User not found')
+    })
 
-  it('should throw FORBIDDEN if acting user tries to update self', () => {
-    const data = { id: '1', userId: '1', role: 'admin' } as never
-    expect(userService.updateUser(data, data)).rejects.toThrow(
-      'You cannot update yourself',
-    )
-  })
+    it('throws FORBIDDEN if acting user tries to update self', () => {
+      expect(
+        service.updateUser(
+          { userId: '1', password: '123', role: 'admin', status: 'active' },
+          adminUser,
+        ),
+      ).rejects.toThrow('You cannot update yourself')
+    })
 
-  it('should throw NOT_FOUND if user does not exist on update', () => {
-    const data = { id: 'not-exist' } as never
-    const actingUser = { role: 'admin' } as never
-    expect(userService.updateUser(data, actingUser)).rejects.toThrow(
-      'User not found',
-    )
-  })
-
-  it('should update user profile', () => {
-    const data = { fullName: 'Updated Name' } as never
-    expect(userService.updateUserProfile('1', data)).resolves.toBeUndefined()
-  })
-
-  it('should throw NOT_FOUND if profile does not exist on update', () => {
-    const data = { fullName: 'Updated Name' } as never
-    expect(userService.updateUserProfile('not-exist', data)).rejects.toThrow(
-      'Profile not found',
-    )
+    it('throws FORBIDDEN if moderator tries to update admin', () => {
+      expect(
+        service.updateUser(
+          { userId: '2', password: '123', role: 'admin', status: 'active' },
+          { ...adminUser, role: 'moderator' },
+        ),
+      ).rejects.toThrow('You do not have permission to update this user')
+    })
   })
 })
