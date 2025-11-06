@@ -36,7 +36,7 @@ export interface IVendorService {
   ): Promise<{ id: IVendorRepository.VendorType['id'] }>
 
   /**
-   * Approve a vendor and update the user role to vendor_owner
+   * Update a vendor's status and adjust the owner's role accordingly
    * @param data - The data for updating the vendor
    * @example
    * {

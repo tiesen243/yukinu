@@ -125,7 +125,7 @@ describe('AuthService', () => {
         currentPassword: password,
         newPassword: 'newpass',
         confirmNewPassword: 'newpass',
-        isLogOutOtherSessions: true,
+        isLogOutOtherSessions: false,
       })
       expect(result).toHaveProperty('id', user.id)
     })
