@@ -8,8 +8,6 @@ export const env = createEnv({
       z.enum(['development', 'production', 'test']),
       'development',
     ),
-    WEB_URL: z._default(z.string(), 'localhost:3000'),
-    DASHBOARD_URL: z._default(z.string(), 'localhost:5173'),
 
     // Database configuration
     POSTGRES_HOST: z._default(z.string(), '127.0.0.1'),

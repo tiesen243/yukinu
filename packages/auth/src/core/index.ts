@@ -349,7 +349,7 @@ const DEFAULT_OPTIONS = {
     secure: env.VERCEL_ENV === 'production',
     sameSite: 'Lax',
     ...(env.VERCEL_ENV === 'production' && {
-      domain: `.${env.WEB_URL}`,
+      domain: `.${env.VERCEL_PROJECT_PRODUCTION_URL}`,
     }),
   },
 } as const satisfies Omit<

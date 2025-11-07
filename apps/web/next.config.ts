@@ -1,6 +1,6 @@
-import type { NextConfig } from 'next'
+import '@yukinu/validators/env'
 
-import { env } from '@yukinu/validators/env'
+import type { NextConfig } from 'next'
 
 const nextConfig = {
   typedRoutes: true,
@@ -17,16 +17,6 @@ const nextConfig = {
     '@yukinu/db',
     '@yukinu/ui',
     '@yukinu/validators',
-  ],
-
-  redirects: async () => [
-    {
-      source: '/dashboard',
-      destination: `${
-        env.NODE_ENV === 'production' ? 'https' : 'http'
-      }://${env.DASHBOARD_URL}`,
-      permanent: true,
-    },
   ],
 
   // Enable standalone build output if specified (for Docker deployment)

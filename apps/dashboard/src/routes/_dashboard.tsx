@@ -16,9 +16,9 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
   const session = await auth(request)
   if (!session.user) {
-    const protocal = import.meta.env.MODE === 'production' ? 'https' : 'http'
+    const protocol = import.meta.env.MODE === 'production' ? 'https' : 'http'
     return redirect(
-      `${protocal}://${env.VITE_WEB_URL}/login?redirect_to=${request.url}/api/auth/set-session`,
+      `${protocol}://${env.VITE_WEB_URL}/login?redirect_to=${request.url}/api/auth/set-session`,
     )
   }
 
