@@ -53,7 +53,7 @@ export class UserService implements IUserService {
 
   async updateUser(
     data: UserValidator.UpdateUserBody,
-    actingUser: UserValidator.User,
+    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
   ): Promise<void> {
     const user = await this._userRepo.find(data.userId)
     if (!user)
@@ -96,7 +96,7 @@ export class UserService implements IUserService {
 
   async deleteUser(
     data: UserValidator.OneParams,
-    actingUser: UserValidator.User,
+    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
   ): Promise<void> {
     const user = await this._userRepo.find(data.userId)
     if (!user)

@@ -36,7 +36,7 @@ export interface IUserService {
    */
   updateUser(
     data: UserValidator.UpdateUserBody,
-    actingUser: UserValidator.User,
+    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
   ): Promise<void>
 
   /**
@@ -50,7 +50,7 @@ export interface IUserService {
    */
   deleteUser(
     data: UserValidator.OneParams,
-    actingUser: UserValidator.User,
+    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
   ): Promise<void>
 
   /**

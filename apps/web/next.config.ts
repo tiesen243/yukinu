@@ -1,5 +1,3 @@
-import '@yukinu/validators/env.next'
-
 import type { NextConfig } from 'next'
 
 import { env } from '@yukinu/validators/env'

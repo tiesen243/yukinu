@@ -38,8 +38,5 @@ export const env = createEnv({
       .VITE_VERCEL_PROJECT_PRODUCTION_URL,
   },
 
-  skipValidation:
-    !!process.env.SKIP_ENV_VALIDATION ||
-    !!process.env.CI ||
-    process.env.npm_lifecycle_event === 'lint',
+  skipValidation: true,
 })
