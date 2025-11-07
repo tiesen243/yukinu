@@ -4,13 +4,13 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "bun run --env-file ../../.env react-router build",
+    "build": "react-router build",
     "clean": "git clean -xdf .cache .react-router .turbo .vercel build node_modules",
-    "dev": "bun --env-file ../../.env react-router dev --port $(microfrontends port)",
+    "dev": "react-router dev --port 6474",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "bun run --env-file ../../.env react-router typegen && eslint",
-    "start": "bun run --env-file ../../.env react-router-serve build/server/nodejs_*/index.js",
-    "typecheck": "bun run --env-file ../../.env react-router typegen && tsc --noEmit"
+    "lint": "react-router typegen && eslint",
+    "start": "react-router-serve build/server/nodejs_*/index.js",
+    "typecheck": "react-router typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
   "overrides": {
