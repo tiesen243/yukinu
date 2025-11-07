@@ -6,7 +6,6 @@ export namespace AuthValidator {
   export const loginBody = z.object({
     identifier: z.union([usernameSchema, z.email('Invalid email address')]),
     password: passwordSchema,
-    setSession: z.boolean().default(true),
   })
   export type LoginBody = z.infer<typeof loginBody>
 
