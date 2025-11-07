@@ -24,7 +24,7 @@ const nextConfig = {
       source: '/dashboard',
       destination: `${
         env.NODE_ENV === 'production' ? 'https' : 'http'
-      }://${env.NEXT_PUBLIC_DASHBOARD_URL}`,
+      }://${env.DASHBOARD_URL}`,
       permanent: true,
     },
   ],

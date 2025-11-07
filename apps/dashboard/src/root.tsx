@@ -14,7 +14,7 @@ import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { Toaster } from '@yukinu/ui/sonner'
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.vite'
 
 import type { Route } from './+types/root'
 import globalsCss from '@/globals.css?url'
@@ -64,8 +64,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     details =
       error.status === 404 ? 'Page Not Found' : error.statusText || details
   } else if (
-    // eslint-disable-next-line no-restricted-properties
-    process.env.NODE_ENV === 'development' &&
+    import.meta.env.MODE === 'development' &&
     error &&
     error instanceof Error
   ) {
@@ -76,7 +75,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <img
-        src={`${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}/assets/images/yuki.webp`}
+        src={`${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.VITE_WEB_URL}/assets/images/yuki.webp`}
         alt='Yukinu Mascot'
         className='size-48 object-cover select-none'
         draggable={false}
@@ -115,7 +114,7 @@ export const meta: Route.MetaFunction = () =>
     openGraph: {
       images: [
         {
-          url: `${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}/api/og?title=Dashboard`,
+          url: `${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.VITE_WEB_URL}/api/og?title=Dashboard`,
           alt: 'Dashboard - Yukinu',
         },
       ],

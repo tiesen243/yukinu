@@ -213,7 +213,7 @@ const EditUserModal: React.FC<{
       userId: user.id,
       role: user.role,
       status: user.status,
-      password: '',
+      password: undefined as string | undefined,
     },
     schema: UserValidator.updateUserBody,
     onSubmit: updateUser,

@@ -12,7 +12,7 @@ import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.next'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'

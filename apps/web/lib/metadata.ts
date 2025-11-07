@@ -1,6 +1,6 @@
 import type { Metadata as NextMetadata } from 'next'
 
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.next'
 
 import { getBaseUrl } from '@/lib/utils'
 
