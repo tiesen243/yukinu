@@ -6,7 +6,7 @@
   "scripts": {
     "build": "bun run --env-file ../../.env react-router build",
     "clean": "git clean -xdf .cache .react-router .turbo .vercel build node_modules",
-    "dev": "bun --env-file ../../.env react-router dev",
+    "dev": "bun --env-file ../../.env react-router dev --port $(microfrontends port)",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "bun run --env-file ../../.env react-router typegen && eslint",
     "start": "bun run --env-file ../../.env react-router-serve build/server/nodejs_*/index.js",
@@ -17,11 +17,11 @@
     "vite": "npm:rolldown-vite@7.1.14"
   },
   "dependencies": {
-    "@react-router/fs-routes": "^7.9.5",
     "@react-router/node": "^7.9.5",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
+    "@vercel/microfrontends": "^2.2.0",
     "@vercel/react-router": "^1.2.3",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",

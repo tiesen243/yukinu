@@ -1,6 +1,5 @@
 'use client'
 
-import type { UrlObject } from 'url'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -35,7 +34,7 @@ import {
 
 const navItems = [
   { label: 'Profile', href: '/user/account/profile', icon: UserIcon },
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboardIcon },
+  { label: 'Dashboard', href: '/dashboard/', icon: LayoutDashboardIcon },
   { label: 'Cart', href: '/user/cart', icon: ShoppingCartIcon },
   { label: 'Purchases', href: '/user/purchase', icon: ReceiptTextIcon },
 ] as const
@@ -76,7 +75,7 @@ export const UserButton: React.FC = () => {
         <DropdownMenuGroup>
           {navItems.map((item) => (
             <DropdownMenuItem key={item.href} asChild>
-              <Link href={item.href as unknown as UrlObject}>
+              <Link href={item.href as never}>
                 <item.icon /> {item.label}
               </Link>
             </DropdownMenuItem>
