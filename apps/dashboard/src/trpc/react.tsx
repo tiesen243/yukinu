@@ -11,7 +11,7 @@ import { createTRPCContext } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.vite'
 
 import { getBaseUrl } from '@/lib/utils'
 import { createQueryClient } from '@/trpc/query-client'
@@ -45,7 +45,7 @@ function TRPCReactProvider({
   const [trpcClient] = React.useState(() =>
     createTRPCClient<AppRouter>({
       links:
-        env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true'
+        env.VITE_TRPC_USE_STREAMING === 'true'
           ? [httpBatchStreamLink(configs)]
           : [httpBatchLink(configs)],
     }),

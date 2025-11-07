@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { cn } from '@yukinu/ui'
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.next'
 
 interface BrandProps {
   containerClassName?: string

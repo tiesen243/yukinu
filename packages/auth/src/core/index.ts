@@ -346,10 +346,10 @@ const DEFAULT_OPTIONS = {
   cookieOptions: {
     path: '/',
     httpOnly: true,
-    secure: process.env.VERCEL_ENV === 'production',
+    secure: env.VERCEL_ENV === 'production',
     sameSite: 'Lax',
-    ...(process.env.VERCEL_ENV === 'production' && {
-      domain: `.${env.NEXT_PUBLIC_WEB_URL}`,
+    ...(env.VERCEL_ENV === 'production' && {
+      domain: `.${env.WEB_URL}`,
     }),
   },
 } as const satisfies Omit<

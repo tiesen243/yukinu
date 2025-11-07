@@ -1,11 +1,10 @@
 import { redirect } from 'react-router'
 
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.vite'
 
 import type { Route } from './+types/web'
 
 export const loader = (_: Route.LoaderArgs) => {
-  if (env.NODE_ENV === 'development')
-    return redirect(`http://${env.NEXT_PUBLIC_WEB_URL}`)
-  return redirect(`https://${env.NEXT_PUBLIC_WEB_URL}`)
+  const protocal = env.NODE_ENV === 'production' ? 'https' : 'http'
+  return redirect(`${protocal}://${env.VITE_WEB_URL}`)
 }

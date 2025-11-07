@@ -1,24 +1,14 @@
 import * as z from 'zod'
 
+import { passwordSchema } from '@/lib/shared'
+
 export namespace UserValidator {
-  export const roles = [
-    'admin',
-    'moderator',
-    'vendor_owner',
-    'vendor_staff',
-    'user',
-  ] as const
+  // prettier-ignore
+  export const roles = ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'] as const
   export type Role = (typeof roles)[number]
 
   export const statuses = ['active', 'inactive'] as const
   export type Status = (typeof statuses)[number]
-
-  export interface User {
-    id: string
-    email: string
-    role: Role
-    status: Status
-  }
 
   export const allParams = z.object({
     search: z.string().max(100, 'Search query is too long'),
@@ -45,10 +35,7 @@ export namespace UserValidator {
     userId: z.cuid2('Invalid user ID'),
     role: z.enum(roles, { error: 'Invalid role' }),
     status: z.enum(statuses, { error: 'Invalid status' }),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters long')
-      .optional(),
+    password: passwordSchema.optional(),
   })
   export type UpdateUserBody = z.infer<typeof updateUserBody>
 

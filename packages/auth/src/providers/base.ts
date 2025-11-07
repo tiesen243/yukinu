@@ -19,7 +19,7 @@ export default abstract class BaseProvider {
       return `https://${env.VERCEL_URL}/api/auth/callback/${provider}`
 
     const protocol = env.NODE_ENV === 'production' ? 'https' : 'http'
-    const baseUrl = `${protocol}://${env.NEXT_PUBLIC_WEB_URL}`
+    const baseUrl = `${protocol}://${env.WEB_URL}`
     return `${baseUrl}/api/auth/callback/${provider}`
   }
 }

@@ -3,7 +3,7 @@ import { Outlet, redirect } from 'react-router'
 
 import { auth } from '@yukinu/auth'
 import { SidebarInset, SidebarProvider } from '@yukinu/ui/sidebar'
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.vite'
 
 import type { Route } from './+types/_dashboard'
 import { AppSidebar } from '@/components/app-sidebar'
@@ -12,14 +12,13 @@ import { Header } from '@/components/header'
 //#endregion
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
   const cookieHeader = request.headers.get('Cookie') ?? ''
 
   const session = await auth(request)
   if (!session.user) {
     const protocal = env.NODE_ENV === 'production' ? 'https' : 'http'
     return redirect(
-      `${protocal}://${env.NEXT_PUBLIC_WEB_URL}/login?redirect_to=${request.url}/api/auth/set-session`,
+      `${protocal}://${env.VITE_WEB_URL}/login?redirect_to=${request.url}/api/auth/set-session`,
     )
   }
 

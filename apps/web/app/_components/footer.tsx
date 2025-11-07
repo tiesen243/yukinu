@@ -15,7 +15,7 @@ import {
   InputGroupAddon,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.next'
 
 import { Brand } from '@/app/_components/brand'
 

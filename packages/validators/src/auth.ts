@@ -1,20 +1,8 @@
 import * as z from 'zod'
 
+import { passwordSchema, usernameSchema } from '@/lib/shared'
+
 export namespace AuthValidator {
-  const usernameSchema = z
-    .string()
-    .trim()
-    .min(2, 'Username too short')
-    .max(100, 'Username too long')
-    .transform((val) => val.toLowerCase())
-
-  const passwordSchema = z
-    .string()
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
-      'Password not strong enough',
-    )
-
   export const loginBody = z.object({
     identifier: z.union([usernameSchema, z.email('Invalid email address')]),
     password: passwordSchema,
