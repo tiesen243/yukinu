@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.1.12
+
+### Patch Changes
+
+- [#137](https://github.com/tiesen243/yukinu/pull/137) [`4411bdc`](https://github.com/tiesen243/yukinu/commit/4411bdc3ef21cb36601baa04411d65dd0f6b4a8b) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
 ## 0.1.11
 
 ### Patch Changes
