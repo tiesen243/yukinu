@@ -1,6 +1,8 @@
+import '@yukinu/validators/env'
+
 import type { NextConfig } from 'next'
 
-import { env } from '@yukinu/validators/env'
+import { env } from '@yukinu/validators/env.next'
 
 const nextConfig = {
   typedRoutes: true,
@@ -24,7 +26,7 @@ const nextConfig = {
       source: '/dashboard',
       destination: `${
         env.NODE_ENV === 'production' ? 'https' : 'http'
-      }://${env.DASHBOARD_URL}`,
+      }://${env.NEXT_PUBLIC_DASHBOARD_URL}`,
       permanent: true,
     },
   ],
