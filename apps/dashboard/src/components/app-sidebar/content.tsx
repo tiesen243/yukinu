@@ -6,7 +6,6 @@ import { useSession } from '@yukinu/auth/react'
 import {
   BarChart3Icon,
   DollarSignIcon,
-  HomeIcon,
   LayoutDashboardIcon,
   LifeBuoyIcon,
   Loader2Icon,
@@ -95,15 +94,9 @@ export const AppSidebarContent: React.FC = () => {
 
 const mainMenuItems = [
   {
-    title: 'Home',
-    icon: HomeIcon,
-    href: '/web',
-    roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
-  },
-  {
     title: 'Dashboard',
     icon: LayoutDashboardIcon,
-    href: '',
+    href: '/',
     roles: ['admin', 'moderator', 'vendor_owner'],
   },
   {
@@ -131,22 +124,22 @@ const mainMenuItems = [
     roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
   },
   {
+    title: 'Vendors',
+    icon: UsersIcon,
+    href: '/vendors',
+    roles: ['admin', 'moderator'],
+  },
+  {
     title: 'Register Shop',
     icon: StoreIcon,
-    href: '/register-shop',
+    href: '/vendors/register',
     roles: ['user'],
   },
   {
     title: 'My Shop',
     icon: StoreIcon,
-    href: '/my-shop',
+    href: '/vendors/me',
     roles: ['vendor_owner', 'vendor_staff'],
-  },
-  {
-    title: 'Vendors',
-    icon: UsersIcon,
-    href: '/vendors',
-    roles: ['admin', 'moderator'],
   },
   {
     title: 'Users',

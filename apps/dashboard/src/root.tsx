@@ -75,7 +75,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <img
-        src={`${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.VITE_WEB_URL}/assets/images/yuki.webp`}
+        src='/assets/images/yuki.webp'
         alt='Yukinu Mascot'
         className='size-48 object-cover select-none'
         draggable={false}

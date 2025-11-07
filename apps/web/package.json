@@ -4,19 +4,20 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "bun run --env-file ../../.env next build",
+    "build": "next build",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
-    "dev": "bun run --env-file ../../.env next dev",
+    "dev": "next dev --turbopack -p 5568",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "bun --env-file ../../.env next typegen && eslint",
-    "start": "bun run --env-file ../../.env next start",
-    "typecheck": "bun --env-file ../../.env next typegen && tsc --noEmit"
+    "lint": "next typegen && eslint",
+    "start": "next start",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
+    "@vercel/microfrontends": "^2.2.0",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
