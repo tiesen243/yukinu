@@ -28,9 +28,10 @@ function createEnv<
   },
   deriveEnv: (env: TResult) => TDeriveEnv = () => ({}) as TDeriveEnv,
 ): TResult & TDeriveEnv {
-  for (const [key, value] of Object.entries(opts.runtimeEnv)) {
+  const runtimeEnv = { ...opts.runtimeEnv }
+  for (const [key, value] of Object.entries(runtimeEnv)) {
     // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-    if (value === '') delete opts.runtimeEnv[key]
+    if (value === '') delete runtimeEnv[key]
   }
 
   const globalThisForWindow = globalThis as unknown as {
@@ -42,7 +43,7 @@ function createEnv<
   const _client = typeof opts.client === 'object' ? opts.client : {}
   const envs = isServer ? { ..._server, ..._client } : { ..._client }
 
-  const parsedEnvs = z.object(envs).safeParse(opts.runtimeEnv)
+  const parsedEnvs = z.object(envs).safeParse(runtimeEnv)
   if (!opts.skipValidation && !parsedEnvs.success)
     throw new Error(
       `❌ Environment variables validation failed:\n${parsedEnvs.error.message}`,

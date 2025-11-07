@@ -9,8 +9,6 @@ import {
 } from '@yukinu/ui/sidebar'
 import { env } from '@yukinu/validators/env.vite'
 
-//import { env } from '@yukinu/validators/env'
-
 //#endregion
 
 export const AppSidebarHeader: React.FC = () => (
