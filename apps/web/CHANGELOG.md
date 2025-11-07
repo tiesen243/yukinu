@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.1.13
+
+### Patch Changes
+
+- [#140](https://github.com/tiesen243/yukinu/pull/140) [`7f0b9ab`](https://github.com/tiesen243/yukinu/commit/7f0b9abc8dafc5967d922e05c65961b58dd470c4) Thanks [@tiesen243](https://github.com/tiesen243)! - using vercel microfrontends
+
 ## 0.1.12
 
 ### Patch Changes
