@@ -15,11 +15,9 @@ export default abstract class BaseProvider {
   ): Promise<OauthAccount>
 
   protected createCallbackUrl(provider: string) {
-    if (env.VERCEL_ENV === 'preview')
-      return `https://${env.VERCEL_URL}/api/auth/callback/${provider}`
-
-    const protocol = env.NODE_ENV === 'production' ? 'https' : 'http'
-    const baseUrl = `${protocol}://${env.WEB_URL}`
+    let baseUrl = `http://localhost:${process.env.PORT ?? 3000}`
+    if (env.VERCEL_PROJECT_PRODUCTION_URL)
+      baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
     return `${baseUrl}/api/auth/callback/${provider}`
   }
 }
