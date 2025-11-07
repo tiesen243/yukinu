@@ -251,20 +251,16 @@ export function Auth(opts: AuthOptions) {
               redirectTo = url.toString()
             }
 
-            const Location = new URL(
-              redirectTo,
-              `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.NEXT_PUBLIC_WEB_URL}`,
-            ).toString()
+            const Location = new URL(redirectTo, request.url).toString()
             const response = new Response(null, {
               status: 302,
               headers: { Location },
             })
 
-            if (!redirectTo.startsWith('http'))
-              cookies.set(response, cookieKeys.token, session.token, {
-                ...cookieOptions,
-                expires: session.expires,
-              })
+            cookies.set(response, cookieKeys.token, session.token, {
+              ...cookieOptions,
+              expires: session.expires,
+            })
 
             for (const key of Object.values(cookieKeys))
               cookies.delete(response, key)
@@ -297,11 +293,10 @@ export function Auth(opts: AuthOptions) {
             const result = await signIn(body, request.headers)
 
             const response = Response.json(result)
-            if (body.setSession)
-              cookies.set(response, cookieKeys.token, result.token, {
-                ...cookieOptions,
-                expires: result.expires,
-              })
+            cookies.set(response, cookieKeys.token, result.token, {
+              ...cookieOptions,
+              expires: result.expires,
+            })
             return setCorsHeaders(response)
           }
 
