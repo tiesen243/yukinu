@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.2.1
+
+### Patch Changes
+
+- [#150](https://github.com/tiesen243/yukinu/pull/150) [`87803ea`](https://github.com/tiesen243/yukinu/commit/87803ea61e9993729c18eb2779702b6faaa08e12) Thanks [@tiesen243](https://github.com/tiesen243)! - fix assets path
+
 ## 0.2.0
 
 ### Minor Changes
