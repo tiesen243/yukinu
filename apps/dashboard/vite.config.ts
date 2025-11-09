@@ -4,7 +4,6 @@ import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig(({ mode }) => ({
-  base: '/dashboard/',
   plugins: [reactRouter(), tailwindcss(), tsconfigPaths()],
   build: {
     assetsDir: 'dashboard/assets',
