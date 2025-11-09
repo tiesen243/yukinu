@@ -167,23 +167,6 @@ export function Auth(opts: AuthOptions) {
             return setCorsHeaders(Response.json(session))
           }
 
-          /**
-           * [GET] /api/auth/set-cookie: Set a test cookie (for dashboard use)
-           */
-          if (pathname === `${base}/api/auth/set-session`) {
-            const response = new Response(null, {
-              status: 302,
-              headers: { Location: '/' },
-            })
-            const token = searchParams.get('token') ?? ''
-            const expires = searchParams.get('expires') ?? ''
-            cookies.set(response, cookieKeys.token, token, {
-              ...cookieOptions,
-              expires,
-            })
-            return setCorsHeaders(response)
-          }
-
           const allowed = ratelimitMiddleware(request, 1)
           if (!allowed)
             return setCorsHeaders(
@@ -257,13 +240,14 @@ export function Auth(opts: AuthOptions) {
               headers: { Location },
             })
 
+            for (const key of Object.values(cookieKeys))
+              cookies.delete(response, key)
+
             cookies.set(response, cookieKeys.token, session.token, {
               ...cookieOptions,
               expires: session.expires,
             })
 
-            for (const key of Object.values(cookieKeys))
-              cookies.delete(response, key)
             return setCorsHeaders(response)
           }
 
@@ -343,9 +327,6 @@ const DEFAULT_OPTIONS = {
     httpOnly: true,
     secure: env.VERCEL_ENV === 'production',
     sameSite: 'Lax',
-    ...(env.VERCEL_ENV === 'production' && {
-      domain: `.${env.VERCEL_PROJECT_PRODUCTION_URL}`,
-    }),
   },
 } as const satisfies Omit<
   Required<AuthOptions>,

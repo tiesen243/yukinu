@@ -6,6 +6,7 @@ import { useSession } from '@yukinu/auth/react'
 import {
   BarChart3Icon,
   DollarSignIcon,
+  HomeIcon,
   LayoutDashboardIcon,
   LifeBuoyIcon,
   Loader2Icon,
@@ -40,6 +41,16 @@ export const AppSidebarContent: React.FC = () => {
       <SidebarGroup>
         <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <NavLink to={window.location.origin}>
+              <SidebarMenuButton asChild>
+                <span>
+                  <HomeIcon /> Home
+                </span>
+              </SidebarMenuButton>
+            </NavLink>
+          </SidebarMenuItem>
+
           {mainMenuItems
             .filter((item) => item.roles.includes(session.user.role))
             .map((item) => (
