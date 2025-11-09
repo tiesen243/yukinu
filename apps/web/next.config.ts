@@ -1,7 +1,6 @@
 import '@yukinu/validators/env'
 
 import type { NextConfig } from 'next'
-import { withMicrofrontends } from '@vercel/microfrontends/next/config'
 
 const nextConfig = {
   typedRoutes: true,
@@ -27,4 +26,4 @@ const nextConfig = {
   }),
 } satisfies NextConfig
 
-export default withMicrofrontends(nextConfig)
+export default nextConfig

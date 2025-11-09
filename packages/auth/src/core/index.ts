@@ -153,7 +153,7 @@ export function Auth(opts: AuthOptions) {
     auth,
     signIn,
     signOut,
-    handlers: {
+    handlers: (base = '') => ({
       GET: async (request: Request) => {
         const { pathname, searchParams } = new URL(request.url)
         const cookies = new Cookies(request)
@@ -162,7 +162,7 @@ export function Auth(opts: AuthOptions) {
           /**
            * [GET] /api/auth/get-session: Get current session
            */
-          if (pathname === '/api/auth/get-session') {
+          if (pathname === `${base}/api/auth/get-session`) {
             const session = await auth(request)
             return setCorsHeaders(Response.json(session))
           }
@@ -170,7 +170,7 @@ export function Auth(opts: AuthOptions) {
           /**
            * [GET] /api/auth/set-cookie: Set a test cookie (for dashboard use)
            */
-          if (pathname === '/api/auth/set-session') {
+          if (pathname === `${base}/api/auth/set-session`) {
             const response = new Response(null, {
               status: 302,
               headers: { Location: '/' },
@@ -288,7 +288,7 @@ export function Auth(opts: AuthOptions) {
           /**
            * [POST] /api/auth/sign-in: Sign in with email and password
            */
-          if (pathname === '/api/auth/sign-in') {
+          if (pathname === `${base}/api/auth/sign-in`) {
             const body = (await request.json()) as AuthValidator.LoginBody
             const result = await signIn(body, request.headers)
 
@@ -303,7 +303,7 @@ export function Auth(opts: AuthOptions) {
           /**
            * [POST] /api/auth/sign-out: Sign out current session
            */
-          if (pathname === '/api/auth/sign-out') {
+          if (pathname === `${base}/api/auth/sign-out`) {
             await signOut(request)
             const response = Response.json({
               message: 'Signed out successfully',
@@ -319,7 +319,7 @@ export function Auth(opts: AuthOptions) {
           return setCorsHeaders(new Response(message, { status: 500 }))
         }
       },
-    },
+    }),
   }
 }
 

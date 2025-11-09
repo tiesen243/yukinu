@@ -36,7 +36,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
           <NuqsAdapter>
             <TRPCReactProvider>
-              <SessionProvider>{children}</SessionProvider>
+              <SessionProvider base='/dashboard'>{children}</SessionProvider>
             </TRPCReactProvider>
           </NuqsAdapter>
 

@@ -19,7 +19,7 @@ import { useTRPCClient } from '@/trpc/react'
 
 //#endregion
 
-export default function RegisterShopPage() {
+export default function DashboardVendorsRegister() {
   return (
     <main className='container py-4'>
       <RegisterShopForm />

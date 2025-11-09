@@ -33,7 +33,7 @@ function TRPCReactProvider({
 
   const configs = {
     transformer: SuperJSON,
-    url: getBaseUrl() + '/api/trpc',
+    url: getBaseUrl() + '/dashboard/api/trpc',
     headers() {
       const headers = new Headers()
       headers.set('x-trpc-source', 'dashboard')
