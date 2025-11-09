@@ -1,7 +1,7 @@
 import type { RouteConfig } from '@react-router/dev/routes'
 import { index, layout, prefix, route } from '@react-router/dev/routes'
 
-export default [
+export default prefix('/dashboard', [
   ...prefix('/api', [
     route('/auth/*', './routes/api/auth.ts'),
     route('/trpc/*', './routes/api/trpc.ts'),
@@ -17,4 +17,4 @@ export default [
       route('/register', './routes/dashboard/vendors/register.tsx'),
     ]),
   ]),
-] satisfies RouteConfig
+]) satisfies RouteConfig
