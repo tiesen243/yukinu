@@ -5,6 +5,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig(({ mode }) => ({
   plugins: [reactRouter(), tailwindcss(), tsconfigPaths()],
+  base: process.env.NODE_ENV === 'production' ? '/' : '/dashboard',
   build: {
     assetsDir: 'dashboard/assets',
     rollupOptions: {

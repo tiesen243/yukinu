@@ -19,9 +19,7 @@ export const metadata = createMetadata({
   openGraph: { url: '/login' },
 })
 
-export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
-  const { redirect_to } = await searchParams
-
+export default function LoginPage() {
   return (
     <>
       <form>
@@ -30,7 +28,7 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
           <FieldDescription>
             Fill in your credentials to access your account.
           </FieldDescription>
-          <LoginForm redirectTo={String(redirect_to ?? '/')} />
+          <LoginForm />
 
           <FieldDescription>
             Don't have an account?{' '}
@@ -47,24 +45,12 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
         </FieldSeparator>
         <Field className='mt-6 grid gap-4 sm:grid-cols-2'>
           <Button variant='outline' asChild>
-            <Link
-              prefetch={false}
-              href={{
-                pathname: '/api/auth/facebook',
-                query: { redirect_to: redirect_to ?? '/' },
-              }}
-            >
+            <Link prefetch={false} href='/api/auth/facebook'>
               <FacebookIcon /> Continue with Facebook
             </Link>
           </Button>
           <Button variant='outline' asChild>
-            <Link
-              prefetch={false}
-              href={{
-                pathname: '/api/auth/google',
-                query: { redirect_to: redirect_to ?? '/' },
-              }}
-            >
+            <Link prefetch={false} href='/api/auth/google'>
               <GoogleIcon /> Continue with Google
             </Link>
           </Button>

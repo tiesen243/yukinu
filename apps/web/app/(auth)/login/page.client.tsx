@@ -10,7 +10,7 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthValidator } from '@yukinu/validators/auth'
 
-export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
+export const LoginForm: React.FC = () => {
   const router = useRouter()
   const { signIn } = useSession()
 
@@ -18,14 +18,8 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
     defaultValues: { identifier: '', password: '' },
     schema: AuthValidator.loginBody,
     onSubmit: (data) => signIn('credentials', data),
-    onSuccess: (data) => {
-      if (redirectTo.startsWith('http') && data) {
-        const url = new URL(redirectTo)
-        url.searchParams.set('token', data.token)
-        url.searchParams.set('expires', new Date(data.expires).toISOString())
-        redirectTo = url.toString()
-      }
-      router.push(redirectTo as never)
+    onSuccess: () => {
+      router.push('/')
       toast.success('Successfully logged in')
     },
     onError: (error) => toast.error(error.message),
