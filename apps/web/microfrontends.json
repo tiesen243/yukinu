@@ -3,12 +3,15 @@
   "applications": {
     "yukinu-web": {
       "packageName": "@yukinu/web",
-      "development": { "fallback": "web.yukinu.tiesen.id.vn" }
+      "development": { "local": 3000, "fallback": "web.yukinu.tiesen.id.vn" }
     },
     "yukinu-dashboard": {
       "packageName": "@yukinu/dashboard",
       "routing": [{ "paths": ["/dashboard", "/dashboard/:path*"] }],
-      "development": { "fallback": "dashboard.yukinu.tiesen.id.vn" }
+      "development": {
+        "local": 3001,
+        "fallback": "dashboard.yukinu.tiesen.id.vn"
+      }
     }
   }
 }

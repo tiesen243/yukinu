@@ -39,8 +39,13 @@ function useSession() {
 
 function SessionProvider({
   session: _session,
+  base = '',
   children,
-}: Readonly<{ children: React.ReactNode; session?: SessionResult }>) {
+}: Readonly<{
+  children: React.ReactNode
+  base?: string
+  session?: SessionResult
+}>) {
   const {
     data: session,
     isLoading,
@@ -48,7 +53,7 @@ function SessionProvider({
   } = useQuery({
     queryKey: ['auth', 'session'],
     queryFn: async ({ signal }) => {
-      const res = await fetch('/api/auth/get-session', {
+      const res = await fetch(`${base}/api/auth/get-session`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
         signal,
@@ -77,7 +82,7 @@ function SessionProvider({
         : [{ redirectUrl?: string }?]
     ): Promise<TData | null> => {
       if (provider === 'credentials') {
-        const res = await fetch('/api/auth/sign-in', {
+        const res = await fetch(`${base}/api/auth/sign-in`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(args[0]),
@@ -93,22 +98,22 @@ function SessionProvider({
         }
       } else {
         const redirectUrl = (args[0] as { redirectUrl?: string }).redirectUrl
-        window.location.href = `/api/auth/${provider}${
+        window.location.href = `${base}/api/auth/${provider}${
           redirectUrl ? `?redirectUrl=${encodeURIComponent(redirectUrl)}` : ''
         }`
         return null
       }
     },
-    [refetch],
+    [base, refetch],
   )
 
   const signOut = React.useCallback(
     async (opts?: { redirectUrl: string }) => {
-      await fetch('/api/auth/sign-out', { method: 'POST' })
+      await fetch(`${base}/api/auth/sign-out`, { method: 'POST' })
       await refetch()
       if (opts?.redirectUrl) window.location.href = opts.redirectUrl
     },
-    [refetch],
+    [base, refetch],
   )
 
   const value = React.useMemo(
