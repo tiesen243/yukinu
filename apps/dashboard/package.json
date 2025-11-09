@@ -6,7 +6,7 @@
   "scripts": {
     "build": "react-router build",
     "clean": "git clean -xdf .cache .react-router .turbo .vercel build node_modules",
-    "dev": "react-router dev --port 6474",
+    "dev": "react-router dev --port $TURBO_MFE_PORT",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "react-router typegen && eslint",
     "start": "react-router-serve build/server/nodejs_*/index.js",
@@ -21,7 +21,6 @@
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
-    "@vercel/microfrontends": "^2.2.0",
     "@vercel/react-router": "^1.2.3",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",

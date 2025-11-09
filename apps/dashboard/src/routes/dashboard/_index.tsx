@@ -1,4 +1,6 @@
-export default function Dashboard() {
+import type { Route } from './+types/_index'
+
+export default function DashboardIndex(_: Route.ComponentProps) {
   return (
     <main className='container py-4'>
       <h1>Welcome to the Dashboard</h1>

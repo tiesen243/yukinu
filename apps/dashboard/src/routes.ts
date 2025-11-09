@@ -1,11 +1,20 @@
 import type { RouteConfig } from '@react-router/dev/routes'
-import { index, layout, route } from '@react-router/dev/routes'
+import { index, layout, prefix, route } from '@react-router/dev/routes'
 
 export default [
-  layout('./routes/layout.tsx', [
-    index('./routes/_index.tsx'),
-    route('/users', './routes/users.tsx'),
-    route('/vendors', './routes/vendors.tsx'),
-    route('/vendors/register', './routes/vendors.register.tsx'),
+  ...prefix('/api', [
+    route('/auth/*', './routes/api/auth.ts'),
+    route('/trpc/*', './routes/api/trpc.ts'),
+  ]),
+
+  layout('./routes/dashboard/layout.tsx', [
+    index('./routes/dashboard/_index.tsx'),
+
+    ...prefix('/users', [index('./routes/dashboard/users/_index.tsx')]),
+
+    ...prefix('/vendors', [
+      index('./routes/dashboard/vendors/_index.tsx'),
+      route('/register', './routes/dashboard/vendors/register.tsx'),
+    ]),
   ]),
 ] satisfies RouteConfig

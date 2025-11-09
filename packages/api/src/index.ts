@@ -4,14 +4,14 @@ import { createTRPCContext } from '@/context'
 import { appRouter } from '@/routers/_app'
 import { createCallerFactory } from '@/trpc'
 
-const handler = async (request: Request) => {
+const handler = async (request: Request, base = '') => {
   let response: Response
 
   if (request.method === 'OPTIONS')
     response = new Response(null, { status: 204 })
   else
     response = await fetchRequestHandler({
-      endpoint: '/api/trpc',
+      endpoint: `${base}/api/trpc`,
       req: request,
       router: appRouter,
       createContext: () => createTRPCContext(request),

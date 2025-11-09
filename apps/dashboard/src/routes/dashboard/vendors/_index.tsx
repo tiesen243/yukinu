@@ -1,6 +1,6 @@
 import { VendorTable } from '@/components/tables/vendor-table'
 
-export default function DashboardVendorsPage() {
+export default function DashboardVendorsIndex() {
   return (
     <main className='container py-4'>
       <h1 className='mb-2 text-3xl font-extrabold'>Vendors Management</h1>
