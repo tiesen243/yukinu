@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.2.0
+
+### Minor Changes
+
+- [#144](https://github.com/tiesen243/yukinu/pull/144) [`2458587`](https://github.com/tiesen243/yukinu/commit/2458587bb31944ce65f0d68fc6bc74117ed30053) Thanks [@tiesen243](https://github.com/tiesen243)! - deploy with microfrontends
+
 ## 0.1.13
 
 ### Patch Changes
