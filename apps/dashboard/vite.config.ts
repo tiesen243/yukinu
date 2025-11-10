@@ -16,5 +16,5 @@ export default defineConfig(({ mode }) => ({
   },
   ...(mode === 'production'
     ? { resolve: { alias: { 'react-dom/server': 'react-dom/server.node' } } }
-    : {}),
+    : { base: '/dashboard' }),
 }))

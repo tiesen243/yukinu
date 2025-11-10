@@ -1,4 +1,3 @@
-//#region imports
 import { Activity } from 'react'
 import { NavLink } from 'react-router'
 
@@ -27,8 +26,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
-
-//#endregion
 
 export const AppSidebarContent: React.FC = () => {
   const { session, status } = useSession()

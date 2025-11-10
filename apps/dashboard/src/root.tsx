@@ -1,4 +1,3 @@
-//#region imports
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import {
   isRouteErrorResponse,
@@ -20,8 +19,6 @@ import type { Route } from './+types/root'
 import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
-
-//#endregion
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -106,6 +103,7 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
+  { rel: "icon", type: "image/x-icon", href: "/dashboard/favicon.ico" },
 ]
 
 export const meta: Route.MetaFunction = () =>

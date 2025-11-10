@@ -1,5 +1,3 @@
-//#region imports
-
 import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
@@ -43,9 +41,6 @@ import { UserValidator } from '@yukinu/validators/user'
 
 import { useTRPC } from '@/trpc/react'
 
-//#endregion
-
-//#region hooks
 export function useUserTable() {
   const trpc = useTRPC()
 
@@ -91,9 +86,7 @@ export function useUserTable() {
     isDeleting,
   }
 }
-//#endregion
 
-//#region user table component
 export const UserTable: React.FC = () => (
   <Table>
     <TableHeader>
@@ -199,9 +192,7 @@ export const UserTableFooter: React.FC = () => {
     </TableRow>
   )
 }
-//#endregion
 
-//#region edit user modal component
 const EditUserModal: React.FC<{
   user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => {
@@ -316,9 +307,7 @@ const EditUserModal: React.FC<{
     </Dialog>
   )
 }
-//#endregion
 
-//#region delete user modal
 export const DeleteUserModal: React.FC<{
   user: RouterOutputs['user']['all']['users'][number]
 }> = ({ user }) => {
