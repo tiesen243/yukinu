@@ -110,6 +110,7 @@ Below are the main scripts available in the project. You can run these using `bu
 - **lint:fix**: Fixes linting issues using ESLint with caching.
 - **lint:ws**: Runs workspace-level linting using Sherif.
 - **prepare**: Sets up Git hooks using Husky.
+- **start:db**: Starts the PostgreSQL database using Docker Compose.
 - **start:dev**: Starts all services in development mode using Docker Compose.
 - **start:prod**: Starts all services in production mode using Docker Compose.
 - **stop:dev**: Stops development Docker Compose services.

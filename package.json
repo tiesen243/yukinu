@@ -23,6 +23,7 @@
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/eslintcache",
     "lint:ws": "bunx sherif@latest",
     "prepare": "husky",
+    "start:db": "docker compose -f ./docker-compose.yml up db -d",
     "start:dev": "docker compose -f ./docker-compose.yml up -d",
     "start:prod": "docker compose -f ./docker-compose.yml -f ./docker-compose.prod.yml up -d",
     "stop:dev": "docker compose -f ./docker-compose.yml down",
