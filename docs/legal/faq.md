@@ -25,7 +25,7 @@ You can disable OAuth and use basic email login during development if needed.
 Because the project is still under development.  
 You can check the current feature list here: [docs/features.md](../features.md)
 
-Upcoming improvements are listed in the todo list: [docs/todo.md](../todo.md)
+Upcoming improvements are listed in the to-do list: [docs/todo.md](../todo.md)
 
 ## 5. I'm running this project locally — why does the database fail to connect?
 
