@@ -1,5 +1,17 @@
 # @yukinu/dashboard
 
+## 0.2.2
+
+### Patch Changes
+
+- [#160](https://github.com/tiesen243/yukinu/pull/160) [`315ea6f`](https://github.com/tiesen243/yukinu/commit/315ea6f626ca9b97c093f2d18626e6ba26d700ed) Thanks [@tiesen243](https://github.com/tiesen243)! - fix assets path
+
+- [#160](https://github.com/tiesen243/yukinu/pull/160) [`3a3a57a`](https://github.com/tiesen243/yukinu/commit/3a3a57aa430a943b29f7b47f312821f5258e803b) Thanks [@tiesen243](https://github.com/tiesen243)! - fix client env in docker deployment
+
+- [#160](https://github.com/tiesen243/yukinu/pull/160) [`7a1b41a`](https://github.com/tiesen243/yukinu/commit/7a1b41ab8aa07b9432f61f9cd611f9ec9a289791) Thanks [@tiesen243](https://github.com/tiesen243)! - correct chown format
+
+- [#160](https://github.com/tiesen243/yukinu/pull/160) [`f62e49d`](https://github.com/tiesen243/yukinu/commit/f62e49d83cc3e35151a23bad1ae65244dc289d69) Thanks [@tiesen243](https://github.com/tiesen243)! - update dockerfile
+
 ## 0.2.1
 
 ### Patch Changes
