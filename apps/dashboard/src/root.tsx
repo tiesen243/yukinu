@@ -13,7 +13,6 @@ import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { Toaster } from '@yukinu/ui/sonner'
-import { env } from '@yukinu/validators/env.vite'
 
 import type { Route } from './+types/root'
 import globalsCss from '@/globals.css?url'
@@ -112,7 +111,7 @@ export const meta: Route.MetaFunction = () =>
     openGraph: {
       images: [
         {
-          url: `${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.VITE_WEB_URL}/api/og?title=Dashboard`,
+          url: `/api/og?title=Dashboard`,
           alt: 'Dashboard - Yukinu',
         },
       ],

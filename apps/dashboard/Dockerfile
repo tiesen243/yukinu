@@ -18,6 +18,7 @@ FROM base AS builder
 WORKDIR /build
 
 COPY --from=prepare /prune/out/json .
+COPY bun.lock ./bun.lock
 RUN bun install
 
 COPY --from=prepare /prune/out/full .
@@ -27,6 +28,15 @@ ENV TURBO_TEAM=$TURBO_TEAM
  
 ARG TURBO_TOKEN
 ENV TURBO_TOKEN=$TURBO_TOKEN
+
+ARG VITE_APP_NAME
+ENV VITE_APP_NAME=$VITE_APP_NAME
+
+ARG VITE_APP_DESCRIPTION
+ENV VITE_APP_DESCRIPTION=$VITE_APP_DESCRIPTION
+
+ARG VITE_TRPC_USE_STREAMING
+ENV VITE_TRPC_USE_STREAMING=$VITE_TRPC_USE_STREAMING
 
 ENV SKIP_ENV_VALIDATION=true
 RUN bun run build
@@ -42,15 +52,15 @@ ENV PORT=3000 \
 
 RUN addgroup --system --gid 1001 yukinu && \
     adduser --system --uid 1001 dashboard
-
-COPY --from=builder /build/apps/dashboard/public ./apps/dashboard/public
+USER dashboard
 
 COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/build ./apps/dashboard/build
+COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/public ./apps/dashboard/public
+
 COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/package.json ./apps/dashboard/package.json
 COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
-
 COPY --from=builder --chown=yukinu:dashboard /build/package.json ./package.json
 COPY --from=builder --chown=yukinu:dashboard /build/node_modules ./node_modules
 
-USER dashboard
+ENV NODE_ENV=production
 CMD ["bun", "--bun", "--filter", "@yukinu/dashboard", "start"]

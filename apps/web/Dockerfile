@@ -18,7 +18,7 @@ FROM base AS builder
 WORKDIR /build
 
 COPY --from=prepare /prune/out/json .
-RUN bun install
+RUN bun ci
 
 COPY --from=prepare /prune/out/full .
 
@@ -27,6 +27,15 @@ ENV TURBO_TEAM=$TURBO_TEAM
  
 ARG TURBO_TOKEN
 ENV TURBO_TOKEN=$TURBO_TOKEN
+
+ARG NEXT_PUBLIC_APP_NAME
+ENV NEXT_PUBLIC_APP_NAME=$NEXT_PUBLIC_APP_NAME
+
+ARG NEXT_PUBLIC_APP_DESCRIPTION
+ENV NEXT_PUBLIC_APP_DESCRIPTION=$NEXT_PUBLIC_APP_DESCRIPTION
+
+ARG NEXT_PUBLIC_TRPC_USE_STREAMING
+ENV NEXT_PUBLIC_TRPC_USE_STREAMING=$NEXT_PUBLIC_TRPC_USE_STREAMING
 
 ENV NEXT_BUILD_OUTPUT=standalone
 ENV SKIP_ENV_VALIDATION=true
@@ -50,4 +59,5 @@ COPY --from=builder --chown=yukinu:web /build/apps/web/.next/standalone ./
 COPY --from=builder --chown=yukinu:web /build/apps/web/.next/static ./apps/web/.next/static
 COPY --from=builder --chown=yukinu:web /build/apps/web/public ./apps/web/public
 
+ENV NODE_ENV=production
 CMD ["bun", "--bun", "run", "apps/web/server.js"]

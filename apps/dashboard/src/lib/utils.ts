@@ -4,7 +4,8 @@ export function getBaseUrl(): string {
   if (typeof window !== 'undefined') return window.location.origin
   else if (env.VITE_VERCEL_ENV === 'preview')
     return `https://${env.VITE_VERCEL_URL}`
-
-  const protocol = import.meta.env.MODE === 'production' ? 'https' : 'http'
-  return `${protocol}://${env.VITE_DASHBOARD_URL}`
+  else if (env.VITE_VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${env.VITE_VERCEL_PROJECT_PRODUCTION_URL}`
+  // eslint-disable-next-line no-restricted-properties
+  return `http://localhost:${process.env.PORT ?? 3001}`
 }

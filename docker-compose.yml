@@ -6,8 +6,13 @@ services:
       args:
         TURBO_TEAM: ${TURBO_TEAM}
         TURBO_TOKEN: ${TURBO_TOKEN}
+        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME}
+        NEXT_PUBLIC_APP_DESCRIPTION: ${NEXT_PUBLIC_APP_DESCRIPTION}
+        NEXT_PUBLIC_TRPC_USE_STREAMING: false
     restart: unless-stopped
     env_file: .env
+    environment:
+      POSTGRES_HOST: db
     expose:
       - '3000'
     depends_on:
@@ -21,8 +26,13 @@ services:
       args:
         TURBO_TEAM: ${TURBO_TEAM}
         TURBO_TOKEN: ${TURBO_TOKEN}
+        VITE_APP_NAME: ${VITE_APP_NAME}
+        VITE_APP_DESCRIPTION: ${VITE_APP_DESCRIPTION}
+        VITE_TRPC_USE_STREAMING: false
     restart: unless-stopped
     env_file: .env
+    environment:
+      POSTGRES_HOST: db
     expose:
       - '3000'
     depends_on:
