@@ -1,0 +1,14 @@
+services:
+  nginx:
+    image: nginx:trixie
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ./tools/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./tools/nginx/certbot-www:/var/www/certbot
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - web
+      - dashboard

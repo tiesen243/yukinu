@@ -1,4 +1,3 @@
-//#region imports
 import { Outlet, redirect } from 'react-router'
 
 import { auth } from '@yukinu/auth'
@@ -7,8 +6,6 @@ import { SidebarInset, SidebarProvider } from '@yukinu/ui/sidebar'
 import type { Route } from './+types/layout'
 import { AppSidebar } from '@/components/app-sidebar'
 import { Header } from '@/components/header'
-
-//#endregion
 
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const cookieHeader = request.headers.get('Cookie') ?? ''

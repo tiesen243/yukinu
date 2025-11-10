@@ -1,4 +1,3 @@
-//#region imports
 import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs'
@@ -32,9 +31,6 @@ import { VendorValidator } from '@yukinu/validators/vendor'
 
 import { useTRPC } from '@/trpc/react'
 
-//#endregion
-
-//#region hooks
 export function useVendorTable() {
   const trpc = useTRPC()
 
@@ -84,9 +80,7 @@ export function useVendorTable() {
     isDeleting,
   }
 }
-//#endregion
 
-//#region vendor table component
 export const VendorTable: React.FC = () => {
   return (
     <Table>
@@ -145,9 +139,6 @@ const VendorTableBody: React.FC = () => {
   ))
 }
 
-//#endregion
-
-//#region edit vendor modal
 export const EditVendorModal: React.FC<{
   vendor: RouterOutputs['vendor']['all']['vendors'][number]
 }> = ({ vendor }) => {
@@ -214,9 +205,7 @@ export const EditVendorModal: React.FC<{
     </Dialog>
   )
 }
-//#endregion
 
-//#region delete vendor modal
 export const DeleteVendorModal: React.FC<{
   vendor: RouterOutputs['vendor']['all']['vendors'][number]
 }> = ({ vendor }) => {
@@ -255,4 +244,3 @@ export const DeleteVendorModal: React.FC<{
     </Dialog>
   )
 }
-//#endregion

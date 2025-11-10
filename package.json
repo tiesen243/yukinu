@@ -9,7 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "bump-deps": "bunx npm-check-updates --deep -u && bun install",
-    "clean": "git clean -xdf node_modules",
+    "clean": "git clean -xdf node_modules out",
     "clean:workspaces": "turbo run clean",
     "db:generate": "turbo run db:generate -F @yukinu/db",
     "db:migrate": "turbo run db:migrate -F @yukinu/db",
@@ -23,6 +23,11 @@
     "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/eslintcache",
     "lint:ws": "bunx sherif@latest",
     "prepare": "husky",
+    "start:db": "docker compose -f ./docker-compose.yml up db -d",
+    "start:dev": "docker compose -f ./docker-compose.yml up -d",
+    "start:prod": "docker compose -f ./docker-compose.yml -f ./docker-compose.prod.yml up -d",
+    "stop:dev": "docker compose -f ./docker-compose.yml down",
+    "stop:prod": "docker compose -f ./docker-compose.yml -f ./docker-compose.prod.yml down",
     "typecheck": "turbo run typecheck"
   },
   "lint-staged": {

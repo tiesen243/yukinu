@@ -54,7 +54,7 @@ function createEnv<
 
   return new Proxy(envData as TResult & TDeriveEnv, {
     get(target, prop) {
-      if (!isServer && prop in opts.server)
+      if (!isServer && prop in _server)
         throw new Error(
           `❌ Attempted to access a server-side environment variable on the client`,
         )

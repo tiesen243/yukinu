@@ -89,3 +89,36 @@ You can test authentication using:
 | Cannot connect to DB        | Check `.env` database host & port            |
 | Website loads but API fails | Verify tRPC URL & proxy config               |
 | OAuth login fails           | Ensure redirect URLs are configured properly |
+
+## 8. Available Scripts
+
+Below are the main scripts available in the project. You can run these using `bun run <script>` or `npm run <script>` from the project root.
+
+- **build**: Builds all packages using Turbo.
+- **bump-deps**: Updates all dependencies recursively and reinstalls them.
+- **clean**: Removes all untracked files, `node_modules`, and `out` directories.
+- **clean:workspaces**: Cleans all workspaces using Turbo.
+- **db:generate**: Runs Prisma schema generation for the database package.
+- **db:migrate**: Applies database migrations for the database package.
+- **db:push**: Pushes the Prisma schema to the database for the database package.
+- **db:studio**: Opens Prisma Studio for the database package.
+- **dev**: Starts development servers for all packages using Turbo.
+- **format**: Checks code formatting using Prettier with caching.
+- **format:fix**: Fixes code formatting issues using Prettier with caching.
+- **postinstall**: Runs workspace linting after dependencies are installed.
+- **lint**: Checks code for linting issues using ESLint with caching.
+- **lint:fix**: Fixes linting issues using ESLint with caching.
+- **lint:ws**: Runs workspace-level linting using Sherif.
+- **prepare**: Sets up Git hooks using Husky.
+- **start:db**: Starts the PostgreSQL database using Docker Compose.
+- **start:dev**: Starts all services in development mode using Docker Compose.
+- **start:prod**: Starts all services in production mode using Docker Compose.
+- **stop:dev**: Stops development Docker Compose services.
+- **stop:prod**: Stops production Docker Compose services.
+- **typecheck**: Runs TypeScript type checking for all packages.
+
+You can run scripts for specific packages by using the `--filter` option with Bun or npm. For example, to run the development server for the web package only:
+
+```bash
+bun --filter @yukinu/<package> <script>
+```

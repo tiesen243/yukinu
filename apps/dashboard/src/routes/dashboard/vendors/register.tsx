@@ -1,4 +1,3 @@
-//#region imports
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
@@ -16,8 +15,6 @@ import { Textarea } from '@yukinu/ui/textarea'
 import { VendorValidator } from '@yukinu/validators/vendor'
 
 import { useTRPCClient } from '@/trpc/react'
-
-//#endregion
 
 export default function DashboardVendorsRegister() {
   return (
