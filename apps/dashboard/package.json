@@ -13,9 +13,6 @@
     "typecheck": "react-router typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
-  "overrides": {
-    "vite": "npm:rolldown-vite@7.1.14"
-  },
   "dependencies": {
     "@react-router/node": "^7.9.5",
     "@tanstack/react-query": "catalog:",

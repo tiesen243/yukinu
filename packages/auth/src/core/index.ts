@@ -325,7 +325,7 @@ const DEFAULT_OPTIONS = {
   cookieOptions: {
     path: '/',
     httpOnly: true,
-    secure: env.VERCEL_ENV === 'production',
+    secure: env.NODE_ENV === 'production',
     sameSite: 'Lax',
   },
 } as const satisfies Omit<
