@@ -18,6 +18,8 @@ Run in project root directory:
 
 ```bash
 docker compose up -d --build
+# production
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 Check running services:
@@ -36,6 +38,8 @@ docker compose logs -f
 
 ```bash
 docker compose down
+# production
+docker compose -f docker-compose.yml -f docker-compose.prod.yml down
 ```
 
 ## Rebuild After Code Changes
@@ -80,8 +84,15 @@ web:
   build:
     context: .
     dockerfile: ./apps/web/Dockerfile
+    args:
+      TURBO_TEAM: ${TURBO_TEAM}
+      TURBO_TOKEN: ${TURBO_TOKEN}
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME}
+      NEXT_PUBLIC_TRPC_USE_STREAMING: false
   restart: unless-stopped
   env_file: .env
+  environment:
+    POSTGRES_HOST: db
   expose:
     - '3000'
   depends_on:
@@ -99,8 +110,15 @@ dashboard:
   build:
     context: .
     dockerfile: ./apps/dashboard/Dockerfile
+    args:
+      TURBO_TEAM: ${TURBO_TEAM}
+      TURBO_TOKEN: ${TURBO_TOKEN}
+      VITE_APP_NAME: ${VITE_APP_NAME}
+      VITE_TRPC_USE_STREAMING: false
   restart: unless-stopped
   env_file: .env
+  environment:
+    POSTGRES_HOST: db
   expose:
     - '3000'
   depends_on:
@@ -113,6 +131,35 @@ dashboard:
 - Acts as a reverse proxy for Web & Dashboard
 - Supports SSL configuration (Certbot-ready)
 - Maps HTTP/HTTPS ports
+
+##### Development setup:
+
+```yaml
+nginx:
+  image: nginx:trixie
+  restart: unless-stopped
+  ports:
+    - '80:80'
+    - '443:443'
+  volumes:
+    - ./tools/nginx/default.dev.conf:/etc/nginx/conf.d/default.conf
+    - ./tools/nginx/certbot-www:/var/www/certbot
+    - ./tools/nginx/certs:/etc/letsencrypt/live/localhost
+  depends_on:
+    - web
+    - dashboard
+```
+
+To create self-signed certificates for local development, run:
+
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout ./tools/nginx/certs/fullchain.pem \
+  -out ./tools/nginx/certs/privkey.pem \
+  -subj "/CN=localhost"
+```
+
+##### Production setup:
 
 ```yaml
 nginx:
@@ -138,7 +185,7 @@ nginx:
 
 ```yaml
 db:
-  image: postgres:18
+  image: postgres:18.0
   restart: unless-stopped
   environment:
     POSTGRES_USER: '${POSTGRES_USER}'

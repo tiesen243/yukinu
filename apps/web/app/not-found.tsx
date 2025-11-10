@@ -10,7 +10,7 @@ export default function DocsNotFoundError() {
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <Image
         src='/assets/images/yuki.webp'
-        alt='Yukinu Mascot'
+        alt='Mascot'
         width={192}
         height={192}
         className='size-48 object-cover select-none'

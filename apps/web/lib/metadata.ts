@@ -10,10 +10,12 @@ export interface Metadata extends NextMetadata {
 
 export function createMetadata(override: Metadata = {}): Metadata {
   const siteName = env.NEXT_PUBLIC_APP_NAME
+  const siteDescription =
+    'An e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience.'
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
-  const description = override.description ?? env.NEXT_PUBLIC_APP_DESCRIPTION
+  const description = override.description ?? siteDescription
 
   const url = override.openGraph?.url
     ? `${baseUrl}${override.openGraph.url}`
@@ -34,9 +36,15 @@ export function createMetadata(override: Metadata = {}): Metadata {
     applicationName: siteName,
     title,
     description,
+    abstract: siteDescription,
+    category: 'E-commerce',
+    classification: 'E-commerce Platform',
     authors: { name: 'Tiesen', url: 'https://tiesen.id.vn' },
     referrer: 'origin-when-cross-origin',
     robots: 'index, follow',
+    assets: `${baseUrl}/assets`,
+    manifest: `${baseUrl}/site.webmanifest`,
+    pinterest: { richPin: true },
     openGraph: {
       ...override.openGraph,
       title,
@@ -45,6 +53,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
       url,
       images,
       locale: override.openGraph?.locale ?? 'en_US',
+      determiner: 'the',
       type: 'website',
     },
     twitter: {
@@ -61,9 +70,12 @@ export function createMetadata(override: Metadata = {}): Metadata {
         : override.keywords
           ? [override.keywords]
           : []),
-      'yukinu',
-      'e-commerce',
-      'multi-vendor',
+      'multi-vendor e-commerce platform',
+      'e-commerce marketplace',
+      'online shopping marketplace',
+      'multi-seller marketplace',
+      'discover products from multiple sellers',
+      'secure online shopping',
     ],
     generator: 'Next.js',
 

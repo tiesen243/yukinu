@@ -16,7 +16,7 @@ export const metadata = createMetadata({
     images: [
       {
         url: `/api/og?title=${encodeURIComponent(TITLE)}&description=${encodeURIComponent(DESCRIPTION)}`,
-        alt: 'Yukinu Home Page',
+        alt: 'Home Page',
       },
     ],
   },
@@ -25,7 +25,7 @@ export const metadata = createMetadata({
 export default function HomePage() {
   return (
     <main className='flex-1'>
-      <h1 className='sr-only'>Yukinu Home Page</h1>
+      <h1 className='sr-only'>Home Page</h1>
       <HeroSection />
       <StatisticsSection />
       <FeaturesSection />

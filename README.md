@@ -18,7 +18,7 @@
   </a>
 </p>
 
-Yukinu is a scalable multi-vendor e-commerce platform built with a modern monorepo architecture. It features dedicated apps for customers and vendors, unified APIs, and robust shared packages for authentication, UI, and validation.
+An e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience
 
 ## Tech Stack
 

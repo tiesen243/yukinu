@@ -3,7 +3,7 @@ FROM oven/bun:latest AS base
 # ===========================================
 # Stage 1: Prune application dependencies
 # ===========================================
-FROM base AS pruner
+FROM base AS prepare
 WORKDIR /prune
 
 RUN bun install -g turbo
@@ -17,12 +17,25 @@ RUN turbo prune @yukinu/dashboard --docker
 FROM base AS builder
 WORKDIR /build
 
-COPY --from=pruner /prune/out/json .
-COPY --from=pruner /prune/out/bun.lock .
-RUN bun install --no-save
+COPY --from=prepare /prune/out/json .
+COPY bun.lock ./bun.lock
+RUN bun install
 
-COPY --from=pruner /prune/out/full .
-COPY .env .env
+COPY --from=prepare /prune/out/full .
+
+ARG TURBO_TEAM
+ENV TURBO_TEAM=$TURBO_TEAM
+ 
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=$TURBO_TOKEN
+
+ARG VITE_APP_NAME
+ENV VITE_APP_NAME=$VITE_APP_NAME
+
+ARG VITE_TRPC_USE_STREAMING
+ENV VITE_TRPC_USE_STREAMING=$VITE_TRPC_USE_STREAMING
+
+ENV SKIP_ENV_VALIDATION=true
 RUN bun run build
 
 # ===========================================
@@ -31,11 +44,20 @@ RUN bun run build
 FROM base AS runner
 WORKDIR /app
 
-COPY --from=builder /build/apps/dashboard/build ./apps/dashboard/build
-COPY --from=builder /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
-COPY --from=builder /build/node_modules ./node_modules
-COPY .env .env
+ENV PORT=3000 \
+    HOSTNAME="0.0.0.0"
 
-ENV PORT=3000
-WORKDIR /app/apps/dashboard
-CMD ["bun", "--env-file=.env", "react-router-serve", "build/server/index.js"]
+RUN addgroup --system --gid 1001 yukinu && \
+    adduser --system --uid 1002 dashboard
+USER dashboard
+
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./apps/dashboard/build
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/public ./apps/dashboard/public/dashboard
+
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/package.json ./apps/dashboard/package.json
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
+COPY --from=builder --chown=dashboard:yukinu /build/package.json ./package.json
+COPY --from=builder --chown=dashboard:yukinu /build/node_modules ./node_modules
+
+ENV NODE_ENV=production
+CMD ["bun", "--bun", "--filter", "@yukinu/dashboard", "start"]

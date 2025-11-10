@@ -1,5 +1,6 @@
 import '@yukinu/validators/env'
 
+import path from 'node:path'
 import type { NextConfig } from 'next'
 
 const nextConfig = {
@@ -22,7 +23,7 @@ const nextConfig = {
   // Enable standalone build output if specified (for Docker deployment)
   ...(process.env.NEXT_BUILD_OUTPUT === 'standalone' && {
     output: 'standalone',
-    outputFileTracing: true,
+    outputFileTracingRoot: path.join(__dirname, '../../'),
   }),
 } satisfies NextConfig
 

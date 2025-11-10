@@ -1,4 +1,3 @@
-//#region imports
 import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import {
   isRouteErrorResponse,
@@ -14,14 +13,11 @@ import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { Toaster } from '@yukinu/ui/sonner'
-import { env } from '@yukinu/validators/env.vite'
 
 import type { Route } from './+types/root'
 import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
 import { TRPCReactProvider } from '@/trpc/react'
-
-//#endregion
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -76,7 +72,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <img
         src='/assets/images/yuki.webp'
-        alt='Yukinu Mascot'
+        alt='Mascot'
         className='size-48 object-cover select-none'
         draggable={false}
       />
@@ -106,6 +102,7 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
+  { rel: "icon", type: "image/x-icon", href: "/dashboard/favicon.ico" },
 ]
 
 export const meta: Route.MetaFunction = () =>
@@ -114,8 +111,8 @@ export const meta: Route.MetaFunction = () =>
     openGraph: {
       images: [
         {
-          url: `${import.meta.env.MODE === 'production' ? 'https' : 'http'}://${env.VITE_WEB_URL}/api/og?title=Dashboard`,
-          alt: 'Dashboard - Yukinu',
+          url: `/api/og?title=Dashboard`,
+          alt: 'Dashboard',
         },
       ],
     },

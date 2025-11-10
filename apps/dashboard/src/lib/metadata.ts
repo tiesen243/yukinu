@@ -18,7 +18,9 @@ export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
   const baseUrl = getBaseUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
-  const description = override.description ?? env.VITE_APP_DESCRIPTION
+  const description =
+    override.description ??
+    'An e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience.'
   const url = override.openGraph?.url
     ? `${baseUrl}${override.openGraph.url}`
     : baseUrl
@@ -59,7 +61,14 @@ export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
     // Keywords
     {
       name: 'keywords',
-      content: ['yukinu', 'e-commerce', 'multi-vendor'].join(', '),
+      content: [
+        'multi-vendor e-commerce platform',
+        'e-commerce marketplace',
+        'online shopping marketplace',
+        'multi-seller marketplace',
+        'discover products from multiple sellers',
+        'secure online shopping',
+      ].join(', '),
     },
 
     // Generator

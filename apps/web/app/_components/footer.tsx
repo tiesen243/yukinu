@@ -30,7 +30,9 @@ export function Footer() {
             <Brand titleClassName='font-semibold' />
 
             <p className='text-sm text-muted-foreground'>
-              {env.NEXT_PUBLIC_APP_DESCRIPTION}
+              An e-commerce platform that enables customers to discover,
+              compare, and purchase products from multiple sellers in one place,
+              with fast browsing, secure checkout, and a smooth user experience
             </p>
 
             <div className='flex gap-6'>

@@ -44,7 +44,6 @@ out/
 
 # misc
 .cache/
-.husky/_
 tmp/
 .DS_Store
 Thumbs.db

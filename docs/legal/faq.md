@@ -25,7 +25,7 @@ You can disable OAuth and use basic email login during development if needed.
 Because the project is still under development.  
 You can check the current feature list here: [docs/features.md](../features.md)
 
-Upcoming improvements are listed in the todo list: [docs/todo.md](../todos.md)
+Upcoming improvements are listed in the to-do list: [docs/todo.md](../todo.md)
 
 ## 5. I'm running this project locally — why does the database fail to connect?
 
@@ -74,7 +74,7 @@ Some actions may be simulated without actual delivery.
 If using Docker:
 
 ```bash
-docker compose down -v
+docker compose down --remove-orphans --volumes
 docker compose up --build -d
 ```
 
@@ -82,6 +82,6 @@ This resets the database and all persisted data in volumes.
 
 ## 10. Who maintains Yukinu?
 
-This project is created and maintained by Trần Tiến for educational purposes.
+This project is created and maintained by [Trần Tiến](https://tiesen.id.vn) for educational purposes.
 
 If you have additional questions, feel free to create an issue on GitHub.

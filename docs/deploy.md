@@ -40,7 +40,7 @@ vi .env
 ### 3. Run Services with Docker Compose
 
 ```bash
-docker compose up -d --build
+bun start:prod
 ```
 
 ### 4. Verify Deployment
@@ -85,4 +85,4 @@ You can use Neon for a serverless PostgreSQL instance:
 
 - Create a database at neon.tech
 - Copy the database config
-- Set the `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DATABASE`, `POSTGRES_HOST`, and `POSTGRES_PORT` environment variables in Vercel.
+- Set environment variables in Vercel.
