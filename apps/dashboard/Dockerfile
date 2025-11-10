@@ -55,7 +55,7 @@ RUN addgroup --system --gid 1001 yukinu && \
 USER dashboard
 
 COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/build ./apps/dashboard/build
-COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/public ./apps/dashboard/public
+COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/public ./apps/dashboard/public/dashboard
 
 COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/package.json ./apps/dashboard/package.json
 COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
