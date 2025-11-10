@@ -72,7 +72,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <img
         src='/assets/images/yuki.webp'
-        alt='Yukinu Mascot'
+        alt='Mascot'
         className='size-48 object-cover select-none'
         draggable={false}
       />
@@ -112,7 +112,7 @@ export const meta: Route.MetaFunction = () =>
       images: [
         {
           url: `/api/og?title=Dashboard`,
-          alt: 'Dashboard - Yukinu',
+          alt: 'Dashboard',
         },
       ],
     },

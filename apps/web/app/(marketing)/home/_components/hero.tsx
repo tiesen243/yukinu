@@ -36,7 +36,7 @@ export function HeroSection() {
                 target='_blank'
                 rel='noopener noreferrer'
               >
-                Learn more about Yukinu platform
+                Learn more about our platform
               </a>
             </Button>
           </div>

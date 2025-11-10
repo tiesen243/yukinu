@@ -17,7 +17,9 @@ This document explains how to build and run Yukinu services using Docker and Doc
 Run in project root directory:
 
 ```bash
-docker compose up -d --build
+docker compose -f docker-compose.dev.yml up -d --build
+# or
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 Check running services:
@@ -35,7 +37,9 @@ docker compose logs -f
 ## Stop Services
 
 ```bash
-docker compose down
+docker compose -f docker-compose.dev.yml down
+# or
+docker compose -f docker-compose.prod.yml down
 ```
 
 ## Rebuild After Code Changes
@@ -80,8 +84,15 @@ web:
   build:
     context: .
     dockerfile: ./apps/web/Dockerfile
+    args:
+      TURBO_TEAM: ${TURBO_TEAM}
+      TURBO_TOKEN: ${TURBO_TOKEN}
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME}
+      NEXT_PUBLIC_TRPC_USE_STREAMING: false
   restart: unless-stopped
   env_file: .env
+  environment:
+    POSTGRES_HOST: db
   expose:
     - '3000'
   depends_on:
@@ -99,8 +110,15 @@ dashboard:
   build:
     context: .
     dockerfile: ./apps/dashboard/Dockerfile
+    args:
+      TURBO_TEAM: ${TURBO_TEAM}
+      TURBO_TOKEN: ${TURBO_TOKEN}
+      VITE_APP_NAME: ${VITE_APP_NAME}
+      VITE_TRPC_USE_STREAMING: false
   restart: unless-stopped
   env_file: .env
+  environment:
+    POSTGRES_HOST: db
   expose:
     - '3000'
   depends_on:
@@ -138,7 +156,7 @@ nginx:
 
 ```yaml
 db:
-  image: postgres:18
+  image: postgres:18.0
   restart: unless-stopped
   environment:
     POSTGRES_USER: '${POSTGRES_USER}'
