@@ -17,9 +17,9 @@ This document explains how to build and run Yukinu services using Docker and Doc
 Run in project root directory:
 
 ```bash
-docker compose -f docker-compose.dev.yml up -d --build
-# or
-docker compose -f docker-compose.prod.yml up -d --build
+docker compose up -d --build
+# production
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
 ```
 
 Check running services:
@@ -37,9 +37,9 @@ docker compose logs -f
 ## Stop Services
 
 ```bash
-docker compose -f docker-compose.dev.yml down
-# or
-docker compose -f docker-compose.prod.yml down
+docker compose down
+# production
+docker compose -f docker-compose.yml -f docker-compose.prod.yml down
 ```
 
 ## Rebuild After Code Changes
@@ -131,6 +131,35 @@ dashboard:
 - Acts as a reverse proxy for Web & Dashboard
 - Supports SSL configuration (Certbot-ready)
 - Maps HTTP/HTTPS ports
+
+##### Development setup:
+
+```yaml
+nginx:
+  image: nginx:trixie
+  restart: unless-stopped
+  ports:
+    - '80:80'
+    - '443:443'
+  volumes:
+    - ./tools/nginx/default.dev.conf:/etc/nginx/conf.d/default.conf
+    - ./tools/nginx/certbot-www:/var/www/certbot
+    - ./tools/nginx/certs:/etc/letsencrypt/live/localhost
+  depends_on:
+    - web
+    - dashboard
+```
+
+To create self-signed certificates for local development, run:
+
+```bash
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout ./tools/nginx/certs/fullchain.pem \
+  -out ./tools/nginx/certs/privkey.pem \
+  -subj "/CN=localhost"
+```
+
+##### Production setup:
 
 ```yaml
 nginx:

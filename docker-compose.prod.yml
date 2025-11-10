@@ -1,42 +1,4 @@
 services:
-  web:
-    build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
-      args:
-        TURBO_TEAM: ${TURBO_TEAM}
-        TURBO_TOKEN: ${TURBO_TOKEN}
-        NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME}
-        NEXT_PUBLIC_TRPC_USE_STREAMING: false
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      POSTGRES_HOST: db
-    expose:
-      - '3000'
-    depends_on:
-      db:
-        condition: service_healthy
-
-  dashboard:
-    build:
-      context: .
-      dockerfile: ./apps/dashboard/Dockerfile
-      args:
-        TURBO_TEAM: ${TURBO_TEAM}
-        TURBO_TOKEN: ${TURBO_TOKEN}
-        VITE_APP_NAME: ${VITE_APP_NAME}
-        VITE_TRPC_USE_STREAMING: false
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      POSTGRES_HOST: db
-    expose:
-      - '3000'
-    depends_on:
-      db:
-        condition: service_healthy
-
   nginx:
     image: nginx:trixie
     restart: unless-stopped
@@ -50,25 +12,3 @@ services:
     depends_on:
       - web
       - dashboard
-
-  db:
-    image: postgres:18.0
-    restart: unless-stopped
-    environment:
-      POSTGRES_USER: '${POSTGRES_USER}'
-      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
-      POSTGRES_DB: '${POSTGRES_DATABASE}'
-    ports:
-      - '${POSTGRES_PORT:-5432}:5432'
-    volumes:
-      - pg_data:/var/lib/postgresql
-    healthcheck:
-      test:
-        ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DATABASE}']
-      interval: 5s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
-
-volumes:
-  pg_data:
