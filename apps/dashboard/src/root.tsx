@@ -102,18 +102,12 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
-  { rel: "icon", type: "image/x-icon", href: "/dashboard/favicon.ico" },
 ]
 
 export const meta: Route.MetaFunction = () =>
   createMetadata({
     title: 'Dashboard',
     openGraph: {
-      images: [
-        {
-          url: `/api/og?title=Dashboard`,
-          alt: 'Dashboard',
-        },
-      ],
+      images: [{ url: `/api/og?title=Dashboard`, alt: 'Dashboard' }],
     },
   })

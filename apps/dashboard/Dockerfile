@@ -52,12 +52,11 @@ RUN addgroup --system --gid 1001 yukinu && \
 USER dashboard
 
 COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./apps/dashboard/build
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/public ./apps/dashboard/public/dashboard
-
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/package.json ./apps/dashboard/package.json
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/public ./apps/dashboard/public
 COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
-COPY --from=builder --chown=dashboard:yukinu /build/package.json ./package.json
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/package.json ./apps/dashboard/package.json
 COPY --from=builder --chown=dashboard:yukinu /build/node_modules ./node_modules
+COPY --from=builder --chown=dashboard:yukinu /build/package.json ./package.json
 
 ENV NODE_ENV=production
 CMD ["bun", "--bun", "--filter", "@yukinu/dashboard", "start"]
