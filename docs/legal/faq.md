@@ -82,6 +82,6 @@ This resets the database and all persisted data in volumes.
 
 ## 10. Who maintains Yukinu?
 
-This project is created and maintained by (Trần Tiến)[https://tiesen.id.vn] for educational purposes.
+This project is created and maintained by [Trần Tiến](https://tiesen.id.vn) for educational purposes.
 
 If you have additional questions, feel free to create an issue on GitHub.

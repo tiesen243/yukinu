@@ -48,16 +48,16 @@ ENV PORT=3000 \
     HOSTNAME="0.0.0.0"
 
 RUN addgroup --system --gid 1001 yukinu && \
-    adduser --system --uid 1001 dashboard
+    adduser --system --uid 1002 dashboard
 USER dashboard
 
-COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/build ./apps/dashboard/build
-COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/public ./apps/dashboard/public/dashboard
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./apps/dashboard/build
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/public ./apps/dashboard/public/dashboard
 
-COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/package.json ./apps/dashboard/package.json
-COPY --from=builder --chown=yukinu:dashboard /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
-COPY --from=builder --chown=yukinu:dashboard /build/package.json ./package.json
-COPY --from=builder --chown=yukinu:dashboard /build/node_modules ./node_modules
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/package.json ./apps/dashboard/package.json
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
+COPY --from=builder --chown=dashboard:yukinu /build/package.json ./package.json
+COPY --from=builder --chown=dashboard:yukinu /build/node_modules ./node_modules
 
 ENV NODE_ENV=production
 CMD ["bun", "--bun", "--filter", "@yukinu/dashboard", "start"]
