@@ -1,57 +1,74 @@
 import * as z from 'zod'
 
-import { passwordSchema } from '@/lib/shared'
+import { paginationInputSchema, paginationOutputSchema } from '@/lib/shared'
 
-export namespace UserValidator {
-  // prettier-ignore
-  export const roles = ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'] as const
+export namespace UserModels {
+  //#region User Schema
+  export const roles = [
+    'admin',
+    'moderator',
+    'vendor_owner',
+    'vendor_staff',
+    'user',
+  ] as const
   export type Role = (typeof roles)[number]
 
   export const statuses = ['active', 'inactive'] as const
   export type Status = (typeof statuses)[number]
 
-  export const allParams = z.object({
-    search: z.string().max(100, 'Search query is too long'),
-    page: z
-      .number()
-      .int('Page must be an integer')
-      .min(1, 'Page must be at least 1')
-      .default(1),
-    limit: z
-      .number()
-      .int('Limit must be an integer')
-      .min(1, 'Limit must be at least 1')
-      .max(100, 'Limit cannot exceed 100')
-      .default(10),
+  export const user = z.object({
+    id: z.cuid2('Invalid user ID'),
+    username: z.string('Username must be a string').min(4).max(100),
+    email: z.email('Invalid email address'),
+    emailVerified: z.date('Email verified must be a date').nullable(),
+    role: z.enum(roles, 'Invalid user role'),
+    status: z.enum(statuses, 'Invalid user status'),
+    createdAt: z.date(),
+    updatedAt: z.date(),
   })
-  export type AllParams = z.infer<typeof allParams>
+  export type User = z.infer<typeof user>
+  //#endregion
 
-  export const oneParams = z.object({
-    userId: z.cuid2('Invalid user ID'),
-  })
-  export type OneParams = z.infer<typeof oneParams>
+  //#region All Users Schema
+  export const allInput = paginationInputSchema.extend({ search: z.string() })
+  export type AllInput = z.infer<typeof allInput>
 
-  export const updateUserBody = z.object({
-    userId: z.cuid2('Invalid user ID'),
-    role: z.enum(roles, { error: 'Invalid role' }),
-    status: z.enum(statuses, { error: 'Invalid status' }),
-    password: passwordSchema.optional(),
+  export const allOutput = z.object({
+    users: z.array(
+      user.pick({
+        id: true,
+        username: true,
+        role: true,
+        status: true,
+        updatedAt: true,
+      }),
+    ),
+    pagination: paginationOutputSchema,
   })
-  export type UpdateUserBody = z.infer<typeof updateUserBody>
+  export type AllOutput = z.infer<typeof allOutput>
+  //#endregion
 
-  export const updateProfileBody = z.object({
-    avatarUrl: z.url('Invalid avatar URL'),
-    fullName: z
-      .string()
-      .min(1, 'Full name cannot be empty')
-      .max(100, 'Full name is too long'),
-    gender: z
-      .string()
-      .min(1, 'Gender cannot be empty')
-      .max(50, 'Gender is too long'),
-    dateOfBirth: z.iso.date('Invalid date format'),
-    website: z.url('Invalid URL').optional(),
-    bio: z.string().max(160, 'Bio is too long'),
-  })
-  export type UpdateProfileBody = z.infer<typeof updateProfileBody>
+  //#region One User Schema
+  export const oneInput = user.pick({ id: true })
+  export type OneInput = z.infer<typeof oneInput>
+
+  export const oneOutput = user.nullable()
+  export type OneOutput = z.infer<typeof oneOutput>
+  //#endregion
+
+  //#region Update User Schema
+  export const updateInput = user.pick({ id: true, role: true, status: true })
+  export type UpdateInput = z.infer<typeof updateInput>
+
+  export const updateOutput = z.object({ userId: user.shape.id })
+  export type UpdateOutput = z.infer<typeof updateOutput>
+  //#endregion
+
+  //#region Delete User Schema
+  export const deleteInput = oneInput
+  export type DeleteInput = z.infer<typeof deleteInput>
+
+  export const deleteOutput = z.object({ userId: user.shape.id })
+  export type DeleteOutput = z.infer<typeof deleteOutput>
+  //#endregion
 }

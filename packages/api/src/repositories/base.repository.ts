@@ -68,36 +68,39 @@ export abstract class BaseRepository<TTable extends PgTable>
   public async create(
     data: TTable['$inferInsert'],
     tx = this._db,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] }> {
     const [result] = await tx
       .insert(this._table as never)
       .values(data)
       .returning({ id: this._table.id })
-    return result ?? null
+    if (!result) throw new Error('Failed to create record')
+    return result
   }
 
   public async update(
     id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
     tx = this._db,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] }> {
     const [result] = await tx
       .update(this._table as never)
       .set(data)
       .where(eq(this._table.id, id as unknown as string))
       .returning({ id: this._table.id })
-    return result ?? null
+    if (!result) throw new Error('Failed to update record')
+    return result
   }
 
   public async delete(
     id: TTable['$inferSelect']['id'],
     tx = this._db,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] }> {
     const [result] = await tx
       .delete(this._table as never)
       .where(eq(this._table.id, id as unknown as string))
       .returning({ id: this._table.id })
-    return result ?? null
+    if (!result) throw new Error('Failed to delete record')
+    return result
   }
 
   protected buildCriteria(

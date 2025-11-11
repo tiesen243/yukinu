@@ -1,4 +1,4 @@
-import { VendorValidator } from '@yukinu/validators/vendor'
+import { VendorModels } from '@yukinu/validators/vendor'
 
 import { createTRPCRouter, protectedProcedure } from '@/trpc'
 
@@ -8,14 +8,16 @@ export const vendorRouter = createTRPCRouter({
       message: 'Vendors retrieved successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(VendorValidator.allParams)
+    .input(VendorModels.allInput)
+    .output(VendorModels.allOutput)
     .query(({ ctx, input }) => ctx.vendorService.all(input)),
 
   register: protectedProcedure
-    .meta({ message: 'Vendor registered successfully' })
-    .input(VendorValidator.registerBody)
+    .meta({ message: 'Vendor registered successfully', roles: ['user'] })
+    .input(VendorModels.registerInput)
+    .output(VendorModels.registerOutput)
     .mutation(({ ctx, input }) =>
-      ctx.vendorService.register({ ...input, ownerId: ctx.session.user.id }),
+      ctx.vendorService.register({ ...input, userId: ctx.session.user.id }),
     ),
 
   update: protectedProcedure
@@ -23,7 +25,8 @@ export const vendorRouter = createTRPCRouter({
       message: 'Vendor updated successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(VendorValidator.updateBody)
+    .input(VendorModels.updateInput)
+    .output(VendorModels.updateOutput)
     .mutation(({ ctx, input }) => ctx.vendorService.update(input)),
 
   delete: protectedProcedure
@@ -31,14 +34,7 @@ export const vendorRouter = createTRPCRouter({
       message: 'Vendor deleted successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(VendorValidator.oneParams)
+    .input(VendorModels.deleteInput)
+    .output(VendorModels.deleteOutput)
     .mutation(({ ctx, input }) => ctx.vendorService.delete(input)),
-
-  invite: protectedProcedure
-    .meta({
-      message: 'Vendor invitation sent successfully',
-      roles: ['admin', 'moderator', 'vendor_owner'],
-    })
-    .input(VendorValidator.inviteBody)
-    .mutation(({ ctx, input }) => ctx.vendorService.inviteMember(input)),
 })

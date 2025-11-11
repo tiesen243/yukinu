@@ -1,4 +1,3 @@
-import type { Database } from '@yukinu/db'
 import type { vendors } from '@yukinu/db/schema/vendor'
 
 import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
@@ -32,38 +31,4 @@ export class VendorRepository
       updatedAt: new Date('2023-06-15T12:00:00Z'),
     },
   ]
-
-  findWithOwner(
-    _criteria: Partial<typeof vendors.$inferSelect>[],
-    _limit: number,
-    _offset: number,
-    _tx?: Database,
-  ): Promise<IVendorRepository.FindWithOwnerResult[]> {
-    return Promise.resolve(
-      this._data.map((vendor) => ({
-        ...vendor,
-        owner: 'Mock Owner',
-      })),
-    )
-  }
-
-  getMember(
-    vendorId: string,
-    userId: string,
-    _tx?: Database,
-  ): Promise<{ id: string } | null> {
-    const vendor = this._data.find((v) => v.id === vendorId)
-    if (vendor?.ownerId === userId) return Promise.resolve({ id: 'member-1' })
-    return Promise.resolve(null)
-  }
-
-  addMember(
-    vendorId: string,
-    _userId: string,
-    _tx?: Database,
-  ): Promise<{ id: string } | null> {
-    const vendor = this._data.find((v) => v.id === vendorId)
-    if (!vendor) return Promise.resolve(null)
-    return Promise.resolve({ id: 'new-member-1' })
-  }
 }

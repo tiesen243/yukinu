@@ -1,17 +1,23 @@
 import * as z from 'zod'
 
-import { passwordSchema, usernameSchema } from '@/lib/shared'
+import { identifierSchema, passwordSchema } from '@/lib/shared'
 
-export namespace AuthValidator {
-  export const loginBody = z.object({
-    identifier: z.union([usernameSchema, z.email('Invalid email address')]),
+export namespace AuthModels {
+  //#region Login Schema
+  export const loginInput = z.object({
+    identifier: identifierSchema,
     password: passwordSchema,
   })
-  export type LoginBody = z.infer<typeof loginBody>
+  export type LoginInput = z.infer<typeof loginInput>
 
-  export const registerBody = z
+  export const loginOutput = z.object({ token: z.string(), expires: z.date() })
+  export type LoginOutput = z.infer<typeof loginOutput>
+  //#endregion
+
+  //#region Register Schema
+  export const registerInput = z
     .object({
-      username: usernameSchema,
+      username: identifierSchema,
       email: z.email('Invalid email address'),
       password: passwordSchema,
       confirmPassword: passwordSchema,
@@ -20,18 +26,28 @@ export namespace AuthValidator {
       error: 'Passwords do not match',
       path: ['confirmPassword'],
     })
-  export type RegisterBody = z.infer<typeof registerBody>
+  export type RegisterInput = z.infer<typeof registerInput>
 
-  export const changePasswordBody = z
+  export const registerOutput = z.object({ userId: z.string() })
+  export type RegisterOutput = z.infer<typeof registerOutput>
+  //#endregion
+
+  //#region Change Password Schema
+  export const changePasswordInput = z
     .object({
-      currentPassword: z.string().optional(),
+      userId: z.cuid2('Invalid user ID'),
+      currentPassword: passwordSchema.optional(),
       newPassword: passwordSchema,
       confirmNewPassword: passwordSchema,
-      isLogOutOtherSessions: z.boolean(),
+      isLogOutOtherSessions: z.boolean().default(true),
     })
     .refine((data) => data.newPassword === data.confirmNewPassword, {
       error: 'New passwords do not match',
       path: ['confirmNewPassword'],
     })
-  export type ChangePasswordBody = z.infer<typeof changePasswordBody>
+  export type ChangePasswordInput = z.infer<typeof changePasswordInput>
+
+  export const changePasswordOutput = z.object({ userId: z.string() })
+  export type ChangePasswordOutput = z.infer<typeof changePasswordOutput>
+  //#endregion
 }

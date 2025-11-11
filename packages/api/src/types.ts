@@ -1,5 +1,5 @@
 import type { Session } from '@yukinu/auth'
-import type { UserValidator } from '@yukinu/validators/user'
+import type { UserModels } from '@yukinu/validators/user'
 
 import type { IAuthService } from '@/contracts/services/auth.service'
 import type { IUserService } from '@/contracts/services/user.service'
@@ -7,7 +7,7 @@ import type { IVendorService } from '@/contracts/services/vendor.service'
 
 export interface TRPCMeta {
   message?: string
-  roles?: UserValidator.Role[]
+  roles?: UserModels.Role[]
 }
 
 export interface TRPCContext {

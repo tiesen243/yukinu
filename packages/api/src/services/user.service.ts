@@ -1,144 +1,97 @@
 import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
-import type { UserValidator } from '@yukinu/validators/user'
-import { Password } from '@yukinu/auth'
+import type { UserModels } from '@yukinu/validators/user'
 
-import type {
-  IAccountRepository,
-  IProfileRepository,
-  IUserRepository,
-  IUserService,
-} from '@/types'
+import type { IProfileRepository, IUserRepository, IUserService } from '@/types'
 
 export class UserService implements IUserService {
-  private readonly _password: Password
-
-  constructor(
+  public constructor(
     private readonly _db: Database,
-    private readonly _accountRepo: IAccountRepository,
     private readonly _profileRepo: IProfileRepository,
     private readonly _userRepo: IUserRepository,
-  ) {
-    this._password = new Password()
-  }
+  ) {}
 
-  async getUsers(query: UserValidator.AllParams): Promise<{
-    users: IUserRepository.UserType[]
-    pagination: { page: number; total: number; totalPages: number }
-  }> {
-    const { search, page, limit } = query
+  public async all(input: UserModels.AllInput): Promise<UserModels.AllOutput> {
+    const { search = '', limit, page } = input
     const offset = (page - 1) * limit
 
-    const criteria = search
-      ? [{ username: `%${search}%` }, { email: `%${search}%` }]
-      : []
-    const orderBy = { createdAt: 'desc' as const }
+    const criteria = [{ email: `%${search}%` }, { username: `%${search}%` }]
+    const users = await this._userRepo.findBy(
+      criteria,
+      { createdAt: 'desc' },
+      limit,
+      offset,
+    )
 
-    const users = await this._userRepo.findBy(criteria, orderBy, limit, offset)
-    const total = await this._userRepo.count(criteria)
-    const totalPages = Math.ceil(total / limit)
+    const totalItems = await this._userRepo.count(criteria)
+    const totalPages = Math.ceil(totalItems / limit)
 
-    return { users, pagination: { page, total, totalPages } }
+    return {
+      users,
+      pagination: { page, totalPages, totalItems },
+    }
   }
 
-  async getUserProfile(user: {
-    id: IUserRepository.UserType['id']
-  }): Promise<IUserRepository.UserWithProfile> {
-    const profile = await this._userRepo.findWithProfile(user.id)
-    if (!profile)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
-    return profile
+  public async one(input: UserModels.OneInput): Promise<UserModels.OneOutput> {
+    return this._userRepo.find(input.id)
   }
 
-  async updateUser(
-    data: UserValidator.UpdateUserBody,
-    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
-  ): Promise<void> {
-    const user = await this._userRepo.find(data.userId)
-    if (!user)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+  public async update(
+    input: UserModels.UpdateInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<UserModels.UpdateOutput> {
+    const { id, ...updateData } = input
 
-    if (actingUser.id === data.userId)
+    const existingUser = await this.one({ id })
+    if (!existingUser)
       throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'You cannot update yourself',
+        code: 'NOT_FOUND',
+        message: `User with ID ${id} not found.`,
       })
 
-    const isAdmin = actingUser.role === 'admin'
-    const isModerator = actingUser.role === 'moderator'
-    if ((!isAdmin && !isModerator) || (isModerator && user.role === 'admin'))
+    this.checkModifyPermissions(existingUser, actingUser)
+
+    await this._userRepo.update(id, updateData)
+    return { userId: id }
+  }
+
+  public async delete(
+    input: UserModels.DeleteInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<UserModels.DeleteOutput> {
+    const { id } = input
+
+    const existingUser = await this.one({ id })
+    if (!existingUser)
       throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'You do not have permission to update this user',
+        code: 'NOT_FOUND',
+        message: `User with ID ${input.id} not found.`,
       })
+
+    this.checkModifyPermissions(existingUser, actingUser)
 
     return this._db.transaction(async (tx) => {
-      const updatedUser = await this._userRepo.update(data.userId, data, tx)
-      if (!updatedUser)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to update user',
-        })
-
-      if (data.password)
-        await this._accountRepo.create(
-          {
-            userId: data.userId,
-            provider: 'credentials',
-            accountId: data.userId,
-            password: await this._password.hash(data.password),
-          },
-          tx,
-        )
+      await this._profileRepo.delete(id, tx)
+      await this._userRepo.delete(id, tx)
+      return { userId: input.id }
     })
   }
 
-  async deleteUser(
-    data: UserValidator.OneParams,
-    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
-  ): Promise<void> {
-    const user = await this._userRepo.find(data.userId)
-    if (!user)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
-
-    if (actingUser.id === data.userId)
+  private checkModifyPermissions(
+    user: Pick<UserModels.User, 'id' | 'role'>,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ) {
+    if (actingUser.id === user.id)
       throw new TRPCError({
         code: 'FORBIDDEN',
-        message: 'You cannot delete yourself',
+        message: 'Users cannot modify their own account.',
       })
 
     if (actingUser.role === 'moderator' && user.role === 'admin')
       throw new TRPCError({
         code: 'FORBIDDEN',
-        message: 'You do not have permission to delete this user',
+        message: 'Moderators cannot modify admin users.',
       })
-
-    return this._db.transaction(async (tx) => {
-      const deleted = await this._userRepo.delete(user.id, tx)
-      if (!deleted)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to delete user',
-        })
-    })
-  }
-
-  async updateUserProfile(
-    userId: IUserRepository.UserType['id'],
-    data: UserValidator.UpdateProfileBody,
-  ): Promise<void> {
-    const profile = await this._profileRepo.find(userId)
-    if (!profile)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
-
-    return this._db.transaction(async (tx) => {
-      const updatedProfile = await this._profileRepo.update(userId, data, tx)
-      if (!updatedProfile)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to update profile',
-        })
-    })
   }
 }

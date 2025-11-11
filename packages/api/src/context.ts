@@ -23,8 +23,8 @@ export const createTRPCContext = async (request: {
   const vendorRepo = new VendorRepository(db)
 
   const authService = new AuthService(db, accountRepo, profileRepo, userRepo)
-  const userService = new UserService(db, accountRepo, profileRepo, userRepo)
-  const vendorService = new VendorService(db, userRepo, vendorRepo)
+  const userService = new UserService(db, profileRepo, userRepo)
+  const vendorService = new VendorService(db, vendorRepo)
 
   return {
     headers,

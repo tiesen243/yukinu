@@ -1,6 +1,4 @@
-import type { AuthValidator } from '@yukinu/validators/auth'
-
-import type { IUserRepository } from '@/types'
+import type { AuthModels } from '@yukinu/validators/auth'
 
 export interface IAuthService {
   /**
@@ -8,18 +6,22 @@ export interface IAuthService {
    * @param data - The registration data
    * @returns The ID of the newly created user
    */
-  register(
-    data: AuthValidator.RegisterBody,
-  ): Promise<{ id: IUserRepository.UserType['id'] }>
+  register(input: AuthModels.RegisterInput): Promise<AuthModels.RegisterOutput>
 
   /**
    * Change the password of a user
-   * @param userId - The ID of the user whose password is to be changed
-   * @param data - The data containing the new password
+   * @param data - The data required to change the password
+   * @example
+   * {
+   *   userId: 'user-id',
+   *   currentPassword: 'current-password', // optional if admin
+   *   newPassword: 'new-password',
+   *   confirmNewPassword: 'new-password',
+   *   isLogOutOtherSessions: true
+   * }
    * @returns The ID of the user whose password was changed
    */
   changePassword(
-    userId: string,
-    data: AuthValidator.ChangePasswordBody,
-  ): Promise<{ id: IUserRepository.UserType['id'] }>
+    input: AuthModels.ChangePasswordInput,
+  ): Promise<AuthModels.ChangePasswordOutput>
 }

@@ -56,7 +56,7 @@ export abstract class BaseRepository<TTable extends PgTable>
   create(
     data: TTable['$inferInsert'],
     _tx?: Database,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] }> {
     const id = String(BaseRepository._idCounter++)
     this._data.push({ ...data, id })
     return Promise.resolve({ id })
@@ -66,9 +66,9 @@ export abstract class BaseRepository<TTable extends PgTable>
     id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
     _tx?: Database,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] }> {
     const recordIndex = this._data.findIndex((item) => item.id === id)
-    if (recordIndex === -1) return Promise.resolve(null)
+    if (recordIndex === -1) throw new Error('Record not found')
 
     this._data[recordIndex] = {
       ...this._data[recordIndex],
@@ -81,9 +81,9 @@ export abstract class BaseRepository<TTable extends PgTable>
   delete(
     id: TTable['$inferSelect']['id'],
     _tx?: Database,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null> {
+  ): Promise<{ id: TTable['$inferSelect']['id'] }> {
     const recordIndex = this._data.findIndex((item) => item.id === id)
-    if (recordIndex === -1) return Promise.resolve(null)
+    if (recordIndex === -1) throw new Error('Record not found')
 
     this._data.splice(recordIndex, 1)
     return Promise.resolve({ id })

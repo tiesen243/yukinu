@@ -1,4 +1,4 @@
-import type { AuthValidator } from '@yukinu/validators/auth'
+import { AuthModels } from '@yukinu/validators/auth'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions, NewAccount, OauthAccount, Session } from '@/types'
@@ -85,7 +85,7 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function signIn(
-    opts: { identifier: string; password: string },
+    opts: AuthModels.LoginInput,
     headers: Headers = new Headers(),
   ): Promise<Omit<Session, 'user'>> {
     const { identifier, password } = opts
@@ -273,8 +273,11 @@ export function Auth(opts: AuthOptions) {
            * [POST] /api/auth/sign-in: Sign in with email and password
            */
           if (pathname === `${base}/api/auth/sign-in`) {
-            const body = (await request.json()) as AuthValidator.LoginBody
-            const result = await signIn(body, request.headers)
+            const { success, data } = AuthModels.loginInput.safeParse(
+              await request.json(),
+            )
+            if (!success) throw new Error('Invalid input data')
+            const result = await signIn(data, request.headers)
 
             const response = Response.json(result)
             cookies.set(response, cookieKeys.token, result.token, {

@@ -5,7 +5,7 @@ import type { IBaseRepository } from '@/types'
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IAccountRepository extends IBaseRepository<typeof accounts> {}
 
-export declare namespace IAccountRepository {
-  export type AccountType = Account
-  export type NewAccountType = NewAccount
+export namespace IAccountRepository {
+  export type IAccount = Account
+  export type INewAccount = NewAccount
 }
