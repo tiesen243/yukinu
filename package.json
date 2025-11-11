@@ -52,7 +52,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.6",
     "prettier": "^3.6.2",
-    "turbo": "^2.6.0"
+    "turbo": "^2.6.1"
   },
   "peerDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
@@ -67,7 +67,7 @@
     "nuqs": "^2.7.2",
     "prettier": "^3.6.2",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "tsdown": "^0.16.0",
+    "tsdown": "^0.16.2",
     "typescript": "^5.9.3"
   },
   "catalogs": {
