@@ -17,6 +17,6 @@ export default [
       route('/register', './routes/dashboard/vendors/register.tsx'),
     ]),
 
-    route('*', './routes/dashboard/fallback.tsx'),
+    route('/*', './routes/dashboard/placeholder.tsx'),
   ]),
 ] satisfies RouteConfig

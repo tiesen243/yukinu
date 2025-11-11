@@ -9,7 +9,7 @@
     "dev": "react-router dev --port $TURBO_MFE_PORT",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "react-router typegen && eslint",
-    "start": "react-router-serve build/server/nodejs_*/index.js",
+    "start": "react-router-serve build/server/index.js",
     "typecheck": "react-router typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
