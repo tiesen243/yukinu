@@ -1,5 +1,13 @@
 # @yukinu/dashboard
 
+## 0.2.3
+
+### Patch Changes
+
+- [#167](https://github.com/tiesen243/yukinu/pull/167) [`3525430`](https://github.com/tiesen243/yukinu/commit/352543000a4e985d0302b395205ad9b06f5246df) Thanks [@tiesen243](https://github.com/tiesen243)! - decrease dashboard image size
+
+- [#167](https://github.com/tiesen243/yukinu/pull/167) [`f5a8716`](https://github.com/tiesen243/yukinu/commit/f5a871614db21c11f2e51752e0e8de6f94a85fb2) Thanks [@tiesen243](https://github.com/tiesen243)! - optimize image
+
 ## 0.2.2
 
 ### Patch Changes
