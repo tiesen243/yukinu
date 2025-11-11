@@ -12,13 +12,13 @@ COPY . .
 RUN turbo prune @yukinu/web --docker
 
 # ===========================================
-# Stage 2: Install production dependencies
+# Stage 2: Build application
 # ===========================================
 FROM base AS builder
 WORKDIR /build
 
 COPY --from=prepare /prune/out/json .
-RUN bun ci
+RUN bun ci 
 
 COPY --from=prepare /prune/out/full .
 

@@ -24,6 +24,7 @@ export const env = createEnv({
     AUTH_GOOGLE_SECRET: z.string(),
 
     // Vercel environment variables
+    VERCEL: z.optional(z.enum(['1'])),
     VERCEL_ENV: z.optional(z.enum(['production', 'preview', 'development'])),
     VERCEL_URL: z.optional(z.string()),
     VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
