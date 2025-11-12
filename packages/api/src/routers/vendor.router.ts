@@ -14,7 +14,7 @@ export const vendorRouter = createTRPCRouter({
 
   register: protectedProcedure
     .meta({ message: 'Vendor registered successfully', roles: ['user'] })
-    .input(VendorModels.registerInput)
+    .input(VendorModels.registerInput.omit({ userId: true }))
     .output(VendorModels.registerOutput)
     .mutation(({ ctx, input }) =>
       ctx.vendorService.register({ ...input, userId: ctx.session.user.id }),
@@ -23,11 +23,13 @@ export const vendorRouter = createTRPCRouter({
   update: protectedProcedure
     .meta({
       message: 'Vendor updated successfully',
-      roles: ['admin', 'moderator'],
+      roles: ['admin', 'moderator', 'vendor_owner'],
     })
     .input(VendorModels.updateInput)
     .output(VendorModels.updateOutput)
-    .mutation(({ ctx, input }) => ctx.vendorService.update(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.vendorService.update(input, ctx.session.user),
+    ),
 
   delete: protectedProcedure
     .meta({
@@ -36,5 +38,7 @@ export const vendorRouter = createTRPCRouter({
     })
     .input(VendorModels.deleteInput)
     .output(VendorModels.deleteOutput)
-    .mutation(({ ctx, input }) => ctx.vendorService.delete(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.vendorService.delete(input, ctx.session.user),
+    ),
 })

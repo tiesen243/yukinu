@@ -1,12 +1,17 @@
+import { TRPCError } from '@trpc/server'
+
 import type { Database } from '@yukinu/db'
+import type { UserModels } from '@yukinu/validators/user'
 import type { VendorModels } from '@yukinu/validators/vendor'
 
 import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 import type { IVendorService } from '@/contracts/services/vendor.service'
+import type { IUserRepository } from '@/types'
 
 export class VendorService implements IVendorService {
   constructor(
     private readonly _db: Database,
+    private readonly _userRepo: IUserRepository,
     private readonly _vendorRepo: IVendorRepository,
   ) {}
 
@@ -18,9 +23,8 @@ export class VendorService implements IVendorService {
 
     const criteria = status ? [{ status }] : []
 
-    const vendors = await this._vendorRepo.findBy(
+    const vendors = await this._vendorRepo.findWithOwner(
       criteria,
-      { createdAt: 'desc' },
       limit,
       offset,
     )
@@ -34,21 +38,112 @@ export class VendorService implements IVendorService {
     }
   }
 
-  public register(
+  public async register(
     input: VendorModels.RegisterInput,
   ): Promise<VendorModels.RegisterOutput> {
-    throw new Error('Method not implemented.')
+    const { userId, ...data } = input
+    const [existingVendor] = await this._vendorRepo.findBy(
+      [{ ownerId: userId }],
+      {},
+      1,
+    )
+    if (existingVendor)
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: 'You already have a vendor registered.',
+      })
+
+    const newVendor = await this._vendorRepo.create({
+      ownerId: userId,
+      ...data,
+    })
+    return { vendorId: newVendor.id }
   }
 
-  public update(
+  public async update(
     input: VendorModels.UpdateInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
   ): Promise<VendorModels.UpdateOutput> {
-    throw new Error('Method not implemented.')
+    const { id = '', ...updateData } = input
+
+    const existingVendor = await this._vendorRepo.find(id)
+    if (!existingVendor)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Vendor with ID ${id} not found.`,
+      })
+
+    const isInvalidStatusTransition = (
+      from: VendorModels.Vendor['status'],
+      to: VendorModels.Vendor['status'] | undefined,
+    ) =>
+      (from === 'pending' && to === 'suspended') ||
+      (to === 'pending' && from !== 'pending')
+
+    if (isInvalidStatusTransition(existingVendor.status, updateData.status))
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Invalid status transition.',
+      })
+
+    if (existingVendor.status === updateData.status) return { vendorId: id }
+
+    this.checkModifyPermissions(existingVendor, actingUser)
+    const statusRoleMap = {
+      pending: 'user',
+      approved: 'vendor_owner',
+      suspended: 'user',
+    } as const satisfies Record<VendorModels.Status, UserModels.Role>
+
+    return this._db.transaction(async (tx) => {
+      await this._vendorRepo.update(id, updateData, tx)
+
+      if (updateData.status)
+        await this._userRepo.update(
+          existingVendor.ownerId,
+          { role: statusRoleMap[updateData.status] },
+          tx,
+        )
+
+      return { vendorId: id }
+    })
   }
 
-  public delete(
+  public async delete(
     input: VendorModels.DeleteInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
   ): Promise<VendorModels.DeleteOutput> {
-    throw new Error('Method not implemented.')
+    const { id } = input
+
+    const existingVendor = await this._vendorRepo.find(id)
+    if (!existingVendor)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Vendor with ID ${id} not found.`,
+      })
+
+    this.checkModifyPermissions(existingVendor, actingUser)
+
+    return this._db.transaction(async (tx) => {
+      await this._vendorRepo.delete(id, tx)
+      await this._userRepo.update(existingVendor.ownerId, { role: 'user' }, tx)
+
+      return { vendorId: id }
+    })
+  }
+
+  private checkModifyPermissions(
+    vendor: Pick<VendorModels.Vendor, 'id' | 'ownerId'>,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ) {
+    if (
+      actingUser.role !== 'admin' &&
+      actingUser.role !== 'moderator' &&
+      vendor.ownerId !== actingUser.id
+    )
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You do not have permission to modify this vendor.',
+      })
   }
 }

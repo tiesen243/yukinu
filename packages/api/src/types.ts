@@ -2,6 +2,7 @@ import type { Session } from '@yukinu/auth'
 import type { UserModels } from '@yukinu/validators/user'
 
 import type { IAuthService } from '@/contracts/services/auth.service'
+import type { IProfileService } from '@/contracts/services/profile.service'
 import type { IUserService } from '@/contracts/services/user.service'
 import type { IVendorService } from '@/contracts/services/vendor.service'
 
@@ -12,9 +13,12 @@ export interface TRPCMeta {
 
 export interface TRPCContext {
   headers: Headers
+  resHeaders: Headers
+
   session: Omit<Session, 'token'> | null
 
   authService: IAuthService
+  profileService: IProfileService
   userService: IUserService
   vendorService: IVendorService
 }

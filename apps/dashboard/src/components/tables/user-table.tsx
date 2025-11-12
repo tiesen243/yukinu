@@ -15,16 +15,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@yukinu/ui/dialog'
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-  FieldSet,
-} from '@yukinu/ui/field'
+import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
-import { Input } from '@yukinu/ui/input'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
@@ -37,7 +30,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
-import { UserValidator } from '@yukinu/validators/user'
+import { UserModels } from '@yukinu/validators/user'
 
 import { useTRPC } from '@/trpc/react'
 
@@ -96,7 +89,6 @@ export const UserTable: React.FC = () => (
         <TableHead>Email</TableHead>
         <TableHead>Role</TableHead>
         <TableHead>Status</TableHead>
-        <TableHead>Created At</TableHead>
         <TableHead>Updated At</TableHead>
         <TableHead>Actions</TableHead>
       </TableRow>
@@ -146,7 +138,6 @@ const UserTableBody: React.FC = () => {
           {user.status}
         </Badge>
       </TableCell>
-      <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
       <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
       <TableCell className='flex w-fit items-center gap-2'>
         <EditUserModal user={user} />
@@ -201,16 +192,14 @@ const EditUserModal: React.FC<{
 
   const form = useForm({
     defaultValues: {
-      userId: user.id,
+      id: user.id,
       role: user.role,
       status: user.status,
-      password: undefined as string | undefined,
     },
-    schema: UserValidator.updateUserBody,
+    schema: UserModels.updateInput,
     onSubmit: updateUser,
     onSuccess: () => {
       setIsOpen(false)
-      form.setValue('password', '')
     },
   })
 
@@ -239,7 +228,7 @@ const EditUserModal: React.FC<{
                   <FieldLabel htmlFor={meta.fieldId}>Role</FieldLabel>
                   <Select {...field}>
                     <SelectOption value=''>Select a role</SelectOption>
-                    {UserValidator.roles.map((role) => (
+                    {UserModels.roles.map((role) => (
                       <SelectOption key={role} value={role}>
                         {role.replace(/_/g, ' ')}
                       </SelectOption>
@@ -260,7 +249,7 @@ const EditUserModal: React.FC<{
                     value={field.value}
                     onValueChange={field.onChange}
                   >
-                    {UserValidator.statuses.map((status) => (
+                    {UserModels.statuses.map((status) => (
                       <div key={status} className='flex items-center gap-3'>
                         <RadioGroupItem id={status} value={status} />
                         <FieldLabel htmlFor={status} className='capitalize'>
@@ -269,24 +258,6 @@ const EditUserModal: React.FC<{
                       </div>
                     ))}
                   </RadioGroup>
-                </Field>
-              )}
-            />
-
-            <form.Field
-              name='password'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-                  <Input
-                    {...field}
-                    type='password'
-                    placeholder='Enter new password'
-                  />
-                  <FieldDescription id={meta.descriptionId}>
-                    Leave blank to keep the current password.
-                  </FieldDescription>
-                  <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
             />
@@ -335,7 +306,7 @@ export const DeleteUserModal: React.FC<{
           <Button
             variant='destructive'
             onClick={() => {
-              deleteUser({ userId: user.id })
+              deleteUser(user)
             }}
             disabled={isDeleting}
           >

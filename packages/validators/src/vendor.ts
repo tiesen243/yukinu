@@ -4,14 +4,17 @@ import { paginationInputSchema, paginationOutputSchema } from '@/lib/shared'
 
 export namespace VendorModels {
   //#region Vendor Schema
-  export const vendorStatus = ['pending', 'approved', 'suspended'] as const
-  export type VendorStatus = (typeof vendorStatus)[number]
+  export const statuses = ['pending', 'approved', 'suspended'] as const
+  export type Status = (typeof statuses)[number]
 
   export const vendor = z.object({
     id: z.cuid2('Invalid vendor ID'),
     ownerId: z.cuid2('Invalid owner ID'),
-    name: z.string('Vendor name must be a string'),
-    status: z.enum(vendorStatus, 'Invalid vendor status'),
+    name: z
+      .string('Vendor name must be a string')
+      .min(4, 'Vendor name must be at least 4 characters long')
+      .max(100, 'Vendor name must be at most 100 characters long'),
+    status: z.enum(statuses, 'Invalid vendor status'),
     description: z.string('Vendor description must be a string').nullable(),
     imageUrl: z.url('Invalid image URL').nullable(),
     website: z.url('Invalid vendor website').nullable(),
@@ -23,7 +26,7 @@ export namespace VendorModels {
 
   //#region All Vendors Schema
   export const allInput = paginationInputSchema.extend({
-    status: z.enum(vendorStatus, 'Invalid vendor status').optional(),
+    status: z.enum(statuses, 'Invalid vendor status').optional(),
   })
   export type AllInput = z.infer<typeof allInput>
 
@@ -57,7 +60,9 @@ export namespace VendorModels {
   //#endregion
 
   //#region Update Vendor Schema
-  export const updateInput = vendor.omit({ createdAt: true, updatedAt: true })
+  export const updateInput = vendor
+    .omit({ createdAt: true, updatedAt: true })
+    .partial()
   export type UpdateInput = z.infer<typeof updateInput>
 
   export const updateOutput = z.object({ vendorId: vendor.shape.id })

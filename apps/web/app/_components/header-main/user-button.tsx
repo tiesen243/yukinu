@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
 
 import { useSession } from '@yukinu/auth/react'
 import { useTheme } from '@yukinu/ui'
@@ -32,6 +33,8 @@ import {
   UserIcon,
 } from '@yukinu/ui/icons'
 
+import { useTRPC } from '@/trpc/react'
+
 const navItems = [
   { label: 'Profile', href: '/user/account/profile', icon: UserIcon },
   { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboardIcon },
@@ -40,8 +43,7 @@ const navItems = [
 ] as const
 
 export const UserButton: React.FC = () => {
-  const { session, status, signOut } = useSession()
-  const router = useRouter()
+  const { session, status } = useSession()
 
   if (status === 'loading')
     return <div className='size-9 animate-pulse rounded-full bg-muted' />
@@ -86,14 +88,7 @@ export const UserButton: React.FC = () => {
 
         <DropdownMenuGroup>
           <ThemeChanger />
-          <DropdownMenuItem
-            onClick={async () => {
-              await signOut()
-              router.push('/')
-            }}
-          >
-            <LogOutIcon /> Sign Out
-          </DropdownMenuItem>
+          <SignOutButton />
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
@@ -140,5 +135,27 @@ const ThemeChanger: React.FC = () => {
         </DropdownMenuSubContent>
       </DropdownMenuPortal>
     </DropdownMenuSub>
+  )
+}
+
+const SignOutButton: React.FC = () => {
+  const trpc = useTRPC()
+  const router = useRouter()
+  const { refresh } = useSession()
+
+  const { mutate } = useMutation({
+    ...trpc.auth.logout.mutationOptions(),
+    onSuccess: refresh,
+  })
+
+  return (
+    <DropdownMenuItem
+      onClick={() => {
+        mutate()
+        router.push('/')
+      }}
+    >
+      <LogOutIcon /> Sign Out
+    </DropdownMenuItem>
   )
 }

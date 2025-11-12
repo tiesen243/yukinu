@@ -2,13 +2,12 @@ import { beforeEach, describe } from 'bun:test'
 
 import type { Database } from '@yukinu/db'
 
-import type { IUserService } from '@/contracts/services/user.service'
+import type { IProfileService } from '@/contracts/services/profile.service'
 import { ProfileRepository } from '@/repositories/profile.repository.mock'
-import { UserRepository } from '@/repositories/user.repository.mock'
-import { UserService } from '@/services/user.service'
+import { ProfileService } from '@/services/profile.service'
 
 describe('UserService', () => {
-  let _service: IUserService
+  let _service: IProfileService
 
   beforeEach(() => {
     const db = {
@@ -18,7 +17,6 @@ describe('UserService', () => {
       },
     } as unknown as Database
     const profile = new ProfileRepository()
-    const user = new UserRepository()
-    _service = new UserService(db, profile, user)
+    _service = new ProfileService(db, profile)
   })
 })

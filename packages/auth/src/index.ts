@@ -10,4 +10,5 @@ export {
 export { Password } from '@/core/password'
 export { generateCsrfToken, verifyRequestOrigin } from '@/csrf'
 export { TokenBucketRateLimit } from '@/rate-limit'
-export const { auth, signIn, signOut, handlers } = Auth(authOptions)
+export const { auth, createSessionCookie, invalidateSession, handlers } =
+  Auth(authOptions)

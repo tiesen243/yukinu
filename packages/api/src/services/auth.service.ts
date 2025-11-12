@@ -2,7 +2,12 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
 import type { AuthModels } from '@yukinu/validators/auth'
-import { invalidateSessionTokens, Password } from '@yukinu/auth'
+import {
+  createSessionCookie,
+  invalidateSession,
+  invalidateSessionTokens,
+  Password,
+} from '@yukinu/auth'
 
 import type {
   IAccountRepository,
@@ -21,6 +26,52 @@ export class AuthService implements IAuthService {
     private readonly _userRepo: IUserRepository,
   ) {
     this._password = new Password()
+  }
+
+  public async login(
+    input: AuthModels.LoginInput,
+    headers: Headers,
+    resHeaders: Headers,
+  ): Promise<AuthModels.LoginOutput> {
+    const { identifier, password } = input
+
+    const [existingUser] = await this._userRepo.findBy(
+      [{ email: identifier }, { username: identifier }],
+      {},
+      1,
+    )
+    if (!existingUser)
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'Invalid credentials',
+      })
+
+    const [existingAccount] = await this._accountRepo.findBy(
+      [{ userId: existingUser.id, provider: 'credentials' }],
+      {},
+      1,
+    )
+    if (
+      !existingAccount?.password ||
+      !(await this._password.verify(existingAccount.password, password))
+    )
+      throw new TRPCError({
+        code: 'UNAUTHORIZED',
+        message: 'Invalid credentials',
+      })
+
+    const { token, expires, cookie } = await createSessionCookie(
+      existingUser.id,
+      headers,
+    )
+
+    resHeaders.append('Set-Cookie', cookie)
+    return { token, expires }
+  }
+
+  public async logout(headers: Headers, resHeaders: Headers): Promise<void> {
+    const cookie = await invalidateSession(headers)
+    if (cookie) resHeaders.append('Set-Cookie', cookie)
   }
 
   public async register(

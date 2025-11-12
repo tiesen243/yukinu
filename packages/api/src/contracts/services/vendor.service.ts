@@ -1,3 +1,4 @@
+import type { UserModels } from '@yukinu/validators/user'
 import type { VendorModels } from '@yukinu/validators/vendor'
 
 export interface IVendorService {
@@ -42,9 +43,18 @@ export interface IVendorService {
    *  website: 'https://updated-website.com', // optional
    *  imageUrl: 'https://image-url.com/image.png' // optional
    * }
+   * @param actingUser - The user performing the update
+   * @example
+   * {
+   *   id: 'admin-user-id',
+   *   role: 'admin'
+   * }
    * @returns The ID of the updated vendor
    */
-  update(input: VendorModels.UpdateInput): Promise<VendorModels.UpdateOutput>
+  update(
+    input: VendorModels.UpdateInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<VendorModels.UpdateOutput>
 
   /**
    * Delete a vendor by ID
@@ -53,7 +63,16 @@ export interface IVendorService {
    * {
    *   id: 'vendor-id'
    * }
+   * @param actingUser - The user performing the deletion
+   * @example
+   * {
+   *   id: 'admin-user-id',
+   *   role: 'admin'
+   * }
    * @returns The ID of the deleted vendor
    */
-  delete(input: VendorModels.DeleteInput): Promise<VendorModels.DeleteOutput>
+  delete(
+    input: VendorModels.DeleteInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<VendorModels.DeleteOutput>
 }

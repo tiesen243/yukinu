@@ -38,6 +38,7 @@ export namespace UserModels {
       user.pick({
         id: true,
         username: true,
+        email: true,
         role: true,
         status: true,
         updatedAt: true,
@@ -57,7 +58,9 @@ export namespace UserModels {
   //#endregion
 
   //#region Update User Schema
-  export const updateInput = user.pick({ id: true, role: true, status: true })
+  export const updateInput = user
+    .pick({ id: true, role: true, status: true })
+    .partial()
   export type UpdateInput = z.infer<typeof updateInput>
 
   export const updateOutput = z.object({ userId: user.shape.id })

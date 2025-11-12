@@ -2,8 +2,6 @@ import * as z from 'zod'
 
 export namespace ProfileModels {
   //#region Profile Schema
-  export const genders = ['male', 'female', 'other'] as const
-  export type Gender = (typeof genders)[number]
 
   export const profile = z.object({
     id: z.cuid2('Invalid profile ID'),
@@ -13,11 +11,22 @@ export namespace ProfileModels {
       .string('Bio must be a string')
       .max(160, 'Bio cannot exceed 160 characters')
       .nullable(),
-    gender: z.enum(genders, 'Invalid gender').nullable(),
+    gender: z.string().nullable(),
     dateOfBirth: z.iso.date('Date of birth is not a valid date').nullable(),
     website: z.url('Invalid website URL').nullable(),
   })
   export type Profile = z.infer<typeof profile>
+  //#endregion
+
+  //#region One Profile Schema
+  export const oneInput = profile.pick({ id: true })
+  export type OneInput = z.infer<typeof oneInput>
+
+  export const oneOutput = profile.extend({
+    username: z.string('Username must be a string'),
+    email: z.email('Invalid email address'),
+  })
+  export type OneOutput = z.infer<typeof oneOutput>
   //#endregion
 
   //#region Update Profile Schema

@@ -41,7 +41,7 @@ export class UserService implements IUserService {
     input: UserModels.UpdateInput,
     actingUser: Pick<UserModels.User, 'id' | 'role'>,
   ): Promise<UserModels.UpdateOutput> {
-    const { id, ...updateData } = input
+    const { id = '', ...updateData } = input
 
     const existingUser = await this.one({ id })
     if (!existingUser)

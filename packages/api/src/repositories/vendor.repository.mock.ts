@@ -1,3 +1,4 @@
+import type { Database } from '@yukinu/db'
 import type { vendors } from '@yukinu/db/schema/vendor'
 
 import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
@@ -31,4 +32,13 @@ export class VendorRepository
       updatedAt: new Date('2023-06-15T12:00:00Z'),
     },
   ]
+
+  findWithOwner(
+    _criteria: Partial<IVendorRepository.IVendor>[],
+    _limit?: number,
+    _offset?: number,
+    _tx?: Database,
+  ): Promise<IVendorRepository.VendorWithOwner[]> {
+    return Promise.resolve([])
+  }
 }
