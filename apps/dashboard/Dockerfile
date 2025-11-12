@@ -18,8 +18,7 @@ FROM base AS builder
 WORKDIR /build
 
 COPY --from=prepare /prune/out/json .
-COPY bun.lock bun.lock
-RUN bun install
+RUN bun ci
 
 COPY --from=prepare /prune/out/full .
 
@@ -31,6 +30,9 @@ ENV TURBO_TOKEN=$TURBO_TOKEN
 
 ARG VITE_APP_NAME
 ENV VITE_APP_NAME=$VITE_APP_NAME
+
+ARG VITE_APP_URL
+ENV VITE_APP_URL=$VITE_APP_URL
 
 ARG VITE_TRPC_USE_STREAMING
 ENV VITE_TRPC_USE_STREAMING=$VITE_TRPC_USE_STREAMING
@@ -46,7 +48,7 @@ FROM base AS prod-deps
 WORKDIR /prod-deps
 
 COPY --from=prepare /prune/out/json .
-RUN bun install --omit=dev --omit=optional --ignore-scripts
+RUN bun install --omit=dev --omit=peer --ignore-scripts
 
 # ===========================================
 # Stage 4: Production image
@@ -61,8 +63,10 @@ RUN addgroup --system --gid 1001 yukinu && \
     adduser --system --uid 1002 dashboard
 USER dashboard
 
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./build
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./apps/dashboard/build
+COPY --from=prod-deps --chown=dashboard:yukinu /prod-deps/apps/dashboard/node_modules ./apps/dashboard/node_modules
 COPY --from=prod-deps --chown=dashboard:yukinu /prod-deps/node_modules ./node_modules
 
 ENV NODE_ENV=production
+WORKDIR /app/apps/dashboard
 CMD ["bun", "--bun", "react-router-serve", "build/server/index.js"]

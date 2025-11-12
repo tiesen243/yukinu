@@ -25,9 +25,9 @@
     "prepare": "husky",
     "start:db": "docker compose -f ./docker-compose.yml up db -d",
     "start:dev": "docker compose -f ./docker-compose.yml up -d",
-    "start:prod": "docker compose -f ./docker-compose.yml -f ./docker-compose.prod.yml up -d",
+    "start:prod": "docker compose -f ./docker-compose.prod.yml up -d",
     "stop:dev": "docker compose -f ./docker-compose.yml down",
-    "stop:prod": "docker compose -f ./docker-compose.yml -f ./docker-compose.prod.yml down",
+    "stop:prod": "docker compose -f ./docker-compose.prod.yml down",
     "typecheck": "turbo run typecheck"
   },
   "lint-staged": {
