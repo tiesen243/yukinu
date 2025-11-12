@@ -4,13 +4,13 @@ import type * as ViewTypes from '@yukinu/db/schema/view'
 import type BaseProvider from '@/providers/base'
 
 export interface CookieOptions {
-  domain?: string
-  expires?: Date | string | number
-  httpOnly?: boolean
-  maxAge?: number
-  path?: string
-  sameSite?: 'Strict' | 'Lax' | 'None'
-  secure?: boolean
+  Domain?: string
+  Expires?: Date | string | number
+  HttpOnly?: boolean
+  'Max-Age'?: number
+  Path?: string
+  SameSite?: 'Strict' | 'Lax' | 'None'
+  Secure?: boolean
   [key: string]: unknown
 }
 
@@ -62,7 +62,6 @@ export interface DatabaseAdapter {
   createSession(data: NewSession): Promise<void>
   updateSession(token: string, data: Partial<NewSession>): Promise<void>
   deleteSession(token: string): Promise<void>
-  deleteSessionsByUserId(userId: string): Promise<void>
 }
 
 export interface AuthOptions {
@@ -72,11 +71,11 @@ export interface AuthOptions {
     expiresIn: number
     expiresThreshold: number
   }
-  cookieKeys?: {
-    token?: string
-    state?: string
-    code?: string
-    redirect?: string
+  cookieKeys: {
+    token: string
+    state: string
+    code: string
+    redirect: string
   }
-  cookieOptions?: CookieOptions
+  cookieOptions: CookieOptions
 }

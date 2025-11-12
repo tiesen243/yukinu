@@ -1,4 +1,5 @@
-import type { users } from '@yukinu/db/schema/user'
+import type { Database } from '@yukinu/db'
+import type { User, users } from '@yukinu/db/schema/user'
 
 import type { IUserRepository } from '@/types'
 import { BaseRepository } from '@/repositories/base.repository.mock'
@@ -39,4 +40,8 @@ export class UserRepository
       updatedAt: new Date('2023-03-01T00:00:00Z'),
     },
   ]
+
+  deleteSessions(_userId: User['id'], _tx?: Database): Promise<void> {
+    return Promise.resolve()
+  }
 }

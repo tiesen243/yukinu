@@ -1,8 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { useMutation } from '@tanstack/react-query'
 
 import { useSession } from '@yukinu/auth/react'
 import { useTheme } from '@yukinu/ui'
@@ -32,8 +30,6 @@ import {
   SunMoonIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
-
-import { useTRPC } from '@/trpc/react'
 
 const navItems = [
   { label: 'Profile', href: '/user/account/profile', icon: UserIcon },
@@ -139,22 +135,10 @@ const ThemeChanger: React.FC = () => {
 }
 
 const SignOutButton: React.FC = () => {
-  const trpc = useTRPC()
-  const router = useRouter()
-  const { refresh } = useSession()
-
-  const { mutate } = useMutation({
-    ...trpc.auth.logout.mutationOptions(),
-    onSuccess: refresh,
-  })
+  const { signOut } = useSession()
 
   return (
-    <DropdownMenuItem
-      onClick={() => {
-        mutate()
-        router.push('/')
-      }}
-    >
+    <DropdownMenuItem onClick={signOut}>
       <LogOutIcon /> Sign Out
     </DropdownMenuItem>
   )
