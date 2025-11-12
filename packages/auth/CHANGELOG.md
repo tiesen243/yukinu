@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.1.5
+
+### Patch Changes
+
+- [#177](https://github.com/tiesen243/yukinu/pull/177) [`a6ad71b`](https://github.com/tiesen243/yukinu/commit/a6ad71bcfba3e2adf1c5f9426bfcd27684f5684d) Thanks [@tiesen243](https://github.com/tiesen243)! - optimize code
+
 ## 0.1.4
 
 ### Patch Changes
