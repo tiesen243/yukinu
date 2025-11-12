@@ -4,16 +4,5 @@ export default defineConfig({
   entry: ['./src/*.ts'],
   dts: true,
   shims: true,
-  exports: {
-    customExports() {
-      return {
-        '.': './dist/index.mjs',
-        './*': {
-          default: './dist/*.mjs',
-          types: './dist/*.d.mts',
-        },
-        './package.json': './package.json',
-      }
-    },
-  },
+  exports: true,
 })

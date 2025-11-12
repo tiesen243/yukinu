@@ -9,7 +9,7 @@ export class ProfileRepository
 {
   protected override _data = [
     {
-      id: '1',
+      id: 'user-1',
       fullName: 'Alice Smith',
       avatarUrl: 'https://example.com/avatars/alice.jpg',
       bio: 'Software developer and tech enthusiast.',
@@ -18,7 +18,7 @@ export class ProfileRepository
       website: 'https://alicesmith.dev',
     },
     {
-      id: '2',
+      id: 'user-2',
       fullName: 'Bob Johnson',
       avatarUrl: 'https://example.com/avatars/bob.jpg',
       bio: 'Digital artist and illustrator.',

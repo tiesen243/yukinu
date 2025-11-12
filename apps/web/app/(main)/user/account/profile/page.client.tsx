@@ -16,13 +16,13 @@ import {
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
-import { UserValidator } from '@yukinu/validators/user'
+import { ProfileModels } from '@yukinu/validators/profile'
 
 import { useTRPC, useTRPCClient } from '@/trpc/react'
 
 export const ProfileAccount: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.user.profile.queryOptions())
+  const { data } = useSuspenseQuery(trpc.profile.get.queryOptions())
 
   return (
     <section className='px-4'>
@@ -61,19 +61,13 @@ export const ProfileAccount: React.FC = () => {
 export const ProfileInfo: React.FC = () => {
   const trpc = useTRPC()
   const trpcClient = useTRPCClient()
-  const { data } = useSuspenseQuery(trpc.user.profile.queryOptions())
+  const { data } = useSuspenseQuery(trpc.profile.get.queryOptions())
+  const { id: _, username: __, email: ___, ...defaultValues } = data
 
   const form = useForm({
-    defaultValues: {
-      avatarUrl: data.profile.avatarUrl ?? '',
-      fullName: data.profile.fullName ?? '',
-      bio: data.profile.bio ?? '',
-      gender: data.profile.gender ?? '',
-      dateOfBirth: data.profile.dateOfBirth ?? '',
-      website: data.profile.website ?? undefined,
-    },
-    schema: UserValidator.updateProfileBody,
-    onSubmit: trpcClient.user.updateProfile.mutate,
+    defaultValues,
+    schema: ProfileModels.updateInput.omit({ id: true }),
+    onSubmit: trpcClient.profile.update.mutate,
     onSuccess: () => toast.success('Profile updated successfully'),
     onError: (error) => toast.error(error.message),
   })
@@ -92,9 +86,9 @@ export const ProfileInfo: React.FC = () => {
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>{label}</FieldLabel>
                   {type === 'textarea' ? (
-                    <Textarea {...field} />
+                    <Textarea {...field} value={field.value ?? ''} />
                   ) : (
-                    <Input {...field} type={type} />
+                    <Input {...field} type={type} value={field.value ?? ''} />
                   )}
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
@@ -110,7 +104,7 @@ export const ProfileInfo: React.FC = () => {
 
       <div className='flex flex-col items-center justify-center gap-8'>
         <Avatar className='size-64'>
-          <AvatarImage src={data.profile.avatarUrl ?? ''} alt={data.username} />
+          <AvatarImage src={data.avatarUrl ?? ''} alt={data.username} />
           <AvatarFallback>
             {data.username.charAt(0).toUpperCase()}
           </AvatarFallback>

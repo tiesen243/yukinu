@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs'
 
-import type { RouterOutputs } from '@yukinu/api'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -27,7 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
-import { VendorValidator } from '@yukinu/validators/vendor'
+import { VendorModels } from '@yukinu/validators/vendor'
 
 import { useTRPC } from '@/trpc/react'
 
@@ -35,7 +34,7 @@ export function useVendorTable() {
   const trpc = useTRPC()
 
   const [query, setQuery] = useQueryStates({
-    status: parseAsStringLiteral(VendorValidator.vendorStatus),
+    status: parseAsStringLiteral(VendorModels.statuses),
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
   })
@@ -89,7 +88,6 @@ export const VendorTable: React.FC = () => {
           <TableHead>Name</TableHead>
           <TableHead>Owner</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Created At</TableHead>
           <TableHead>Updated At</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
@@ -129,7 +127,6 @@ const VendorTableBody: React.FC = () => {
       <TableCell>
         <Badge variant={statusMap[vendor.status]}>{vendor.status}</Badge>
       </TableCell>
-      <TableCell>{vendor.createdAt.toDateString()}</TableCell>
       <TableCell>{vendor.updatedAt.toDateString()}</TableCell>
       <TableCell className='space-x-4'>
         <EditVendorModal vendor={vendor} />
@@ -140,13 +137,13 @@ const VendorTableBody: React.FC = () => {
 }
 
 export const EditVendorModal: React.FC<{
-  vendor: RouterOutputs['vendor']['all']['vendors'][number]
+  vendor: VendorModels.AllOutput['vendors'][number]
 }> = ({ vendor }) => {
   const { updateVendor } = useVendorTable()
   const [open, setOpen] = React.useState(false)
   const form = useForm({
-    defaultValues: { vendorId: vendor.id, status: vendor.status },
-    schema: VendorValidator.updateBody,
+    defaultValues: { id: vendor.id, status: vendor.status },
+    schema: VendorModels.updateInput.pick({ id: true, status: true }),
     onSubmit: updateVendor,
     onSuccess: () => {
       setOpen(false)
@@ -178,7 +175,7 @@ export const EditVendorModal: React.FC<{
                 onValueChange={field.onChange}
                 className='grid grid-cols-3 gap-4'
               >
-                {VendorValidator.vendorStatus.map((status) => (
+                {VendorModels.statuses.map((status) => (
                   <div key={status} className='flex items-center gap-3'>
                     <RadioGroupItem id={status} value={status} />
                     <FieldLabel htmlFor={status} className='capitalize'>
@@ -207,7 +204,7 @@ export const EditVendorModal: React.FC<{
 }
 
 export const DeleteVendorModal: React.FC<{
-  vendor: RouterOutputs['vendor']['all']['vendors'][number]
+  vendor: VendorModels.AllOutput['vendors'][number]
 }> = ({ vendor }) => {
   const { deleteVendor, isDeleting } = useVendorTable()
 
@@ -233,7 +230,7 @@ export const DeleteVendorModal: React.FC<{
           <Button
             variant='destructive'
             onClick={() => {
-              deleteVendor({ vendorId: vendor.id })
+              deleteVendor(vendor)
             }}
             disabled={isDeleting}
           >

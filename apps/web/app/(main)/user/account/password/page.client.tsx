@@ -16,7 +16,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidator } from '@yukinu/validators/auth'
+import { AuthModels } from '@yukinu/validators/auth'
 
 import { useTRPCClient } from '@/trpc/react'
 
@@ -31,7 +31,7 @@ export const ChangePasswordForm: React.FC = () => {
       confirmNewPassword: '',
       isLogOutOtherSessions: true,
     },
-    schema: AuthValidator.changePasswordBody,
+    schema: AuthModels.changePasswordInput,
     onSubmit: trpcClient.auth.changePassword.mutate,
     onSuccess: () => {
       toast.success('Password changed successfully')

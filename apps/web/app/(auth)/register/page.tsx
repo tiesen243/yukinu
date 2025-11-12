@@ -26,13 +26,21 @@ export default function RegisterPage() {
         <FieldDescription>
           By registering, you agree to our
           <Button variant='link' size='sm' asChild>
-            <Link href='https://tiesen243.github.io/yukinu/legal/terms-of-service.html'>
+            <Link
+              href='https://tiesen243.github.io/yukinu/legal/term-of-service.html'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               Terms of Service
             </Link>
-          </Button>{' '}
-          and{' '}
+          </Button>
+          and
           <Button variant='link' size='sm' asChild>
-            <Link href='https://tiesen243.github.io/yukinu/legal/term-of-service.html'>
+            <Link
+              href='https://tiesen243.github.io/yukinu/legal/privacy-policy.html'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
               Privacy Policy
             </Link>
           </Button>
@@ -40,7 +48,7 @@ export default function RegisterPage() {
         </FieldDescription>
 
         <FieldDescription>
-          Already have an account?{' '}
+          Already have an account?
           <Button variant='link' size='sm' asChild>
             <Link href='/login'>Login</Link>
           </Button>

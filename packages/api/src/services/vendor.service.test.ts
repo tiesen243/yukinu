@@ -8,7 +8,7 @@ import { VendorRepository } from '@/repositories/vendor.repository.mock'
 import { VendorService } from '@/services/vendor.service'
 
 describe('VendorService', () => {
-  let service: IVendorService
+  let _service: IVendorService
 
   beforeEach(() => {
     const db = {
@@ -17,99 +17,89 @@ describe('VendorService', () => {
         return await fn(tx)
       },
     } as unknown as Database
-    const userRepo = new UserRepository()
-    const vendorRepo = new VendorRepository()
-    service = new VendorService(db, userRepo, vendorRepo)
+    const user = new UserRepository()
+    const vendor = new VendorRepository(user)
+    _service = new VendorService(db, user, vendor)
   })
 
-  describe('VendorService.register', () => {
-    it('should register a new vendor for a user without an existing vendor', async () => {
-      const data = {
-        ownerId: '1',
+  describe('all', () => {
+    it('should return all vendors with pagination', async () => {
+      const result = await _service.all({
+        status: undefined,
+        limit: 2,
+        page: 1,
+      })
+
+      expect(result.vendors.length).toBeGreaterThan(0)
+      expect(result.pagination.totalItems).toBeGreaterThan(0)
+      expect(result.pagination.page).toBe(1)
+    })
+  })
+
+  describe('register', () => {
+    it('should register a new vendor', async () => {
+      const output = await _service.register({
+        userId: 'user-2',
         name: 'New Vendor',
-        description: 'Test vendor',
-        imageUrl: null,
-        website: undefined,
-      }
-      const result = await service.register(data)
-      expect(result).toHaveProperty('id')
-      expect(typeof result.id).toBe('string')
+        description: 'desc',
+        website: '',
+      })
+      expect(output.vendorId).toBeDefined()
     })
 
-    it('should throw CONFLICT if user already has a vendor', () => {
-      const data = {
-        ownerId: 'user-1',
-        name: 'Duplicate Vendor',
-        description: 'Test vendor',
-        imageUrl: null,
-        website: undefined,
-      }
-      expect(service.register(data)).rejects.toThrow(
-        'You already has a registered vendor',
+    it('should throw if user already has a vendor', () => {
+      expect(
+        _service.register({
+          userId: 'user-3',
+          name: 'Duplicate Vendor',
+          description: '',
+          website: '',
+        }),
+      ).rejects.toThrow('You already have a vendor registered.')
+    })
+  })
+
+  describe('update', () => {
+    it('should update vendor status and user role', async () => {
+      const output = await _service.update(
+        { id: 'vendor-1', status: 'suspended' },
+        { id: 'user-1', role: 'admin' },
       )
+      expect(output.vendorId).toBe('vendor-1')
+    })
+
+    it('should throw on invalid status transition', () => {
+      expect(
+        _service.update(
+          { id: 'vendor-1', status: 'pending' },
+          { id: 'user-1', role: 'admin' },
+        ),
+      ).rejects.toThrow('Invalid status transition.')
+    })
+
+    it('should throw if vendor not found', () => {
+      expect(
+        _service.update(
+          { id: 'not-exist', status: 'approved' },
+          { id: 'user-1', role: 'admin' },
+        ),
+      ).rejects.toThrow('Vendor with ID not-exist not found.')
     })
   })
 
-  describe('VendorService.update', () => {
-    it('should throw NOT_FOUND if vendor does not exist', () => {
-      expect(
-        service.update({ vendorId: 'not-exist', status: 'approved' }),
-      ).rejects.toThrow('Vendor not found')
+  describe('delete', () => {
+    it('should delete a vendor and update user role', async () => {
+      const output = await _service.delete(
+        { id: 'vendor-1' },
+        { id: 'user-1', role: 'admin' },
+      )
+      expect(output.vendorId).toBe('vendor-1')
     })
 
-    it('should throw BAD_REQUEST for invalid status transition', async () => {
-      const data = {
-        ownerId: 'user-3',
-        name: 'Test Vendor',
-        description: 'Test',
-        imageUrl: null,
-        website: 'https://test.com',
-      }
-      const { id } = await service.register(data)
+    it('should throw if vendor not found', () => {
       expect(
-        service.update({ vendorId: id, status: 'suspended' }),
-      ).rejects.toThrow('Invalid status transition')
-    })
-  })
-
-  describe('VendorService.inviteMember', () => {
-    it('should throw NOT_FOUND if vendor does not exist', () => {
-      expect(
-        service.inviteMember({
-          vendorId: 'not-exist',
-          email: 'alice@example.com',
-        }),
-      ).rejects.toThrow('Vendor not found')
-    })
-
-    it('should throw NOT_FOUND if user does not exist', async () => {
-      const { id } = await service.register({
-        ownerId: '1',
-        name: 'Test Vendor',
-        description: 'Test',
-        website: 'https://test.com',
-      })
-      expect(
-        service.inviteMember({
-          vendorId: id,
-          email: 'notfound@example.com',
-        }),
-      ).rejects.toThrow('User with the provided email not found')
-    })
-
-    it('should throw CONFLICT if user is already a member', async () => {
-      const { id } = await service.register({
-        ownerId: '1',
-        name: 'Test Vendor',
-        description: 'Test',
-        website: 'https://test.com',
-      })
-      expect(
-        service.inviteMember({
-          vendorId: id,
-          email: 'alice@example.com',
-        }),
-      ).rejects.toThrow('User is already a member of the vendor')
+        _service.delete({ id: 'not-exist' }, { id: 'user-1', role: 'admin' }),
+      ).rejects.toThrow('Vendor with ID not-exist not found.')
     })
   })
 })

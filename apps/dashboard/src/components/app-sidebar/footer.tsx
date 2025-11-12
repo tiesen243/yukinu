@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { useMutation } from '@tanstack/react-query'
 
 import { useSession } from '@yukinu/auth/react'
 import { useTheme } from '@yukinu/ui'
@@ -10,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
+
+import { useTRPC } from '@/trpc/react'
 
 export const AppSidebarFooter: React.FC = () => {
   return (
@@ -58,8 +60,15 @@ const ToggleThemeButton: React.FC = () => {
 }
 
 const LogOutButton: React.FC = () => {
-  const { signOut, status } = useSession()
-  const navigate = useNavigate()
+  const { status, refresh } = useSession()
+
+  const trpc = useTRPC()
+  const { mutate } = useMutation({
+    ...trpc.auth.logout.mutationOptions(),
+    onSuccess: async () => {
+      await refresh()
+    },
+  })
 
   if (status === 'loading')
     return (
@@ -73,9 +82,8 @@ const LogOutButton: React.FC = () => {
   return (
     <SidebarMenuButton
       role='button'
-      onClick={async () => {
-        await signOut()
-        await navigate(0)
+      onClick={() => {
+        mutate()
       }}
     >
       <LogOutIcon /> Logout

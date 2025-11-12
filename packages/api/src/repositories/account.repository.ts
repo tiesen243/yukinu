@@ -10,9 +10,9 @@ export class AccountRepository
   protected override _table = accounts
 
   override async create(
-    data: IAccountRepository.NewAccountType,
+    data: IAccountRepository.INewAccount,
     tx = this._db,
-  ): Promise<{ id: string } | null> {
+  ): Promise<{ id: string }> {
     const [result] = await tx
       .insert(this._table)
       .values(data)
@@ -21,8 +21,7 @@ export class AccountRepository
         target: [this._table.provider, this._table.accountId],
         set: data,
       })
-    if (!result) return null
-
+    if (!result) throw new Error('Failed to create or update account')
     return result
   }
 }

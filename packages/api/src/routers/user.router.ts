@@ -1,4 +1,4 @@
-import { UserValidator } from '@yukinu/validators/user'
+import { UserModels } from '@yukinu/validators/user'
 
 import { createTRPCRouter, protectedProcedure } from '@/trpc'
 
@@ -8,21 +8,19 @@ export const userRouter = createTRPCRouter({
       message: 'Fetched users successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(UserValidator.allParams)
-    .query(({ ctx, input }) => ctx.userService.getUsers(input)),
-
-  profile: protectedProcedure
-    .meta({ message: 'Fetched profile successfully' })
-    .query(({ ctx }) => ctx.userService.getUserProfile(ctx.session.user)),
+    .input(UserModels.allInput)
+    .output(UserModels.allOutput)
+    .query(({ ctx, input }) => ctx.userService.all(input)),
 
   update: protectedProcedure
     .meta({
       message: 'User updated successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(UserValidator.updateUserBody)
+    .input(UserModels.updateInput)
+    .output(UserModels.updateOutput)
     .mutation(({ ctx, input }) =>
-      ctx.userService.updateUser(input, ctx.session.user),
+      ctx.userService.update(input, ctx.session.user),
     ),
 
   delete: protectedProcedure
@@ -30,15 +28,9 @@ export const userRouter = createTRPCRouter({
       message: 'User deleted successfully',
       roles: ['admin', 'moderator'],
     })
-    .input(UserValidator.oneParams)
+    .input(UserModels.deleteInput)
+    .output(UserModels.deleteOutput)
     .mutation(({ ctx, input }) =>
-      ctx.userService.deleteUser(input, ctx.session.user),
-    ),
-
-  updateProfile: protectedProcedure
-    .meta({ message: 'Profile updated successfully' })
-    .input(UserValidator.updateProfileBody)
-    .mutation(({ ctx, input }) =>
-      ctx.userService.updateUserProfile(ctx.session.user.id, input),
+      ctx.userService.delete(input, ctx.session.user),
     ),
 })

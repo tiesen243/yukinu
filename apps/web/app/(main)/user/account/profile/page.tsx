@@ -10,7 +10,7 @@ import { getQueryClient, HydrateClient, trpc } from '@/trpc/rsc'
 
 export default function ProfilePage() {
   const queryClient = getQueryClient()
-  void queryClient.prefetchQuery(trpc.user.profile.queryOptions())
+  void queryClient.prefetchQuery(trpc.profile.get.queryOptions())
 
   return (
     <HydrateClient>

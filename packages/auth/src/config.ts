@@ -122,15 +122,19 @@ function getAdapter(): AuthOptions['adapter'] {
         .innerJoin(usersView, eq(sessions.userId, usersView.id))
       return session ?? null
     },
+
     createSession: async (data) => {
       await db.insert(sessions).values(data)
     },
+
     updateSession: async (token, data) => {
       await db.update(sessions).set(data).where(eq(sessions.token, token))
     },
+
     deleteSession: async (token) => {
       await db.delete(sessions).where(eq(sessions.token, token))
     },
+
     deleteSessionsByUserId: async (userId) => {
       await db.delete(sessions).where(eq(sessions.userId, userId))
     },

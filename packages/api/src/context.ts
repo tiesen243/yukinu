@@ -7,30 +7,36 @@ import { ProfileRepository } from '@/repositories/profile.repository'
 import { UserRepository } from '@/repositories/user.repository'
 import { VendorRepository } from '@/repositories/vendor.repository'
 import { AuthService } from '@/services/auth.service'
+import { ProfileService } from '@/services/profile.service'
 import { UserService } from '@/services/user.service'
 import { VendorService } from '@/services/vendor.service'
 
-export const createTRPCContext = async (request: {
+export const createTRPCContext = async (options: {
   headers: Headers
+  resHeaders?: Headers
 }): Promise<TRPCContext> => {
-  const headers = request.headers
-  const session = await auth(request)
+  const { headers, resHeaders = new Headers() } = options
 
-  const accountRepo = new AccountRepository(db)
-  const profileRepo = new ProfileRepository(db)
-  const userRepo = new UserRepository(db)
+  const session = await auth({ headers })
 
-  const vendorRepo = new VendorRepository(db)
+  const account = new AccountRepository(db)
+  const profile = new ProfileRepository(db)
+  const user = new UserRepository(db)
+  const vendor = new VendorRepository(db)
 
-  const authService = new AuthService(db, accountRepo, profileRepo, userRepo)
-  const userService = new UserService(db, accountRepo, profileRepo, userRepo)
-  const vendorService = new VendorService(db, userRepo, vendorRepo)
+  const authService = new AuthService(db, account, profile, user)
+  const profileService = new ProfileService(db, profile)
+  const userService = new UserService(db, profile, user)
+  const vendorService = new VendorService(db, user, vendor)
 
   return {
     headers,
+    resHeaders,
+
     session,
 
     authService,
+    profileService,
     userService,
     vendorService,
   }
