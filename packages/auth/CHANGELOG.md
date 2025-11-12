@@ -1,5 +1,17 @@
 # @yukinu/auth
 
+## 0.1.6
+
+### Patch Changes
+
+- [#180](https://github.com/tiesen243/yukinu/pull/180) [`2547ae1`](https://github.com/tiesen243/yukinu/commit/2547ae1054e5f8d590d9c63b6edf7505c93f5afc) Thanks [@tiesen243](https://github.com/tiesen243)! - fix oauth callback url
+
+- [#180](https://github.com/tiesen243/yukinu/pull/180) [`a8fb1c3`](https://github.com/tiesen243/yukinu/commit/a8fb1c3e893a22387721038e4c8e19a9dd91e604) Thanks [@tiesen243](https://github.com/tiesen243)! - fix url
+
+- Updated dependencies [[`a8fb1c3`](https://github.com/tiesen243/yukinu/commit/a8fb1c3e893a22387721038e4c8e19a9dd91e604)]:
+  - @yukinu/validators@0.1.5
+  - @yukinu/db@0.1.5
+
 ## 0.1.5
 
 ### Patch Changes
