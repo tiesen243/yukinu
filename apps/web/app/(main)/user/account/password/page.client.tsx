@@ -26,11 +26,11 @@ export const ChangePasswordForm: React.FC = () => {
 
   const form = useForm({
     defaultValues: {
-      currentPassword: '',
+      currentPassword: undefined,
       newPassword: '',
       confirmNewPassword: '',
       isLogOutOtherSessions: true,
-    },
+    } as AuthModels.ChangePasswordInput,
     schema: AuthModels.changePasswordInput,
     onSubmit: trpcClient.auth.changePassword.mutate,
     onSuccess: () => {

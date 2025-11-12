@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.2.6
+
+### Patch Changes
+
+- [#183](https://github.com/tiesen243/yukinu/pull/183) [`13d1adb`](https://github.com/tiesen243/yukinu/commit/13d1adb4ea944de8bc8213fe17e76e931801e880) Thanks [@tiesen243](https://github.com/tiesen243)! - fix default current password in change password form
+
 ## 0.2.5
 
 ### Patch Changes
