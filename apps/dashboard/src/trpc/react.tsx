@@ -45,8 +45,7 @@ function TRPCReactProvider({
       links: [
         splitLink({
           condition: ({ path }) =>
-            env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true' &&
-            !path.startsWith('auth.'),
+            env.VITE_TRPC_USE_STREAMING === 'true' && !path.startsWith('auth.'),
           true: httpBatchStreamLink(configs),
           false: httpBatchLink(configs),
         }),
