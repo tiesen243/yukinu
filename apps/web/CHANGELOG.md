@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.2.3
+
+### Patch Changes
+
+- [#174](https://github.com/tiesen243/yukinu/pull/174) [`bbbd032`](https://github.com/tiesen243/yukinu/commit/bbbd03200a9e556f174ef09ceb9671aff73fa317) Thanks [@tiesen243](https://github.com/tiesen243)! - disable batch stream link for auth route
+
 ## 0.2.2
 
 ### Patch Changes
