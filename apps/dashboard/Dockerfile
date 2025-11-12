@@ -48,7 +48,7 @@ FROM base AS prod-deps
 WORKDIR /prod-deps
 
 COPY --from=prepare /prune/out/json .
-RUN bun install --omit=dev --omit=peer --ignore-scripts
+RUN bun ci --omit=dev --omit=peer --ignore-scripts
 
 # ===========================================
 # Stage 4: Production image

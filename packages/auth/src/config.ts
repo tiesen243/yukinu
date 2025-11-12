@@ -131,7 +131,7 @@ export type Providers = keyof typeof authOptions.providers
 export function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_APP_URL)
     return `https://${process.env.NEXT_PUBLIC_APP_URL}`
-  else if (import.meta.env.VITE_APP_URL)
+  else if (typeof import.meta.env === 'object' && import.meta.env.VITE_APP_URL)
     return `https://${import.meta.env.VITE_APP_URL}`
   return `http://localhost:${process.env.PORT ?? 3000}`
 }
