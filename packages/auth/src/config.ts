@@ -31,10 +31,10 @@ export const authOptions = {
     redirect: 'auth.redirect',
   },
   cookieOptions: {
-    path: '/',
-    httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'Lax',
+    Path: '/',
+    HttpOnly: true,
+    SameSite: 'Lax',
+    Secure: env.NODE_ENV === 'production',
   },
   adapter: {
     getUserByIndentifier: async (indentifier) => {
@@ -127,18 +127,3 @@ export const authOptions = {
 } as const satisfies AuthOptions
 
 export type Providers = keyof typeof authOptions.providers
-
-export const createSessionCookie = (
-  token: string,
-  options: AuthOptions['cookieOptions'],
-): string => {
-  let cookie = `${authOptions.cookieKeys.token}=${token};`
-
-  const finalOptions = { ...authOptions.cookieOptions, ...options }
-  for (const [key, value] of Object.entries(finalOptions)) {
-    if (typeof value === 'boolean') cookie += ` ${key};`
-    else cookie += ` ${key}=${value};`
-  }
-
-  return cookie
-}

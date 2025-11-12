@@ -4,13 +4,13 @@ import type * as ViewTypes from '@yukinu/db/schema/view'
 import type BaseProvider from '@/providers/base'
 
 export interface CookieOptions {
-  domain?: string
-  expires?: Date | string | number
-  httpOnly?: boolean
-  maxAge?: number
-  path?: string
-  sameSite?: 'Strict' | 'Lax' | 'None'
-  secure?: boolean
+  Domain?: string
+  Expires?: Date | string | number
+  HttpOnly?: boolean
+  'Max-Age'?: number
+  Path?: string
+  SameSite?: 'Strict' | 'Lax' | 'None'
+  Secure?: boolean
   [key: string]: unknown
 }
 

@@ -12,7 +12,6 @@ const { auth: uncachedAuth, signIn, signOut, handlers } = Auth(authOptions)
 const auth = cache(uncachedAuth)
 
 export type { Session, User } from '@/types'
-export { createSessionCookie } from '@/config'
 export { Password } from '@/core/password'
 export { generateCsrfToken, verifyRequestOrigin } from '@/csrf'
 export { TokenBucketRateLimit } from '@/rate-limit'

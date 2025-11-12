@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/web",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "private": false,
   "type": "module",
   "scripts": {
@@ -22,7 +22,7 @@
     "@yukinu/db": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.0.1",
+    "next": "^16.0.2",
     "react": "catalog:react",
     "react-dom": "catalog:react",
     "superjson": "catalog:trpc"

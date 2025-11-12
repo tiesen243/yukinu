@@ -1,7 +1,6 @@
 import { AuthModels } from '@yukinu/validators/auth'
 
-import type { AuthOptions, Session } from '@/types'
-import { createSessionCookie } from '@/config'
+import type { AuthOptions, CookieOptions, Session } from '@/types'
 import {
   encodeHex,
   generateSecureString,
@@ -29,7 +28,7 @@ function extractToken(headers: Headers, tokenKey: string): string {
 }
 
 export function Auth(opts: AuthOptions) {
-  const { adapter, cookieKeys, providers, session } = opts
+  const { adapter, cookieKeys, cookieOptions, providers, session } = opts
 
   async function createSession(
     userId: string,
@@ -111,6 +110,21 @@ export function Auth(opts: AuthOptions) {
     await adapter.deleteSession(hashToken)
   }
 
+  const createSessionCookie = (
+    token: string,
+    options: CookieOptions,
+  ): string => {
+    let cookie = `${cookieKeys.token}=${token};`
+
+    const finalOptions = { ...cookieOptions, ...options }
+    for (const [key, value] of Object.entries(finalOptions)) {
+      if (typeof value === 'boolean') cookie += ` ${key};`
+      else cookie += ` ${key}=${value};`
+    }
+
+    return cookie
+  }
+
   return {
     auth,
     signIn,
@@ -174,12 +188,12 @@ export function Auth(opts: AuthOptions) {
               session = await createSession(userId, request.headers)
             }
 
-            const { token, expires } = session
+            const { token, expires: Expires } = session
 
             if (redirectTo.startsWith('http')) {
               const url = new URL(redirectTo)
               url.searchParams.set('token', token)
-              url.searchParams.set('expires', expires.toISOString())
+              url.searchParams.set('expires', Expires.toISOString())
               redirectTo = url.toString()
             }
 
@@ -198,7 +212,7 @@ export function Auth(opts: AuthOptions) {
             if (!redirectTo.startsWith('http'))
               response.headers.append(
                 'Set-Cookie',
-                createSessionCookie(token, { expires }),
+                createSessionCookie(token, { Expires }),
               )
 
             return setCorsHeaders(response)
@@ -223,14 +237,14 @@ export function Auth(opts: AuthOptions) {
             const parsed = AuthModels.loginInput.safeParse(await request.json())
             if (!parsed.success) throw new Error(parsed.error.message)
 
-            const { token, expires } = await signIn(
+            const { token, expires: Expires } = await signIn(
               parsed.data,
               request.headers,
             )
-            const response = Response.json({ token, expires })
+            const response = Response.json({ token, expires: Expires })
             response.headers.append(
               'Set-Cookie',
-              createSessionCookie(token, { expires }),
+              createSessionCookie(token, { Expires }),
             )
 
             return setCorsHeaders(response)
