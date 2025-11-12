@@ -53,7 +53,7 @@ export namespace UserModels {
   export const oneInput = user.pick({ id: true })
   export type OneInput = z.infer<typeof oneInput>
 
-  export const oneOutput = user.nullable()
+  export const oneOutput = user
   export type OneOutput = z.infer<typeof oneOutput>
   //#endregion
 

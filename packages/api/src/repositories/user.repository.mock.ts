@@ -9,7 +9,17 @@ export class UserRepository
 {
   protected override _data = [
     {
-      id: '1',
+      id: 'user-1',
+      username: 'bob',
+      email: 'bob@example.com',
+      emailVerified: null,
+      role: 'admin' as const,
+      status: 'active' as const,
+      createdAt: new Date('2023-02-01T00:00:00Z'),
+      updatedAt: new Date('2023-02-01T00:00:00Z'),
+    },
+    {
+      id: 'user-2',
       username: 'alice',
       email: 'alice@example.com',
       emailVerified: new Date('2023-01-01T00:00:00Z'),
@@ -19,14 +29,14 @@ export class UserRepository
       updatedAt: new Date('2023-01-01T00:00:00Z'),
     },
     {
-      id: '2',
-      username: 'bob',
-      email: 'bob@example.com',
-      emailVerified: null,
-      role: 'admin' as const,
+      id: 'user-3',
+      username: 'charlie',
+      email: 'charlie@example.com',
+      emailVerified: new Date('2023-03-01T00:00:00Z'),
+      role: 'vendor_owner' as const,
       status: 'active' as const,
-      createdAt: new Date('2023-02-01T00:00:00Z'),
-      updatedAt: new Date('2023-02-01T00:00:00Z'),
+      createdAt: new Date('2023-03-01T00:00:00Z'),
+      updatedAt: new Date('2023-03-01T00:00:00Z'),
     },
   ]
 }

@@ -28,7 +28,7 @@ export abstract class BaseRepository<TTable extends PgTable>
     _tx?: Database,
   ): Promise<TTable['$inferSelect'][]> {
     const records = this._data.filter((item) =>
-      criteria.every((criterion) =>
+      criteria.some((criterion) =>
         Object.entries(criterion).every(
           ([key, value]) => item[key as keyof TTable['$inferSelect']] === value,
         ),

@@ -21,9 +21,9 @@ export class AuthService implements IAuthService {
 
   public constructor(
     private readonly _db: Database,
-    private readonly _accountRepo: IAccountRepository,
-    private readonly _profileRepo: IProfileRepository,
-    private readonly _userRepo: IUserRepository,
+    private readonly _account: IAccountRepository,
+    private readonly _profile: IProfileRepository,
+    private readonly _user: IUserRepository,
   ) {
     this._password = new Password()
   }
@@ -35,7 +35,7 @@ export class AuthService implements IAuthService {
   ): Promise<AuthModels.LoginOutput> {
     const { identifier, password } = input
 
-    const [existingUser] = await this._userRepo.findBy(
+    const [existingUser] = await this._user.findBy(
       [{ email: identifier }, { username: identifier }],
       {},
       1,
@@ -46,7 +46,7 @@ export class AuthService implements IAuthService {
         message: 'Invalid credentials',
       })
 
-    const [existingAccount] = await this._accountRepo.findBy(
+    const [existingAccount] = await this._account.findBy(
       [{ userId: existingUser.id, provider: 'credentials' }],
       {},
       1,
@@ -79,7 +79,7 @@ export class AuthService implements IAuthService {
   ): Promise<AuthModels.RegisterOutput> {
     const { email, username } = input
 
-    const [existingUser] = await this._userRepo.findBy(
+    const [existingUser] = await this._user.findBy(
       [{ email }, { username }],
       {},
       1,
@@ -93,17 +93,14 @@ export class AuthService implements IAuthService {
     const password = await this._password.hash(input.password)
 
     return this._db.transaction(async (tx) => {
-      const { id: userId } = await this._userRepo.create(
-        { email, username },
-        tx,
-      )
+      const { id: userId } = await this._user.create({ email, username }, tx)
 
-      await this._accountRepo.create(
+      await this._account.create(
         { userId, provider: 'credentials', accountId: userId, password },
         tx,
       )
 
-      await this._profileRepo.create({ id: userId, fullName: username }, tx)
+      await this._profile.create({ id: userId, fullName: username }, tx)
 
       return { userId }
     })
@@ -115,7 +112,7 @@ export class AuthService implements IAuthService {
     const { userId, currentPassword, newPassword, isLogOutOtherSessions } =
       input
 
-    const [existingAccount] = await this._accountRepo.findBy(
+    const [existingAccount] = await this._account.findBy(
       [{ userId, provider: 'credentials' }],
       {},
       1,
@@ -130,11 +127,11 @@ export class AuthService implements IAuthService {
     )
       throw new TRPCError({
         code: 'UNAUTHORIZED',
-        message: 'Current password is incorrect',
+        message: 'Invalid current password',
       })
 
     const password = await this._password.hash(newPassword)
-    await this._accountRepo.create({
+    await this._account.create({
       userId,
       provider: 'credentials',
       accountId: userId,

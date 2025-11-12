@@ -16,7 +16,9 @@ export class UserService implements IUserService {
     const { search = '', limit, page } = input
     const offset = (page - 1) * limit
 
-    const criteria = [{ email: `%${search}%` }, { username: `%${search}%` }]
+    const criteria = search
+      ? [{ email: `%${search}%` }, { username: `%${search}%` }]
+      : []
     const users = await this._userRepo.findBy(
       criteria,
       { createdAt: 'desc' },
@@ -34,7 +36,10 @@ export class UserService implements IUserService {
   }
 
   public async one(input: UserModels.OneInput): Promise<UserModels.OneOutput> {
-    return this._userRepo.find(input.id)
+    const user = await this._userRepo.find(input.id)
+    if (!user)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
+    return user
   }
 
   public async update(
@@ -44,11 +49,6 @@ export class UserService implements IUserService {
     const { id = '', ...updateData } = input
 
     const existingUser = await this.one({ id })
-    if (!existingUser)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `User with ID ${id} not found.`,
-      })
 
     this.checkModifyPermissions(existingUser, actingUser)
 
@@ -63,12 +63,6 @@ export class UserService implements IUserService {
     const { id } = input
 
     const existingUser = await this.one({ id })
-    if (!existingUser)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `User with ID ${input.id} not found.`,
-      })
-
     this.checkModifyPermissions(existingUser, actingUser)
 
     return this._db.transaction(async (tx) => {

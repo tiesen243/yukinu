@@ -30,7 +30,7 @@ export namespace ProfileModels {
   //#endregion
 
   //#region Update Profile Schema
-  export const updateInput = profile
+  export const updateInput = profile.partial()
   export type UpdateInput = z.infer<typeof updateInput>
 
   export const updateOutput = z.object({ profileId: profile.shape.id })
