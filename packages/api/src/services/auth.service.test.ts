@@ -48,44 +48,6 @@ describe('AuthService', () => {
     _service = new AuthService(db, account, profile, user)
   })
 
-  describe('login', () => {
-    it('should throw UNAUTHORIZED if user does not exist', () => {
-      const headers = new Headers()
-      const resHeaders = new Headers()
-      expect(
-        _service.login(
-          { identifier: 'notfound', password: 'pass' },
-          headers,
-          resHeaders,
-        ),
-      ).rejects.toThrow('Invalid credentials')
-    })
-
-    it('should throw UNAUTHORIZED if password is invalid', () => {
-      const headers = new Headers()
-      const resHeaders = new Headers()
-      expect(
-        _service.login(
-          { identifier: 'alice', password: 'wrong' },
-          headers,
-          resHeaders,
-        ),
-      ).rejects.toThrow('Invalid credentials')
-    })
-
-    it('should return token and set cookie for valid credentials', async () => {
-      const headers = new Headers()
-      const resHeaders = new Headers()
-      const result = await _service.login(
-        { identifier: 'alice', password: 'password123' },
-        headers,
-        resHeaders,
-      )
-      expect(result).toHaveProperty('token')
-      expect(resHeaders.get('Set-Cookie')).toContain('session=token-user-2')
-    })
-  })
-
   describe('register', () => {
     it('should throw CONFLICT if user already exists', () => {
       expect(
@@ -106,15 +68,6 @@ describe('AuthService', () => {
         confirmPassword: 'pass',
       })
       expect(result).toHaveProperty('userId')
-    })
-  })
-
-  describe('logout', () => {
-    it('should append Set-Cookie if invalidateSession returns a cookie', async () => {
-      const headers = new Headers()
-      const resHeaders = new Headers()
-      await _service.logout(headers, resHeaders)
-      expect(resHeaders.get('Set-Cookie')).toContain('session=; Max-Age=0')
     })
   })
 

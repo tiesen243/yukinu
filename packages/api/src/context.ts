@@ -13,11 +13,8 @@ import { VendorService } from '@/services/vendor.service'
 
 export const createTRPCContext = async (options: {
   headers: Headers
-  resHeaders?: Headers
 }): Promise<TRPCContext> => {
-  const { headers, resHeaders = new Headers() } = options
-
-  const session = await auth({ headers })
+  const session = await auth(options)
 
   const account = new AccountRepository(db)
   const profile = new ProfileRepository(db)
@@ -30,8 +27,7 @@ export const createTRPCContext = async (options: {
   const vendorService = new VendorService(db, user, vendor)
 
   return {
-    headers,
-    resHeaders,
+    headers: options.headers,
 
     session,
 

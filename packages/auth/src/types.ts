@@ -62,7 +62,6 @@ export interface DatabaseAdapter {
   createSession(data: NewSession): Promise<void>
   updateSession(token: string, data: Partial<NewSession>): Promise<void>
   deleteSession(token: string): Promise<void>
-  deleteSessionsByUserId(userId: string): Promise<void>
 }
 
 export interface AuthOptions {
@@ -72,11 +71,11 @@ export interface AuthOptions {
     expiresIn: number
     expiresThreshold: number
   }
-  cookieKeys?: {
-    token?: string
-    state?: string
-    code?: string
-    redirect?: string
+  cookieKeys: {
+    token: string
+    state: string
+    code: string
+    redirect: string
   }
-  cookieOptions?: CookieOptions
+  cookieOptions: CookieOptions
 }

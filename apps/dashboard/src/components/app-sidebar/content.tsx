@@ -27,6 +27,8 @@ import {
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
 
+import { getBaseUrl } from '@/lib/utils'
+
 export const AppSidebarContent: React.FC = () => {
   const { session, status } = useSession()
 
@@ -36,18 +38,23 @@ export const AppSidebarContent: React.FC = () => {
   return (
     <SidebarContent>
       <SidebarGroup>
-        <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <NavLink to={window.location.origin}>
-              <SidebarMenuButton asChild>
+        <SidebarMenuItem>
+          <NavLink to={getBaseUrl()}>
+            {({ isActive, isPending }) => (
+              <SidebarMenuButton isActive={isActive} asChild>
                 <span>
                   <HomeIcon /> Home
+                  <Activity mode={isPending ? 'visible' : 'hidden'}>
+                    <Loader2Icon className='animate-spin' />
+                  </Activity>
                 </span>
               </SidebarMenuButton>
-            </NavLink>
-          </SidebarMenuItem>
+            )}
+          </NavLink>
+        </SidebarMenuItem>
 
+        <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
+        <SidebarMenu>
           {mainMenuItems
             .filter((item) => item.roles.includes(session.user.role))
             .map((item) => (
