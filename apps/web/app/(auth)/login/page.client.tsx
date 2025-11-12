@@ -8,19 +8,23 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidator } from '@yukinu/validators/auth'
+import { AuthModels } from '@yukinu/validators/auth'
+
+import { useTRPCClient } from '@/trpc/react'
 
 export const LoginForm: React.FC = () => {
+  const { refresh } = useSession()
+  const trpc = useTRPCClient()
   const router = useRouter()
-  const { signIn } = useSession()
 
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
-    schema: AuthValidator.loginBody,
-    onSubmit: (data) => signIn('credentials', data),
+    schema: AuthModels.loginInput,
+    onSubmit: trpc.auth.login.mutate,
     onSuccess: () => {
-      router.push('/')
       toast.success('Successfully logged in')
+      router.push('/')
+      void refresh()
     },
     onError: (error) => toast.error(error.message),
   })

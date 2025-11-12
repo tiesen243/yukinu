@@ -12,7 +12,7 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
-import { VendorValidator } from '@yukinu/validators/vendor'
+import { VendorModels } from '@yukinu/validators/vendor'
 
 import { useTRPCClient } from '@/trpc/react'
 
@@ -31,9 +31,9 @@ function RegisterShopForm() {
     defaultValues: {
       name: '',
       description: '',
-      website: undefined as string | undefined,
-    },
-    schema: VendorValidator.registerBody,
+      website: null,
+    } as Omit<VendorModels.RegisterInput, 'userId'>,
+    schema: VendorModels.registerInput.omit({ userId: true }),
     onSubmit: trpc.vendor.register.mutate,
     onError: ({ message }) => toast.error(message),
     onSuccess: () =>
@@ -72,6 +72,7 @@ function RegisterShopForm() {
                 <FieldLabel htmlFor={meta.fieldId}>Shop Description</FieldLabel>
                 <Textarea
                   {...field}
+                  value={field.value ?? ''}
                   placeholder='Enter a brief description of your shop'
                 />
                 <FieldError id={meta.errorId} errors={meta.errors} />
@@ -87,6 +88,7 @@ function RegisterShopForm() {
                 <Input
                   {...field}
                   type='url'
+                  value={field.value ?? ''}
                   placeholder='Enter your shop website URL'
                 />
                 <FieldError id={meta.errorId} errors={meta.errors} />

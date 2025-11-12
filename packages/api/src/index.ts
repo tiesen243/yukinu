@@ -14,7 +14,8 @@ const handler = async (request: Request, base = '') => {
       endpoint: `${base}/api/trpc`,
       req: request,
       router: appRouter,
-      createContext: () => createTRPCContext(request),
+      createContext: ({ resHeaders }) =>
+        createTRPCContext({ headers: request.headers, resHeaders }),
     })
 
   response.headers.set('Access-Control-Allow-Origin', '*')

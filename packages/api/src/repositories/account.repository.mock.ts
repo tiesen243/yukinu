@@ -9,18 +9,18 @@ export class AccountRepository
 {
   protected override _data = [
     {
-      id: '1',
-      userId: '1',
+      id: 'account-1',
+      userId: 'user-1',
       provider: 'google',
       accountId: 'google-uid-123',
       password: null,
     },
     {
-      id: '2',
-      userId: '2',
-      provider: 'local',
-      accountId: 'facebook-uid-456',
-      password: null,
+      id: 'account-2',
+      userId: 'user-2',
+      provider: 'credentials',
+      accountId: 'user-2',
+      password: 'hashed-password123',
     },
   ]
 }

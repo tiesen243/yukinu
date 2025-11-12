@@ -24,16 +24,16 @@ export interface IBaseRepository<TTable extends PgTable> {
   create(
     data: TTable['$inferInsert'],
     tx?: Database,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null>
+  ): Promise<{ id: TTable['$inferSelect']['id'] }>
 
   update(
     id: TTable['$inferSelect']['id'],
     data: Partial<TTable['$inferInsert']>,
     tx?: Database,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null>
+  ): Promise<{ id: TTable['$inferSelect']['id'] }>
 
   delete(
     id: TTable['$inferSelect']['id'],
     tx?: Database,
-  ): Promise<{ id: TTable['$inferSelect']['id'] } | null>
+  ): Promise<{ id: TTable['$inferSelect']['id'] }>
 }

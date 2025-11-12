@@ -31,7 +31,7 @@ export default function LoginPage() {
           <LoginForm />
 
           <FieldDescription>
-            Don't have an account?{' '}
+            Don't have an account?
             <Button variant='link' size='sm' asChild>
               <Link href='/register'>Register</Link>
             </Button>
@@ -39,23 +39,23 @@ export default function LoginPage() {
         </FieldSet>
       </form>
 
-      <div className='mt-6'>
+      <form method='POST' className='mt-6'>
         <FieldSeparator className='*:data-[slot=field-separator-content]:bg-card'>
           or
         </FieldSeparator>
         <Field className='mt-6 grid gap-4 sm:grid-cols-2'>
-          <Button variant='outline' asChild>
-            <Link prefetch={false} href='/api/auth/facebook'>
-              <FacebookIcon /> Continue with Facebook
-            </Link>
+          <Button
+            type='submit'
+            variant='outline'
+            formAction='/api/auth/facebook'
+          >
+            <FacebookIcon /> Continue with Facebook
           </Button>
-          <Button variant='outline' asChild>
-            <Link prefetch={false} href='/api/auth/google'>
-              <GoogleIcon /> Continue with Google
-            </Link>
+          <Button type='submit' variant='outline' formAction='/api/auth/google'>
+            <GoogleIcon /> Continue with Google
           </Button>
         </Field>
-      </div>
+      </form>
     </>
   )
 }

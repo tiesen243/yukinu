@@ -1,65 +1,70 @@
-import type { UserValidator } from '@yukinu/validators/user'
-
-import type { IUserRepository } from '@/types'
+import type { UserModels } from '@yukinu/validators/user'
 
 export interface IUserService {
   /**
    * Get a list of users with pagination
-   * @param query - The query parameters for searching and pagination
+   * @param input - The query parameters for searching and pagination
+   * @example
+   * {
+   *   search: 'john',
+   *   page: 1,
+   *   limit: 10
+   * }
    * @returns A list of users and pagination info
    */
-  getUsers(query: UserValidator.AllParams): Promise<{
-    users: IUserRepository.UserType[]
-    pagination: { page: number; total: number; totalPages: number }
-  }>
+  all(input: UserModels.AllInput): Promise<UserModels.AllOutput>
 
   /**
-   * Get the profile of a user
-   * @param user - The user object containing the user ID
-   * @returns The user's profile
+   * Get a single user by ID
+   * @param input - The data containing the user ID
+   * @example
+   * {
+   *   id: 'user-id'
+   * }
+   * @returns The user's information
    */
-  getUserProfile(user: {
-    id: IUserRepository.UserType['id']
-  }): Promise<IUserRepository.UserWithProfile>
+  one(input: UserModels.OneInput): Promise<UserModels.OneOutput>
 
   /**
    * Update a user's information
-   * @param data - The data to update the user with
+   * @param input - The data to update the user with
    * @example
    * {
-   *   userId: 'user-uuid',
+   *   id: 'user-id',
    *   role: 'admin',
    *   status: 'active',
    *   password: 'newPassword123' // optional
    * }
    * @param actingUser - The user performing the update
+   * @example
+   * {
+   *   id: 'admin-user-id',
+   *   role: 'admin'
+   * }
+   * @returns The ID of the updated user
    */
-  updateUser(
-    data: UserValidator.UpdateUserBody,
-    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
-  ): Promise<void>
+  update(
+    input: UserModels.UpdateInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<UserModels.UpdateOutput>
 
   /**
    * Delete a user
-   * @param data - The data containing the user ID to delete
+   * @param input - The data containing the user ID to delete
    * @example
    * {
-   *   userId: 'user-uuid'
+   *   id: 'user-id'
    * }
    * @param actingUser - The user performing the deletion
+   * @example
+   * {
+   *   id: 'admin-user-id',
+   *   role: 'admin'
+   * }
+   * @returns The ID of the deleted user
    */
-  deleteUser(
-    data: UserValidator.OneParams,
-    actingUser: Pick<IUserRepository.UserType, 'id' | 'role'>,
-  ): Promise<void>
-
-  /**
-   * Update a user's profile
-   * @param userId - The ID of the user whose profile is to be updated
-   * @param data - The data to update the profile with
-   */
-  updateUserProfile(
-    userId: IUserRepository.UserType['id'],
-    data: UserValidator.UpdateProfileBody,
-  ): Promise<void>
+  delete(
+    input: UserModels.DeleteInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<UserModels.DeleteOutput>
 }

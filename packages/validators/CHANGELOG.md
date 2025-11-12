@@ -1,5 +1,15 @@
 # @yukinu/validators
 
+## 0.1.4
+
+### Patch Changes
+
+- [#169](https://github.com/tiesen243/yukinu/pull/169) [`b4893aa`](https://github.com/tiesen243/yukinu/commit/b4893aa564c30e295ad2f443c20f295f2bcd84e8) Thanks [@tiesen243](https://github.com/tiesen243)! - added input output type
+
+- [#169](https://github.com/tiesen243/yukinu/pull/169) [`9dc7549`](https://github.com/tiesen243/yukinu/commit/9dc754977d85fe399e7a271002e8cce393ba97f7) Thanks [@tiesen243](https://github.com/tiesen243)! - update unit test
+
+- [#169](https://github.com/tiesen243/yukinu/pull/169) [`085ce77`](https://github.com/tiesen243/yukinu/commit/085ce7734c7bf53c0e64e3c0418399d1365bd309) Thanks [@tiesen243](https://github.com/tiesen243)! - update ui
+
 ## 0.1.3
 
 ### Patch Changes

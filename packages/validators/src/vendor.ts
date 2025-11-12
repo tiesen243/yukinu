@@ -1,39 +1,79 @@
 import * as z from 'zod'
 
-export namespace VendorValidator {
-  export const vendorStatus = ['pending', 'approved', 'suspended'] as const
-  export type VendorStatus = (typeof vendorStatus)[number]
+import { paginationInputSchema, paginationOutputSchema } from '@/lib/shared'
 
-  export const allParams = z.object({
-    status: z.enum(vendorStatus, 'Invalid vendor status').optional(),
-    page: z.number().min(1, 'Page must be at least 1').default(1),
-    limit: z.number().min(1, 'Limit must be at least 1').default(10),
-  })
-  export type AllParams = z.infer<typeof allParams>
+export namespace VendorModels {
+  //#region Vendor Schema
+  export const statuses = ['pending', 'approved', 'suspended'] as const
+  export type Status = (typeof statuses)[number]
 
-  export const oneParams = z.object({
-    vendorId: z.cuid2(),
+  export const vendor = z.object({
+    id: z.cuid2('Invalid vendor ID'),
+    ownerId: z.cuid2('Invalid owner ID'),
+    name: z
+      .string('Vendor name must be a string')
+      .min(4, 'Vendor name must be at least 4 characters long')
+      .max(100, 'Vendor name must be at most 100 characters long'),
+    status: z.enum(statuses, 'Invalid vendor status'),
+    description: z.string('Vendor description must be a string').nullable(),
+    imageUrl: z.url('Invalid image URL').nullable(),
+    website: z.url('Invalid vendor website').nullable(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
   })
-  export type OneParams = z.infer<typeof oneParams>
+  export type Vendor = z.infer<typeof vendor>
+  //#endregion
 
-  export const registerBody = z.object({
-    name: z.string().min(1, 'Name is required'),
-    description: z
-      .string()
-      .min(10, 'Description must be at least 10 characters'),
-    website: z.url().optional(),
+  //#region All Vendors Schema
+  export const allInput = paginationInputSchema.extend({
+    status: z.enum(statuses, 'Invalid vendor status').optional(),
   })
-  export type RegisterBody = z.infer<typeof registerBody>
+  export type AllInput = z.infer<typeof allInput>
 
-  export const updateBody = z.object({
-    vendorId: z.cuid2(),
-    status: z.enum(vendorStatus),
+  export const allOutput = z.object({
+    vendors: z.array(
+      vendor
+        .pick({ id: true, name: true, status: true, updatedAt: true })
+        .extend({ owner: z.string() }),
+    ),
+    pagination: paginationOutputSchema,
   })
-  export type UpdateBody = z.infer<typeof updateBody>
+  export type AllOutput = z.infer<typeof allOutput>
+  //#endregion
 
-  export const inviteBody = z.object({
-    vendorId: z.cuid2(),
-    email: z.email(),
-  })
-  export type InviteBody = z.infer<typeof inviteBody>
+  //#region One Vendor Schema
+  export const oneInput = vendor.pick({ id: true })
+  export type oneInput = z.infer<typeof oneInput>
+
+  export const oneOutput = vendor.extend({ owner: z.string() }).nullable()
+  export type OneOutput = z.infer<typeof oneOutput>
+  //#endregion
+
+  //#region Register Vendor Schema
+  export const registerInput = vendor
+    .pick({ name: true, description: true, website: true })
+    .extend({ userId: z.cuid2() })
+  export type RegisterInput = z.infer<typeof registerInput>
+
+  export const registerOutput = z.object({ vendorId: vendor.shape.id })
+  export type RegisterOutput = z.infer<typeof registerOutput>
+  //#endregion
+
+  //#region Update Vendor Schema
+  export const updateInput = vendor
+    .omit({ createdAt: true, updatedAt: true })
+    .partial()
+  export type UpdateInput = z.infer<typeof updateInput>
+
+  export const updateOutput = z.object({ vendorId: vendor.shape.id })
+  export type UpdateOutput = z.infer<typeof updateOutput>
+  //#endregion
+
+  //#region Delete Vendor Schema
+  export const deleteInput = vendor.pick({ id: true })
+  export type DeleteInput = z.infer<typeof deleteInput>
+
+  export const deleteOutput = z.object({ vendorId: vendor.shape.id })
+  export type DeleteOutput = z.infer<typeof deleteOutput>
+  //#endregion
 }

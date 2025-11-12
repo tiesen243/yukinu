@@ -12,13 +12,13 @@ COPY . .
 RUN turbo prune @yukinu/dashboard --docker
 
 # ===========================================
-# Stage 2: Install production dependencies
+# Stage 2: Build application
 # ===========================================
 FROM base AS builder
 WORKDIR /build
 
 COPY --from=prepare /prune/out/json .
-COPY bun.lock ./bun.lock
+COPY bun.lock bun.lock
 RUN bun install
 
 COPY --from=prepare /prune/out/full .
@@ -36,10 +36,20 @@ ARG VITE_TRPC_USE_STREAMING
 ENV VITE_TRPC_USE_STREAMING=$VITE_TRPC_USE_STREAMING
 
 ENV SKIP_ENV_VALIDATION=true
+
 RUN bun run build
 
 # ===========================================
-# Stage 3: Production image
+# Stage 3: Install production dependencies
+# ===========================================
+FROM base AS prod-deps
+WORKDIR /prod-deps
+
+COPY --from=prepare /prune/out/json .
+RUN bun install --omit=dev --omit=optional --ignore-scripts
+
+# ===========================================
+# Stage 4: Production image
 # ===========================================
 FROM base AS runner
 WORKDIR /app
@@ -51,12 +61,8 @@ RUN addgroup --system --gid 1001 yukinu && \
     adduser --system --uid 1002 dashboard
 USER dashboard
 
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./apps/dashboard/build
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/public ./apps/dashboard/public
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/node_modules ./apps/dashboard/node_modules
-COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/package.json ./apps/dashboard/package.json
-COPY --from=builder --chown=dashboard:yukinu /build/node_modules ./node_modules
-COPY --from=builder --chown=dashboard:yukinu /build/package.json ./package.json
+COPY --from=builder --chown=dashboard:yukinu /build/apps/dashboard/build ./build
+COPY --from=prod-deps --chown=dashboard:yukinu /prod-deps/node_modules ./node_modules
 
 ENV NODE_ENV=production
-CMD ["bun", "--bun", "--filter", "@yukinu/dashboard", "start"]
+CMD ["bun", "--bun", "react-router-serve", "build/server/index.js"]

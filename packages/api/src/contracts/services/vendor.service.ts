@@ -1,11 +1,10 @@
-import type { VendorValidator } from '@yukinu/validators/vendor'
-
-import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
+import type { UserModels } from '@yukinu/validators/user'
+import type { VendorModels } from '@yukinu/validators/vendor'
 
 export interface IVendorService {
   /**
    * Get all vendors with optional filters
-   * @param data - The parameters for filtering and pagination
+   * @param input - The parameters for filtering and pagination
    * @example
    * {
    *   status: 'approved', // optional
@@ -14,56 +13,66 @@ export interface IVendorService {
    * }
    * @returns A list of vendors along with pagination details
    */
-  all(data: VendorValidator.AllParams): Promise<{
-    vendors: IVendorRepository.FindWithOwnerResult[]
-    pagination: { page: number; total: number; totalPages: number }
-  }>
+  all(input: VendorModels.AllInput): Promise<VendorModels.AllOutput>
 
   /**
    * Register a new vendor
-   * @param data - The data for registering a new vendor
+   * @param input - The data for registering a new vendor
    * @example
    * {
-   *   name: 'Vendor Name',
-   *   ownerId: 'owner-uuid'
+   *  userId: 'user-id',
+   *  name: 'Vendor Name',
+   *  description: 'A brief description of the vendor',
+   *  website: 'https://vendor-website.com'
    * }
    * @returns The ID of the newly registered vendor
    */
   register(
-    data: VendorValidator.RegisterBody & {
-      ownerId: IVendorRepository.VendorType['ownerId']
-    },
-  ): Promise<{ id: IVendorRepository.VendorType['id'] }>
+    input: VendorModels.RegisterInput,
+  ): Promise<VendorModels.RegisterOutput>
 
   /**
    * Update a vendor's status and adjust the owner's role accordingly
-   * @param data - The data for updating the vendor
+   * @param input - The data for updating the vendor
    * @example
    * {
-   *   vendorId: 'vendor-uuid',
-   *   status: 'approved'
+   *  id: 'vendor-id',
+   *  name: 'Updated Vendor Name',
+   *  description: 'Updated description', // optional
+   *  status: 'approved',
+   *  website: 'https://updated-website.com', // optional
+   *  imageUrl: 'https://image-url.com/image.png' // optional
    * }
+   * @param actingUser - The user performing the update
+   * @example
+   * {
+   *   id: 'admin-user-id',
+   *   role: 'admin'
+   * }
+   * @returns The ID of the updated vendor
    */
-  update(data: VendorValidator.UpdateBody): Promise<void>
+  update(
+    input: VendorModels.UpdateInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<VendorModels.UpdateOutput>
 
   /**
    * Delete a vendor by ID
-   * @param data - The parameters for deleting the vendor
+   * @param input - The parameters for deleting the vendor
    * @example
    * {
-   *   vendorId: 'vendor-uuid'
+   *   id: 'vendor-id'
    * }
-   */
-  delete(data: VendorValidator.OneParams): Promise<void>
-
-  /**
-   * Invite a member to the vendor by email
-   * @param data - The data for inviting a member
+   * @param actingUser - The user performing the deletion
    * @example
    * {
-   *   vendorId: 'vendor-uuid',
-   *   email: 'member@vendor.com'
-   *  }
+   *   id: 'admin-user-id',
+   *   role: 'admin'
+   * }
+   * @returns The ID of the deleted vendor
    */
-  inviteMember(data: VendorValidator.InviteBody): Promise<void>
+  delete(
+    input: VendorModels.DeleteInput,
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<VendorModels.DeleteOutput>
 }
