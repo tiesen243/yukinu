@@ -65,8 +65,7 @@
     "RESEND_TOKEN",
     "UPLOADTHING_TOKEN",
 
-    "PORT",
-    "TURBO_MFE_PORT"
+    "PORT"
   ],
   "globalPassThroughEnv": [
     "CI",
