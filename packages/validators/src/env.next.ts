@@ -14,29 +14,19 @@ export const env = createEnv({
   client: {
     // Application settings
     NEXT_PUBLIC_APP_NAME: z._default(z.string(), 'My App'),
+    NEXT_PUBLIC_APP_URL: z.optional(z.string()),
     NEXT_PUBLIC_TRPC_USE_STREAMING: z._default(
       z.enum(['true', 'false']),
       'true',
     ),
-
-    // Vercel
-    NEXT_PUBLIC_VERCEL_ENV: z.optional(
-      z.enum(['development', 'preview', 'production']),
-    ),
-    NEXT_PUBLIC_VERCEL_URL: z.optional(z.string()),
-    NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
   },
 
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
 
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_TRPC_USE_STREAMING: process.env.NEXT_PUBLIC_TRPC_USE_STREAMING,
-
-    NEXT_PUBLIC_VERCEL_ENV: process.env.NEXT_PUBLIC_VERCEL_ENV,
-    NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
-    NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL:
-      process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL,
   },
 
   skipValidation: true,

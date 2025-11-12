@@ -7,6 +7,7 @@ services:
         TURBO_TEAM: ${TURBO_TEAM}
         TURBO_TOKEN: ${TURBO_TOKEN}
         NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME}
+        NEXT_PUBLIC_APP_URL: localhost
         NEXT_PUBLIC_TRPC_USE_STREAMING: false
     restart: unless-stopped
     env_file: .env
@@ -26,6 +27,7 @@ services:
         TURBO_TEAM: ${TURBO_TEAM}
         TURBO_TOKEN: ${TURBO_TOKEN}
         VITE_APP_NAME: ${VITE_APP_NAME}
+        VITE_APP_URL: localhost
         VITE_TRPC_USE_STREAMING: false
     restart: unless-stopped
     env_file: .env

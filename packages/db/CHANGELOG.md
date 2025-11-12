@@ -1,5 +1,12 @@
 # @yukinu/db
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies [[`a8fb1c3`](https://github.com/tiesen243/yukinu/commit/a8fb1c3e893a22387721038e4c8e19a9dd91e604)]:
+  - @yukinu/validators@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes

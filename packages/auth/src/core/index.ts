@@ -1,6 +1,7 @@
 import { AuthModels } from '@yukinu/validators/auth'
 
 import type { AuthOptions, CookieOptions, Session } from '@/types'
+import { getBaseUrl } from '@/config'
 import {
   encodeHex,
   generateSecureString,
@@ -197,7 +198,7 @@ export function Auth(opts: AuthOptions) {
               redirectTo = url.toString()
             }
 
-            const Location = new URL(redirectTo, request.url).toString()
+            const Location = new URL(redirectTo, getBaseUrl()).toString()
             const response = new Response(null, {
               status: 302,
               headers: { Location },

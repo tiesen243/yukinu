@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.1.5
+
+### Patch Changes
+
+- [#180](https://github.com/tiesen243/yukinu/pull/180) [`a8fb1c3`](https://github.com/tiesen243/yukinu/commit/a8fb1c3e893a22387721038e4c8e19a9dd91e604) Thanks [@tiesen243](https://github.com/tiesen243)! - fix url
+
 ## 0.1.4
 
 ### Patch Changes
