@@ -17,6 +17,17 @@ const PATH_REGEXS = {
   oauth: /^(?:\/([^/]+))?\/api\/auth\/([^/]+)$/,
 } as const
 
+function extractToken(headers: Headers, tokenKey: string): string {
+  return (
+    (headers.get('cookie') ?? '')
+      .split('; ')
+      .find((row) => row.startsWith(`${tokenKey}=`))
+      ?.split('=')[1] ??
+    headers.get('authorization')?.replace('Bearer ', '') ??
+    ''
+  )
+}
+
 export function Auth(opts: AuthOptions) {
   const { adapter, cookieKeys, providers, session } = opts
 
@@ -43,14 +54,9 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function auth(opts: { headers: Headers }) {
-    const token =
-      opts.headers
-        .get('cookie')
-        ?.split('; ')
-        .find((row) => row.startsWith(`${cookieKeys.token}=`))
-        ?.split('=')[1] ??
-      opts.headers.get('authorization')?.replace('Bearer ', '') ??
-      ''
+    const token = extractToken(opts.headers, cookieKeys.token)
+    if (!token)
+      return { user: null, userAgent: '', ipAddress: '', expires: new Date(0) }
 
     const hashToken = encodeHex(await hashSecret(token))
 
@@ -82,7 +88,7 @@ export function Auth(opts: AuthOptions) {
   async function signIn(
     input: AuthModels.LoginInput,
     headers = new Headers(),
-  ): Promise<Pick<Session, 'token' | 'expires'>> {
+  ): Promise<AuthModels.LoginOutput> {
     const { identifier, password } = input
 
     const user = await adapter.getUserByIndentifier(identifier)
@@ -99,15 +105,8 @@ export function Auth(opts: AuthOptions) {
   }
 
   async function signOut(opts: { headers: Headers }) {
-    const token =
-      opts.headers
-        .get('cookie')
-        ?.split('; ')
-        .find((row) => row.startsWith(`${cookieKeys.token}=`))
-        ?.split('=')[1] ??
-      opts.headers.get('authorization')?.replace('Bearer ', '') ??
-      ''
-
+    const token = extractToken(opts.headers, cookieKeys.token)
+    if (!token) return
     const hashToken = encodeHex(await hashSecret(token))
     await adapter.deleteSession(hashToken)
   }
@@ -119,13 +118,14 @@ export function Auth(opts: AuthOptions) {
     handlers: {
       GET: async (request: Request) => {
         const { pathname, searchParams } = new URL(request.url)
-
-        const cookieHeader = request.headers.get('cookie') ?? ''
-        const cookies = new Map<string, string>(
-          cookieHeader.split('; ').map((c) => {
-            const [key, ...v] = c.split('=')
-            return [key, v.join('=')] as [string, string]
-          }),
+        const cookies = new Map(
+          (request.headers.get('cookie') ?? '')
+            .split('; ')
+            .filter(Boolean)
+            .map((c) => {
+              const [key, ...v] = c.split('=')
+              return [key, v.join('=')] as [string, string]
+            }),
         )
 
         try {
@@ -133,7 +133,7 @@ export function Auth(opts: AuthOptions) {
            * [GET] /api/auth/get-session: Get current session
            */
           if (PATH_REGEXS.getSession.exec(pathname)) {
-            const session = await auth(request)
+            const session = await auth({ headers: request.headers })
             return setCorsHeaders(Response.json(session))
           }
 
@@ -155,32 +155,22 @@ export function Auth(opts: AuthOptions) {
               throw new Error('Invalid state or code')
 
             const userData = await instance.fetchUserData(code, codeVerifier)
-            const existingAccount = await adapter.getAccount(
-              provider,
-              userData.accountId,
-            )
+            const { accountId } = userData
+
+            const account = await adapter.getAccount(provider, accountId)
 
             let session: Pick<Session, 'token' | 'expires'>
-            if (existingAccount) {
-              if (existingAccount.status === 'inactive')
+            if (account) {
+              if (account.status === 'inactive')
                 throw new Error('Account is inactive')
-
-              session = await createSession(
-                existingAccount.userId,
-                request.headers,
-              )
+              session = await createSession(account.userId, request.headers)
             } else {
               const userId =
                 (await adapter.getUserByIndentifier(userData.email))?.id ??
                 (await adapter.createUser(userData)) ??
                 ''
 
-              await adapter.createAccount({
-                userId,
-                provider,
-                accountId: userData.accountId,
-                password: null,
-              })
+              await adapter.createAccount({ userId, provider, accountId })
               session = await createSession(userId, request.headers)
             }
 
@@ -237,8 +227,7 @@ export function Auth(opts: AuthOptions) {
               parsed.data,
               request.headers,
             )
-            const response = Response.json({ token, expires }, { status: 200 })
-
+            const response = Response.json({ token, expires })
             response.headers.append(
               'Set-Cookie',
               createSessionCookie(token, { expires }),
@@ -252,8 +241,8 @@ export function Auth(opts: AuthOptions) {
            */
           if (PATH_REGEXS.signOut.exec(pathname)) {
             await signOut({ headers: request.headers })
-            const response = new Response(null, { status: 200 })
 
+            const response = new Response(null)
             response.headers.append(
               'Set-Cookie',
               `${cookieKeys.token}=; Expires=${new Date(0).toUTCString()}; Path=/`,
@@ -284,18 +273,16 @@ export function Auth(opts: AuthOptions) {
               headers: { Location: callbackUrl.toString() },
             })
 
-            response.headers.append(
-              'Set-Cookie',
-              `${cookieKeys.state}=${state}; Max-Age=300; Path=/`,
-            )
-            response.headers.append(
-              'Set-Cookie',
-              `${cookieKeys.code}=${codeVerifier}; Max-Age=300; Path=/`,
-            )
-            response.headers.append(
-              'Set-Cookie',
-              `${cookieKeys.redirect}=${redirectUrl}; Max-Age=300; Path=/`,
-            )
+            for (const [key, value] of Object.entries({
+              [cookieKeys.state]: state,
+              [cookieKeys.code]: codeVerifier,
+              [cookieKeys.redirect]: redirectUrl,
+            }))
+              response.headers.append(
+                'Set-Cookie',
+                `${key}=${value}; Max-Age=300; Path=/`,
+              )
+
             return setCorsHeaders(response)
           }
 
