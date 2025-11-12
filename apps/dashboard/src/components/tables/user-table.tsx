@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
-import type { RouterOutputs } from '@yukinu/api'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -185,7 +184,7 @@ export const UserTableFooter: React.FC = () => {
 }
 
 const EditUserModal: React.FC<{
-  user: RouterOutputs['user']['all']['users'][number]
+  user: UserModels.AllOutput['users'][number]
 }> = ({ user }) => {
   const [isOpen, setIsOpen] = React.useState(false)
   const { updateUser } = useUserTable()
@@ -280,7 +279,7 @@ const EditUserModal: React.FC<{
 }
 
 export const DeleteUserModal: React.FC<{
-  user: RouterOutputs['user']['all']['users'][number]
+  user: UserModels.AllOutput['users'][number]
 }> = ({ user }) => {
   const { deleteUser, isDeleting } = useUserTable()
 

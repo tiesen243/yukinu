@@ -2,7 +2,6 @@ import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { parseAsInteger, parseAsStringLiteral, useQueryStates } from 'nuqs'
 
-import type { RouterOutputs } from '@yukinu/api'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -138,7 +137,7 @@ const VendorTableBody: React.FC = () => {
 }
 
 export const EditVendorModal: React.FC<{
-  vendor: RouterOutputs['vendor']['all']['vendors'][number]
+  vendor: VendorModels.AllOutput['vendors'][number]
 }> = ({ vendor }) => {
   const { updateVendor } = useVendorTable()
   const [open, setOpen] = React.useState(false)
@@ -205,7 +204,7 @@ export const EditVendorModal: React.FC<{
 }
 
 export const DeleteVendorModal: React.FC<{
-  vendor: RouterOutputs['vendor']['all']['vendors'][number]
+  vendor: VendorModels.AllOutput['vendors'][number]
 }> = ({ vendor }) => {
   const { deleteVendor, isDeleting } = useVendorTable()
 
