@@ -30,8 +30,8 @@ export const ChangePasswordForm: React.FC = () => {
       newPassword: '',
       confirmNewPassword: '',
       isLogOutOtherSessions: true,
-    } as AuthModels.ChangePasswordInput,
-    schema: AuthModels.changePasswordInput,
+    } as Omit<AuthModels.ChangePasswordInput, 'userId'>,
+    schema: AuthModels.changePasswordInput.omit({ userId: true }),
     onSubmit: trpcClient.auth.changePassword.mutate,
     onSuccess: () => {
       toast.success('Password changed successfully')
