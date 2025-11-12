@@ -1,9 +1,11 @@
+import type { Database } from '@yukinu/db'
 import type { NewUser, User, users } from '@yukinu/db/schema/user'
 
 import type { IBaseRepository } from '@/types'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IUserRepository extends IBaseRepository<typeof users> {}
+export interface IUserRepository extends IBaseRepository<typeof users> {
+  deleteSessions(userId: User['id'], tx?: Database): Promise<void>
+}
 
 export namespace IUserRepository {
   export type IUser = User

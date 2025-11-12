@@ -1,5 +1,13 @@
 # @yukinu/web
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies [[`a6ad71b`](https://github.com/tiesen243/yukinu/commit/a6ad71bcfba3e2adf1c5f9426bfcd27684f5684d)]:
+  - @yukinu/auth@0.1.5
+  - @yukinu/api@0.1.6
+
 ## 0.2.3
 
 ### Patch Changes

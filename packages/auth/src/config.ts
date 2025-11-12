@@ -5,17 +5,11 @@ import { usersView } from '@yukinu/db/schema/view'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthOptions } from '@/types'
-import { encodeHex, generateSecureString, hashSecret } from '@/core/crypto'
+import { generateSecureString } from '@/core/crypto'
 import Facebook from '@/providers/facebook'
 import Google from '@/providers/google'
 
-const adapter = getAdapter()
 export const authOptions = {
-  adapter,
-  session: {
-    expiresIn: 60 * 60 * 24 * 7, // 7 days
-    expiresThreshold: 60 * 60 * 24 * 1, // 1 days
-  },
   providers: {
     facebook: new Facebook({
       clientId: env.AUTH_FACEBOOK_ID,
@@ -26,26 +20,23 @@ export const authOptions = {
       clientSecret: env.AUTH_GOOGLE_SECRET,
     }),
   },
-} satisfies AuthOptions
-
-export type Providers = keyof typeof authOptions.providers
-
-export async function validateSessionToken(token: string) {
-  const hashToken = encodeHex(await hashSecret(token))
-  return await adapter.getSessionAndUser(hashToken)
-}
-
-export async function invalidateSessionToken(token: string) {
-  const hashToken = encodeHex(await hashSecret(token))
-  await adapter.deleteSession(hashToken)
-}
-
-export async function invalidateSessionTokens(userId: string) {
-  await adapter.deleteSessionsByUserId(userId)
-}
-
-function getAdapter(): AuthOptions['adapter'] {
-  return {
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    expiresThreshold: 60 * 60 * 24 * 1, // 1 days
+  },
+  cookieKeys: {
+    token: 'auth.token',
+    state: 'auth.state',
+    code: 'auth.code',
+    redirect: 'auth.redirect',
+  },
+  cookieOptions: {
+    Path: '/',
+    HttpOnly: true,
+    SameSite: 'Lax',
+    Secure: env.NODE_ENV === 'production',
+  },
+  adapter: {
     getUserByIndentifier: async (indentifier) => {
       const whereClause = or(
         eq(users.email, indentifier),
@@ -55,21 +46,19 @@ function getAdapter(): AuthOptions['adapter'] {
         .select({ id: users.id, status: users.status })
         .from(users)
         .where(whereClause)
+        .limit(1)
       return user ?? null
     },
 
     createUser: async (data) => {
       const username = generateSecureString().slice(0, 8)
+
       return db.transaction(async (tx) => {
         const [user] = await tx
           .insert(users)
           .values({ email: data.email, username })
           .returning({ id: users.id })
-        if (!user?.id) {
-          tx.rollback()
-          return null
-        }
-
+        if (!user) return null
         await tx
           .insert(profiles)
           .values({ id: user.id, fullName: data.name, avatarUrl: data.image })
@@ -78,6 +67,11 @@ function getAdapter(): AuthOptions['adapter'] {
     },
 
     getAccount: async (provider, accountId) => {
+      const whereClause = and(
+        eq(accounts.provider, provider),
+        eq(accounts.accountId, accountId),
+      )
+
       const [account] = await db
         .select({
           id: accounts.id,
@@ -88,12 +82,7 @@ function getAdapter(): AuthOptions['adapter'] {
           status: users.status,
         })
         .from(accounts)
-        .where(
-          and(
-            eq(accounts.provider, provider),
-            eq(accounts.accountId, accountId),
-          ),
-        )
+        .where(whereClause)
         .innerJoin(users, eq(accounts.userId, users.id))
       return account ?? null
     },
@@ -134,9 +123,7 @@ function getAdapter(): AuthOptions['adapter'] {
     deleteSession: async (token) => {
       await db.delete(sessions).where(eq(sessions.token, token))
     },
+  },
+} as const satisfies AuthOptions
 
-    deleteSessionsByUserId: async (userId) => {
-      await db.delete(sessions).where(eq(sessions.userId, userId))
-    },
-  }
-}
+export type Providers = keyof typeof authOptions.providers

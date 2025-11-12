@@ -2,31 +2,6 @@ import type { AuthModels } from '@yukinu/validators/auth'
 
 export interface IAuthService {
   /**
-   * Login a user
-   * @param input - The login data
-   * @example
-   * {
-   *   identifier: 'username-or-email',
-   *   password: 'user-password'
-   * }
-   * @param headers - The request headers
-   * @param resHeaders - The response headers
-   * @returns The session data
-   */
-  login(
-    input: AuthModels.LoginInput,
-    headers: Headers,
-    resHeaders: Headers,
-  ): Promise<AuthModels.LoginOutput>
-
-  /**
-   * Logout a user
-   * @param headers - The request headers
-   * @param resHeaders - The response headers
-   */
-  logout(headers: Headers, resHeaders: Headers): Promise<void>
-
-  /**
    * Register a new user
    * @param input - The registration data
    * @example
