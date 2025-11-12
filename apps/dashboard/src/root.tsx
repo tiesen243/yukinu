@@ -9,7 +9,6 @@ import {
   ScrollRestoration,
 } from 'react-router'
 
-import { SessionProvider } from '@yukinu/auth/react'
 import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { Toaster } from '@yukinu/ui/sonner'
@@ -31,9 +30,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
       <body className='flex min-h-dvh flex-col font-sans antialiased'>
         <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
           <NuqsAdapter>
-            <TRPCReactProvider>
-              <SessionProvider base='/dashboard'>{children}</SessionProvider>
-            </TRPCReactProvider>
+            <TRPCReactProvider>{children}</TRPCReactProvider>
           </NuqsAdapter>
 
           <Toaster richColors />

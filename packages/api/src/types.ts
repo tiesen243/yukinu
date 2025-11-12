@@ -13,7 +13,6 @@ export interface TRPCMeta {
 
 export interface TRPCContext {
   headers: Headers
-  resHeaders: Headers
 
   session: Omit<Session, 'token'> | null
 

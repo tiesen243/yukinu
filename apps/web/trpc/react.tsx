@@ -46,9 +46,7 @@ function TRPCReactProvider({
     createTRPCClient<AppRouter>({
       links: [
         splitLink({
-          condition: ({ path }) =>
-            env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true' &&
-            !path.startsWith('auth.'),
+          condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
           true: httpBatchStreamLink(configs),
           false: httpBatchLink(configs),
         }),

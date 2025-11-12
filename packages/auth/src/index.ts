@@ -2,13 +2,8 @@ import { authOptions } from '@/config'
 import { Auth } from '@/core'
 
 export type { Session, User } from '@/types'
-export {
-  validateSessionToken,
-  invalidateSessionToken,
-  invalidateSessionTokens,
-} from '@/config'
+export { createSessionCookie } from '@/config'
 export { Password } from '@/core/password'
 export { generateCsrfToken, verifyRequestOrigin } from '@/csrf'
 export { TokenBucketRateLimit } from '@/rate-limit'
-export const { auth, createSessionCookie, invalidateSession, handlers } =
-  Auth(authOptions)
+export const { auth, signIn, signOut, handlers } = Auth(authOptions)

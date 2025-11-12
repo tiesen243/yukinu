@@ -10,21 +10,17 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthModels } from '@yukinu/validators/auth'
 
-import { useTRPCClient } from '@/trpc/react'
-
 export const LoginForm: React.FC = () => {
-  const { refresh } = useSession()
-  const trpc = useTRPCClient()
+  const { signIn } = useSession()
   const router = useRouter()
 
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
     schema: AuthModels.loginInput,
-    onSubmit: trpc.auth.login.mutate,
+    onSubmit: signIn,
     onSuccess: () => {
       toast.success('Successfully logged in')
       router.push('/')
-      void refresh()
     },
     onError: (error) => toast.error(error.message),
   })

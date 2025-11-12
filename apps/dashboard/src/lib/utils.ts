@@ -7,5 +7,5 @@ export function getBaseUrl(): string {
   else if (env.VITE_VERCEL_PROJECT_PRODUCTION_URL)
     return `https://${env.VITE_VERCEL_PROJECT_PRODUCTION_URL}`
   // eslint-disable-next-line no-restricted-properties
-  return `http://localhost:${process.env.PORT ?? 3001}`
+  return `http://localhost:${process.env.TURBO_MFE_PORT ?? 3024}`
 }
