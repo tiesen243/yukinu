@@ -4,17 +4,19 @@ import type * as React from 'react'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import type { AddressModels } from '@yukinu/validators/address'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@yukinu/ui/alert-dialog'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@yukinu/ui/dialog'
 import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/trpc/react'
@@ -72,74 +74,95 @@ const AddressItem: React.FC<{
         <p>{address.country}</p>
       </div>
 
-      <div className='flex items-center justify-between'>
-        {address.isDefault ? (
-          <Badge variant='outline' className='h-8 rounded-md border-primary'>
-            Default
-          </Badge>
-        ) : (
-          <Button
-            variant='outline'
-            size='sm'
-            onClick={() => {
-              update.mutate({ id: address.id, isDefault: true })
-            }}
-            disabled={update.isPending}
-          >
-            Set as Default
-          </Button>
-        )}
-      </div>
+      {address.isDefault ? (
+        <Badge variant='outline' className='h-8 rounded-md border-primary'>
+          Default
+        </Badge>
+      ) : (
+        <Button
+          variant='outline'
+          size='sm'
+          className='w-fit'
+          onClick={() => {
+            update.mutate({ id: address.id, isDefault: true })
+          }}
+          disabled={update.isPending}
+        >
+          Set as Default
+        </Button>
+      )}
 
       <div className='col-start-2 row-span-2 row-start-1 flex gap-2 self-start justify-self-end'>
         <Button variant='link' size='sm'>
           Edit
         </Button>
-        <Dialog>
-          <DialogTrigger asChild>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
             <Button variant='link' size='sm' className='text-destructive'>
               Delete
             </Button>
-          </DialogTrigger>
+          </AlertDialogTrigger>
 
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Delete Address</DialogTitle>
-              <DialogDescription>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Address</AlertDialogTitle>
+              <AlertDialogDescription>
                 Are you sure you want to delete this address? This action cannot
                 be undone.
-              </DialogDescription>
-            </DialogHeader>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
 
-            <div className='mt-4 flex justify-end gap-2'>
-              <DialogClose asChild>
-                <Button variant='secondary'>Cancel</Button>
-              </DialogClose>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
 
-              <DialogClose asChild>
-                <Button
-                  variant='destructive'
-                  onClick={() => {
-                    remove.mutate({ id: address.id })
-                  }}
-                  disabled={remove.isPending}
-                >
-                  Delete
-                </Button>
-              </DialogClose>
-            </div>
-          </DialogContent>
-        </Dialog>
+              <AlertDialogAction
+                onClick={() => {
+                  remove.mutate({ id: address.id })
+                }}
+                disabled={remove.isPending}
+              >
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
     </li>
   )
 }
 
-export const AddressListSkeleton: React.FC = () => {
-  return (
-    <section className='px-4'>
-      <h4 className='sr-only'>Address List</h4>
-      <ul></ul>
-    </section>
-  )
-}
+export const AddressListSkeleton: React.FC = () => (
+  <section className='px-4'>
+    <h4 className='sr-only'>Address List</h4>
+    <ul className='flex flex-col gap-4 divide-y divide-border'>
+      {Array.from({ length: 3 }, (_, index) => (
+        <AddressItemSkeleton key={index} />
+      ))}
+    </ul>
+  </section>
+)
+
+const AddressItemSkeleton: React.FC = () => (
+  <li className='grid auto-rows-min grid-rows-[1fr_auto] items-start gap-2 pb-4 last:pb-0'>
+    <div className='w-1/2 animate-pulse rounded-sm bg-current'>&nbsp;</div>
+
+    <div>
+      <p className='w-1/3 animate-pulse rounded-sm bg-current'>&nbsp;</p>
+      <p className='w-1/4 animate-pulse rounded-sm bg-current'>&nbsp;</p>
+      <p className='w-1/5 animate-pulse rounded-sm bg-current'>&nbsp;</p>
+    </div>
+
+    <Button variant='outline' size='sm' className='w-fit' disabled>
+      Set as Default
+    </Button>
+
+    <div className='col-start-2 row-span-2 row-start-1 flex gap-2 self-start justify-self-end'>
+      <Button variant='link' size='sm'>
+        Edit
+      </Button>
+      <Button variant='link' size='sm' className='text-destructive'>
+        Delete
+      </Button>
+    </div>
+  </li>
+)
