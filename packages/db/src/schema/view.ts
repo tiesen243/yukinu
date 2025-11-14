@@ -17,4 +17,3 @@ export const usersView = pgView('users_view').as((qb) =>
     .from(users)
     .innerJoin(profiles, eq(users.id, profiles.id)),
 )
-export type UserView = typeof usersView.$inferSelect

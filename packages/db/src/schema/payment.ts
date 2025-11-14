@@ -29,8 +29,6 @@ export const payments = pgTable('payments', (t) => ({
   transactionId: t.varchar({ length: 255 }).unique().notNull(),
   createdAt,
 }))
-export type Payment = typeof payments.$inferSelect
-export type NewPayment = typeof payments.$inferInsert
 
 export const paymentsRelation = relations(payments, ({ one }) => ({
   order: one(orders, {

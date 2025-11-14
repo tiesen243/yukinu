@@ -35,8 +35,6 @@ export const users = pgTable(
     index('users_status_idx').on(t.status),
   ],
 )
-export type User = typeof users.$inferSelect
-export type NewUser = typeof users.$inferInsert
 
 export const usersRelations = relations(users, ({ one, many }) => ({
   accounts: many(accounts),
@@ -70,8 +68,6 @@ export const accounts = pgTable(
     index('account_user_id_idx').on(t.userId),
   ],
 )
-export type Account = typeof accounts.$inferSelect
-export type NewAccount = typeof accounts.$inferInsert
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, { fields: [accounts.userId], references: [users.id] }),
@@ -92,8 +88,6 @@ export const sessions = pgTable(
   }),
   (t) => [index('session_user_id_idx').on(t.userId)],
 )
-export type Session = typeof sessions.$inferSelect
-export type NewSession = typeof sessions.$inferInsert
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
