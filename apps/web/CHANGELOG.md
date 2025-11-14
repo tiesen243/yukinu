@@ -1,5 +1,28 @@
 # @yukinu/web
 
+## 0.2.7
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`e42f8ef`](https://github.com/tiesen243/yukinu/commit/e42f8ef9880a2000963aa15f55a9c8ec8f06e6c5) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`051de6a`](https://github.com/tiesen243/yukinu/commit/051de6ad94d80250388fa68896c9d52d8010b606) Thanks [@tiesen243](https://github.com/tiesen243)! - added address list loading skeleton
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`b17b4d2`](https://github.com/tiesen243/yukinu/commit/b17b4d27b06b45b7aeabecf0bb58dd86f6923e07) Thanks [@tiesen243](https://github.com/tiesen243)! - added address list, delete address button, set default address button
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`0936077`](https://github.com/tiesen243/yukinu/commit/09360776e962c0afa4c54d511dde11b7ee5e035a) Thanks [@tiesen243](https://github.com/tiesen243)! - added edit address form
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`f38e688`](https://github.com/tiesen243/yukinu/commit/f38e6886357c70dc39068441857279ed2818a3c8) Thanks [@tiesen243](https://github.com/tiesen243)! - improve sidebar navigation for mobile devices with dropdown menus
+
+- Updated dependencies [[`7ad647a`](https://github.com/tiesen243/yukinu/commit/7ad647ae7098bc8d9f213825059c409b20668c55), [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186), [`bf7a102`](https://github.com/tiesen243/yukinu/commit/bf7a1025d2a4a0c7ce5931efc06c90d18597450a)]:
+  - @yukinu/validators@0.1.6
+  - @yukinu/api@0.1.8
+  - @yukinu/auth@0.1.7
+  - @yukinu/db@0.1.6
+  - @yukinu/ui@0.1.1
+
 ## 0.2.6
 
 ### Patch Changes
