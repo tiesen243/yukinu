@@ -1,6 +1,8 @@
 'use client'
 
+import type { Route } from 'next'
 import type * as React from 'react'
+import Link from 'next/link'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import type { AddressModels } from '@yukinu/validators/address'
@@ -48,7 +50,7 @@ const AddressItem: React.FC<{
   const update = useMutation({
     ...trpc.address.update.mutationOptions(),
     meta: { filter: trpc.address.all.queryFilter() },
-    onSuccess: () => toast.success('Address updated successfully'),
+    onSuccess: () => toast.success('Set as default address successfully'),
     onError: ({ message }) => toast.error(message),
   })
 
@@ -75,7 +77,10 @@ const AddressItem: React.FC<{
       </div>
 
       {address.isDefault ? (
-        <Badge variant='outline' className='h-8 rounded-md border-primary'>
+        <Badge
+          variant='outline'
+          className='h-8 rounded-md border-primary bg-primary/10 text-primary'
+        >
           Default
         </Badge>
       ) : (
@@ -93,8 +98,10 @@ const AddressItem: React.FC<{
       )}
 
       <div className='col-start-2 row-span-2 row-start-1 flex gap-2 self-start justify-self-end'>
-        <Button variant='link' size='sm'>
-          Edit
+        <Button variant='link' size='sm' asChild>
+          <Link href={`/user/account/address/${address.id}` as Route}>
+            Edit
+          </Link>
         </Button>
         <AlertDialog>
           <AlertDialogTrigger asChild>
