@@ -4,6 +4,12 @@ import { redirect } from 'next/navigation'
 
 import { auth } from '@yukinu/auth'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@yukinu/ui/dropdown-menu'
 import { ReceiptTextIcon, ShoppingCartIcon, UserIcon } from '@yukinu/ui/icons'
 
 export default async function UserLayout({ children }: LayoutProps<'/user'>) {
@@ -13,14 +19,14 @@ export default async function UserLayout({ children }: LayoutProps<'/user'>) {
   const { user } = session
 
   return (
-    <main className='container flex flex-1 flex-col items-start gap-4 py-4 sm:flex-row'>
+    <main className='container flex flex-1 flex-col items-start gap-4 py-4 md:flex-row'>
       <h1 className='sr-only'>User Account</h1>
 
       <aside className='flex basis-1/6 flex-col gap-6'>
         <h2 className='sr-only'>Sidebar Navigation</h2>
 
-        <section className='flex items-center gap-2 sm:flex-col md:flex-row'>
-          <Avatar>
+        <section className='flex items-center gap-4'>
+          <Avatar className='size-10'>
             <AvatarImage src={user.avatarUrl ?? ''} alt={user.username} />
             <AvatarFallback>{user.username[0]?.toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -32,24 +38,32 @@ export default async function UserLayout({ children }: LayoutProps<'/user'>) {
         </section>
 
         <nav>
-          <ul className='flex flex-row gap-2 text-sm break-all transition-colors sm:flex-col [&_a]:w-full [&_a]:rounded-md [&_a]:px-2 [&_a]:py-1 [&_a]:hover:bg-accent [&_a]:hover:text-accent-foreground'>
+          <ul className='flex flex-row gap-2 text-sm break-all transition-colors md:flex-col'>
             {navItems.map((item) => (
               <li key={item.href}>
-                <Link className='flex items-center gap-2' href={item.href}>
-                  <item.icon className='size-4' />
-                  <span className='line-clamp-1'>{item.label}</span>
-                </Link>
-                {item.subItems.length > 0 && (
-                  <ul className='hidden flex-col gap-2 pt-2 pl-6 sm:flex'>
-                    {item.subItems.map((sub) => (
-                      <li key={sub.href} className=''>
-                        <Link href={sub.href} className='line-clamp-1'>
-                          {sub.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                <DropdownMenu>
+                  {item.subItems.length > 0 ? (
+                    <DropdownMenuTrigger className='flex w-full items-center gap-2 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground [&_svg]:size-4'>
+                      <item.icon />
+                      <span className='line-clamp-1'>{item.label}</span>
+                    </DropdownMenuTrigger>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      className='flex w-full items-center gap-2 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground [&_svg]:size-4'
+                    >
+                      <item.icon />
+                      <span className='line-clamp-1'>{item.label}</span>
+                    </Link>
+                  )}
+
+                  {item.subItems.length > 0 && (
+                    <>
+                      <MobileNavigationSubmenu items={item.subItems} />
+                      <DesktopNavigationSubmenu items={item.subItems} />
+                    </>
+                  )}
+                </DropdownMenu>
               </li>
             ))}
           </ul>
@@ -63,6 +77,35 @@ export default async function UserLayout({ children }: LayoutProps<'/user'>) {
     </main>
   )
 }
+
+const DesktopNavigationSubmenu: React.FC<{
+  items: (typeof navItems)[number]['subItems']
+}> = ({ items }) => (
+  <ul className='hidden flex-col gap-2 pt-2 pl-6 md:flex'>
+    {items.map((sub) => (
+      <li
+        key={sub.href}
+        className='flex w-full items-center gap-2 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground'
+      >
+        <Link href={sub.href} className='line-clamp-1'>
+          {sub.label}
+        </Link>
+      </li>
+    ))}
+  </ul>
+)
+
+const MobileNavigationSubmenu: React.FC<{
+  items: (typeof navItems)[number]['subItems']
+}> = ({ items }) => (
+  <DropdownMenuContent align='start' className='md:hidden'>
+    {items.map((sub) => (
+      <DropdownMenuItem key={sub.href} asChild>
+        <Link href={sub.href}>{sub.label}</Link>
+      </DropdownMenuItem>
+    ))}
+  </DropdownMenuContent>
+)
 
 const navItems = [
   {

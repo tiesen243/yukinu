@@ -84,7 +84,7 @@ export abstract class BaseRepository<TTable extends PgTable>
     _tx?: Database,
   ): Promise<number> {
     const recordsToUpdate = this._data.filter((item) =>
-      criteria.every((criterion) =>
+      criteria.some((criterion) =>
         Object.entries(criterion).every(
           ([key, value]) => item[key as keyof TTable['$inferSelect']] === value,
         ),
@@ -118,7 +118,7 @@ export abstract class BaseRepository<TTable extends PgTable>
     _tx?: Database,
   ): Promise<number> {
     const recordsToDelete = this._data.filter((item) =>
-      criteria.every((criterion) =>
+      criteria.some((criterion) =>
         Object.entries(criterion).every(
           ([key, value]) => item[key as keyof TTable['$inferSelect']] === value,
         ),

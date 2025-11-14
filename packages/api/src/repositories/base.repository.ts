@@ -96,6 +96,9 @@ export abstract class BaseRepository<TTable extends PgTable>
     data: Partial<TTable['$inferInsert']>,
     tx = this._db,
   ): Promise<number> {
+    if (criteria.length === 0)
+      throw new Error('No criteria provided for updateBy')
+
     const whereClause = this.buildCriteria(criteria)
     const result = await tx
       .update(this._table as never)
@@ -121,6 +124,9 @@ export abstract class BaseRepository<TTable extends PgTable>
     criteria: Partial<TTable['$inferSelect']>[],
     tx = this._db,
   ): Promise<number> {
+    if (criteria.length === 0)
+      throw new Error('No criteria provided for deleteBy')
+
     const whereClause = this.buildCriteria(criteria)
     const result = await tx
       .delete(this._table as never)

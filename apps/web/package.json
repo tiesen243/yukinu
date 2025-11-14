@@ -4,13 +4,13 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "next build",
+    "build": "bun --env-file ../../.env next build",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
-    "dev": "next dev --port $TURBO_MFE_PORT",
+    "dev": "bun --env-file ../../.env next dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "next typegen && eslint",
-    "start": "next start",
-    "typecheck": "next typegen && tsc --noEmit"
+    "lint": "bun --env-file ../../.env next typegen && eslint",
+    "start": "bun --env-file ../../.env next start",
+    "typecheck": "bun --env-file ../../.env next typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
