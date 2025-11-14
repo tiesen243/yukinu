@@ -1,5 +1,11 @@
 # @yukinu/eslint-config
 
+## 0.1.1
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
 ## 0.1.0
 
 ### Minor Changes

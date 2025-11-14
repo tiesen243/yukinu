@@ -1,5 +1,18 @@
 # @yukinu/dashboard
 
+## 0.2.8
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
+- Updated dependencies [[`7ad647a`](https://github.com/tiesen243/yukinu/commit/7ad647ae7098bc8d9f213825059c409b20668c55), [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186), [`bf7a102`](https://github.com/tiesen243/yukinu/commit/bf7a1025d2a4a0c7ce5931efc06c90d18597450a)]:
+  - @yukinu/validators@0.1.6
+  - @yukinu/api@0.1.8
+  - @yukinu/auth@0.1.7
+  - @yukinu/db@0.1.6
+  - @yukinu/ui@0.1.1
+
 ## 0.2.7
 
 ### Patch Changes

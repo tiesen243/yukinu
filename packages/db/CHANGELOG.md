@@ -1,5 +1,16 @@
 # @yukinu/db
 
+## 0.1.6
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`bf7a102`](https://github.com/tiesen243/yukinu/commit/bf7a1025d2a4a0c7ce5931efc06c90d18597450a) Thanks [@tiesen243](https://github.com/tiesen243)! - remove export type of schema
+
+- Updated dependencies [[`7ad647a`](https://github.com/tiesen243/yukinu/commit/7ad647ae7098bc8d9f213825059c409b20668c55), [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186)]:
+  - @yukinu/validators@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes
