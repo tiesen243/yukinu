@@ -5,26 +5,24 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 
-import { ChangePasswordForm } from '@/app/(main)/user/account/password/page.client'
+import { NewAddressForm } from '@/app/(main)/user/account/address/new/page.client'
 
-export default function PasswordPage() {
+export default function NewAddressPage() {
   return (
     <form>
       <FieldSet>
         <div className='px-4'>
           <FieldLegend className='data-[variant=legend]:text-lg'>
-            Change Password
+            Add New Address
           </FieldLegend>
-
           <FieldDescription>
-            Please enter your current password and choose a new one. Make sure
-            your new password is strong and unique.
+            Please fill in the form below to add a new address to your account.
           </FieldDescription>
         </div>
 
         <FieldSeparator className='-my-2' />
 
-        <ChangePasswordForm />
+        <NewAddressForm />
       </FieldSet>
     </form>
   )

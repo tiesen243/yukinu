@@ -13,7 +13,9 @@ export class AddressService implements IAddressService {
 
   async all(input: AddressModels.AllInput): Promise<AddressModels.AllOutput> {
     const { userId } = input
-    const addresses = await this._address.findBy([{ userId }])
+    const addresses = await this._address.findBy([{ userId }], {
+      recipientName: 'asc',
+    })
     return { addresses }
   }
 
@@ -71,7 +73,9 @@ export class AddressService implements IAddressService {
         await this._address.update(id, { isDefault }, tx)
       }
 
-      await this._address.update(id, updateData, tx)
+      if (Object.keys(updateData).length > 0)
+        await this._address.update(id, updateData, tx)
+
       return { addressId: id }
     })
   }
