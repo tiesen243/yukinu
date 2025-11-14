@@ -59,7 +59,7 @@ export const EditAddressForm: React.FC<{ id: string }> = ({ id }) => {
           onClick={form.handleSubmit}
           disabled={form.state.isPending}
         >
-          Add Address
+          Save Address
         </Button>
       </Field>
     </FieldGroup>

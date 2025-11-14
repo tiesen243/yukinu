@@ -43,8 +43,8 @@ export default async function UserLayout({ children }: LayoutProps<'/user'>) {
               <li key={item.href}>
                 <DropdownMenu>
                   {item.subItems.length > 0 ? (
-                    <DropdownMenuTrigger className='flex w-full items-center gap-2 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground [&_svg]:size-4'>
-                      <item.icon />
+                    <DropdownMenuTrigger className='flex w-full items-center gap-2 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground md:hover:bg-transparent'>
+                      <item.icon className='size-4' />
                       <span className='line-clamp-1'>{item.label}</span>
                     </DropdownMenuTrigger>
                   ) : (
@@ -83,11 +83,11 @@ const DesktopNavigationSubmenu: React.FC<{
 }> = ({ items }) => (
   <ul className='hidden flex-col gap-2 pt-2 pl-6 md:flex'>
     {items.map((sub) => (
-      <li
-        key={sub.href}
-        className='flex w-full items-center gap-2 rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground'
-      >
-        <Link href={sub.href} className='line-clamp-1'>
+      <li key={sub.href}>
+        <Link
+          href={sub.href}
+          className='line-clamp-1 w-full rounded-md px-2 py-1 hover:bg-accent hover:text-accent-foreground'
+        >
           {sub.label}
         </Link>
       </li>

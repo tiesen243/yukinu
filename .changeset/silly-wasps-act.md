@@ -2,4 +2,4 @@
 '@yukinu/web': patch
 ---
 
-sidebar nav in mobile
+improve sidebar navigation for mobile devices with dropdown menus
