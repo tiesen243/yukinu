@@ -42,25 +42,19 @@ export function useUserTable() {
     limit: parseAsInteger.withDefault(10),
   })
 
-  const { data, isLoading, refetch } = useQuery(
-    trpc.user.all.queryOptions(query),
-  )
+  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
   const { mutateAsync: updateUser } = useMutation({
     ...trpc.user.update.mutationOptions(),
-    onSuccess: () => {
-      void refetch()
-      toast.success('User updated successfully')
-    },
+    onSuccess: () => toast.success('User updated successfully'),
     onError: (error) => toast.error(error.message),
+    meta: { filter: trpc.user.all.queryFilter() },
   })
 
   const { mutate: deleteUser, isPending: isDeleting } = useMutation({
     ...trpc.user.delete.mutationOptions(),
-    onSuccess: () => {
-      void refetch()
-      toast.success('User deleted successfully')
-    },
+    onSuccess: () => toast.success('User deleted successfully'),
     onError: (error) => toast.error(error.message),
+    meta: { filter: trpc.user.all.queryFilter() },
   })
 
   const handlePagination = React.useCallback(

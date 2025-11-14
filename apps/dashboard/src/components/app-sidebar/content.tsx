@@ -2,6 +2,7 @@ import { Activity } from 'react'
 import { NavLink } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
+import { useMounted } from '@yukinu/ui/hooks/use-mounted'
 import {
   BarChart3Icon,
   DollarSignIcon,
@@ -32,29 +33,21 @@ import { getBaseUrl } from '@/lib/utils'
 export const AppSidebarContent: React.FC = () => {
   const { session, status } = useSession()
 
-  if (status === 'loading') return <SidebarContent></SidebarContent>
+  if (status === 'loading')
+    return (
+      <SidebarContent>
+        <SidebarGroup></SidebarGroup>
+      </SidebarContent>
+    )
   else if (status !== 'authenticated') return null
 
   return (
     <SidebarContent>
       <SidebarGroup>
-        <SidebarMenuItem>
-          <NavLink to={getBaseUrl()}>
-            {({ isActive, isPending }) => (
-              <SidebarMenuButton isActive={isActive} asChild>
-                <span>
-                  <HomeIcon /> Home
-                  <Activity mode={isPending ? 'visible' : 'hidden'}>
-                    <Loader2Icon className='animate-spin' />
-                  </Activity>
-                </span>
-              </SidebarMenuButton>
-            )}
-          </NavLink>
-        </SidebarMenuItem>
-
         <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
         <SidebarMenu>
+          <HomeLink />
+
           {mainMenuItems
             .filter((item) => item.roles.includes(session.user.role))
             .map((item) => (
@@ -104,6 +97,28 @@ export const AppSidebarContent: React.FC = () => {
         </SidebarGroup>
       )}
     </SidebarContent>
+  )
+}
+
+const HomeLink: React.FC = () => {
+  const isMounted = useMounted()
+  if (!isMounted)
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton>
+          <HomeIcon /> Home
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    )
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <a href={getBaseUrl()}>
+          <HomeIcon /> Home
+        </a>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
   )
 }
 

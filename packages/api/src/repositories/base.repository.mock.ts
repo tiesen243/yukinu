@@ -78,6 +78,30 @@ export abstract class BaseRepository<TTable extends PgTable>
     return Promise.resolve({ id })
   }
 
+  updateBy(
+    criteria: Partial<TTable['$inferSelect']>[],
+    data: Partial<TTable['$inferInsert']>,
+    _tx?: Database,
+  ): Promise<number> {
+    const recordsToUpdate = this._data.filter((item) =>
+      criteria.some((criterion) =>
+        Object.entries(criterion).every(
+          ([key, value]) => item[key as keyof TTable['$inferSelect']] === value,
+        ),
+      ),
+    )
+
+    recordsToUpdate.forEach((record) => {
+      const recordIndex = this._data.findIndex((item) => item.id === record.id)
+      this._data[recordIndex] = {
+        ...this._data[recordIndex],
+        ...data,
+      } as TTable['$inferSelect']
+    })
+
+    return Promise.resolve(recordsToUpdate.length)
+  }
+
   delete(
     id: TTable['$inferSelect']['id'],
     _tx?: Database,
@@ -87,5 +111,25 @@ export abstract class BaseRepository<TTable extends PgTable>
 
     this._data.splice(recordIndex, 1)
     return Promise.resolve({ id })
+  }
+
+  deleteBy(
+    criteria: Partial<TTable['$inferSelect']>[],
+    _tx?: Database,
+  ): Promise<number> {
+    const recordsToDelete = this._data.filter((item) =>
+      criteria.some((criterion) =>
+        Object.entries(criterion).every(
+          ([key, value]) => item[key as keyof TTable['$inferSelect']] === value,
+        ),
+      ),
+    )
+
+    recordsToDelete.forEach((record) => {
+      const recordIndex = this._data.findIndex((item) => item.id === record.id)
+      this._data.splice(recordIndex, 1)
+    })
+
+    return Promise.resolve(recordsToDelete.length)
   }
 }

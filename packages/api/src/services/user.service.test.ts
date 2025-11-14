@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'bun:test'
 
 import type { Database } from '@yukinu/db'
 
-import type { IUserService } from '@/contracts/services/user.service'
+import type { IUserService } from '@/types'
 import { ProfileRepository } from '@/repositories/profile.repository.mock'
 import { UserRepository } from '@/repositories/user.repository.mock'
 import { UserService } from '@/services/user.service'

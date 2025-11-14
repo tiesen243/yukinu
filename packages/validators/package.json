@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./address": "./dist/address.mjs",
     "./auth": "./dist/auth.mjs",
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",

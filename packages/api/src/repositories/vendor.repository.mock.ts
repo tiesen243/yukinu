@@ -31,7 +31,7 @@ export class VendorRepository
   ]
 
   findWithOwner(
-    _criteria: Partial<IVendorRepository.IVendor>[],
+    _criteria: Partial<IVendorRepository.Vendor>[],
     _limit?: number,
     _offset?: number,
     _tx?: Database,

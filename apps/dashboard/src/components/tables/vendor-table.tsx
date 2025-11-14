@@ -39,7 +39,7 @@ export function useVendorTable() {
     limit: parseAsInteger.withDefault(10),
   })
 
-  const { data, isLoading, refetch } = useQuery(
+  const { data, isLoading } = useQuery(
     trpc.vendor.all.queryOptions({
       ...query,
       status: query.status ?? undefined,
@@ -48,20 +48,16 @@ export function useVendorTable() {
 
   const { mutateAsync: updateVendor } = useMutation({
     ...trpc.vendor.update.mutationOptions(),
+    onSuccess: () => toast.success('Vendor updated successfully'),
     onError: (error) => toast.error(error.message),
-    onSuccess: () => {
-      void refetch()
-      toast.success('Vendor updated successfully')
-    },
+    meta: { filter: trpc.vendor.all.queryFilter() },
   })
 
   const { mutate: deleteVendor, isPending: isDeleting } = useMutation({
     ...trpc.vendor.delete.mutationOptions(),
+    onSuccess: () => toast.success('Vendor deleted successfully'),
     onError: (error) => toast.error(error.message),
-    onSuccess: () => {
-      void refetch()
-      toast.success('Vendor deleted successfully')
-    },
+    meta: { filter: trpc.vendor.all.queryFilter() },
   })
 
   const handlePagination = React.useCallback(

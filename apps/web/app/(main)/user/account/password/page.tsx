@@ -1,15 +1,31 @@
+import {
+  FieldDescription,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+} from '@yukinu/ui/field'
+
 import { ChangePasswordForm } from '@/app/(main)/user/account/password/page.client'
 
 export default function PasswordPage() {
   return (
-    <section>
-      <h3 className='px-4 text-lg font-medium'>Change Password</h3>
-      <hr className='my-4' />
+    <form>
+      <FieldSet>
+        <div className='px-4'>
+          <FieldLegend className='data-[variant=legend]:text-lg'>
+            Change Password
+          </FieldLegend>
 
-      <section className='px-4'>
-        <h4 className='sr-only'>Change Password Form</h4>
+          <FieldDescription>
+            Please enter your current password and choose a new one. Make sure
+            your new password is strong and unique.
+          </FieldDescription>
+        </div>
+
+        <FieldSeparator className='-my-2' />
+
         <ChangePasswordForm />
-      </section>
-    </section>
+      </FieldSet>
+    </form>
   )
 }

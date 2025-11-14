@@ -1,5 +1,6 @@
-import type * as UserTypes from '@yukinu/db/schema/user'
-import type * as ViewTypes from '@yukinu/db/schema/view'
+import type { accounts, sessions } from '@yukinu/db/schema/user'
+import type { usersView } from '@yukinu/db/schema/view'
+import { type users } from '@yukinu/db/schema/user'
 
 import type BaseProvider from '@/providers/base'
 
@@ -20,26 +21,11 @@ export interface OAuth2Token {
   expires_in: number
 }
 
-export interface User extends ViewTypes.UserView {
-  id: string
-}
-
-export interface Account extends UserTypes.Account {
-  id: string
-  status: UserTypes.User['status']
-}
-
-export interface NewAccount extends UserTypes.NewAccount {
-  userId: string
-}
+export type User = typeof usersView.$inferSelect
 
 export interface Session
-  extends Omit<UserTypes.Session, 'userId' | 'createdAt'> {
+  extends Omit<typeof sessions.$inferSelect, 'userId' | 'createdAt'> {
   user: User | null
-}
-
-export interface NewSession extends UserTypes.NewSession {
-  token: string
 }
 
 export interface OauthAccount {
@@ -55,12 +41,27 @@ export interface DatabaseAdapter {
   ): Promise<Pick<User, 'id' | 'status'> | null>
   createUser(data: Omit<OauthAccount, 'accountId'>): Promise<User['id'] | null>
 
-  getAccount(provider: string, accountId: string): Promise<Account | null>
-  createAccount(data: NewAccount): Promise<void>
+  getAccount(
+    provider: string,
+    accountId: string,
+  ): Promise<
+    | (typeof accounts.$inferSelect & {
+        status: (typeof users.$inferSelect)['status']
+      })
+    | null
+  >
+
+  createAccount(data: typeof accounts.$inferInsert): Promise<void>
 
   getSessionAndUser(token: string): Promise<Omit<Session, 'token'> | null>
-  createSession(data: NewSession): Promise<void>
-  updateSession(token: string, data: Partial<NewSession>): Promise<void>
+
+  createSession(data: typeof sessions.$inferInsert): Promise<void>
+
+  updateSession(
+    token: string,
+    data: Partial<typeof sessions.$inferInsert>,
+  ): Promise<void>
+
   deleteSession(token: string): Promise<void>
 }
 

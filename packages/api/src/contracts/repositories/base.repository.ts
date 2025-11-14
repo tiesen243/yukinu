@@ -32,8 +32,19 @@ export interface IBaseRepository<TTable extends PgTable> {
     tx?: Database,
   ): Promise<{ id: TTable['$inferSelect']['id'] }>
 
+  updateBy(
+    criteria: Partial<TTable['$inferSelect']>[],
+    data: Partial<TTable['$inferInsert']>,
+    tx?: Database,
+  ): Promise<number>
+
   delete(
     id: TTable['$inferSelect']['id'],
     tx?: Database,
   ): Promise<{ id: TTable['$inferSelect']['id'] }>
+
+  deleteBy(
+    criteria: Partial<TTable['$inferSelect']>[],
+    tx?: Database,
+  ): Promise<number>
 }
