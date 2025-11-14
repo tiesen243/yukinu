@@ -1,4 +1,4 @@
-import type { NewProfile, Profile, profiles } from '@yukinu/db/schema/profile'
+import type { profiles } from '@yukinu/db/schema/profile'
 
 import type { IBaseRepository } from '@/types'
 
@@ -6,6 +6,6 @@ import type { IBaseRepository } from '@/types'
 export interface IProfileRepository extends IBaseRepository<typeof profiles> {}
 
 export namespace IProfileRepository {
-  export type IProfile = Profile
-  export type INewProfile = NewProfile
+  export type Profile = typeof profiles.$inferSelect
+  export type NewProfile = typeof profiles.$inferInsert
 }
