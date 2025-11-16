@@ -4,9 +4,8 @@ import type { Database } from '@yukinu/db'
 import type { UserModels } from '@yukinu/validators/user'
 import type { VendorModels } from '@yukinu/validators/vendor'
 
-import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 import type { IVendorService } from '@/contracts/services/vendor.service'
-import type { IUserRepository } from '@/types'
+import type { IUserRepository, IVendorRepository } from '@/types'
 
 export class VendorService implements IVendorService {
   constructor(
@@ -53,11 +52,11 @@ export class VendorService implements IVendorService {
         message: 'You already have a vendor registered.',
       })
 
-    const newVendor = await this._vendorRepo.create({
+    const { id } = await this._vendorRepo.create({
       ownerId: userId,
       ...data,
     })
-    return { vendorId: newVendor.id }
+    return { vendorId: id }
   }
 
   public async update(

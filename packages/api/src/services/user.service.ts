@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server'
 import type { Database } from '@yukinu/db'
 import type { UserModels } from '@yukinu/validators/user'
 
-import type { IProfileRepository, IUserRepository, IUserService } from '@/types'
+import type { IUserService } from '@/contracts/services/user.service'
+import type { IProfileRepository, IUserRepository } from '@/types'
 
 export class UserService implements IUserService {
   public constructor(

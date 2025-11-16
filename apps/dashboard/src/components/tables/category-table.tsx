@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
+import { parseAsInteger, useQueryStates } from 'nuqs'
 
-import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -17,8 +16,7 @@ import {
 import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
-import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import {
   Table,
@@ -29,32 +27,31 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
-import { UserModels } from '@yukinu/validators/user'
+import { CategoryModels } from '@yukinu/validators/category'
 
 import { useTRPC } from '@/trpc/react'
 
-function useUserTable() {
+function useCategoryTable() {
   const trpc = useTRPC()
 
   const [query, setQuery] = useQueryStates({
-    search: parseAsString.withDefault(''),
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
   })
 
-  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
+  const { data, isLoading } = useQuery(trpc.category.all.queryOptions(query))
   const { mutateAsync: update } = useMutation({
-    ...trpc.user.update.mutationOptions(),
-    onSuccess: () => toast.success('User updated successfully'),
+    ...trpc.category.update.mutationOptions(),
+    onSuccess: () => toast.success('Category updated successfully'),
     onError: (error) => toast.error(error.message),
-    meta: { filter: trpc.user.all.queryFilter(query) },
+    meta: { filter: trpc.category.all.queryFilter() },
   })
 
   const { mutate: remove, isPending: isRemoving } = useMutation({
-    ...trpc.user.delete.mutationOptions(),
-    onSuccess: () => toast.success('User deleted successfully'),
+    ...trpc.category.delete.mutationOptions(),
+    onSuccess: () => toast.success('Category deleted successfully'),
     onError: (error) => toast.error(error.message),
-    meta: { filter: trpc.user.all.queryFilter(query) },
+    meta: { filter: trpc.category.all.queryFilter() },
   })
 
   const handlePagination = React.useCallback(
@@ -73,37 +70,33 @@ function useUserTable() {
   }
 }
 
-export const UserTable: React.FC = () => (
+export const CategoryTable: React.FC = () => (
   <Table>
     <TableHeader>
       <TableRow>
         <TableHead className='w-52'>ID</TableHead>
-        <TableHead>Username</TableHead>
-        <TableHead>Email</TableHead>
-        <TableHead>Role</TableHead>
-        <TableHead>Status</TableHead>
-        <TableHead>Updated At</TableHead>
+        <TableHead className='w-full'>Name</TableHead>
         <TableHead className='min-w-32'>Actions</TableHead>
       </TableRow>
     </TableHeader>
 
     <TableBody>
-      <UserTableBody />
+      <CategoryTableBody />
     </TableBody>
 
     <TableFooter className='bg-transparent'>
-      <UserTableFooter />
+      <CategoryTableFooter />
     </TableFooter>
   </Table>
 )
 
-const UserTableBody: React.FC = () => {
-  const { data, query, isLoading } = useUserTable()
+const CategoryTableBody: React.FC = () => {
+  const { query, data, isLoading } = useCategoryTable()
 
   if (isLoading)
     return Array.from({ length: query.limit }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 8 }, (_, index) => (
+        {Array.from({ length: 3 }, (_, index) => (
           <TableCell key={index}>
             <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
           </TableCell>
@@ -111,44 +104,36 @@ const UserTableBody: React.FC = () => {
       </TableRow>
     ))
 
-  if (!data?.users || data.users.length === 0)
+  if (!data?.categories || data.categories.length === 0)
     return (
       <TableRow>
-        <TableCell colSpan={8} className='text-center'>
-          No users found.
+        <TableCell colSpan={3} className='text-center'>
+          No categories found.
         </TableCell>
       </TableRow>
     )
 
-  return data.users.map((user) => (
-    <TableRow key={user.id}>
-      <TableCell>{user.id}</TableCell>
-      <TableCell>{user.username}</TableCell>
-      <TableCell>{user.email}</TableCell>
-      <TableCell>{user.role}</TableCell>
-      <TableCell>
-        <Badge variant={user.status === 'active' ? 'success' : 'warning'}>
-          {user.status}
-        </Badge>
-      </TableCell>
-      <TableCell>{new Date(user.updatedAt).toDateString()}</TableCell>
+  return data.categories.map((category) => (
+    <TableRow key={category.id}>
+      <TableCell>{category.id}</TableCell>
+      <TableCell>{category.name}</TableCell>
       <TableCell className='flex w-fit items-center gap-2'>
-        <EditUserModal user={user} />
-        <DeleteUserModal user={user} />
+        <EditCategoryModal category={category} />
+        <DeleteCategoryModal category={category} />
       </TableCell>
     </TableRow>
   ))
 }
 
-const UserTableFooter: React.FC = () => {
-  const { data, isLoading, handlePagination } = useUserTable()
+const CategoryTableFooter: React.FC = () => {
+  const { data, isLoading, handlePagination } = useCategoryTable()
   if (isLoading || !data?.pagination) return null
 
   const { page, totalPages } = data.pagination
 
   return (
     <TableRow>
-      <TableCell colSpan={8}>
+      <TableCell colSpan={3}>
         <div className='flex items-center justify-end gap-4'>
           <Button
             variant='outline'
@@ -177,20 +162,16 @@ const UserTableFooter: React.FC = () => {
   )
 }
 
-const EditUserModal: React.FC<{
-  user: UserModels.AllOutput['users'][number]
-}> = ({ user }) => {
+const EditCategoryModal: React.FC<{
+  category: CategoryModels.AllOutput['categories'][number]
+}> = ({ category }) => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const { update: updateUser } = useUserTable()
+  const { update } = useCategoryTable()
 
   const form = useForm({
-    defaultValues: {
-      id: user.id,
-      role: user.role,
-      status: user.status,
-    },
-    schema: UserModels.updateInput,
-    onSubmit: updateUser,
+    defaultValues: category,
+    schema: CategoryModels.updateInput,
+    onSubmit: update,
     onSuccess: () => {
       setIsOpen(false)
     },
@@ -206,7 +187,7 @@ const EditUserModal: React.FC<{
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit User #{user.id}</DialogTitle>
+          <DialogTitle>Edit Category #{category.id}</DialogTitle>
           <DialogDescription>
             Here you can edit the user details.
           </DialogDescription>
@@ -215,42 +196,12 @@ const EditUserModal: React.FC<{
         <form onSubmit={form.handleSubmit}>
           <FieldSet>
             <form.Field
-              name='role'
+              name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Role</FieldLabel>
-                  <Select {...field}>
-                    <SelectOption value=''>Select a role</SelectOption>
-                    {UserModels.roles.map((role) => (
-                      <SelectOption key={role} value={role}>
-                        {role.replace(/_/g, ' ')}
-                      </SelectOption>
-                    ))}
-                  </Select>
+                  <Input {...field} />
                   <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
-
-            <form.Field
-              name='status'
-              render={({ meta, field }) => (
-                <Field>
-                  <FieldLabel htmlFor={meta.fieldId}>Status</FieldLabel>
-                  <RadioGroup
-                    className='grid grid-cols-2 gap-4'
-                    value={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    {UserModels.statuses.map((status) => (
-                      <div key={status} className='flex items-center gap-3'>
-                        <RadioGroupItem id={status} value={status} />
-                        <FieldLabel htmlFor={status} className='capitalize'>
-                          {status}
-                        </FieldLabel>
-                      </div>
-                    ))}
-                  </RadioGroup>
                 </Field>
               )}
             />
@@ -272,10 +223,10 @@ const EditUserModal: React.FC<{
   )
 }
 
-const DeleteUserModal: React.FC<{
-  user: UserModels.AllOutput['users'][number]
-}> = ({ user }) => {
-  const { remove: deleteUser, isRemoving: isDeleting } = useUserTable()
+export const DeleteCategoryModal: React.FC<{
+  category: CategoryModels.AllOutput['categories'][number]
+}> = ({ category }) => {
+  const { remove, isRemoving } = useCategoryTable()
 
   return (
     <Dialog>
@@ -286,9 +237,9 @@ const DeleteUserModal: React.FC<{
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete User: {user.username}</DialogTitle>
+          <DialogTitle>Delete Category: {category.name}</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete this user? This action cannot be
+            Are you sure you want to delete this category? This action cannot be
             undone.
           </DialogDescription>
         </DialogHeader>
@@ -299,11 +250,11 @@ const DeleteUserModal: React.FC<{
           <Button
             variant='destructive'
             onClick={() => {
-              deleteUser(user)
+              remove(category)
             }}
-            disabled={isDeleting}
+            disabled={isRemoving}
           >
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isRemoving ? 'Deleting...' : 'Delete'}
           </Button>
         </DialogFooter>
       </DialogContent>

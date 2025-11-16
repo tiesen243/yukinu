@@ -136,6 +136,12 @@ const mainMenuItems = [
     roles: ['admin', 'vendor_owner', 'vendor_staff'],
   },
   {
+    title: 'Categories',
+    icon: TagIcon,
+    href: '/categories',
+    roles: ['admin', 'moderator'],
+  },
+  {
     title: 'Products',
     icon: PackageIcon,
     href: '/products',

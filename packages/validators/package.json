@@ -6,6 +6,7 @@
   "exports": {
     "./address": "./dist/address.mjs",
     "./auth": "./dist/auth.mjs",
+    "./category": "./dist/category.mjs",
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",
     "./env.vite": "./dist/env.vite.mjs",
