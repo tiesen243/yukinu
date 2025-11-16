@@ -3,7 +3,8 @@ import { TRPCError } from '@trpc/server'
 import type { Database } from '@yukinu/db'
 import type { AddressModels } from '@yukinu/validators/address'
 
-import type { IAddressRepository, IAddressService } from '@/types'
+import type { IAddressService } from '@/contracts/services/address.service'
+import type { IAddressRepository } from '@/types'
 
 export class AddressService implements IAddressService {
   constructor(

@@ -16,12 +16,14 @@ import {
 } from '@yukinu/ui/dialog'
 import { Field, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
+import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/sonner'
 import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -30,7 +32,7 @@ import { VendorModels } from '@yukinu/validators/vendor'
 
 import { useTRPC } from '@/trpc/react'
 
-export function useVendorTable() {
+function useVendorTable() {
   const trpc = useTRPC()
 
   const [query, setQuery] = useQueryStates({
@@ -46,14 +48,14 @@ export function useVendorTable() {
     }),
   )
 
-  const { mutateAsync: updateVendor } = useMutation({
+  const { mutateAsync: update } = useMutation({
     ...trpc.vendor.update.mutationOptions(),
     onSuccess: () => toast.success('Vendor updated successfully'),
     onError: (error) => toast.error(error.message),
     meta: { filter: trpc.vendor.all.queryFilter() },
   })
 
-  const { mutate: deleteVendor, isPending: isDeleting } = useMutation({
+  const { mutate: remove, isPending: isRemoving } = useMutation({
     ...trpc.vendor.delete.mutationOptions(),
     onSuccess: () => toast.success('Vendor deleted successfully'),
     onError: (error) => toast.error(error.message),
@@ -66,13 +68,13 @@ export function useVendorTable() {
   )
 
   return {
+    query,
     data,
     isLoading,
-    query,
     handlePagination,
-    updateVendor,
-    deleteVendor,
-    isDeleting,
+    update,
+    remove,
+    isRemoving,
   }
 }
 
@@ -81,17 +83,22 @@ export const VendorTable: React.FC = () => {
     <Table>
       <TableHeader>
         <TableRow>
+          <TableHead className='w-52'>ID</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Owner</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Updated At</TableHead>
-          <TableHead>Actions</TableHead>
+          <TableHead className='min-w-32'>Actions</TableHead>
         </TableRow>
       </TableHeader>
 
       <TableBody>
         <VendorTableBody />
       </TableBody>
+
+      <TableFooter>
+        <VendorTableFooter />
+      </TableFooter>
     </Table>
   )
 }
@@ -102,7 +109,7 @@ const VendorTableBody: React.FC = () => {
   if (isLoading)
     return Array.from({ length: query.limit }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 6 }, (_, index) => (
+        {Array.from({ length: 7 }, (_, index) => (
           <TableCell key={index}>
             <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
           </TableCell>
@@ -118,6 +125,7 @@ const VendorTableBody: React.FC = () => {
 
   return data?.vendors.map((vendor) => (
     <TableRow key={vendor.id}>
+      <TableCell>{vendor.id}</TableCell>
       <TableCell>{vendor.name}</TableCell>
       <TableCell>{vendor.owner}</TableCell>
       <TableCell>
@@ -132,10 +140,47 @@ const VendorTableBody: React.FC = () => {
   ))
 }
 
-export const EditVendorModal: React.FC<{
+const VendorTableFooter: React.FC = () => {
+  const { data, isLoading, handlePagination } = useVendorTable()
+  if (isLoading || !data?.pagination) return null
+
+  const { page, totalPages } = data.pagination
+
+  return (
+    <TableRow>
+      <TableCell colSpan={6}>
+        <div className='flex items-center justify-end gap-4'>
+          <Button
+            variant='outline'
+            size='sm'
+            disabled={page <= 1}
+            onClick={() => handlePagination(page - 1)}
+          >
+            <ChevronLeftIcon />
+            <span className='sr-only'>Previous</span>
+          </Button>
+          <span>
+            Page {page} of {totalPages}
+          </span>
+          <Button
+            variant='outline'
+            size='sm'
+            disabled={page >= totalPages}
+            onClick={() => handlePagination(page + 1)}
+          >
+            <ChevronRightIcon />
+            <span className='sr-only'>Next</span>
+          </Button>
+        </div>
+      </TableCell>
+    </TableRow>
+  )
+}
+
+const EditVendorModal: React.FC<{
   vendor: VendorModels.AllOutput['vendors'][number]
 }> = ({ vendor }) => {
-  const { updateVendor } = useVendorTable()
+  const { update: updateVendor } = useVendorTable()
   const [open, setOpen] = React.useState(false)
   const form = useForm({
     defaultValues: { id: vendor.id, status: vendor.status },
@@ -199,10 +244,10 @@ export const EditVendorModal: React.FC<{
   )
 }
 
-export const DeleteVendorModal: React.FC<{
+const DeleteVendorModal: React.FC<{
   vendor: VendorModels.AllOutput['vendors'][number]
 }> = ({ vendor }) => {
-  const { deleteVendor, isDeleting } = useVendorTable()
+  const { remove: deleteVendor, isRemoving: isDeleting } = useVendorTable()
 
   return (
     <Dialog>

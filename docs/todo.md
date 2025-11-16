@@ -18,7 +18,7 @@ nav_order: 5
 ## User (Customer)
 
 - [x] Update personal profile
-- [ ] Manage shipping addresses (CRUD)
+- [x] Manage shipping addresses (CRUD)
 - [ ] Add product to wishlist
 - [ ] Remove product from wishlist
 - [ ] Add product to cart _(if available)_
@@ -31,7 +31,7 @@ nav_order: 5
 
 ## Vendor Owner / Manager
 
-- [ ] Apply to become a vendor
+- [x] Apply to become a vendor
 - [ ] Manage store information
 - [ ] Manage products (CRUD)
 - [ ] Manage product images
@@ -46,8 +46,8 @@ nav_order: 5
 ## Admin
 
 - [x] Manage users (activate / deactivate)
-- [ ] Manage vendors (approve / suspend)
-- [ ] Manage product categories (CRUD)
+- [x] Manage vendors (approve / suspend)
+- [x] Manage product categories (CRUD)
 - [ ] Moderate products across the system
 - [ ] System analytics & dashboards
 - [x] Manage roles & permissions _(optional)_

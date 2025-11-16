@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'bun:test'
 
 import type { Database } from '@yukinu/db'
 
-import type { IUserService } from '@/types'
+import type { IUserService } from '@/contracts/services/user.service'
 import { ProfileRepository } from '@/repositories/profile.repository.mock'
 import { UserRepository } from '@/repositories/user.repository.mock'
 import { UserService } from '@/services/user.service'
@@ -24,8 +24,8 @@ describe('UserService', () => {
 
   describe('all', () => {
     it('should return all users with pagination', async () => {
-      const result = await _service.all({ search: '', limit: 2, page: 1 })
-      expect(result.users.length).toBe(0)
+      const result = await _service.all({ search: '', page: 1, limit: 2 })
+      expect(result.users.length).toBe(2)
       expect(result.pagination.totalItems).toBe(3)
       expect(result.pagination.totalPages).toBe(2)
     })

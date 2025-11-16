@@ -33,12 +33,7 @@ import { getBaseUrl } from '@/lib/utils'
 export const AppSidebarContent: React.FC = () => {
   const { session, status } = useSession()
 
-  if (status === 'loading')
-    return (
-      <SidebarContent>
-        <SidebarGroup></SidebarGroup>
-      </SidebarContent>
-    )
+  if (status === 'loading') return <SidebarContent></SidebarContent>
   else if (status !== 'authenticated') return null
 
   return (
@@ -134,6 +129,12 @@ const mainMenuItems = [
     icon: ShoppingCartIcon,
     href: '/orders',
     roles: ['admin', 'vendor_owner', 'vendor_staff'],
+  },
+  {
+    title: 'Categories',
+    icon: TagIcon,
+    href: '/categories',
+    roles: ['admin', 'moderator'],
   },
   {
     title: 'Products',

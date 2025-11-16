@@ -9,6 +9,7 @@ export default [
 
   layout('./routes/dashboard/layout.tsx', [
     index('./routes/dashboard/_index.tsx'),
+    route('/categories', './routes/dashboard/categories.tsx'),
 
     ...prefix('/users', [index('./routes/dashboard/users/_index.tsx')]),
 

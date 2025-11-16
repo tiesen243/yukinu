@@ -71,6 +71,20 @@
       "when": 1762363022855,
       "tag": "0009_amused_blackheart",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1763320887484,
+      "tag": "0010_seed",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1763322921431,
+      "tag": "0011_faithful_rockslide",
+      "breakpoints": true
     }
   ]
 }

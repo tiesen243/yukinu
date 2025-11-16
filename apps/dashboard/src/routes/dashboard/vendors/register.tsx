@@ -14,6 +14,7 @@ import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { VendorModels } from '@yukinu/validators/vendor'
 
+import { createMetadata } from '@/lib/metadata'
 import { useTRPCClient } from '@/trpc/react'
 
 export default function DashboardVendorsRegister() {
@@ -23,6 +24,12 @@ export default function DashboardVendorsRegister() {
     </main>
   )
 }
+
+export const meta = () =>
+  createMetadata({
+    title: 'Register Your Shop',
+    description: 'Register your shop to start selling your products.',
+  })
 
 function RegisterShopForm() {
   const trpc = useTRPCClient()
