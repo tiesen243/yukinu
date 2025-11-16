@@ -27,13 +27,17 @@ export abstract class BaseRepository<TTable extends PgTable>
     _offset?: number,
     _tx?: Database,
   ): Promise<TTable['$inferSelect'][]> {
-    const records = this._data.filter((item) =>
-      criteria.some((criterion) =>
-        Object.entries(criterion).every(
-          ([key, value]) => item[key as keyof TTable['$inferSelect']] === value,
-        ),
-      ),
-    )
+    const records =
+      criteria.length > 0
+        ? this._data.filter((item) =>
+            criteria.some((criterion) =>
+              Object.entries(criterion).every(
+                ([key, value]) =>
+                  item[key as keyof TTable['$inferSelect']] === value,
+              ),
+            ),
+          )
+        : this._data
 
     return Promise.resolve(limit ? records.slice(0, limit) : records)
   }

@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'bun:test'
 
 import type { Database } from '@yukinu/db'
 
-import type { IAddressService } from '@/types'
+import type { IAddressService } from '@/contracts/services/address.service'
 import { AddressRepository } from '@/repositories/address.repository.mock'
 import { AddressService } from '@/services/address.service'
 
