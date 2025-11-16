@@ -1,5 +1,16 @@
 # @yukinu/db
 
+## 0.1.7
+
+### Patch Changes
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`7c7f601`](https://github.com/tiesen243/yukinu/commit/7c7f6011eb76da7f1f20ef723b49eb3cb6d5cda2) Thanks [@tiesen243](https://github.com/tiesen243)! - added unique index for categories.name
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`fdbc32f`](https://github.com/tiesen243/yukinu/commit/fdbc32f6b56f8e365c7bc51d071aa4364206cdcd) Thanks [@tiesen243](https://github.com/tiesen243)! - added seed db
+
+- Updated dependencies [[`f2c30e8`](https://github.com/tiesen243/yukinu/commit/f2c30e80900f24e1d942548920be1e1f130e2f37), [`788207c`](https://github.com/tiesen243/yukinu/commit/788207c20a950b5b2049560ed7e00c364c7ceac9)]:
+  - @yukinu/validators@0.1.7
+
 ## 0.1.6
 
 ### Patch Changes

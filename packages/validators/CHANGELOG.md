@@ -1,5 +1,13 @@
 # @yukinu/validators
 
+## 0.1.7
+
+### Patch Changes
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`f2c30e8`](https://github.com/tiesen243/yukinu/commit/f2c30e80900f24e1d942548920be1e1f130e2f37) Thanks [@tiesen243](https://github.com/tiesen243)! - added unit test for category service
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`788207c`](https://github.com/tiesen243/yukinu/commit/788207c20a950b5b2049560ed7e00c364c7ceac9) Thanks [@tiesen243](https://github.com/tiesen243)! - added category management feature
+
 ## 0.1.6
 
 ### Patch Changes
