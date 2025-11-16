@@ -33,12 +33,7 @@ import { getBaseUrl } from '@/lib/utils'
 export const AppSidebarContent: React.FC = () => {
   const { session, status } = useSession()
 
-  if (status === 'loading')
-    return (
-      <SidebarContent>
-        <SidebarGroup></SidebarGroup>
-      </SidebarContent>
-    )
+  if (status === 'loading') return <SidebarContent></SidebarContent>
   else if (status !== 'authenticated') return null
 
   return (
