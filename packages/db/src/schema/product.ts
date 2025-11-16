@@ -1,5 +1,12 @@
 import { relations, sql } from 'drizzle-orm'
-import { check, index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import {
+  check,
+  index,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core'
 
 import { orderItems } from '@/schema/order'
 import { wishlistItems } from '@/schema/profile'
@@ -19,7 +26,7 @@ export const categories = pgTable(
     id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
     name: t.varchar({ length: 255 }).notNull(),
   }),
-  (t) => [index('categories_name_idx').on(t.name)],
+  (t) => [uniqueIndex('categories_name_idx').on(t.name)],
 )
 
 export const categoriesRelations = relations(categories, ({ many }) => ({

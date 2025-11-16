@@ -189,7 +189,7 @@ const EditCategoryModal: React.FC<{
         <DialogHeader>
           <DialogTitle>Edit Category #{category.id}</DialogTitle>
           <DialogDescription>
-            Here you can edit the user details.
+            Modify the details of the category and save your changes.
           </DialogDescription>
         </DialogHeader>
 
@@ -199,7 +199,7 @@ const EditCategoryModal: React.FC<{
               name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Role</FieldLabel>
+                  <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
                   <Input {...field} />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>

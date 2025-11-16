@@ -78,6 +78,13 @@
       "when": 1763320887484,
       "tag": "0010_seed",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1763322921431,
+      "tag": "0011_faithful_rockslide",
+      "breakpoints": true
     }
   ]
 }
