@@ -240,7 +240,7 @@ const EditUserModal: React.FC<{
                   <RadioGroup
                     className='grid grid-cols-2 gap-4'
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={field.onChange as never}
                   >
                     {UserModels.statuses.map((status) => (
                       <div key={status} className='flex items-center gap-3'>

@@ -12,7 +12,6 @@ import {
 import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { Toaster } from '@yukinu/ui/sonner'
-import { env } from '@yukinu/validators/env.vite'
 
 import type { Route } from './+types/root'
 import globalsCss from '@/globals.css?url'
@@ -100,9 +99,6 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
-  { rel: 'icon', href: `${env.VITE_APP_URL}/favicon.ico` },
-  { rel: 'apple-touch-icon', href: `${env.VITE_APP_URL}/apple-touch-icon.png` },
-  { rel: 'shortcut icon', href: `${env.VITE_APP_URL}/favicon.ico` },
 ]
 
 export const meta: Route.MetaFunction = () =>

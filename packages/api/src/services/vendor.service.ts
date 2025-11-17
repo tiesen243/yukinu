@@ -37,6 +37,39 @@ export class VendorService implements IVendorService {
     }
   }
 
+  public async one(
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<Pick<VendorModels.Vendor, 'id'>> {
+    if (actingUser.role === 'vendor_owner') {
+      const [vendor] = await this._vendorRepo.findBy(
+        [{ ownerId: actingUser.id }],
+        {},
+        1,
+      )
+      if (!vendor)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Vendor not found for the acting user.',
+        })
+      return vendor
+    }
+
+    if (actingUser.role === 'vendor_staff') {
+      const vendor = await this._vendorRepo.findByStaffId(actingUser.id)
+      if (!vendor)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Vendor not found for the acting user.',
+        })
+      return vendor
+    }
+
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: 'Vendor not found for the acting user.',
+    })
+  }
+
   public async register(
     input: VendorModels.RegisterInput,
   ): Promise<VendorModels.RegisterOutput> {

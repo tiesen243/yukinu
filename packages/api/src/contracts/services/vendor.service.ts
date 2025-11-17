@@ -16,6 +16,20 @@ export interface IVendorService {
   all(input: VendorModels.AllInput): Promise<VendorModels.AllOutput>
 
   /**
+   * Get a single vendor associated with the acting user
+   * @param actingUser - The user requesting their vendor information
+   * @example
+   * {
+   *   id: 'user-id',
+   *   role: 'vendor_owner' | 'vendor_staff'
+   * }
+   * @returns The vendor associated with the acting user
+   */
+  one(
+    actingUser: Pick<UserModels.User, 'id' | 'role'>,
+  ): Promise<Pick<VendorModels.Vendor, 'id'>>
+
+  /**
    * Register a new vendor
    * @param input - The data for registering a new vendor
    * @example

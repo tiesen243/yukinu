@@ -12,6 +12,13 @@ export const vendorRouter = createTRPCRouter({
     .output(VendorModels.allOutput)
     .query(({ ctx, input }) => ctx.vendorService.all(input)),
 
+  one: protectedProcedure
+    .meta({
+      message: 'Vendor retrieved successfully',
+      roles: ['vendor_owner', 'vendor_staff'],
+    })
+    .query(({ ctx }) => ctx.vendorService.one(ctx.session.user)),
+
   register: protectedProcedure
     .meta({ message: 'Vendor registered successfully', roles: ['user'] })
     .input(VendorModels.registerInput.omit({ userId: true }))

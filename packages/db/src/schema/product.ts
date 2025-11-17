@@ -47,6 +47,7 @@ export const products = pgTable(
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
     price: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    stock: t.integer().default(0).notNull(),
     status: productStatusEnum().default('active').notNull(),
     createdAt,
     updatedAt,
@@ -67,7 +68,6 @@ export const productsRelations = relations(products, ({ one, many }) => ({
 
   images: many(productImages),
   variantGroups: many(productVariantGroups),
-  variantCombinations: many(productVariantCombinations),
 
   vendor: one(vendors, {
     fields: [products.vendorId],
@@ -155,31 +155,6 @@ export const productVariantsRelations = relations(
     variantGroup: one(productVariantGroups, {
       fields: [productVariants.variantGroupId],
       references: [productVariantGroups.id],
-    }),
-  }),
-)
-
-export const productVariantCombinations = pgTable(
-  'product_variant_combinations',
-  (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-    productId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
-    sku: t.varchar({ length: 100 }).notNull(),
-    price: t.numeric({ precision: 10, scale: 2 }).notNull(),
-    stock: t.integer().default(0).notNull(),
-  }),
-  (t) => [index('product_variant_combinations_product_id_idx').on(t.productId)],
-)
-
-export const productVariantCombinationsRelations = relations(
-  productVariantCombinations,
-  ({ one }) => ({
-    product: one(products, {
-      fields: [productVariantCombinations.productId],
-      references: [products.id],
     }),
   }),
 )

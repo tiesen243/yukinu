@@ -30,9 +30,10 @@ export const productsView = pgView('products_view').as((qb) =>
     .select({
       id: products.id,
       name: products.name,
+      status: products.status,
       imageUrl: sql<string>`MIN(${productImages.url})`.as('image_url'),
       price: products.price,
-      stock: sql<number>`SUM(${productVariants.stock})`.as('stock'),
+      stock: products.stock,
       minPrice: sql<number>`MIN(${productVariants.extraPrice})`.as('min_price'),
       maxPrice: sql<number>`MAX(${productVariants.extraPrice})`.as('max_price'),
       averageRating: sql<number>`AVG(${productReviews.rating})`.as(
@@ -40,16 +41,21 @@ export const productsView = pgView('products_view').as((qb) =>
       ),
     })
     .from(products)
-    .where(eq(products.status, 'active'))
-    .groupBy(products.id, products.name, products.price)
-    .innerJoin(productImages, eq(products.id, productImages.productId))
-    .innerJoin(
+    .groupBy(
+      products.id,
+      products.name,
+      products.status,
+      products.price,
+      products.stock,
+    )
+    .leftJoin(productImages, eq(products.id, productImages.productId))
+    .leftJoin(
       productVariantGroups,
       eq(products.id, productVariantGroups.productId),
     )
-    .innerJoin(
+    .leftJoin(
       productVariants,
       eq(productVariantGroups.id, productVariants.variantGroupId),
     )
-    .innerJoin(productReviews, eq(products.id, productReviews.productId)),
+    .leftJoin(productReviews, eq(products.id, productReviews.productId)),
 )

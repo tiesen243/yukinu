@@ -1,6 +1,6 @@
 import { desc, eq } from '@yukinu/db'
 import { users } from '@yukinu/db/schema/user'
-import { vendors } from '@yukinu/db/schema/vendor'
+import { vendorMembers, vendors } from '@yukinu/db/schema/vendor'
 
 import type { IVendorRepository } from '@/types'
 import { BaseRepository } from '@/repositories/base.repository'
@@ -37,5 +37,18 @@ export class VendorRepository
     if (offset !== undefined) query.offset(offset)
 
     return query
+  }
+
+  async findByStaffId(
+    staffId: string,
+    tx = this._db,
+  ): Promise<Pick<IVendorRepository.Vendor, 'id'> | null> {
+    const [vendor] = await tx
+      .select({ id: vendors.id })
+      .from(vendorMembers)
+      .where(eq(vendorMembers.userId, staffId))
+      .innerJoin(this._table, eq(vendorMembers.vendorId, vendors.id))
+      .limit(1)
+    return vendor ?? null
   }
 }
