@@ -85,6 +85,20 @@
       "when": 1763322921431,
       "tag": "0011_faithful_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1763362856992,
+      "tag": "0012_heavy_power_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1763363722662,
+      "tag": "0013_clever_thaddeus_ross",
+      "breakpoints": true
     }
   ]
 }
