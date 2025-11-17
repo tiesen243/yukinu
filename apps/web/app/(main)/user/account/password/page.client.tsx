@@ -83,7 +83,7 @@ export const ChangePasswordForm: React.FC = () => {
             <Checkbox
               id={meta.fieldId}
               checked={field.value}
-              onCheckedChange={field.onChange}
+              onCheckedChange={field.onChange as never}
             />
             <FieldLabel htmlFor={meta.fieldId}>
               Log out from other sessions

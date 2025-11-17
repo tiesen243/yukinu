@@ -46,4 +46,14 @@ export class VendorRepository
       }),
     )
   }
+
+  findByStaffId(
+    staffId: string,
+    _tx?: Database,
+  ): Promise<Pick<IVendorRepository.Vendor, 'id'> | null> {
+    const vendor = this._data.find((v) => v.ownerId === staffId)
+    if (!vendor) return Promise.resolve(null)
+
+    return Promise.resolve({ id: vendor.id })
+  }
 }

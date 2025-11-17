@@ -59,8 +59,8 @@ const useForm = <
       : never
     : (value: TValues) => TResults | Promise<TResults>
   onSubmit: (data: TValues) => TData | Promise<TData>
-  onSuccess?: (data: TData) => void | Promise<void>
-  onError?: (error: TError) => void | Promise<void>
+  onSuccess?: (data: TData) => unknown
+  onError?: (error: TError) => unknown
 }) => {
   const { defaultValues, schema, onSubmit, onSuccess, onError } = opts
 
@@ -144,12 +144,12 @@ const useForm = <
         try {
           dataRef.current = await onSubmit(data)
           errorRef.current = { message: null, errors: {} } as TError
-          return await onSuccess?.(dataRef.current)
+          return void onSuccess?.(dataRef.current)
         } catch (e: unknown) {
           const message = e instanceof Error ? e.message : String(e)
           dataRef.current = null
           errorRef.current = { message, errors: {} } as TError
-          return await onError?.(errorRef.current)
+          return void onError?.(errorRef.current)
         }
       })
     },
