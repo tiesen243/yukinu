@@ -8,7 +8,7 @@ import {
 } from '@yukinu/ui/sidebar'
 import { env } from '@yukinu/validators/env.vite'
 
-import Logo from '../../../public/logo.svg'
+import Logo from '@/assets/logo.svg'
 
 export const AppSidebarHeader: React.FC = () => (
   <SidebarHeader className='h-16 border-b border-sidebar-border'>

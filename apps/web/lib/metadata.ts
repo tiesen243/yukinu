@@ -62,7 +62,11 @@ export function createMetadata(override: Metadata = {}): Metadata {
       site: '@tiesen243',
       creator: '@tiesen243',
     },
-    icons: { icon: '/favicon.ico' },
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/apple-touch-icon.png',
+      shortcut: '/favicon-32x32.png',
+    },
     alternates: { ...override.alternates, canonical: url },
     keywords: [
       ...(Array.isArray(override.keywords)
