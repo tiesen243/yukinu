@@ -2,6 +2,7 @@ import { eq, sql } from 'drizzle-orm'
 import { pgView } from 'drizzle-orm/pg-core'
 
 import {
+  categories,
   productImages,
   productReviews,
   products,
@@ -10,6 +11,7 @@ import {
 } from '@/schema/product'
 import { profiles } from '@/schema/profile'
 import { users } from '@/schema/user'
+import { vendors } from '@/schema/vendor'
 
 export const usersView = pgView('users_view').as((qb) =>
   qb
@@ -30,6 +32,14 @@ export const productsView = pgView('products_view').as((qb) =>
     .select({
       id: products.id,
       name: products.name,
+      category: {
+        id: sql<string>`${categories.id}`.as('category_id'),
+        name: sql<string>`${categories.name}`.as('category_name'),
+      },
+      vendor: {
+        id: sql<string>`${vendors.id}`.as('vendor_id'),
+        name: sql<string>`${vendors.name}`.as('vendor_name'),
+      },
       status: products.status,
       imageUrl: sql<string>`MIN(${productImages.url})`.as('image_url'),
       price: products.price,
@@ -47,7 +57,14 @@ export const productsView = pgView('products_view').as((qb) =>
       products.status,
       products.price,
       products.stock,
+
+      categories.id,
+      categories.name,
+      vendors.id,
+      vendors.name,
     )
+    .innerJoin(categories, eq(products.categoryId, categories.id))
+    .innerJoin(vendors, eq(vendors.id, products.vendorId))
     .leftJoin(productImages, eq(products.id, productImages.productId))
     .leftJoin(
       productVariantGroups,

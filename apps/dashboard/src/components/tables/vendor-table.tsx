@@ -213,7 +213,7 @@ const EditVendorModal: React.FC<{
               <RadioGroup
                 id={field.id}
                 value={field.value}
-                onValueChange={field.onChange as never}
+                onValueChange={field.onChange as (value: string) => void}
                 className='grid grid-cols-3 gap-4'
               >
                 {VendorModels.statuses.map((status) => (

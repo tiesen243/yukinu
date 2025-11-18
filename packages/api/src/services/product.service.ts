@@ -54,28 +54,30 @@ export class ProductService implements IProductService {
         tx,
       )
 
-      await this._product.createImages(
-        input.images.map((image) => ({
-          url: image.url,
-          alt: image.alt,
-          productId: product.id,
-        })),
-        tx,
-      )
-
-      await this._product.createVariants(
-        input.variantGroups.map((group) => ({
-          code: group.name.charAt(0).toUpperCase(),
-          name: group.name,
-          productId: product.id,
-          variants: group.variants.map((variant) => ({
-            code: variant.name.charAt(0).toUpperCase(),
-            name: variant.name,
-            extraPrice: String(variant.extraPrice),
+      if (input.images.length > 0)
+        await this._product.createImages(
+          input.images.map((image) => ({
+            url: image.url,
+            alt: image.alt,
+            productId: product.id,
           })),
-        })),
-        tx,
-      )
+          tx,
+        )
+
+      if (input.variantGroups.length > 0)
+        await this._product.createVariants(
+          input.variantGroups.map((group) => ({
+            code: group.name.charAt(0).toUpperCase(),
+            name: group.name,
+            productId: product.id,
+            variants: group.variants.map((variant) => ({
+              code: variant.name.charAt(0).toUpperCase(),
+              name: variant.name,
+              extraPrice: String(variant.extraPrice),
+            })),
+          })),
+          tx,
+        )
 
       return { productId: product.id }
     })

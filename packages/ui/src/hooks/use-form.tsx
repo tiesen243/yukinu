@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 
 interface FormError<TValue extends Record<string, unknown>> {
@@ -10,6 +12,11 @@ type ExtractValues<T extends StandardSchemaV1> = {
     StandardSchemaV1.InferInput<T>
   >[K]
 }
+
+type FormControlElement =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement
 
 interface RenderProps<
   TValue extends Record<string, unknown>,
@@ -27,17 +34,9 @@ interface RenderProps<
     name: TFieldName
     value: TValue[TFieldName]
     onChange: (
-      event:
-        | React.ChangeEvent<
-            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-          >
-        | TValue[TFieldName],
+      event: React.ChangeEvent<FormControlElement> | TValue[TFieldName],
     ) => void
-    onBlur: (
-      event: React.FocusEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >,
-    ) => Promise<void>
+    onBlur: (event: React.FocusEvent<FormControlElement>) => Promise<void>
     'aria-describedby': string
     'aria-invalid': boolean
   }
@@ -59,8 +58,8 @@ const useForm = <
       : never
     : (value: TValues) => TResults | Promise<TResults>
   onSubmit: (data: TValues) => TData | Promise<TData>
-  onSuccess?: (data: TData) => unknown
-  onError?: (error: TError) => unknown
+  onSuccess?: (data: TData) => void
+  onError?: (error: TError) => void
 }) => {
   const { defaultValues, schema, onSubmit, onSuccess, onError } = opts
 
@@ -144,12 +143,12 @@ const useForm = <
         try {
           dataRef.current = await onSubmit(data)
           errorRef.current = { message: null, errors: {} } as TError
-          return void onSuccess?.(dataRef.current)
+          return onSuccess?.(dataRef.current)
         } catch (e: unknown) {
           const message = e instanceof Error ? e.message : String(e)
           dataRef.current = null
           errorRef.current = { message, errors: {} } as TError
-          return void onError?.(errorRef.current)
+          return onError?.(errorRef.current)
         }
       })
     },
@@ -170,36 +169,27 @@ const useForm = <
       const prevLocalValueRef = React.useRef(localValue)
 
       const handleChange = (
-        event:
-          | React.ChangeEvent<
-              HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-            >
-          | TValues[TFieldName],
+        event: React.ChangeEvent<FormControlElement> | TValues[TFieldName],
       ) => {
         setErrors([])
 
+        let newValue
         if (event && typeof event === 'object' && 'target' in event) {
           event.persist()
-          let newValue
           const { type, checked, value, valueAsNumber } =
             event.target as unknown as HTMLInputElement
           if (type === 'checkbox') newValue = checked
           else if (type === 'number')
             newValue = isNaN(valueAsNumber) ? '' : valueAsNumber
           else newValue = value
+        } else newValue = event
 
-          setLocalValue(newValue as TValues[TFieldName])
-          setValue(props.name, newValue as TValues[TFieldName])
-        } else {
-          setLocalValue(event)
-          setValue(props.name, event)
-        }
+        setLocalValue(newValue as TValues[TFieldName])
+        setValue(props.name, newValue as TValues[TFieldName])
       }
 
       const handleBlur = async (
-        event: React.FocusEvent<
-          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >,
+        event: React.FocusEvent<FormControlElement>,
       ) => {
         event.persist()
         if (prevLocalValueRef.current === localValue) return

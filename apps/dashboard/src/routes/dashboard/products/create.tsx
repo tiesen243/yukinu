@@ -29,9 +29,8 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
   const api = createApi(request)
 
   const categories = await api.category.all({ limit: 100 })
-  const vendor = await api.vendor.one()
 
-  return { categories, vendor }
+  return { categories }
 }
 
 export default function DashboardProductsCreate() {
@@ -56,25 +55,24 @@ const CreateProductForm: React.FC = () => {
   const trpc = useTRPC()
   const { mutateAsync } = useMutation({
     ...trpc.product.create.mutationOptions(),
-    meta: { filter: trpc.product.all.queryFilter() },
+    meta: { filter: trpc.product.allByVendor.queryFilter() },
     onSuccess: () => toast.success('Product created successfully'),
     onError: ({ message }) => toast.error(message),
   })
 
   const form = useForm({
     defaultValues: {
-      vendorId: data.vendor.id,
-      categoryId: '',
       name: '',
+      categoryId: '',
       description: undefined,
       price: 0,
       stock: 0,
       images: [{ url: '', alt: '' }],
       variantGroups: [],
-    } as ProductModels.CreateInput,
-    schema: ProductModels.createInput,
+    } as Omit<ProductModels.CreateInput, 'vendorId'>,
+    schema: ProductModels.createInput.omit({ vendorId: true }),
     onSubmit: mutateAsync,
-    onSuccess: () => navigate('/products'),
+    onSuccess: () => void navigate('/products'),
   })
 
   return (

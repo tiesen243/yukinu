@@ -30,16 +30,14 @@ import { useTRPC } from '@/trpc/react'
 export default function DashboardCategoriesIndex() {
   return (
     <main className='container py-4'>
-      <div className='mb-4 flex items-center justify-between'>
-        <div className='grid gap-2'>
-          <h1 className='text-3xl font-extrabold'>Category Management</h1>
-          <p className='text-muted-foreground'>
-            View and manage all categories in your application.
-          </p>
-        </div>
-
+      <div className='mb-2 flex items-center justify-between'>
+        <h1 className='text-3xl font-extrabold'>Category Management</h1>
         <CreateCategoryButton />
       </div>
+
+      <p className='mb-4 text-muted-foreground'>
+        View and manage all categories in your application.
+      </p>
 
       <section className='rounded-lg bg-card p-4 shadow'>
         <CategoryTable />

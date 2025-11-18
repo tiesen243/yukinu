@@ -24,6 +24,7 @@ export namespace ProductModels {
   //#region All Products Schema
   export const allInput = paginationInputSchema.extend({
     search: z.string().optional().default(''),
+    vendorId: z.cuid2('Invalid vendor ID').optional(),
   })
   export type AllInput = z.infer<typeof allInput>
 

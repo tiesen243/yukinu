@@ -4,6 +4,7 @@ import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 import { Link } from 'react-router'
 
 import type { ProductModels } from '@yukinu/validators/product'
+import { useSession } from '@yukinu/auth/react'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon, ChevronRightIcon } from '@yukinu/ui/icons'
@@ -21,6 +22,7 @@ import { useTRPC } from '@/trpc/react'
 
 function useProductTable() {
   const trpc = useTRPC()
+  const { session } = useSession()
 
   const [query, setQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
@@ -28,7 +30,11 @@ function useProductTable() {
     limit: parseAsInteger.withDefault(10),
   })
 
-  const { data, isLoading } = useQuery(trpc.product.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    session.user?.role === 'admin'
+      ? trpc.product.all.queryOptions(query)
+      : trpc.product.allByVendor.queryOptions(query),
+  )
 
   const handlePagination = React.useCallback(
     async (newPage: number) => setQuery({ ...query, page: newPage }),
