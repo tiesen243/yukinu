@@ -1,10 +1,12 @@
-import { and, ilike, lte } from '@yukinu/db'
+import { and, eq, ilike, lte, sql } from '@yukinu/db'
 import {
+  categories,
   productImages,
   products,
   productVariantGroups,
   productVariants,
 } from '@yukinu/db/schema/product'
+import { vendors } from '@yukinu/db/schema/vendor'
 import { productsView } from '@yukinu/db/schema/view'
 
 import type { IProductRepository } from '@/types'
@@ -35,6 +37,58 @@ export class ProductRepository
       productsView,
       and(ilike(productsView.name, `%${search}%`), lte(productsView.stock, 0)),
     )
+  }
+
+  public async findWithRelations(
+    productId: string,
+    tx = this._db,
+  ): ReturnType<IProductRepository['findWithRelations']> {
+    const [product] = await tx
+      .select({
+        id: products.id,
+        name: products.name,
+        status: products.status,
+        description: products.description,
+        price: products.price,
+        stock: products.stock,
+        vendor: {
+          id: vendors.id,
+          name: vendors.name,
+          imageUrl: vendors.imageUrl,
+          website: vendors.website,
+        },
+        category: { id: categories.id, name: categories.name },
+      })
+      .from(products)
+      .where(eq(products.id, productId))
+      .innerJoin(vendors, eq(vendors.id, products.vendorId))
+      .innerJoin(categories, eq(categories.id, products.categoryId))
+
+    if (!product) return null
+
+    const images = await tx
+      .select({ url: productImages.url, alt: productImages.alt })
+      .from(productImages)
+      .where(eq(productImages.productId, productId))
+
+    const variantGroups = await tx
+      .select({
+        id: productVariantGroups.id,
+        name: productVariantGroups.name,
+        variants: sql<
+          { id: string; name: string; stock: number; extraPrice: string }[]
+        >`json_agg(jsonb_build_object('id', ${productVariants.id}, 'name', ${productVariants.name}, 'stock', ${productVariants.extraPrice}, 'extraPrice', ${productVariants.extraPrice})) FILTER (WHERE ${productVariants.id} IS NOT NULL)`.as(
+          'variants',
+        ),
+      })
+      .from(productVariantGroups)
+      .innerJoin(
+        productVariants,
+        eq(productVariants.variantGroupId, productVariantGroups.id),
+      )
+      .groupBy(productVariantGroups.id)
+
+    return { ...product, images, variantGroups }
   }
 
   public async createVariants(

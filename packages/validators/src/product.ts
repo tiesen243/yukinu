@@ -11,11 +11,11 @@ export namespace ProductModels {
     id: z.cuid2(),
     name: z.string(),
     imageUrl: z.url().nullable(),
-    price: z.string(),
+    price: z.coerce.string(),
     stock: z.number().min(0),
     status: z.enum(productStatuses),
-    minPrice: z.number().min(0).nullable(),
-    maxPrice: z.number().min(0).nullable(),
+    minPrice: z.coerce.string().min(0).nullable(),
+    maxPrice: z.coerce.string().min(0).nullable(),
     averageRating: z.number().min(0).max(5).nullable(),
   })
   export type ProductView = z.infer<typeof productView>
@@ -35,6 +35,55 @@ export namespace ProductModels {
   export type AllOutput = z.infer<typeof allOutput>
   //#endregion
 
+  //#region One Product Schema
+  export const oneInput = z.object({
+    productId: z.cuid2('Invalid product ID'),
+  })
+  export type OneInput = z.infer<typeof oneInput>
+
+  export const oneOutput = z.object({
+    id: z.cuid2(),
+    name: z.string(),
+    description: z.string().nullable(),
+    price: z.coerce.string(),
+    stock: z.number().min(0),
+    status: z.enum(productStatuses),
+
+    vendor: z.object({
+      id: z.cuid2(),
+      name: z.string(),
+    }),
+
+    category: z.object({
+      id: z.cuid2(),
+      name: z.string(),
+    }),
+
+    images: z.array(
+      z.object({
+        url: z.url(),
+        alt: z.string().nullable(),
+      }),
+    ),
+
+    variantGroups: z.array(
+      z.object({
+        id: z.cuid2(),
+        name: z.string(),
+        variants: z.array(
+          z.object({
+            id: z.cuid2(),
+            name: z.string(),
+            extraPrice: z.coerce.string().min(0),
+            stock: z.number().min(0),
+          }),
+        ),
+      }),
+    ),
+  })
+  export type OneOutput = z.infer<typeof oneOutput>
+  //#endregion
+
   //#region Create Product Schema
   export const createInput = z.object({
     vendorId: z.cuid2('Invalid vendor ID'),
@@ -44,7 +93,7 @@ export namespace ProductModels {
       .min(1, 'Product name must be at least 1 character long')
       .max(255, 'Product name must be at most 255 characters long'),
     description: z.string().optional(),
-    price: z.number().min(0, 'Price must be at least 0'),
+    price: z.coerce.string().min(0, 'Price must be at least 0'),
     stock: z.number().min(0, 'Stock must be at least 0'),
 
     images: z.array(
@@ -69,9 +118,7 @@ export namespace ProductModels {
               .string()
               .min(1, 'Variant name must be at least 1 character long')
               .max(100, 'Variant name must be at most 100 characters long'),
-            extraPrice: z
-              .number()
-              .min(0, 'Variant extra price must be at least 0'),
+            extraPrice: z.coerce.string(),
             stock: z.number().min(0, 'Variant stock must be at least 0'),
           }),
         ),
@@ -82,5 +129,15 @@ export namespace ProductModels {
 
   export const createOutput = z.object({ productId: productView.shape.id })
   export type CreateOutput = z.infer<typeof createOutput>
+  //#endregion
+
+  //#region Update Product Schema
+  export const updateInput = createInput.extend({
+    productId: z.cuid2('Invalid product ID'),
+  })
+  export type UpdateInput = z.infer<typeof updateInput>
+
+  export const updateOutput = z.object({ success: z.boolean() })
+  export type UpdateOutput = z.infer<typeof updateOutput>
   //#endregion
 }

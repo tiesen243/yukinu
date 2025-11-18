@@ -1,5 +1,5 @@
 {
-  "id": "5686542b-4214-44e5-8d64-281f34915f07",
+  "id": "8bab16f0-9e97-4609-b6bb-a33a3f319e3c",
   "prevId": "131f8e0d-e37a-41e6-8817-ca237b0269e3",
   "version": "7",
   "dialect": "postgresql",
@@ -1391,6 +1391,21 @@
         }
       },
       "indexes": {
+        "products_code_idx": {
+          "name": "products_code_idx",
+          "columns": [
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
         "products_vendor_id_idx": {
           "name": "products_vendor_id_idx",
           "columns": [

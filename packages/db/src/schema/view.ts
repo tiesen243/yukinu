@@ -44,8 +44,8 @@ export const productsView = pgView('products_view').as((qb) =>
       imageUrl: sql<string>`MIN(${productImages.url})`.as('image_url'),
       price: products.price,
       stock: products.stock,
-      minPrice: sql<number>`MIN(${productVariants.extraPrice})`.as('min_price'),
-      maxPrice: sql<number>`MAX(${productVariants.extraPrice})`.as('max_price'),
+      minPrice: sql<string>`MIN(${productVariants.extraPrice})`.as('min_price'),
+      maxPrice: sql<string>`MAX(${productVariants.extraPrice})`.as('max_price'),
       averageRating: sql<number>`AVG(${productReviews.rating})`.as(
         'average_rating',
       ),

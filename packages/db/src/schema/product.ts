@@ -53,6 +53,7 @@ export const products = pgTable(
     updatedAt,
   }),
   (t) => [
+    uniqueIndex('products_code_idx').on(t.code),
     index('products_vendor_id_idx').on(t.vendorId),
     index('products_category_id_idx').on(t.categoryId),
     index('products_name_idx').on(t.name),

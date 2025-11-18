@@ -35,6 +35,17 @@ export class ProductService implements IProductService {
     }
   }
 
+  public async one(
+    input: ProductModels.OneInput,
+  ): Promise<ProductModels.OneOutput> {
+    return this._db.transaction(async (tx) => {
+      const product = await this._product.findWithRelations(input.productId, tx)
+      if (!product)
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Product not found' })
+      return product
+    })
+  }
+
   public async create(
     input: ProductModels.CreateInput,
   ): Promise<ProductModels.CreateOutput> {
@@ -48,7 +59,6 @@ export class ProductService implements IProductService {
       const product = await this._product.create(
         {
           ...input,
-          price: String(input.price),
           code: this._generateProductCode(input.name),
         },
         tx,
@@ -73,7 +83,7 @@ export class ProductService implements IProductService {
             variants: group.variants.map((variant) => ({
               code: variant.name.charAt(0).toUpperCase(),
               name: variant.name,
-              extraPrice: String(variant.extraPrice),
+              extraPrice: variant.extraPrice,
             })),
           })),
           tx,

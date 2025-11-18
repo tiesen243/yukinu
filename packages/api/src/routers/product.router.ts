@@ -20,6 +20,12 @@ export const productRouter = createTRPCRouter({
       ctx.productService.all({ ...input, vendorId: ctx.vendor.id }),
     ),
 
+  one: publicProcedure
+    .meta({ message: 'Fetch product successfully' })
+    .input(ProductModels.oneInput)
+    .output(ProductModels.oneOutput)
+    .query(({ ctx, input }) => ctx.productService.one(input)),
+
   create: vendorProcedure
     .meta({
       message: 'Product created successfully',

@@ -7,7 +7,11 @@ import type {
 } from '@yukinu/db/schema/product'
 import type { productsView } from '@yukinu/db/schema/view'
 
-import type { IBaseRepository } from '@/types'
+import type {
+  IBaseRepository,
+  ICategoryRepository,
+  IVendorRepository,
+} from '@/types'
 
 export interface IProductRepository extends IBaseRepository<typeof products> {
   findAllView(
@@ -18,6 +22,33 @@ export interface IProductRepository extends IBaseRepository<typeof products> {
   ): Promise<IProductRepository.ProductsView[]>
 
   countAllView(search?: string, tx?: Database): Promise<number>
+
+  findWithRelations(
+    productId: string,
+    tx?: Database,
+  ): Promise<
+    | (Pick<
+        IProductRepository.Product,
+        'id' | 'name' | 'description' | 'price' | 'stock' | 'status'
+      > & {
+        vendor: Pick<
+          IVendorRepository.Vendor,
+          'id' | 'name' | 'imageUrl' | 'website'
+        >
+        category: Pick<ICategoryRepository.Category, 'id' | 'name'>
+        images: Pick<IProductRepository.ProductImage, 'url' | 'alt'>[]
+        variantGroups: (Pick<
+          IProductRepository.ProductVariantGroup,
+          'id' | 'name'
+        > & {
+          variants: Pick<
+            IProductRepository.ProductVariant,
+            'id' | 'name' | 'extraPrice' | 'stock'
+          >[]
+        })[]
+      })
+    | null
+  >
 
   createVariants(
     variantGroups: (IProductRepository.NewProductVariantGroup & {
