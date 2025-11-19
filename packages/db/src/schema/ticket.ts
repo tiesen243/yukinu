@@ -24,5 +24,3 @@ export const tickets = pgTable('tickets', (t) => ({
   createdAt,
   updatedAt,
 }))
-export type Ticket = typeof tickets.$inferSelect
-export type NewTicket = typeof tickets.$inferInsert

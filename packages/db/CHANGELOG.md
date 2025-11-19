@@ -1,5 +1,27 @@
 # @yukinu/db
 
+## 0.1.7
+
+### Patch Changes
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`7c7f601`](https://github.com/tiesen243/yukinu/commit/7c7f6011eb76da7f1f20ef723b49eb3cb6d5cda2) Thanks [@tiesen243](https://github.com/tiesen243)! - added unique index for categories.name
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`fdbc32f`](https://github.com/tiesen243/yukinu/commit/fdbc32f6b56f8e365c7bc51d071aa4364206cdcd) Thanks [@tiesen243](https://github.com/tiesen243)! - added seed db
+
+- Updated dependencies [[`f2c30e8`](https://github.com/tiesen243/yukinu/commit/f2c30e80900f24e1d942548920be1e1f130e2f37), [`788207c`](https://github.com/tiesen243/yukinu/commit/788207c20a950b5b2049560ed7e00c364c7ceac9)]:
+  - @yukinu/validators@0.1.7
+
+## 0.1.6
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`bf7a102`](https://github.com/tiesen243/yukinu/commit/bf7a1025d2a4a0c7ce5931efc06c90d18597450a) Thanks [@tiesen243](https://github.com/tiesen243)! - remove export type of schema
+
+- Updated dependencies [[`7ad647a`](https://github.com/tiesen243/yukinu/commit/7ad647ae7098bc8d9f213825059c409b20668c55), [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186)]:
+  - @yukinu/validators@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

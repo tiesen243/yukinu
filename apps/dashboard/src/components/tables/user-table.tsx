@@ -33,7 +33,7 @@ import { UserModels } from '@yukinu/validators/user'
 
 import { useTRPC } from '@/trpc/react'
 
-export function useUserTable() {
+function useUserTable() {
   const trpc = useTRPC()
 
   const [query, setQuery] = useQueryStates({
@@ -42,25 +42,19 @@ export function useUserTable() {
     limit: parseAsInteger.withDefault(10),
   })
 
-  const { data, isLoading, refetch } = useQuery(
-    trpc.user.all.queryOptions(query),
-  )
-  const { mutateAsync: updateUser } = useMutation({
+  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
+  const { mutateAsync: update } = useMutation({
     ...trpc.user.update.mutationOptions(),
-    onSuccess: () => {
-      void refetch()
-      toast.success('User updated successfully')
-    },
+    onSuccess: () => toast.success('User updated successfully'),
     onError: (error) => toast.error(error.message),
+    meta: { filter: trpc.user.all.queryFilter(query) },
   })
 
-  const { mutate: deleteUser, isPending: isDeleting } = useMutation({
+  const { mutate: remove, isPending: isRemoving } = useMutation({
     ...trpc.user.delete.mutationOptions(),
-    onSuccess: () => {
-      void refetch()
-      toast.success('User deleted successfully')
-    },
+    onSuccess: () => toast.success('User deleted successfully'),
     onError: (error) => toast.error(error.message),
+    meta: { filter: trpc.user.all.queryFilter(query) },
   })
 
   const handlePagination = React.useCallback(
@@ -69,13 +63,13 @@ export function useUserTable() {
   )
 
   return {
+    query,
     data,
     isLoading,
-    query,
     handlePagination,
-    updateUser,
-    deleteUser,
-    isDeleting,
+    update,
+    remove,
+    isRemoving,
   }
 }
 
@@ -83,13 +77,13 @@ export const UserTable: React.FC = () => (
   <Table>
     <TableHeader>
       <TableRow>
-        <TableHead className='w-[100px]'>ID</TableHead>
+        <TableHead className='w-52'>ID</TableHead>
         <TableHead>Username</TableHead>
         <TableHead>Email</TableHead>
         <TableHead>Role</TableHead>
         <TableHead>Status</TableHead>
         <TableHead>Updated At</TableHead>
-        <TableHead>Actions</TableHead>
+        <TableHead className='min-w-32'>Actions</TableHead>
       </TableRow>
     </TableHeader>
 
@@ -137,7 +131,7 @@ const UserTableBody: React.FC = () => {
           {user.status}
         </Badge>
       </TableCell>
-      <TableCell>{new Date(user.updatedAt).toLocaleDateString()}</TableCell>
+      <TableCell>{new Date(user.updatedAt).toDateString()}</TableCell>
       <TableCell className='flex w-fit items-center gap-2'>
         <EditUserModal user={user} />
         <DeleteUserModal user={user} />
@@ -146,7 +140,7 @@ const UserTableBody: React.FC = () => {
   ))
 }
 
-export const UserTableFooter: React.FC = () => {
+const UserTableFooter: React.FC = () => {
   const { data, isLoading, handlePagination } = useUserTable()
   if (isLoading || !data?.pagination) return null
 
@@ -187,7 +181,7 @@ const EditUserModal: React.FC<{
   user: UserModels.AllOutput['users'][number]
 }> = ({ user }) => {
   const [isOpen, setIsOpen] = React.useState(false)
-  const { updateUser } = useUserTable()
+  const { update: updateUser } = useUserTable()
 
   const form = useForm({
     defaultValues: {
@@ -278,10 +272,10 @@ const EditUserModal: React.FC<{
   )
 }
 
-export const DeleteUserModal: React.FC<{
+const DeleteUserModal: React.FC<{
   user: UserModels.AllOutput['users'][number]
 }> = ({ user }) => {
-  const { deleteUser, isDeleting } = useUserTable()
+  const { remove: deleteUser, isRemoving: isDeleting } = useUserTable()
 
   return (
     <Dialog>

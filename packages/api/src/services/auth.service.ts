@@ -4,9 +4,9 @@ import type { Database } from '@yukinu/db'
 import type { AuthModels } from '@yukinu/validators/auth'
 import { Password } from '@yukinu/auth'
 
+import type { IAuthService } from '@/contracts/services/auth.service'
 import type {
   IAccountRepository,
-  IAuthService,
   IProfileRepository,
   IUserRepository,
 } from '@/types'

@@ -1,21 +1,21 @@
 {
   "name": "@yukinu/dashboard",
-  "version": "0.2.7",
+  "version": "0.2.9",
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "react-router build",
+    "build": "bun --env-file ../../.env react-router build",
     "clean": "git clean -xdf .cache .react-router .turbo .vercel build node_modules",
-    "dev": "react-router dev --port $TURBO_MFE_PORT",
+    "dev": "bun --env-file ../../.env react-router dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "react-router typegen && eslint",
-    "start": "react-router-serve build/server/index.js",
-    "typecheck": "react-router typegen && tsc --noEmit"
+    "lint": "bun --env-file ../../.env react-router typegen && eslint",
+    "start": "bun --env-file ../../.env react-router-serve build/server/index.js",
+    "typecheck": "bun --env-file ../../.env react-router typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@react-router/node": "^7.9.5",
-    "@react-router/serve": "^7.9.5",
+    "@react-router/node": "^7.9.6",
+    "@react-router/serve": "^7.9.6",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
@@ -29,11 +29,11 @@
     "nuqs": "catalog:",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.9.5",
+    "react-router": "^7.9.6",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.9.5",
+    "@react-router/dev": "^7.9.6",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/node": "catalog:",
     "@types/react": "catalog:react",
@@ -45,7 +45,7 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
-    "vite": "7.2.2",
+    "vite": "^7.2.2",
     "vite-tsconfig-paths": "^5.1.4"
   },
   "peerDependencies": {

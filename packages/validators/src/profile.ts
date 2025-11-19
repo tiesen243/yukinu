@@ -2,7 +2,6 @@ import * as z from 'zod'
 
 export namespace ProfileModels {
   //#region Profile Schema
-
   export const profile = z.object({
     id: z.cuid2('Invalid profile ID'),
     fullName: z.string('Full name must be a string').nullable(),

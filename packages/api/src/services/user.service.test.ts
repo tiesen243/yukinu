@@ -24,8 +24,8 @@ describe('UserService', () => {
 
   describe('all', () => {
     it('should return all users with pagination', async () => {
-      const result = await _service.all({ search: '', limit: 2, page: 1 })
-      expect(result.users.length).toBe(0)
+      const result = await _service.all({ search: '', page: 1, limit: 2 })
+      expect(result.users.length).toBe(2)
       expect(result.pagination.totalItems).toBe(3)
       expect(result.pagination.totalPages).toBe(2)
     })

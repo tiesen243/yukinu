@@ -1,4 +1,3 @@
-import type { User } from '@yukinu/db/schema/user'
 import { eq } from '@yukinu/db'
 import { sessions, users } from '@yukinu/db/schema/user'
 
@@ -11,7 +10,10 @@ export class UserRepository
 {
   protected override _table = users
 
-  async deleteSessions(userId: User['id'], tx = this._db): Promise<void> {
+  async deleteSessions(
+    userId: IUserRepository.User['id'],
+    tx = this._db,
+  ): Promise<void> {
     await tx.delete(sessions).where(eq(sessions.userId, userId))
   }
 }

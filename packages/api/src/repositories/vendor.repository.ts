@@ -2,7 +2,7 @@ import { desc, eq } from '@yukinu/db'
 import { users } from '@yukinu/db/schema/user'
 import { vendors } from '@yukinu/db/schema/vendor'
 
-import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
+import type { IVendorRepository } from '@/types'
 import { BaseRepository } from '@/repositories/base.repository'
 
 export class VendorRepository
@@ -12,7 +12,7 @@ export class VendorRepository
   protected override _table = vendors
 
   findWithOwner(
-    criteria: Partial<IVendorRepository.IVendor>[],
+    criteria: Partial<IVendorRepository.Vendor>[],
     limit?: number,
     offset?: number,
     tx = this._db,

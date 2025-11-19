@@ -10,8 +10,6 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
@@ -41,83 +39,68 @@ export const ChangePasswordForm: React.FC = () => {
   })
 
   return (
-    <form onSubmit={form.handleSubmit}>
-      <FieldSet>
-        <FieldLegend>Update Your Password</FieldLegend>
-        <FieldDescription>
-          Please enter your current password and choose a new one. Make sure
-          your new password is strong and unique.
-        </FieldDescription>
-
-        <FieldGroup>
-          <form.Field
-            name='currentPassword'
-            render={({ field, meta }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Current Password</FieldLabel>
-                <Input
-                  {...field}
-                  type='password'
-                  autoComplete='current-password'
-                />
-                <FieldDescription>
-                  Leave blank if you registered using a social account.
-                </FieldDescription>
-                <FieldError errors={meta.errors} />
-              </Field>
-            )}
-          />
-
-          <form.Field
-            name='newPassword'
-            render={({ field, meta }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>New Password</FieldLabel>
-                <Input {...field} type='password' autoComplete='new-password' />
-                <FieldError errors={meta.errors} />
-              </Field>
-            )}
-          />
-
-          <form.Field
-            name='confirmNewPassword'
-            render={({ field, meta }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>
-                  Confirm New Password
-                </FieldLabel>
-                <Input {...field} type='password' autoComplete='new-password' />
-                <FieldError errors={meta.errors} />
-              </Field>
-            )}
-          />
-
-          <form.Field
-            name='isLogOutOtherSessions'
-            render={({ field, meta }) => (
-              <Field
-                data-invalid={meta.errors.length > 0}
-                orientation='horizontal'
-              >
-                <Checkbox
-                  id={meta.fieldId}
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-                <FieldLabel htmlFor={meta.fieldId}>
-                  Log out from other sessions
-                </FieldLabel>
-              </Field>
-            )}
-          />
-
-          <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              Change Password
-            </Button>
+    <FieldGroup className='px-4'>
+      <form.Field
+        name='currentPassword'
+        render={({ field, meta }) => (
+          <Field data-invalid={meta.errors.length > 0}>
+            <FieldLabel htmlFor={meta.fieldId}>Current Password</FieldLabel>
+            <Input {...field} type='password' autoComplete='current-password' />
+            <FieldDescription>
+              Leave blank if you registered using a social account.
+            </FieldDescription>
+            <FieldError errors={meta.errors} />
           </Field>
-        </FieldGroup>
-      </FieldSet>
-    </form>
+        )}
+      />
+
+      <form.Field
+        name='newPassword'
+        render={({ field, meta }) => (
+          <Field data-invalid={meta.errors.length > 0}>
+            <FieldLabel htmlFor={meta.fieldId}>New Password</FieldLabel>
+            <Input {...field} type='password' autoComplete='new-password' />
+            <FieldError errors={meta.errors} />
+          </Field>
+        )}
+      />
+
+      <form.Field
+        name='confirmNewPassword'
+        render={({ field, meta }) => (
+          <Field data-invalid={meta.errors.length > 0}>
+            <FieldLabel htmlFor={meta.fieldId}>Confirm New Password</FieldLabel>
+            <Input {...field} type='password' autoComplete='new-password' />
+            <FieldError errors={meta.errors} />
+          </Field>
+        )}
+      />
+
+      <form.Field
+        name='isLogOutOtherSessions'
+        render={({ field, meta }) => (
+          <Field data-invalid={meta.errors.length > 0} orientation='horizontal'>
+            <Checkbox
+              id={meta.fieldId}
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+            <FieldLabel htmlFor={meta.fieldId}>
+              Log out from other sessions
+            </FieldLabel>
+          </Field>
+        )}
+      />
+
+      <Field>
+        <Button
+          type='submit'
+          onClick={form.handleSubmit}
+          disabled={form.state.isPending}
+        >
+          Change Password
+        </Button>
+      </Field>
+    </FieldGroup>
   )
 }

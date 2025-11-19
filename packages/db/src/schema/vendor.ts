@@ -38,8 +38,6 @@ export const vendors = pgTable(
     index('vendors_status_idx').on(t.status),
   ],
 )
-export type Vendor = typeof vendors.$inferSelect
-export type NewVendor = typeof vendors.$inferInsert
 
 export const vendorsRelations = relations(vendors, ({ many, one }) => ({
   owner: one(users, { fields: [vendors.ownerId], references: [users.id] }),
@@ -74,8 +72,6 @@ export const vendorMembers = pgTable(
     index('vendor_members_user_id_idx').on(t.userId),
   ],
 )
-export type VendorMember = typeof vendorMembers.$inferSelect
-export type NewVendorMember = typeof vendorMembers.$inferInsert
 
 export const vendorMembersRelations = relations(vendorMembers, ({ one }) => ({
   vendor: one(vendors, {
@@ -103,8 +99,6 @@ export const vendorCollections = pgTable(
     index('vendor_collections_name_idx').on(t.name),
   ],
 )
-export type VendorCollection = typeof vendorCollections.$inferSelect
-export type NewVendorCollection = typeof vendorCollections.$inferInsert
 
 export const vendorCollectionsRelations = relations(
   vendorCollections,
@@ -134,8 +128,6 @@ export const vendorCollectionItems = pgTable(
     index('vendor_collection_items_product_id_idx').on(t.productId),
   ],
 )
-export type VendorCollectionItem = typeof vendorCollectionItems.$inferSelect
-export type NewVendorCollectionItem = typeof vendorCollectionItems.$inferInsert
 
 export const vendorCollectionItemsRelations = relations(
   vendorCollectionItems,

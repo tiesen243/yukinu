@@ -32,8 +32,6 @@ export const orders = pgTable(
     index('orders_status_idx').on(t.status),
   ],
 )
-export type Order = typeof orders.$inferSelect
-export type NewOrder = typeof orders.$inferInsert
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
   user: one(users, { fields: [orders.userId], references: [users.id] }),
@@ -65,8 +63,6 @@ export const orderItems = pgTable(
     index('order_items_variant_id_idx').on(t.variantId),
   ],
 )
-export type OrderItem = typeof orderItems.$inferSelect
-export type NewOrderItem = typeof orderItems.$inferInsert
 
 export const orderItemsRelations = relations(orderItems, ({ one }) => ({
   order: one(orders, { fields: [orderItems.orderId], references: [orders.id] }),

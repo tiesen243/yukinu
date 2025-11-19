@@ -2,6 +2,7 @@ import { Activity } from 'react'
 import { NavLink } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
+import { useMounted } from '@yukinu/ui/hooks/use-mounted'
 import {
   BarChart3Icon,
   DollarSignIcon,
@@ -38,23 +39,10 @@ export const AppSidebarContent: React.FC = () => {
   return (
     <SidebarContent>
       <SidebarGroup>
-        <SidebarMenuItem>
-          <NavLink to={getBaseUrl()}>
-            {({ isActive, isPending }) => (
-              <SidebarMenuButton isActive={isActive} asChild>
-                <span>
-                  <HomeIcon /> Home
-                  <Activity mode={isPending ? 'visible' : 'hidden'}>
-                    <Loader2Icon className='animate-spin' />
-                  </Activity>
-                </span>
-              </SidebarMenuButton>
-            )}
-          </NavLink>
-        </SidebarMenuItem>
-
         <SidebarGroupLabel>Main Menu</SidebarGroupLabel>
         <SidebarMenu>
+          <HomeLink />
+
           {mainMenuItems
             .filter((item) => item.roles.includes(session.user.role))
             .map((item) => (
@@ -107,6 +95,28 @@ export const AppSidebarContent: React.FC = () => {
   )
 }
 
+const HomeLink: React.FC = () => {
+  const isMounted = useMounted()
+  if (!isMounted)
+    return (
+      <SidebarMenuItem>
+        <SidebarMenuButton>
+          <HomeIcon /> Home
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    )
+
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton asChild>
+        <a href={getBaseUrl()}>
+          <HomeIcon /> Home
+        </a>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  )
+}
+
 const mainMenuItems = [
   {
     title: 'Dashboard',
@@ -119,6 +129,12 @@ const mainMenuItems = [
     icon: ShoppingCartIcon,
     href: '/orders',
     roles: ['admin', 'vendor_owner', 'vendor_staff'],
+  },
+  {
+    title: 'Categories',
+    icon: TagIcon,
+    href: '/categories',
+    roles: ['admin', 'moderator'],
   },
   {
     title: 'Products',

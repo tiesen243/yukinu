@@ -1,12 +1,11 @@
 import type { Database } from '@yukinu/db'
-import type { User } from '@yukinu/db/schema/user'
-import type { NewVendor, Vendor, vendors } from '@yukinu/db/schema/vendor'
+import type { vendors } from '@yukinu/db/schema/vendor'
 
-import type { IBaseRepository } from '@/types'
+import type { IBaseRepository, IUserRepository } from '@/types'
 
 export interface IVendorRepository extends IBaseRepository<typeof vendors> {
   findWithOwner(
-    criteria: Partial<IVendorRepository.IVendor>[],
+    criteria: Partial<IVendorRepository.Vendor>[],
     limit?: number,
     offset?: number,
     tx?: Database,
@@ -14,14 +13,14 @@ export interface IVendorRepository extends IBaseRepository<typeof vendors> {
 }
 
 export namespace IVendorRepository {
-  export type IVendor = Vendor
-  export type INewVendor = NewVendor
+  export type Vendor = typeof vendors.$inferSelect
+  export type NewVendor = typeof vendors.$inferInsert
 
   export interface VendorWithOwner {
-    id: IVendor['id']
-    name: IVendor['name']
-    status: IVendor['status']
-    owner: User['username']
-    updatedAt: IVendor['updatedAt']
+    id: Vendor['id']
+    name: Vendor['name']
+    status: Vendor['status']
+    owner: IUserRepository.User['username']
+    updatedAt: Vendor['updatedAt']
   }
 }

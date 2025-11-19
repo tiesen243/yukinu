@@ -1,4 +1,9 @@
-import { defaultShouldDehydrateQuery, QueryClient } from '@tanstack/react-query'
+import type { InvalidateQueryFilters } from '@tanstack/react-query'
+import {
+  defaultShouldDehydrateQuery,
+  MutationCache,
+  QueryClient,
+} from '@tanstack/react-query'
 import SuperJSON from 'superjson'
 
 export const createQueryClient = () =>
@@ -19,4 +24,18 @@ export const createQueryClient = () =>
         deserializeData: SuperJSON.deserialize,
       },
     },
+    mutationCache: new MutationCache({
+      onSuccess: (_data, _var, _res, _mutation, context) => {
+        const filter = context.meta?.filter
+        if (filter) void context.client.invalidateQueries(filter)
+      },
+    }),
   })
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    mutationMeta: {
+      filter: InvalidateQueryFilters
+    }
+  }
+}

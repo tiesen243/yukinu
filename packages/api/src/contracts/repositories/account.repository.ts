@@ -1,4 +1,4 @@
-import type { Account, accounts, NewAccount } from '@yukinu/db/schema/user'
+import type { accounts } from '@yukinu/db/schema/user'
 
 import type { IBaseRepository } from '@/types'
 
@@ -6,6 +6,6 @@ import type { IBaseRepository } from '@/types'
 export interface IAccountRepository extends IBaseRepository<typeof accounts> {}
 
 export namespace IAccountRepository {
-  export type IAccount = Account
-  export type INewAccount = NewAccount
+  export type Account = typeof accounts.$inferSelect
+  export type NewAccount = typeof accounts.$inferInsert
 }

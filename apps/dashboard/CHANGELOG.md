@@ -1,5 +1,30 @@
 # @yukinu/dashboard
 
+## 0.2.9
+
+### Patch Changes
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`788207c`](https://github.com/tiesen243/yukinu/commit/788207c20a950b5b2049560ed7e00c364c7ceac9) Thanks [@tiesen243](https://github.com/tiesen243)! - added category management feature
+
+- Updated dependencies [[`7c7f601`](https://github.com/tiesen243/yukinu/commit/7c7f6011eb76da7f1f20ef723b49eb3cb6d5cda2), [`f2c30e8`](https://github.com/tiesen243/yukinu/commit/f2c30e80900f24e1d942548920be1e1f130e2f37), [`fdbc32f`](https://github.com/tiesen243/yukinu/commit/fdbc32f6b56f8e365c7bc51d071aa4364206cdcd), [`788207c`](https://github.com/tiesen243/yukinu/commit/788207c20a950b5b2049560ed7e00c364c7ceac9)]:
+  - @yukinu/db@0.1.7
+  - @yukinu/validators@0.1.7
+  - @yukinu/api@0.1.9
+  - @yukinu/auth@0.1.8
+
+## 0.2.8
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
+- Updated dependencies [[`7ad647a`](https://github.com/tiesen243/yukinu/commit/7ad647ae7098bc8d9f213825059c409b20668c55), [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186), [`bf7a102`](https://github.com/tiesen243/yukinu/commit/bf7a1025d2a4a0c7ce5931efc06c90d18597450a)]:
+  - @yukinu/validators@0.1.6
+  - @yukinu/api@0.1.8
+  - @yukinu/auth@0.1.7
+  - @yukinu/db@0.1.6
+  - @yukinu/ui@0.1.1
+
 ## 0.2.7
 
 ### Patch Changes

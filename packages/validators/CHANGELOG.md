@@ -1,5 +1,21 @@
 # @yukinu/validators
 
+## 0.1.7
+
+### Patch Changes
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`f2c30e8`](https://github.com/tiesen243/yukinu/commit/f2c30e80900f24e1d942548920be1e1f130e2f37) Thanks [@tiesen243](https://github.com/tiesen243)! - added unit test for category service
+
+- [#191](https://github.com/tiesen243/yukinu/pull/191) [`788207c`](https://github.com/tiesen243/yukinu/commit/788207c20a950b5b2049560ed7e00c364c7ceac9) Thanks [@tiesen243](https://github.com/tiesen243)! - added category management feature
+
+## 0.1.6
+
+### Patch Changes
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`7ad647a`](https://github.com/tiesen243/yukinu/commit/7ad647ae7098bc8d9f213825059c409b20668c55) Thanks [@tiesen243](https://github.com/tiesen243)! - added CRUD address api
+
+- [#188](https://github.com/tiesen243/yukinu/pull/188) [`37873d7`](https://github.com/tiesen243/yukinu/commit/37873d724b92f36c9b708f98ee73e82cd89f6186) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
 ## 0.1.5
 
 ### Patch Changes

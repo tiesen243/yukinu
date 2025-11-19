@@ -1,4 +1,5 @@
 import { UserTable } from '@/components/tables/user-table'
+import { createMetadata } from '@/lib/metadata'
 
 export default function DashboardUsersIndex() {
   return (
@@ -14,3 +15,9 @@ export default function DashboardUsersIndex() {
     </main>
   )
 }
+
+export const meta = () =>
+  createMetadata({
+    title: 'User Management',
+    description: 'View and manage all registered users in your application.',
+  })

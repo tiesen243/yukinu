@@ -10,7 +10,7 @@ export class AccountRepository
   protected override _table = accounts
 
   override async create(
-    data: IAccountRepository.INewAccount,
+    data: IAccountRepository.NewAccount,
     tx = this._db,
   ): Promise<{ id: string }> {
     const [result] = await tx

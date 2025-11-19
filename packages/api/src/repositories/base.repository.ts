@@ -91,6 +91,23 @@ export abstract class BaseRepository<TTable extends PgTable>
     return result
   }
 
+  public async updateBy(
+    criteria: Partial<TTable['$inferSelect']>[],
+    data: Partial<TTable['$inferInsert']>,
+    tx = this._db,
+  ): Promise<number> {
+    if (criteria.length === 0)
+      throw new Error('No criteria provided for updateBy')
+
+    const whereClause = this.buildCriteria(criteria)
+    const result = await tx
+      .update(this._table as never)
+      .set(data)
+      .where(whereClause)
+      .returning({ id: this._table.id })
+    return result.length
+  }
+
   public async delete(
     id: TTable['$inferSelect']['id'],
     tx = this._db,
@@ -101,6 +118,21 @@ export abstract class BaseRepository<TTable extends PgTable>
       .returning({ id: this._table.id })
     if (!result) throw new Error('Failed to delete record')
     return result
+  }
+
+  public async deleteBy(
+    criteria: Partial<TTable['$inferSelect']>[],
+    tx = this._db,
+  ): Promise<number> {
+    if (criteria.length === 0)
+      throw new Error('No criteria provided for deleteBy')
+
+    const whereClause = this.buildCriteria(criteria)
+    const result = await tx
+      .delete(this._table as never)
+      .where(whereClause)
+      .returning({ id: this._table.id })
+    return result.length
   }
 
   protected buildCriteria(
