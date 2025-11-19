@@ -80,7 +80,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
     generator: 'Next.js',
 
     // Webmaster verifications
-    verification: { google: 'dfsGgsTDdq4IwdTzb4p69XHyrPXvzFNmUMRxpuV4M8Q' },
+    verification: { google: 'IxxbL_t4Uj36PsfajteCHNpV6Ln9fr7WCkxmzFjW_ms' },
     facebook: { appId: '523462826928110' },
   }
 }
