@@ -113,7 +113,7 @@ export class ProductService implements IProductService {
     }
 
     return this._db.transaction(async (tx) => {
-      await this._product.update(productId, updateData, tx)
+      await this._product.update(productId, { ...updateData, categoryId }, tx)
 
       await this._product.deleteImagesByProductId(productId, tx)
       await this._product.deleteVariantsByProductId(productId, tx)

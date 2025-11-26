@@ -31,7 +31,7 @@ function useProductTable() {
   })
 
   const { data, isLoading } = useQuery(
-    session.user?.role === 'admin'
+    ['admin', 'moderator'].includes(session.user?.role ?? '')
       ? trpc.product.all.queryOptions(query)
       : trpc.product.allByVendor.queryOptions(query),
   )
@@ -89,7 +89,7 @@ const ProductTableBody: React.FC = () => {
   if (!data?.products || data.products.length === 0)
     return (
       <TableRow>
-        <TableCell colSpan={8} className='text-center'>
+        <TableCell colSpan={6} className='text-center'>
           No products found.
         </TableCell>
       </TableRow>
@@ -130,7 +130,7 @@ const ProductTableFooter: React.FC = () => {
 
   return (
     <TableRow>
-      <TableCell colSpan={8}>
+      <TableCell colSpan={6}>
         <div className='flex items-center justify-end gap-4'>
           <Button
             variant='outline'

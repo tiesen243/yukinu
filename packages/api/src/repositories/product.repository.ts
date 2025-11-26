@@ -27,7 +27,12 @@ export class ProductRepository
     return tx
       .select()
       .from(productsView)
-      .where(ilike(productsView.name, `%${search}%`))
+      .where(
+        and(
+          ilike(productsView.name, `%${search}%`),
+          lte(productsView.stock, 0),
+        ),
+      )
       .limit(limit)
       .offset(offset)
   }
@@ -146,11 +151,12 @@ export class ProductRepository
       .where(eq(productVariantGroups.productId, productId))
       .returning({ id: productVariantGroups.id })
 
-    await tx.delete(productVariants).where(
-      inArray(
-        productVariants.variantGroupId,
-        variantGroupIds.map((vg) => vg.id),
-      ),
-    )
+    if (variantGroupIds.length > 0)
+      await tx.delete(productVariants).where(
+        inArray(
+          productVariants.variantGroupId,
+          variantGroupIds.map((vg) => vg.id),
+        ),
+      )
   }
 }

@@ -101,7 +101,7 @@ export namespace ProductModels {
         url: z.url('Invalid image URL'),
         alt: z
           .string()
-          .min(1, 'Imaga alt is required')
+          .min(1, 'Image alt is required')
           .max(255, 'Image alt must be at most 255 characters long'),
       }),
     ),

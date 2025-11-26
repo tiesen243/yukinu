@@ -33,7 +33,7 @@ nav_order: 5
 
 - [x] Apply to become a vendor
 - [ ] Manage store information
-- [x] Manage products (CRUD)
+- [x] Manage products (list/create/update)
 - [x] Manage product images
 - [x] Manage product variants (size, color, etc.)
 - [ ] Manage product inventory

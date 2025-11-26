@@ -51,6 +51,18 @@ export const productsView = pgView('products_view').as((qb) =>
       ),
     })
     .from(products)
+    .leftJoin(categories, eq(products.categoryId, categories.id))
+    .leftJoin(vendors, eq(vendors.id, products.vendorId))
+    .leftJoin(productImages, eq(products.id, productImages.productId))
+    .leftJoin(
+      productVariantGroups,
+      eq(products.id, productVariantGroups.productId),
+    )
+    .leftJoin(
+      productVariants,
+      eq(productVariantGroups.id, productVariants.variantGroupId),
+    )
+    .leftJoin(productReviews, eq(products.id, productReviews.productId))
     .groupBy(
       products.id,
       products.name,
@@ -62,17 +74,5 @@ export const productsView = pgView('products_view').as((qb) =>
       categories.name,
       vendors.id,
       vendors.name,
-    )
-    .innerJoin(categories, eq(products.categoryId, categories.id))
-    .innerJoin(vendors, eq(vendors.id, products.vendorId))
-    .leftJoin(productImages, eq(products.id, productImages.productId))
-    .leftJoin(
-      productVariantGroups,
-      eq(products.id, productVariantGroups.productId),
-    )
-    .leftJoin(
-      productVariants,
-      eq(productVariantGroups.id, productVariants.variantGroupId),
-    )
-    .leftJoin(productReviews, eq(products.id, productReviews.productId)),
+    ),
 )
