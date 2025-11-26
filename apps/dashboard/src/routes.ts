@@ -11,6 +11,12 @@ export default [
     index('./routes/dashboard/_index.tsx'),
     route('/categories', './routes/dashboard/categories.tsx'),
 
+    ...prefix('/products', [
+      index('./routes/dashboard/products/_index.tsx'),
+      route('/create', './routes/dashboard/products/create.tsx'),
+      route('/:id', './routes/dashboard/products/[id].tsx'),
+    ]),
+
     ...prefix('/users', [index('./routes/dashboard/users/_index.tsx')]),
 
     ...prefix('/vendors', [

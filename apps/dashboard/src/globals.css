@@ -1,7 +1,2 @@
 @import '@yukinu/ui/tailwind.css';
 @source '../../../packages/ui/src/**/*.tsx';
-
-@theme inline {
-  --font-sans: 'Geist', sans-serif;
-  --font-mono: 'Geist Mono', monospace;
-}

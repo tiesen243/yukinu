@@ -111,7 +111,7 @@ const VendorTableBody: React.FC = () => {
       <TableRow key={index}>
         {Array.from({ length: 7 }, (_, index) => (
           <TableCell key={index}>
-            <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
+            <div className='animate-pulse rounded-sm bg-muted'>&nbsp;</div>
           </TableCell>
         ))}
       </TableRow>
@@ -213,7 +213,7 @@ const EditVendorModal: React.FC<{
               <RadioGroup
                 id={field.id}
                 value={field.value}
-                onValueChange={field.onChange}
+                onValueChange={field.onChange as (value: string) => void}
                 className='grid grid-cols-3 gap-4'
               >
                 {VendorModels.statuses.map((status) => (

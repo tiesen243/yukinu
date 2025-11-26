@@ -10,6 +10,11 @@ export interface IVendorRepository extends IBaseRepository<typeof vendors> {
     offset?: number,
     tx?: Database,
   ): Promise<IVendorRepository.VendorWithOwner[]>
+
+  findByStaffId(
+    staffId: string,
+    tx?: Database,
+  ): Promise<Pick<IVendorRepository.Vendor, 'id'> | null>
 }
 
 export namespace IVendorRepository {

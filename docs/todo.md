@@ -33,9 +33,9 @@ nav_order: 5
 
 - [x] Apply to become a vendor
 - [ ] Manage store information
-- [ ] Manage products (CRUD)
-- [ ] Manage product images
-- [ ] Manage product variants (size, color, etc.)
+- [x] Manage products (list/create/update)
+- [x] Manage product images
+- [x] Manage product variants (size, color, etc.)
 - [ ] Manage product inventory
 - [ ] Manage vendor-specific orders
 - [ ] Update order status (processing → shipped → delivered)
@@ -48,7 +48,7 @@ nav_order: 5
 - [x] Manage users (activate / deactivate)
 - [x] Manage vendors (approve / suspend)
 - [x] Manage product categories (CRUD)
-- [ ] Moderate products across the system
+- [x] Moderate products across the system
 - [ ] System analytics & dashboards
 - [x] Manage roles & permissions _(optional)_
 

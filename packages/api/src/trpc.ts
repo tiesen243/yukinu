@@ -99,14 +99,22 @@ const publicProcedure = t.procedure
   .use(loggingMiddleware)
   .use(rateLimitMiddleware)
 
-const protectedProcedure = t.procedure
-  .use(loggingMiddleware)
-  .use(rateLimitMiddleware)
-  .use(authMiddleware)
+const protectedProcedure = publicProcedure.use(authMiddleware)
+
+const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  const vendor = await ctx.vendorService.one(ctx.session.user)
+
+  return next({
+    ctx: {
+      vendor,
+    },
+  })
+})
 
 export {
   createCallerFactory,
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  vendorProcedure,
 }

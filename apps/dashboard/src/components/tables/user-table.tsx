@@ -105,7 +105,7 @@ const UserTableBody: React.FC = () => {
       <TableRow key={index}>
         {Array.from({ length: 8 }, (_, index) => (
           <TableCell key={index}>
-            <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
+            <div className='animate-pulse rounded-sm bg-muted'>&nbsp;</div>
           </TableCell>
         ))}
       </TableRow>
@@ -240,7 +240,7 @@ const EditUserModal: React.FC<{
                   <RadioGroup
                     className='grid grid-cols-2 gap-4'
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={field.onChange as (value: string) => void}
                   >
                     {UserModels.statuses.map((status) => (
                       <div key={status} className='flex items-center gap-3'>

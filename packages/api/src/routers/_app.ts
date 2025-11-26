@@ -9,6 +9,7 @@ const appRouter = createTRPCRouter({
   address: lazy(() => import('@/routers/address.router')),
   auth: lazy(() => import('@/routers/auth.router')),
   category: lazy(() => import('@/routers/category.router')),
+  product: lazy(() => import('@/routers/product.router')),
   profile: lazy(() => import('@/routers/profile.router')),
   user: lazy(() => import('@/routers/user.router')),
   vendor: lazy(() => import('@/routers/vendor.router')),
