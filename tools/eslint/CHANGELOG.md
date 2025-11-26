@@ -1,5 +1,15 @@
 # @yukinu/eslint-config
 
+## 0.1.2
+
+### Patch Changes
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`9308c83`](https://github.com/tiesen243/yukinu/commit/9308c8384a27ab4fd037e89a0e130bb189bdd0cc) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`28bd65f`](https://github.com/tiesen243/yukinu/commit/28bd65f4832c0a28197c7632e82abadf4090e4d8) Thanks [@tiesen243](https://github.com/tiesen243)! - fix db query
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`d5dd889`](https://github.com/tiesen243/yukinu/commit/d5dd8899c2e2496209860bd9e2a1ca83745be2d4) Thanks [@tiesen243](https://github.com/tiesen243)! - added crud product features
+
 ## 0.1.1
 
 ### Patch Changes

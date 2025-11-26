@@ -1,5 +1,13 @@
 # @yukinu/auth
 
+## 0.1.9
+
+### Patch Changes
+
+- Updated dependencies [[`9308c83`](https://github.com/tiesen243/yukinu/commit/9308c8384a27ab4fd037e89a0e130bb189bdd0cc), [`abde172`](https://github.com/tiesen243/yukinu/commit/abde172dc541d963028d36a33d3c625c1210f767), [`28bd65f`](https://github.com/tiesen243/yukinu/commit/28bd65f4832c0a28197c7632e82abadf4090e4d8), [`d5dd889`](https://github.com/tiesen243/yukinu/commit/d5dd8899c2e2496209860bd9e2a1ca83745be2d4), [`37e175f`](https://github.com/tiesen243/yukinu/commit/37e175f5aa3df27f9f18314a539bb41110c722a7), [`0a6793b`](https://github.com/tiesen243/yukinu/commit/0a6793b72c7c29dbd346a98f198385ebe3f91ab9), [`6c85976`](https://github.com/tiesen243/yukinu/commit/6c859763f5117f9e5a443b71ebf1597652928c67), [`e920f2e`](https://github.com/tiesen243/yukinu/commit/e920f2e3c46a4c45681c74773f6e243f57bf1954)]:
+  - @yukinu/validators@0.1.8
+  - @yukinu/db@0.1.8
+
 ## 0.1.8
 
 ### Patch Changes
