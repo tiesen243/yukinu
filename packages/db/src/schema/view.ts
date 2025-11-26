@@ -33,12 +33,12 @@ export const productsView = pgView('products_view').as((qb) =>
       id: products.id,
       name: products.name,
       category: {
-        id: sql<string>`${categories.id}`.as('category_id'),
-        name: sql<string>`${categories.name}`.as('category_name'),
+        id: categories.id,
+        name: categories.name,
       },
       vendor: {
-        id: sql<string>`${vendors.id}`.as('vendor_id'),
-        name: sql<string>`${vendors.name}`.as('vendor_name'),
+        id: vendors.id,
+        name: vendors.name,
       },
       status: products.status,
       imageUrl: sql<string>`MIN(${productImages.url})`.as('image_url'),

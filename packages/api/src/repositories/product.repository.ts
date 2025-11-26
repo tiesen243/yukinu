@@ -1,4 +1,4 @@
-import { and, eq, ilike, inArray, lte, sql } from '@yukinu/db'
+import { eq, ilike, inArray, sql } from '@yukinu/db'
 import {
   categories,
   productImages,
@@ -27,21 +27,13 @@ export class ProductRepository
     return tx
       .select()
       .from(productsView)
-      .where(
-        and(
-          ilike(productsView.name, `%${search}%`),
-          lte(productsView.stock, 0),
-        ),
-      )
+      .where(ilike(productsView.name, `%${search}%`))
       .limit(limit)
       .offset(offset)
   }
 
   public async countAllView(search = '', tx = this._db): Promise<number> {
-    return tx.$count(
-      productsView,
-      and(ilike(productsView.name, `%${search}%`), lte(productsView.stock, 0)),
-    )
+    return tx.$count(productsView, ilike(productsView.name, `%${search}%`))
   }
 
   public async findWithRelations(
@@ -83,19 +75,19 @@ export class ProductRepository
         variants: sql<
           IProductRepository.ProductVariant[]
         >`json_agg(jsonb_build_object(
-      'id', ${productVariants.id}, 
-      'name', ${productVariants.name}, 
-      'stock', ${productVariants.stock},
-      'extraPrice', ${productVariants.extraPrice}
-      ))`.as('variants'),
+            'id', ${productVariants.id}, 
+            'name', ${productVariants.name}, 
+            'stock', ${productVariants.stock},
+            'extraPrice', ${productVariants.extraPrice}
+          ))`.as('variants'),
       })
       .from(productVariantGroups)
+      .where(eq(productVariantGroups.productId, productId))
       .innerJoin(
         productVariants,
         eq(productVariants.variantGroupId, productVariantGroups.id),
       )
       .groupBy(productVariantGroups.id)
-      .having(eq(productVariantGroups.productId, productId))
 
     return { ...product, images, variantGroups }
   }
