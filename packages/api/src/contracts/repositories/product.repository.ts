@@ -57,10 +57,14 @@ export interface IProductRepository extends IBaseRepository<typeof products> {
     tx?: Database,
   ): Promise<void>
 
+  deleteVariantsByProductId(productId: string, tx?: Database): Promise<void>
+
   createImages(
     images: IProductRepository.NewProductImage[],
     tx?: Database,
   ): Promise<void>
+
+  deleteImagesByProductId(productId: string, tx?: Database): Promise<void>
 }
 
 export declare namespace IProductRepository {

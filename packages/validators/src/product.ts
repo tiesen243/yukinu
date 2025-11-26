@@ -93,7 +93,7 @@ export namespace ProductModels {
       .min(1, 'Product name must be at least 1 character long')
       .max(255, 'Product name must be at most 255 characters long'),
     description: z.string().optional(),
-    price: z.coerce.string().min(0, 'Price must be at least 0'),
+    price: z.coerce.string().min(1, 'Price is required'),
     stock: z.number().min(0, 'Stock must be at least 0'),
 
     images: z.array(
@@ -118,7 +118,9 @@ export namespace ProductModels {
               .string()
               .min(1, 'Variant name must be at least 1 character long')
               .max(100, 'Variant name must be at most 100 characters long'),
-            extraPrice: z.coerce.string(),
+            extraPrice: z.coerce
+              .string()
+              .min(1, 'Variant extra price is required'),
             stock: z.number().min(0, 'Variant stock must be at least 0'),
           }),
         ),
@@ -132,12 +134,12 @@ export namespace ProductModels {
   //#endregion
 
   //#region Update Product Schema
-  export const updateInput = createInput.extend({
+  export const updateInput = createInput.omit({ vendorId: true }).extend({
     productId: z.cuid2('Invalid product ID'),
   })
   export type UpdateInput = z.infer<typeof updateInput>
 
-  export const updateOutput = z.object({ success: z.boolean() })
+  export const updateOutput = z.object({ productId: productView.shape.id })
   export type UpdateOutput = z.infer<typeof updateOutput>
   //#endregion
 }

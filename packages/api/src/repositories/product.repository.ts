@@ -1,4 +1,4 @@
-import { and, eq, ilike, lte, sql } from '@yukinu/db'
+import { and, eq, ilike, inArray, lte, sql } from '@yukinu/db'
 import {
   categories,
   productImages,
@@ -76,10 +76,13 @@ export class ProductRepository
         id: productVariantGroups.id,
         name: productVariantGroups.name,
         variants: sql<
-          { id: string; name: string; stock: number; extraPrice: string }[]
-        >`json_agg(jsonb_build_object('id', ${productVariants.id}, 'name', ${productVariants.name}, 'stock', ${productVariants.extraPrice}, 'extraPrice', ${productVariants.extraPrice})) FILTER (WHERE ${productVariants.id} IS NOT NULL)`.as(
-          'variants',
-        ),
+          IProductRepository.ProductVariant[]
+        >`json_agg(jsonb_build_object(
+      'id', ${productVariants.id}, 
+      'name', ${productVariants.name}, 
+      'stock', ${productVariants.stock},
+      'extraPrice', ${productVariants.extraPrice}
+      ))`.as('variants'),
       })
       .from(productVariantGroups)
       .innerJoin(
@@ -87,6 +90,7 @@ export class ProductRepository
         eq(productVariants.variantGroupId, productVariantGroups.id),
       )
       .groupBy(productVariantGroups.id)
+      .having(eq(productVariantGroups.productId, productId))
 
     return { ...product, images, variantGroups }
   }
@@ -119,10 +123,34 @@ export class ProductRepository
     }
   }
 
+  public async deleteImagesByProductId(
+    productId: string,
+    tx = this._db,
+  ): Promise<void> {
+    await tx.delete(productImages).where(eq(productImages.productId, productId))
+  }
+
   public async createImages(
     images: IProductRepository.NewProductImage[],
     tx = this._db,
   ): Promise<void> {
     await tx.insert(productImages).values(images)
+  }
+
+  public async deleteVariantsByProductId(
+    productId: string,
+    tx = this._db,
+  ): Promise<void> {
+    const variantGroupIds = await tx
+      .delete(productVariantGroups)
+      .where(eq(productVariantGroups.productId, productId))
+      .returning({ id: productVariantGroups.id })
+
+    await tx.delete(productVariants).where(
+      inArray(
+        productVariants.variantGroupId,
+        variantGroupIds.map((vg) => vg.id),
+      ),
+    )
   }
 }

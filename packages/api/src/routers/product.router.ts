@@ -1,6 +1,11 @@
 import { ProductModels } from '@yukinu/validators/product'
 
-import { createTRPCRouter, publicProcedure, vendorProcedure } from '@/trpc'
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+  vendorProcedure,
+} from '@/trpc'
 
 export const productRouter = createTRPCRouter({
   all: publicProcedure
@@ -36,4 +41,13 @@ export const productRouter = createTRPCRouter({
     .mutation(({ ctx, input }) =>
       ctx.productService.create({ ...input, vendorId: ctx.vendor.id }),
     ),
+
+  update: protectedProcedure
+    .meta({
+      message: 'Product updated successfully',
+      roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductModels.updateInput)
+    .output(ProductModels.updateOutput)
+    .mutation(({ ctx, input }) => ctx.productService.update(input)),
 })

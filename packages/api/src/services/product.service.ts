@@ -93,6 +93,60 @@ export class ProductService implements IProductService {
     })
   }
 
+  public async update(
+    input: ProductModels.UpdateInput,
+  ): Promise<ProductModels.UpdateOutput> {
+    const { productId, categoryId, images, variantGroups, ...updateData } =
+      input
+
+    const product = await this._product.find(productId)
+    if (!product)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Product not found' })
+
+    if (categoryId !== product.categoryId) {
+      const category = await this._category.find(categoryId)
+      if (!category)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Category not found',
+        })
+    }
+
+    return this._db.transaction(async (tx) => {
+      await this._product.update(productId, updateData, tx)
+
+      await this._product.deleteImagesByProductId(productId, tx)
+      await this._product.deleteVariantsByProductId(productId, tx)
+
+      if (images.length > 0)
+        await this._product.createImages(
+          images.map((image) => ({
+            url: image.url,
+            alt: image.alt,
+            productId,
+          })),
+          tx,
+        )
+
+      if (variantGroups.length > 0)
+        await this._product.createVariants(
+          variantGroups.map((group) => ({
+            code: group.name.charAt(0).toUpperCase(),
+            name: group.name,
+            productId,
+            variants: group.variants.map((variant) => ({
+              code: variant.name.charAt(0).toUpperCase(),
+              name: variant.name,
+              extraPrice: variant.extraPrice,
+            })),
+          })),
+          tx,
+        )
+
+      return { productId }
+    })
+  }
+
   private _generateProductCode(productName: string): string {
     const namePart = productName
       .replace(/[^a-zA-Z]/g, '')

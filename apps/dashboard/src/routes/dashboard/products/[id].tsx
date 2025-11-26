@@ -29,56 +29,62 @@ import {
 import { Textarea } from '@yukinu/ui/textarea'
 import { ProductModels } from '@yukinu/validators/product'
 
-import type { Route } from './+types/create'
+import type { Route } from './+types/[id]'
 import { useTRPC } from '@/trpc/react'
 import { createApi } from '@/trpc/rsc'
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const loader = async ({ params, request }: Route.LoaderArgs) => {
   const api = createApi(request)
 
   const categories = await api.category.all({ limit: 100 })
+  const product = await api.product.one({ productId: params.id })
 
-  return { categories }
+  return { categories, product }
 }
 
-export default function DashboardProductsCreate() {
+export default function DashboardProductsCreate({
+  loaderData,
+}: Route.ComponentProps) {
   return (
     <main className='container py-4'>
-      <h1 className='mb-2 text-3xl font-extrabold'>Create New Product</h1>
+      <h1 className='mb-2 text-3xl font-extrabold'>
+        Edit: {loaderData.product.name}
+      </h1>
       <p className='mb-4 text-muted-foreground'>
-        Use the form below to add a new product to your shop.
+        Modify the details of your product below.
       </p>
 
       <section className='rounded-lg bg-card p-4 shadow'>
-        <CreateProductForm />
+        <EditProductForm />
       </section>
     </main>
   )
 }
 
-const CreateProductForm: React.FC = () => {
+const EditProductForm: React.FC = () => {
   const data = useLoaderData<typeof loader>()
   const navigate = useNavigate()
 
   const trpc = useTRPC()
   const { mutateAsync } = useMutation({
-    ...trpc.product.create.mutationOptions(),
+    ...trpc.product.update.mutationOptions(),
     meta: { filter: trpc.product.allByVendor.queryFilter() },
-    onSuccess: () => toast.success('Product created successfully'),
+    onSuccess: () => toast.success('Product updated successfully'),
     onError: ({ message }) => toast.error(message),
   })
 
   const form = useForm({
     defaultValues: {
-      name: '',
-      categoryId: '',
-      description: '',
-      price: '0.00',
-      stock: 0,
-      images: [{ url: '', alt: '' }],
-      variantGroups: [],
-    } as Omit<ProductModels.CreateInput, 'vendorId'>, // @ts-expect-error ts(2322) - Zod inference issue
-    schema: ProductModels.createInput.omit({ vendorId: true }),
+      productId: data.product.id,
+      name: data.product.name,
+      categoryId: data.product.category.id,
+      description: data.product.description,
+      price: data.product.price,
+      stock: data.product.stock,
+      images: data.product.images,
+      variantGroups: data.product.variantGroups,
+    } as ProductModels.UpdateInput, // @ts-expect-error ts(2322) - Zod inference issue
+    schema: ProductModels.updateInput,
     onSubmit: mutateAsync,
     onSuccess: () => void navigate('/products'),
   })
@@ -217,6 +223,7 @@ const CreateProductForm: React.FC = () => {
                     >
                       Add Image
                     </Button>
+
                     <FieldError id={meta.errorId} errors={meta.errors} />
                   </Field>
                 </>
@@ -418,6 +425,7 @@ const CreateProductForm: React.FC = () => {
                     >
                       Add Variant Group
                     </Button>
+
                     <FieldError id={meta.errorId} errors={meta.errors} />
                   </Field>
                 </>
@@ -427,7 +435,7 @@ const CreateProductForm: React.FC = () => {
 
           <Field>
             <Button type='submit' disabled={form.state.isPending}>
-              Create Product
+              Save Changes
             </Button>
           </Field>
         </FieldGroup>

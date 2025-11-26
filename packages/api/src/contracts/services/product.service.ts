@@ -6,4 +6,6 @@ export interface IProductService {
   one(input: ProductModels.OneInput): Promise<ProductModels.OneOutput>
 
   create(input: ProductModels.CreateInput): Promise<ProductModels.CreateOutput>
+
+  update(input: ProductModels.UpdateInput): Promise<ProductModels.UpdateOutput>
 }
