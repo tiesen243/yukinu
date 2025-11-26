@@ -1,6 +1,6 @@
 import '@/app/globals.css'
 
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Geist, Geist_Mono, Yuji_Syuku } from 'next/font/google'
 
 import { SessionProvider } from '@yukinu/auth/react'
 import { cn, ThemeProvider } from '@yukinu/ui'
@@ -12,6 +12,12 @@ import { TRPCReactProvider } from '@/trpc/react'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
+})
+
+const yujiSyuku = Yuji_Syuku({
+  variable: '--font-yuji-syuku',
+  subsets: ['latin'],
+  weight: '400',
 })
 
 const geistMono = Geist_Mono({
@@ -28,6 +34,7 @@ export default function RootLayout({
         className={cn(
           'flex min-h-dvh flex-col font-sans antialiased',
           geistSans.variable,
+          yujiSyuku.variable,
           geistMono.variable,
         )}
       >

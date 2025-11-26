@@ -64,7 +64,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
     },
     icons: {
       icon: '/favicon.ico',
-      apple: '/apple-touch-icon.png',
+      apple: '/favicon.ico',
       shortcut: '/favicon-32x32.png',
     },
     alternates: { ...override.alternates, canonical: url },

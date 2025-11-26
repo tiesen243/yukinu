@@ -98,7 +98,7 @@ const CategoryTableBody: React.FC = () => {
       <TableRow key={index}>
         {Array.from({ length: 3 }, (_, index) => (
           <TableCell key={index}>
-            <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
+            <div className='animate-pulse rounded-sm bg-muted'>&nbsp;</div>
           </TableCell>
         ))}
       </TableRow>

@@ -111,7 +111,7 @@ const VendorTableBody: React.FC = () => {
       <TableRow key={index}>
         {Array.from({ length: 7 }, (_, index) => (
           <TableCell key={index}>
-            <div className='animate-pulse rounded-sm bg-accent'>&nbsp;</div>
+            <div className='animate-pulse rounded-sm bg-muted'>&nbsp;</div>
           </TableCell>
         ))}
       </TableRow>
