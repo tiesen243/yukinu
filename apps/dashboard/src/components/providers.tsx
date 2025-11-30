@@ -10,14 +10,14 @@ import {
   retryLink,
   splitLink,
 } from '@trpc/client'
-import { NuqsAdapter } from 'nuqs/adapters/next/app'
+import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
 import { SessionProvider } from '@yukinu/auth/react'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
 import { ThemeProvider } from '@yukinu/ui'
-import { env } from '@yukinu/validators/env.next'
+import { env } from '@yukinu/validators/env.vite'
 
 import { TRPCProvider } from '@/lib/trpc/react'
 import { getBaseUrl } from '@/lib/utils'
@@ -38,7 +38,7 @@ export function Providers({
     url: getBaseUrl() + '/api/trpc',
     headers() {
       const headers = new Headers()
-      headers.set('x-trpc-source', 'web')
+      headers.set('x-trpc-source', 'dashboard')
 
       const token = document.cookie
         .split('; ')
@@ -66,7 +66,7 @@ export function Providers({
           retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30000),
         }),
         splitLink({
-          condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
+          condition: () => env.VITE_TRPC_USE_STREAMING === 'true',
           true: httpBatchStreamLink(configs),
           false: httpBatchLink(configs),
         }),

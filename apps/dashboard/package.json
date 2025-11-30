@@ -1,37 +1,41 @@
 {
-  "name": "@yukinu/web",
-  "version": "0.2.9",
+  "name": "@yukinu/dashboard",
+  "version": "0.2.10",
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "bun --env-file ../../.env next build",
-    "clean": "git clean -xdf .cache .next .turbo node_modules",
-    "dev": "bun --env-file ../../.env next dev",
+    "build": "bun --env-file ../../.env react-router build",
+    "clean": "git clean -xdf .cache .react-router .turbo .vercel build node_modules",
+    "dev": "bun --env-file ../../.env react-router dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "bun --env-file ../../.env next typegen && eslint",
-    "start": "bun --env-file ../../.env next start",
-    "typecheck": "bun --env-file ../../.env next typegen && tsc --noEmit"
+    "lint": "bun --env-file ../../.env react-router typegen && eslint",
+    "start": "bun --env-file ../../.env react-router-serve build/server/index.js",
+    "typecheck": "bun --env-file ../../.env react-router typegen && tsc --noEmit"
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
+    "@react-router/node": "^7.9.6",
+    "@react-router/serve": "^7.9.6",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
+    "@vercel/react-router": "^1.2.3",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.0.6",
+    "isbot": "^5.1.32",
     "nuqs": "catalog:",
     "react": "catalog:react",
     "react-dom": "catalog:react",
+    "react-router": "^7.9.6",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "catalog:tailwind",
-    "@types/node": "catalog:",
+    "@react-router/dev": "^7.9.6",
+    "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/eslint-config": "workspace:*",
@@ -40,6 +44,7 @@
     "eslint": "catalog:",
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vite": "^7.2.4"
   }
 }

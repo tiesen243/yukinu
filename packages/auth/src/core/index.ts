@@ -39,7 +39,7 @@ export function Auth(config: AuthConfig) {
     if (!user) throw new Error('User not found')
 
     const payload = { sub: userId, role: user.role }
-    return jwt.sign(payload, { expiresIn: 24 * 60 * 60 }) // 1 day
+    return jwt.sign(payload, { expiresIn: 15 * 60 }) // 15 minutes
   }
 
   async function validateAccessToken(
@@ -318,6 +318,13 @@ export function Auth(config: AuthConfig) {
 
         const newToken = await createAccessToken(session.user.id)
         response = Response.json({ accessToken: newToken })
+        response.headers.append(
+          'Set-Cookie',
+          serializeCookie(keys.accessToken, newToken, {
+            ...cookie,
+            HttpOnly: false,
+          }),
+        )
       }
 
       /*
