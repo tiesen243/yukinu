@@ -18,7 +18,7 @@ export const users = pgTable(
   'users',
   (t) => ({
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    username: t.varchar({ length: 100 }).notNull(),
+    username: t.varchar({ length: 20 }).notNull(),
     email: t.varchar({ length: 255 }).notNull(),
     emailVerified: t.timestamp({ mode: 'date' }),
     role: userRoleEnum().default('user').notNull(),

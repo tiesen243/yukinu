@@ -113,7 +113,7 @@ CREATE TABLE "sessions" (
 --> statement-breakpoint
 CREATE TABLE "users" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
-	"username" varchar(100) NOT NULL,
+	"username" varchar(20) NOT NULL,
 	"email" varchar(255) NOT NULL,
 	"email_verified" timestamp,
 	"role" "user_role" DEFAULT 'user' NOT NULL,
