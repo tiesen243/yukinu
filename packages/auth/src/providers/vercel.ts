@@ -1,14 +1,14 @@
 import type { OAuth2Token, OAuthAccount } from '@/types'
 import { BaseProvider } from '@/providers/base'
 
-export class Github extends BaseProvider {
+export class Vercel extends BaseProvider {
   constructor(clientId: string, clientSecret: string, redirectUri = '') {
-    super('github', clientId, clientSecret, redirectUri)
+    super('vercel', clientId, clientSecret, redirectUri)
   }
 
-  private authorizationEndpoint = 'https://github.com/login/oauth/authorize'
-  private tokenEndpoint = 'https://github.com/login/oauth/access_token'
-  private apiEndpoint = 'https://api.github.com/user'
+  private authorizationEndpoint = 'https://vercel.com/oauth/authorize'
+  private tokenEndpoint = 'https://api.vercel.com/login/oauth/token'
+  private apiEndpoint = 'https://api.vercel.com/login/oauth/userinfo'
 
   public override async createAuthorizationUrl(
     state: string,
@@ -17,7 +17,7 @@ export class Github extends BaseProvider {
     const url = await this.createAuthorizationUrlWithPKCE(
       this.authorizationEndpoint,
       state,
-      ['read:user', 'user:email'],
+      ['openid', 'email', 'profile'],
       codeVerifier,
     )
 
@@ -35,31 +35,32 @@ export class Github extends BaseProvider {
     )
     if (!tokenResponse.ok) {
       const error = await tokenResponse.text().catch(() => 'Unknown error')
-      throw new Error(`GitHub API error: ${error}`)
+      throw new Error(`Vercel API error: ${error}`)
     }
 
     const tokenData = (await tokenResponse.json()) as OAuth2Token
     const response = await fetch(this.apiEndpoint, {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     })
-
     if (!response.ok) {
       const errorText = await response.text().catch(() => 'Unknown error')
-      throw new Error(`GitHub API error (${response.status}): ${errorText}`)
+      throw new Error(`Vercel API error (${response.status}): ${errorText}`)
     }
-    const userData = (await response.json()) as GithubUserResponse
+
+    const userData = (await response.json()) as VercelUserResponse
     return {
-      id: userData.id,
+      id: userData.sub,
       username: userData.name,
       email: userData.email,
-      image: userData.avatar_url,
+      image: userData.picture,
     }
   }
 }
 
-interface GithubUserResponse {
-  id: string
+interface VercelUserResponse {
+  sub: string
   name: string
   email: string
-  avatar_url: string
+  picture: string
+  preferred_username: string
 }

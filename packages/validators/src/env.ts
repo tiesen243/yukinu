@@ -1,6 +1,6 @@
-import * as z from 'zod/v4-mini'
+import * as z from 'zod/mini'
 
-import { createEnv } from '@/lib/create-env'
+import { createEnv } from '@yukinu/lib/create-env'
 
 export const env = createEnv({
   server: {
@@ -18,6 +18,7 @@ export const env = createEnv({
     POSTGRES_SSL_MODE: z._default(z.enum(['true', 'false']), 'false'),
 
     // OAuth configuration
+    AUTH_SECRET: z.optional(z.string()),
     AUTH_FACEBOOK_ID: z.string(),
     AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
@@ -25,6 +26,7 @@ export const env = createEnv({
 
     // Vercel environment
     VERCEL: z.optional(z.enum(['1'])),
+    VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
   },
 
   clientPrefix: 'PUBLIC_',

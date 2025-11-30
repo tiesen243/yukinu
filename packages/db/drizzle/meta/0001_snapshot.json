@@ -1,6 +1,6 @@
 {
-  "id": "d098be77-f7ad-464d-a11a-fa3fcfec366f",
-  "prevId": "ac0b5c63-7530-4620-b04c-57370545ae60",
+  "id": "23dd526f-581b-4b08-b2ee-c4e34412273f",
+  "prevId": "51db41ab-ff6b-4fbd-b42e-99f89206ef6a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -986,6 +986,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "token": {
           "name": "token",
           "type": "varchar(64)",
@@ -1016,7 +1022,7 @@
           "name": "sessions_user_id_idx",
           "columns": [
             {
-              "expression": "id",
+              "expression": "user_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -1050,10 +1056,10 @@
         }
       },
       "foreignKeys": {
-        "sessions_id_users_id_fk": {
-          "name": "sessions_id_users_id_fk",
+        "sessions_user_id_users_id_fk": {
+          "name": "sessions_user_id_users_id_fk",
           "tableFrom": "sessions",
-          "columnsFrom": ["id"],
+          "columnsFrom": ["user_id"],
           "tableTo": "users",
           "columnsTo": ["id"],
           "onUpdate": "no action",
@@ -1078,7 +1084,7 @@
         },
         "username": {
           "name": "username",
-          "type": "varchar(100)",
+          "type": "varchar(20)",
           "primaryKey": false,
           "notNull": true
         },

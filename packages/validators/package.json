@@ -4,14 +4,12 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./address": "./dist/address.mjs",
     "./auth": "./dist/auth.mjs",
     "./category": "./dist/category.mjs",
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",
     "./env.vite": "./dist/env.vite.mjs",
     "./product": "./dist/product.mjs",
-    "./profile": "./dist/profile.mjs",
     "./user": "./dist/user.mjs",
     "./vendor": "./dist/vendor.mjs",
     "./package.json": "./package.json"

@@ -58,9 +58,10 @@ export const accounts = pgTable(
 export const sessions = pgTable(
   'sessions',
   (t) => ({
-    id: t
+    id: t.varchar({ length: 24 }).primaryKey(),
+    userId: t
       .varchar({ length: 24 })
-      .primaryKey()
+      .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     token: t.varchar({ length: 64 }).notNull(),
     expiresAt: t.timestamp({ mode: 'date' }).notNull(),
@@ -68,7 +69,7 @@ export const sessions = pgTable(
     userAgent: t.text(),
   }),
   (t) => [
-    index('sessions_user_id_idx').on(t.id),
+    index('sessions_user_id_idx').on(t.userId),
     uniqueIndex('sessions_id_token_uq_idx').on(t.id, t.token),
   ],
 )

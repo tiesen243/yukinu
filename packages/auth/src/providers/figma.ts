@@ -1,14 +1,14 @@
 import type { OAuth2Token, OAuthAccount } from '@/types'
 import { BaseProvider } from '@/providers/base'
 
-export class Github extends BaseProvider {
+export class Figma extends BaseProvider {
   constructor(clientId: string, clientSecret: string, redirectUri = '') {
-    super('github', clientId, clientSecret, redirectUri)
+    super('figma', clientId, clientSecret, redirectUri)
   }
 
-  private authorizationEndpoint = 'https://github.com/login/oauth/authorize'
-  private tokenEndpoint = 'https://github.com/login/oauth/access_token'
-  private apiEndpoint = 'https://api.github.com/user'
+  private authorizationEndpoint = 'https://www.figma.com/oauth'
+  private tokenEndpoint = 'https://api.figma.com/v1/oauth/token'
+  private apiEndpoint = 'https://api.figma.com/v1/me'
 
   public override async createAuthorizationUrl(
     state: string,
@@ -17,7 +17,7 @@ export class Github extends BaseProvider {
     const url = await this.createAuthorizationUrlWithPKCE(
       this.authorizationEndpoint,
       state,
-      ['read:user', 'user:email'],
+      ['current_user:read'],
       codeVerifier,
     )
 
@@ -35,31 +35,31 @@ export class Github extends BaseProvider {
     )
     if (!tokenResponse.ok) {
       const error = await tokenResponse.text().catch(() => 'Unknown error')
-      throw new Error(`GitHub API error: ${error}`)
+      throw new Error(`Figma API error: ${error}`)
     }
 
     const tokenData = (await tokenResponse.json()) as OAuth2Token
-    const response = await fetch(this.apiEndpoint, {
+    const userResponse = await fetch(this.apiEndpoint, {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     })
-
-    if (!response.ok) {
-      const errorText = await response.text().catch(() => 'Unknown error')
-      throw new Error(`GitHub API error (${response.status}): ${errorText}`)
+    if (!userResponse.ok) {
+      const error = await userResponse.text().catch(() => 'Unknown error')
+      throw new Error(`Figma API error: ${error}`)
     }
-    const userData = (await response.json()) as GithubUserResponse
+
+    const userData = (await userResponse.json()) as FigmaUserResponse
     return {
       id: userData.id,
-      username: userData.name,
+      username: userData.handle,
       email: userData.email,
-      image: userData.avatar_url,
+      image: userData.img_url,
     }
   }
 }
 
-interface GithubUserResponse {
+interface FigmaUserResponse {
   id: string
-  name: string
+  handle: string
   email: string
-  avatar_url: string
+  img_url: string
 }

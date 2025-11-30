@@ -1,18 +1,43 @@
-import type { accounts, sessions } from '@yukinu/db/schema/user'
-import type { usersView } from '@yukinu/db/schema/view'
-import { type users } from '@yukinu/db/schema/user'
+import type { BaseProvider } from '@/providers/base'
 
-import type BaseProvider from '@/providers/base'
+export interface User {
+  id: string
+  username: string
+  email: string
+  image: string | null
+  createdAt: Date
+  updatedAt: Date
+}
 
-export interface CookieOptions {
-  Domain?: string
-  Expires?: Date | string | number
-  HttpOnly?: boolean
-  'Max-Age'?: number
-  Path?: string
-  SameSite?: 'Strict' | 'Lax' | 'None'
-  Secure?: boolean
-  [key: string]: unknown
+export interface Account {
+  id: string
+  userId: string
+  provider: string
+  accountId: string
+  password: string | null
+}
+
+export interface Session {
+  id: string
+  userId: string
+  token: string
+  expiresAt: Date
+  ipAddress: string | null
+  userAgent: string | null
+}
+
+export type SessionWithUser = Pick<
+  Session,
+  'token' | 'expiresAt' | 'ipAddress' | 'userAgent'
+> & {
+  user: Pick<User, 'id' | 'username' | 'email' | 'image'> | null
+}
+
+export interface OAuthAccount {
+  id: string
+  username: string
+  email: string
+  image: string | null
 }
 
 export interface OAuth2Token {
@@ -21,64 +46,53 @@ export interface OAuth2Token {
   expires_in: number
 }
 
-export type User = typeof usersView.$inferSelect
+export interface AuthConfig {
+  providers?: BaseProvider[]
+  secret?: string
 
-export interface Session extends Omit<
-  typeof sessions.$inferSelect,
-  'userId' | 'createdAt'
-> {
-  user: User | null
-}
-
-export interface OauthAccount {
-  accountId: string
-  email: string
-  name: string
-  image: string
-}
-
-export interface DatabaseAdapter {
-  getUserByIndentifier(
-    indentifier: string,
-  ): Promise<Pick<User, 'id' | 'status'> | null>
-  createUser(data: Omit<OauthAccount, 'accountId'>): Promise<User['id'] | null>
-
-  getAccount(
-    provider: string,
-    accountId: string,
-  ): Promise<
-    | (typeof accounts.$inferSelect & {
-        status: (typeof users.$inferSelect)['status']
-      })
-    | null
-  >
-
-  createAccount(data: typeof accounts.$inferInsert): Promise<void>
-
-  getSessionAndUser(token: string): Promise<Omit<Session, 'token'> | null>
-
-  createSession(data: typeof sessions.$inferInsert): Promise<void>
-
-  updateSession(
-    token: string,
-    data: Partial<typeof sessions.$inferInsert>,
-  ): Promise<void>
-
-  deleteSession(token: string): Promise<void>
-}
-
-export interface AuthOptions {
-  adapter: DatabaseAdapter
-  providers: Record<string, BaseProvider>
-  session: {
-    expiresIn: number
-    expiresThreshold: number
+  session?: {
+    expiresIn?: number
+    expiresThreshold?: number
   }
-  cookieKeys: {
-    token: string
-    state: string
-    code: string
-    redirect: string
+
+  keys?: {
+    token?: string
+    state?: string
+    codeVerifier?: string
+    redirectUri?: string
   }
-  cookieOptions: CookieOptions
+
+  cookie?: {
+    domain?: string
+    path?: string
+    httpOnly?: boolean
+    secure?: boolean
+    sameSite?: 'lax' | 'strict' | 'none'
+    maxAge?: number
+  }
+
+  adapter: {
+    user: {
+      find(identifier: string): Promise<User | null>
+      create(
+        data: Pick<User, 'username' | 'email' | 'image'>,
+      ): Promise<Pick<User, 'id'>>
+    }
+    account: {
+      find(
+        provider: string,
+        accountId: string,
+      ): Promise<Pick<Account, 'id' | 'userId' | 'password'> | null>
+      create(data: Omit<Account, 'id'>): Promise<void>
+    }
+    session: {
+      find(id: string): Promise<SessionWithUser | null>
+      create(data: Session): Promise<void>
+      update(
+        token: string,
+        data: Partial<Omit<Session, 'id' | 'token' | 'userId'>>,
+      ): Promise<void>
+      delete(id: string): Promise<void>
+    }
+  }
 }

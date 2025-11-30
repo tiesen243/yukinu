@@ -1,12 +1,6 @@
 import type { AuthConfig, Session, SessionWithUser } from '@/types'
-import {
-  constantTimeEqual,
-  decodeHex,
-  encodeHex,
-  generateSecureString,
-  generateStateOrCode,
-  hashSecret,
-} from '@/core/crypto'
+import { generateStateOrCode } from '@/core/crypto'
+import { JWT } from '@/core/jwt'
 import { Password } from '@/core/password'
 
 const PATH_REGEXS = {
@@ -24,29 +18,23 @@ export function Auth(config: AuthConfig) {
     cookie: { ...defaultConfig.cookie, ...config.cookie },
   } satisfies AuthConfig
   const { adapter, providers = [], session, keys, cookie } = finalConfig
+  const jwt = new JWT<{ userId: string }>(finalConfig.secret ?? '')
 
   async function createSession(
     userId: string,
-    opts: Pick<Session, 'ipAddress' | 'userAgent'>,
+    _opts: Pick<Session, 'ipAddress' | 'userAgent'>,
   ): Promise<{ token: string; expiresAt: Date }> {
-    const id = generateSecureString()
-    const secret = generateSecureString()
-    const hashedSecret = await hashSecret(secret)
-
-    const token = `${id}.${secret}`
+    const payload = { userId }
     const expiresAt = new Date(Date.now() + session.expiresIn * 1000)
-    await adapter.session.create({
-      ...opts,
-      id,
-      userId,
-      token: encodeHex(hashedSecret),
-      expiresAt,
-    })
+
+    const token = await jwt.sign(payload, { expiresIn: session.expiresIn })
 
     return { token, expiresAt }
   }
 
-  async function auth(opts: { headers: Headers }): Promise<SessionWithUser> {
+  async function auth(opts: {
+    headers: Headers
+  }): Promise<Pick<SessionWithUser, 'user' | 'expiresAt'>> {
     const cookies = parseCookies(opts.headers.get('Cookie'))
     const token =
       cookies[keys.token] ??
@@ -54,45 +42,12 @@ export function Auth(config: AuthConfig) {
       ''
 
     try {
-      const [id, secret] = token.split('.')
-      if (!id || !secret) throw new Error('Invalid token format')
-
-      const result = await adapter.session.find(id)
-      if (!result) throw new Error('Session not found')
-
-      const hashedSecret = await hashSecret(secret)
-      const decodedToken = decodeHex(result.token)
-      const isValid = constantTimeEqual(hashedSecret, decodedToken)
-
-      const now = Date.now()
-      const expiresTime = result.expiresAt.getTime()
-
-      if (
-        !isValid ||
-        expiresTime < now // implement additional checks if needed
-        //session.ipAddress !== opts.headers.get('X-Forwarded-For') ||
-        //session.userAgent !== opts.headers.get('User-Agent')
-      ) {
-        await adapter.session.delete(token)
-        throw new Error('Session expired')
-      }
-
-      // Extend session if it's close to expiration
-      //if (now >= expiresTime - session.expiresThreshold * 1000) {
-      //  const newExpires = new Date(now + session.expiresIn * 1000)
-      //  await adapter.session.update(id, { expiresAt: newExpires })
-      //  result.expiresAt = newExpires
-      //}
-
-      return result
+      if (!token) throw new Error('Invalid token format')
+      const payload = await jwt.verify(token)
+      const user = await adapter.user.find(payload.userId)
+      return { user, expiresAt: new Date(payload.exp * 1000) }
     } catch {
-      return {
-        token: '',
-        user: null,
-        expiresAt: new Date(0),
-        ipAddress: null,
-        userAgent: null,
-      }
+      return { user: null, expiresAt: new Date(0) }
     }
   }
 
@@ -121,8 +76,11 @@ export function Auth(config: AuthConfig) {
       cookies[keys.token] ??
       opts.headers.get('Authorization')?.replace('Bearer ', '') ??
       ''
-    const [id] = token.split('.')
-    if (id) await adapter.session.delete(id)
+    if (!token) return
+
+    // For JWT, sign-out is typically handled client-side by deleting the token.
+    // If using a token blacklist, implement that logic here.
+    return Promise.resolve()
   }
 
   const handleGet = async (request: Request): Promise<Response> => {
@@ -131,7 +89,7 @@ export function Auth(config: AuthConfig) {
 
     try {
       /*
-       * [GET] /auth/get-session
+       * GET /auth/get-session
        * - Retrieves the current authenticated user's session.
        */
       if (PATH_REGEXS.getSession.test(pathname)) {
@@ -140,7 +98,7 @@ export function Auth(config: AuthConfig) {
       }
 
       /*
-       * [GET] /auth/:provider
+       * GET /auth/:provider
        * - Handles OAuth provider callback after user authentication.
        */
       const match = PATH_REGEXS.oauth.exec(pathname)
@@ -218,7 +176,7 @@ export function Auth(config: AuthConfig) {
 
     try {
       /*
-       * [POST] /auth/sign-in
+       * POST /auth/sign-in
        * - Authenticates a user using credentials.
        */
       if (PATH_REGEXS.signIn.test(pathname)) {
@@ -251,7 +209,7 @@ export function Auth(config: AuthConfig) {
       }
 
       /*
-       * [POST] /auth/sign-out
+       * POST /auth/sign-out
        * - Terminates the current user's session.
        */
       if (PATH_REGEXS.signOut.test(pathname)) {
@@ -259,7 +217,10 @@ export function Auth(config: AuthConfig) {
         response = new Response(null, { status: 204 })
         response.headers.set(
           'Set-Cookie',
-          serializeCookie(keys.token, '', { ...cookie, maxAge: 0 }),
+          serializeCookie(keys.token, '', {
+            ...cookie,
+            maxAge: 0,
+          }),
         )
       }
 
@@ -302,7 +263,7 @@ export function Auth(config: AuthConfig) {
     return response
   }
 
-  async function handler(request: Request): Promise<Response> {
+  const handler = async (request: Request): Promise<Response> => {
     let response: Response
     if (request.method === 'OPTIONS')
       response = new Response(null, { status: 204 })

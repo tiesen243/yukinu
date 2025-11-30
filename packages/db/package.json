@@ -5,11 +5,8 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.mjs",
-    "./package.json": "./package.json",
-    "./schema/*": {
-      "default": "./dist/schema/*.mjs",
-      "types": "./dist/schema/*.d.mts"
-    }
+    "./schema": "./dist/schema/index.mjs",
+    "./package.json": "./package.json"
   },
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",

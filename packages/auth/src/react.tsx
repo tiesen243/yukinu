@@ -1,79 +1,64 @@
-'use client'
-
 import * as React from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
-import type { AuthModels } from '@yukinu/validators/auth'
+import type { AuthValidators } from '@yukinu/validators/auth'
 
-import type { Session, User } from '@/types'
+import type { SessionWithUser } from '@/types'
 
-type SessionResult = Omit<Session, 'token' | 'userAgent' | 'ipAddress'>
-
-type SessionContextValue = {
+type SessionContextValue = (
+  | { status: 'loading'; session: SessionWithUser }
+  | { status: 'unauthenticated'; session: null }
+  | {
+      status: 'authenticated'
+      session: SessionWithUser & { user: NonNullable<SessionWithUser['user']> }
+    }
+) & {
   signIn: (
-    input: AuthModels.LoginInput,
-  ) => Promise<{ token: string; expires: string }>
+    credentials: AuthValidators.LoginInput,
+  ) => Promise<AuthValidators.LoginOutput>
+
   signOut: () => Promise<void>
-} & (
-  | { status: 'loading'; session: SessionResult }
-  | { status: 'unauthenticated'; session: SessionResult & { user: null } }
-  | { status: 'authenticated'; session: SessionResult & { user: User } }
-)
+}
+
+interface SessionProviderProps {
+  children: React.ReactNode
+  session?: SessionWithUser
+  basePath?: string
+}
 
 const SessionContext = React.createContext<SessionContextValue | null>(null)
 
-function useSession() {
+const useSession = () => {
   const context = React.use(SessionContext)
   if (!context)
     throw new Error('useSession must be used within a SessionProvider')
   return context
 }
 
-function SessionProvider({
-  session: _session,
-  base = '/api/auth',
-  children,
-}: Readonly<{
-  children: React.ReactNode
-  base?: string
-  session?: SessionResult
-}>) {
-  const {
-    data: session,
-    status,
-    refetch,
-  } = useQuery({
-    queryKey: ['auth', 'session'],
-    queryFn: async ({ signal }) => {
-      const res = await fetch(`${base}/get-session`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-        signal,
-      })
+function SessionProvider(props: Readonly<SessionProviderProps>) {
+  const { session, basePath = '/api/auth', children } = props
 
-      const session = (await res.json()) as SessionResult
-      if (!session.user) throw new Error('No active session')
-      return session
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ['auth', 'get-session'],
+    initialData: session,
+    enabled: !session,
+    queryFn: async () => {
+      const res = await fetch(`${basePath}/get-session`)
+      if (!res.ok) throw new Error('Failed to fetch session')
+      return res.json() as Promise<SessionWithUser>
     },
-    initialData: _session ?? undefined,
-    staleTime: 1000 * 60 * 10, // 10 minutes
-    retry: false,
   })
 
   const { mutateAsync: signIn } = useMutation({
     mutationKey: ['auth', 'sign-in'],
-    mutationFn: async (input: AuthModels.LoginInput) => {
-      const res = await fetch(`${base}/sign-in`, {
+    mutationFn: async (credentials: AuthValidators.LoginInput) => {
+      const res = await fetch(`${basePath}/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
+        body: JSON.stringify(credentials),
       })
-
-      const json = (await res.json()) as
-        | { error: string }
-        | { token: string; expires: string }
-      if ('error' in json) throw new Error(json.error)
-      return json
+      if (!res.ok) throw new Error('Invalid credentials')
+      return res.json() as Promise<AuthValidators.LoginOutput>
     },
     onSuccess: () => refetch(),
   })
@@ -81,29 +66,23 @@ function SessionProvider({
   const { mutateAsync: signOut } = useMutation({
     mutationKey: ['auth', 'sign-out'],
     mutationFn: async () => {
-      const res = await fetch(`${base}/sign-out`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      if (!res.ok) {
-        const json = (await res.json()) as { error?: string }
-        throw new Error(json.error)
-      }
+      const res = await fetch(`${basePath}/sign-out`, { method: 'POST' })
+      if (!res.ok) throw new Error('Failed to sign out')
     },
     onSuccess: () => refetch(),
   })
 
   const value = React.useMemo(() => {
-    const statusMap = {
-      pending: 'loading',
-      error: 'unauthenticated',
-      success: 'authenticated',
-    } as const
-    return { status: statusMap[status], session, signIn, signOut }
-  }, [status, session, signIn, signOut]) as SessionContextValue
+    const status = isLoading
+      ? 'loading'
+      : data?.user
+        ? 'authenticated'
+        : 'unauthenticated'
+
+    return { status, session: data, signIn, signOut } as SessionContextValue
+  }, [data, isLoading, signIn, signOut])
 
   return <SessionContext value={value}>{children}</SessionContext>
 }
 
-export { useSession, SessionProvider }
+export { SessionProvider, useSession }

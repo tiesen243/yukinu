@@ -6,6 +6,7 @@
   "exports": {
     "./create-env": "./dist/create-env.mjs",
     "./create-id": "./dist/create-id.mjs",
+    "./rate-limit": "./dist/rate-limit.mjs",
     "./package.json": "./package.json"
   },
   "scripts": {
