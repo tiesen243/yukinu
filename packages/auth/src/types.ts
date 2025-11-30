@@ -23,8 +23,10 @@ export interface OAuth2Token {
 
 export type User = typeof usersView.$inferSelect
 
-export interface Session
-  extends Omit<typeof sessions.$inferSelect, 'userId' | 'createdAt'> {
+export interface Session extends Omit<
+  typeof sessions.$inferSelect,
+  'userId' | 'createdAt'
+> {
   user: User | null
 }
 

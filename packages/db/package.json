@@ -28,6 +28,7 @@
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
+    "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*",
     "drizzle-orm": "^0.44.7",
     "postgres": "^3.4.7"
@@ -41,10 +42,5 @@
     "prettier": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:"
-  },
-  "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
-    "@types/node": "catalog:",
-    "prettier-plugin-tailwindcss": "catalog:"
   }
 }

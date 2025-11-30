@@ -27,11 +27,9 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 - **Web App**
   - Next.js, React.js, TailwindCSS
   - tRPC client integration
-  - Dockerized for deployment
 - **Dashboard**
   - React, React Router, TailwindCSS
-  - Admin vendor dashboard
-  - Dockerized for deployment
+  - tRPC client integration
 
 ### Backend & Shared Services
 
@@ -39,7 +37,6 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 - **ORM**: Drizzle ORM + PostgreSQL
 - **Validation**: Zod
 - **Email Service**: Resend
-- **Deployment**: Docker + Nginx Reverse Proxy
 
 ## Monorepo Structure
 
@@ -52,6 +49,7 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 │   ├── api              # tRPC API package
 │   ├── auth             # Authentication utilities
 │   ├── db               # Drizzle + DB models + queries
+│   ├── lib              # Shared utilities/helpers
 │   ├── ui               # Shared UI components (shadcn)
 │   └── validators       # Zod validators
 ├── tools
@@ -64,20 +62,9 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 └── docker-compose.yml   # Local deployment (NGINX + Postgres + Apps)
 ```
 
-## Package Management
-
-This repo uses **Turborepo** for task running and **Bun** for package management.
-
-Useful commands:
-
-```sh
-bun install
-bun run dev
-bun run build
-bun run lint
-```
-
 ## Deployment
+
+### Docker Deployment
 
 This system is deployed using Docker Compose & Nginx reverse proxy.
 
@@ -86,10 +73,9 @@ Config files:
 - docker-compose.yml
 - tools/nginx/default.conf
 
-## Security & Validation
+### Vercel Deployment
 
-- Zod is used across API and data models for **type-safe validation**
-- Shared authentication logic stored in `packages/auth`
+The web app and dashboard can also be deployed to Vercel directly from the monorepo.
 
 ## Documentation
 

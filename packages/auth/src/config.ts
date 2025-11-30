@@ -135,3 +135,9 @@ export function getBaseUrl() {
     return `https://${import.meta.env.VITE_APP_URL}`
   return `http://localhost:${process.env.PORT ?? 3000}`
 }
+
+declare global {
+  interface ImportMeta {
+    readonly env: Record<string, string | undefined>
+  }
+}

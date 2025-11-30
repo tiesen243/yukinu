@@ -2,9 +2,9 @@ import type { Database, PgTable } from '@yukinu/db'
 
 import type { IBaseRepository } from '@/types'
 
-export abstract class BaseRepository<TTable extends PgTable>
-  implements IBaseRepository<TTable>
-{
+export abstract class BaseRepository<
+  TTable extends PgTable,
+> implements IBaseRepository<TTable> {
   protected _data: TTable['$inferSelect'][] = []
   protected static _idCounter = 1
 

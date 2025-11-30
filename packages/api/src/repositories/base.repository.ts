@@ -3,9 +3,9 @@ import { and, asc, desc, eq, ilike, or } from '@yukinu/db'
 
 import type { IBaseRepository } from '@/types'
 
-export abstract class BaseRepository<TTable extends PgTable>
-  implements IBaseRepository<TTable>
-{
+export abstract class BaseRepository<
+  TTable extends PgTable,
+> implements IBaseRepository<TTable> {
   protected _table: TTable = {} as TTable
 
   constructor(protected _db: Database) {}

@@ -21,3 +21,9 @@ export const env = createEnv({
 
   skipValidation: true,
 })
+
+declare global {
+  interface ImportMeta {
+    readonly env: Record<string, string | undefined>
+  }
+}
