@@ -23,7 +23,7 @@
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.0.5",
+    "next": "^16.0.6",
     "react": "catalog:react",
     "react-dom": "catalog:react",
     "superjson": "catalog:trpc"

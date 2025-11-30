@@ -61,7 +61,7 @@
     "eslint": "^9.39.1",
     "prettier": "^3.7.1",
     "prettier-plugin-tailwindcss": "^0.7.1",
-    "tsdown": "^0.17.0-beta.3",
+    "tsdown": "^0.17.0-beta.4",
     "typescript": "^5.9.3",
     "nuqs": "^2.8.1",
     "zod": "^4.1.13"
