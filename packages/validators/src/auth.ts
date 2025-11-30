@@ -4,7 +4,7 @@ export namespace AuthValidators {
   const passwordRegex = z
     .string()
     .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
       'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
     )
 
@@ -40,6 +40,7 @@ export namespace AuthValidators {
 
   export const changePasswordInput = z
     .object({
+      userId: z.cuid(),
       currentPassword: z.string().optional(),
       newPassword: passwordRegex,
       confirmNewPassword: z.string(),
@@ -56,7 +57,7 @@ export namespace AuthValidators {
   export const forgotPasswordInput = z.object({
     email: z.email('Invalid email address'),
   })
-  export type ForgotPassword = z.infer<typeof forgotPasswordInput>
+  export type ForgotPasswordInput = z.infer<typeof forgotPasswordInput>
   export const forgotPasswordOutput = z.void()
   export type ForgotPasswordOutput = z.infer<typeof forgotPasswordOutput>
 

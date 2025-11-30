@@ -16,6 +16,7 @@ const nextConfig = {
     '@yukinu/api',
     '@yukinu/auth',
     '@yukinu/db',
+    '@yukinu/lib',
     '@yukinu/ui',
     '@yukinu/validators',
   ],

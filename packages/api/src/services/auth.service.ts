@@ -1,94 +1,121 @@
 import { TRPCError } from '@trpc/server'
 
-import type { Database } from '@yukinu/db'
-import type { AuthModels } from '@yukinu/validators/auth'
+import type { AuthValidators } from '@yukinu/validators/auth'
 import { Password } from '@yukinu/auth'
 
 import type { IAuthService } from '@/contracts/services/auth.service'
-import type {
-  IAccountRepository,
-  IProfileRepository,
-  IUserRepository,
-} from '@/types'
+import { BaseService } from '@/services/base.service'
 
-export class AuthService implements IAuthService {
-  private readonly _password: Password
+export class AuthService extends BaseService implements IAuthService {
+  private readonly _password = new Password()
 
-  public constructor(
-    private readonly _db: Database,
-    private readonly _account: IAccountRepository,
-    private readonly _profile: IProfileRepository,
-    private readonly _user: IUserRepository,
-  ) {
-    this._password = new Password()
-  }
+  async register(
+    input: AuthValidators.RegisterInput,
+  ): Promise<AuthValidators.RegisterOutput> {
+    const { eq, or } = this._orm
+    const { accounts, profiles, users } = this._schema
+    const { email, username, password } = input
 
-  public async register(
-    input: AuthModels.RegisterInput,
-  ): Promise<AuthModels.RegisterOutput> {
-    const { email, username } = input
-
-    const [existingUser] = await this._user.findBy(
-      [{ email }, { username }],
-      {},
-      1,
-    )
+    const [existingUser] = await this._db
+      .select()
+      .from(users)
+      .where(or(eq(users.email, email), eq(users.username, username)))
+      .limit(1)
     if (existingUser)
       throw new TRPCError({
         code: 'CONFLICT',
-        message: 'Email or username already in use',
+        message: 'A user with the given email or username already exists.',
       })
 
-    const password = await this._password.hash(input.password)
-
     return this._db.transaction(async (tx) => {
-      const { id: userId } = await this._user.create({ email, username }, tx)
+      const [newUser] = await tx
+        .insert(users)
+        .values({ email, username })
+        .returning({ id: users.id })
+      if (!newUser)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to create a new user.',
+        })
 
-      await this._account.create(
-        { userId, provider: 'credentials', accountId: userId, password },
-        tx,
-      )
+      const passwordHash = await this._password.hash(password)
+      await tx.insert(accounts).values({
+        userId: newUser.id,
+        provider: 'credentials',
+        accountId: newUser.id,
+        password: passwordHash,
+      })
 
-      await this._profile.create({ id: userId, fullName: username }, tx)
+      await tx.insert(profiles).values({ id: newUser.id, fullName: username })
 
-      return { userId }
+      return newUser
     })
   }
 
-  public async changePassword(
-    input: AuthModels.ChangePasswordInput,
-  ): Promise<AuthModels.ChangePasswordOutput> {
-    const { userId, currentPassword, newPassword, isLogOutOtherSessions } =
-      input
+  async changePassword(
+    input: AuthValidators.ChangePasswordInput,
+  ): Promise<AuthValidators.ChangePasswordOutput> {
+    const { and, eq } = this._orm
+    const { accounts } = this._schema
+    const { userId, currentPassword, newPassword } = input
 
-    const [existingAccount] = await this._account.findBy(
-      [{ userId, provider: 'credentials' }],
-      {},
-      1,
+    const whereClause = and(
+      eq(accounts.userId, userId),
+      eq(accounts.provider, 'credentials'),
     )
-
-    if (
-      existingAccount?.password &&
-      !(await this._password.verify(
-        existingAccount.password,
-        currentPassword ?? '',
-      ))
-    )
-      throw new TRPCError({
-        code: 'UNAUTHORIZED',
-        message: 'Invalid current password',
-      })
 
     return this._db.transaction(async (tx) => {
-      const password = await this._password.hash(newPassword)
-      await this._account.create(
-        { userId, provider: 'credentials', accountId: userId, password },
-        tx,
-      )
+      const [account] = await tx
+        .select()
+        .from(accounts)
+        .where(whereClause)
+        .limit(1)
 
-      if (isLogOutOtherSessions) await this._user.deleteSessions(userId, tx)
+      if (!account?.password) {
+        const newPasswordHash = await this._password.hash(newPassword)
+        return void tx.insert(accounts).values({
+          userId,
+          provider: 'credentials',
+          accountId: userId,
+          password: newPasswordHash,
+        })
+      }
 
-      return { userId }
+      if (!currentPassword)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Current password is required to change the password.',
+        })
+
+      if (currentPassword === newPassword)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'The new password must be different from the current one.',
+        })
+
+      if (!(await this._password.verify(account.password, currentPassword)))
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'The current password is incorrect.',
+        })
+
+      const newPasswordHash = await this._password.hash(newPassword)
+      return void tx
+        .update(accounts)
+        .set({ password: newPasswordHash })
+        .where(whereClause)
     })
+  }
+
+  forgotPassword(
+    _input: AuthValidators.ForgotPasswordInput,
+  ): Promise<AuthValidators.ForgotPasswordOutput> {
+    throw new Error('Method not implemented.')
+  }
+
+  resetPassword(
+    _input: AuthValidators.ResetPasswordInput,
+  ): Promise<AuthValidators.ResetPasswordOutput> {
+    throw new Error('Method not implemented.')
   }
 }

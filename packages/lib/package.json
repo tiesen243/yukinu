@@ -6,6 +6,7 @@
   "exports": {
     "./create-env": "./dist/create-env.mjs",
     "./create-id": "./dist/create-id.mjs",
+    "./create-query-client": "./dist/create-query-client.mjs",
     "./rate-limit": "./dist/rate-limit.mjs",
     "./package.json": "./package.json"
   },
@@ -19,10 +20,12 @@
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@types/node": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "superjson": "catalog:trpc",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",

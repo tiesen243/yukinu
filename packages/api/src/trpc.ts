@@ -1,9 +1,32 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import { TokenBucketRateLimit } from '@yukinu/auth'
+import { validateAccessToken } from '@yukinu/auth'
+import { db, orm } from '@yukinu/db'
+import * as schema from '@yukinu/db/schema'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
+import { AuthService } from '@/services/auth.service'
+import { UserService } from '@/services/user.service'
+
+const createTRPCContext = async (opts: {
+  headers: Headers
+}): Promise<TRPCContext> => {
+  const token = opts.headers.get('authorization')?.replace('Bearer ', '') ?? ''
+  const session = await validateAccessToken(token)
+
+  const authService = new AuthService(db, orm, schema)
+  const userService = new UserService(db, orm, schema)
+
+  return {
+    headers: opts.headers,
+    session,
+    services: {
+      auth: authService,
+      user: userService,
+    },
+  }
+}
 
 const t = initTRPC
   .meta<TRPCMeta>()
@@ -33,7 +56,7 @@ const loggingMiddleware = t.middleware(
       '[tRPC] >>> Request from',
       ctx.headers.get('x-trpc-source') ?? 'unknown',
       'by',
-      ctx.session?.user?.id ?? 'guest',
+      ctx.session?.userId ?? 'guest',
       `at ${path}`,
     )
 
@@ -53,68 +76,27 @@ const loggingMiddleware = t.middleware(
   },
 )
 
-const ratelimiters = new TokenBucketRateLimit<string>(50, 60)
-const ratelimitConsume = { query: 1, mutation: 5, subscription: 1 } as const
-const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
-  const ip =
-    ctx.headers.get('x-forwarded-for') ??
-    ctx.headers.get('x-real-ip') ??
-    'unknown'
-
-  const key = `${ctx.session?.user?.id ?? 'unknown'}:${ip.split(',').at(0)?.trim() ?? 'unknown'}`
-  const allowed = ratelimiters.consume(key, ratelimitConsume[type])
-  if (!allowed)
-    throw new TRPCError({
-      code: 'TOO_MANY_REQUESTS',
-      message: 'Rate limit exceeded',
-    })
-  return next()
-})
-
-const authMiddleware = t.middleware(({ meta, ctx, next }) => {
-  if (!ctx.session?.user)
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'User not authenticated',
-    })
-
-  if (
-    meta?.roles &&
-    meta.roles.length > 0 &&
-    !meta.roles.includes(ctx.session.user.role)
-  )
-    throw new TRPCError({
-      code: 'FORBIDDEN',
-      message: 'User does not have sufficient permissions',
-    })
-
-  return next({
-    ctx: {
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  })
-})
-
-const publicProcedure = t.procedure
+const publicProcedure = t.procedure.use(loggingMiddleware)
+const protectedProcedure = t.procedure
   .use(loggingMiddleware)
-  .use(rateLimitMiddleware)
+  .use(({ ctx, meta, next }) => {
+    if (!ctx.session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
 
-const protectedProcedure = publicProcedure.use(authMiddleware)
+    if (meta?.role?.length && !meta.role.includes(ctx.session.role)) {
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You do not have permission to perform this action.',
+      })
+    }
 
-const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
-  const vendor = await ctx.vendorService.one(ctx.session.user)
-
-  return next({
-    ctx: {
-      vendor,
-    },
+    return next({ ctx: { session: ctx.session } })
   })
-})
 
+export type { TRPCMeta, TRPCContext }
 export {
   createCallerFactory,
+  createTRPCContext,
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
-  vendorProcedure,
 }

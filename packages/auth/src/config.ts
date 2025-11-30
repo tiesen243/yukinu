@@ -1,5 +1,5 @@
 import { db, orm } from '@yukinu/db'
-import { accounts, sessions, users } from '@yukinu/db/schema'
+import { accounts, profiles, sessions, users } from '@yukinu/db/schema'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthConfig } from '@/types'
@@ -32,11 +32,18 @@ export const authOptions = {
         return record ?? null
       },
       async create(data) {
+        const username =
+          'user' + Math.floor(1000 + Math.random() * 9000).toString()
+
         const [result] = await db
           .insert(users)
-          .values(data)
+          .values({ ...data, username })
           .returning({ id: users.id })
         if (!result) throw new Error('Failed to create user')
+
+        await db
+          .insert(profiles)
+          .values({ id: result.id, fullName: data.username })
 
         return result
       },
@@ -77,6 +84,7 @@ export const authOptions = {
               id: users.id,
               username: users.username,
               email: users.email,
+              role: users.role,
               image: users.image,
             },
             token: sessions.token,

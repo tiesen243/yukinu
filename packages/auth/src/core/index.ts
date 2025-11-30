@@ -1,3 +1,6 @@
+import type { UserValidators } from '@yukinu/validators/user'
+import { AuthValidators } from '@yukinu/validators/auth'
+
 import type { AuthConfig, Session, SessionWithUser } from '@/types'
 import {
   constantTimeEqual,
@@ -7,12 +10,14 @@ import {
   generateStateOrCode,
   hashSecret,
 } from '@/core/crypto'
+import { JWT } from '@/core/jwt'
 import { Password } from '@/core/password'
 
 const PATH_REGEXS = {
   getSession: /^(?:\/([^/]+))?\/api\/auth\/get-session$/,
   signIn: /^(?:\/([^/]+))?\/api\/auth\/sign-in$/,
   signOut: /^(?:\/([^/]+))?\/api\/auth\/sign-out$/,
+  refreshToken: /^(?:\/([^/]+))?\/api\/auth\/refresh-token$/,
   oauth: /^(?:\/([^/]+))?\/api\/auth\/([^/]+)$/,
 } as const
 
@@ -24,11 +29,34 @@ export function Auth(config: AuthConfig) {
     cookie: { ...defaultConfig.cookie, ...config.cookie },
   } satisfies AuthConfig
   const { adapter, providers = [], session, keys, cookie } = finalConfig
+  const jwt = new JWT<{
+    sub: string
+    role: UserValidators.Role
+  }>(finalConfig.secret)
+
+  async function createAccessToken(userId: string): Promise<string> {
+    const user = await adapter.user.find(userId)
+    if (!user) throw new Error('User not found')
+
+    const payload = { sub: userId, role: user.role }
+    return jwt.sign(payload, { expiresIn: 24 * 60 * 60 }) // 1 day
+  }
+
+  async function validateAccessToken(
+    token: string,
+  ): Promise<{ userId: string; role: UserValidators.Role } | null> {
+    try {
+      const { sub, role } = await jwt.verify(token)
+      return { userId: sub, role }
+    } catch {
+      return null
+    }
+  }
 
   async function createSession(
     userId: string,
     opts: Pick<Session, 'ipAddress' | 'userAgent'>,
-  ): Promise<{ token: string; expiresAt: Date }> {
+  ): Promise<{ token: string; accessToken: string; expiresAt: Date }> {
     const id = generateSecureString()
     const secret = generateSecureString()
     const hashedSecret = await hashSecret(secret)
@@ -43,7 +71,9 @@ export function Auth(config: AuthConfig) {
       expiresAt,
     })
 
-    return { token, expiresAt }
+    const accessToken = await createAccessToken(userId)
+
+    return { token, accessToken, expiresAt }
   }
 
   async function auth(opts: { headers: Headers }): Promise<SessionWithUser> {
@@ -69,20 +99,20 @@ export function Auth(config: AuthConfig) {
 
       if (
         !isValid ||
-        expiresTime < now // implement additional checks if needed
-        //session.ipAddress !== opts.headers.get('X-Forwarded-For') ||
-        //session.userAgent !== opts.headers.get('User-Agent')
+        expiresTime < now || // implement additional checks if needed
+        // result.ipAddress !== opts.headers.get('X-Forwarded-For') ||
+        result.userAgent !== opts.headers.get('User-Agent')
       ) {
         await adapter.session.delete(token)
         throw new Error('Session expired')
       }
 
       // Extend session if it's close to expiration
-      //if (now >= expiresTime - session.expiresThreshold * 1000) {
-      //  const newExpires = new Date(now + session.expiresIn * 1000)
-      //  await adapter.session.update(id, { expiresAt: newExpires })
-      //  result.expiresAt = newExpires
-      //}
+      if (now >= expiresTime - session.expiresThreshold * 1000) {
+        const newExpires = new Date(now + session.expiresIn * 1000)
+        await adapter.session.update(id, { expiresAt: newExpires })
+        result.expiresAt = newExpires
+      }
 
       return result
     } catch {
@@ -97,13 +127,13 @@ export function Auth(config: AuthConfig) {
   }
 
   async function signIn(
-    data: { email: string; password: string },
+    data: AuthValidators.LoginInput,
     opts: Pick<Session, 'ipAddress' | 'userAgent'> = {
       ipAddress: null,
       userAgent: null,
     },
-  ): Promise<{ token: string; expiresAt: Date }> {
-    const user = await adapter.user.find(data.email)
+  ): Promise<{ token: string; accessToken: string; expiresAt: Date }> {
+    const user = await adapter.user.find(data.identifier)
     if (!user) throw new Error('Invalid credentials')
 
     const account = await adapter.account.find('credentials', user.id)
@@ -144,7 +174,7 @@ export function Auth(config: AuthConfig) {
        * - Handles OAuth provider callback after user authentication.
        */
       const match = PATH_REGEXS.oauth.exec(pathname)
-      if (match && ['get-session'].every((p) => p !== match[2])) {
+      if (match && !['get-session'].includes(match[2] ?? '')) {
         const [, , provider = ''] = match
         const inst = providers.find((p) => p.providerName === provider)
         if (!inst) throw new Error(`Provider "${provider}" is not configured`)
@@ -201,6 +231,13 @@ export function Auth(config: AuthConfig) {
             expires: result.expiresAt.toUTCString(),
           }),
         )
+        response.headers.append(
+          'Set-Cookie',
+          serializeCookie(keys.accessToken, result.accessToken, {
+            ...cookie,
+            HttpOnly: false,
+          }),
+        )
       }
     } catch (e) {
       response = new Response(
@@ -230,8 +267,9 @@ export function Auth(config: AuthConfig) {
           const formData = await request.formData()
           data = Object.fromEntries(formData.entries())
         } else throw new Error('Unsupported content type')
+        const userData = AuthValidators.loginInput.parse(data)
 
-        const result = await signIn(data as never, {
+        const result = await signIn(userData, {
           ipAddress: request.headers.get('X-Forwarded-For'),
           userAgent: request.headers.get('User-Agent'),
         })
@@ -246,6 +284,13 @@ export function Auth(config: AuthConfig) {
           serializeCookie(keys.token, result.token, {
             ...cookie,
             expires: result.expiresAt.toUTCString(),
+          }),
+        )
+        response.headers.append(
+          'Set-Cookie',
+          serializeCookie(keys.accessToken, result.accessToken, {
+            ...cookie,
+            HttpOnly: false,
           }),
         )
       }
@@ -264,11 +309,26 @@ export function Auth(config: AuthConfig) {
       }
 
       /*
+       * [POST] /auth/refresh-token
+       * - Refreshes the access token for the current session.
+       */
+      if (PATH_REGEXS.refreshToken.test(pathname)) {
+        const session = await auth({ headers: request.headers })
+        if (!session.user) throw new Error('Not authenticated')
+
+        const newToken = await createAccessToken(session.user.id)
+        response = Response.json({ accessToken: newToken })
+      }
+
+      /*
        * POST /auth/:provider
        * - Initiates OAuth authentication with the specified provider.
        */
       const match = PATH_REGEXS.oauth.exec(pathname)
-      if (match && ['sign-in', 'sign-out'].every((p) => p !== match[2])) {
+      if (
+        match &&
+        !['sign-in', 'sign-out', 'refresh-token'].includes(match[2] ?? '')
+      ) {
         const [, , provider = ''] = match
         const inst = providers.find((p) => p.providerName === provider)
         if (!inst) throw new Error(`Provider "${provider}" is not configured`)
@@ -281,15 +341,15 @@ export function Auth(config: AuthConfig) {
         response.headers.set('Location', authorizationUrl.toString())
         response.headers.append(
           'Set-Cookie',
-          serializeCookie(keys.state, state, { maxAge: 300 }),
+          serializeCookie(keys.state, state, { 'Max-Age': 300 }),
         )
         response.headers.append(
           'Set-Cookie',
-          serializeCookie(keys.codeVerifier, code, { maxAge: 300 }),
+          serializeCookie(keys.codeVerifier, code, { 'Max-Age': 300 }),
         )
         response.headers.append(
           'Set-Cookie',
-          serializeCookie(keys.redirectUri, redirectUri, { maxAge: 300 }),
+          serializeCookie(keys.redirectUri, redirectUri, { 'Max-Age': 300 }),
         )
       }
     } catch (e) {
@@ -317,7 +377,7 @@ export function Auth(config: AuthConfig) {
     return response
   }
 
-  return { auth, signIn, signOut, handler }
+  return { auth, signIn, signOut, validateAccessToken, handler }
 }
 
 function parseCookies(cookieHeader: string | null): Record<string, string> {
@@ -339,6 +399,7 @@ function serializeCookie(
   let cookieString = `${name}=${encodeURIComponent(value)}`
   for (const [key, val] of Object.entries(options)) {
     if (val === true) cookieString += `; ${key}`
+    else if (val === false) continue
     else cookieString += `; ${key}=${val}`
   }
   return cookieString
@@ -350,13 +411,14 @@ const defaultConfig = {
     expiresThreshold: 60 * 60 * 24, // 1 day
   },
   cookie: {
-    path: '/',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    Path: '/',
+    HttpOnly: true,
+    Secure: process.env.NODE_ENV === 'production',
+    SameSite: 'lax',
   },
   keys: {
     token: 'auth.token',
+    accessToken: 'auth.access_token',
     state: 'auth.state',
     codeVerifier: 'auth.code_verifier',
     redirectUri: 'auth.redirect_uri',

@@ -1,9 +1,12 @@
+import type { UserValidators } from '@yukinu/validators/user'
+
 import type { BaseProvider } from '@/providers/base'
 
 export interface User {
   id: string
   username: string
   email: string
+  role: UserValidators.Role
   image: string | null
   createdAt: Date
   updatedAt: Date
@@ -30,7 +33,7 @@ export type SessionWithUser = Pick<
   Session,
   'token' | 'expiresAt' | 'ipAddress' | 'userAgent'
 > & {
-  user: Pick<User, 'id' | 'username' | 'email' | 'image'> | null
+  user: Pick<User, 'id' | 'username' | 'email' | 'role' | 'image'> | null
 }
 
 export interface OAuthAccount {
@@ -57,18 +60,17 @@ export interface AuthConfig {
 
   keys?: {
     token?: string
+    accessToken?: string
     state?: string
     codeVerifier?: string
     redirectUri?: string
   }
 
   cookie?: {
-    domain?: string
-    path?: string
-    httpOnly?: boolean
-    secure?: boolean
-    sameSite?: 'lax' | 'strict' | 'none'
-    maxAge?: number
+    Path?: string
+    HttpOnly?: boolean
+    Secure?: boolean
+    SameSite?: 'lax' | 'strict' | 'none'
   }
 
   adapter: {

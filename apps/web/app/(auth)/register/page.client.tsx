@@ -7,12 +7,12 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthModels } from '@yukinu/validators/auth'
+import { AuthValidators } from '@yukinu/validators/auth'
 
-import { useTRPCClient } from '@/trpc/react'
+import { useTRPCClient } from '@/lib/trpc/react'
 
 export const RegisterForm: React.FC = () => {
-  const trpcClient = useTRPCClient()
+  const trpc = useTRPCClient()
   const router = useRouter()
 
   const form = useForm({
@@ -22,46 +22,52 @@ export const RegisterForm: React.FC = () => {
       password: '',
       confirmPassword: '',
     },
-    schema: AuthModels.registerInput,
-    onSubmit: trpcClient.auth.register.mutate,
+    schema: AuthValidators.registerInput,
+    onSubmit: trpc.auth.register.mutate,
+    onError: ({ message }) => toast.error(message),
     onSuccess: () => {
+      toast.success('Registration successful! Please log in.')
       router.push('/login')
-      toast.success('Successfully registered')
     },
-    onError: (error) => toast.error(error.message),
   })
 
   return (
     <FieldGroup>
-      <form.Field
-        name='username'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Username</FieldLabel>
-            <Input {...field} placeholder='yuki' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
-          </Field>
-        )}
-      />
+      <Field orientation='horizontal'>
+        <form.Field
+          name='username'
+          render={({ meta, field }) => (
+            <Field data-invalid={meta.errors.length > 0}>
+              <FieldLabel htmlFor={meta.fieldId}>Username</FieldLabel>
+              <Input {...field} placeholder='Enter your username' />
+              <FieldError errors={meta.errors} />
+            </Field>
+          )}
+        />
 
-      <form.Field
-        name='email'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Email</FieldLabel>
-            <Input {...field} type='email' placeholder='yuki@example.com' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
-          </Field>
-        )}
-      />
+        <form.Field
+          name='email'
+          render={({ meta, field }) => (
+            <Field data-invalid={meta.errors.length > 0}>
+              <FieldLabel htmlFor={meta.fieldId}>Email</FieldLabel>
+              <Input {...field} type='email' placeholder='Enter your email' />
+              <FieldError errors={meta.errors} />
+            </Field>
+          )}
+        />
+      </Field>
 
       <form.Field
         name='password'
         render={({ meta, field }) => (
           <Field data-invalid={meta.errors.length > 0}>
             <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-            <Input {...field} type='password' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <Input
+              {...field}
+              type='password'
+              placeholder='Enter your password'
+            />
+            <FieldError errors={meta.errors} />
           </Field>
         )}
       />
@@ -71,8 +77,12 @@ export const RegisterForm: React.FC = () => {
         render={({ meta, field }) => (
           <Field data-invalid={meta.errors.length > 0}>
             <FieldLabel htmlFor={meta.fieldId}>Confirm Password</FieldLabel>
-            <Input {...field} type='password' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <Input
+              {...field}
+              type='password'
+              placeholder='Confirm your password'
+            />
+            <FieldError errors={meta.errors} />
           </Field>
         )}
       />

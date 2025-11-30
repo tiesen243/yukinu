@@ -6,12 +6,12 @@
   "exports": {
     ".": "./dist/index.mjs",
     "./*": {
-      "types": "./dist/components/*.d.mts",
-      "default": "./dist/components/*.mjs"
+      "default": "./dist/components/*.mjs",
+      "types": "./dist/components/*.d.mts"
     },
     "./hooks/*": {
-      "types": "./dist/hooks/*.d.mts",
-      "default": "./dist/hooks/*.mjs"
+      "default": "./dist/hooks/*.mjs",
+      "types": "./dist/hooks/*.d.mts"
     },
     "./tailwind.css": "./src/tailwind.css",
     "./package.json": "./package.json"

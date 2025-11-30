@@ -33,10 +33,10 @@ export namespace UserValidators {
 
   export const profile = z.object({
     id: z.cuid(),
-    fullName: z.string().min(1).max(255),
+    fullName: z.string().min(1).max(255).nullable(),
     bio: z.string().nullable(),
     gender: z.enum(genders).nullable(),
-    dateOfBirth: z.date().nullable(),
+    dateOfBirth: z.iso.date().nullable(),
   })
   export type Profile = z.infer<typeof profile>
 
@@ -93,22 +93,15 @@ export namespace UserValidators {
 
   export const getProfileInput = z.object({ userId: z.cuid() })
   export type GetProfileInput = z.infer<typeof getProfileInput>
-  export const getProfileOutput = profile.extend(
-    user.pick({
-      username: true,
-      email: true,
-      emailVerified: true,
-      image: true,
-      role: true,
-      createdAt: true,
-    }),
-  )
+  export const getProfileOutput = user
+    .omit({ status: true, updatedAt: true })
+    .extend({ profile: profile.omit({ id: true }) })
   export type GetProfileOutput = z.infer<typeof getProfileOutput>
 
-  export const updateInput = profile.extend(user.pick({ image: true }))
-  export type UpdateInput = z.infer<typeof updateInput>
-  export const updateOutput = z.object({ id: z.cuid() })
-  export type UpdateOutput = z.infer<typeof updateOutput>
+  export const updateProfileInput = profile.extend({ image: user.shape.image })
+  export type UpdateProfileInput = z.infer<typeof updateProfileInput>
+  export const updateProfileOutput = z.object({ id: z.cuid() })
+  export type UpdateProfileOutput = z.infer<typeof updateProfileOutput>
 
   export const getAddressesInput = z.object({ userId: z.cuid() })
   export type GetAddressesInput = z.infer<typeof getAddressesInput>
