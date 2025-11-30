@@ -17,12 +17,16 @@ export const env = createEnv({
     POSTGRES_DATABASE: z.string(),
     POSTGRES_SSL_MODE: z._default(z.enum(['true', 'false']), 'false'),
 
-    // OAuth configuration
+    // Auth configuration
     AUTH_SECRET: z.optional(z.string()),
     AUTH_FACEBOOK_ID: z.string(),
     AUTH_FACEBOOK_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
+
+    // Third-party services
+    RESEND_TOKEN: z.string(),
+    UPLOADTHING_TOKEN: z.string(),
 
     // Vercel environment
     VERCEL: z.optional(z.enum(['1'])),

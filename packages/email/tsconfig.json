@@ -2,8 +2,7 @@
   "extends": "@yukinu/tsconfig/react.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@/utils": ["./src/index.ts"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],

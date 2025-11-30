@@ -1,7 +1,6 @@
 {
   "extends": "@yukinu/tsconfig/internal-package.json",
   "compilerOptions": {
-    "rootDir": "src",
     "paths": {
       "@/*": ["./src/*"]
     }
