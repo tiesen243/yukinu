@@ -67,7 +67,10 @@ export const sessions = pgTable(
     ipAddress: t.varchar({ length: 45 }),
     userAgent: t.text(),
   }),
-  (t) => [uniqueIndex('sessions_token_uq_idx').on(t.token)],
+  (t) => [
+    index('sessions_user_id_idx').on(t.id),
+    uniqueIndex('sessions_id_token_uq_idx').on(t.id, t.token),
+  ],
 )
 
 export const verifications = pgTable(
