@@ -9,6 +9,12 @@ export const authRouter = createTRPCRouter({
     .output(AuthValidators.registerOutput)
     .mutation(({ ctx, input }) => ctx.services.auth.register(input)),
 
+  verufyEmail: publicProcedure
+    .meta({ message: 'Email verified successfully.' })
+    .input(AuthValidators.verifyEmailInput)
+    .output(AuthValidators.verifyEmailOutput)
+    .mutation(({ ctx, input }) => ctx.services.auth.verifyEmail(input)),
+
   changePassword: protectedProcedure
     .meta({ message: 'Password changed successfully.' })
     .input(AuthValidators.changePasswordInput.omit({ userId: true }))

@@ -1,7 +1,10 @@
+import { randomBytes } from 'node:crypto'
 import { TRPCError } from '@trpc/server'
 
 import type { AuthValidators } from '@yukinu/validators/auth'
 import { Password } from '@yukinu/auth'
+import { sendEmail } from '@yukinu/email'
+import { env } from '@yukinu/validators/env'
 
 import type { IAuthService } from '@/contracts/services/auth.service'
 import { BaseService } from '@/services/base.service'
@@ -13,7 +16,7 @@ export class AuthService extends BaseService implements IAuthService {
     input: AuthValidators.RegisterInput,
   ): Promise<AuthValidators.RegisterOutput> {
     const { eq, or } = this._orm
-    const { accounts, profiles, users } = this._schema
+    const { accounts, profiles, users, verifications } = this._schema
     const { email, username, password } = input
 
     const [existingUser] = await this._db
@@ -48,7 +51,58 @@ export class AuthService extends BaseService implements IAuthService {
 
       await tx.insert(profiles).values({ id: newUser.id, fullName: username })
 
+      const token = randomBytes(32).toString('hex')
+      await tx.insert(verifications).values({
+        token,
+        userId: newUser.id,
+        type: 'email',
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
+      })
+
+      const verificationLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
+      await sendEmail({
+        to: email,
+        subject: 'Welcome to Yukinu!',
+        template: 'Welcome',
+        data: { username, verificationLink },
+      })
+
       return newUser
+    })
+  }
+
+  async verifyEmail(
+    input: AuthValidators.VerifyEmailInput,
+  ): Promise<AuthValidators.VerifyEmailOutput> {
+    const { and, eq } = this._orm
+    const { users, verifications } = this._schema
+    const { token } = input
+
+    const [verification] = await this._db
+      .select()
+      .from(verifications)
+      .where(and(eq(verifications.token, token)))
+      .limit(1)
+    if (!verification)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'The verification token is invalid.',
+      })
+
+    return this._db.transaction(async (tx) => {
+      if (verification.expiresAt < new Date()) {
+        await tx.delete(verifications).where(eq(verifications.token, token))
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'The verification token has expired.',
+        })
+      }
+
+      await tx
+        .update(users)
+        .set({ emailVerified: new Date() })
+        .where(eq(users.id, verification.userId))
+      await tx.delete(verifications).where(eq(verifications.token, token))
     })
   }
 

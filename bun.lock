@@ -93,6 +93,7 @@
         "@trpc/server": "catalog:trpc",
         "@yukinu/auth": "workspace:*",
         "@yukinu/db": "workspace:*",
+        "@yukinu/email": "workspace:*",
         "@yukinu/validators": "workspace:*",
         "superjson": "catalog:trpc",
       },

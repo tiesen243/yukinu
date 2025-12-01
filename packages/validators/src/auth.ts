@@ -30,6 +30,13 @@ export namespace AuthValidators {
   export const registerOutput = z.object({ id: z.cuid() })
   export type RegisterOutput = z.infer<typeof registerOutput>
 
+  export const verifyEmailInput = z.object({
+    token: z.string().min(1, 'Token is required'),
+  })
+  export type VerifyEmailInput = z.infer<typeof verifyEmailInput>
+  export const verifyEmailOutput = z.void()
+  export type VerifyEmailOutput = z.infer<typeof verifyEmailOutput>
+
   export const loginInput = z.object({
     identifier: z.string().min(1, 'Identifier is required'),
     password: passwordRegex,

@@ -6,6 +6,7 @@ export interface User {
   id: string
   username: string
   email: string
+  emailVerified: Date | null
   role: UserValidators.Role
   image: string | null
   createdAt: Date
@@ -77,7 +78,7 @@ export interface AuthConfig {
     user: {
       find(identifier: string): Promise<User | null>
       create(
-        data: Pick<User, 'username' | 'email' | 'image'>,
+        data: Pick<User, 'username' | 'email' | 'emailVerified' | 'image'>,
       ): Promise<Pick<User, 'id'>>
     }
     account: {

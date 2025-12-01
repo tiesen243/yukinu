@@ -135,6 +135,7 @@ export function Auth(config: AuthConfig) {
   ): Promise<{ token: string; accessToken: string; expiresAt: Date }> {
     const user = await adapter.user.find(data.identifier)
     if (!user) throw new Error('Invalid credentials')
+    if (user.emailVerified === null) throw new Error('Email is not verified')
 
     const account = await adapter.account.find('credentials', user.id)
     if (!account?.password) throw new Error('Invalid credentials')
@@ -206,7 +207,10 @@ export function Auth(config: AuthConfig) {
             })
         } else {
           const { id: _, ...rest } = userData
-          const newUser = await adapter.user.create(rest)
+          const newUser = await adapter.user.create({
+            ...rest,
+            emailVerified: new Date(),
+          })
           userId = newUser.id
 
           await adapter.account.create({

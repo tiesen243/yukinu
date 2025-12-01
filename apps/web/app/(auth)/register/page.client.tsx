@@ -1,7 +1,5 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-
 import { Button } from '@yukinu/ui/button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
@@ -13,7 +11,6 @@ import { useTRPCClient } from '@/lib/trpc/react'
 
 export const RegisterForm: React.FC = () => {
   const trpc = useTRPCClient()
-  const router = useRouter()
 
   const form = useForm({
     defaultValues: {
@@ -26,8 +23,9 @@ export const RegisterForm: React.FC = () => {
     onSubmit: trpc.auth.register.mutate,
     onError: ({ message }) => toast.error(message),
     onSuccess: () => {
-      toast.success('Registration successful! Please log in.')
-      router.push('/login')
+      toast.success('Registration successful!', {
+        description: 'Please check your email to verify your account.',
+      })
     },
   })
 

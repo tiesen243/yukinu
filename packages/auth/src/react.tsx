@@ -57,7 +57,7 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       })
-      if (!res.ok) throw new Error('Invalid credentials')
+      if (!res.ok) throw new Error(await res.text())
       return res.json() as Promise<AuthValidators.LoginOutput>
     },
     onSuccess: () => refetch(),

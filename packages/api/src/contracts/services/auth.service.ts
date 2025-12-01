@@ -5,6 +5,10 @@ export interface IAuthService {
     input: AuthValidators.RegisterInput,
   ): Promise<AuthValidators.RegisterOutput>
 
+  verifyEmail(
+    input: AuthValidators.VerifyEmailInput,
+  ): Promise<AuthValidators.VerifyEmailOutput>
+
   changePassword(
     input: AuthValidators.ChangePasswordInput,
   ): Promise<AuthValidators.ChangePasswordOutput>
