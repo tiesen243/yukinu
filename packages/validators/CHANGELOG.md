@@ -1,5 +1,30 @@
 # @yukinu/validators
 
+## 0.2.0
+
+### Minor Changes
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`aafae65`](https://github.com/tiesen243/yukinu/commit/aafae65a110ac4bb68790ea3c9c891e1dde15894) Thanks [@tiesen243](https://github.com/tiesen243)! - completed core backend features
+
+### Patch Changes
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`7aa15f4`](https://github.com/tiesen243/yukinu/commit/7aa15f47d325a21f972110d437adc462f565e2c8) Thanks [@tiesen243](https://github.com/tiesen243)! - update api
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`10419b3`](https://github.com/tiesen243/yukinu/commit/10419b3aec6f0bdce9179ccce3ecfbd759261514) Thanks [@tiesen243](https://github.com/tiesen243)! - added email
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`dec3ad5`](https://github.com/tiesen243/yukinu/commit/dec3ad54ba200c84f497a4a2fa50feb8b9b05a37) Thanks [@tiesen243](https://github.com/tiesen243)! - update validators
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`7a5a2fc`](https://github.com/tiesen243/yukinu/commit/7a5a2fc440c8c08d9a213b9b99ffdc09fe3aa6d1) Thanks [@tiesen243](https://github.com/tiesen243)! - added verify email
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`403287f`](https://github.com/tiesen243/yukinu/commit/403287fd5cce25720347fb2a9437b171a995ee67) Thanks [@tiesen243](https://github.com/tiesen243)! - added api contract
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`f83c8a3`](https://github.com/tiesen243/yukinu/commit/f83c8a3df0aec127f8aef808e5ec6816ddead49f) Thanks [@tiesen243](https://github.com/tiesen243)! - handle refresh token
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`3ba2f97`](https://github.com/tiesen243/yukinu/commit/3ba2f97e883a8c7902f28148cbb854cfd06fd5c7) Thanks [@tiesen243](https://github.com/tiesen243)! - update packages
+
+- Updated dependencies [[`7aa15f4`](https://github.com/tiesen243/yukinu/commit/7aa15f47d325a21f972110d437adc462f565e2c8), [`10419b3`](https://github.com/tiesen243/yukinu/commit/10419b3aec6f0bdce9179ccce3ecfbd759261514), [`aafae65`](https://github.com/tiesen243/yukinu/commit/aafae65a110ac4bb68790ea3c9c891e1dde15894), [`7a5a2fc`](https://github.com/tiesen243/yukinu/commit/7a5a2fc440c8c08d9a213b9b99ffdc09fe3aa6d1), [`f83c8a3`](https://github.com/tiesen243/yukinu/commit/f83c8a3df0aec127f8aef808e5ec6816ddead49f), [`3ba2f97`](https://github.com/tiesen243/yukinu/commit/3ba2f97e883a8c7902f28148cbb854cfd06fd5c7)]:
+  - @yukinu/lib@0.1.0
+
 ## 0.1.8
 
 ### Patch Changes

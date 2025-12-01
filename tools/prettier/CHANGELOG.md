@@ -1,5 +1,11 @@
 # @yukinu/prettier-config
 
+## 0.1.1
+
+### Patch Changes
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`3ba2f97`](https://github.com/tiesen243/yukinu/commit/3ba2f97e883a8c7902f28148cbb854cfd06fd5c7) Thanks [@tiesen243](https://github.com/tiesen243)! - update packages
+
 ## 0.1.0
 
 ### Minor Changes
