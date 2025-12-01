@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.2.1
+
+### Patch Changes
+
+- [#202](https://github.com/tiesen243/yukinu/pull/202) [`5dc5827`](https://github.com/tiesen243/yukinu/commit/5dc582718d769a65d0c9076e7f2695c652fc1e07) Thanks [@tiesen243](https://github.com/tiesen243)! - fix hash algorithm
+
 ## 0.2.0
 
 ### Minor Changes
