@@ -1,16 +1,18 @@
 import * as z from 'zod'
 
+import { UserValidators } from '@/user'
+
 export namespace VendorValidators {
   export const vendorStatus = ['pending', 'approved', 'suspended'] as const
   export type VendorStatus = (typeof vendorStatus)[number]
 
   export const vendor = z.object({
     id: z.cuid(),
-    ownerId: z.cuid(),
+    ownerId: z.cuid().nullable(),
     name: z.string().min(1).max(255),
-    description: z.string().optional(),
-    image: z.url(),
-    address: z.string().min(1).max(500),
+    description: z.string().nullable(),
+    image: z.url().nullable(),
+    address: z.string().min(1).max(500).nullable(),
     status: z.enum(vendorStatus),
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -43,8 +45,9 @@ export namespace VendorValidators {
 
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
-  export const oneOutput = vendor.extend({
-    staffs: z.array(z.object({ userId: z.cuid(), username: z.string() })),
+  export const oneOutput = vendor.omit({ ownerId: true }).extend({
+    owner: UserValidators.user.pick({ id: true, username: true }),
+    staffs: z.array(UserValidators.user.pick({ id: true, username: true })),
   })
   export type OneOutput = z.infer<typeof oneOutput>
 

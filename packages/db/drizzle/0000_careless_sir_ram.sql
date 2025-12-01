@@ -15,8 +15,8 @@ CREATE TABLE "vendors" (
 	"owner_id" varchar(24),
 	"name" varchar(255) NOT NULL,
 	"description" text,
-	"image" varchar(500) NOT NULL,
-	"address" varchar(500) NOT NULL,
+	"image" varchar(500),
+	"address" varchar(500),
 	"status" "vendor_status" DEFAULT 'pending' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
