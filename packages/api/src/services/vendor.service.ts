@@ -93,7 +93,19 @@ export class VendorService extends BaseService implements IVendorService {
   async create(
     input: VendorValidators.CreateInput,
   ): Promise<VendorValidators.CreateOutput> {
+    const { eq } = this._orm
     const { vendors } = this._schema
+
+    const [vendor] = await this._db
+      .select({ id: vendors.id })
+      .from(vendors)
+      .where(eq(vendors.ownerId, input.ownerId))
+      .limit(1)
+    if (vendor)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You already own a vendor or application is pending.',
+      })
 
     const [result] = await this._db
       .insert(vendors)

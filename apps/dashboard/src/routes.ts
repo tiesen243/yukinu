@@ -11,7 +11,14 @@ export default [
 
   layout('./routes/__layout.tsx', [
     index('./routes/_index.tsx'),
+
+    // Management
+
+    // Vendors
     route('/vendors', './routes/vendors/_index.tsx'),
+
+    // Others
+    route('/apply-vendor', './routes/apply-vendor.tsx'),
     route('/*', './routes/fallback.tsx'),
   ]),
 ] satisfies RouteConfig

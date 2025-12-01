@@ -25,9 +25,14 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor created successfully',
       role: ['user'],
     })
-    .input(VendorValidators.createInput)
+    .input(VendorValidators.createInput.omit({ ownerId: true }))
     .output(VendorValidators.createOutput)
-    .mutation(({ ctx, input }) => ctx.services.vendor.create(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.create({
+        ...input,
+        ownerId: ctx.session.userId,
+      }),
+    ),
 
   updateStatus: protectedProcedure
     .meta({

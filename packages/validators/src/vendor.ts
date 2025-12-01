@@ -63,10 +63,11 @@ export namespace VendorValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = z.object({
+    ownerId: z.cuid(),
     name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().optional(),
-    image: z.url('Invalid image URL'),
-    address: z.string().min(1, 'Address is required').max(500),
+    description: z.string().nullable(),
+    image: z.url('Invalid image URL').nullable(),
+    address: z.string().min(1, 'Address is required').max(500).nullable(),
   })
   export type CreateInput = z.infer<typeof createInput>
   export const createOutput = z.object({ id: z.cuid() })

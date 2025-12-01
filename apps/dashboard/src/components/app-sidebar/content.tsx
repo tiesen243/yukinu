@@ -108,7 +108,7 @@ const navs = [
       {
         icon: StoreIcon,
         title: 'My Store',
-        url: '/vendor',
+        url: '/vendor/my-store',
         roles: ['vendor_owner', 'vendor_staff'],
       },
       {
@@ -120,7 +120,7 @@ const navs = [
       {
         icon: UserCogIcon,
         title: 'Staff Management',
-        url: '/vendor/staff',
+        url: '/vendor/staffs',
         roles: ['vendor_owner'],
       },
       {
