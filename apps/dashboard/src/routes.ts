@@ -11,6 +11,7 @@ export default [
 
   layout('./routes/__layout.tsx', [
     index('./routes/_index.tsx'),
+    route('/vendors', './routes/vendors/_index.tsx'),
     route('/*', './routes/fallback.tsx'),
   ]),
 ] satisfies RouteConfig

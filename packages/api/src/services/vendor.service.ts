@@ -10,8 +10,8 @@ export class VendorService extends BaseService implements IVendorService {
   async all(
     input: VendorValidators.AllInput,
   ): Promise<VendorValidators.AllOutput> {
-    const { and, eq, ilike } = this._orm
-    const { vendors } = this._schema
+    const { and, desc, eq, ilike, count } = this._orm
+    const { vendors, vendorStaffs } = this._schema
     const { search, status, page, limit } = input
     const offset = (page - 1) * limit
 
@@ -21,11 +21,24 @@ export class VendorService extends BaseService implements IVendorService {
 
     const [vendorsList, total] = await Promise.all([
       this._db
-        .select()
+        .select({
+          id: vendors.id,
+          name: vendors.name,
+          status: vendors.status,
+          owner: { id: users.id, username: users.username },
+          staffCount: count(vendorStaffs.userId),
+          createdAt: vendors.createdAt,
+          updatedAt: vendors.updatedAt,
+        })
         .from(vendors)
         .where(and(...whereClause))
+        .innerJoin(users, eq(users.id, vendors.ownerId))
+        .leftJoin(vendorStaffs, eq(vendorStaffs.vendorId, vendors.id))
+        .orderBy(desc(vendors.createdAt))
         .offset(offset)
-        .limit(limit),
+        .limit(limit)
+        .groupBy(vendors.id, users.id),
+
       this._db.$count(vendors, and(...whereClause)),
     ])
     const totalPages = Math.ceil(total / limit)

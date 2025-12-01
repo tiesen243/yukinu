@@ -1,8 +1,8 @@
 import * as z from 'zod'
 
 export namespace VendorValidators {
-  export const vendorStatus = ['pending', 'approved', 'suspended'] as const
-  export type VendorStatus = (typeof vendorStatus)[number]
+  export const statuses = ['pending', 'approved', 'suspended'] as const
+  export type Status = (typeof statuses)[number]
 
   export const vendor = z.object({
     id: z.cuid(),
@@ -11,7 +11,7 @@ export namespace VendorValidators {
     description: z.string().nullable(),
     image: z.url().nullable(),
     address: z.string().min(1).max(500).nullable(),
-    status: z.enum(vendorStatus),
+    status: z.enum(statuses),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -25,13 +25,26 @@ export namespace VendorValidators {
 
   export const allInput = z.object({
     search: z.string().optional(),
-    status: z.enum(vendorStatus).optional(),
+    status: z.enum(statuses).nullable(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
   })
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
-    vendors: z.array(vendor),
+    vendors: z.array(
+      vendor
+        .pick({
+          id: true,
+          name: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        })
+        .extend({
+          owner: z.object({ id: z.cuid(), username: z.string() }),
+          staffCount: z.number(),
+        }),
+    ),
     pagination: z.object({
       total: z.number(),
       page: z.number(),
@@ -61,7 +74,7 @@ export namespace VendorValidators {
 
   export const updateStatusInput = z.object({
     id: z.cuid(),
-    status: z.enum(vendorStatus),
+    status: z.enum(statuses),
   })
   export type UpdateStatusInput = z.infer<typeof updateStatusInput>
   export const updateStatusOutput = z.object({ id: z.cuid() })
