@@ -9,7 +9,7 @@ export namespace ProductValidators {
     categoryId: z.cuid(),
     sku: z.string().min(1).max(50),
     name: z.string().min(1).max(255),
-    description: z.string().optional(),
+    description: z.string().nullable(),
     price: numeric,
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -56,14 +56,15 @@ export namespace ProductValidators {
     vendorId: z.cuid().optional(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
+    isDeleted: z.boolean().default(false),
   })
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
     products: z.array(
       product.pick({ id: true, name: true, price: true }).extend({
-        image: z.url(),
-        lowestVariantPrice: z.number().min(0),
-        highestVariantPrice: z.number().min(0),
+        image: z.url().nullable(),
+        lowestVariantPrice: numeric.nullable(),
+        highestVariantPrice: numeric.nullable(),
       }),
     ),
     pagination: z.object({
@@ -77,13 +78,37 @@ export namespace ProductValidators {
 
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
-  export const oneOutput = product.extend({
-    images: z.array(productImage),
-    variants: z.array(
-      productVariant.extend({ options: z.array(productVariantOption) }),
-    ),
-    reviews: z.array(productReview),
-  })
+  export const oneOutput = product
+    .omit({
+      categoryId: true,
+      vendorId: true,
+      createdAt: true,
+      updatedAt: true,
+    })
+    .extend({
+      category: z.object({ id: z.cuid(), name: z.string() }).nullable(),
+      vendor: z.object({
+        id: z.cuid(),
+        name: z.string(),
+        image: z.url().nullable(),
+        createdAt: z.date(),
+      }),
+      images: z.array(productImage.omit({ productId: true })),
+      variants: z.array(
+        productVariant.omit({ productId: true }).extend({
+          options: z.array(productVariantOption.omit({ variantId: true })),
+        }),
+      ),
+      reviews: z.array(
+        productReview.pick({ id: true, rating: true, createdAt: true }).extend({
+          user: z.object({
+            id: z.cuid(),
+            username: z.string(),
+            image: z.url().nullable(),
+          }),
+        }),
+      ),
+    })
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = z.object({
@@ -113,7 +138,7 @@ export namespace ProductValidators {
   export const createOutput = z.object({ id: z.cuid() })
   export type CreateOutput = z.infer<typeof createOutput>
 
-  export const updateInput = createInput.extend({
+  export const updateInput = createInput.omit({ vendorId: true }).extend({
     id: z.cuid(),
   })
   export type UpdateInput = z.infer<typeof updateInput>
@@ -124,4 +149,9 @@ export namespace ProductValidators {
   export type DeleteInput = z.infer<typeof deleteInput>
   export const deleteOutput = z.object({ id: z.cuid() })
   export type DeleteOutput = z.infer<typeof deleteOutput>
+
+  export const restoreInput = z.object({ id: z.cuid() })
+  export type RestoreInput = z.infer<typeof restoreInput>
+  export const restoreOutput = z.object({ id: z.cuid() })
+  export type RestoreOutput = z.infer<typeof restoreOutput>
 }

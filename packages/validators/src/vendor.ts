@@ -1,7 +1,5 @@
 import * as z from 'zod'
 
-import { UserValidators } from '@/user'
-
 export namespace VendorValidators {
   export const vendorStatus = ['pending', 'approved', 'suspended'] as const
   export type VendorStatus = (typeof vendorStatus)[number]
@@ -46,8 +44,8 @@ export namespace VendorValidators {
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
   export const oneOutput = vendor.omit({ ownerId: true }).extend({
-    owner: UserValidators.user.pick({ id: true, username: true }),
-    staffs: z.array(UserValidators.user.pick({ id: true, username: true })),
+    owner: z.object({ id: z.cuid(), username: z.string() }),
+    staffs: z.array(z.object({ id: z.cuid(), username: z.string() })),
   })
   export type OneOutput = z.infer<typeof oneOutput>
 

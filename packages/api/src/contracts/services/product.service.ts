@@ -16,4 +16,8 @@ export interface IProductService {
   delete(
     input: ProductValidators.DeleteInput,
   ): Promise<ProductValidators.DeleteOutput>
+
+  restore(
+    input: ProductValidators.RestoreInput,
+  ): Promise<ProductValidators.RestoreOutput>
 }

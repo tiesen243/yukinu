@@ -1,7 +1,5 @@
 import * as z from 'zod'
 
-import { ProductValidators } from '@/product'
-
 export namespace UserValidators {
   export const statuses = ['active', 'inactive'] as const
   export type Status = (typeof statuses)[number]
@@ -135,9 +133,12 @@ export namespace UserValidators {
   export type WishlistInput = z.infer<typeof wishlistInput>
   export const wishlistOutput = z.array(
     z.object({
-      product: ProductValidators.product
-        .pick({ id: true, name: true, price: true })
-        .extend({ image: ProductValidators.productImage.shape.url.nullable() }),
+      product: z.object({
+        id: z.cuid(),
+        name: z.string(),
+        price: z.string().regex(/^\d+(\.\d+)?$/),
+        image: z.url().nullable(),
+      }),
       addedAt: z.date(),
     }),
   )

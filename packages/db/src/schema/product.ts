@@ -33,6 +33,7 @@ export const products = pgTable(
     price: t.numeric({ precision: 10, scale: 2 }).notNull(),
     createdAt,
     updatedAt,
+    deletedAt: t.timestamp(),
   }),
   (t) => [
     index('products_vendor_id_idx').on(t.vendorId),

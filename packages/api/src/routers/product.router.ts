@@ -1,6 +1,11 @@
 import { ProductValidators } from '@yukinu/validators/product'
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc'
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+  vendorProcedure,
+} from '@/trpc'
 
 export const productRouter = createTRPCRouter({
   all: publicProcedure
@@ -15,14 +20,16 @@ export const productRouter = createTRPCRouter({
     .output(ProductValidators.oneOutput)
     .query(({ ctx, input }) => ctx.services.product.one(input)),
 
-  create: protectedProcedure
+  create: vendorProcedure
     .meta({
       message: 'Product created successfully',
       role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(ProductValidators.createInput)
+    .input(ProductValidators.createInput.omit({ vendorId: true }))
     .output(ProductValidators.createOutput)
-    .mutation(({ ctx, input }) => ctx.services.product.create(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.product.create({ ...input, vendorId: ctx.vendorId }),
+    ),
 
   update: protectedProcedure
     .meta({
@@ -41,4 +48,13 @@ export const productRouter = createTRPCRouter({
     .input(ProductValidators.deleteInput)
     .output(ProductValidators.deleteOutput)
     .mutation(({ ctx, input }) => ctx.services.product.delete(input)),
+
+  restore: protectedProcedure
+    .meta({
+      message: 'Product restored successfully',
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.restoreInput)
+    .output(ProductValidators.restoreOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.restore(input)),
 })

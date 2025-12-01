@@ -1,6 +1,11 @@
 import { VendorValidators } from '@yukinu/validators/vendor'
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc'
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+  vendorProcedure,
+} from '@/trpc'
 
 export const VendorRouter = createTRPCRouter({
   all: publicProcedure
@@ -33,30 +38,36 @@ export const VendorRouter = createTRPCRouter({
     .output(VendorValidators.updateStatusOutput)
     .mutation(({ ctx, input }) => ctx.services.vendor.updateStatus(input)),
 
-  update: protectedProcedure
+  update: vendorProcedure
     .meta({
       message: 'Vendor updated successfully',
       role: ['vendor_owner'],
     })
-    .input(VendorValidators.updateInput)
+    .input(VendorValidators.updateInput.omit({ id: true }))
     .output(VendorValidators.updateOutput)
-    .mutation(({ ctx, input }) => ctx.services.vendor.update(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.update({ ...input, id: ctx.vendorId }),
+    ),
 
-  addStaff: protectedProcedure
+  addStaff: vendorProcedure
     .meta({
       message: 'Vendor staff added successfully',
       role: ['vendor_owner'],
     })
-    .input(VendorValidators.addStaffInput)
+    .input(VendorValidators.addStaffInput.omit({ vendorId: true }))
     .output(VendorValidators.addStaffOutput)
-    .mutation(({ ctx, input }) => ctx.services.vendor.addStaff(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.addStaff({ ...input, vendorId: ctx.vendorId }),
+    ),
 
-  removeStaff: protectedProcedure
+  removeStaff: vendorProcedure
     .meta({
       message: 'Vendor staff removed successfully',
       role: ['vendor_owner'],
     })
-    .input(VendorValidators.removeStaffInput)
+    .input(VendorValidators.removeStaffInput.omit({ vendorId: true }))
     .output(VendorValidators.removeStaffOutput)
-    .mutation(({ ctx, input }) => ctx.services.vendor.removeStaff(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.removeStaff({ ...input, vendorId: ctx.vendorId }),
+    ),
 })

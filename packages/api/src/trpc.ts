@@ -86,20 +86,55 @@ const loggingMiddleware = t.middleware(
 )
 
 const publicProcedure = t.procedure.use(loggingMiddleware)
-const protectedProcedure = t.procedure
-  .use(loggingMiddleware)
-  .use(({ ctx, meta, next }) => {
-    if (!ctx.session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
+const protectedProcedure = publicProcedure.use(({ ctx, meta, next }) => {
+  if (!ctx.session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
 
-    if (meta?.role?.length && !meta.role.includes(ctx.session.role)) {
+  if (meta?.role?.length && !meta.role.includes(ctx.session.role)) {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'You do not have permission to perform this action.',
+    })
+  }
+
+  return next({ ctx: { session: ctx.session } })
+})
+
+const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  let vendorId: string
+
+  if (ctx.session.role === 'vendor_owner') {
+    const [vendor] = await db
+      .select({ id: schema.vendors.id })
+      .from(schema.vendors)
+      .where(orm.eq(schema.vendors.ownerId, ctx.session.userId))
+      .limit(1)
+    if (!vendor)
       throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'You do not have permission to perform this action.',
+        code: 'NOT_FOUND',
+        message: 'Vendor not found for the owner.',
       })
-    }
+    vendorId = vendor.id
+  } else if (ctx.session.role === 'vendor_staff') {
+    const [staff] = await db
+      .select({ vendorId: schema.vendorStaffs.vendorId })
+      .from(schema.vendorStaffs)
+      .where(orm.eq(schema.vendorStaffs.userId, ctx.session.userId))
+      .limit(1)
+    if (!staff)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Vendor not found for the staff.',
+      })
+    vendorId = staff.vendorId
+  } else {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Only vendor owners and staff can access this resource.',
+    })
+  }
 
-    return next({ ctx: { session: ctx.session } })
-  })
+  return next({ ctx: { session: ctx.session, vendorId } })
+})
 
 export type { TRPCMeta, TRPCContext }
 export {
@@ -108,4 +143,5 @@ export {
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  vendorProcedure,
 }
