@@ -47,7 +47,7 @@ export const wishlistItems = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    addedAt: t.timestamp().defaultNow().notNull(),
+    addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
   }),
   (t) => [
     primaryKey({ columns: [t.userId, t.productId] }),

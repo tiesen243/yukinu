@@ -224,6 +224,7 @@ export class UserService extends BaseService implements IUserService {
       .where(eq(wishlistItems.userId, userId))
       .innerJoin(products, eq(products.id, wishlistItems.productId))
       .leftJoin(productImages, eq(productImages.productId, products.id))
+      .groupBy(wishlistItems.addedAt, products.id)
   }
 
   async toggleWishlistItem(

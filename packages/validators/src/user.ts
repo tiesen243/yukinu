@@ -137,8 +137,8 @@ export namespace UserValidators {
     z.object({
       product: ProductValidators.product
         .pick({ id: true, name: true, price: true })
-        .extend({ image: ProductValidators.productImage.shape.url }),
-      addedAt: z.iso.date(),
+        .extend({ image: ProductValidators.productImage.shape.url.nullable() }),
+      addedAt: z.date(),
     }),
   )
   export type WishlistOutput = z.infer<typeof wishlistOutput>

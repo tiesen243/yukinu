@@ -1,6 +1,8 @@
 import * as z from 'zod'
 
 export namespace ProductValidators {
+  const numeric = z.string().regex(/^\d+(\.\d+)?$/)
+
   export const product = z.object({
     id: z.cuid(),
     vendorId: z.cuid(),
@@ -8,7 +10,7 @@ export namespace ProductValidators {
     sku: z.string().min(1).max(50),
     name: z.string().min(1).max(255),
     description: z.string().optional(),
-    price: z.coerce.number().min(0),
+    price: numeric,
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -90,7 +92,7 @@ export namespace ProductValidators {
     sku: z.string().min(1, 'SKU is required').max(50),
     name: z.string().min(1, 'Name is required').max(255),
     description: z.string().optional(),
-    price: z.coerce.number().min(0, 'Price must be at least 0'),
+    price: numeric,
 
     images: z.array(z.url()),
 
@@ -101,7 +103,7 @@ export namespace ProductValidators {
           z.object({
             value: z.string().min(1, 'Option value is required').max(100),
             stock: z.number().min(0, 'Stock must be at least 0'),
-            extraPrice: z.number().min(0, 'Extra price must be at least 0'),
+            extraPrice: numeric,
           }),
         ),
       }),
