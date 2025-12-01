@@ -63,7 +63,7 @@
     "prettier-plugin-tailwindcss": "^0.7.1",
     "tsdown": "^0.17.0-beta.4",
     "typescript": "^5.9.3",
-    "nuqs": "^2.8.1",
+    "nuqs": "^2.8.2",
     "zod": "^4.1.13"
   },
   "catalogs": {
