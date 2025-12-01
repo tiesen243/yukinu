@@ -100,7 +100,12 @@ export const userRouter = createTRPCRouter({
 
   toggleWishlistItem: protectedProcedure
     .meta({ message: 'User wishlist item toggled successfully' })
-    .input(UserValidators.toggleWishlistItemInput)
+    .input(UserValidators.toggleWishlistItemInput.omit({ userId: true }))
     .output(UserValidators.toggleWishlistItemOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.toggleWishlistItem(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.toggleWishlistItem({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 })

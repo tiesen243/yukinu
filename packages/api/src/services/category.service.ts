@@ -9,7 +9,7 @@ export class CategoryService extends BaseService implements ICategoryService {
   async all(
     input: CategoryValidators.AllInput,
   ): Promise<CategoryValidators.AllOutput> {
-    const { ilike } = this._orm
+    const { asc, ilike } = this._orm
     const { categories } = this._schema
     const { search, page, limit } = input
     const offset = (page - 1) * limit
@@ -24,7 +24,8 @@ export class CategoryService extends BaseService implements ICategoryService {
         .from(categories)
         .where(whereClause)
         .offset(offset)
-        .limit(limit),
+        .limit(limit)
+        .orderBy(asc(categories.name)),
       this._db.$count(categories, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
@@ -81,6 +82,8 @@ export class CategoryService extends BaseService implements ICategoryService {
     const { categories } = this._schema
     const { id, name, description } = input
 
+    await this.one({ id })
+
     await this._db
       .update(categories)
       .set({ name, description })
@@ -95,6 +98,8 @@ export class CategoryService extends BaseService implements ICategoryService {
     const { eq } = this._orm
     const { categories } = this._schema
     const { id } = input
+
+    await this.one({ id })
 
     await this._db.delete(categories).where(eq(categories.id, id))
 

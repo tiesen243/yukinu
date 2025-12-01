@@ -5,6 +5,7 @@ export namespace CategoryValidators {
     id: z.cuid(),
     name: z.string().min(1).max(255),
     image: z.url().nullable(),
+    description: z.string().nullable(),
   })
   export type Category = z.infer<typeof category>
 
@@ -32,7 +33,7 @@ export namespace CategoryValidators {
 
   export const createInput = z.object({
     name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().optional(),
+    description: z.string().nullable(),
     image: z.url('Invalid image URL').optional(),
   })
   export type CreateInput = z.infer<typeof createInput>
