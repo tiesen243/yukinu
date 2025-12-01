@@ -8,7 +8,7 @@ export namespace ProductValidators {
     sku: z.string().min(1).max(50),
     name: z.string().min(1).max(255),
     description: z.string().optional(),
-    price: z.number().min(0),
+    price: z.coerce.number().min(0),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -33,7 +33,7 @@ export namespace ProductValidators {
     variantId: z.cuid(),
     value: z.string().min(1).max(100),
     stock: z.number().min(0),
-    extraPrice: z.number().min(0),
+    extraPrice: z.coerce.number().min(0),
   })
   export type VariantOption = z.infer<typeof productVariantOption>
 
@@ -90,7 +90,7 @@ export namespace ProductValidators {
     sku: z.string().min(1, 'SKU is required').max(50),
     name: z.string().min(1, 'Name is required').max(255),
     description: z.string().optional(),
-    price: z.number().min(0, 'Price must be at least 0'),
+    price: z.coerce.number().min(0, 'Price must be at least 0'),
 
     images: z.array(z.url()),
 

@@ -42,6 +42,7 @@ export namespace UserValidators {
 
   export const address = z.object({
     id: z.cuid(),
+    userId: z.cuid(),
     recipientName: z.string().min(1).max(255),
     phoneNumber: z.string().min(1).max(20),
     street: z.string().min(1).max(255),
@@ -110,7 +111,7 @@ export namespace UserValidators {
   })
   export type AllAddressesOutput = z.infer<typeof allAddressesOutput>
 
-  export const oneAddressInput = z.object({ id: z.cuid() })
+  export const oneAddressInput = z.object({ id: z.cuid(), userId: z.cuid() })
   export type OneAddressInput = z.infer<typeof oneAddressInput>
   export const oneAddressOutput = address
   export type OneAddressOutput = z.infer<typeof oneAddressOutput>
@@ -125,24 +126,21 @@ export namespace UserValidators {
   export const updateAddressOutput = z.object({ id: z.cuid() })
   export type UpdateAddressOutput = z.infer<typeof updateAddressOutput>
 
-  export const deleteAddressInput = z.object({ id: z.cuid() })
+  export const deleteAddressInput = z.object({ id: z.cuid(), userId: z.cuid() })
   export type DeleteAddressInput = z.infer<typeof deleteAddressInput>
   export const deleteAddressOutput = z.object({ id: z.cuid() })
   export type DeleteAddressOutput = z.infer<typeof deleteAddressOutput>
 
   export const wishlistInput = z.object({ userId: z.cuid() })
   export type WishlistInput = z.infer<typeof wishlistInput>
-  export const wishlistOutput = z.object({
-    items: z.array(
-      wishlistItem.extend({
-        product: ProductValidators.product.pick({
-          id: true,
-          name: true,
-          price: true,
-        }),
-      }),
-    ),
-  })
+  export const wishlistOutput = z.array(
+    z.object({
+      product: ProductValidators.product
+        .pick({ id: true, name: true, price: true })
+        .extend({ image: ProductValidators.productImage.shape.url }),
+      addedAt: z.iso.date(),
+    }),
+  )
   export type WishlistOutput = z.infer<typeof wishlistOutput>
 
   export const toggleWishlistItemInput = z.object({

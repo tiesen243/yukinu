@@ -4,7 +4,7 @@ export namespace CategoryValidators {
   export const category = z.object({
     id: z.cuid(),
     name: z.string().min(1).max(255),
-    image: z.url().optional(),
+    image: z.url().nullable(),
   })
   export type Category = z.infer<typeof category>
 

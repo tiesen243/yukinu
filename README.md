@@ -49,8 +49,9 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 │   ├── api              # tRPC API package
 │   ├── auth             # Authentication utilities
 │   ├── db               # Drizzle + DB models + queries
+│   ├── email            # Email service (Resend)
 │   ├── lib              # Shared utilities/helpers
-│   ├── ui               # Shared UI components (shadcn)
+│   ├── ui               # Shared UI components (shadcn/ui)
 │   └── validators       # Zod validators
 ├── tools
 │   ├── eslint           # ESLint configs

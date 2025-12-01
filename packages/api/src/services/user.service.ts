@@ -6,18 +6,66 @@ import type { IUserService } from '@/contracts/services/user.service'
 import { BaseService } from '@/services/base.service'
 
 export class UserService extends BaseService implements IUserService {
-  all(_input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
-    throw new Error('Method not implemented.')
+  async all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
+    const { and, eq, ilike, or } = this._orm
+    const { users } = this._schema
+    const { search, status, page, limit } = input
+    const offset = (page - 1) * limit
+
+    const whereClause = []
+    if (search)
+      whereClause.push(
+        or(
+          ilike(users.username, `%${search}%`),
+          ilike(users.email, `%${search}%`),
+        ),
+      )
+    if (status) whereClause.push(eq(users.status, status))
+
+    const [usersList, total] = await Promise.all([
+      this._db
+        .select()
+        .from(users)
+        .where(and(...whereClause))
+        .offset(offset)
+        .limit(limit),
+      this._db.$count(users, and(...whereClause)),
+    ])
+    const totalPages = Math.ceil(total / limit)
+
+    return {
+      users: usersList,
+      pagination: { total, page, limit, totalPages },
+    }
   }
 
-  one(_input: UserValidators.OneInput): Promise<UserValidators.OneOutput> {
-    throw new Error('Method not implemented.')
+  async one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id } = input
+
+    const [user] = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1)
+
+    if (!user)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    return user
   }
 
-  updateStatus(
-    _input: UserValidators.UpdateStatusInput,
+  async updateStatus(
+    input: UserValidators.UpdateStatusInput,
   ): Promise<UserValidators.UpdateStatusOutput> {
-    throw new Error('Method not implemented.')
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id, status, role } = input
+
+    await this._db.update(users).set({ status, role }).where(eq(users.id, id))
+
+    return { id }
   }
 
   async profile(
@@ -54,50 +102,154 @@ export class UserService extends BaseService implements IUserService {
   }
 
   updateProfile(
-    _input: UserValidators.UpdateProfileInput,
+    input: UserValidators.UpdateProfileInput,
   ): Promise<UserValidators.UpdateProfileOutput> {
-    throw new Error('Method not implemented.')
+    const { eq } = this._orm
+    const { profiles, users } = this._schema
+    const { id, image, ...data } = input
+
+    return this._db.transaction(async (tx) => {
+      await tx
+        .update(profiles)
+        .set({ ...data })
+        .where(eq(profiles.id, id))
+
+      await tx.update(users).set({ image }).where(eq(users.id, id))
+
+      return { id }
+    })
   }
 
-  allAddresses(
-    _input: UserValidators.AllAddressesInput,
+  async allAddresses(
+    input: UserValidators.AllAddressesInput,
   ): Promise<UserValidators.AllAddressesOutput> {
-    throw new Error('Method not implemented.')
+    const { eq, desc } = this._orm
+    const { addresses } = this._schema
+    const { userId } = input
+
+    const addressesList = await this._db
+      .select()
+      .from(addresses)
+      .where(eq(addresses.userId, userId))
+      .orderBy(desc(addresses.recipientName))
+
+    return { addresses: addressesList }
   }
 
-  oneAddress(
-    _input: UserValidators.OneAddressInput,
+  async oneAddress(
+    input: UserValidators.OneAddressInput,
   ): Promise<UserValidators.OneAddressOutput> {
-    throw new Error('Method not implemented.')
+    const { and, eq } = this._orm
+    const { addresses } = this._schema
+    const { id, userId } = input
+
+    const [address] = await this._db
+      .select()
+      .from(addresses)
+      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
+      .limit(1)
+
+    if (!address)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Address not found' })
+
+    return address
   }
 
-  createAddress(
-    _input: UserValidators.CreateAddressInput,
+  async createAddress(
+    input: UserValidators.CreateAddressInput,
   ): Promise<UserValidators.CreateAddressOutput> {
-    throw new Error('Method not implemented.')
+    const { addresses } = this._schema
+
+    const [address] = await this._db
+      .insert(addresses)
+      .values({ ...input })
+      .returning({ id: addresses.id })
+
+    if (!address)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to create address',
+      })
+
+    return address
   }
 
-  updateAddress(
-    _input: UserValidators.UpdateAddressInput,
+  async updateAddress(
+    input: UserValidators.UpdateAddressInput,
   ): Promise<UserValidators.UpdateAddressOutput> {
-    throw new Error('Method not implemented.')
+    const { and, eq } = this._orm
+    const { addresses } = this._schema
+    const { id, userId, ...data } = input
+
+    await this._db
+      .update(addresses)
+      .set({ ...data })
+      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
+
+    return { id }
   }
 
-  deleteAddress(
-    _input: UserValidators.DeleteAddressInput,
+  async deleteAddress(
+    input: UserValidators.DeleteAddressInput,
   ): Promise<UserValidators.DeleteAddressOutput> {
-    throw new Error('Method not implemented.')
+    const { and, eq } = this._orm
+    const { addresses } = this._schema
+    const { id, userId } = input
+
+    await this._db
+      .delete(addresses)
+      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
+
+    return { id }
   }
 
-  wishlist(
-    _input: UserValidators.WishlistInput,
+  async wishlist(
+    input: UserValidators.WishlistInput,
   ): Promise<UserValidators.WishlistOutput> {
-    throw new Error('Method not implemented.')
+    const { eq, min } = this._orm
+    const { wishlistItems, products, productImages } = this._schema
+    const { userId } = input
+
+    return this._db
+      .select({
+        product: {
+          id: products.id,
+          name: products.name,
+          price: products.price,
+          image: min(productImages.url),
+        },
+        addedAt: wishlistItems.addedAt,
+      })
+      .from(wishlistItems)
+      .where(eq(wishlistItems.userId, userId))
+      .innerJoin(products, eq(products.id, wishlistItems.productId))
+      .leftJoin(productImages, eq(productImages.productId, products.id))
   }
 
-  toggleWishlistItem(
-    _input: UserValidators.ToggleWishlistItemInput,
+  async toggleWishlistItem(
+    input: UserValidators.ToggleWishlistItemInput,
   ): Promise<UserValidators.ToggleWishlistItemOutput> {
-    throw new Error('Method not implemented.')
+    const { and, eq } = this._orm
+    const { wishlistItems } = this._schema
+    const { userId, productId } = input
+
+    const whereClause = and(
+      eq(wishlistItems.userId, userId),
+      eq(wishlistItems.productId, productId),
+    )
+
+    const [existingItem] = await this._db
+      .select()
+      .from(wishlistItems)
+      .where(whereClause)
+      .limit(1)
+
+    if (existingItem) {
+      await this._db.delete(wishlistItems).where(whereClause)
+      return { added: false }
+    } else {
+      await this._db.insert(wishlistItems).values({ userId, productId })
+      return { added: true }
+    }
   }
 }

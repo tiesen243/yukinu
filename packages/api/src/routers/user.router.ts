@@ -46,38 +46,57 @@ export const userRouter = createTRPCRouter({
 
   allAddresses: protectedProcedure
     .meta({ message: 'User addresses fetched successfully' })
-    .input(UserValidators.allAddressesInput)
+    .input(UserValidators.allAddressesInput.omit({ userId: true }))
     .output(UserValidators.allAddressesOutput)
-    .query(({ ctx, input }) => ctx.services.user.allAddresses(input)),
+    .query(({ ctx }) =>
+      ctx.services.user.allAddresses({ userId: ctx.session.userId }),
+    ),
 
   oneAddress: protectedProcedure
     .meta({ message: 'User address fetched successfully' })
-    .input(UserValidators.oneAddressInput)
+    .input(UserValidators.oneAddressInput.omit({ userId: true }))
     .output(UserValidators.oneAddressOutput)
-    .query(({ ctx, input }) => ctx.services.user.oneAddress(input)),
+    .query(({ ctx, input }) =>
+      ctx.services.user.oneAddress({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 
   createAddress: protectedProcedure
     .meta({ message: 'User address created successfully' })
-    .input(UserValidators.createAddressInput)
+    .input(UserValidators.createAddressInput.omit({ userId: true }))
     .output(UserValidators.createAddressOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.createAddress(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.createAddress({ ...input, userId: ctx.session.userId }),
+    ),
 
   updateAddress: protectedProcedure
     .meta({ message: 'User address updated successfully' })
-    .input(UserValidators.updateAddressInput)
+    .input(UserValidators.updateAddressInput.omit({ userId: true }))
     .output(UserValidators.updateAddressOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.updateAddress(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.updateAddress({ ...input, userId: ctx.session.userId }),
+    ),
 
   deleteAddress: protectedProcedure
     .meta({ message: 'User address deleted successfully' })
-    .input(UserValidators.deleteAddressInput)
-    .mutation(({ ctx, input }) => ctx.services.user.deleteAddress(input)),
+    .input(UserValidators.deleteAddressInput.omit({ userId: true }))
+    .output(UserValidators.deleteAddressOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.deleteAddress({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 
   wishlist: protectedProcedure
     .meta({ message: 'User wishlist fetched successfully' })
-    .input(UserValidators.wishlistInput)
+    .input(UserValidators.wishlistInput.omit({ userId: true }))
     .output(UserValidators.wishlistOutput)
-    .query(({ ctx, input }) => ctx.services.user.wishlist(input)),
+    .query(({ ctx }) =>
+      ctx.services.user.wishlist({ userId: ctx.session.userId }),
+    ),
 
   toggleWishlistItem: protectedProcedure
     .meta({ message: 'User wishlist item toggled successfully' })
