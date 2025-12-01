@@ -7,5 +7,10 @@ export default [
     route('/trpc/*', './routes/api/trpc.ts'),
   ]),
 
-  layout('./routes/__layout.tsx', [index('./routes/_index.tsx')]),
+  route('/login', './routes/login/_index.tsx'),
+
+  layout('./routes/__layout.tsx', [
+    index('./routes/_index.tsx'),
+    route('/*', './routes/fallback.tsx'),
+  ]),
 ] satisfies RouteConfig
