@@ -1,44 +1,73 @@
-import { VendorModels } from '@yukinu/validators/vendor'
+import { VendorValidators } from '@yukinu/validators/vendor'
 
-import { createTRPCRouter, protectedProcedure } from '@/trpc'
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+  vendorProcedure,
+} from '@/trpc'
 
-export const vendorRouter = createTRPCRouter({
-  all: protectedProcedure
+export const VendorRouter = createTRPCRouter({
+  all: publicProcedure
+    .meta({ message: 'Vendors fetched successfully' })
+    .input(VendorValidators.allInput)
+    .output(VendorValidators.allOutput)
+    .query(({ ctx, input }) => ctx.services.vendor.all(input)),
+
+  one: publicProcedure
+    .meta({ message: 'Vendor fetched successfully' })
+    .input(VendorValidators.oneInput)
+    .output(VendorValidators.oneOutput)
+    .query(({ ctx, input }) => ctx.services.vendor.one(input)),
+
+  create: protectedProcedure
     .meta({
-      message: 'Vendors retrieved successfully',
-      roles: ['admin', 'moderator'],
+      message: 'Vendor created successfully',
+      role: ['user'],
     })
-    .input(VendorModels.allInput)
-    .output(VendorModels.allOutput)
-    .query(({ ctx, input }) => ctx.vendorService.all(input)),
+    .input(VendorValidators.createInput)
+    .output(VendorValidators.createOutput)
+    .mutation(({ ctx, input }) => ctx.services.vendor.create(input)),
 
-  register: protectedProcedure
-    .meta({ message: 'Vendor registered successfully', roles: ['user'] })
-    .input(VendorModels.registerInput.omit({ userId: true }))
-    .output(VendorModels.registerOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.vendorService.register({ ...input, userId: ctx.session.user.id }),
-    ),
+  updateStatus: protectedProcedure
+    .meta({
+      message: 'Vendor status updated successfully',
+      role: ['admin', 'moderator'],
+    })
+    .input(VendorValidators.updateStatusInput)
+    .output(VendorValidators.updateStatusOutput)
+    .mutation(({ ctx, input }) => ctx.services.vendor.updateStatus(input)),
 
-  update: protectedProcedure
+  update: vendorProcedure
     .meta({
       message: 'Vendor updated successfully',
-      roles: ['admin', 'moderator', 'vendor_owner'],
+      role: ['vendor_owner'],
     })
-    .input(VendorModels.updateInput)
-    .output(VendorModels.updateOutput)
+    .input(VendorValidators.updateInput.omit({ id: true }))
+    .output(VendorValidators.updateOutput)
     .mutation(({ ctx, input }) =>
-      ctx.vendorService.update(input, ctx.session.user),
+      ctx.services.vendor.update({ ...input, id: ctx.vendorId }),
     ),
 
-  delete: protectedProcedure
+  addStaff: vendorProcedure
     .meta({
-      message: 'Vendor deleted successfully',
-      roles: ['admin', 'moderator'],
+      message: 'Vendor staff added successfully',
+      role: ['vendor_owner'],
     })
-    .input(VendorModels.deleteInput)
-    .output(VendorModels.deleteOutput)
+    .input(VendorValidators.addStaffInput.omit({ vendorId: true }))
+    .output(VendorValidators.addStaffOutput)
     .mutation(({ ctx, input }) =>
-      ctx.vendorService.delete(input, ctx.session.user),
+      ctx.services.vendor.addStaff({ ...input, vendorId: ctx.vendorId }),
+    ),
+
+  removeStaff: vendorProcedure
+    .meta({
+      message: 'Vendor staff removed successfully',
+      role: ['vendor_owner'],
+    })
+    .input(VendorValidators.removeStaffInput.omit({ vendorId: true }))
+    .output(VendorValidators.removeStaffOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.removeStaff({ ...input, vendorId: ctx.vendorId }),
     ),
 })

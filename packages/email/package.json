@@ -1,0 +1,42 @@
+{
+  "name": "@yukinu/email",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "scripts": {
+    "build": "tsdown",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "email:dev": "email dev --dir ./src/templates",
+    "email:export": "email export",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "~dev": "tsdown --watch"
+  },
+  "prettier": "@yukinu/prettier-config",
+  "dependencies": {
+    "@react-email/components": "^1.0.1",
+    "@yukinu/validators": "workspace:*",
+    "react": "catalog:react",
+    "resend": "^6.5.2"
+  },
+  "devDependencies": {
+    "@react-email/preview-server": "5.0.5",
+    "@types/react": "catalog:react",
+    "@yukinu/eslint-config": "workspace:*",
+    "@yukinu/prettier-config": "workspace:*",
+    "@yukinu/tsconfig": "workspace:*",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
+    "react-email": "^5.0.5",
+    "tsdown": "catalog:",
+    "typescript": "catalog:"
+  }
+}

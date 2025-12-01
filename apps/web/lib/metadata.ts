@@ -62,7 +62,11 @@ export function createMetadata(override: Metadata = {}): Metadata {
       site: '@tiesen243',
       creator: '@tiesen243',
     },
-    icons: { icon: '/favicon.ico' },
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/favicon.ico',
+      shortcut: '/favicon-32x32.png',
+    },
     alternates: { ...override.alternates, canonical: url },
     keywords: [
       ...(Array.isArray(override.keywords)
@@ -77,7 +81,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
       'discover products from multiple sellers',
       'secure online shopping',
     ],
-    generator: 'Next.js',
+    generator: 'Create Yuki Stack',
 
     // Webmaster verifications
     verification: { google: 'IxxbL_t4Uj36PsfajteCHNpV6Ln9fr7WCkxmzFjW_ms' },

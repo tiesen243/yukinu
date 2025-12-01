@@ -1,5 +1,41 @@
 # @yukinu/ui
 
+## 0.2.0
+
+### Minor Changes
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`aafae65`](https://github.com/tiesen243/yukinu/commit/aafae65a110ac4bb68790ea3c9c891e1dde15894) Thanks [@tiesen243](https://github.com/tiesen243)! - completed core backend features
+
+### Patch Changes
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`7aa15f4`](https://github.com/tiesen243/yukinu/commit/7aa15f47d325a21f972110d437adc462f565e2c8) Thanks [@tiesen243](https://github.com/tiesen243)! - update api
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`10419b3`](https://github.com/tiesen243/yukinu/commit/10419b3aec6f0bdce9179ccce3ecfbd759261514) Thanks [@tiesen243](https://github.com/tiesen243)! - added email
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`7a5a2fc`](https://github.com/tiesen243/yukinu/commit/7a5a2fc440c8c08d9a213b9b99ffdc09fe3aa6d1) Thanks [@tiesen243](https://github.com/tiesen243)! - added verify email
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`f83c8a3`](https://github.com/tiesen243/yukinu/commit/f83c8a3df0aec127f8aef808e5ec6816ddead49f) Thanks [@tiesen243](https://github.com/tiesen243)! - handle refresh token
+
+- [#197](https://github.com/tiesen243/yukinu/pull/197) [`3ba2f97`](https://github.com/tiesen243/yukinu/commit/3ba2f97e883a8c7902f28148cbb854cfd06fd5c7) Thanks [@tiesen243](https://github.com/tiesen243)! - update packages
+
+## 0.1.2
+
+### Patch Changes
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`9308c83`](https://github.com/tiesen243/yukinu/commit/9308c8384a27ab4fd037e89a0e130bb189bdd0cc) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`abde172`](https://github.com/tiesen243/yukinu/commit/abde172dc541d963028d36a33d3c625c1210f767) Thanks [@tiesen243](https://github.com/tiesen243)! - added get one product api
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`28bd65f`](https://github.com/tiesen243/yukinu/commit/28bd65f4832c0a28197c7632e82abadf4090e4d8) Thanks [@tiesen243](https://github.com/tiesen243)! - fix db query
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`d5dd889`](https://github.com/tiesen243/yukinu/commit/d5dd8899c2e2496209860bd9e2a1ca83745be2d4) Thanks [@tiesen243](https://github.com/tiesen243)! - added crud product features
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`0a6793b`](https://github.com/tiesen243/yukinu/commit/0a6793b72c7c29dbd346a98f198385ebe3f91ab9) Thanks [@tiesen243](https://github.com/tiesen243)! - get product list by vendor
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`6c85976`](https://github.com/tiesen243/yukinu/commit/6c859763f5117f9e5a443b71ebf1597652928c67) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typecheck error
+
+- [#195](https://github.com/tiesen243/yukinu/pull/195) [`e920f2e`](https://github.com/tiesen243/yukinu/commit/e920f2e3c46a4c45681c74773f6e243f57bf1954) Thanks [@tiesen243](https://github.com/tiesen243)! - added create product form
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,3 +1,5 @@
+'use client'
+
 import * as React from 'react'
 
 interface FormError<TValue extends Record<string, unknown>> {
@@ -10,6 +12,11 @@ type ExtractValues<T extends StandardSchemaV1> = {
     StandardSchemaV1.InferInput<T>
   >[K]
 }
+
+type FormControlElement =
+  | HTMLInputElement
+  | HTMLTextAreaElement
+  | HTMLSelectElement
 
 interface RenderProps<
   TValue extends Record<string, unknown>,
@@ -27,19 +34,9 @@ interface RenderProps<
     name: TFieldName
     value: TValue[TFieldName]
     onChange: (
-      event:
-        | React.ChangeEvent<
-            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-          >
-        | string
-        | number
-        | boolean,
+      event: React.ChangeEvent<FormControlElement> | TValue[TFieldName],
     ) => void
-    onBlur: (
-      event: React.FocusEvent<
-        HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-      >,
-    ) => Promise<void>
+    onBlur: (event: React.FocusEvent<FormControlElement>) => Promise<void>
     'aria-describedby': string
     'aria-invalid': boolean
   }
@@ -172,39 +169,27 @@ const useForm = <
       const prevLocalValueRef = React.useRef(localValue)
 
       const handleChange = (
-        event:
-          | React.ChangeEvent<
-              HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-            >
-          | string
-          | number
-          | boolean,
+        event: React.ChangeEvent<FormControlElement> | TValues[TFieldName],
       ) => {
         setErrors([])
 
-        if (typeof event !== 'object') {
-          setLocalValue(event as TValues[TFieldName])
-          setValue(props.name, event as TValues[TFieldName])
-          return
-        }
-
-        event.persist()
         let newValue
-        const { type, checked, value, valueAsNumber } =
-          event.target as unknown as HTMLInputElement
-        if (type === 'checkbox') newValue = checked
-        else if (type === 'number')
-          newValue = isNaN(valueAsNumber) ? '' : valueAsNumber
-        else newValue = value
+        if (event && typeof event === 'object' && 'target' in event) {
+          event.persist()
+          const { type, checked, value, valueAsNumber } =
+            event.target as unknown as HTMLInputElement
+          if (type === 'checkbox') newValue = checked
+          else if (type === 'number')
+            newValue = isNaN(valueAsNumber) ? '' : valueAsNumber
+          else newValue = value
+        } else newValue = event
 
         setLocalValue(newValue as TValues[TFieldName])
         setValue(props.name, newValue as TValues[TFieldName])
       }
 
       const handleBlur = async (
-        event: React.FocusEvent<
-          HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-        >,
+        event: React.FocusEvent<FormControlElement>,
       ) => {
         event.persist()
         if (prevLocalValueRef.current === localValue) return

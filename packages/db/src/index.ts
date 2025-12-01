@@ -19,5 +19,6 @@ const globalForDrizzle = globalThis as unknown as {
 }
 export const db = globalForDrizzle.db ?? createDrizzleClient()
 if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
+
 export type * from '@/types'
-export * from 'drizzle-orm'
+export * as orm from 'drizzle-orm'

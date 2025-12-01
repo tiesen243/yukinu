@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/dashboard",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -23,6 +23,7 @@
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
+    "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
     "isbot": "^5.1.32",
@@ -35,7 +36,6 @@
   "devDependencies": {
     "@react-router/dev": "^7.9.6",
     "@tailwindcss/vite": "catalog:tailwind",
-    "@types/node": "catalog:",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/eslint-config": "workspace:*",
@@ -45,11 +45,6 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
-    "vite": "^7.2.2",
-    "vite-tsconfig-paths": "^5.1.4"
-  },
-  "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
-    "prettier-plugin-tailwindcss": "catalog:"
+    "vite": "^7.2.4"
   }
 }

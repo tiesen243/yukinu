@@ -1,20 +1,19 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 
-import { createTRPCContext } from '@/context'
 import { appRouter } from '@/routers/_app'
-import { createCallerFactory } from '@/trpc'
+import { createCallerFactory, createTRPCContext } from '@/trpc'
 
-const handler = async (request: Request, endpoint = '/api/trpc') => {
+const handler = async (request: Request): Promise<Response> => {
   let response: Response
 
   if (request.method === 'OPTIONS')
     response = new Response(null, { status: 204 })
   else
     response = await fetchRequestHandler({
-      endpoint,
+      endpoint: '/api/trpc',
       req: request,
       router: appRouter,
-      createContext: () => createTRPCContext({ headers: request.headers }),
+      createContext: () => createTRPCContext(request),
     })
 
   response.headers.set('Access-Control-Allow-Origin', '*')
@@ -26,5 +25,6 @@ const handler = async (request: Request, endpoint = '/api/trpc') => {
 
 const createCaller = createCallerFactory(appRouter)
 
-export type * from '@/types'
+export type { AppRouter, RouterInputs, RouterOutputs } from '@/routers/_app'
+export type { TRPCMeta, TRPCContext } from '@/trpc'
 export { appRouter, createCaller, createTRPCContext, handler }

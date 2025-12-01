@@ -1,9 +1,41 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 
-import { TokenBucketRateLimit } from '@yukinu/auth'
+import { validateAccessToken } from '@yukinu/auth'
+import { db, orm } from '@yukinu/db'
+import * as schema from '@yukinu/db/schema'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
+import { AuthService } from '@/services/auth.service'
+import { CategoryService } from '@/services/category.service'
+import { ProductService } from '@/services/product.service'
+import { UserService } from '@/services/user.service'
+import { VendorService } from '@/services/vendor.service'
+
+const createTRPCContext = async (opts: {
+  headers: Headers
+}): Promise<TRPCContext> => {
+  const token = opts.headers.get('authorization')?.replace('Bearer ', '') ?? ''
+  const session = await validateAccessToken(token)
+
+  const authService = new AuthService(db, orm, schema)
+  const categoryService = new CategoryService(db, orm, schema)
+  const productService = new ProductService(db, orm, schema)
+  const userService = new UserService(db, orm, schema)
+  const vendorService = new VendorService(db, orm, schema)
+
+  return {
+    headers: opts.headers,
+    session,
+    services: {
+      auth: authService,
+      category: categoryService,
+      product: productService,
+      user: userService,
+      vendor: vendorService,
+    },
+  }
+}
 
 const t = initTRPC
   .meta<TRPCMeta>()
@@ -33,7 +65,7 @@ const loggingMiddleware = t.middleware(
       '[tRPC] >>> Request from',
       ctx.headers.get('x-trpc-source') ?? 'unknown',
       'by',
-      ctx.session?.user?.id ?? 'guest',
+      ctx.session?.userId ?? 'guest',
       `at ${path}`,
     )
 
@@ -53,60 +85,63 @@ const loggingMiddleware = t.middleware(
   },
 )
 
-const ratelimiters = new TokenBucketRateLimit<string>(50, 60)
-const ratelimitConsume = { query: 1, mutation: 5, subscription: 1 } as const
-const rateLimitMiddleware = t.middleware(async ({ ctx, type, next }) => {
-  const ip =
-    ctx.headers.get('x-forwarded-for') ??
-    ctx.headers.get('x-real-ip') ??
-    'unknown'
+const publicProcedure = t.procedure.use(loggingMiddleware)
+const protectedProcedure = publicProcedure.use(({ ctx, meta, next }) => {
+  if (!ctx.session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
 
-  const key = `${ctx.session?.user?.id ?? 'unknown'}:${ip.split(',').at(0)?.trim() ?? 'unknown'}`
-  const allowed = ratelimiters.consume(key, ratelimitConsume[type])
-  if (!allowed)
-    throw new TRPCError({
-      code: 'TOO_MANY_REQUESTS',
-      message: 'Rate limit exceeded',
-    })
-  return next()
-})
-
-const authMiddleware = t.middleware(({ meta, ctx, next }) => {
-  if (!ctx.session?.user)
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'User not authenticated',
-    })
-
-  if (
-    meta?.roles &&
-    meta.roles.length > 0 &&
-    !meta.roles.includes(ctx.session.user.role)
-  )
+  if (meta?.role?.length && !meta.role.includes(ctx.session.role)) {
     throw new TRPCError({
       code: 'FORBIDDEN',
-      message: 'User does not have sufficient permissions',
+      message: 'You do not have permission to perform this action.',
     })
+  }
 
-  return next({
-    ctx: {
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  })
+  return next({ ctx: { session: ctx.session } })
 })
 
-const publicProcedure = t.procedure
-  .use(loggingMiddleware)
-  .use(rateLimitMiddleware)
+const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  let vendorId: string
 
-const protectedProcedure = t.procedure
-  .use(loggingMiddleware)
-  .use(rateLimitMiddleware)
-  .use(authMiddleware)
+  if (ctx.session.role === 'vendor_owner') {
+    const [vendor] = await db
+      .select({ id: schema.vendors.id })
+      .from(schema.vendors)
+      .where(orm.eq(schema.vendors.ownerId, ctx.session.userId))
+      .limit(1)
+    if (!vendor)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Vendor not found for the owner.',
+      })
+    vendorId = vendor.id
+  } else if (ctx.session.role === 'vendor_staff') {
+    const [staff] = await db
+      .select({ vendorId: schema.vendorStaffs.vendorId })
+      .from(schema.vendorStaffs)
+      .where(orm.eq(schema.vendorStaffs.userId, ctx.session.userId))
+      .limit(1)
+    if (!staff)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Vendor not found for the staff.',
+      })
+    vendorId = staff.vendorId
+  } else {
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Only vendor owners and staff can access this resource.',
+    })
+  }
 
+  return next({ ctx: { session: ctx.session, vendorId } })
+})
+
+export type { TRPCMeta, TRPCContext }
 export {
   createCallerFactory,
+  createTRPCContext,
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,
+  vendorProcedure,
 }

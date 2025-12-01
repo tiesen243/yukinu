@@ -1,4 +1,3 @@
-import { NuqsAdapter } from 'nuqs/adapters/react-router/v7'
 import {
   isRouteErrorResponse,
   Link,
@@ -9,14 +8,13 @@ import {
   ScrollRestoration,
 } from 'react-router'
 
-import { ThemeProvider } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import { Toaster } from '@yukinu/ui/sonner'
 
 import type { Route } from './+types/root'
+import { Providers } from '@/components/providers'
 import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
-import { TRPCReactProvider } from '@/trpc/react'
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -28,13 +26,11 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         <Links />
       </head>
       <body className='flex min-h-dvh flex-col font-sans antialiased'>
-        <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
-          <NuqsAdapter>
-            <TRPCReactProvider>{children}</TRPCReactProvider>
-          </NuqsAdapter>
+        <Providers>
+          {children}
 
           <Toaster richColors />
-        </ThemeProvider>
+        </Providers>
 
         <ScrollRestoration />
         <Scripts />
@@ -97,7 +93,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Geist:wght@100..900&display=swap' },
+  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Yuji+Syuku&family=Geist+Mono:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
 ]
 

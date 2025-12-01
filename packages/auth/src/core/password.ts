@@ -3,7 +3,7 @@ import { scrypt } from 'node:crypto'
 import { constantTimeEqual, decodeHex, encodeHex } from '@/core/crypto'
 
 export class Password {
-  private dkLen = 64
+  constructor(private readonly dkLen = 64) {}
 
   async hash(password: string): Promise<string> {
     const salt = encodeHex(crypto.getRandomValues(new Uint8Array(16)))

@@ -1,53 +1,84 @@
 import * as z from 'zod'
 
-import { identifierSchema, passwordSchema } from '@/lib/shared'
+export namespace AuthValidators {
+  const passwordRegex = z
+    .string()
+    .regex(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
+      'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
+    )
 
-export namespace AuthModels {
-  //#region Login Schema
-  export const loginInput = z.object({
-    identifier: identifierSchema,
-    password: passwordSchema,
-  })
-  export type LoginInput = z.infer<typeof loginInput>
-
-  export const loginOutput = z.object({ token: z.string(), expires: z.date() })
-  export type LoginOutput = z.infer<typeof loginOutput>
-  //#endregion
-
-  //#region Register Schema
   export const registerInput = z
     .object({
-      username: identifierSchema,
+      username: z
+        .string()
+        .min(4, 'Username must be at least 4 characters long')
+        .max(20, 'Username must be at most 20 characters long')
+        .regex(
+          /^[a-zA-Z0-9]+$/,
+          'Username can only contain letters and numbers',
+        ),
       email: z.email('Invalid email address'),
-      password: passwordSchema,
-      confirmPassword: passwordSchema,
+      password: passwordRegex,
+      confirmPassword: z.string(),
     })
     .refine((data) => data.password === data.confirmPassword, {
-      error: 'Passwords do not match',
+      message: 'Passwords do not match',
       path: ['confirmPassword'],
     })
   export type RegisterInput = z.infer<typeof registerInput>
-
-  export const registerOutput = z.object({ userId: z.string() })
+  export const registerOutput = z.object({ id: z.cuid() })
   export type RegisterOutput = z.infer<typeof registerOutput>
-  //#endregion
 
-  //#region Change Password Schema
+  export const verifyEmailInput = z.object({
+    token: z.string().min(1, 'Token is required'),
+  })
+  export type VerifyEmailInput = z.infer<typeof verifyEmailInput>
+  export const verifyEmailOutput = z.void()
+  export type VerifyEmailOutput = z.infer<typeof verifyEmailOutput>
+
+  export const loginInput = z.object({
+    identifier: z.string().min(1, 'Identifier is required'),
+    password: passwordRegex,
+  })
+  export type LoginInput = z.infer<typeof loginInput>
+  export const loginOutput = z.object({ token: z.string() })
+  export type LoginOutput = z.infer<typeof loginOutput>
+
   export const changePasswordInput = z
     .object({
-      userId: z.cuid2('Invalid user ID'),
-      currentPassword: passwordSchema.optional(),
-      newPassword: passwordSchema,
-      confirmNewPassword: passwordSchema,
-      isLogOutOtherSessions: z.boolean().default(true),
+      userId: z.cuid(),
+      currentPassword: z.string().optional(),
+      newPassword: passwordRegex,
+      confirmNewPassword: z.string(),
+      isLogOut: z.boolean().default(true),
     })
     .refine((data) => data.newPassword === data.confirmNewPassword, {
-      error: 'New passwords do not match',
+      message: 'New passwords do not match',
       path: ['confirmNewPassword'],
     })
   export type ChangePasswordInput = z.infer<typeof changePasswordInput>
-
-  export const changePasswordOutput = z.object({ userId: z.string() })
+  export const changePasswordOutput = z.void()
   export type ChangePasswordOutput = z.infer<typeof changePasswordOutput>
-  //#endregion
+
+  export const forgotPasswordInput = z.object({
+    email: z.email('Invalid email address'),
+  })
+  export type ForgotPasswordInput = z.infer<typeof forgotPasswordInput>
+  export const forgotPasswordOutput = z.void()
+  export type ForgotPasswordOutput = z.infer<typeof forgotPasswordOutput>
+
+  export const resetPasswordInput = z
+    .object({
+      token: z.string().min(1, 'Token is required'),
+      newPassword: passwordRegex,
+      confirmNewPassword: z.string(),
+    })
+    .refine((data) => data.newPassword === data.confirmNewPassword, {
+      message: 'New passwords do not match',
+      path: ['confirmNewPassword'],
+    })
+  export type ResetPasswordInput = z.infer<typeof resetPasswordInput>
+  export const resetPasswordOutput = z.void()
+  export type ResetPasswordOutput = z.infer<typeof resetPasswordOutput>
 }

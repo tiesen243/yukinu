@@ -1,16 +1,15 @@
 {
   "name": "@yukinu/validators",
-  "version": "0.1.7",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "exports": {
-    "./address": "./dist/address.mjs",
     "./auth": "./dist/auth.mjs",
     "./category": "./dist/category.mjs",
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",
     "./env.vite": "./dist/env.vite.mjs",
-    "./profile": "./dist/profile.mjs",
+    "./product": "./dist/product.mjs",
     "./user": "./dist/user.mjs",
     "./vendor": "./dist/vendor.mjs",
     "./package.json": "./package.json"
@@ -25,9 +24,11 @@
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "zod": "^4.1.12"
+    "@yukinu/lib": "workspace:*",
+    "zod": "catalog:"
   },
   "devDependencies": {
+    "@types/node": "catalog:",
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
@@ -35,10 +36,5 @@
     "prettier": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:"
-  },
-  "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
-    "@types/node": "catalog:",
-    "prettier-plugin-tailwindcss": "catalog:"
   }
 }

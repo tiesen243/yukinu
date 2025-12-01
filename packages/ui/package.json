@@ -1,17 +1,17 @@
 {
   "name": "@yukinu/ui",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "exports": {
     ".": "./dist/index.mjs",
     "./*": {
-      "default": "./dist/components/*.mjs",
-      "types": "./dist/components/*.d.mts"
+      "types": "./dist/components/*.d.mts",
+      "default": "./dist/components/*.mjs"
     },
     "./hooks/*": {
-      "default": "./dist/hooks/*.mjs",
-      "types": "./dist/hooks/*.d.mts"
+      "types": "./dist/hooks/*.d.mts",
+      "default": "./dist/hooks/*.mjs"
     },
     "./tailwind.css": "./src/tailwind.css",
     "./package.json": "./package.json"
@@ -41,7 +41,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.553.0",
+    "lucide-react": "^0.555.0",
     "next-themes": "^0.4.6",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0"
@@ -58,9 +58,7 @@
     "typescript": "catalog:"
   },
   "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
     "@types/react": "catalog:react",
-    "prettier-plugin-tailwindcss": "catalog:",
     "react": "catalog:react"
   }
 }

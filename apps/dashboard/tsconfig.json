@@ -9,6 +9,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".react-router/types/**/*"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", ".react-router/types/**/*"],
   "exclude": ["build", "node_modules"]
 }

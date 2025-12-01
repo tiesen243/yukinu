@@ -2,12 +2,11 @@ import '@/app/globals.css'
 
 import { Geist, Geist_Mono } from 'next/font/google'
 
-import { SessionProvider } from '@yukinu/auth/react'
-import { cn, ThemeProvider } from '@yukinu/ui'
+import { cn } from '@yukinu/ui'
 import { Toaster } from '@yukinu/ui/sonner'
 
+import { Providers } from '@/components/providers'
 import { createMetadata } from '@/lib/metadata'
-import { TRPCReactProvider } from '@/trpc/react'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -31,13 +30,11 @@ export default function RootLayout({
           geistMono.variable,
         )}
       >
-        <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
-          <TRPCReactProvider>
-            <SessionProvider>{children}</SessionProvider>
-          </TRPCReactProvider>
+        <Providers>
+          {children}
 
           <Toaster richColors />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   )
@@ -50,7 +47,7 @@ export const viewport = {
   initialScale: 1,
   colorScheme: 'light dark',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#16134a' },
-    { media: '(prefers-color-scheme: dark)', color: '#e3e0f9' },
+    { media: '(prefers-color-scheme: light)', color: '#fafafa' },
+    { media: '(prefers-color-scheme: dark)', color: '#000000' },
   ],
 }
