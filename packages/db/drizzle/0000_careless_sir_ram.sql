@@ -92,7 +92,7 @@ CREATE TABLE "products" (
 	"description" text,
 	"price" numeric(10, 2) NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
   "deleted_at" timestamp
 );
 --> statement-breakpoint
