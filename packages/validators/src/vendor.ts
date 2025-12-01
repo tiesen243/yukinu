@@ -23,14 +23,14 @@ export namespace VendorValidators {
   })
   export type VendorStaff = z.infer<typeof vendorStaff>
 
-  export const getVendorsInput = z.object({
+  export const allInput = z.object({
     search: z.string().optional(),
     status: z.enum(vendorStatus).optional(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
   })
-  export type GetVendorsInput = z.infer<typeof getVendorsInput>
-  export const getVendorsOutput = z.object({
+  export type AllInput = z.infer<typeof allInput>
+  export const allOutput = z.object({
     vendors: z.array(vendor),
     pagination: z.object({
       total: z.number(),
@@ -39,41 +39,37 @@ export namespace VendorValidators {
       totalPages: z.number(),
     }),
   })
-  export type GetVendorsOutput = z.infer<typeof getVendorsOutput>
+  export type AllOutput = z.infer<typeof allOutput>
 
-  export const getVendorInput = z.object({ id: z.cuid() })
-  export type GetVendorInput = z.infer<typeof getVendorInput>
-  export const getVendorOutput = vendor.extend({
+  export const oneInput = z.object({ id: z.cuid() })
+  export type OneInput = z.infer<typeof oneInput>
+  export const oneOutput = vendor.extend({
     staffs: z.array(z.object({ userId: z.cuid(), username: z.string() })),
   })
-  export type GetVendorOutput = z.infer<typeof getVendorOutput>
+  export type OneOutput = z.infer<typeof oneOutput>
 
-  export const createVendorInput = z.object({
+  export const createInput = z.object({
     name: z.string().min(1, 'Name is required').max(255),
     description: z.string().optional(),
     image: z.url('Invalid image URL'),
     address: z.string().min(1, 'Address is required').max(500),
   })
-  export type CreateVendorInput = z.infer<typeof createVendorInput>
-  export const createVendorOutput = z.object({ id: z.cuid() })
-  export type CreateVendorOutput = z.infer<typeof createVendorOutput>
+  export type CreateInput = z.infer<typeof createInput>
+  export const createOutput = z.object({ id: z.cuid() })
+  export type CreateOutput = z.infer<typeof createOutput>
 
-  export const updateVendorStatusInput = z.object({
+  export const updateStatusInput = z.object({
     id: z.cuid(),
     status: z.enum(vendorStatus),
   })
-  export type UpdateVendorStatusInput = z.infer<typeof updateVendorStatusInput>
-  export const updateVendorStatusOutput = z.object({ id: z.cuid() })
-  export type UpdateVendorStatusOutput = z.infer<
-    typeof updateVendorStatusOutput
-  >
+  export type UpdateStatusInput = z.infer<typeof updateStatusInput>
+  export const updateStatusOutput = z.object({ id: z.cuid() })
+  export type UpdateStatusOutput = z.infer<typeof updateStatusOutput>
 
-  export const updateVendorInput = createVendorInput.extend({
-    id: z.cuid(),
-  })
-  export type UpdateVendorInput = z.infer<typeof updateVendorInput>
-  export const updateVendorOutput = z.object({ id: z.cuid() })
-  export type UpdateVendorOutput = z.infer<typeof updateVendorOutput>
+  export const updateInput = createInput.extend({ id: z.cuid() })
+  export type UpdateInput = z.infer<typeof updateInput>
+  export const updateOutput = z.object({ id: z.cuid() })
+  export type UpdateOutput = z.infer<typeof updateOutput>
 
   export const addStaffInput = z.object({
     vendorId: z.cuid(),

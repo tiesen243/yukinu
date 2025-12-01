@@ -1,7 +1,10 @@
 import type { UserValidators } from '@yukinu/validators/user'
 
 import type { IAuthService } from '@/contracts/services/auth.service'
+import type { ICategoryService } from '@/contracts/services/category.service'
+import type { IProductService } from '@/contracts/services/product.service'
 import type { IUserService } from '@/contracts/services/user.service'
+import type { IVendorService } from '@/contracts/services/vendor.service'
 
 export interface TRPCMeta {
   message?: string
@@ -13,6 +16,9 @@ export interface TRPCContext {
   session: { userId: string; role: UserValidators.Role } | null
   services: {
     auth: IAuthService
+    category: ICategoryService
+    product: IProductService
     user: IUserService
+    vendor: IVendorService
   }
 }

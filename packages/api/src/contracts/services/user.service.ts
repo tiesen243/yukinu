@@ -1,25 +1,29 @@
 import type { UserValidators } from '@yukinu/validators/user'
 
 export interface IUserService {
+  all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput>
+
+  one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput>
+
   updateStatus(
     input: UserValidators.UpdateStatusInput,
   ): Promise<UserValidators.UpdateStatusOutput>
 
-  getProfile(
-    input: UserValidators.GetProfileInput,
-  ): Promise<UserValidators.GetProfileOutput>
+  profile(
+    input: UserValidators.ProfileInput,
+  ): Promise<UserValidators.ProfileOutput>
 
   updateProfile(
     input: UserValidators.UpdateProfileInput,
   ): Promise<UserValidators.UpdateProfileOutput>
 
-  getAddresses(
-    input: UserValidators.GetAddressesInput,
-  ): Promise<UserValidators.GetAddressesOutput>
+  allAddresses(
+    input: UserValidators.AllAddressesInput,
+  ): Promise<UserValidators.AllAddressesOutput>
 
-  getAddress(
-    input: UserValidators.GetAddressInput,
-  ): Promise<UserValidators.GetAddressOutput>
+  oneAddress(
+    input: UserValidators.OneAddressInput,
+  ): Promise<UserValidators.OneAddressOutput>
 
   createAddress(
     input: UserValidators.CreateAddressInput,
@@ -33,9 +37,9 @@ export interface IUserService {
     input: UserValidators.DeleteAddressInput,
   ): Promise<UserValidators.DeleteAddressOutput>
 
-  getWishlist(
-    input: UserValidators.GetWishlistInput,
-  ): Promise<UserValidators.GetWishlistOutput>
+  wishlist(
+    input: UserValidators.WishlistInput,
+  ): Promise<UserValidators.WishlistOutput>
 
   toggleWishlistItem(
     input: UserValidators.ToggleWishlistItemInput,

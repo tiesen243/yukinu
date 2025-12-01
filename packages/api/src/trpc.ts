@@ -7,7 +7,10 @@ import * as schema from '@yukinu/db/schema'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
 import { AuthService } from '@/services/auth.service'
+import { CategoryService } from '@/services/category.service'
+import { ProductService } from '@/services/product.service'
 import { UserService } from '@/services/user.service'
+import { VendorService } from '@/services/vendor.service'
 
 const createTRPCContext = async (opts: {
   headers: Headers
@@ -16,14 +19,20 @@ const createTRPCContext = async (opts: {
   const session = await validateAccessToken(token)
 
   const authService = new AuthService(db, orm, schema)
+  const categoryService = new CategoryService(db, orm, schema)
+  const productService = new ProductService(db, orm, schema)
   const userService = new UserService(db, orm, schema)
+  const vendorService = new VendorService(db, orm, schema)
 
   return {
     headers: opts.headers,
     session,
     services: {
       auth: authService,
+      category: categoryService,
+      product: productService,
       user: userService,
+      vendor: vendorService,
     },
   }
 }

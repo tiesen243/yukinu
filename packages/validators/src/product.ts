@@ -19,14 +19,14 @@ export namespace ProductValidators {
     productId: z.cuid(),
     url: z.url(),
   })
-  export type ProductImage = z.infer<typeof productImage>
+  export type Image = z.infer<typeof productImage>
 
   export const productVariant = z.object({
     id: z.cuid(),
     productId: z.cuid(),
     name: z.string().min(1).max(100),
   })
-  export type ProductVariant = z.infer<typeof productVariant>
+  export type Variant = z.infer<typeof productVariant>
 
   export const productVariantOption = z.object({
     id: z.cuid(),
@@ -35,7 +35,7 @@ export namespace ProductValidators {
     stock: z.number().min(0),
     extraPrice: z.number().min(0),
   })
-  export type ProductVariantOption = z.infer<typeof productVariantOption>
+  export type VariantOption = z.infer<typeof productVariantOption>
 
   export const productReview = z.object({
     id: z.cuid(),
@@ -46,17 +46,17 @@ export namespace ProductValidators {
     createdAt: z.date(),
     updatedAt: z.date(),
   })
-  export type ProductReview = z.infer<typeof productReview>
+  export type Review = z.infer<typeof productReview>
 
-  export const getProductsInput = z.object({
+  export const allInput = z.object({
     search: z.string().optional(),
     categoryId: z.cuid().optional(),
     vendorId: z.cuid().optional(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
   })
-  export type GetProductsInput = z.infer<typeof getProductsInput>
-  export const getProductsOutput = z.object({
+  export type AllInput = z.infer<typeof allInput>
+  export const allOutput = z.object({
     products: z.array(
       product.pick({ id: true, name: true, price: true }).extend({
         image: z.url(),
@@ -71,20 +71,20 @@ export namespace ProductValidators {
       totalPages: z.number(),
     }),
   })
-  export type GetProductsOutput = z.infer<typeof getProductsOutput>
+  export type AllOutput = z.infer<typeof allOutput>
 
-  export const getProductInput = z.object({ id: z.cuid() })
-  export type GetProductInput = z.infer<typeof getProductInput>
-  export const getProductOutput = product.extend({
+  export const oneInput = z.object({ id: z.cuid() })
+  export type OneInput = z.infer<typeof oneInput>
+  export const oneOutput = product.extend({
     images: z.array(productImage),
     variants: z.array(
       productVariant.extend({ options: z.array(productVariantOption) }),
     ),
     reviews: z.array(productReview),
   })
-  export type GetProductOutput = z.infer<typeof getProductOutput>
+  export type OneOutput = z.infer<typeof oneOutput>
 
-  export const createProductInput = z.object({
+  export const createInput = z.object({
     vendorId: z.cuid(),
     categoryId: z.cuid(),
     sku: z.string().min(1, 'SKU is required').max(50),
@@ -107,19 +107,19 @@ export namespace ProductValidators {
       }),
     ),
   })
-  export type CreateProductInput = z.infer<typeof createProductInput>
-  export const createProductOutput = z.object({ id: z.cuid() })
-  export type CreateProductOutput = z.infer<typeof createProductOutput>
+  export type CreateInput = z.infer<typeof createInput>
+  export const createOutput = z.object({ id: z.cuid() })
+  export type CreateOutput = z.infer<typeof createOutput>
 
-  export const updateProductInput = createProductInput.extend({
+  export const updateInput = createInput.extend({
     id: z.cuid(),
   })
-  export type UpdateProductInput = z.infer<typeof updateProductInput>
-  export const updateProductOutput = z.object({ id: z.cuid() })
-  export type UpdateProductOutput = z.infer<typeof updateProductOutput>
+  export type UpdateInput = z.infer<typeof updateInput>
+  export const updateOutput = z.object({ id: z.cuid() })
+  export type UpdateOutput = z.infer<typeof updateOutput>
 
-  export const deleteProductInput = z.object({ id: z.cuid() })
-  export type DeleteProductInput = z.infer<typeof deleteProductInput>
-  export const deleteProductOutput = z.object({ id: z.cuid() })
-  export type DeleteProductOutput = z.infer<typeof deleteProductOutput>
+  export const deleteInput = z.object({ id: z.cuid() })
+  export type DeleteInput = z.infer<typeof deleteInput>
+  export const deleteOutput = z.object({ id: z.cuid() })
+  export type DeleteOutput = z.infer<typeof deleteOutput>
 }

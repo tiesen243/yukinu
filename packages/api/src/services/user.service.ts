@@ -6,15 +6,23 @@ import type { IUserService } from '@/contracts/services/user.service'
 import { BaseService } from '@/services/base.service'
 
 export class UserService extends BaseService implements IUserService {
+  all(_input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
+    throw new Error('Method not implemented.')
+  }
+
+  one(_input: UserValidators.OneInput): Promise<UserValidators.OneOutput> {
+    throw new Error('Method not implemented.')
+  }
+
   updateStatus(
     _input: UserValidators.UpdateStatusInput,
   ): Promise<UserValidators.UpdateStatusOutput> {
     throw new Error('Method not implemented.')
   }
 
-  async getProfile(
-    input: UserValidators.GetProfileInput,
-  ): Promise<UserValidators.GetProfileOutput> {
+  async profile(
+    input: UserValidators.ProfileInput,
+  ): Promise<UserValidators.ProfileOutput> {
     const { eq } = this._orm
     const { users, profiles } = this._schema
     const { userId } = input
@@ -51,15 +59,15 @@ export class UserService extends BaseService implements IUserService {
     throw new Error('Method not implemented.')
   }
 
-  getAddresses(
-    _input: UserValidators.GetAddressesInput,
-  ): Promise<UserValidators.GetAddressesOutput> {
+  allAddresses(
+    _input: UserValidators.AllAddressesInput,
+  ): Promise<UserValidators.AllAddressesOutput> {
     throw new Error('Method not implemented.')
   }
 
-  getAddress(
-    _input: UserValidators.GetAddressInput,
-  ): Promise<UserValidators.GetAddressOutput> {
+  oneAddress(
+    _input: UserValidators.OneAddressInput,
+  ): Promise<UserValidators.OneAddressOutput> {
     throw new Error('Method not implemented.')
   }
 
@@ -81,9 +89,9 @@ export class UserService extends BaseService implements IUserService {
     throw new Error('Method not implemented.')
   }
 
-  getWishlist(
-    _input: UserValidators.GetWishlistInput,
-  ): Promise<UserValidators.GetWishlistOutput> {
+  wishlist(
+    _input: UserValidators.WishlistInput,
+  ): Promise<UserValidators.WishlistOutput> {
     throw new Error('Method not implemented.')
   }
 
