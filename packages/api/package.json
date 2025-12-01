@@ -24,10 +24,12 @@
     "@trpc/server": "catalog:trpc",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
+    "@yukinu/email": "workspace:*",
     "@yukinu/validators": "workspace:*",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
+    "@types/bun": "^1.3.3",
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
@@ -35,10 +37,5 @@
     "prettier": "catalog:",
     "tsdown": "catalog:",
     "typescript": "catalog:"
-  },
-  "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
-    "@types/node": "catalog:",
-    "prettier-plugin-tailwindcss": "catalog:"
   }
 }

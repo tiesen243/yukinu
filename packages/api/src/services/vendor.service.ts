@@ -1,181 +1,217 @@
 import { TRPCError } from '@trpc/server'
 
-import type { Database } from '@yukinu/db'
-import type { UserModels } from '@yukinu/validators/user'
-import type { VendorModels } from '@yukinu/validators/vendor'
+import type { VendorValidators } from '@yukinu/validators/vendor'
+import { users } from '@yukinu/db/schema'
 
 import type { IVendorService } from '@/contracts/services/vendor.service'
-import type { IUserRepository, IVendorRepository } from '@/types'
+import { BaseService } from '@/services/base.service'
 
-export class VendorService implements IVendorService {
-  constructor(
-    private readonly _db: Database,
-    private readonly _userRepo: IUserRepository,
-    private readonly _vendorRepo: IVendorRepository,
-  ) {}
-
-  public async all(
-    input: VendorModels.AllInput,
-  ): Promise<VendorModels.AllOutput> {
-    const { status, page, limit } = input
+export class VendorService extends BaseService implements IVendorService {
+  async all(
+    input: VendorValidators.AllInput,
+  ): Promise<VendorValidators.AllOutput> {
+    const { and, eq, ilike } = this._orm
+    const { vendors } = this._schema
+    const { search, status, page, limit } = input
     const offset = (page - 1) * limit
 
-    const criteria = status ? [{ status }] : []
+    const whereClause = []
+    if (search) whereClause.push(ilike(vendors.name, `%${search}%`))
+    if (status) whereClause.push(eq(vendors.status, status))
 
-    const vendors = await this._vendorRepo.findWithOwner(
-      criteria,
-      limit,
-      offset,
-    )
-
-    const totalItems = await this._vendorRepo.count(criteria)
-    const totalPages = Math.ceil(totalItems / limit)
+    const [vendorsList, total] = await Promise.all([
+      this._db
+        .select()
+        .from(vendors)
+        .where(and(...whereClause))
+        .offset(offset)
+        .limit(limit),
+      this._db.$count(vendors, and(...whereClause)),
+    ])
+    const totalPages = Math.ceil(total / limit)
 
     return {
-      vendors,
-      pagination: { page, totalPages, totalItems },
+      vendors: vendorsList,
+      pagination: { total, page, limit, totalPages },
     }
   }
 
-  public async one(
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<Pick<VendorModels.Vendor, 'id'>> {
-    if (actingUser.role === 'vendor_owner') {
-      const [vendor] = await this._vendorRepo.findBy(
-        [{ ownerId: actingUser.id }],
-        {},
-        1,
-      )
-      if (!vendor)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Vendor not found for the acting user.',
-        })
-      return vendor
-    }
-
-    if (actingUser.role === 'vendor_staff') {
-      const vendor = await this._vendorRepo.findByStaffId(actingUser.id)
-      if (!vendor)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Vendor not found for the acting user.',
-        })
-      return vendor
-    }
-
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: 'Vendor not found for the acting user.',
-    })
-  }
-
-  public async register(
-    input: VendorModels.RegisterInput,
-  ): Promise<VendorModels.RegisterOutput> {
-    const { userId, ...data } = input
-    const [existingVendor] = await this._vendorRepo.findBy(
-      [{ ownerId: userId }],
-      {},
-      1,
-    )
-    if (existingVendor)
-      throw new TRPCError({
-        code: 'CONFLICT',
-        message: 'You already have a vendor registered.',
-      })
-
-    const { id } = await this._vendorRepo.create({
-      ownerId: userId,
-      ...data,
-    })
-    return { vendorId: id }
-  }
-
-  public async update(
-    input: VendorModels.UpdateInput,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<VendorModels.UpdateOutput> {
-    const { id = '', ...updateData } = input
-
-    const existingVendor = await this._vendorRepo.find(id)
-    if (!existingVendor)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Vendor with ID ${id} not found.`,
-      })
-
-    const isInvalidStatusTransition = (
-      from: VendorModels.Vendor['status'],
-      to: VendorModels.Vendor['status'] | undefined,
-    ) =>
-      (from === 'pending' && to === 'suspended') ||
-      (to === 'pending' && from !== 'pending')
-
-    if (isInvalidStatusTransition(existingVendor.status, updateData.status))
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Invalid status transition.',
-      })
-
-    if (existingVendor.status === updateData.status) return { vendorId: id }
-
-    this.checkModifyPermissions(existingVendor, actingUser)
-    const statusRoleMap = {
-      pending: 'user',
-      approved: 'vendor_owner',
-      suspended: 'user',
-    } as const satisfies Record<VendorModels.Status, UserModels.Role>
-
-    return this._db.transaction(async (tx) => {
-      await this._vendorRepo.update(id, updateData, tx)
-
-      if (updateData.status)
-        await this._userRepo.update(
-          existingVendor.ownerId,
-          { role: statusRoleMap[updateData.status] },
-          tx,
-        )
-
-      return { vendorId: id }
-    })
-  }
-
-  public async delete(
-    input: VendorModels.DeleteInput,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<VendorModels.DeleteOutput> {
+  async one(
+    input: VendorValidators.OneInput,
+  ): Promise<VendorValidators.OneOutput> {
+    const { eq } = this._orm
+    const { vendors, vendorStaffs } = this._schema
     const { id } = input
 
-    const existingVendor = await this._vendorRepo.find(id)
-    if (!existingVendor)
+    const [[vendor], staffs] = await Promise.all([
+      this._db
+        .select({
+          id: vendors.id,
+          name: vendors.name,
+          description: vendors.description,
+          image: vendors.image,
+          address: vendors.address,
+          status: vendors.status,
+          owner: { id: users.id, username: users.username },
+          createdAt: vendors.createdAt,
+          updatedAt: vendors.updatedAt,
+        })
+        .from(vendors)
+        .where(eq(vendors.id, id))
+        .innerJoin(users, eq(users.id, vendors.ownerId))
+        .limit(1),
+      this._db
+        .select({ id: users.id, username: users.username })
+        .from(vendorStaffs)
+        .where(eq(vendorStaffs.vendorId, id))
+        .innerJoin(users, eq(users.id, vendorStaffs.userId))
+        .orderBy(users.username),
+    ])
+
+    if (!vendor)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Vendor with ID ${id} not found.`,
       })
 
-    this.checkModifyPermissions(existingVendor, actingUser)
+    return { ...vendor, staffs }
+  }
+
+  async create(
+    input: VendorValidators.CreateInput,
+  ): Promise<VendorValidators.CreateOutput> {
+    const { vendors } = this._schema
+
+    const [result] = await this._db
+      .insert(vendors)
+      .values({ ...input })
+      .returning({ id: vendors.id })
+
+    if (!result?.id)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: `Failed to create vendor.`,
+      })
+
+    return result
+  }
+
+  async updateStatus(
+    input: VendorValidators.UpdateStatusInput,
+  ): Promise<VendorValidators.UpdateStatusOutput> {
+    const { eq } = this._orm
+    const { vendors, users } = this._schema
+    const { id, status } = input
+
+    const { status: currentStatus, owner } = await this.one({ id })
+    const validTransitions = {
+      pending: ['approved', 'suspended'],
+      approved: ['suspended'],
+      suspended: ['approved'],
+    }[currentStatus]
+
+    if (!validTransitions.includes(status))
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Invalid status transition from ${currentStatus} to ${status}.`,
+      })
 
     return this._db.transaction(async (tx) => {
-      await this._vendorRepo.delete(id, tx)
-      await this._userRepo.update(existingVendor.ownerId, { role: 'user' }, tx)
+      if (status === 'approved') {
+        await tx
+          .update(users)
+          .set({ role: 'vendor_owner' })
+          .where(eq(users.id, owner.id))
+        await tx
+          .update(vendors)
+          .set({ status: 'approved' })
+          .where(eq(vendors.id, id))
+      } else if (status === 'suspended') {
+        await tx
+          .update(vendors)
+          .set({ status: 'suspended' })
+          .where(eq(vendors.id, id))
+        await tx
+          .update(users)
+          .set({ role: 'user' })
+          .where(eq(users.id, owner.id))
+      }
 
-      return { vendorId: id }
+      return { id }
     })
   }
 
-  private checkModifyPermissions(
-    vendor: Pick<VendorModels.Vendor, 'id' | 'ownerId'>,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ) {
-    if (
-      actingUser.role !== 'admin' &&
-      actingUser.role !== 'moderator' &&
-      vendor.ownerId !== actingUser.id
-    )
+  async update(
+    input: VendorValidators.UpdateInput,
+  ): Promise<VendorValidators.UpdateOutput> {
+    const { eq } = this._orm
+    const { vendors } = this._schema
+    const { id, ...data } = input
+
+    await this.one({ id })
+    await this._db
+      .update(vendors)
+      .set({ ...data })
+      .where(eq(vendors.id, id))
+
+    return { id }
+  }
+
+  async addStaff(
+    input: VendorValidators.AddStaffInput,
+  ): Promise<VendorValidators.AddStaffOutput> {
+    const { and, eq } = this._orm
+    const { vendorStaffs } = this._schema
+    const { vendorId, userId } = input
+
+    const [existingStaff] = await this._db
+      .select()
+      .from(vendorStaffs)
+      .where(
+        and(
+          eq(vendorStaffs.vendorId, vendorId),
+          eq(vendorStaffs.userId, userId),
+        ),
+      )
+      .limit(1)
+    if (existingStaff)
       throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'You do not have permission to modify this vendor.',
+        code: 'BAD_REQUEST',
+        message: `User with ID ${userId} is already a staff member of vendor ${vendorId}.`,
+      })
+
+    const [result] = await this._db
+      .insert(vendorStaffs)
+      .values({ vendorId, userId })
+      .returning({ id: vendorStaffs.userId })
+    if (!result?.id)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: `Failed to add staff with ID ${userId} to vendor ${vendorId}.`,
+      })
+  }
+
+  async removeStaff(
+    input: VendorValidators.RemoveStaffInput,
+  ): Promise<VendorValidators.RemoveStaffOutput> {
+    const { and, eq } = this._orm
+    const { vendorStaffs } = this._schema
+    const { vendorId, userId } = input
+
+    const [deletedStaff] = await this._db
+      .delete(vendorStaffs)
+      .where(
+        and(
+          eq(vendorStaffs.vendorId, vendorId),
+          eq(vendorStaffs.userId, userId),
+        ),
+      )
+      .returning({ id: vendorStaffs.userId })
+
+    if (!deletedStaff?.id)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Staff with ID ${userId} not found in vendor ${vendorId}.`,
       })
   }
 }

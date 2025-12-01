@@ -3,8 +3,8 @@ import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 
-export default defineConfig(({ mode }) => ({
-  base: mode === 'development' ? '/dashboard' : '/',
+export default defineConfig({
+  // base: mode === 'development' ? '/dashboard' : '/',
   plugins: [reactRouter(), tailwindcss()],
   resolve: {
     alias: {
@@ -12,7 +12,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    assetsDir: 'dashboard/assets',
+    // assetsDir: 'dashboard/assets',
     rollupOptions: {
       onwarn(warning, warn) {
         if (warning.code === 'SOURCEMAP_ERROR') return
@@ -20,4 +20,4 @@ export default defineConfig(({ mode }) => ({
       },
     },
   },
-}))
+})

@@ -1,94 +1,108 @@
 import { TRPCError } from '@trpc/server'
 
-import type { Database } from '@yukinu/db'
-import type { CategoryModels } from '@yukinu/validators/category'
+import type { CategoryValidators } from '@yukinu/validators/category'
 
 import type { ICategoryService } from '@/contracts/services/category.service'
-import type { ICategoryRepository } from '@/types'
+import { BaseService } from '@/services/base.service'
 
-export class CategoryService implements ICategoryService {
-  constructor(
-    private readonly _db: Database,
-    private readonly _category: ICategoryRepository,
-  ) {}
-
-  async all(input: CategoryModels.AllInput): Promise<CategoryModels.AllOutput> {
-    const { page, limit } = input
+export class CategoryService extends BaseService implements ICategoryService {
+  async all(
+    input: CategoryValidators.AllInput,
+  ): Promise<CategoryValidators.AllOutput> {
+    const { asc, ilike } = this._orm
+    const { categories } = this._schema
+    const { search, page, limit } = input
     const offset = (page - 1) * limit
 
-    const categories = await this._category.findBy(
-      [],
-      { name: 'asc' },
-      limit,
-      offset,
-    )
+    const whereClause = search
+      ? ilike(categories.name, `%${search}%`)
+      : undefined
 
-    const totalItems = await this._category.count([])
-    const totalPages = Math.ceil(totalItems / limit)
+    const [categoriesList, total] = await Promise.all([
+      this._db
+        .select()
+        .from(categories)
+        .where(whereClause)
+        .offset(offset)
+        .limit(limit)
+        .orderBy(asc(categories.name)),
+      this._db.$count(categories, whereClause),
+    ])
+    const totalPages = Math.ceil(total / limit)
 
     return {
-      categories,
-      pagination: { page, totalPages, totalItems },
+      categories: categoriesList,
+      pagination: { total, page, limit, totalPages },
     }
   }
 
-  async one(input: CategoryModels.OneInput): Promise<CategoryModels.OneOutput> {
+  async one(
+    input: CategoryValidators.OneInput,
+  ): Promise<CategoryValidators.OneOutput> {
+    const { eq } = this._orm
+    const { categories } = this._schema
     const { id } = input
 
-    const category = await this._category.find(id)
+    const [category] = await this._db
+      .select()
+      .from(categories)
+      .where(eq(categories.id, id))
+      .limit(1)
+
     if (!category)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Category not found' })
+
     return category
   }
 
   async create(
-    input: CategoryModels.CreateInput,
-  ): Promise<CategoryModels.CreateOutput> {
-    const { name } = input
+    input: CategoryValidators.CreateInput,
+  ): Promise<CategoryValidators.CreateOutput> {
+    const { categories } = this._schema
+    const { name, description } = input
 
-    const [category] = await this._category.findBy([{ name }], {}, 1)
-    if (category)
+    const [result] = await this._db
+      .insert(categories)
+      .values({ name, description })
+      .returning({ id: categories.id })
+
+    if (!result?.id)
       throw new TRPCError({
-        code: 'CONFLICT',
-        message: 'Category with the same name already exists',
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to create category',
       })
 
-    const { id } = await this._category.create({ name })
-    return { categoryId: id }
+    return result
   }
 
   async update(
-    input: CategoryModels.UpdateInput,
-  ): Promise<CategoryModels.UpdateOutput> {
-    const { id, name } = input
+    input: CategoryValidators.UpdateInput,
+  ): Promise<CategoryValidators.UpdateOutput> {
+    const { eq } = this._orm
+    const { categories } = this._schema
+    const { id, name, description } = input
 
-    const category = await this._category.find(id)
-    if (!category)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Category not found' })
+    await this.one({ id })
 
-    const [existingCategory] = await this._category.findBy([{ name }], {}, 1)
-    if (existingCategory && existingCategory.id !== id)
-      throw new TRPCError({
-        code: 'CONFLICT',
-        message: 'Category with the same name already exists',
-      })
+    await this._db
+      .update(categories)
+      .set({ name, description })
+      .where(eq(categories.id, id))
 
-    await this._category.update(id, { name })
-
-    return { categoryId: id }
+    return { id }
   }
 
   async delete(
-    input: CategoryModels.DeleteInput,
-  ): Promise<CategoryModels.DeleteOutput> {
+    input: CategoryValidators.DeleteInput,
+  ): Promise<CategoryValidators.DeleteOutput> {
+    const { eq } = this._orm
+    const { categories } = this._schema
     const { id } = input
 
-    const category = await this._category.find(id)
-    if (!category)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Category not found' })
+    await this.one({ id })
 
-    await this._category.delete(id)
+    await this._db.delete(categories).where(eq(categories.id, id))
 
-    return { categoryId: id }
+    return { id }
   }
 }

@@ -10,12 +10,12 @@ export default defineConfig({
       return {
         '.': './dist/index.mjs',
         './*': {
-          default: './dist/components/*.mjs',
           types: './dist/components/*.d.mts',
+          default: './dist/components/*.mjs',
         },
         './hooks/*': {
-          default: './dist/hooks/*.mjs',
           types: './dist/hooks/*.d.mts',
+          default: './dist/hooks/*.mjs',
         },
         './tailwind.css': './src/tailwind.css',
         './package.json': './package.json',

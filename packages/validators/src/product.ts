@@ -1,145 +1,157 @@
 import * as z from 'zod'
 
-import { paginationInputSchema, paginationOutputSchema } from '@/lib/shared'
+export namespace ProductValidators {
+  const numeric = z.string().regex(/^\d+(\.\d+)?$/)
 
-export namespace ProductModels {
-  //#region Product View Schema
-  export const productStatuses = ['active', 'inactive', 'out_of_stock'] as const
-  export type ProductStatus = (typeof productStatuses)[number]
-
-  export const productView = z.object({
-    id: z.cuid2(),
-    name: z.string(),
-    imageUrl: z.url().nullable(),
-    price: z.coerce.string(),
-    stock: z.number().min(0),
-    status: z.enum(productStatuses),
-    minPrice: z.coerce.string().min(0).nullable(),
-    maxPrice: z.coerce.string().min(0).nullable(),
-    averageRating: z.number().min(0).max(5).nullable(),
+  export const product = z.object({
+    id: z.cuid(),
+    vendorId: z.cuid(),
+    categoryId: z.cuid(),
+    sku: z.string().min(1).max(50),
+    name: z.string().min(1).max(255),
+    description: z.string().nullable(),
+    price: numeric,
+    createdAt: z.date(),
+    updatedAt: z.date(),
   })
-  export type ProductView = z.infer<typeof productView>
-  //#endregion
+  export type Product = z.infer<typeof product>
 
-  //#region All Products Schema
-  export const allInput = paginationInputSchema.extend({
-    search: z.string().optional().default(''),
-    vendorId: z.cuid2('Invalid vendor ID').optional(),
+  export const productImage = z.object({
+    id: z.cuid(),
+    productId: z.cuid(),
+    url: z.url(),
+  })
+  export type Image = z.infer<typeof productImage>
+
+  export const productVariant = z.object({
+    id: z.cuid(),
+    productId: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type Variant = z.infer<typeof productVariant>
+
+  export const productVariantOption = z.object({
+    id: z.cuid(),
+    variantId: z.cuid(),
+    value: z.string().min(1).max(100),
+    stock: z.number().min(0),
+    extraPrice: z.coerce.number().min(0),
+  })
+  export type VariantOption = z.infer<typeof productVariantOption>
+
+  export const productReview = z.object({
+    id: z.cuid(),
+    productId: z.cuid(),
+    userId: z.cuid(),
+    rating: z.number().min(1).max(5),
+    comment: z.string().optional(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+  })
+  export type Review = z.infer<typeof productReview>
+
+  export const allInput = z.object({
+    search: z.string().optional(),
+    categoryId: z.cuid().optional(),
+    vendorId: z.cuid().optional(),
+    page: z.number().min(1).default(1),
+    limit: z.number().min(1).max(100).default(10),
+    isDeleted: z.boolean().default(false),
   })
   export type AllInput = z.infer<typeof allInput>
-
   export const allOutput = z.object({
-    products: z.array(productView),
-    pagination: paginationOutputSchema,
+    products: z.array(
+      product.pick({ id: true, name: true, price: true }).extend({
+        image: z.url().nullable(),
+        lowestVariantPrice: numeric.nullable(),
+        highestVariantPrice: numeric.nullable(),
+      }),
+    ),
+    pagination: z.object({
+      total: z.number(),
+      page: z.number(),
+      limit: z.number(),
+      totalPages: z.number(),
+    }),
   })
   export type AllOutput = z.infer<typeof allOutput>
-  //#endregion
 
-  //#region One Product Schema
-  export const oneInput = z.object({
-    productId: z.cuid2('Invalid product ID'),
-  })
+  export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
-
-  export const oneOutput = z.object({
-    id: z.cuid2(),
-    name: z.string(),
-    description: z.string().nullable(),
-    price: z.coerce.string(),
-    stock: z.number().min(0),
-    status: z.enum(productStatuses),
-
-    vendor: z.object({
-      id: z.cuid2(),
-      name: z.string(),
-    }),
-
-    category: z.object({
-      id: z.cuid2(),
-      name: z.string(),
-    }),
-
-    images: z.array(
-      z.object({
-        url: z.url(),
-        alt: z.string().nullable(),
-      }),
-    ),
-
-    variantGroups: z.array(
-      z.object({
-        id: z.cuid2(),
+  export const oneOutput = product
+    .omit({
+      categoryId: true,
+      vendorId: true,
+      createdAt: true,
+      updatedAt: true,
+    })
+    .extend({
+      category: z.object({ id: z.cuid(), name: z.string() }).nullable(),
+      vendor: z.object({
+        id: z.cuid(),
         name: z.string(),
-        variants: z.array(
-          z.object({
-            id: z.cuid2(),
-            name: z.string(),
-            extraPrice: z.coerce.string().min(0),
-            stock: z.number().min(0),
+        image: z.url().nullable(),
+        createdAt: z.date(),
+      }),
+      images: z.array(productImage.omit({ productId: true })),
+      variants: z.array(
+        productVariant.omit({ productId: true }).extend({
+          options: z.array(productVariantOption.omit({ variantId: true })),
+        }),
+      ),
+      reviews: z.array(
+        productReview.pick({ id: true, rating: true, createdAt: true }).extend({
+          user: z.object({
+            id: z.cuid(),
+            username: z.string(),
+            image: z.url().nullable(),
           }),
-        ),
-      }),
-    ),
-  })
+        }),
+      ),
+    })
   export type OneOutput = z.infer<typeof oneOutput>
-  //#endregion
 
-  //#region Create Product Schema
   export const createInput = z.object({
-    vendorId: z.cuid2('Invalid vendor ID'),
-    categoryId: z.cuid2('Invalid category ID'),
-    name: z
-      .string()
-      .min(1, 'Product name must be at least 1 character long')
-      .max(255, 'Product name must be at most 255 characters long'),
+    vendorId: z.cuid(),
+    categoryId: z.cuid(),
+    sku: z.string().min(1, 'SKU is required').max(50),
+    name: z.string().min(1, 'Name is required').max(255),
     description: z.string().optional(),
-    price: z.coerce.string().min(1, 'Price is required'),
-    stock: z.number().min(0, 'Stock must be at least 0'),
+    price: numeric,
 
-    images: z.array(
-      z.object({
-        url: z.url('Invalid image URL'),
-        alt: z
-          .string()
-          .min(1, 'Image alt is required')
-          .max(255, 'Image alt must be at most 255 characters long'),
-      }),
-    ),
+    images: z.array(z.url()),
 
-    variantGroups: z.array(
+    variants: z.array(
       z.object({
-        name: z
-          .string()
-          .min(1, 'Variant group name must be at least 1 character long')
-          .max(100, 'Variant group name must be at most 100 characters long'),
-        variants: z.array(
+        name: z.string().min(1, 'Variant name is required').max(100),
+        options: z.array(
           z.object({
-            name: z
-              .string()
-              .min(1, 'Variant name must be at least 1 character long')
-              .max(100, 'Variant name must be at most 100 characters long'),
-            extraPrice: z.coerce
-              .string()
-              .min(1, 'Variant extra price is required'),
-            stock: z.number().min(0, 'Variant stock must be at least 0'),
+            value: z.string().min(1, 'Option value is required').max(100),
+            stock: z.number().min(0, 'Stock must be at least 0'),
+            extraPrice: numeric,
           }),
         ),
       }),
     ),
   })
   export type CreateInput = z.infer<typeof createInput>
-
-  export const createOutput = z.object({ productId: productView.shape.id })
+  export const createOutput = z.object({ id: z.cuid() })
   export type CreateOutput = z.infer<typeof createOutput>
-  //#endregion
 
-  //#region Update Product Schema
   export const updateInput = createInput.omit({ vendorId: true }).extend({
-    productId: z.cuid2('Invalid product ID'),
+    id: z.cuid(),
   })
   export type UpdateInput = z.infer<typeof updateInput>
-
-  export const updateOutput = z.object({ productId: productView.shape.id })
+  export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
-  //#endregion
+
+  export const deleteInput = z.object({ id: z.cuid() })
+  export type DeleteInput = z.infer<typeof deleteInput>
+  export const deleteOutput = z.object({ id: z.cuid() })
+  export type DeleteOutput = z.infer<typeof deleteOutput>
+
+  export const restoreInput = z.object({ id: z.cuid() })
+  export type RestoreInput = z.infer<typeof restoreInput>
+  export const restoreOutput = z.object({ id: z.cuid() })
+  export type RestoreOutput = z.infer<typeof restoreOutput>
 }

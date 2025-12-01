@@ -1,70 +1,47 @@
-import type { UserModels } from '@yukinu/validators/user'
+import type { UserValidators } from '@yukinu/validators/user'
 
 export interface IUserService {
-  /**
-   * Get a list of users with pagination
-   * @param input - The query parameters for searching and pagination
-   * @example
-   * {
-   *   search: 'john',
-   *   page: 1,
-   *   limit: 10
-   * }
-   * @returns A list of users and pagination info
-   */
-  all(input: UserModels.AllInput): Promise<UserModels.AllOutput>
+  all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput>
 
-  /**
-   * Get a single user by ID
-   * @param input - The data containing the user ID
-   * @example
-   * {
-   *   id: 'user-id'
-   * }
-   * @returns The user's information
-   */
-  one(input: UserModels.OneInput): Promise<UserModels.OneOutput>
+  one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput>
 
-  /**
-   * Update a user's information
-   * @param input - The data to update the user with
-   * @example
-   * {
-   *   id: 'user-id',
-   *   role: 'admin',
-   *   status: 'active',
-   *   password: 'newPassword123' // optional
-   * }
-   * @param actingUser - The user performing the update
-   * @example
-   * {
-   *   id: 'admin-user-id',
-   *   role: 'admin'
-   * }
-   * @returns The ID of the updated user
-   */
-  update(
-    input: UserModels.UpdateInput,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<UserModels.UpdateOutput>
+  updateStatus(
+    input: UserValidators.UpdateStatusInput,
+  ): Promise<UserValidators.UpdateStatusOutput>
 
-  /**
-   * Delete a user
-   * @param input - The data containing the user ID to delete
-   * @example
-   * {
-   *   id: 'user-id'
-   * }
-   * @param actingUser - The user performing the deletion
-   * @example
-   * {
-   *   id: 'admin-user-id',
-   *   role: 'admin'
-   * }
-   * @returns The ID of the deleted user
-   */
-  delete(
-    input: UserModels.DeleteInput,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<UserModels.DeleteOutput>
+  profile(
+    input: UserValidators.ProfileInput,
+  ): Promise<UserValidators.ProfileOutput>
+
+  updateProfile(
+    input: UserValidators.UpdateProfileInput,
+  ): Promise<UserValidators.UpdateProfileOutput>
+
+  allAddresses(
+    input: UserValidators.AllAddressesInput,
+  ): Promise<UserValidators.AllAddressesOutput>
+
+  oneAddress(
+    input: UserValidators.OneAddressInput,
+  ): Promise<UserValidators.OneAddressOutput>
+
+  createAddress(
+    input: UserValidators.CreateAddressInput,
+  ): Promise<UserValidators.CreateAddressOutput>
+
+  updateAddress(
+    input: UserValidators.UpdateAddressInput,
+  ): Promise<UserValidators.UpdateAddressOutput>
+
+  deleteAddress(
+    input: UserValidators.DeleteAddressInput,
+  ): Promise<UserValidators.DeleteAddressOutput>
+
+  wishlist(
+    input: UserValidators.WishlistInput,
+  ): Promise<UserValidators.WishlistOutput>
+
+  toggleWishlistItem(
+    input: UserValidators.ToggleWishlistItemInput,
+  ): Promise<UserValidators.ToggleWishlistItemOutput>
 }

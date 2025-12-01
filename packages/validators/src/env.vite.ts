@@ -1,6 +1,6 @@
-import * as z from 'zod/v4-mini'
+import * as z from 'zod/mini'
 
-import { createEnv } from '@/lib/create-env'
+import { createEnv } from '@yukinu/lib/create-env'
 
 export const env = createEnv({
   server: {},
@@ -21,3 +21,9 @@ export const env = createEnv({
 
   skipValidation: true,
 })
+
+declare global {
+  interface ImportMeta {
+    readonly env: Record<string, string | undefined>
+  }
+}

@@ -1,31 +1,25 @@
 import Link from 'next/link'
 
-import { Button } from '@yukinu/ui/button'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { RegisterForm } from '@/app/(auth)/register/page.client'
-import { createMetadata } from '@/lib/metadata'
-
-export const metadata = createMetadata({
-  title: 'Register',
-  description: 'Create an account to get started',
-  openGraph: { url: '/register' },
-})
 
 export default function RegisterPage() {
   return (
-    <form>
-      <FieldSet>
-        <FieldLegend>Create an account to get started</FieldLegend>
-        <FieldDescription>
-          Fill in the details below to create your account.
-        </FieldDescription>
+    <main className='grid min-h-dvh place-items-center'>
+      <form className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
+        <FieldSet>
+          <FieldLegend>Register</FieldLegend>
+          <FieldDescription>Create your account</FieldDescription>
 
-        <RegisterForm />
+          <RegisterForm />
 
-        <FieldDescription>
-          By registering, you agree to our
-          <Button variant='link' size='sm' asChild>
+          <FieldDescription>
+            Already have an account? <Link href='/login'>Log in here</Link>.
+          </FieldDescription>
+
+          <FieldDescription>
+            By registering, you agree to our{' '}
             <Link
               href='https://tiesen243.github.io/yukinu/legal/term-of-service.html'
               target='_blank'
@@ -33,9 +27,7 @@ export default function RegisterPage() {
             >
               Terms of Service
             </Link>
-          </Button>
-          and
-          <Button variant='link' size='sm' asChild>
+            {' and '}
             <Link
               href='https://tiesen243.github.io/yukinu/legal/privacy-policy.html'
               target='_blank'
@@ -43,17 +35,10 @@ export default function RegisterPage() {
             >
               Privacy Policy
             </Link>
-          </Button>
-          .
-        </FieldDescription>
-
-        <FieldDescription>
-          Already have an account?
-          <Button variant='link' size='sm' asChild>
-            <Link href='/login'>Login</Link>
-          </Button>
-        </FieldDescription>
-      </FieldSet>
-    </form>
+            .
+          </FieldDescription>
+        </FieldSet>
+      </form>
+    </main>
   )
 }

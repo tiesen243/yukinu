@@ -1,94 +1,56 @@
-import { relations } from 'drizzle-orm'
-import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
+import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { orders } from '@/schema/order'
-import { productReviews } from '@/schema/product'
-import { addresses, profiles, wishlistItems } from '@/schema/profile'
-import { vendorMembers, vendors } from '@/schema/vendor'
-import { createdAt, createId, updatedAt } from '@/utils'
+import { createId } from '@yukinu/lib/create-id'
 
-export const userRoleEnum = pgEnum('user_role', [
-  'admin',
-  'moderator',
-  'vendor_owner',
-  'vendor_staff',
-  'user',
-])
-export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
+import { products, users } from '@/schema'
 
-export const users = pgTable(
-  'users',
-  (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-    username: t.varchar({ length: 255 }).unique().notNull(),
-    email: t.varchar({ length: 255 }).unique().notNull(),
-    emailVerified: t.timestamp({ mode: 'date', withTimezone: true }),
-    role: userRoleEnum().default('user').notNull(),
-    status: userStatusEnum().default('active').notNull(),
-    createdAt,
-    updatedAt,
-  }),
-  (t) => [
-    index('users_email_idx').on(t.email),
-    index('users_username_idx').on(t.username),
-    index('users_role_idx').on(t.role),
-    index('users_status_idx').on(t.status),
-  ],
-)
+export const genderEnum = pgEnum('gender', ['male', 'female', 'other'])
 
-export const usersRelations = relations(users, ({ one, many }) => ({
-  accounts: many(accounts),
-  sessions: many(sessions),
-
-  profile: one(profiles, { fields: [users.id], references: [profiles.id] }),
-  addresses: many(addresses),
-
-  wishlistItems: many(wishlistItems),
-  reviews: many(productReviews),
-  orders: many(orders),
-
-  vendors: many(vendors),
-  vendorMembers: many(vendorMembers),
+export const profiles = pgTable('profiles', (t) => ({
+  id: t
+    .varchar({ length: 24 })
+    .primaryKey()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  fullName: t.varchar({ length: 255 }),
+  bio: t.text(),
+  gender: genderEnum(),
+  dateOfBirth: t.date(),
 }))
 
-export const accounts = pgTable(
-  'accounts',
+export const addresses = pgTable(
+  'addresses',
   (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey().$default(createId).notNull(),
-    provider: t.varchar({ length: 255 }).notNull(),
-    accountId: t.varchar({ length: 255 }).notNull(),
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    password: t.varchar({ length: 255 }),
+    recipientName: t.varchar({ length: 255 }).notNull(),
+    phoneNumber: t.varchar({ length: 20 }).notNull(),
+    street: t.varchar({ length: 255 }).notNull(),
+    city: t.varchar({ length: 100 }).notNull(),
+    state: t.varchar({ length: 100 }).notNull(),
+    postalCode: t.varchar({ length: 20 }).notNull(),
+    country: t.varchar({ length: 100 }).notNull(),
   }),
-  (t) => [
-    uniqueIndex('account_provider_account_id_idx').on(t.provider, t.accountId),
-    index('account_user_id_idx').on(t.userId),
-  ],
+  (t) => [index('addresses_user_id_idx').on(t.userId)],
 )
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] }),
-}))
-
-export const sessions = pgTable(
-  'sessions',
+export const wishlistItems = pgTable(
+  'wishlist_items',
   (t) => ({
-    token: t.varchar({ length: 255 }).primaryKey().notNull(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
-    userAgent: t.varchar({ length: 512 }),
-    ipAddress: t.varchar({ length: 45 }),
-    expires: t.timestamp({ mode: 'date', withTimezone: true }).notNull(),
-    createdAt,
+    productId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
   }),
-  (t) => [index('session_user_id_idx').on(t.userId)],
+  (t) => [
+    primaryKey({ columns: [t.userId, t.productId] }),
+    index('wishlist_items_user_id_idx').on(t.userId),
+  ],
 )
-
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] }),
-}))

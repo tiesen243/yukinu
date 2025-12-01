@@ -5,7 +5,6 @@ import { env } from '@yukinu/validators/env'
 
 export default {
   appDirectory: 'src',
-  basename: '/dashboard',
   // Server-side render by default, to enable SPA mode set this to `false`
   ssr: true,
   ...(env.VERCEL ? { presets: [vercelPreset()] } : {}),

@@ -1,44 +1,44 @@
-import { CategoryModels } from '@yukinu/validators/category'
+import { CategoryValidators } from '@yukinu/validators/category'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc'
 
 export const categoryRouter = createTRPCRouter({
   all: publicProcedure
-    .meta({ message: 'Fetched categories successfully' })
-    .input(CategoryModels.allInput)
-    .output(CategoryModels.allOutput)
-    .query(({ ctx, input }) => ctx.categoryService.all(input)),
+    .meta({ message: 'Categories fetched successfully' })
+    .input(CategoryValidators.allInput)
+    .output(CategoryValidators.allOutput)
+    .query(({ ctx, input }) => ctx.services.category.all(input)),
 
   one: publicProcedure
-    .meta({ message: 'Fetch category successfully' })
-    .input(CategoryModels.oneInput)
-    .output(CategoryModels.oneOutput)
-    .query(({ ctx, input }) => ctx.categoryService.one(input)),
+    .meta({ message: 'Category fetched successfully' })
+    .input(CategoryValidators.oneInput)
+    .output(CategoryValidators.oneOutput)
+    .query(({ ctx, input }) => ctx.services.category.one(input)),
 
   create: protectedProcedure
     .meta({
-      roles: ['admin', 'moderator'],
       message: 'Category created successfully',
+      role: ['admin', 'moderator'],
     })
-    .input(CategoryModels.createInput)
-    .output(CategoryModels.createOutput)
-    .mutation(({ ctx, input }) => ctx.categoryService.create(input)),
+    .input(CategoryValidators.createInput)
+    .output(CategoryValidators.createOutput)
+    .mutation(({ ctx, input }) => ctx.services.category.create(input)),
 
   update: protectedProcedure
     .meta({
-      roles: ['admin', 'moderator'],
       message: 'Category updated successfully',
+      role: ['admin', 'moderator'],
     })
-    .input(CategoryModels.updateInput)
-    .output(CategoryModels.updateOutput)
-    .mutation(({ ctx, input }) => ctx.categoryService.update(input)),
+    .input(CategoryValidators.updateInput)
+    .output(CategoryValidators.updateOutput)
+    .mutation(({ ctx, input }) => ctx.services.category.update(input)),
 
   delete: protectedProcedure
     .meta({
-      roles: ['admin', 'moderator'],
       message: 'Category deleted successfully',
+      role: ['admin', 'moderator'],
     })
-    .input(CategoryModels.deleteInput)
-    .output(CategoryModels.deleteOutput)
-    .mutation(({ ctx, input }) => ctx.categoryService.delete(input)),
+    .input(CategoryValidators.deleteInput)
+    .output(CategoryValidators.deleteOutput)
+    .mutation(({ ctx, input }) => ctx.services.category.delete(input)),
 })

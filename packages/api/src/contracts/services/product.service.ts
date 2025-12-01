@@ -1,11 +1,23 @@
-import type { ProductModels } from '@yukinu/validators/product'
+import type { ProductValidators } from '@yukinu/validators/product'
 
 export interface IProductService {
-  all(input: ProductModels.AllInput): Promise<ProductModels.AllOutput>
+  all(input: ProductValidators.AllInput): Promise<ProductValidators.AllOutput>
 
-  one(input: ProductModels.OneInput): Promise<ProductModels.OneOutput>
+  one(input: ProductValidators.OneInput): Promise<ProductValidators.OneOutput>
 
-  create(input: ProductModels.CreateInput): Promise<ProductModels.CreateOutput>
+  create(
+    input: ProductValidators.CreateInput,
+  ): Promise<ProductValidators.CreateOutput>
 
-  update(input: ProductModels.UpdateInput): Promise<ProductModels.UpdateOutput>
+  update(
+    input: ProductValidators.UpdateInput,
+  ): Promise<ProductValidators.UpdateOutput>
+
+  delete(
+    input: ProductValidators.DeleteInput,
+  ): Promise<ProductValidators.DeleteOutput>
+
+  restore(
+    input: ProductValidators.RestoreInput,
+  ): Promise<ProductValidators.RestoreOutput>
 }

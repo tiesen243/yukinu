@@ -1,2 +1,0 @@
-DROP VIEW "public"."users_view";--> statement-breakpoint
-CREATE VIEW "public"."users_view" AS (select "users"."id", "users"."email", "users"."username", "users"."role", "users"."status", "profiles"."avatar_url" as "avatar_url" from "users" inner join "profiles" on "users"."id" = "profiles"."id");

@@ -20,9 +20,11 @@
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
+    "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.0.4",
+    "next": "^16.0.6",
+    "nuqs": "catalog:",
     "react": "catalog:react",
     "react-dom": "catalog:react",
     "superjson": "catalog:trpc"
@@ -39,9 +41,5 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:"
-  },
-  "peerDependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "catalog:",
-    "prettier-plugin-tailwindcss": "catalog:"
   }
 }

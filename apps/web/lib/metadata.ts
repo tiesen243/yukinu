@@ -81,7 +81,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
       'discover products from multiple sellers',
       'secure online shopping',
     ],
-    generator: 'Next.js',
+    generator: 'Create Yuki Stack',
 
     // Webmaster verifications
     verification: { google: 'IxxbL_t4Uj36PsfajteCHNpV6Ln9fr7WCkxmzFjW_ms' },

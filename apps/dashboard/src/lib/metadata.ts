@@ -72,7 +72,7 @@ export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
     },
 
     // Generator
-    { name: 'generator', content: 'React Router' },
+    { name: 'generator', content: 'Create Yuki Stack' },
 
     // Webmaster verifications
     {

@@ -1,92 +1,256 @@
 import { TRPCError } from '@trpc/server'
 
-import type { Database } from '@yukinu/db'
-import type { UserModels } from '@yukinu/validators/user'
+import type { UserValidators } from '@yukinu/validators/user'
 
 import type { IUserService } from '@/contracts/services/user.service'
-import type { IProfileRepository, IUserRepository } from '@/types'
+import { BaseService } from '@/services/base.service'
 
-export class UserService implements IUserService {
-  public constructor(
-    private readonly _db: Database,
-    private readonly _profileRepo: IProfileRepository,
-    private readonly _userRepo: IUserRepository,
-  ) {}
-
-  public async all(input: UserModels.AllInput): Promise<UserModels.AllOutput> {
-    const { search = '', limit, page } = input
+export class UserService extends BaseService implements IUserService {
+  async all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
+    const { and, eq, ilike, or } = this._orm
+    const { users } = this._schema
+    const { search, status, page, limit } = input
     const offset = (page - 1) * limit
 
-    const criteria = search
-      ? [{ email: `%${search}%` }, { username: `%${search}%` }]
-      : []
-    const users = await this._userRepo.findBy(
-      criteria,
-      { createdAt: 'desc' },
-      limit,
-      offset,
-    )
+    const whereClause = []
+    if (search)
+      whereClause.push(
+        or(
+          ilike(users.username, `%${search}%`),
+          ilike(users.email, `%${search}%`),
+        ),
+      )
+    if (status) whereClause.push(eq(users.status, status))
 
-    const totalItems = await this._userRepo.count(criteria)
-    const totalPages = Math.ceil(totalItems / limit)
+    const [usersList, total] = await Promise.all([
+      this._db
+        .select()
+        .from(users)
+        .where(and(...whereClause))
+        .offset(offset)
+        .limit(limit),
+      this._db.$count(users, and(...whereClause)),
+    ])
+    const totalPages = Math.ceil(total / limit)
 
     return {
-      users,
-      pagination: { page, totalPages, totalItems },
+      users: usersList,
+      pagination: { total, page, limit, totalPages },
     }
   }
 
-  public async one(input: UserModels.OneInput): Promise<UserModels.OneOutput> {
-    const user = await this._userRepo.find(input.id)
+  async one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id } = input
+
+    const [user] = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1)
+
     if (!user)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
     return user
   }
 
-  public async update(
-    input: UserModels.UpdateInput,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<UserModels.UpdateOutput> {
-    const { id = '', ...updateData } = input
+  async updateStatus(
+    input: UserValidators.UpdateStatusInput,
+  ): Promise<UserValidators.UpdateStatusOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id, status, role } = input
 
-    const existingUser = await this.one({ id })
+    await this._db.update(users).set({ status, role }).where(eq(users.id, id))
 
-    this.checkModifyPermissions(existingUser, actingUser)
-
-    await this._userRepo.update(id, updateData)
-    return { userId: id }
+    return { id }
   }
 
-  public async delete(
-    input: UserModels.DeleteInput,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ): Promise<UserModels.DeleteOutput> {
-    const { id } = input
+  async profile(
+    input: UserValidators.ProfileInput,
+  ): Promise<UserValidators.ProfileOutput> {
+    const { eq } = this._orm
+    const { users, profiles } = this._schema
+    const { userId } = input
 
-    const existingUser = await this.one({ id })
-    this.checkModifyPermissions(existingUser, actingUser)
+    const [profile] = await this._db
+      .select({
+        id: users.id,
+        username: users.username,
+        email: users.email,
+        emailVerified: users.emailVerified,
+        image: users.image,
+        role: users.role,
+        createdAt: users.createdAt,
+        profile: {
+          fullName: profiles.fullName,
+          bio: profiles.bio,
+          gender: profiles.gender,
+          dateOfBirth: profiles.dateOfBirth,
+        },
+      })
+      .from(users)
+      .where(eq(users.id, userId))
+      .innerJoin(profiles, eq(profiles.id, users.id))
+      .limit(1)
+    if (!profile)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
+
+    return profile
+  }
+
+  updateProfile(
+    input: UserValidators.UpdateProfileInput,
+  ): Promise<UserValidators.UpdateProfileOutput> {
+    const { eq } = this._orm
+    const { profiles, users } = this._schema
+    const { id, image, ...data } = input
 
     return this._db.transaction(async (tx) => {
-      await this._profileRepo.delete(id, tx)
-      await this._userRepo.delete(id, tx)
-      return { userId: input.id }
+      await tx
+        .update(profiles)
+        .set({ ...data })
+        .where(eq(profiles.id, id))
+
+      await tx.update(users).set({ image }).where(eq(users.id, id))
+
+      return { id }
     })
   }
 
-  private checkModifyPermissions(
-    user: Pick<UserModels.User, 'id' | 'role'>,
-    actingUser: Pick<UserModels.User, 'id' | 'role'>,
-  ) {
-    if (actingUser.id === user.id)
+  async allAddresses(
+    input: UserValidators.AllAddressesInput,
+  ): Promise<UserValidators.AllAddressesOutput> {
+    const { eq, desc } = this._orm
+    const { addresses } = this._schema
+    const { userId } = input
+
+    const addressesList = await this._db
+      .select()
+      .from(addresses)
+      .where(eq(addresses.userId, userId))
+      .orderBy(desc(addresses.recipientName))
+
+    return { addresses: addressesList }
+  }
+
+  async oneAddress(
+    input: UserValidators.OneAddressInput,
+  ): Promise<UserValidators.OneAddressOutput> {
+    const { and, eq } = this._orm
+    const { addresses } = this._schema
+    const { id, userId } = input
+
+    const [address] = await this._db
+      .select()
+      .from(addresses)
+      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
+      .limit(1)
+
+    if (!address)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Address not found' })
+
+    return address
+  }
+
+  async createAddress(
+    input: UserValidators.CreateAddressInput,
+  ): Promise<UserValidators.CreateAddressOutput> {
+    const { addresses } = this._schema
+
+    const [address] = await this._db
+      .insert(addresses)
+      .values({ ...input })
+      .returning({ id: addresses.id })
+
+    if (!address)
       throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'Users cannot modify their own account.',
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to create address',
       })
 
-    if (actingUser.role === 'moderator' && user.role === 'admin')
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'Moderators cannot modify admin users.',
+    return address
+  }
+
+  async updateAddress(
+    input: UserValidators.UpdateAddressInput,
+  ): Promise<UserValidators.UpdateAddressOutput> {
+    const { and, eq } = this._orm
+    const { addresses } = this._schema
+    const { id, userId, ...data } = input
+
+    await this._db
+      .update(addresses)
+      .set({ ...data })
+      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
+
+    return { id }
+  }
+
+  async deleteAddress(
+    input: UserValidators.DeleteAddressInput,
+  ): Promise<UserValidators.DeleteAddressOutput> {
+    const { and, eq } = this._orm
+    const { addresses } = this._schema
+    const { id, userId } = input
+
+    await this._db
+      .delete(addresses)
+      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
+
+    return { id }
+  }
+
+  async wishlist(
+    input: UserValidators.WishlistInput,
+  ): Promise<UserValidators.WishlistOutput> {
+    const { eq, min } = this._orm
+    const { wishlistItems, products, productImages } = this._schema
+    const { userId } = input
+
+    return this._db
+      .select({
+        product: {
+          id: products.id,
+          name: products.name,
+          price: products.price,
+          image: min(productImages.url),
+        },
+        addedAt: wishlistItems.addedAt,
       })
+      .from(wishlistItems)
+      .where(eq(wishlistItems.userId, userId))
+      .innerJoin(products, eq(products.id, wishlistItems.productId))
+      .leftJoin(productImages, eq(productImages.productId, products.id))
+      .groupBy(wishlistItems.addedAt, products.id)
+  }
+
+  async toggleWishlistItem(
+    input: UserValidators.ToggleWishlistItemInput,
+  ): Promise<UserValidators.ToggleWishlistItemOutput> {
+    const { and, eq } = this._orm
+    const { wishlistItems } = this._schema
+    const { userId, productId } = input
+
+    const whereClause = and(
+      eq(wishlistItems.userId, userId),
+      eq(wishlistItems.productId, productId),
+    )
+
+    const [existingItem] = await this._db
+      .select()
+      .from(wishlistItems)
+      .where(whereClause)
+      .limit(1)
+
+    if (existingItem) {
+      await this._db.delete(wishlistItems).where(whereClause)
+      return { added: false }
+    } else {
+      await this._db.insert(wishlistItems).values({ userId, productId })
+      return { added: true }
+    }
   }
 }

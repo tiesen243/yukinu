@@ -47,6 +47,7 @@ out/
 tmp/
 .DS_Store
 Thumbs.db
+*.bak
 *.pem
 
 # debug

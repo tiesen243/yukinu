@@ -1,28 +1,38 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
+import {
+  Field,
+  FieldContent,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthModels } from '@yukinu/validators/auth'
+import { AuthValidators } from '@yukinu/validators/auth'
 
 export const LoginForm: React.FC = () => {
   const { signIn } = useSession()
   const router = useRouter()
 
   const form = useForm({
-    defaultValues: { identifier: '', password: '' },
-    schema: AuthModels.loginInput,
+    defaultValues: {
+      identifier: '',
+      password: '',
+    },
+    schema: AuthValidators.loginInput,
     onSubmit: signIn,
+    onError: ({ message }) => toast.error(message),
     onSuccess: () => {
-      toast.success('Successfully logged in')
+      toast.success('Logged in successfully!')
       router.push('/')
     },
-    onError: (error) => toast.error(error.message),
   })
 
   return (
@@ -31,9 +41,9 @@ export const LoginForm: React.FC = () => {
         name='identifier'
         render={({ meta, field }) => (
           <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Email or Username</FieldLabel>
-            <Input {...field} placeholder='Your email or username' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldLabel htmlFor={meta.fieldId}>Username or Email</FieldLabel>
+            <Input {...field} placeholder='Enter your username or email' />
+            <FieldError errors={meta.errors} />
           </Field>
         )}
       />
@@ -42,22 +52,22 @@ export const LoginForm: React.FC = () => {
         name='password'
         render={({ meta, field }) => (
           <Field data-invalid={meta.errors.length > 0}>
-            <div className='flex items-center justify-between gap-4'>
+            <FieldContent className='flex-row justify-between'>
               <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-              <Button
-                type='button'
-                variant='link'
-                size='sm'
+              <Link
+                href='/forgot-password'
+                className='text-sm underline-offset-4 hover:underline'
                 tabIndex={-1}
-                onClick={() => {
-                  router.push('/forgot-password')
-                }}
               >
-                Forgot password?
-              </Button>
-            </div>
-            <Input {...field} type='password' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+                Forgot your password?
+              </Link>
+            </FieldContent>
+            <Input
+              {...field}
+              type='password'
+              placeholder='Enter your password'
+            />
+            <FieldError errors={meta.errors} />
           </Field>
         )}
       />
@@ -68,7 +78,7 @@ export const LoginForm: React.FC = () => {
           onClick={form.handleSubmit}
           disabled={form.state.isPending}
         >
-          {form.state.isPending ? 'Logging in...' : 'Login'}
+          {form.state.isPending ? 'Logging in...' : 'Log In'}
         </Button>
       </Field>
     </FieldGroup>

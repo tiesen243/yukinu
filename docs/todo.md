@@ -13,7 +13,7 @@ nav_order: 5
 - [ ] Search and filter products
 - [ ] View vendors list
 - [ ] View products by vendor
-- [ ] Reset password (forgot password)
+- [x] Reset password (forgot password)
 
 ## User (Customer)
 

@@ -1,4 +1,4 @@
-import { ProductModels } from '@yukinu/validators/product'
+import { ProductValidators } from '@yukinu/validators/product'
 
 import {
   createTRPCRouter,
@@ -9,45 +9,52 @@ import {
 
 export const productRouter = createTRPCRouter({
   all: publicProcedure
-    .meta({ message: 'Fetch all products successfully' })
-    .input(ProductModels.allInput.omit({ vendorId: true }))
-    .output(ProductModels.allOutput)
-    .query(({ ctx, input }) => ctx.productService.all(input)),
-
-  allByVendor: vendorProcedure
-    .meta({
-      message: 'Fetch all products by vendor successfully',
-      roles: ['vendor_owner', 'vendor_staff'],
-    })
-    .input(ProductModels.allInput.omit({ vendorId: true }))
-    .output(ProductModels.allOutput)
-    .query(({ ctx, input }) =>
-      ctx.productService.all({ ...input, vendorId: ctx.vendor.id }),
-    ),
+    .meta({ message: 'Products fetched successfully' })
+    .input(ProductValidators.allInput)
+    .output(ProductValidators.allOutput)
+    .query(({ ctx, input }) => ctx.services.product.all(input)),
 
   one: publicProcedure
-    .meta({ message: 'Fetch product successfully' })
-    .input(ProductModels.oneInput)
-    .output(ProductModels.oneOutput)
-    .query(({ ctx, input }) => ctx.productService.one(input)),
+    .meta({ message: 'Product fetched successfully' })
+    .input(ProductValidators.oneInput)
+    .output(ProductValidators.oneOutput)
+    .query(({ ctx, input }) => ctx.services.product.one(input)),
 
   create: vendorProcedure
     .meta({
       message: 'Product created successfully',
-      roles: ['vendor_owner', 'vendor_staff'],
+      role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(ProductModels.createInput.omit({ vendorId: true }))
-    .output(ProductModels.createOutput)
+    .input(ProductValidators.createInput.omit({ vendorId: true }))
+    .output(ProductValidators.createOutput)
     .mutation(({ ctx, input }) =>
-      ctx.productService.create({ ...input, vendorId: ctx.vendor.id }),
+      ctx.services.product.create({ ...input, vendorId: ctx.vendorId }),
     ),
 
   update: protectedProcedure
     .meta({
       message: 'Product updated successfully',
-      roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
     })
-    .input(ProductModels.updateInput)
-    .output(ProductModels.updateOutput)
-    .mutation(({ ctx, input }) => ctx.productService.update(input)),
+    .input(ProductValidators.updateInput)
+    .output(ProductValidators.updateOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.update(input)),
+
+  delete: protectedProcedure
+    .meta({
+      message: 'Product deleted successfully',
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.deleteInput)
+    .output(ProductValidators.deleteOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.delete(input)),
+
+  restore: protectedProcedure
+    .meta({
+      message: 'Product restored successfully',
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.restoreInput)
+    .output(ProductValidators.restoreOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.restore(input)),
 })
