@@ -54,7 +54,11 @@ export const LoginForm: React.FC = () => {
           <Field data-invalid={meta.errors.length > 0}>
             <FieldContent className='flex-row justify-between'>
               <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-              <Link href='#' className='text-sm hover:underline' tabIndex={-1}>
+              <Link
+                href='/forgot-password'
+                className='text-sm underline-offset-4 hover:underline'
+                tabIndex={-1}
+              >
                 Forgot your password?
               </Link>
             </FieldContent>

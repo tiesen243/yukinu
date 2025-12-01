@@ -20,7 +20,7 @@ export async function sendEmail<T extends keyof typeof Templates>(
     from: 'Yukinu <no-reply@tiesen.id.vn>',
     to: opts.to,
     subject: opts.subject,
-    react: Templates[opts.template](opts.data),
+    react: Templates[opts.template](opts.data as never),
   })
 
   if (res.error) throw new Error(res.error.message)

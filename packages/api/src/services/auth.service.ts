@@ -81,7 +81,9 @@ export class AuthService extends BaseService implements IAuthService {
     const [verification] = await this._db
       .select()
       .from(verifications)
-      .where(and(eq(verifications.token, token)))
+      .where(
+        and(eq(verifications.token, token), eq(verifications.type, 'email')),
+      )
       .limit(1)
     if (!verification)
       throw new TRPCError({
@@ -161,15 +163,84 @@ export class AuthService extends BaseService implements IAuthService {
     })
   }
 
-  forgotPassword(
-    _input: AuthValidators.ForgotPasswordInput,
+  async forgotPassword(
+    input: AuthValidators.ForgotPasswordInput,
   ): Promise<AuthValidators.ForgotPasswordOutput> {
-    throw new Error('Method not implemented.')
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { email } = input
+
+    const [user] = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1)
+    if (!user) return
+
+    return this._db.transaction(async (tx) => {
+      const token = randomBytes(32).toString('hex')
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+
+      await tx.insert(this._schema.verifications).values({
+        token,
+        userId: user.id,
+        type: 'password_reset',
+        expiresAt,
+      })
+
+      const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
+      await sendEmail({
+        to: email,
+        subject: 'Yukinu Password Reset',
+        template: 'ResetPassword',
+        data: { username: user.username, resetLink },
+      })
+    })
   }
 
-  resetPassword(
-    _input: AuthValidators.ResetPasswordInput,
+  async resetPassword(
+    input: AuthValidators.ResetPasswordInput,
   ): Promise<AuthValidators.ResetPasswordOutput> {
-    throw new Error('Method not implemented.')
+    const { and, eq } = this._orm
+    const { verifications } = this._schema
+    const { token, newPassword } = input
+
+    const [verification] = await this._db
+      .select()
+      .from(verifications)
+      .where(
+        and(
+          eq(verifications.token, token),
+          eq(verifications.type, 'password_reset'),
+        ),
+      )
+      .limit(1)
+    if (!verification)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'The password reset token is invalid.',
+      })
+
+    return this._db.transaction(async (tx) => {
+      if (verification.expiresAt < new Date()) {
+        await tx.delete(verifications).where(eq(verifications.token, token))
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'The password reset token has expired.',
+        })
+      }
+
+      const passwordHash = await this._password.hash(newPassword)
+      await tx
+        .update(this._schema.accounts)
+        .set({ password: passwordHash })
+        .where(
+          and(
+            eq(this._schema.accounts.userId, verification.userId),
+            eq(this._schema.accounts.provider, 'credentials'),
+          ),
+        )
+      await tx.delete(verifications).where(eq(verifications.token, token))
+    })
   }
 }

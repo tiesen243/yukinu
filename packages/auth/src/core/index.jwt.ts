@@ -134,7 +134,10 @@ export function Auth(config: AuthConfig) {
             })
         } else {
           const { id: _, ...rest } = userData
-          const newUser = await adapter.user.create(rest)
+          const newUser = await adapter.user.create({
+            ...rest,
+            emailVerified: new Date(),
+          })
           userId = newUser.id
 
           await adapter.account.create({
