@@ -30,6 +30,8 @@ export const products = pgTable(
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
     price: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
+    stock: t.integer().notNull().default(0),
+    sold: t.integer().notNull().default(0),
     createdAt,
     updatedAt,
     deletedAt: t.timestamp(),
@@ -83,6 +85,34 @@ export const productAttributes = pgTable(
   ],
 )
 
+export const variants = pgTable(
+  'variants',
+  (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    name: t.varchar({ length: 100 }).notNull(),
+  }),
+  (t) => [uniqueIndex('variants_name_idx').on(t.name)],
+)
+
+export const variantOptions = pgTable(
+  'variant_options',
+  (t) => ({
+    id: t.integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
+    variantId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => variants.id, { onDelete: 'cascade' }),
+    value: t.varchar({ length: 100 }).notNull(),
+  }),
+  (t) => [
+    index('variant_options_variant_id_idx').on(t.variantId),
+    uniqueIndex('variant_options_variant_id_value_idx').on(
+      t.variantId,
+      t.value,
+    ),
+  ],
+)
+
 export const productVariants = pgTable(
   'product_variants',
   (t) => ({
@@ -91,48 +121,13 @@ export const productVariants = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    name: t.varchar({ length: 100 }).notNull(),
-  }),
-  (t) => [
-    index('product_variants_product_id_idx').on(t.productId),
-    uniqueIndex('product_variants_product_id_name_idx').on(t.productId, t.name),
-  ],
-)
-
-export const productVariantOptions = pgTable(
-  'product_variant_options',
-  (t) => ({
-    id: t.integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
-    variantId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => productVariants.id, { onDelete: 'cascade' }),
-    value: t.varchar({ length: 100 }).notNull(),
-  }),
-  (t) => [
-    index('product_variant_options_variant_id_idx').on(t.variantId),
-    uniqueIndex('product_variant_options_variant_id_value_idx').on(
-      t.variantId,
-      t.value,
-    ),
-  ],
-)
-
-export const productVariantCombinations = pgTable(
-  'product_variant_combinations',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    productId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
-    sku: t.varchar({ length: 50 }).notNull(), // Stock Keeping Unit: [option_1_id]-[option_2_id]-...
+    sku: t.varchar({ length: 100 }).notNull(), // Stock Keeping Unit: variant_options ids joined by '-'
     price: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
     stock: t.integer().notNull().default(0),
   }),
   (t) => [
-    index('product_variant_combinations_product_id_idx').on(t.productId),
-    uniqueIndex('product_variant_combinations_sku_idx').on(t.sku),
+    index('product_variants_product_id_idx').on(t.productId),
+    uniqueIndex('product_variants_product_id_sku_idx').on(t.productId, t.sku),
   ],
 )
 

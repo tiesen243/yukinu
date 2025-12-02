@@ -10,6 +10,8 @@ export namespace ProductValidators {
     name: z.string().min(1).max(255),
     description: z.string().nullable(),
     price: numeric,
+    stock: z.int().min(0),
+    sold: z.int().min(0),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -22,43 +24,47 @@ export namespace ProductValidators {
   })
   export type Image = z.infer<typeof productImage>
 
-  export const productAttribute = z.object({
+  export const attribute = z.object({
     id: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type Attribute = z.infer<typeof attribute>
+
+  export const productAttribute = z.object({
     productId: z.cuid(),
-    key: z.string().min(1).max(100),
+    attributeId: z.cuid(),
     value: z.string().min(1).max(255),
   })
-  export type Attribute = z.infer<typeof productAttribute>
+  export type ProductAttribute = z.infer<typeof productAttribute>
+
+  export const variant = z.object({
+    id: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type Variant = z.infer<typeof variant>
+
+  export const variantOption = z.object({
+    id: z.int().min(1000),
+    variantId: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type VariantOption = z.infer<typeof variantOption>
 
   export const productVariant = z.object({
     id: z.cuid(),
     productId: z.cuid(),
-    name: z.string().min(1).max(100),
-  })
-  export type Variant = z.infer<typeof productVariant>
-
-  export const productVariantOption = z.object({
-    id: z.int().min(1000),
-    variantId: z.cuid(),
-    value: z.string().min(1).max(100),
-  })
-  export type VariantOption = z.infer<typeof productVariantOption>
-
-  export const productVariantCombination = z.object({
-    id: z.cuid(),
-    productId: z.cuid(),
-    sku: z.string().min(1).max(50),
+    sku: z.string().min(1).max(100),
     price: numeric,
-    stock: z.number().min(0),
+    stock: z.int().min(0),
   })
-  export type VariantCombination = z.infer<typeof productVariantCombination>
+  export type ProductVariant = z.infer<typeof productVariant>
 
   export const productReview = z.object({
     id: z.cuid(),
     productId: z.cuid(),
     userId: z.cuid(),
     rating: z.number().min(1).max(5),
-    comment: z.string().optional(),
+    comment: z.string().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -93,24 +99,37 @@ export namespace ProductValidators {
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
   export const oneOutput = product
-    .omit({ categoryId: true, vendorId: true, updatedAt: true })
+    .omit({ categoryId: true, vendorId: true })
     .extend({
       category: z.object({ id: z.cuid(), name: z.string() }).nullable(),
-      vendor: z.object({
-        id: z.cuid(),
-        name: z.string(),
-        image: z.url().nullable(),
-        createdAt: z.date(),
-      }),
+      vendor: z
+        .object({
+          id: z.cuid(),
+          name: z.string(),
+          image: z.url().nullable(),
+        })
+        .nullable(),
+      attributes: z.array(
+        productAttribute
+          .omit({ attributeId: true, productId: true })
+          .extend({ name: z.string() }),
+      ),
       images: z.array(productImage.omit({ productId: true })),
-      reviews: z.array(
-        productReview.pick({ id: true, rating: true, createdAt: true }).extend({
-          user: z.object({
-            id: z.cuid(),
-            username: z.string(),
-            image: z.url().nullable(),
-          }),
+      variants: z.array(
+        productVariant.omit({ id: true, productId: true }).extend({
+          options: z.array(z.object({ name: z.string(), value: z.string() })),
         }),
+      ),
+      reviews: z.array(
+        productReview
+          .omit({ productId: true, userId: true, updatedAt: true })
+          .extend({
+            user: z.object({
+              id: z.cuid(),
+              username: z.string(),
+              image: z.url().nullable(),
+            }),
+          }),
       ),
     })
   export type OneOutput = z.infer<typeof oneOutput>
@@ -122,6 +141,12 @@ export namespace ProductValidators {
         z.object({
           name: z.string().min(1).max(100),
           value: z.string().min(1).max(255),
+        }),
+      ),
+      variants: z.array(
+        z.object({
+          name: z.string().min(1).max(100),
+          options: z.array(z.string().min(1).max(100)),
         }),
       ),
     })
