@@ -19,6 +19,7 @@ export default [
 
     layout('./routes/vendor/__layout.tsx', [
       route('/vendor/my-store', './routes/vendor/_index.tsx'),
+      route('/vendor/staffs', './routes/vendor/staffs/_index.tsx'),
     ]),
 
     // Others

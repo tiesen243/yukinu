@@ -109,7 +109,7 @@ const EditVendorButton: React.FC<{
 
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant='secondary' disabled={isPending}>
+            <Button variant='outline' disabled={isPending}>
               Cancel
             </Button>
           </DialogClose>

@@ -20,6 +20,7 @@ export namespace VendorValidators {
   export const vendorStaff = z.object({
     vendorId: z.cuid(),
     userId: z.cuid(),
+    assignedAt: z.date(),
   })
   export type VendorStaff = z.infer<typeof vendorStaff>
 
@@ -88,9 +89,23 @@ export namespace VendorValidators {
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
 
+  export const allStaffsInput = z.object({
+    vendorId: z.cuid(),
+  })
+  export type AllStaffsInput = z.infer<typeof allStaffsInput>
+  export const allStaffsOutput = z.array(
+    z.object({
+      id: z.cuid(),
+      username: z.string(),
+      email: z.email(),
+      assignedAt: z.date(),
+    }),
+  )
+  export type AllStaffsOutput = z.infer<typeof allStaffsOutput>
+
   export const addStaffInput = z.object({
     vendorId: z.cuid(),
-    userId: z.cuid(),
+    email: z.email('Invalid email address'),
   })
   export type AddStaffInput = z.infer<typeof addStaffInput>
   export const addStaffOutput = z.void()
@@ -98,7 +113,7 @@ export namespace VendorValidators {
 
   export const removeStaffInput = z.object({
     vendorId: z.cuid(),
-    userId: z.cuid(),
+    staffId: z.cuid(),
   })
   export type RemoveStaffInput = z.infer<typeof removeStaffInput>
   export const removeStaffOutput = z.void()

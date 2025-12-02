@@ -7,6 +7,7 @@ CREATE TYPE "public"."gender" AS ENUM('male', 'female', 'other');--> statement-b
 CREATE TABLE "vendor_staffs" (
 	"vendor_id" varchar(24) NOT NULL,
 	"user_id" varchar(24) NOT NULL,
+  "assigned_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "vendor_staffs_vendor_id_user_id_pk" PRIMARY KEY("vendor_id","user_id")
 );
 --> statement-breakpoint

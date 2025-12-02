@@ -1,4 +1,5 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { Suspense } from 'react'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import { Button } from '@yukinu/ui/button'
 import {
@@ -10,6 +11,7 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
+import { Loader2Icon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
@@ -21,14 +23,27 @@ import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
 export const loader = ({ request }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
-  return getQueryClient().ensureQueryData(trpc.vendor.me.queryOptions())
+  void getQueryClient().prefetchQuery(trpc.vendor.me.queryOptions())
 }
 
-export default function MyStorePage({ loaderData }: Route.ComponentProps) {
+export default function MyStorePage(_: Route.ComponentProps) {
+  return (
+    <Suspense
+      fallback={
+        <div className='grid h-[568px] w-full place-items-center rounded-lg bg-card text-card-foreground shadow-sm'>
+          <Loader2Icon className='animate-spin' />
+        </div>
+      }
+    >
+      <MyStoreForm />
+    </Suspense>
+  )
+}
+
+const MyStoreForm: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useQuery({
+  const { data } = useSuspenseQuery({
     ...trpc.vendor.me.queryOptions(),
-    initialData: loaderData,
   })
   const { mutateAsync } = useMutation({
     ...trpc.vendor.update.mutationOptions(),

@@ -59,6 +59,17 @@ export const VendorRouter = createTRPCRouter({
       ctx.services.vendor.update({ ...input, id: ctx.vendorId }),
     ),
 
+  allStaffs: vendorProcedure
+    .meta({
+      message: 'Vendor staff fetched successfully',
+      role: ['vendor_owner'],
+    })
+    .input(VendorValidators.allStaffsInput.omit({ vendorId: true }))
+    .output(VendorValidators.allStaffsOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.vendor.allStaffs({ ...input, vendorId: ctx.vendorId }),
+    ),
+
   addStaff: vendorProcedure
     .meta({
       message: 'Vendor staff added successfully',
