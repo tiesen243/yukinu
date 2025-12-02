@@ -4,7 +4,7 @@ import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon } from '@yukinu/ui/icons'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useVendorQueryStates } from '@/routes/vendors/_hook'
+import { useVendorQueryStates } from '@/routes/admin/vendors/hook'
 
 export const VendorsPagination: React.FC = () => {
   const trpc = useTRPC()

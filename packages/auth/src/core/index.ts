@@ -43,8 +43,15 @@ export function Auth(config: AuthConfig) {
   }
 
   async function validateAccessToken(
-    token: string,
+    headers: Headers,
   ): Promise<{ userId: string; role: UserValidators.Role } | null> {
+    const cookies = parseCookies(headers.get('Cookie'))
+    const token =
+      cookies[keys.accessToken] ??
+      headers.get('Authorization')?.replace('Bearer ', '') ??
+      ''
+    if (!token) return null
+
     try {
       const { sub, role } = await jwt.verify(token)
       return { userId: sub, role }
@@ -292,10 +299,7 @@ export function Auth(config: AuthConfig) {
         )
         response.headers.append(
           'Set-Cookie',
-          serializeCookie(keys.accessToken, result.accessToken, {
-            ...cookie,
-            HttpOnly: false,
-          }),
+          serializeCookie(keys.accessToken, result.accessToken, cookie),
         )
       }
 
@@ -324,10 +328,7 @@ export function Auth(config: AuthConfig) {
         response = Response.json({ accessToken: newToken })
         response.headers.append(
           'Set-Cookie',
-          serializeCookie(keys.accessToken, newToken, {
-            ...cookie,
-            HttpOnly: false,
-          }),
+          serializeCookie(keys.accessToken, newToken, cookie),
         )
       }
 

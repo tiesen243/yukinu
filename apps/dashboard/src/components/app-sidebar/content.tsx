@@ -8,9 +8,9 @@ import {
   HelpCircleIcon,
   LayoutDashboardIcon,
   ListOrderedIcon,
+  Loader2Icon,
   PackageIcon,
   PercentIcon,
-  SettingsIcon,
   ShoppingBagIcon,
   StoreIcon,
   TagsIcon,
@@ -72,13 +72,13 @@ const navs = [
       {
         icon: UsersIcon,
         title: 'Users',
-        url: '/users',
+        url: '/admin/users',
         roles: ['admin', 'moderator'],
       },
       {
         icon: BuildingIcon,
         title: 'Vendors',
-        url: '/vendors',
+        url: '/admin/vendors',
         roles: ['admin', 'moderator'],
       },
       {
@@ -90,13 +90,13 @@ const navs = [
       {
         icon: TagsIcon,
         title: 'Categories',
-        url: '/categories',
+        url: '/admin/categories',
         roles: ['admin', 'moderator'],
       },
       {
         icon: PercentIcon,
         title: 'Coupons',
-        url: '/coupons',
+        url: '/admin/coupons',
         roles: ['admin', 'moderator'],
       },
     ],
@@ -127,12 +127,6 @@ const navs = [
         icon: WalletIcon,
         title: 'Payouts',
         url: '/vendor/payouts',
-        roles: ['vendor_owner'],
-      },
-      {
-        icon: SettingsIcon,
-        title: 'Settings',
-        url: '/vendor/settings',
         roles: ['vendor_owner'],
       },
     ],
@@ -172,9 +166,10 @@ export const AppSidebarContent: React.FC = () => {
               item.roles.includes(session.user.role) && (
                 <SidebarMenuItem key={item.url}>
                   <NavLink to={item.url}>
-                    {({ isActive }) => (
+                    {({ isActive, isPending }) => (
                       <SidebarMenuButton isActive={isActive}>
                         <item.icon /> {item.title}
+                        {isPending && <Loader2Icon className='animate-spin' />}
                       </SidebarMenuButton>
                     )}
                   </NavLink>

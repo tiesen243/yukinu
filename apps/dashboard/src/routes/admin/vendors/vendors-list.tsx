@@ -20,7 +20,7 @@ import { TableCell, TableRow } from '@yukinu/ui/table'
 import { VendorValidators } from '@yukinu/validators/vendor'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useVendorQueryStates } from '@/routes/vendors/_hook'
+import { useVendorQueryStates } from '@/routes/admin/vendors/hook'
 
 export const VendorsList: React.FC = () => {
   const trpc = useTRPC()

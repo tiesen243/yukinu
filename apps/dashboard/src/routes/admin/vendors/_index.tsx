@@ -6,9 +6,9 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 
-import { SearchForm } from '@/routes/vendors/_components/search-form'
-import { VendorsList } from '@/routes/vendors/_components/vendors-list'
-import { VendorsPagination } from '@/routes/vendors/_components/vendors-pagination'
+import { SearchForm } from '@/routes/admin/vendors/search-form'
+import { VendorsList } from '@/routes/admin/vendors/vendors-list'
+import { VendorsPagination } from '@/routes/admin/vendors/vendors-pagination'
 
 export default function VendorsPage() {
   return (

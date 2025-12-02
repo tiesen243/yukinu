@@ -81,7 +81,9 @@ export namespace VendorValidators {
   export const updateStatusOutput = z.object({ id: z.cuid() })
   export type UpdateStatusOutput = z.infer<typeof updateStatusOutput>
 
-  export const updateInput = createInput.extend({ id: z.cuid() })
+  export const updateInput = createInput
+    .omit({ ownerId: true })
+    .extend({ id: z.cuid() })
   export type UpdateInput = z.infer<typeof updateInput>
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>

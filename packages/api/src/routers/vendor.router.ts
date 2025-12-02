@@ -20,6 +20,11 @@ export const VendorRouter = createTRPCRouter({
     .output(VendorValidators.oneOutput)
     .query(({ ctx, input }) => ctx.services.vendor.one(input)),
 
+  me: vendorProcedure
+    .meta({ message: 'Vendor fetched successfully', role: ['vendor_owner'] })
+    .output(VendorValidators.oneOutput.omit({ id: true }))
+    .query(({ ctx }) => ctx.services.vendor.one({ id: ctx.vendorId })),
+
   create: protectedProcedure
     .meta({
       message: 'Vendor created successfully',
