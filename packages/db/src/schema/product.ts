@@ -66,7 +66,10 @@ export const productAttributes = pgTable(
     key: t.varchar({ length: 100 }).notNull(),
     value: t.varchar({ length: 255 }).notNull(),
   }),
-  (t) => [index('product_attributes_product_id_idx').on(t.productId)],
+  (t) => [
+    index('product_attributes_product_id_idx').on(t.productId),
+    uniqueIndex('product_attributes_product_id_key_idx').on(t.productId, t.key),
+  ],
 )
 
 export const productVariants = pgTable(
@@ -79,7 +82,10 @@ export const productVariants = pgTable(
       .references(() => products.id, { onDelete: 'cascade' }),
     name: t.varchar({ length: 100 }).notNull(),
   }),
-  (t) => [index('product_variants_product_id_idx').on(t.productId)],
+  (t) => [
+    index('product_variants_product_id_idx').on(t.productId),
+    uniqueIndex('product_variants_product_id_name_idx').on(t.productId, t.name),
+  ],
 )
 
 export const productVariantOptions = pgTable(

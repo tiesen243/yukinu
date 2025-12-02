@@ -203,12 +203,14 @@ CREATE INDEX "orders_user_id_idx" ON "orders" USING btree ("user_id");--> statem
 CREATE INDEX "payments_order_id_idx" ON "payments" USING btree ("order_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "categories_name_idx" ON "categories" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "product_attributes_product_id_idx" ON "product_attributes" USING btree ("product_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "product_attributes_product_id_key_idx" ON "product_attributes" USING btree ("product_id","key");--> statement-breakpoint
 CREATE INDEX "product_images_product_id_idx" ON "product_images" USING btree ("product_id");--> statement-breakpoint
 CREATE INDEX "product_reviews_product_id_idx" ON "product_reviews" USING btree ("product_id");--> statement-breakpoint
 CREATE INDEX "product_variant_combinations_product_id_idx" ON "product_variant_combinations" USING btree ("product_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "product_variant_combinations_sku_idx" ON "product_variant_combinations" USING btree ("sku");--> statement-breakpoint
 CREATE INDEX "product_variant_options_variant_id_idx" ON "product_variant_options" USING btree ("variant_id");--> statement-breakpoint
 CREATE INDEX "product_variants_product_id_idx" ON "product_variants" USING btree ("product_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "product_variants_product_id_name_idx" ON "product_variants" USING btree ("product_id","name");--> statement-breakpoint
 CREATE INDEX "products_vendor_id_idx" ON "products" USING btree ("vendor_id");--> statement-breakpoint
 CREATE INDEX "products_category_id_idx" ON "products" USING btree ("category_id");--> statement-breakpoint
 CREATE INDEX "products_name_idx" ON "products" USING btree ("name");--> statement-breakpoint
