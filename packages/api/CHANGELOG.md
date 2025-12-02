@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.2.2
+
+### Patch Changes
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`054f313`](https://github.com/tiesen243/yukinu/commit/054f313f574ac9770398f19fd3cb320ce398272d) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
 ## 0.2.1
 
 ### Patch Changes

@@ -1,5 +1,24 @@
 # @yukinu/dashboard
 
+## 0.3.2
+
+### Patch Changes
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`e94ccac`](https://github.com/tiesen243/yukinu/commit/e94ccac17fc406e87038d2daf1325e43767d55ba) Thanks [@tiesen243](https://github.com/tiesen243)! - update vendor information
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`4c8e42e`](https://github.com/tiesen243/yukinu/commit/4c8e42e35ef419f0019a90b52aad6fa7284f8b18) Thanks [@tiesen243](https://github.com/tiesen243)! - check todos
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`ebe7bd2`](https://github.com/tiesen243/yukinu/commit/ebe7bd2ffdac6dd834b089ae2a3d543e9bda140c) Thanks [@tiesen243](https://github.com/tiesen243)! - add staff management
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`b89e799`](https://github.com/tiesen243/yukinu/commit/b89e799e3cbab7b7e34a79d983496a1105d53131) Thanks [@tiesen243](https://github.com/tiesen243)! - added apply vendor form
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`25af78a`](https://github.com/tiesen243/yukinu/commit/25af78af33f1aa4b01de875d2f55ebe8394523d5) Thanks [@tiesen243](https://github.com/tiesen243)! - create dashboard layout
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`4cde474`](https://github.com/tiesen243/yukinu/commit/4cde47411a4226c50c27788884e3209bf5bb9c84) Thanks [@tiesen243](https://github.com/tiesen243)! - added vendor management table
+
+- Updated dependencies [[`054f313`](https://github.com/tiesen243/yukinu/commit/054f313f574ac9770398f19fd3cb320ce398272d)]:
+  - @yukinu/api@0.2.2
+
 ## 0.3.1
 
 ### Patch Changes
