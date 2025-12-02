@@ -22,9 +22,9 @@ export default function AppVendorPage() {
   const form = useForm({
     defaultValues: {
       name: '',
-      description: '',
-      image: '',
-      address: '',
+      description: undefined,
+      image: undefined,
+      address: undefined,
     } as Omit<VendorValidators.CreateInput, 'ownerId'>,
     schema: VendorValidators.createInput.omit({ ownerId: true }),
     onSubmit: trpc.vendor.create.mutate,
@@ -64,14 +64,10 @@ export default function AppVendorPage() {
 
           <form.Field
             name='description'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <Textarea
-                  {...field}
-                  value={value ?? ''}
-                  placeholder='Vendor Description'
-                />
+                <Textarea {...field} placeholder='Vendor Description' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
@@ -79,12 +75,11 @@ export default function AppVendorPage() {
 
           <form.Field
             name='image'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                 <Input
                   {...field}
-                  value={value ?? ''}
                   type='url'
                   placeholder='https://example.com/image.jpg'
                 />
@@ -99,14 +94,10 @@ export default function AppVendorPage() {
 
           <form.Field
             name='address'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                <Input
-                  {...field}
-                  value={value ?? ''}
-                  placeholder='Vendor Address'
-                />
+                <Input {...field} placeholder='Vendor Address' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

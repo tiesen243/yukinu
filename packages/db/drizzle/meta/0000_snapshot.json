@@ -1,5 +1,5 @@
 {
-  "id": "13b432dc-59bc-4985-8d23-6c3c187dc18d",
+  "id": "5c844451-dfc6-42c6-8814-aacf1e17d665",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -401,6 +401,47 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.attributes": {
+      "name": "attributes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "attributes_name_idx": {
+          "name": "attributes_name_idx",
+          "columns": [
+            {
+              "expression": "name",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.categories": {
       "name": "categories",
       "schema": "",
@@ -464,21 +505,15 @@
       "name": "product_attributes",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(24)",
-          "primaryKey": true,
-          "notNull": true
-        },
         "product_id": {
           "name": "product_id",
           "type": "varchar(24)",
           "primaryKey": false,
           "notNull": true
         },
-        "key": {
-          "name": "key",
-          "type": "varchar(100)",
+        "attribute_id": {
+          "name": "attribute_id",
+          "type": "varchar(24)",
           "primaryKey": false,
           "notNull": true
         },
@@ -505,23 +540,17 @@
           "method": "btree",
           "with": {}
         },
-        "product_attributes_product_id_key_idx": {
-          "name": "product_attributes_product_id_key_idx",
+        "product_attributes_attribute_id_idx": {
+          "name": "product_attributes_attribute_id_idx",
           "columns": [
             {
-              "expression": "product_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "key",
+              "expression": "attribute_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
             }
           ],
-          "isUnique": true,
+          "isUnique": false,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -536,9 +565,23 @@
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "product_attributes_attribute_id_attributes_id_fk": {
+          "name": "product_attributes_attribute_id_attributes_id_fk",
+          "tableFrom": "product_attributes",
+          "tableTo": "attributes",
+          "columnsFrom": ["attribute_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "product_attributes_product_id_attribute_id_pk": {
+          "name": "product_attributes_product_id_attribute_id_pk",
+          "columns": ["product_id", "attribute_id"]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -708,12 +751,12 @@
           "primaryKey": false,
           "notNull": true
         },
-        "extra_price": {
-          "name": "extra_price",
+        "price": {
+          "name": "price",
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true,
-          "default": "'0'"
+          "default": "'0.00'"
         },
         "stock": {
           "name": "stock",
@@ -818,6 +861,27 @@
             }
           ],
           "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "product_variant_options_variant_id_value_idx": {
+          "name": "product_variant_options_variant_id_value_idx",
+          "columns": [
+            {
+              "expression": "variant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "value",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -956,7 +1020,8 @@
           "name": "price",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'0.00'"
         },
         "created_at": {
           "name": "created_at",
@@ -1056,12 +1121,6 @@
       "name": "accounts",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(24)",
-          "primaryKey": true,
-          "notNull": true
-        },
         "user_id": {
           "name": "user_id",
           "type": "varchar(24)",
@@ -1102,48 +1161,6 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
-        },
-        "accounts_user_id_provider_uq_idx": {
-          "name": "accounts_user_id_provider_uq_idx",
-          "columns": [
-            {
-              "expression": "user_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "provider",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        },
-        "accounts_provider_account_id_uq_idx": {
-          "name": "accounts_provider_account_id_uq_idx",
-          "columns": [
-            {
-              "expression": "provider",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            },
-            {
-              "expression": "account_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": true,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
         }
       },
       "foreignKeys": {
@@ -1157,7 +1174,12 @@
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "accounts_provider_account_id_pk": {
+          "name": "accounts_provider_account_id_pk",
+          "columns": ["provider", "account_id"]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},

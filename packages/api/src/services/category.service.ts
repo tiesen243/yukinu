@@ -59,11 +59,12 @@ export class CategoryService extends BaseService implements ICategoryService {
     input: CategoryValidators.CreateInput,
   ): Promise<CategoryValidators.CreateOutput> {
     const { categories } = this._schema
-    const { name, description } = input
+    const { parentId, ...data } = input
 
+    if (parentId) await this.one({ id: parentId })
     const [result] = await this._db
       .insert(categories)
-      .values({ name, description })
+      .values({ ...data, parentId: parentId ?? null })
       .returning({ id: categories.id })
 
     if (!result?.id)

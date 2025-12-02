@@ -1,4 +1,4 @@
-import { index, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
+import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
 
@@ -30,7 +30,7 @@ export const products = pgTable(
       .references(() => categories.id, { onDelete: 'set null' }),
     name: t.varchar({ length: 255 }).notNull(),
     description: t.text(),
-    price: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    price: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
     createdAt,
     updatedAt,
     deletedAt: t.timestamp(),
@@ -55,20 +55,32 @@ export const productImages = pgTable(
   (t) => [index('product_images_product_id_idx').on(t.productId)],
 )
 
+export const attributes = pgTable(
+  'attributes',
+  (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    name: t.varchar({ length: 100 }).notNull(),
+  }),
+  (t) => [uniqueIndex('attributes_name_idx').on(t.name)],
+)
+
 export const productAttributes = pgTable(
   'product_attributes',
   (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     productId: t
       .varchar({ length: 24 })
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    key: t.varchar({ length: 100 }).notNull(),
+    attributeId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => attributes.id, { onDelete: 'cascade' }),
     value: t.varchar({ length: 255 }).notNull(),
   }),
   (t) => [
+    primaryKey({ columns: [t.productId, t.attributeId] }),
     index('product_attributes_product_id_idx').on(t.productId),
-    uniqueIndex('product_attributes_product_id_key_idx').on(t.productId, t.key),
+    index('product_attributes_attribute_id_idx').on(t.attributeId),
   ],
 )
 
@@ -98,7 +110,13 @@ export const productVariantOptions = pgTable(
       .references(() => productVariants.id, { onDelete: 'cascade' }),
     value: t.varchar({ length: 100 }).notNull(),
   }),
-  (t) => [index('product_variant_options_variant_id_idx').on(t.variantId)],
+  (t) => [
+    index('product_variant_options_variant_id_idx').on(t.variantId),
+    uniqueIndex('product_variant_options_variant_id_value_idx').on(
+      t.variantId,
+      t.value,
+    ),
+  ],
 )
 
 export const productVariantCombinations = pgTable(
@@ -109,8 +127,8 @@ export const productVariantCombinations = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    sku: t.varchar({ length: 50 }).notNull(), // [id_variantOptionId1]_[id_variantOptionId2]...
-    extraPrice: t.numeric({ precision: 10, scale: 2 }).notNull().default('0'),
+    sku: t.varchar({ length: 50 }).notNull(), // Stock Keeping Unit: [option_1_id]-[option_2_id]-...
+    price: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
     stock: t.integer().notNull().default(0),
   }),
   (t) => [
