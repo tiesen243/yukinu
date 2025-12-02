@@ -1,5 +1,5 @@
 {
-  "id": "5c844451-dfc6-42c6-8814-aacf1e17d665",
+  "id": "7412a6dd-9e10-41b4-9c6f-9e9c29b9fe57",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -996,7 +996,7 @@
           "name": "vendor_id",
           "type": "varchar(24)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
         },
         "category_id": {
           "name": "category_id",
@@ -1098,7 +1098,7 @@
           "tableTo": "vendors",
           "columnsFrom": ["vendor_id"],
           "columnsTo": ["id"],
-          "onDelete": "cascade",
+          "onDelete": "set null",
           "onUpdate": "no action"
         },
         "products_category_id_categories_id_fk": {

@@ -12,7 +12,7 @@ export const productRouter = createTRPCRouter({
   one: publicProcedure
     .meta({ message: 'Product fetched successfully' })
     .input(ProductValidators.oneInput)
-    .output(ProductValidators.oneOutput)
+    // .output(ProductValidators.oneOutput)
     .query(({ ctx, input }) => ctx.services.product.one(input)),
 
   create: vendorProcedure

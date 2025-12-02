@@ -23,8 +23,7 @@ export const products = pgTable(
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     vendorId: t
       .varchar({ length: 24 })
-      .notNull()
-      .references(() => vendors.id, { onDelete: 'cascade' }),
+      .references(() => vendors.id, { onDelete: 'set null' }),
     categoryId: t
       .varchar({ length: 24 })
       .references(() => categories.id, { onDelete: 'set null' }),
