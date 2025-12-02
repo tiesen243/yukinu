@@ -10,8 +10,8 @@ export class VendorService extends BaseService implements IVendorService {
   async all(
     input: VendorValidators.AllInput,
   ): Promise<VendorValidators.AllOutput> {
-    const { and, eq, ilike } = this._orm
-    const { vendors } = this._schema
+    const { and, desc, eq, ilike, count } = this._orm
+    const { vendors, vendorStaffs } = this._schema
     const { search, status, page, limit } = input
     const offset = (page - 1) * limit
 
@@ -21,11 +21,24 @@ export class VendorService extends BaseService implements IVendorService {
 
     const [vendorsList, total] = await Promise.all([
       this._db
-        .select()
+        .select({
+          id: vendors.id,
+          name: vendors.name,
+          status: vendors.status,
+          owner: { id: users.id, username: users.username },
+          staffCount: count(vendorStaffs.userId),
+          createdAt: vendors.createdAt,
+          updatedAt: vendors.updatedAt,
+        })
         .from(vendors)
         .where(and(...whereClause))
+        .innerJoin(users, eq(users.id, vendors.ownerId))
+        .leftJoin(vendorStaffs, eq(vendorStaffs.vendorId, vendors.id))
+        .orderBy(desc(vendors.createdAt))
         .offset(offset)
-        .limit(limit),
+        .limit(limit)
+        .groupBy(vendors.id, users.id),
+
       this._db.$count(vendors, and(...whereClause)),
     ])
     const totalPages = Math.ceil(total / limit)
@@ -71,7 +84,7 @@ export class VendorService extends BaseService implements IVendorService {
     if (!vendor)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `Vendor with ID ${id} not found.`,
+        message: `Vendor with ID ${id} not found`,
       })
 
     return { ...vendor, staffs }
@@ -80,7 +93,19 @@ export class VendorService extends BaseService implements IVendorService {
   async create(
     input: VendorValidators.CreateInput,
   ): Promise<VendorValidators.CreateOutput> {
+    const { eq } = this._orm
     const { vendors } = this._schema
+
+    const [vendor] = await this._db
+      .select({ id: vendors.id })
+      .from(vendors)
+      .where(eq(vendors.ownerId, input.ownerId))
+      .limit(1)
+    if (vendor)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You already own a vendor or application is pending',
+      })
 
     const [result] = await this._db
       .insert(vendors)
@@ -90,7 +115,7 @@ export class VendorService extends BaseService implements IVendorService {
     if (!result?.id)
       throw new TRPCError({
         code: 'INTERNAL_SERVER_ERROR',
-        message: `Failed to create vendor.`,
+        message: `Failed to create vendor`,
       })
 
     return result
@@ -113,7 +138,7 @@ export class VendorService extends BaseService implements IVendorService {
     if (!validTransitions.includes(status))
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `Invalid status transition from ${currentStatus} to ${status}.`,
+        message: `Invalid status transition from ${currentStatus} to ${status}`,
       })
 
     return this._db.transaction(async (tx) => {
@@ -157,12 +182,49 @@ export class VendorService extends BaseService implements IVendorService {
     return { id }
   }
 
+  async allStaffs(
+    input: VendorValidators.AllStaffsInput,
+  ): Promise<VendorValidators.AllStaffsOutput> {
+    const { eq } = this._orm
+    const { vendorStaffs } = this._schema
+    const { vendorId } = input
+
+    return this._db
+      .select({
+        id: users.id,
+        username: users.username,
+        email: users.email,
+        assignedAt: vendorStaffs.assignedAt,
+      })
+      .from(vendorStaffs)
+      .where(eq(vendorStaffs.vendorId, vendorId))
+      .innerJoin(users, eq(users.id, vendorStaffs.userId))
+      .orderBy(users.username)
+  }
+
   async addStaff(
     input: VendorValidators.AddStaffInput,
   ): Promise<VendorValidators.AddStaffOutput> {
     const { and, eq } = this._orm
-    const { vendorStaffs } = this._schema
-    const { vendorId, userId } = input
+    const { users, vendorStaffs } = this._schema
+    const { vendorId, email } = input
+
+    const [user] = await this._db
+      .select({ id: users.id, role: users.role })
+      .from(users)
+      .where(eq(users.email, email))
+      .limit(1)
+    if (!user)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'User not found with the provided email',
+      })
+
+    if (user.role !== 'user')
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'This user cannot be added as staff',
+      })
 
     const [existingStaff] = await this._db
       .select()
@@ -170,25 +232,17 @@ export class VendorService extends BaseService implements IVendorService {
       .where(
         and(
           eq(vendorStaffs.vendorId, vendorId),
-          eq(vendorStaffs.userId, userId),
+          eq(vendorStaffs.userId, user.id),
         ),
       )
       .limit(1)
     if (existingStaff)
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `User with ID ${userId} is already a staff member of vendor ${vendorId}.`,
+        message: `User with email ${email} is already a staff member of your vendor`,
       })
 
-    const [result] = await this._db
-      .insert(vendorStaffs)
-      .values({ vendorId, userId })
-      .returning({ id: vendorStaffs.userId })
-    if (!result?.id)
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: `Failed to add staff with ID ${userId} to vendor ${vendorId}.`,
-      })
+    await this._db.insert(vendorStaffs).values({ vendorId, userId: user.id })
   }
 
   async removeStaff(
@@ -196,14 +250,14 @@ export class VendorService extends BaseService implements IVendorService {
   ): Promise<VendorValidators.RemoveStaffOutput> {
     const { and, eq } = this._orm
     const { vendorStaffs } = this._schema
-    const { vendorId, userId } = input
+    const { vendorId, staffId } = input
 
     const [deletedStaff] = await this._db
       .delete(vendorStaffs)
       .where(
         and(
           eq(vendorStaffs.vendorId, vendorId),
-          eq(vendorStaffs.userId, userId),
+          eq(vendorStaffs.userId, staffId),
         ),
       )
       .returning({ id: vendorStaffs.userId })
@@ -211,7 +265,7 @@ export class VendorService extends BaseService implements IVendorService {
     if (!deletedStaff?.id)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `Staff with ID ${userId} not found in vendor ${vendorId}.`,
+        message: `Staff with ID ${staffId} not found in your vendor`,
       })
   }
 }

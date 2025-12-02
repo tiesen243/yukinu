@@ -19,6 +19,13 @@
           "type": "varchar(24)",
           "primaryKey": false,
           "notNull": true
+        },
+        "assigned_at": {
+          "name": "assigned_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {

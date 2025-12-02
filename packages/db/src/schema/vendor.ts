@@ -40,6 +40,7 @@ export const vendorStaffs = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
+    assignedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
   }),
   (t) => [
     primaryKey({ columns: [t.vendorId, t.userId] }),

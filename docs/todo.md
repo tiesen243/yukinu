@@ -32,16 +32,14 @@ nav_order: 5
 ## Vendor Owner / Manager
 
 - [x] Apply to become a vendor
-- [ ] Manage store information
+- [x] Manage store information
 - [x] Manage products (list/create/update)
 - [x] Manage product images
 - [x] Manage product variants (size, color, etc.)
-- [ ] Manage product inventory
 - [ ] Manage vendor-specific orders
 - [ ] Update order status (processing → shipped → delivered)
 - [ ] Manage vendor product collections (CRUD)
-- [ ] Manage vendor members (add / assign roles / remove)
-- [ ] View & reply to product reviews _(optional)_
+- [x] Manage vendor members (add / assign roles / remove)
 
 ## Admin
 
