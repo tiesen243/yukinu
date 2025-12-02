@@ -217,13 +217,13 @@ export class VendorService extends BaseService implements IVendorService {
     if (!user)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `User with email ${email} not found`,
+        message: 'User not found with the provided email',
       })
 
     if (user.role !== 'user')
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `User with email ${email} cannot be added as staff`,
+        message: 'This user cannot be added as staff',
       })
 
     const [existingStaff] = await this._db
@@ -242,15 +242,7 @@ export class VendorService extends BaseService implements IVendorService {
         message: `User with email ${email} is already a staff member of your vendor`,
       })
 
-    const [result] = await this._db
-      .insert(vendorStaffs)
-      .values({ vendorId, userId: user.id })
-      .returning({ id: vendorStaffs.userId })
-    if (!result?.id)
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: `Failed to add staff with email ${email} to your vendor`,
-      })
+    await this._db.insert(vendorStaffs).values({ vendorId, userId: user.id })
   }
 
   async removeStaff(

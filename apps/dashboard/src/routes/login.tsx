@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
@@ -30,11 +30,6 @@ export default function LoginPage() {
           </FieldDescription>
 
           <LoginForm />
-
-          <FieldDescription>
-            Don&apos;t have an account?{' '}
-            <Link to='/register'>Register here</Link>.
-          </FieldDescription>
         </FieldSet>
       </form>
     </main>

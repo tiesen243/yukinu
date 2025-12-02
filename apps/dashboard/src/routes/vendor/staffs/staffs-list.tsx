@@ -55,7 +55,7 @@ const RemoveStaffButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.vendor.removeStaff.mutationOptions(),
     onSuccess: () => {
-      toast.success('Vendor status updated successfully')
+      toast.success('Staff member removed successfully')
       setOpen(false)
     },
     onError: ({ message }) =>
