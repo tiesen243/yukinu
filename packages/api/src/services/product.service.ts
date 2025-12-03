@@ -10,8 +10,9 @@ export class ProductService extends BaseService implements IProductService {
   async all(
     input: ProductValidators.AllInput,
   ): Promise<ProductValidators.AllOutput> {
-    const { and, desc, eq, ilike, max, min, isNull, isNotNull } = this._orm
-    const { productImages, productVariants, products } = this._schema
+    const { and, desc, eq, ilike, max, min, isNull, isNotNull, sql } = this._orm
+    const { productImages, productReviews, productVariants, products } =
+      this._schema
     const { search, categoryId, vendorId, isDeleted, page, limit } = input
     const offset = (page - 1) * limit
 
@@ -28,15 +29,17 @@ export class ProductService extends BaseService implements IProductService {
           id: products.id,
           name: products.name,
           image: min(productImages.url),
-          price: products.price,
-          lowestVariantPrice: min(productVariants.price),
-          highestVariantPrice: max(productVariants.price),
+          sold: products.sold,
+          rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
+          minPrice: sql<string>`LEAST(${min(productVariants.price)}, ${products.price})`,
+          maxPrice: sql<string>`GREATEST(${max(productVariants.price)}, ${products.price})`,
         })
         .from(products)
         .where(and(...whereClause))
         .limit(limit)
         .offset(offset)
         .leftJoin(productImages, eq(productImages.productId, products.id))
+        .leftJoin(productReviews, eq(productReviews.productId, products.id))
         .leftJoin(productVariants, eq(productVariants.productId, products.id))
         .orderBy(desc(products.createdAt))
         .groupBy(products.id),

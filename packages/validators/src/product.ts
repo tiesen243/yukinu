@@ -81,10 +81,12 @@ export namespace ProductValidators {
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
     products: z.array(
-      product.pick({ id: true, name: true, price: true }).extend({
+      product.pick({ id: true, name: true }).extend({
         image: z.url().nullable(),
-        lowestVariantPrice: numeric.nullable(),
-        highestVariantPrice: numeric.nullable(),
+        sold: z.number(),
+        rating: z.string(),
+        minPrice: numeric.nullable(),
+        maxPrice: numeric.nullable(),
       }),
     ),
     pagination: z.object({
