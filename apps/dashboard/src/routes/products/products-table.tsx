@@ -1,3 +1,7 @@
+import { Link } from 'react-router'
+
+import { Button } from '@yukinu/ui/button'
+import { PlusIcon } from '@yukinu/ui/icons'
 import {
   Table,
   TableBody,
@@ -6,18 +10,29 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 
-import { ProductsList } from '@/components/product-table/products-list'
-import { ProductsPagination } from '@/components/product-table/products-pagination'
+import { ProductsList } from '@/routes/products/products-list'
+import { ProductsPagination } from '@/routes/products/products-pagination'
 import {
   SearchForm,
   ToggleProductStatusButton,
-} from '@/components/product-table/search-form'
+} from '@/routes/products/search-form'
 
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
   return (
     <>
-      <div className='flex items-center justify-between'>
+      <div className='flex items-center justify-between gap-4'>
         <SearchForm />
+
+        <div className='flex-1' />
+
+        {!isAdmin && (
+          <Button variant='outline' size='icon' asChild>
+            <Link to='/products/new'>
+              <PlusIcon />
+              <span className='sr-only'>Add Product</span>
+            </Link>
+          </Button>
+        )}
         <ToggleProductStatusButton />
       </div>
 

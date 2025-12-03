@@ -2,7 +2,7 @@ import { Button } from '@yukinu/ui/button'
 import { RefreshCwIcon, SearchIcon, Trash2Icon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 
-import { useProductQueryStates } from '@/components/product-table/hook'
+import { useProductQueryStates } from '@/routes/products/hook'
 
 export const SearchForm: React.FC = () => {
   const [query, setQuery] = useProductQueryStates()

@@ -16,8 +16,8 @@ import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
 
-import { useProductQueryStates } from '@/components/product-table/hook'
 import { useTRPC } from '@/lib/trpc/react'
+import { useProductQueryStates } from '@/routes/products/hook'
 
 export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const trpc = useTRPC()

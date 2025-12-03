@@ -3,8 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon } from '@yukinu/ui/icons'
 
-import { useProductQueryStates } from '@/components/product-table/hook'
 import { useTRPC } from '@/lib/trpc/react'
+import { useProductQueryStates } from '@/routes/products/hook'
 
 export const ProductsPagination: React.FC<{ isAdmin?: boolean }> = ({
   isAdmin,
