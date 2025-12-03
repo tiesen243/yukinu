@@ -5,6 +5,7 @@ import { Button } from '@yukinu/ui/button'
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -53,9 +54,9 @@ const MyStoreForm: React.FC = () => {
   const form = useForm({
     defaultValues: {
       name: data.name,
-      description: data.description,
-      image: data.image,
-      address: data.address,
+      description: data.description ?? undefined,
+      image: data.image ?? undefined,
+      address: data.address ?? undefined,
     } as Omit<VendorValidators.UpdateInput, 'id'>,
     schema: VendorValidators.updateInput.omit({ id: true }),
     onSubmit: mutateAsync,
@@ -81,36 +82,40 @@ const MyStoreForm: React.FC = () => {
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Store Name</FieldLabel>
                 <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <form.Field
             name='description'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <Textarea {...field} value={value ?? ''} />
+                <Textarea {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <form.Field
             name='image'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                <Input {...field} value={value ?? ''} />
+                <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <form.Field
             name='address'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                <Input {...field} value={value ?? ''} />
+                <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />

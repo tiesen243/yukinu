@@ -59,7 +59,7 @@ export class AuthService extends BaseService implements IAuthService {
         expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
       })
 
-      const verificationLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
+      const verificationLink = `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
       await sendEmail({
         to: email,
         subject: 'Welcome to Yukinu!',
@@ -188,7 +188,7 @@ export class AuthService extends BaseService implements IAuthService {
         expiresAt,
       })
 
-      const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
+      const resetLink = `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
       await sendEmail({
         to: email,
         subject: 'Yukinu Password Reset',

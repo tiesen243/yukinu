@@ -3,14 +3,21 @@ import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon } from '@yukinu/ui/icons'
 
+import { useProductQueryStates } from '@/components/product-table/hook'
 import { useTRPC } from '@/lib/trpc/react'
-import { useVendorQueryStates } from '@/routes/admin/vendors/hook'
 
-export const VendorsPagination: React.FC = () => {
+export const ProductsPagination: React.FC<{ isAdmin?: boolean }> = ({
+  isAdmin,
+}) => {
   const trpc = useTRPC()
-  const [query, setQuery] = useVendorQueryStates()
+  const [query, setQuery] = useProductQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.vendor.all.queryOptions(query))
+  const queryOptions = isAdmin
+    ? trpc.product.all.queryOptions
+    : trpc.product.allByVendor.queryOptions
+  const { data, isLoading } = useQuery(
+    queryOptions({ ...query, isDeleted: query.status === 'inactive' }),
+  )
 
   if (isLoading || !data?.pagination) return
 

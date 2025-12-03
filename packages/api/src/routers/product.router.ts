@@ -9,6 +9,17 @@ export const productRouter = createTRPCRouter({
     .output(ProductValidators.allOutput)
     .query(({ ctx, input }) => ctx.services.product.all(input)),
 
+  allByVendor: vendorProcedure
+    .meta({
+      message: 'Vendor products fetched successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.allInput)
+    .output(ProductValidators.allOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.product.all({ ...input, vendorId: ctx.vendorId }),
+    ),
+
   one: publicProcedure
     .meta({ message: 'Product fetched successfully' })
     .input(ProductValidators.oneInput)

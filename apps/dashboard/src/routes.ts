@@ -14,11 +14,12 @@ export default [
     route('/apply-vendor', './routes/apply-vendor.tsx'),
 
     layout('./routes/admin/__layout.tsx', [
+      route('/admin/products', './routes/admin/products.tsx'),
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
     ]),
 
     layout('./routes/products/__layout.tsx', [
-      index('./routes/products/_index.tsx'),
+      route('/products', './routes/products/_index.tsx'),
       route('/products/create', './routes/products/create/_index.tsx'),
       route('/products/:id', './routes/products/[id]/_index.tsx'),
     ]),
