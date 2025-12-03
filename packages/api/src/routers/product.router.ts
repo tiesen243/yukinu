@@ -64,4 +64,31 @@ export const productRouter = createTRPCRouter({
         vendorId: ctx.vendorId,
       }),
     ),
+
+  createVariant: vendorProcedure
+    .meta({
+      message: 'Product variant created successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.createVariantInput)
+    .output(ProductValidators.createVariantOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.createVariant(input)),
+
+  updateVariant: vendorProcedure
+    .meta({
+      message: 'Product variant updated successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.updateVariantInput)
+    .output(ProductValidators.updateVariantOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.updateVariant(input)),
+
+  deleteVariant: vendorProcedure
+    .meta({
+      message: 'Product variant deleted successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(ProductValidators.deleteVariantInput)
+    .output(ProductValidators.deleteVariantOutput)
+    .mutation(({ ctx, input }) => ctx.services.product.deleteVariant(input)),
 })

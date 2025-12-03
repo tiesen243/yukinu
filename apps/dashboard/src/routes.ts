@@ -17,6 +17,12 @@ export default [
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
     ]),
 
+    layout('./routes/products/__layout.tsx', [
+      index('./routes/products/_index.tsx'),
+      route('/products/create', './routes/products/create/_index.tsx'),
+      route('/products/:id', './routes/products/[id]/_index.tsx'),
+    ]),
+
     layout('./routes/vendor/__layout.tsx', [
       route('/vendor/my-store', './routes/vendor/_index.tsx'),
       route('/vendor/staffs', './routes/vendor/staffs/_index.tsx'),

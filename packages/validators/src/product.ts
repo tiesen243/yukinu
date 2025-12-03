@@ -157,7 +157,9 @@ export namespace ProductValidators {
   export const createOutput = z.object({ id: z.cuid() })
   export type CreateOutput = z.infer<typeof createOutput>
 
-  export const updateInput = createInput.extend({ id: z.cuid() })
+  export const updateInput = createInput
+    .omit({ variants: true })
+    .extend({ id: z.cuid() })
   export type UpdateInput = z.infer<typeof updateInput>
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
@@ -171,4 +173,24 @@ export namespace ProductValidators {
   export type RestoreInput = z.infer<typeof restoreInput>
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
+
+  export const createVariantInput = productVariant.omit({ id: true }).extend({
+    options: z.array(z.string().min(1).max(100)),
+  })
+  export type CreateVariantInput = z.infer<typeof createVariantInput>
+  export const createVariantOutput = z.object({ id: z.cuid() })
+  export type CreateVariantOutput = z.infer<typeof createVariantOutput>
+
+  export const updateVariantInput = productVariant.omit({
+    productId: true,
+    sku: true,
+  })
+  export type UpdateVariantInput = z.infer<typeof updateVariantInput>
+  export const updateVariantOutput = z.object({ id: z.cuid() })
+  export type UpdateVariantOutput = z.infer<typeof updateVariantOutput>
+
+  export const deleteVariantInput = productVariant.pick({ id: true })
+  export type DeleteVariantInput = z.infer<typeof deleteVariantInput>
+  export const deleteVariantOutput = z.object({ id: z.cuid() })
+  export type DeleteVariantOutput = z.infer<typeof deleteVariantOutput>
 }

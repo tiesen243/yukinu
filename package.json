@@ -59,9 +59,9 @@
     "@tanstack/react-query": "^5.90.11",
     "@types/node": "^24.10.1",
     "eslint": "^9.39.1",
-    "prettier": "^3.7.1",
+    "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "tsdown": "^0.17.0-beta.5",
+    "tsdown": "^0.17.0-beta.6",
     "typescript": "^5.9.3",
     "nuqs": "^2.8.2",
     "zod": "^4.1.13"

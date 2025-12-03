@@ -247,10 +247,12 @@ export class ProductService extends BaseService implements IProductService {
       const skuCombinations = this._cartesianProduct(
         results.map((r) => r.options.map(String)),
       )
-      const skus = skuCombinations.map((comb) => comb.join('-'))
-      await tx
-        .insert(productVariants)
-        .values(skus.map((sku) => ({ productId: product.id, sku })))
+      await tx.insert(productVariants).values(
+        skuCombinations.map((skus) => ({
+          productId: product.id,
+          sku: skus.join('-'),
+        })),
+      )
 
       return { id: product.id }
     })
@@ -383,6 +385,56 @@ export class ProductService extends BaseService implements IProductService {
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Product with id ${id} not found`,
+      })
+
+    return { id }
+  }
+
+  createVariant(
+    _input: ProductValidators.CreateVariantInput,
+  ): Promise<ProductValidators.CreateVariantOutput> {
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message: 'Method not implemented.',
+    })
+  }
+
+  async updateVariant(
+    input: ProductValidators.UpdateVariantInput,
+  ): Promise<ProductValidators.UpdateVariantOutput> {
+    const { eq } = this._orm
+    const { productVariants } = this._schema
+    const { id, ...data } = input
+
+    const [updated] = await this._db
+      .update(productVariants)
+      .set(data)
+      .where(eq(productVariants.id, id))
+      .returning({ id: productVariants.id })
+    if (!updated)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
+
+    return { id }
+  }
+
+  async deleteVariant(
+    input: ProductValidators.DeleteVariantInput,
+  ): Promise<ProductValidators.DeleteVariantOutput> {
+    const { eq } = this._orm
+    const { productVariants } = this._schema
+    const { id } = input
+
+    const [deleted] = await this._db
+      .delete(productVariants)
+      .where(eq(productVariants.id, id))
+      .returning({ id: productVariants.id })
+    if (!deleted)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
       })
 
     return { id }
