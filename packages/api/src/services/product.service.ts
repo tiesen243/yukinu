@@ -161,12 +161,13 @@ export class ProductService extends BaseService implements IProductService {
       attributes,
       categories,
       productAttributes,
+      productImages,
       productVariants,
       products,
       variantOptions,
       variants,
     } = this._schema
-    const { attributes: attrs, variants: vrts, ...data } = input
+    const { attributes: attrs, images, variants: vrts, ...data } = input
 
     const [category] = await this._db
       .select({ id: categories.id })
@@ -189,6 +190,10 @@ export class ProductService extends BaseService implements IProductService {
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create product',
         })
+
+      await tx
+        .insert(productImages)
+        .values(images.map((url) => ({ productId: product.id, url })))
 
       await Promise.all(
         attrs.map(async (attr) => {
@@ -252,7 +257,8 @@ export class ProductService extends BaseService implements IProductService {
     input: ProductValidators.UpdateInput,
   ): Promise<ProductValidators.UpdateOutput> {
     const { and, eq } = this._orm
-    const { attributes, products, productAttributes } = this._schema
+    const { attributes, productAttributes, productImages, products } =
+      this._schema
     const { id, vendorId, attributes: attrs = [], ...data } = input
 
     const [product] = await this._db
@@ -281,6 +287,11 @@ export class ProductService extends BaseService implements IProductService {
           code: 'INTERNAL_SERVER_ERROR',
           message: `Failed to update product with id ${id}`,
         })
+
+      await tx.delete(productImages).where(eq(productImages.productId, id))
+      await tx
+        .insert(productImages)
+        .values(data.images.map((url) => ({ productId: id, url })))
 
       await Promise.all(
         attrs.map(async (attr) => {
@@ -317,7 +328,7 @@ export class ProductService extends BaseService implements IProductService {
   async delete(
     input: ProductValidators.DeleteInput,
   ): Promise<ProductValidators.DeleteOutput> {
-    const { and, eq } = this._orm
+    const { and, eq, isNull } = this._orm
     const { products } = this._schema
     const { id, vendorId } = input
 
@@ -327,6 +338,7 @@ export class ProductService extends BaseService implements IProductService {
       .where(
         and(
           eq(products.id, id),
+          isNull(products.deletedAt),
           vendorId === MINMOD_ACCESS
             ? undefined
             : eq(products.vendorId, vendorId),
@@ -346,7 +358,7 @@ export class ProductService extends BaseService implements IProductService {
   async restore(
     input: ProductValidators.RestoreInput,
   ): Promise<ProductValidators.RestoreOutput> {
-    const { and, eq } = this._orm
+    const { and, eq, isNotNull } = this._orm
     const { products } = this._schema
     const { id, vendorId } = input
 
@@ -354,9 +366,13 @@ export class ProductService extends BaseService implements IProductService {
       .update(products)
       .set({ deletedAt: null })
       .where(
-        vendorId === MINMOD_ACCESS
-          ? eq(products.id, id)
-          : and(eq(products.id, id), eq(products.vendorId, vendorId)),
+        and(
+          eq(products.id, id),
+          isNotNull(products.deletedAt),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
       )
       .returning({ id: products.id })
 

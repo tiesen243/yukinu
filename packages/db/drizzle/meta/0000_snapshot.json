@@ -1,5 +1,5 @@
 {
-  "id": "a7c05cfb-cd97-4191-914d-f651d4996c88",
+  "id": "28b98aca-b462-4ae8-9111-30af72e52152",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -713,10 +713,10 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "product_reviews_user_id_vendors_id_fk": {
-          "name": "product_reviews_user_id_vendors_id_fk",
+        "product_reviews_user_id_users_id_fk": {
+          "name": "product_reviews_user_id_users_id_fk",
           "tableFrom": "product_reviews",
-          "tableTo": "vendors",
+          "tableTo": "users",
           "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",

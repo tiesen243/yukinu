@@ -135,8 +135,9 @@ export namespace ProductValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = product
-    .omit({ id: true, createdAt: true, updatedAt: true })
+    .omit({ id: true, sold: true, createdAt: true, updatedAt: true })
     .extend({
+      images: z.array(z.url()),
       attributes: z.array(
         z.object({
           name: z.string().min(1).max(100),

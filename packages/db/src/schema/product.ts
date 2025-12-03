@@ -2,7 +2,7 @@ import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
 
-import { vendors } from '@/schema'
+import { users, vendors } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
 export const categories = pgTable(
@@ -142,7 +142,7 @@ export const productReviews = pgTable(
     userId: t
       .varchar({ length: 24 })
       .notNull()
-      .references(() => vendors.id, { onDelete: 'cascade' }),
+      .references(() => users.id, { onDelete: 'cascade' }),
     rating: t.integer().notNull(),
     comment: t.text(),
     createdAt,
