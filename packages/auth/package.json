@@ -5,12 +5,12 @@
   "type": "module",
   "exports": {
     ".": {
-      "default": "./dist/index.mjs",
-      "react-server": "./dist/index.rsc.mjs"
+      "react-server": "./dist/index.rsc.mjs",
+      "default": "./dist/index.mjs"
     },
     "./react": {
-      "default": "./dist/react.mjs",
-      "types": "./dist/react.d.mts"
+      "types": "./dist/react.d.mts",
+      "default": "./dist/react.mjs"
     },
     "./package.json": "./package.json"
   },

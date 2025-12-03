@@ -1,6 +1,14 @@
 {
   "name": "yukinu",
   "private": true,
+  "homepage": "https://yukinu.vercel.app",
+  "bugs": {
+    "url": "https://github.com/tiesen243/yukinu/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiesen243/yukinu.git"
+  },
   "workspaces": [
     "apps/*",
     "packages/*",
@@ -70,8 +78,8 @@
     "react": {
       "@types/react": "^19.2.7",
       "@types/react-dom": "^19.2.3",
-      "react": "^19.2.0",
-      "react-dom": "^19.2.0"
+      "react": "^19.2.1",
+      "react-dom": "^19.2.1"
     },
     "tailwind": {
       "@tailwindcss/postcss": "^4.1.17",
