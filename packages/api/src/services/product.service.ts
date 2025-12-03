@@ -11,8 +11,13 @@ export class ProductService extends BaseService implements IProductService {
     input: ProductValidators.AllInput,
   ): Promise<ProductValidators.AllOutput> {
     const { and, desc, eq, ilike, max, min, isNull, isNotNull, sql } = this._orm
-    const { productImages, productReviews, productVariants, products } =
-      this._schema
+    const {
+      categories,
+      productImages,
+      productReviews,
+      productVariants,
+      products,
+    } = this._schema
     const { search, categoryId, vendorId, isDeleted, page, limit } = input
     const offset = (page - 1) * limit
 
@@ -28,21 +33,26 @@ export class ProductService extends BaseService implements IProductService {
         .select({
           id: products.id,
           name: products.name,
+          category: categories.name,
           image: min(productImages.url),
-          sold: products.sold,
-          rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
+          price: products.price,
           minPrice: sql<string>`LEAST(${min(productVariants.price)}, ${products.price})`,
           maxPrice: sql<string>`GREATEST(${max(productVariants.price)}, ${products.price})`,
+          sold: products.sold,
+          rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
+          createdAt: products.createdAt,
+          updatedAt: products.updatedAt,
         })
         .from(products)
         .where(and(...whereClause))
         .limit(limit)
         .offset(offset)
+        .leftJoin(categories, eq(categories.id, products.categoryId))
         .leftJoin(productImages, eq(productImages.productId, products.id))
         .leftJoin(productReviews, eq(productReviews.productId, products.id))
         .leftJoin(productVariants, eq(productVariants.productId, products.id))
         .orderBy(desc(products.createdAt))
-        .groupBy(products.id),
+        .groupBy(products.id, categories.id),
       this._db.$count(products, and(...whereClause)),
     ])
     const totalPages = Math.ceil(total / limit)
@@ -202,16 +212,16 @@ export class ProductService extends BaseService implements IProductService {
         attrs.map(async (attr) => {
           const [attribute = { id: '' }] = await tx
             .insert(attributes)
-            .values({ name: attr.name })
+            .values({ name: attr.name.toLowerCase() })
             .onConflictDoUpdate({
               target: attributes.name,
-              set: { name: attr.name },
+              set: { name: attr.name.toLowerCase() },
             })
             .returning({ id: attributes.id })
           await tx.insert(productAttributes).values({
             productId: product.id,
             attributeId: attribute.id,
-            value: attr.value,
+            value: attr.value.toLowerCase(),
           })
         }),
       )
@@ -220,10 +230,10 @@ export class ProductService extends BaseService implements IProductService {
         vrts.map(async (vrt) => {
           const [variant = { id: '' }] = await tx
             .insert(variants)
-            .values({ name: vrt.name })
+            .values({ name: vrt.name.toLowerCase() })
             .onConflictDoUpdate({
               target: variants.name,
-              set: { name: vrt.name },
+              set: { name: vrt.name.toLowerCase() },
             })
             .returning({ id: variants.id })
           const options = await tx
@@ -231,7 +241,7 @@ export class ProductService extends BaseService implements IProductService {
             .values(
               vrt.options.map((option) => ({
                 variantId: variant.id,
-                value: option,
+                value: option.toLowerCase(),
               })),
             )
             .onConflictDoUpdate({
@@ -302,10 +312,10 @@ export class ProductService extends BaseService implements IProductService {
         attrs.map(async (attr) => {
           const [attribute = { id: '' }] = await tx
             .insert(attributes)
-            .values({ name: attr.name })
+            .values({ name: attr.name.toLowerCase() })
             .onConflictDoUpdate({
               target: attributes.name,
-              set: { name: attr.name },
+              set: { name: attr.name.toLowerCase() },
             })
             .returning({ id: attributes.id })
 
@@ -314,14 +324,14 @@ export class ProductService extends BaseService implements IProductService {
             .values({
               productId: id,
               attributeId: attribute.id,
-              value: attr.value,
+              value: attr.value.toLowerCase(),
             })
             .onConflictDoUpdate({
               target: [
                 productAttributes.productId,
                 productAttributes.attributeId,
               ],
-              set: { value: attr.value },
+              set: { value: attr.value.toLowerCase() },
             })
         }),
       )

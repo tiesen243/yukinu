@@ -45,10 +45,12 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
     <TableRow key={product.id}>
       <TableCell>{product.id}</TableCell>
       <TableCell>{product.name}</TableCell>
+      <TableCell>{product.category}</TableCell>
       <TableCell>{product.sold}</TableCell>
       <TableCell>{product.rating}</TableCell>
-      <TableCell>{product.minPrice}</TableCell>
-      <TableCell>{product.maxPrice}</TableCell>
+      <TableCell>{product.price}</TableCell>
+      <TableCell>{new Date(product.createdAt).toLocaleDateString()}</TableCell>
+      <TableCell>{new Date(product.updatedAt).toLocaleDateString()}</TableCell>
       <TableCell>
         <Button variant='link'>
           <Link to={`/products/${product.id}`}>Edit</Link>

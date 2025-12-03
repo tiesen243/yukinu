@@ -81,13 +81,22 @@ export namespace ProductValidators {
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
     products: z.array(
-      product.pick({ id: true, name: true }).extend({
-        image: z.url().nullable(),
-        sold: z.number(),
-        rating: z.string(),
-        minPrice: numeric.nullable(),
-        maxPrice: numeric.nullable(),
-      }),
+      product
+        .pick({
+          id: true,
+          name: true,
+          price: true,
+          sold: true,
+          createdAt: true,
+          updatedAt: true,
+        })
+        .extend({
+          category: z.string().nullable(),
+          image: z.url().nullable(),
+          rating: z.string(),
+          minPrice: numeric,
+          maxPrice: numeric,
+        }),
     ),
     pagination: z.object({
       total: z.number(),
@@ -139,6 +148,7 @@ export namespace ProductValidators {
   export const createInput = product
     .omit({ id: true, sold: true, createdAt: true, updatedAt: true })
     .extend({
+      description: z.string().min(1).max(1000).optional(),
       images: z.array(z.url()),
       attributes: z.array(
         z.object({

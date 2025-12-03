@@ -42,10 +42,12 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>Name</TableHead>
+              <TableHead>Category</TableHead>
               <TableHead>Sold</TableHead>
               <TableHead>Rating</TableHead>
-              <TableHead>Min Price</TableHead>
-              <TableHead>Max Price</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead>Updated At</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>

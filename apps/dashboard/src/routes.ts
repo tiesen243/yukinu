@@ -15,11 +15,11 @@ export default [
 
     layout('./routes/admin/__layout.tsx', [
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
+      route('/products/admin', './routes/products/admin.tsx'),
     ]),
 
     layout('./routes/products/__layout.tsx', [
       route('/products', './routes/products/_index.tsx'),
-      route('/products/admin', './routes/products/admin.tsx'),
       route('/products/new', './routes/products/new/_index.tsx'),
       route('/products/:id', './routes/products/[id]/_index.tsx'),
     ]),

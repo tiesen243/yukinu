@@ -46,31 +46,31 @@ INSERT INTO "public"."products" ("id", "vendor_id", "category_id", "name", "desc
 
 -- Variants (Expanded to include 'Length')
 INSERT INTO "public"."variants" ("id", "name") VALUES
-('c000000000000000000000va', 'Color'),
-('c000000000000000000000vb', 'Storage'),
-('c000000000000000000000vc', 'Size'),
-('c000000000000000000000vd', 'Length');
+('c000000000000000000000va', 'color'),
+('c000000000000000000000vb', 'storage'),
+('c000000000000000000000vc', 'size'),
+('c000000000000000000000vd', 'length');
 
 -- Variant Options (Expanded with new colors and Regular/Long length)
 INSERT INTO "public"."variant_options" ("variant_id", "value") VALUES
-('c000000000000000000000va', 'Black'),
-('c000000000000000000000va', 'White'),
-('c000000000000000000000va', 'Grey'),
-('c000000000000000000000va', 'Blue'),
-('c000000000000000000000va', 'Red'),
-('c000000000000000000000va', 'Silver'),
-('c000000000000000000000va', 'Gold'),
-('c000000000000000000000va', 'Dark Wash'),
-('c000000000000000000000va', 'Light Wash'),
-('c000000000000000000000vb', '128GB'),
-('c000000000000000000000vb', '256GB'),
-('c000000000000000000000vb', '512GB'),
-('c000000000000000000000vc', 'S'),
-('c000000000000000000000vc', 'M'),
-('c000000000000000000000vc', 'L'),
-('c000000000000000000000vc', 'XL'),
-('c000000000000000000000vd', 'Regular'),
-('c000000000000000000000vd', 'Long');
+('c000000000000000000000va', 'black'),
+('c000000000000000000000va', 'white'),
+('c000000000000000000000va', 'grey'),
+('c000000000000000000000va', 'blue'),
+('c000000000000000000000va', 'red'),
+('c000000000000000000000va', 'silver'),
+('c000000000000000000000va', 'gold'),
+('c000000000000000000000va', 'dark wash'),
+('c000000000000000000000va', 'light wash'),
+('c000000000000000000000vb', '128gb'),
+('c000000000000000000000vb', '256gb'),
+('c000000000000000000000vb', '512gb'),
+('c000000000000000000000vc', 's'),
+('c000000000000000000000vc', 'm'),
+('c000000000000000000000vc', 'l'),
+('c000000000000000000000vc', 'xl'),
+('c000000000000000000000vd', 'regular'),
+('c000000000000000000000vd', 'long');
 
 -- Product Variants (Expanded to 10 variants and including 'is_master' set to FALSE)
 INSERT INTO "public"."product_variants" ("id", "product_id", "sku", "price", "stock") VALUES
@@ -87,12 +87,12 @@ INSERT INTO "public"."product_variants" ("id", "product_id", "sku", "price", "st
 
 -- Attributes (Re-used)
 INSERT INTO "public"."attributes" ("id", "name") VALUES
-('c00000000000000000000at1', 'Material'),
-('c00000000000000000000at2', 'Warranty'),
-('c00000000000000000000at3', 'Weight'),
-('c00000000000000000000at4', 'Screen Size'),
-('c00000000000000000000at5', 'Battery Life (Hours)'),
-('c00000000000000000000at6', 'Water Resistance Rating (IP)');
+('c00000000000000000000at1', 'material'),
+('c00000000000000000000at2', 'warranty'),
+('c00000000000000000000at3', 'weight'),
+('c00000000000000000000at4', 'screen size'),
+('c00000000000000000000at5', 'battery life'),
+('c00000000000000000000at6', 'water resistance rating');
 
 -- Product Attributes (Re-used)
 INSERT INTO "public"."product_attributes" ("product_id", "attribute_id", "value") VALUES
