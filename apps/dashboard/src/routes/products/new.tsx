@@ -198,6 +198,8 @@ export default function ProductsNewPage() {
                 >
                   Add Image URL
                 </Button>
+
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </FieldGroup>
             )}
           />
@@ -248,7 +250,6 @@ export default function ProductsNewPage() {
                         <MinusIcon />
                       </Button>
                     </div>
-                    <FieldError />
                   </Field>
                 ))}
 
@@ -263,6 +264,8 @@ export default function ProductsNewPage() {
                     Add Attribute
                   </Button>
                 </Field>
+
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </FieldGroup>
             )}
           />
@@ -305,7 +308,6 @@ export default function ProductsNewPage() {
                           </InputGroupButton>
                         </InputGroupAddon>
                       </InputGroup>
-                      <FieldError />
                     </Field>
 
                     <FieldGroup>
