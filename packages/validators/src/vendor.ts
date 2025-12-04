@@ -111,6 +111,17 @@ export namespace VendorValidators {
   export const addStaffOutput = z.void()
   export type AddStaffOutput = z.infer<typeof addStaffOutput>
 
+  export const acceptStaffInvitationInput = z.object({
+    token: z.string(),
+  })
+  export type AcceptStaffInvitationInput = z.infer<
+    typeof acceptStaffInvitationInput
+  >
+  export const acceptStaffInvitationOutput = z.void()
+  export type AcceptStaffInvitationOutput = z.infer<
+    typeof acceptStaffInvitationOutput
+  >
+
   export const removeStaffInput = z.object({
     vendorId: z.cuid(),
     staffId: z.cuid(),

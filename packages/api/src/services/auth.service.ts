@@ -59,7 +59,7 @@ export class AuthService extends BaseService implements IAuthService {
         expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
       })
 
-      const verificationLink = `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
+      const verificationLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
       await sendEmail({
         to: email,
         subject: 'Welcome to Yukinu!',
@@ -112,7 +112,7 @@ export class AuthService extends BaseService implements IAuthService {
     input: AuthValidators.ChangePasswordInput,
   ): Promise<AuthValidators.ChangePasswordOutput> {
     const { and, eq } = this._orm
-    const { accounts } = this._schema
+    const { accounts, users } = this._schema
     const { userId, currentPassword, newPassword } = input
 
     const whereClause = and(
@@ -122,9 +122,14 @@ export class AuthService extends BaseService implements IAuthService {
 
     return this._db.transaction(async (tx) => {
       const [account] = await tx
-        .select()
+        .select({
+          password: accounts.password,
+          email: users.email,
+          username: users.username,
+        })
         .from(accounts)
         .where(whereClause)
+        .innerJoin(users, eq(users.id, accounts.userId))
         .limit(1)
 
       if (!account?.password) {
@@ -156,10 +161,17 @@ export class AuthService extends BaseService implements IAuthService {
         })
 
       const newPasswordHash = await this._password.hash(newPassword)
-      return void tx
+      await tx
         .update(accounts)
         .set({ password: newPasswordHash })
         .where(whereClause)
+
+      await sendEmail({
+        to: account.email,
+        subject: 'Yukinu Password Changed',
+        template: 'ChangePassword',
+        data: { username: account.username },
+      })
     })
   }
 
@@ -188,7 +200,7 @@ export class AuthService extends BaseService implements IAuthService {
         expiresAt,
       })
 
-      const resetLink = `${env.NODE_ENV === 'production' ? 'https' : 'http'}://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
+      const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
       await sendEmail({
         to: email,
         subject: 'Yukinu Password Reset',
@@ -208,12 +220,7 @@ export class AuthService extends BaseService implements IAuthService {
     const [verification] = await this._db
       .select()
       .from(verifications)
-      .where(
-        and(
-          eq(verifications.token, token),
-          eq(verifications.type, 'password_reset'),
-        ),
-      )
+      .where(eq(verifications.token, token))
       .limit(1)
     if (!verification)
       throw new TRPCError({

@@ -10,12 +10,12 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 
-import { ProductsList } from '@/routes/products/products-list'
-import { ProductsPagination } from '@/routes/products/products-pagination'
+import { ProductsList } from '@/routes/products/_components/products-list'
+import { ProductsPagination } from '@/routes/products/_components/products-pagination'
 import {
   SearchForm,
   ToggleProductStatusButton,
-} from '@/routes/products/search-form'
+} from '@/routes/products/_components/search-form'
 
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
   return (

@@ -14,7 +14,7 @@ export const VerifyEmailForm: React.FC<{ token: string }> = ({ token }) => {
   const router = useRouter()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.auth.verufyEmail.mutationOptions(),
+    ...trpc.auth.verifyEmail.mutationOptions(),
     onError: ({ message }) => toast.error(message),
     onSuccess: () => {
       toast.success('Email verified successfully!', {

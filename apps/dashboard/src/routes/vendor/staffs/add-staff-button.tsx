@@ -28,7 +28,7 @@ export const AddStaffButton: React.FC = () => {
     meta: { filter: trpc.vendor.allStaffs.queryFilter() },
     onError: ({ message }) => toast.error(message),
     onSuccess: () => {
-      toast.success('Staff added successfully')
+      toast.success('Invitation sent successfully!')
       setOpen(false)
       setEmail('')
     },

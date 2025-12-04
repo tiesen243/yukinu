@@ -209,8 +209,8 @@ export default function ProductsNewPage() {
               <FieldGroup>
                 <FieldLabel htmlFor={meta.fieldId}>Attributes</FieldLabel>
                 <FieldDescription id={meta.descriptionId}>
-                  Define custom attributes for the product (e.g., Color:
-                  Red/Blue/Green).
+                  Define custom attributes for the product (e.g., material,
+                  brand).
                 </FieldDescription>
                 {field.value.map((attribute, index) => (
                   <Field key={`attribute-${index}`}>

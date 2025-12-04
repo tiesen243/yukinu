@@ -25,6 +25,10 @@ export interface IVendorService {
     input: VendorValidators.AddStaffInput,
   ): Promise<VendorValidators.AddStaffOutput>
 
+  acceptStaffInvitation(
+    input: VendorValidators.AcceptStaffInvitationInput,
+  ): Promise<VendorValidators.AcceptStaffInvitationOutput>
+
   removeStaff(
     input: VendorValidators.RemoveStaffInput,
   ): Promise<VendorValidators.RemoveStaffOutput>

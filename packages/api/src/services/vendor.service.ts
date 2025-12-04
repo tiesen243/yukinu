@@ -2,6 +2,8 @@ import { TRPCError } from '@trpc/server'
 
 import type { VendorValidators } from '@yukinu/validators/vendor'
 import { users } from '@yukinu/db/schema'
+import { sendEmail } from '@yukinu/email'
+import { env } from '@yukinu/validators/env'
 
 import type { IVendorService } from '@/contracts/services/vendor.service'
 import { BaseService } from '@/services/base.service'
@@ -206,24 +208,18 @@ export class VendorService extends BaseService implements IVendorService {
     input: VendorValidators.AddStaffInput,
   ): Promise<VendorValidators.AddStaffOutput> {
     const { and, eq } = this._orm
-    const { users, vendorStaffs } = this._schema
+    const { users, vendorStaffs, vendors, verifications } = this._schema
     const { vendorId, email } = input
 
     const [user] = await this._db
-      .select({ id: users.id, role: users.role })
+      .select({ id: users.id, username: users.username, role: users.role })
       .from(users)
       .where(eq(users.email, email))
       .limit(1)
-    if (!user)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'User not found with the provided email',
-      })
-
-    if (user.role !== 'user')
+    if (user?.role !== 'user')
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'This user cannot be added as staff',
+        message: 'This user cannot be added as vendor staff',
       })
 
     const [existingStaff] = await this._db
@@ -242,7 +238,85 @@ export class VendorService extends BaseService implements IVendorService {
         message: `User with email ${email} is already a staff member of your vendor`,
       })
 
-    await this._db.insert(vendorStaffs).values({ vendorId, userId: user.id })
+    const [vendor] = await this._db
+      .select({
+        vendorName: vendors.name,
+        inviterName: users.username,
+        inviterEmail: users.email,
+      })
+      .from(vendors)
+      .where(eq(vendors.id, vendorId))
+      .innerJoin(users, eq(users.id, vendors.ownerId))
+      .limit(1)
+    if (!vendor)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Vendor with ID ${vendorId} not found`,
+      })
+
+    const token = crypto.randomUUID()
+
+    await this._db.insert(verifications).values({
+      token,
+      userId: user.id,
+      type: `invite_${vendorId}`,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    })
+
+    const { inviterName, inviterEmail, vendorName } = vendor
+    const inviteLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/invite?token=${token}`
+    await sendEmail({
+      to: email,
+      subject: 'Vendor Staff Invitation',
+      template: 'Invite',
+      data: {
+        username: user.username,
+        inviterEmail,
+        inviterName,
+        vendorName,
+        inviteLink,
+      },
+    })
+  }
+
+  async acceptStaffInvitation(
+    input: VendorValidators.AcceptStaffInvitationInput,
+  ): Promise<VendorValidators.AcceptStaffInvitationOutput> {
+    const { eq } = this._orm
+    const { vendorStaffs, verifications } = this._schema
+    const { token } = input
+
+    const [verification] = await this._db
+      .select()
+      .from(verifications)
+      .where(eq(verifications.token, token))
+      .limit(1)
+    if (!verification)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'The invitation token is invalid.',
+      })
+
+    return this._db.transaction(async (tx) => {
+      if (verification.expiresAt < new Date()) {
+        await tx.delete(verifications).where(eq(verifications.token, token))
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'The invitation has expired.',
+        })
+      }
+
+      const [_, vendorId] = verification.type.split('_')
+      if (!vendorId)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Invalid invitation token type.',
+        })
+
+      await tx
+        .insert(vendorStaffs)
+        .values({ vendorId, userId: verification.userId })
+    })
   }
 
   async removeStaff(

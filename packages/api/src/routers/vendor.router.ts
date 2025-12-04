@@ -81,6 +81,14 @@ export const VendorRouter = createTRPCRouter({
       ctx.services.vendor.addStaff({ ...input, vendorId: ctx.vendorId }),
     ),
 
+  acceptStaffInvitation: publicProcedure
+    .meta({ message: 'Vendor invitation accepted successfully' })
+    .input(VendorValidators.acceptStaffInvitationInput)
+    .output(VendorValidators.acceptStaffInvitationOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.acceptStaffInvitation(input),
+    ),
+
   removeStaff: vendorProcedure
     .meta({
       message: 'Vendor staff removed successfully',

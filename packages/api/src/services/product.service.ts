@@ -308,6 +308,9 @@ export class ProductService extends BaseService implements IProductService {
         .insert(productImages)
         .values(data.images.map((url) => ({ productId: id, url })))
 
+      await tx
+        .delete(productAttributes)
+        .where(eq(productAttributes.productId, id))
       await Promise.all(
         attrs.map(async (attr) => {
           const [attribute = { id: '' }] = await tx

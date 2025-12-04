@@ -1,4 +1,4 @@
-import { ProductTable } from '@/routes/products/products-table'
+import { ProductTable } from '@/routes/products/_components/products-table'
 
 export default function ProductsPage() {
   return (
