@@ -1,5 +1,5 @@
 import { Button } from '@yukinu/ui/button'
-import { ListIcon, ListTreeIcon, SearchIcon } from '@yukinu/ui/icons'
+import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 
 import { useCategoryQueryStates } from '@/routes/admin/categories/hook'
@@ -9,7 +9,7 @@ export const SearchForm: React.FC = () => {
 
   return (
     <form
-      className='my-6 flex items-center gap-2 md:w-1/2 lg:w-1/3'
+      className='flex items-center gap-2 md:w-1/2 lg:w-1/3'
       onSubmit={async (e) => {
         e.preventDefault()
         const rawQ = new FormData(e.currentTarget).get('q')
@@ -24,30 +24,5 @@ export const SearchForm: React.FC = () => {
         <SearchIcon /> <span className='sr-only'>Search</span>
       </Button>
     </form>
-  )
-}
-
-export const ParentCategoryOnlyToggle: React.FC = () => {
-  const [query, setQuery] = useCategoryQueryStates()
-
-  return (
-    <Button
-      variant={query.isOnlyParent ? 'secondary' : 'outline'}
-      size='icon'
-      onClick={async () => {
-        await setQuery((prev) => ({
-          ...prev,
-          isOnlyParent: !prev.isOnlyParent,
-          page: 1,
-        }))
-      }}
-    >
-      {query.isOnlyParent ? <ListIcon /> : <ListTreeIcon />}
-      <span className='sr-only'>
-        {query.isOnlyParent
-          ? 'Showing Parent Categories'
-          : 'Show Only Parent Categories'}
-      </span>
-    </Button>
   )
 }

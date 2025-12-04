@@ -1,7 +1,5 @@
-import { Link } from 'react-router'
-
 import { Button } from '@yukinu/ui/button'
-import { DownloadIcon, PlusIcon } from '@yukinu/ui/icons'
+import { DownloadIcon } from '@yukinu/ui/icons'
 import {
   Table,
   TableBody,
@@ -10,16 +8,16 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 
-import { CategoriesList } from '@/routes/admin/categories/categories-list'
-import { CategoriesPagination } from '@/routes/admin/categories/categories-pagination'
-import { SearchForm } from '@/routes/admin/categories/search-form'
+import { SearchForm, UserFilterButton } from '@/routes/admin/users/search-form'
+import { UsersList } from '@/routes/admin/users/users-list'
+import { UsersPagination } from '@/routes/admin/users/users-pagination'
 
-export default function CategoriesPage() {
+export default function UsersPage() {
   return (
     <>
-      <h1 className='text-3xl font-bold'>Categories Management</h1>
+      <h1 className='text-3xl font-bold'>Users Management</h1>
       <p className='mt-2 text-muted-foreground'>
-        Manage and view all categories in the system.
+        Manage and monitor all registered users in the system.
       </p>
 
       <div className='my-6 flex items-center justify-between gap-4'>
@@ -27,12 +25,7 @@ export default function CategoriesPage() {
 
         <div className='flex-1' />
 
-        <Button variant='outline' asChild>
-          <Link to='/admin/categories/new'>
-            <PlusIcon />
-            <span className='sr-only md:not-sr-only'>Add</span>
-          </Link>
-        </Button>
+        <UserFilterButton />
 
         <Button variant='outline' disabled>
           <DownloadIcon />
@@ -45,18 +38,23 @@ export default function CategoriesPage() {
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Parent</TableHead>
+              <TableHead>Username</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Email Verified</TableHead>
+              <TableHead>Created At</TableHead>
+              <TableHead>Updated At</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
-            <CategoriesList />
+            <UsersList />
           </TableBody>
         </Table>
 
-        <CategoriesPagination />
+        <UsersPagination />
       </section>
     </>
   )

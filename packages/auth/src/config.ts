@@ -29,7 +29,13 @@ export const authOptions = {
           )
           .limit(1)
 
-        return record ?? null
+        if (!record) return null
+        if (record.status === 'inactive')
+          throw new Error(
+            'Your account is banned from our platform. Please contact support for more information.',
+          )
+
+        return record
       },
       async create(data) {
         const username =

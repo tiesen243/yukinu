@@ -197,7 +197,6 @@ export const UpdateProductForm: React.FC<{
                         </InputGroupButton>
                       </InputGroupAddon>
                     </InputGroup>
-                    <FieldError />
                   </Field>
                 ))}
                 <Button
@@ -209,6 +208,8 @@ export const UpdateProductForm: React.FC<{
                 >
                   Add Image URL
                 </Button>
+
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </FieldGroup>
             )}
           />
@@ -259,7 +260,6 @@ export const UpdateProductForm: React.FC<{
                         <MinusIcon />
                       </Button>
                     </div>
-                    <FieldError />
                   </Field>
                 ))}
 
@@ -274,6 +274,8 @@ export const UpdateProductForm: React.FC<{
                     Add Attribute
                   </Button>
                 </Field>
+
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </FieldGroup>
             )}
           />

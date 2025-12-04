@@ -5,9 +5,14 @@ export interface IUserService {
 
   one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput>
 
-  updateStatus(
-    input: UserValidators.UpdateStatusInput,
-  ): Promise<UserValidators.UpdateStatusOutput>
+  update(
+    input: UserValidators.UpdateInput,
+  ): Promise<UserValidators.UpdateOutput>
+
+  delete(
+    input: UserValidators.DeleteInput,
+    userId: UserValidators.User['id'],
+  ): Promise<UserValidators.DeleteOutput>
 
   profile(
     input: UserValidators.ProfileInput,

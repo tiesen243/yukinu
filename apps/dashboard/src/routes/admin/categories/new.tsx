@@ -24,9 +24,7 @@ export default function CategoriesNewPage() {
   const trpc = useTRPC()
   const navigate = useNavigate()
 
-  const { data } = useQuery(
-    trpc.category.all.queryOptions({ isOnlyParent: true, limit: 100 }),
-  )
+  const { data } = useQuery(trpc.category.all.queryOptions({ limit: 100 }))
 
   const { mutateAsync } = useMutation({
     ...trpc.category.create.mutationOptions(),

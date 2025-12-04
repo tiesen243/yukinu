@@ -19,6 +19,8 @@ export default [
       route('/admin/categories/new', './routes/admin/categories/new.tsx'),
       route('/admin/categories/:id', './routes/admin/categories/edit.tsx'),
 
+      route('/admin/users', './routes/admin/users/_index.tsx'),
+
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
       route('/admin/products', './routes/admin/products.tsx'),
     ]),
