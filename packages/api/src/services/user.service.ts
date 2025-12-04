@@ -91,12 +91,26 @@ export class UserService extends BaseService implements IUserService {
         message: 'You cannot delete your own account',
       })
 
-    const [deleted] = await this._db
+    const [targetUser] = await this._db
+      .select({ role: users.role })
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1)
+
+    if (!targetUser)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    const criticalRoles = ['admin', 'moderator', 'vendor_owner', 'vendor_staff']
+    if (criticalRoles.includes(targetUser.role))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: `You cannot delete users with critical roles (${criticalRoles.join(', ')})`,
+      })
+
+    await this._db
       .delete(users)
       .where(eq(users.id, id))
       .returning({ id: users.id })
-    if (!deleted)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
 
     return { id }
   }
