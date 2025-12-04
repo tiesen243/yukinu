@@ -18,6 +18,7 @@ export class CategoryService extends BaseService implements ICategoryService {
     const whereClauses = []
     if (search) whereClauses.push(ilike(categories.name, `%${search}%`))
     if (isOnlyParent) whereClauses.push(isNull(categories.parentId))
+    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
     const parent = alias(categories, 'parent')
     const [categoriesList, total] = await Promise.all([
@@ -33,12 +34,12 @@ export class CategoryService extends BaseService implements ICategoryService {
           },
         })
         .from(categories)
-        .where(and(...whereClauses))
+        .where(whereClause)
         .leftJoin(parent, this._orm.eq(categories.parentId, parent.id))
         .offset(offset)
         .limit(limit)
         .orderBy(asc(categories.name)),
-      this._db.$count(categories, and(...whereClauses)),
+      this._db.$count(categories, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 
@@ -86,10 +87,10 @@ export class CategoryService extends BaseService implements ICategoryService {
 
     if (parentId && parentId !== 'no-parent') {
       let currentId = parentId
-      const visited = new Set([input.parentId])
+      const visited = new Set([parentId])
       while (currentId) {
         const parent = await this.one({ id: currentId })
-        if (visited.has(parent.parent?.id)) {
+        if (visited.has(parent.parent?.id ?? '')) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'Circular parent-child relationship detected',
@@ -127,10 +128,10 @@ export class CategoryService extends BaseService implements ICategoryService {
       parentId !== 'no-parent'
     ) {
       let currentId = parentId
-      const visited = new Set([input.parentId])
+      const visited = new Set([parentId])
       while (currentId) {
         const parent = await this.one({ id: currentId })
-        if (visited.has(parent.parent?.id) || parent.id === id) {
+        if (visited.has(parent.parent?.id ?? '') || parent.id === id) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'Circular parent-child relationship detected',
