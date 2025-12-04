@@ -2,6 +2,8 @@ import { TRPCError } from '@trpc/server'
 
 import type { VendorValidators } from '@yukinu/validators/vendor'
 import { users } from '@yukinu/db/schema'
+import { sendEmail } from '@yukinu/email'
+import { env } from '@yukinu/validators/env'
 
 import type { IVendorService } from '@/contracts/services/vendor.service'
 import { BaseService } from '@/services/base.service'
@@ -202,28 +204,29 @@ export class VendorService extends BaseService implements IVendorService {
       .orderBy(users.username)
   }
 
-  async addStaff(
-    input: VendorValidators.AddStaffInput,
-  ): Promise<VendorValidators.AddStaffOutput> {
+  async inviteStaff(
+    input: VendorValidators.InviteStaffInput,
+  ): Promise<VendorValidators.InviteStaffOutput> {
     const { and, eq } = this._orm
-    const { users, vendorStaffs } = this._schema
+    const { users, vendorStaffs, vendors, verifications } = this._schema
     const { vendorId, email } = input
 
     const [user] = await this._db
-      .select({ id: users.id, role: users.role })
+      .select({ id: users.id, username: users.username, role: users.role })
       .from(users)
       .where(eq(users.email, email))
       .limit(1)
+
     if (!user)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'User not found with the provided email',
+        message: `User with email ${email} not found`,
       })
 
     if (user.role !== 'user')
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'This user cannot be added as staff',
+        message: 'This user cannot be added as vendor staff',
       })
 
     const [existingStaff] = await this._db
@@ -242,7 +245,107 @@ export class VendorService extends BaseService implements IVendorService {
         message: `User with email ${email} is already a staff member of your vendor`,
       })
 
-    await this._db.insert(vendorStaffs).values({ vendorId, userId: user.id })
+    const [vendor] = await this._db
+      .select({
+        vendorName: vendors.name,
+        inviterName: users.username,
+        inviterEmail: users.email,
+      })
+      .from(vendors)
+      .where(eq(vendors.id, vendorId))
+      .innerJoin(users, eq(users.id, vendors.ownerId))
+      .limit(1)
+    if (!vendor)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Vendor with ID ${vendorId} not found`,
+      })
+
+    const token = crypto.randomUUID()
+
+    await this._db.insert(verifications).values({
+      token,
+      userId: user.id,
+      type: `invite_${vendorId}`,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    })
+
+    const { inviterName, inviterEmail, vendorName } = vendor
+    const inviteLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/invite?token=${token}`
+    await sendEmail({
+      to: email,
+      subject: 'Vendor Staff Invitation',
+      template: 'Invite',
+      data: {
+        username: user.username,
+        inviterEmail,
+        inviterName,
+        vendorName,
+        inviteLink,
+      },
+    })
+  }
+
+  async acceptStaffInvitation(
+    input: VendorValidators.AcceptStaffInvitationInput,
+    userId: string,
+  ): Promise<VendorValidators.AcceptStaffInvitationOutput> {
+    const { eq } = this._orm
+    const { vendorStaffs, vendors, verifications } = this._schema
+    const { token } = input
+
+    const [verification] = await this._db
+      .select()
+      .from(verifications)
+      .where(eq(verifications.token, token))
+      .limit(1)
+    if (
+      verification?.userId !== userId &&
+      !verification?.type.startsWith('invite_')
+    )
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'Invalid invitation token.',
+      })
+
+    return this._db.transaction(async (tx) => {
+      if (verification.expiresAt < new Date()) {
+        await tx.delete(verifications).where(eq(verifications.token, token))
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'The invitation has expired.',
+        })
+      }
+
+      const vendorId = verification.type.slice('invite_'.length)
+      const [vendor] = await tx
+        .select({ id: vendors.id, staffId: vendorStaffs.userId })
+        .from(vendors)
+        .where(eq(vendors.id, vendorId))
+        .leftJoin(vendorStaffs, eq(vendorStaffs.userId, verification.userId))
+        .limit(1)
+
+      if (!vendor)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Vendor with ID ${vendorId} not found`,
+        })
+
+      if (vendor.staffId)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'You are already a staff member of this vendor',
+        })
+
+      await tx
+        .insert(vendorStaffs)
+        .values({ vendorId, userId: verification.userId })
+      await tx
+        .update(users)
+        .set({ role: 'vendor_staff' })
+        .where(eq(users.id, verification.userId))
+      await tx.delete(verifications).where(eq(verifications.token, token))
+    })
   }
 
   async removeStaff(
@@ -252,20 +355,24 @@ export class VendorService extends BaseService implements IVendorService {
     const { vendorStaffs } = this._schema
     const { vendorId, staffId } = input
 
-    const [deletedStaff] = await this._db
-      .delete(vendorStaffs)
-      .where(
-        and(
-          eq(vendorStaffs.vendorId, vendorId),
-          eq(vendorStaffs.userId, staffId),
-        ),
-      )
-      .returning({ id: vendorStaffs.userId })
+    return this._db.transaction(async (tx) => {
+      const [deletedStaff] = await tx
+        .delete(vendorStaffs)
+        .where(
+          and(
+            eq(vendorStaffs.vendorId, vendorId),
+            eq(vendorStaffs.userId, staffId),
+          ),
+        )
+        .returning({ id: vendorStaffs.userId })
 
-    if (!deletedStaff?.id)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Staff with ID ${staffId} not found in your vendor`,
-      })
+      if (!deletedStaff?.id)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Staff with ID ${staffId} not found in your vendor`,
+        })
+
+      await tx.update(users).set({ role: 'user' }).where(eq(users.id, staffId))
+    })
   }
 }

@@ -6,7 +6,7 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 
-import { AddStaffButton } from '@/routes/vendor/staffs/add-staff-button'
+import { InviteStaffButton } from '@/routes/vendor/staffs/invite-staff-button'
 import { StaffsList } from '@/routes/vendor/staffs/staffs-list'
 
 export default function VendorStaffsPage() {
@@ -20,7 +20,7 @@ export default function VendorStaffsPage() {
           </p>
         </div>
 
-        <AddStaffButton />
+        <InviteStaffButton />
       </div>
 
       <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm'>

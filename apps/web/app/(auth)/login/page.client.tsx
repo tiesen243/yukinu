@@ -28,11 +28,12 @@ export const LoginForm: React.FC = () => {
     },
     schema: AuthValidators.loginInput,
     onSubmit: signIn,
-    onError: ({ message }) => toast.error(message),
     onSuccess: () => {
       toast.success('Logged in successfully!')
       router.push('/')
     },
+    onError: ({ message }) =>
+      toast.error('Login failed', { description: message }),
   })
 
   return (

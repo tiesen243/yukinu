@@ -7,10 +7,11 @@ export namespace ProductValidators {
     id: z.cuid(),
     vendorId: z.cuid(),
     categoryId: z.cuid(),
-    sku: z.string().min(1).max(50),
     name: z.string().min(1).max(255),
     description: z.string().nullable(),
     price: numeric,
+    stock: z.int().min(0),
+    sold: z.int().min(0),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -23,28 +24,47 @@ export namespace ProductValidators {
   })
   export type Image = z.infer<typeof productImage>
 
+  export const attribute = z.object({
+    id: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type Attribute = z.infer<typeof attribute>
+
+  export const productAttribute = z.object({
+    productId: z.cuid(),
+    attributeId: z.cuid(),
+    value: z.string().min(1).max(255),
+  })
+  export type ProductAttribute = z.infer<typeof productAttribute>
+
+  export const variant = z.object({
+    id: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type Variant = z.infer<typeof variant>
+
+  export const variantOption = z.object({
+    id: z.int().min(1000),
+    variantId: z.cuid(),
+    name: z.string().min(1).max(100),
+  })
+  export type VariantOption = z.infer<typeof variantOption>
+
   export const productVariant = z.object({
     id: z.cuid(),
     productId: z.cuid(),
-    name: z.string().min(1).max(100),
+    sku: z.string().min(1).max(100),
+    price: numeric,
+    stock: z.int().min(0),
   })
-  export type Variant = z.infer<typeof productVariant>
-
-  export const productVariantOption = z.object({
-    id: z.cuid(),
-    variantId: z.cuid(),
-    value: z.string().min(1).max(100),
-    stock: z.number().min(0),
-    extraPrice: z.coerce.number().min(0),
-  })
-  export type VariantOption = z.infer<typeof productVariantOption>
+  export type ProductVariant = z.infer<typeof productVariant>
 
   export const productReview = z.object({
     id: z.cuid(),
     productId: z.cuid(),
     userId: z.cuid(),
     rating: z.number().min(1).max(5),
-    comment: z.string().optional(),
+    comment: z.string().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -61,11 +81,22 @@ export namespace ProductValidators {
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
     products: z.array(
-      product.pick({ id: true, name: true, price: true }).extend({
-        image: z.url().nullable(),
-        lowestVariantPrice: numeric.nullable(),
-        highestVariantPrice: numeric.nullable(),
-      }),
+      product
+        .pick({
+          id: true,
+          name: true,
+          price: true,
+          sold: true,
+          createdAt: true,
+          updatedAt: true,
+        })
+        .extend({
+          category: z.string().nullable(),
+          image: z.url().nullable(),
+          rating: z.string(),
+          minPrice: numeric,
+          maxPrice: numeric,
+        }),
     ),
     pagination: z.object({
       total: z.number(),
@@ -79,79 +110,99 @@ export namespace ProductValidators {
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
   export const oneOutput = product
-    .omit({
-      categoryId: true,
-      vendorId: true,
-      createdAt: true,
-      updatedAt: true,
-    })
+    .omit({ categoryId: true, vendorId: true })
     .extend({
       category: z.object({ id: z.cuid(), name: z.string() }).nullable(),
-      vendor: z.object({
-        id: z.cuid(),
-        name: z.string(),
-        image: z.url().nullable(),
-        createdAt: z.date(),
-      }),
+      vendor: z
+        .object({
+          id: z.cuid(),
+          name: z.string(),
+          image: z.url().nullable(),
+        })
+        .nullable(),
+      attributes: z.array(
+        productAttribute
+          .omit({ attributeId: true, productId: true })
+          .extend({ name: z.string() }),
+      ),
       images: z.array(productImage.omit({ productId: true })),
       variants: z.array(
         productVariant.omit({ productId: true }).extend({
-          options: z.array(productVariantOption.omit({ variantId: true })),
+          options: z.array(z.object({ name: z.string(), value: z.string() })),
         }),
       ),
       reviews: z.array(
-        productReview.pick({ id: true, rating: true, createdAt: true }).extend({
-          user: z.object({
-            id: z.cuid(),
-            username: z.string(),
-            image: z.url().nullable(),
+        productReview
+          .omit({ productId: true, userId: true, updatedAt: true })
+          .extend({
+            user: z.object({
+              id: z.cuid(),
+              username: z.string(),
+              image: z.url().nullable(),
+            }),
           }),
-        }),
       ),
     })
   export type OneOutput = z.infer<typeof oneOutput>
 
-  export const createInput = z.object({
-    vendorId: z.cuid(),
-    categoryId: z.cuid(),
-    sku: z.string().min(1, 'SKU is required').max(50),
-    name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().optional(),
-    price: numeric,
-
-    images: z.array(z.url()),
-
-    variants: z.array(
-      z.object({
-        name: z.string().min(1, 'Variant name is required').max(100),
-        options: z.array(
-          z.object({
-            value: z.string().min(1, 'Option value is required').max(100),
-            stock: z.number().min(0, 'Stock must be at least 0'),
-            extraPrice: numeric,
-          }),
-        ),
-      }),
-    ),
-  })
+  export const createInput = product
+    .omit({ id: true, sold: true, createdAt: true, updatedAt: true })
+    .extend({
+      description: z.string().min(1).max(1000).optional(),
+      images: z.array(z.url()),
+      attributes: z.array(
+        z.object({
+          name: z.string().min(1).max(100),
+          value: z.string().min(1).max(255),
+        }),
+      ),
+      variants: z.array(
+        z.object({
+          name: z.string().min(1).max(100),
+          options: z.array(z.string().min(1).max(100)),
+        }),
+      ),
+    })
   export type CreateInput = z.infer<typeof createInput>
   export const createOutput = z.object({ id: z.cuid() })
   export type CreateOutput = z.infer<typeof createOutput>
 
-  export const updateInput = createInput.omit({ vendorId: true }).extend({
-    id: z.cuid(),
-  })
+  export const updateInput = createInput
+    .omit({ variants: true })
+    .extend({ id: z.cuid() })
   export type UpdateInput = z.infer<typeof updateInput>
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
 
-  export const deleteInput = z.object({ id: z.cuid() })
+  export const deleteInput = z.object({ id: z.cuid(), vendorId: z.cuid() })
   export type DeleteInput = z.infer<typeof deleteInput>
   export const deleteOutput = z.object({ id: z.cuid() })
   export type DeleteOutput = z.infer<typeof deleteOutput>
 
-  export const restoreInput = z.object({ id: z.cuid() })
+  export const restoreInput = z.object({ id: z.cuid(), vendorId: z.cuid() })
   export type RestoreInput = z.infer<typeof restoreInput>
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
+
+  export const createVariantInput = productVariant.omit({ id: true }).extend({
+    vendorId: z.cuid(),
+    options: z.array(z.string().min(1).max(100)).nonempty(),
+  })
+  export type CreateVariantInput = z.infer<typeof createVariantInput>
+  export const createVariantOutput = z.object({ id: z.cuid() })
+  export type CreateVariantOutput = z.infer<typeof createVariantOutput>
+
+  export const updateVariantInput = productVariant
+    .omit({ productId: true, sku: true })
+    .extend({ vendorId: z.cuid() })
+  export type UpdateVariantInput = z.infer<typeof updateVariantInput>
+  export const updateVariantOutput = z.object({ id: z.cuid() })
+  export type UpdateVariantOutput = z.infer<typeof updateVariantOutput>
+
+  export const deleteVariantInput = productVariant.pick({ id: true }).extend({
+    vendorId: z.cuid(),
+  })
+  export type DeleteVariantInput = z.infer<typeof deleteVariantInput>
+  export const deleteVariantOutput = z.object({ id: z.cuid() })
+  export type DeleteVariantOutput = z.infer<typeof deleteVariantOutput>
 }

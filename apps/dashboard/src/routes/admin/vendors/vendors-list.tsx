@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { cn } from '@yukinu/ui'
+import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -39,13 +40,21 @@ export const VendorsList: React.FC = () => {
       </TableRow>
     ))
 
+  const statusVariantMap = {
+    approved: 'success',
+    pending: 'warning',
+    suspended: 'destructive',
+  } as const
+
   return data?.vendors.map((vendor) => (
     <TableRow key={vendor.id}>
       <TableCell>{vendor.id}</TableCell>
       <TableCell>{vendor.name}</TableCell>
       <TableCell>{vendor.owner.username}</TableCell>
       <TableCell>{vendor.staffCount}</TableCell>
-      <TableCell>{vendor.status}</TableCell>
+      <TableCell>
+        <Badge variant={statusVariantMap[vendor.status]}>{vendor.status}</Badge>
+      </TableCell>
       <TableCell>{vendor.createdAt.toLocaleDateString()}</TableCell>
       <TableCell>{vendor.updatedAt.toLocaleDateString()}</TableCell>
       <TableCell>

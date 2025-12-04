@@ -38,7 +38,10 @@ export const VendorsPagination: React.FC = () => {
       <Button
         variant='outline'
         size='icon'
-        disabled={data.pagination.page === data.pagination.totalPages}
+        disabled={
+          data.pagination.page === data.pagination.totalPages ||
+          data.pagination.totalPages === 0
+        }
         onClick={() =>
           setQuery((prev) => ({
             ...prev,

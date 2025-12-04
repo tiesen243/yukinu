@@ -19,10 +19,7 @@ import { AuthValidators } from '@yukinu/validators/auth'
 export default function LoginPage() {
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <form
-        method='POST'
-        className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'
-      >
+      <form className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
         <FieldSet>
           <FieldLegend>Login</FieldLegend>
           <FieldDescription>
@@ -47,7 +44,8 @@ const LoginForm: React.FC = () => {
     },
     schema: AuthValidators.loginInput,
     onSubmit: signIn,
-    onError: ({ message }) => toast.error(message),
+    onError: ({ message }) =>
+      toast.error('Login failed', { description: message }),
     onSuccess: () => {
       toast.success('Logged in successfully!')
       void navigate('/')

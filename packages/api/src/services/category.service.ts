@@ -59,11 +59,26 @@ export class CategoryService extends BaseService implements ICategoryService {
     input: CategoryValidators.CreateInput,
   ): Promise<CategoryValidators.CreateOutput> {
     const { categories } = this._schema
-    const { name, description } = input
+    const { parentId, ...data } = input
 
+    if (parentId) {
+      let currentId: string | null = parentId
+      const visited = new Set([input.parentId])
+      while (currentId) {
+        const parent = await this.one({ id: currentId })
+        if (visited.has(parent.parentId ?? undefined)) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Circular parent-child relationship detected',
+          })
+        }
+        if (parent.parentId) visited.add(parent.parentId)
+        currentId = parent.parentId
+      }
+    }
     const [result] = await this._db
       .insert(categories)
-      .values({ name, description })
+      .values({ ...data, parentId: parentId ?? null })
       .returning({ id: categories.id })
 
     if (!result?.id)
@@ -80,9 +95,24 @@ export class CategoryService extends BaseService implements ICategoryService {
   ): Promise<CategoryValidators.UpdateOutput> {
     const { eq } = this._orm
     const { categories } = this._schema
-    const { id, name, description } = input
+    const { id, name, description, parentId } = input
 
-    await this.one({ id })
+    const category = await this.one({ id })
+    if (parentId !== category.parentId) {
+      let currentId: string | null = parentId ?? null
+      const visited = new Set([input.parentId])
+      while (currentId) {
+        const parent = await this.one({ id: currentId })
+        if (visited.has(parent.parentId ?? undefined) || parent.id === id) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Circular parent-child relationship detected',
+          })
+        }
+        if (parent.parentId) visited.add(parent.parentId)
+        currentId = parent.parentId
+      }
+    }
 
     await this._db
       .update(categories)

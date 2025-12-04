@@ -65,7 +65,7 @@ const RemoveStaffButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-destructive hover:underline'>
+      <DialogTrigger className='text-destructive underline-offset-4 hover:underline'>
         Remove
       </DialogTrigger>
 

@@ -1,17 +1,16 @@
-import { Suspense } from 'react'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
   FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
-import { Loader2Icon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
@@ -23,28 +22,11 @@ import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
 export const loader = ({ request }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
-  void getQueryClient().prefetchQuery(trpc.vendor.me.queryOptions())
+  return getQueryClient().ensureQueryData(trpc.vendor.me.queryOptions())
 }
 
-export default function MyStorePage(_: Route.ComponentProps) {
-  return (
-    <Suspense
-      fallback={
-        <div className='grid h-[568px] w-full place-items-center rounded-lg bg-card text-card-foreground shadow-sm'>
-          <Loader2Icon className='animate-spin' />
-        </div>
-      }
-    >
-      <MyStoreForm />
-    </Suspense>
-  )
-}
-
-const MyStoreForm: React.FC = () => {
+export default function MyStorePage({ loaderData }: Route.ComponentProps) {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery({
-    ...trpc.vendor.me.queryOptions(),
-  })
   const { mutateAsync } = useMutation({
     ...trpc.vendor.update.mutationOptions(),
     meta: { filter: trpc.vendor.me.queryFilter() },
@@ -52,15 +34,16 @@ const MyStoreForm: React.FC = () => {
 
   const form = useForm({
     defaultValues: {
-      name: data.name,
-      description: data.description,
-      image: data.image,
-      address: data.address,
+      name: loaderData.name,
+      description: loaderData.description ?? undefined,
+      image: loaderData.image ?? undefined,
+      address: loaderData.address ?? undefined,
     } as Omit<VendorValidators.UpdateInput, 'id'>,
     schema: VendorValidators.updateInput.omit({ id: true }),
     onSubmit: mutateAsync,
     onSuccess: () => toast.success('Store updated successfully!'),
-    onError: ({ message }) => toast.error(message),
+    onError: ({ message }) =>
+      toast.error('Failed to update store', { description: message }),
   })
 
   return (
@@ -81,36 +64,40 @@ const MyStoreForm: React.FC = () => {
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Store Name</FieldLabel>
                 <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <form.Field
             name='description'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <Textarea {...field} value={value ?? ''} />
+                <Textarea {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <form.Field
             name='image'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                <Input {...field} value={value ?? ''} />
+                <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <form.Field
             name='address'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                <Input {...field} value={value ?? ''} />
+                <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />

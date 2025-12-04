@@ -84,8 +84,14 @@ const navs = [
       {
         icon: PackageIcon,
         title: 'Products',
+        url: '/products/admin',
+        roles: ['admin', 'moderator'],
+      },
+      {
+        icon: PackageIcon,
+        title: 'Products',
         url: '/products',
-        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+        roles: ['vendor_owner', 'vendor_staff'],
       },
       {
         icon: TagsIcon,
@@ -109,7 +115,7 @@ const navs = [
         icon: StoreIcon,
         title: 'My Store',
         url: '/vendor/my-store',
-        roles: ['vendor_owner', 'vendor_staff'],
+        roles: ['vendor_owner'],
       },
       {
         icon: ShoppingBagIcon,

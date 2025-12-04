@@ -3,6 +3,7 @@ import * as z from 'zod'
 export namespace CategoryValidators {
   export const category = z.object({
     id: z.cuid(),
+    parentId: z.cuid().nullable(),
     name: z.string().min(1).max(255),
     image: z.url().nullable(),
     description: z.string().nullable(),
@@ -32,9 +33,10 @@ export namespace CategoryValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = z.object({
+    parentId: z.cuid().optional(),
     name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().nullable(),
-    image: z.url('Invalid image URL').nullable(),
+    description: z.string().optional(),
+    image: z.url('Invalid image URL').optional(),
   })
   export type CreateInput = z.infer<typeof createInput>
   export const createOutput = z.object({ id: z.cuid() })

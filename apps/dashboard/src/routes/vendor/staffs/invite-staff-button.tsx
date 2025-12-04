@@ -18,34 +18,34 @@ import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export const AddStaffButton: React.FC = () => {
+export const InviteStaffButton: React.FC = () => {
   const trpc = useTRPC()
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState('')
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendor.addStaff.mutationOptions(),
+    ...trpc.vendor.inviteStaff.mutationOptions(),
     meta: { filter: trpc.vendor.allStaffs.queryFilter() },
-    onError: ({ message }) => toast.error(message),
     onSuccess: () => {
-      toast.success('Staff added successfully')
+      toast.success('Invitation sent successfully!')
       setOpen(false)
       setEmail('')
     },
+    onError: ({ message }) =>
+      toast.error('Failed to invite staff', { description: message }),
   })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add New Staff</Button>
+        <Button>Invite New Staff</Button>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Staff</DialogTitle>
+          <DialogTitle>Invite New Staff</DialogTitle>
           <DialogDescription>
-            Fill email address of the user you want to add as staff to your
-            vendor.
+            Enter the email address of the staff member you want to invite.
           </DialogDescription>
         </DialogHeader>
 

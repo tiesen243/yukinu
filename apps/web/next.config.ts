@@ -20,6 +20,7 @@ const nextConfig = {
     '@yukinu/lib',
     '@yukinu/ui',
     '@yukinu/validators',
+    'prettier',
   ],
 
   // Enable standalone build output if specified (for Docker deployment)

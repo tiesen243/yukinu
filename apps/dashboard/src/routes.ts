@@ -8,6 +8,7 @@ export default [
   ]),
 
   route('/login', './routes/login.tsx'),
+  route('/invite', './routes/invite.tsx'),
 
   layout('./routes/__layout.tsx', [
     index('./routes/_index.tsx'),
@@ -15,6 +16,13 @@ export default [
 
     layout('./routes/admin/__layout.tsx', [
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
+      route('/products/admin', './routes/products/admin.tsx'),
+    ]),
+
+    layout('./routes/products/__layout.tsx', [
+      route('/products', './routes/products/_index.tsx'),
+      route('/products/new', './routes/products/new.tsx'),
+      route('/products/:id', './routes/products/[id]/_index.tsx'),
     ]),
 
     layout('./routes/vendor/__layout.tsx', [

@@ -66,9 +66,9 @@ export namespace VendorValidators {
   export const createInput = z.object({
     ownerId: z.cuid(),
     name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().nullable(),
-    image: z.url('Invalid image URL').nullable(),
-    address: z.string().min(1, 'Address is required').max(500).nullable(),
+    description: z.string().optional(),
+    image: z.url('Invalid image URL').optional(),
+    address: z.string().min(1, 'Address is required').max(500).optional(),
   })
   export type CreateInput = z.infer<typeof createInput>
   export const createOutput = z.object({ id: z.cuid() })
@@ -103,13 +103,24 @@ export namespace VendorValidators {
   )
   export type AllStaffsOutput = z.infer<typeof allStaffsOutput>
 
-  export const addStaffInput = z.object({
+  export const inviteStaffInput = z.object({
     vendorId: z.cuid(),
     email: z.email('Invalid email address'),
   })
-  export type AddStaffInput = z.infer<typeof addStaffInput>
-  export const addStaffOutput = z.void()
-  export type AddStaffOutput = z.infer<typeof addStaffOutput>
+  export type InviteStaffInput = z.infer<typeof inviteStaffInput>
+  export const inviteStaffOutput = z.void()
+  export type InviteStaffOutput = z.infer<typeof inviteStaffOutput>
+
+  export const acceptStaffInvitationInput = z.object({
+    token: z.string(),
+  })
+  export type AcceptStaffInvitationInput = z.infer<
+    typeof acceptStaffInvitationInput
+  >
+  export const acceptStaffInvitationOutput = z.void()
+  export type AcceptStaffInvitationOutput = z.infer<
+    typeof acceptStaffInvitationOutput
+  >
 
   export const removeStaffInput = z.object({
     vendorId: z.cuid(),
