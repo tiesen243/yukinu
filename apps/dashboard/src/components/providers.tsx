@@ -39,13 +39,6 @@ export function Providers({
     headers() {
       const headers = new Headers()
       headers.set('x-trpc-source', 'dashboard')
-
-      const token = document.cookie
-        .split('; ')
-        .find((row) => row.startsWith('auth.access_token='))
-        ?.split('=')[1]
-      if (token) headers.set('Authorization', `Bearer ${token}`)
-
       return headers
     },
   }

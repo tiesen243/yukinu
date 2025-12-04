@@ -1,5 +1,53 @@
 # @yukinu/web
 
+## 0.4.2
+
+### Patch Changes
+
+- Updated dependencies [[`e8453d9`](https://github.com/tiesen243/yukinu/commit/e8453d9bf2095e4d2c19a5d11555fdbec9d3069b)]:
+  - @yukinu/validators@0.3.2
+  - @yukinu/auth@0.3.2
+  - @yukinu/api@0.3.2
+  - @yukinu/db@0.3.2
+  - @yukinu/email@0.2.2
+
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [[`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b)]:
+  - @yukinu/validators@0.3.1
+  - @yukinu/api@0.3.1
+  - @yukinu/db@0.3.1
+  - @yukinu/auth@0.3.1
+  - @yukinu/email@0.2.1
+
+## 0.4.0
+
+### Minor Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87) Thanks [@tiesen243](https://github.com/tiesen243)! - done product management features
+
+### Patch Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa) Thanks [@tiesen243](https://github.com/tiesen243)! - resolve comment
+
+- Updated dependencies [[`46edbfb`](https://github.com/tiesen243/yukinu/commit/46edbfbeb87930ce5a644324d3bf6a9c8997b906), [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87), [`ddda95a`](https://github.com/tiesen243/yukinu/commit/ddda95ae08b7ea7b3704efd1f305186c50dfa32a), [`812e48d`](https://github.com/tiesen243/yukinu/commit/812e48d7b29f6367d8a10a0a14d391caf63abb4a), [`b2d1872`](https://github.com/tiesen243/yukinu/commit/b2d187233bf6c367155f068333172fd96cd22b60), [`ffa0edc`](https://github.com/tiesen243/yukinu/commit/ffa0edcc4ec7c3e4a520fc28591c24d711df8838), [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa), [`5c418e2`](https://github.com/tiesen243/yukinu/commit/5c418e243720ef177b89557798aef701d05d82e0)]:
+  - @yukinu/email@0.2.0
+  - @yukinu/api@0.3.0
+  - @yukinu/validators@0.3.0
+  - @yukinu/auth@0.3.0
+  - @yukinu/db@0.3.0
+  - @yukinu/lib@0.1.0
+  - @yukinu/ui@0.2.0
+
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies [[`054f313`](https://github.com/tiesen243/yukinu/commit/054f313f574ac9770398f19fd3cb320ce398272d)]:
+  - @yukinu/api@0.2.2
+
 ## 0.3.1
 
 ### Patch Changes

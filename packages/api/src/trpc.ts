@@ -15,8 +15,7 @@ import { VendorService } from '@/services/vendor.service'
 const createTRPCContext = async (opts: {
   headers: Headers
 }): Promise<TRPCContext> => {
-  const token = opts.headers.get('authorization')?.replace('Bearer ', '') ?? ''
-  const session = await validateAccessToken(token)
+  const session = await validateAccessToken(opts.headers)
 
   const authService = new AuthService(db, orm, schema)
   const categoryService = new CategoryService(db, orm, schema)
@@ -126,6 +125,8 @@ const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
         message: 'Vendor not found for the staff.',
       })
     vendorId = staff.vendorId
+  } else if (['admin', 'moderator'].includes(ctx.session.role)) {
+    vendorId = 'admin-or-moderator-access'
   } else {
     throw new TRPCError({
       code: 'FORBIDDEN',
@@ -137,6 +138,7 @@ const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
 })
 
 export type { TRPCMeta, TRPCContext }
+export const MINMOD_ACCESS = 'admin-or-moderator-access'
 export {
   createCallerFactory,
   createTRPCContext,

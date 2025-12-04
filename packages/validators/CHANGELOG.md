@@ -1,5 +1,30 @@
 # @yukinu/validators
 
+## 0.3.2
+
+### Patch Changes
+
+- [#236](https://github.com/tiesen243/yukinu/pull/236) [`e8453d9`](https://github.com/tiesen243/yukinu/commit/e8453d9bf2095e4d2c19a5d11555fdbec9d3069b) Thanks [@tiesen243](https://github.com/tiesen243)! - added user management
+
+## 0.3.1
+
+### Patch Changes
+
+- [#234](https://github.com/tiesen243/yukinu/pull/234) [`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b) Thanks [@tiesen243](https://github.com/tiesen243)! - added categories management
+
+## 0.3.0
+
+### Minor Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87) Thanks [@tiesen243](https://github.com/tiesen243)! - done product management features
+
+### Patch Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa) Thanks [@tiesen243](https://github.com/tiesen243)! - resolve comment
+
+- Updated dependencies []:
+  - @yukinu/lib@0.1.0
+
 ## 0.2.0
 
 ### Minor Changes

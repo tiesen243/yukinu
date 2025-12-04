@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/email",
-  "version": "0.1.0",
+  "version": "0.2.2",
   "private": true,
   "type": "module",
   "exports": {
@@ -25,6 +25,7 @@
     "@react-email/components": "^1.0.1",
     "@yukinu/validators": "workspace:*",
     "react": "catalog:react",
+    "react-dom": "catalog:react",
     "resend": "^6.5.2"
   },
   "devDependencies": {

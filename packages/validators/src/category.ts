@@ -3,6 +3,7 @@ import * as z from 'zod'
 export namespace CategoryValidators {
   export const category = z.object({
     id: z.cuid(),
+    parentId: z.cuid().nullable(),
     name: z.string().min(1).max(255),
     image: z.url().nullable(),
     description: z.string().nullable(),
@@ -16,7 +17,13 @@ export namespace CategoryValidators {
   })
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
-    categories: z.array(category),
+    categories: z.array(
+      category.omit({ parentId: true }).extend({
+        parent: z
+          .object({ id: z.cuid(), name: z.string().min(1).max(255) })
+          .nullable(),
+      }),
+    ),
     pagination: z.object({
       total: z.number(),
       page: z.number(),
@@ -28,12 +35,17 @@ export namespace CategoryValidators {
 
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
-  export const oneOutput = category
+  export const oneOutput = category.omit({ parentId: true }).extend({
+    parent: z
+      .object({ id: z.cuid(), name: z.string().min(1).max(255) })
+      .nullable(),
+  })
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = z.object({
+    parentId: z.union([z.cuid(), z.literal('no-parent')]).optional(),
     name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().nullable(),
+    description: z.string().optional(),
     image: z.url('Invalid image URL').optional(),
   })
   export type CreateInput = z.infer<typeof createInput>

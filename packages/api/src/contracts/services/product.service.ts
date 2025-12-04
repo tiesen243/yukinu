@@ -20,4 +20,16 @@ export interface IProductService {
   restore(
     input: ProductValidators.RestoreInput,
   ): Promise<ProductValidators.RestoreOutput>
+
+  createVariant(
+    input: ProductValidators.CreateVariantInput,
+  ): Promise<ProductValidators.CreateVariantOutput>
+
+  updateVariant(
+    input: ProductValidators.UpdateVariantInput,
+  ): Promise<ProductValidators.UpdateVariantOutput>
+
+  deleteVariant(
+    input: ProductValidators.DeleteVariantInput,
+  ): Promise<ProductValidators.DeleteVariantOutput>
 }

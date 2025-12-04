@@ -21,14 +21,25 @@ export const userRouter = createTRPCRouter({
     .output(UserValidators.oneOutput)
     .query(({ ctx, input }) => ctx.services.user.one(input)),
 
-  updateStatus: protectedProcedure
+  update: protectedProcedure
     .meta({
-      message: 'User status updated successfully',
+      message: 'User updated successfully',
       role: ['admin'],
     })
-    .input(UserValidators.updateStatusInput)
-    .output(UserValidators.updateStatusOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.updateStatus(input)),
+    .input(UserValidators.updateInput)
+    .output(UserValidators.updateOutput)
+    .mutation(({ ctx, input }) => ctx.services.user.update(input)),
+
+  delete: protectedProcedure
+    .meta({
+      message: 'User deleted successfully',
+      role: ['admin'],
+    })
+    .input(UserValidators.deleteInput)
+    .output(UserValidators.deleteOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.delete(input, ctx.session.userId),
+    ),
 
   profile: protectedProcedure
     .meta({ message: 'User profile fetched successfully' })

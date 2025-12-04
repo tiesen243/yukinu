@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/dashboard",
-  "version": "0.3.1",
+  "version": "0.4.2",
   "private": false,
   "type": "module",
   "scripts": {
@@ -14,8 +14,8 @@
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@react-router/node": "^7.9.6",
-    "@react-router/serve": "^7.9.6",
+    "@react-router/node": "^7.10.0",
+    "@react-router/serve": "^7.10.0",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
@@ -23,6 +23,7 @@
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
+    "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
@@ -30,11 +31,11 @@
     "nuqs": "catalog:",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.9.6",
+    "react-router": "^7.10.0",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.9.6",
+    "@react-router/dev": "^7.10.0",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
@@ -45,6 +46,6 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
-    "vite": "^7.2.4"
+    "vite": "^8.0.0-beta.0"
   }
 }

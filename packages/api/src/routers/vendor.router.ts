@@ -20,14 +20,24 @@ export const VendorRouter = createTRPCRouter({
     .output(VendorValidators.oneOutput)
     .query(({ ctx, input }) => ctx.services.vendor.one(input)),
 
+  me: vendorProcedure
+    .meta({ message: 'Vendor fetched successfully', role: ['vendor_owner'] })
+    .output(VendorValidators.oneOutput.omit({ id: true }))
+    .query(({ ctx }) => ctx.services.vendor.one({ id: ctx.vendorId })),
+
   create: protectedProcedure
     .meta({
       message: 'Vendor created successfully',
       role: ['user'],
     })
-    .input(VendorValidators.createInput)
+    .input(VendorValidators.createInput.omit({ ownerId: true }))
     .output(VendorValidators.createOutput)
-    .mutation(({ ctx, input }) => ctx.services.vendor.create(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.create({
+        ...input,
+        ownerId: ctx.session.userId,
+      }),
+    ),
 
   updateStatus: protectedProcedure
     .meta({
@@ -49,15 +59,34 @@ export const VendorRouter = createTRPCRouter({
       ctx.services.vendor.update({ ...input, id: ctx.vendorId }),
     ),
 
-  addStaff: vendorProcedure
+  allStaffs: vendorProcedure
+    .meta({
+      message: 'Vendor staff fetched successfully',
+      role: ['vendor_owner'],
+    })
+    .input(VendorValidators.allStaffsInput.omit({ vendorId: true }))
+    .output(VendorValidators.allStaffsOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.vendor.allStaffs({ ...input, vendorId: ctx.vendorId }),
+    ),
+
+  inviteStaff: vendorProcedure
     .meta({
       message: 'Vendor staff added successfully',
       role: ['vendor_owner'],
     })
-    .input(VendorValidators.addStaffInput.omit({ vendorId: true }))
-    .output(VendorValidators.addStaffOutput)
+    .input(VendorValidators.inviteStaffInput.omit({ vendorId: true }))
+    .output(VendorValidators.inviteStaffOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.vendor.addStaff({ ...input, vendorId: ctx.vendorId }),
+      ctx.services.vendor.inviteStaff({ ...input, vendorId: ctx.vendorId }),
+    ),
+
+  acceptStaffInvitation: protectedProcedure
+    .meta({ message: 'Vendor invitation accepted successfully' })
+    .input(VendorValidators.acceptStaffInvitationInput)
+    .output(VendorValidators.acceptStaffInvitationOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.acceptStaffInvitation(input, ctx.session.userId),
     ),
 
   removeStaff: vendorProcedure

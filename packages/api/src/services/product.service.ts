@@ -4,47 +4,57 @@ import type { ProductValidators } from '@yukinu/validators/product'
 
 import type { IProductService } from '@/contracts/services/product.service'
 import { BaseService } from '@/services/base.service'
+import { MINMOD_ACCESS } from '@/trpc'
 
 export class ProductService extends BaseService implements IProductService {
   async all(
     input: ProductValidators.AllInput,
   ): Promise<ProductValidators.AllOutput> {
-    const { and, eq, ilike, min, max, isNull, isNotNull } = this._orm
-    const { products, productImages, productVariants, productVariantOptions } =
-      this._schema
+    const { and, desc, eq, ilike, max, min, isNull, isNotNull, sql } = this._orm
+    const {
+      categories,
+      productImages,
+      productReviews,
+      productVariants,
+      products,
+    } = this._schema
     const { search, categoryId, vendorId, isDeleted, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClause = []
-    if (search) whereClause.push(ilike(products.name, `%${search}%`))
-    if (categoryId) whereClause.push(eq(products.categoryId, categoryId))
-    if (vendorId) whereClause.push(eq(products.vendorId, vendorId))
-
-    if (isDeleted) whereClause.push(isNotNull(products.deletedAt))
-    else whereClause.push(isNull(products.deletedAt))
+    const whereClauses = []
+    if (search) whereClauses.push(ilike(products.name, `%${search}%`))
+    if (categoryId) whereClauses.push(eq(products.categoryId, categoryId))
+    if (vendorId) whereClauses.push(eq(products.vendorId, vendorId))
+    if (isDeleted) whereClauses.push(isNotNull(products.deletedAt))
+    else whereClauses.push(isNull(products.deletedAt))
+    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
     const [productsList, total] = await Promise.all([
       this._db
         .select({
           id: products.id,
           name: products.name,
-          price: products.price,
+          category: categories.name,
           image: min(productImages.url),
-          lowestVariantPrice: min(productVariantOptions.extraPrice),
-          highestVariantPrice: max(productVariantOptions.extraPrice),
+          price: products.price,
+          minPrice: sql<string>`LEAST(${min(productVariants.price)}, ${products.price})`,
+          maxPrice: sql<string>`GREATEST(${max(productVariants.price)}, ${products.price})`,
+          sold: products.sold,
+          rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
+          createdAt: products.createdAt,
+          updatedAt: products.updatedAt,
         })
         .from(products)
-        .where(and(...whereClause))
-        .offset(offset)
+        .where(whereClause)
         .limit(limit)
+        .offset(offset)
+        .leftJoin(categories, eq(categories.id, products.categoryId))
         .leftJoin(productImages, eq(productImages.productId, products.id))
+        .leftJoin(productReviews, eq(productReviews.productId, products.id))
         .leftJoin(productVariants, eq(productVariants.productId, products.id))
-        .leftJoin(
-          productVariantOptions,
-          eq(productVariantOptions.variantId, productVariants.id),
-        )
-        .groupBy(products.id),
-      this._db.$count(products, and(...whereClause)),
+        .orderBy(desc(products.createdAt))
+        .groupBy(products.id, categories.id),
+      this._db.$count(products, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 
@@ -57,15 +67,18 @@ export class ProductService extends BaseService implements IProductService {
   async one(
     input: ProductValidators.OneInput,
   ): Promise<ProductValidators.OneOutput> {
-    const { and, eq, isNull, sql } = this._orm
+    const { and, asc, eq, inArray, isNull } = this._orm
     const {
+      attributes,
       categories,
-      products,
+      productAttributes,
       productImages,
-      productVariants,
-      productVariantOptions,
       productReviews,
+      productVariants,
+      products,
       users,
+      variantOptions,
+      variants,
       vendors,
     } = this._schema
     const { id } = input
@@ -76,28 +89,31 @@ export class ProductService extends BaseService implements IProductService {
         name: products.name,
         description: products.description,
         price: products.price,
-        sku: products.sku,
+        stock: products.stock,
+        sold: products.sold,
         category: { id: categories.id, name: categories.name },
-        vendor: {
-          id: vendors.id,
-          name: vendors.name,
-          image: vendors.image,
-          createdAt: vendors.createdAt,
-        },
+        vendor: { id: vendors.id, name: vendors.name, image: vendors.image },
+        createdAt: products.createdAt,
+        updatedAt: products.updatedAt,
       })
       .from(products)
+      .leftJoin(categories, eq(categories.id, products.categoryId))
+      .leftJoin(vendors, eq(vendors.id, products.vendorId))
       .where(and(eq(products.id, id), isNull(products.deletedAt)))
       .limit(1)
-      .leftJoin(categories, eq(categories.id, products.categoryId))
-      .innerJoin(vendors, eq(vendors.id, products.vendorId))
-
     if (!product)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'Product not found or deleted',
+        message: `Product with id ${id} not found`,
       })
 
-    const [images, variants, reviews] = await Promise.all([
+    const [attrs, images, vrts, reviews] = await Promise.all([
+      this._db
+        .select({ name: attributes.name, value: productAttributes.value })
+        .from(productAttributes)
+        .where(eq(productAttributes.productId, id))
+        .innerJoin(attributes, eq(attributes.id, productAttributes.attributeId))
+        .orderBy(asc(attributes.name)),
       this._db
         .select({ id: productImages.id, url: productImages.url })
         .from(productImages)
@@ -105,29 +121,22 @@ export class ProductService extends BaseService implements IProductService {
       this._db
         .select({
           id: productVariants.id,
-          name: productVariants.name,
-          options: sql<
-            ProductValidators.OneOutput['variants'][number]['options']
-          >`json_agg(json_build_object(
-              'id', ${productVariantOptions.id}, 
-              'value', ${productVariantOptions.value}, 
-              'stock', ${productVariantOptions.stock},
-              'extraPrice', ${productVariantOptions.extraPrice}
-            ))`.as('options'),
+          sku: productVariants.sku,
+          price: productVariants.price,
+          stock: productVariants.stock,
         })
         .from(productVariants)
-        .where(eq(productVariants.productId, id))
-        .innerJoin(
-          productVariantOptions,
-          eq(productVariantOptions.variantId, productVariants.id),
-        )
-        .groupBy(productVariants.id),
+        .where(eq(productVariants.productId, id)),
       this._db
         .select({
           id: productReviews.id,
           rating: productReviews.rating,
           comment: productReviews.comment,
-          user: { id: users.id, username: users.username, image: users.image },
+          user: {
+            id: users.id,
+            username: users.username,
+            image: users.image,
+          },
           createdAt: productReviews.createdAt,
         })
         .from(productReviews)
@@ -135,123 +144,205 @@ export class ProductService extends BaseService implements IProductService {
         .innerJoin(users, eq(users.id, productReviews.userId)),
     ])
 
-    return { ...product, images, variants, reviews }
+    const variantsList = await Promise.all(
+      vrts.map(async (vrt) => {
+        const ids = vrt.sku.split('-').map((v) => parseInt(v, 10))
+
+        const options = await this._db
+          .select({ name: variants.name, value: variantOptions.value })
+          .from(variantOptions)
+          .where(inArray(variantOptions.id, ids))
+          .innerJoin(variants, eq(variants.id, variantOptions.variantId))
+          .orderBy(asc(variantOptions.value))
+
+        return { ...vrt, options }
+      }),
+    )
+
+    return {
+      ...product,
+      images,
+      attributes: attrs,
+      variants: variantsList,
+      reviews,
+    }
   }
 
-  create(
+  async create(
     input: ProductValidators.CreateInput,
   ): Promise<ProductValidators.CreateOutput> {
-    const { products, productImages, productVariants, productVariantOptions } =
-      this._schema
-    const { images, variants, ...data } = input
+    const { eq } = this._orm
+    const {
+      attributes,
+      categories,
+      productAttributes,
+      productImages,
+      productVariants,
+      products,
+      variantOptions,
+      variants,
+    } = this._schema
+    const { attributes: attrs, images, variants: vrts, ...data } = input
+
+    const [category] = await this._db
+      .select({ id: categories.id })
+      .from(categories)
+      .where(eq(categories.id, data.categoryId))
+      .limit(1)
+    if (!category)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Category with id ${data.categoryId} does not exist`,
+      })
 
     return this._db.transaction(async (tx) => {
-      // 1. Insert product
-      const [newProduct] = await tx
+      const [product] = await tx
         .insert(products)
         .values(data)
         .returning({ id: products.id })
-      if (!newProduct)
+      if (!product)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to create product',
         })
 
-      // 2. Insert images
-      const imageInserts =
-        images.length > 0
-          ? tx
-              .insert(productImages)
-              .values(images.map((url) => ({ url, productId: newProduct.id })))
-          : Promise.resolve()
+      await tx
+        .insert(productImages)
+        .values(images.map((url) => ({ productId: product.id, url })))
 
-      // 3. Insert variants and options
-      const variantInserts = variants.map(async (variant) => {
-        const { name, options } = variant
-        const [newVariant] = await tx
-          .insert(productVariants)
-          .values({ name, productId: newProduct.id })
-          .returning({ id: productVariants.id })
-        if (!newVariant)
-          throw new TRPCError({
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Failed to create product variant',
+      await Promise.all(
+        attrs.map(async (attr) => {
+          const [attribute = { id: '' }] = await tx
+            .insert(attributes)
+            .values({ name: attr.name.toLowerCase() })
+            .onConflictDoUpdate({
+              target: attributes.name,
+              set: { name: attr.name.toLowerCase() },
+            })
+            .returning({ id: attributes.id })
+          await tx.insert(productAttributes).values({
+            productId: product.id,
+            attributeId: attribute.id,
+            value: attr.value.toLowerCase(),
           })
+        }),
+      )
 
-        if (options.length > 0) {
-          await tx.insert(productVariantOptions).values(
-            options.map((option) => ({
-              ...option,
-              variantId: newVariant.id,
-            })),
-          )
-        }
-      })
+      if (vrts.length === 0) return { id: product.id }
 
-      await Promise.all([imageInserts, ...variantInserts])
-      return newProduct
+      const results = await Promise.all(
+        vrts.map(async (vrt) => {
+          const [variant = { id: '' }] = await tx
+            .insert(variants)
+            .values({ name: vrt.name.toLowerCase() })
+            .onConflictDoUpdate({
+              target: variants.name,
+              set: { name: vrt.name.toLowerCase() },
+            })
+            .returning({ id: variants.id })
+          const options = await tx
+            .insert(variantOptions)
+            .values(
+              vrt.options.map((option) => ({
+                variantId: variant.id,
+                value: option.toLowerCase(),
+              })),
+            )
+            .onConflictDoUpdate({
+              target: [variantOptions.variantId, variantOptions.value],
+              set: { variantId: variant.id },
+            })
+            .returning({ id: variantOptions.id })
+
+          return { id: variant.id, options: options.map((o) => o.id) }
+        }),
+      )
+
+      const skuCombinations = this._cartesianProduct(
+        results.map((r) => r.options.map(String)),
+      )
+      if (skuCombinations.length > 0)
+        await tx.insert(productVariants).values(
+          skuCombinations.map((skus) => ({
+            productId: product.id,
+            sku: skus.join('-'),
+          })),
+        )
+
+      return { id: product.id }
     })
   }
 
   async update(
     input: ProductValidators.UpdateInput,
   ): Promise<ProductValidators.UpdateOutput> {
-    const { eq } = this._orm
-    const { products, productImages, productVariants, productVariantOptions } =
+    const { and, eq } = this._orm
+    const { attributes, productAttributes, productImages, products } =
       this._schema
-    const { id, images, variants, ...data } = input
+    const { id, vendorId, attributes: attrs, images, ...data } = input
+
+    const [product] = await this._db
+      .select({ id: products.id })
+      .from(products)
+      .where(
+        vendorId === MINMOD_ACCESS
+          ? eq(products.id, id)
+          : and(eq(products.id, id), eq(products.vendorId, vendorId)),
+      )
+      .limit(1)
+    if (!product)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
 
     return this._db.transaction(async (tx) => {
-      // 1. Update product data
-      const [result] = await tx
+      const [updated] = await tx
         .update(products)
-        .set({ ...data })
+        .set(data)
         .where(eq(products.id, id))
         .returning({ id: products.id })
-      if (!result)
+      if (!updated)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to update product',
+          message: `Failed to update product with id ${id}`,
         })
 
-      // 2. Delete and re-insert images if provided
-      if (images.length > 0) {
-        await tx.delete(productImages).where(eq(productImages.productId, id))
-        await tx
-          .insert(productImages)
-          .values(images.map((url) => ({ url, productId: id })))
-      }
+      await tx.delete(productImages).where(eq(productImages.productId, id))
+      await tx
+        .insert(productImages)
+        .values(images.map((url) => ({ productId: id, url })))
 
-      // 3. Delete and re-insert variants and options if provided
-      if (variants.length > 0) {
-        await tx
-          .delete(productVariants)
-          .where(eq(productVariants.productId, id))
+      await tx
+        .delete(productAttributes)
+        .where(eq(productAttributes.productId, id))
+      await Promise.all(
+        attrs.map(async (attr) => {
+          const [attribute = { id: '' }] = await tx
+            .insert(attributes)
+            .values({ name: attr.name.toLowerCase() })
+            .onConflictDoUpdate({
+              target: attributes.name,
+              set: { name: attr.name.toLowerCase() },
+            })
+            .returning({ id: attributes.id })
 
-        await Promise.all(
-          variants.map(async (variant) => {
-            const { name, options } = variant
-            const [newVariant] = await tx
-              .insert(productVariants)
-              .values({ name, productId: id })
-              .returning({ id: productVariants.id })
-            if (!newVariant)
-              throw new TRPCError({
-                code: 'INTERNAL_SERVER_ERROR',
-                message: 'Failed to create product variant',
-              })
-
-            if (options.length > 0) {
-              await tx.insert(productVariantOptions).values(
-                options.map((option) => ({
-                  ...option,
-                  variantId: newVariant.id,
-                })),
-              )
-            }
-          }),
-        )
-      }
+          await tx
+            .insert(productAttributes)
+            .values({
+              productId: id,
+              attributeId: attribute.id,
+              value: attr.value.toLowerCase(),
+            })
+            .onConflictDoUpdate({
+              target: [
+                productAttributes.productId,
+                productAttributes.attributeId,
+              ],
+              set: { value: attr.value.toLowerCase() },
+            })
+        }),
+      )
 
       return { id }
     })
@@ -260,14 +351,29 @@ export class ProductService extends BaseService implements IProductService {
   async delete(
     input: ProductValidators.DeleteInput,
   ): Promise<ProductValidators.DeleteOutput> {
-    const { eq } = this._orm
+    const { and, eq, isNull } = this._orm
     const { products } = this._schema
-    const { id } = input
+    const { id, vendorId } = input
 
-    await this._db
+    const [deleted] = await this._db
       .update(products)
       .set({ deletedAt: new Date() })
-      .where(eq(products.id, id))
+      .where(
+        and(
+          eq(products.id, id),
+          isNull(products.deletedAt),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .returning({ id: products.id })
+
+    if (!deleted)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
 
     return { id }
   }
@@ -275,15 +381,125 @@ export class ProductService extends BaseService implements IProductService {
   async restore(
     input: ProductValidators.RestoreInput,
   ): Promise<ProductValidators.RestoreOutput> {
-    const { eq } = this._orm
+    const { and, eq, isNotNull } = this._orm
     const { products } = this._schema
-    const { id } = input
+    const { id, vendorId } = input
 
-    await this._db
+    const [restored] = await this._db
       .update(products)
       .set({ deletedAt: null })
-      .where(eq(products.id, id))
+      .where(
+        and(
+          eq(products.id, id),
+          isNotNull(products.deletedAt),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .returning({ id: products.id })
+
+    if (!restored)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
 
     return { id }
+  }
+
+  createVariant(
+    _input: ProductValidators.CreateVariantInput,
+  ): Promise<ProductValidators.CreateVariantOutput> {
+    throw new TRPCError({
+      code: 'NOT_IMPLEMENTED',
+      message: 'Method not implemented.',
+    })
+  }
+
+  async updateVariant(
+    input: ProductValidators.UpdateVariantInput,
+  ): Promise<ProductValidators.UpdateVariantOutput> {
+    const { and, eq } = this._orm
+    const { productVariants, products } = this._schema
+    const { id, vendorId, ...data } = input
+
+    const [variant] = await this._db
+      .select({ id: productVariants.id })
+      .from(productVariants)
+      .innerJoin(products, eq(products.id, productVariants.productId))
+      .where(
+        and(
+          eq(productVariants.id, id),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .limit(1)
+    if (!variant)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
+
+    const [updated] = await this._db
+      .update(productVariants)
+      .set(data)
+      .where(eq(productVariants.id, id))
+      .returning({ id: productVariants.id })
+    if (!updated)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
+
+    return { id }
+  }
+
+  async deleteVariant(
+    input: ProductValidators.DeleteVariantInput,
+  ): Promise<ProductValidators.DeleteVariantOutput> {
+    const { and, eq } = this._orm
+    const { productVariants, products } = this._schema
+    const { id, vendorId } = input
+
+    const [variant] = await this._db
+      .select({ id: productVariants.id })
+      .from(productVariants)
+      .innerJoin(products, eq(products.id, productVariants.productId))
+      .where(
+        and(
+          eq(productVariants.id, id),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .limit(1)
+    if (!variant)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
+
+    const [deleted] = await this._db
+      .delete(productVariants)
+      .where(eq(productVariants.id, id))
+      .returning({ id: productVariants.id })
+    if (!deleted)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
+
+    return { id }
+  }
+
+  private _cartesianProduct(arrays: string[][]): string[][] {
+    return arrays.reduce<string[][]>(
+      (acc, curr) => acc.flatMap((a) => curr.map((b) => [...a, b])),
+      [[]],
+    )
   }
 }

@@ -1,0 +1,14 @@
+import { ProductTable } from '@/routes/products/_components/products-table'
+
+export default function ProductsPage() {
+  return (
+    <>
+      <h1 className='text-3xl font-bold'>Products Management</h1>
+      <p className='mt-2 text-muted-foreground'>
+        Manage and view all products in your vendors from this dashboard.
+      </p>
+
+      <ProductTable />
+    </>
+  )
+}

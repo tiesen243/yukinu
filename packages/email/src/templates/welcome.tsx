@@ -43,7 +43,7 @@ export default function Welcome(props: WelcomeEmailProps) {
       </Section>
 
       <Text>
-        Or copy and paste the following link into your browser:{' '}
+        or copy and paste the following link into your browser:{' '}
         <Link href={verificationLink}>{verificationLink}</Link>
       </Text>
 

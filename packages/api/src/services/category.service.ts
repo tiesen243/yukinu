@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server'
 
 import type { CategoryValidators } from '@yukinu/validators/category'
+import { alias } from '@yukinu/db'
 
 import type { ICategoryService } from '@/contracts/services/category.service'
 import { BaseService } from '@/services/base.service'
@@ -18,11 +19,19 @@ export class CategoryService extends BaseService implements ICategoryService {
       ? ilike(categories.name, `%${search}%`)
       : undefined
 
+    const parent = alias(categories, 'parent')
     const [categoriesList, total] = await Promise.all([
       this._db
-        .select()
+        .select({
+          id: categories.id,
+          name: categories.name,
+          description: categories.description,
+          image: categories.image,
+          parent: { id: parent.id, name: parent.name },
+        })
         .from(categories)
         .where(whereClause)
+        .leftJoin(parent, this._orm.eq(categories.parentId, parent.id))
         .offset(offset)
         .limit(limit)
         .orderBy(asc(categories.name)),
@@ -43,10 +52,21 @@ export class CategoryService extends BaseService implements ICategoryService {
     const { categories } = this._schema
     const { id } = input
 
+    const parent = alias(categories, 'parent')
     const [category] = await this._db
-      .select()
+      .select({
+        id: categories.id,
+        name: categories.name,
+        description: categories.description,
+        image: categories.image,
+        parent: {
+          id: parent.id,
+          name: parent.name,
+        },
+      })
       .from(categories)
       .where(eq(categories.id, id))
+      .leftJoin(parent, eq(categories.parentId, parent.id))
       .limit(1)
 
     if (!category)
@@ -59,11 +79,26 @@ export class CategoryService extends BaseService implements ICategoryService {
     input: CategoryValidators.CreateInput,
   ): Promise<CategoryValidators.CreateOutput> {
     const { categories } = this._schema
-    const { name, description } = input
+    const { parentId, ...data } = input
 
+    if (parentId && parentId !== 'no-parent') {
+      let currentId = parentId
+      const visited = new Set([parentId])
+      while (currentId) {
+        const parent = await this.one({ id: currentId })
+        if (visited.has(parent.parent?.id ?? '')) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Circular parent-child relationship detected',
+          })
+        }
+        if (parent.parent?.id) visited.add(parent.parent.id)
+        currentId = parent.parent?.id ?? ''
+      }
+    }
     const [result] = await this._db
       .insert(categories)
-      .values({ name, description })
+      .values({ ...data, parentId: parentId === 'no-parent' ? null : parentId })
       .returning({ id: categories.id })
 
     if (!result?.id)
@@ -80,13 +115,38 @@ export class CategoryService extends BaseService implements ICategoryService {
   ): Promise<CategoryValidators.UpdateOutput> {
     const { eq } = this._orm
     const { categories } = this._schema
-    const { id, name, description } = input
+    const { id, name, description, parentId } = input
 
-    await this.one({ id })
+    const category = await this.one({ id })
+    if (
+      parentId &&
+      parentId !== category.parent?.id &&
+      parentId !== 'no-parent'
+    ) {
+      let currentId = parentId
+      const visited = new Set([parentId])
+      while (currentId) {
+        const parent = await this.one({ id: currentId })
+        if (visited.has(parent.parent?.id ?? '') || parent.id === id) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Circular parent-child relationship detected',
+          })
+        }
+        if (parent.parent?.id) visited.add(parent.parent.id)
+        currentId = parent.parent?.id ?? ''
+      }
+    }
 
     await this._db
       .update(categories)
-      .set({ name, description })
+      .set({
+        name,
+        description,
+        ...(parentId !== undefined && {
+          parentId: parentId === 'no-parent' ? null : parentId,
+        }),
+      })
       .where(eq(categories.id, id))
 
     return { id }

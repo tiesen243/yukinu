@@ -1,5 +1,77 @@
 # @yukinu/dashboard
 
+## 0.4.2
+
+### Patch Changes
+
+- [#236](https://github.com/tiesen243/yukinu/pull/236) [`e8453d9`](https://github.com/tiesen243/yukinu/commit/e8453d9bf2095e4d2c19a5d11555fdbec9d3069b) Thanks [@tiesen243](https://github.com/tiesen243)! - added user management
+
+- Updated dependencies [[`e8453d9`](https://github.com/tiesen243/yukinu/commit/e8453d9bf2095e4d2c19a5d11555fdbec9d3069b)]:
+  - @yukinu/validators@0.3.2
+  - @yukinu/auth@0.3.2
+  - @yukinu/api@0.3.2
+  - @yukinu/db@0.3.2
+  - @yukinu/email@0.2.2
+
+## 0.4.1
+
+### Patch Changes
+
+- [#234](https://github.com/tiesen243/yukinu/pull/234) [`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b) Thanks [@tiesen243](https://github.com/tiesen243)! - added categories management
+
+- [#234](https://github.com/tiesen243/yukinu/pull/234) [`92423d9`](https://github.com/tiesen243/yukinu/commit/92423d9072f116f15fbc7b46e31b66f2a0673776) Thanks [@tiesen243](https://github.com/tiesen243)! - set null when delete parent id
+
+- Updated dependencies [[`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b)]:
+  - @yukinu/validators@0.3.1
+  - @yukinu/api@0.3.1
+  - @yukinu/db@0.3.1
+  - @yukinu/auth@0.3.1
+  - @yukinu/email@0.2.1
+
+## 0.4.0
+
+### Minor Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87) Thanks [@tiesen243](https://github.com/tiesen243)! - done product management features
+
+### Patch Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`46edbfb`](https://github.com/tiesen243/yukinu/commit/46edbfbeb87930ce5a644324d3bf6a9c8997b906) Thanks [@tiesen243](https://github.com/tiesen243)! - added invite email
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa) Thanks [@tiesen243](https://github.com/tiesen243)! - resolve comment
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`4e946b0`](https://github.com/tiesen243/yukinu/commit/4e946b0cada3263ea670987ce59da834db88998b) Thanks [@tiesen243](https://github.com/tiesen243)! - added product table
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`1c3b72c`](https://github.com/tiesen243/yukinu/commit/1c3b72ce55d6f3d690c2fe000a4e77765eeb4640) Thanks [@tiesen243](https://github.com/tiesen243)! - added create product form
+
+- Updated dependencies [[`46edbfb`](https://github.com/tiesen243/yukinu/commit/46edbfbeb87930ce5a644324d3bf6a9c8997b906), [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87), [`ddda95a`](https://github.com/tiesen243/yukinu/commit/ddda95ae08b7ea7b3704efd1f305186c50dfa32a), [`812e48d`](https://github.com/tiesen243/yukinu/commit/812e48d7b29f6367d8a10a0a14d391caf63abb4a), [`b2d1872`](https://github.com/tiesen243/yukinu/commit/b2d187233bf6c367155f068333172fd96cd22b60), [`ffa0edc`](https://github.com/tiesen243/yukinu/commit/ffa0edcc4ec7c3e4a520fc28591c24d711df8838), [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa), [`5c418e2`](https://github.com/tiesen243/yukinu/commit/5c418e243720ef177b89557798aef701d05d82e0)]:
+  - @yukinu/email@0.2.0
+  - @yukinu/api@0.3.0
+  - @yukinu/validators@0.3.0
+  - @yukinu/auth@0.3.0
+  - @yukinu/db@0.3.0
+  - @yukinu/lib@0.1.0
+  - @yukinu/ui@0.2.0
+
+## 0.3.2
+
+### Patch Changes
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`e94ccac`](https://github.com/tiesen243/yukinu/commit/e94ccac17fc406e87038d2daf1325e43767d55ba) Thanks [@tiesen243](https://github.com/tiesen243)! - update vendor information
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`4c8e42e`](https://github.com/tiesen243/yukinu/commit/4c8e42e35ef419f0019a90b52aad6fa7284f8b18) Thanks [@tiesen243](https://github.com/tiesen243)! - check todos
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`ebe7bd2`](https://github.com/tiesen243/yukinu/commit/ebe7bd2ffdac6dd834b089ae2a3d543e9bda140c) Thanks [@tiesen243](https://github.com/tiesen243)! - add staff management
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`b89e799`](https://github.com/tiesen243/yukinu/commit/b89e799e3cbab7b7e34a79d983496a1105d53131) Thanks [@tiesen243](https://github.com/tiesen243)! - added apply vendor form
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`25af78a`](https://github.com/tiesen243/yukinu/commit/25af78af33f1aa4b01de875d2f55ebe8394523d5) Thanks [@tiesen243](https://github.com/tiesen243)! - create dashboard layout
+
+- [#205](https://github.com/tiesen243/yukinu/pull/205) [`4cde474`](https://github.com/tiesen243/yukinu/commit/4cde47411a4226c50c27788884e3209bf5bb9c84) Thanks [@tiesen243](https://github.com/tiesen243)! - added vendor management table
+
+- Updated dependencies [[`054f313`](https://github.com/tiesen243/yukinu/commit/054f313f574ac9770398f19fd3cb320ce398272d)]:
+  - @yukinu/api@0.2.2
+
 ## 0.3.1
 
 ### Patch Changes

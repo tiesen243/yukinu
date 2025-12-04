@@ -60,7 +60,8 @@ export namespace UserValidators {
 
   export const allInput = z.object({
     search: z.string().optional(),
-    status: z.enum(statuses).optional(),
+    status: z.enum(statuses).nullable(),
+    role: z.enum(roles).nullable(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
   })
@@ -81,14 +82,19 @@ export namespace UserValidators {
   export const oneOutput = user
   export type OneOutput = z.infer<typeof oneOutput>
 
-  export const updateStatusInput = user.pick({
+  export const updateInput = user.pick({
     id: true,
     status: true,
     role: true,
   })
-  export type UpdateStatusInput = z.infer<typeof updateStatusInput>
-  export const updateStatusOutput = z.object({ id: z.cuid() })
-  export type UpdateStatusOutput = z.infer<typeof updateStatusOutput>
+  export type UpdateInput = z.infer<typeof updateInput>
+  export const updateOutput = z.object({ id: z.cuid() })
+  export type UpdateOutput = z.infer<typeof updateOutput>
+
+  export const deleteInput = z.object({ id: z.cuid() })
+  export type DeleteInput = z.infer<typeof deleteInput>
+  export const deleteOutput = z.object({ id: z.cuid() })
+  export type DeleteOutput = z.infer<typeof deleteOutput>
 
   export const profileInput = z.object({ userId: z.cuid() })
   export type ProfileInput = z.infer<typeof profileInput>

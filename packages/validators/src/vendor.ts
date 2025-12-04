@@ -1,8 +1,8 @@
 import * as z from 'zod'
 
 export namespace VendorValidators {
-  export const vendorStatus = ['pending', 'approved', 'suspended'] as const
-  export type VendorStatus = (typeof vendorStatus)[number]
+  export const statuses = ['pending', 'approved', 'suspended'] as const
+  export type Status = (typeof statuses)[number]
 
   export const vendor = z.object({
     id: z.cuid(),
@@ -11,7 +11,7 @@ export namespace VendorValidators {
     description: z.string().nullable(),
     image: z.url().nullable(),
     address: z.string().min(1).max(500).nullable(),
-    status: z.enum(vendorStatus),
+    status: z.enum(statuses),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -20,18 +20,32 @@ export namespace VendorValidators {
   export const vendorStaff = z.object({
     vendorId: z.cuid(),
     userId: z.cuid(),
+    assignedAt: z.date(),
   })
   export type VendorStaff = z.infer<typeof vendorStaff>
 
   export const allInput = z.object({
     search: z.string().optional(),
-    status: z.enum(vendorStatus).optional(),
+    status: z.enum(statuses).nullable(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
   })
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
-    vendors: z.array(vendor),
+    vendors: z.array(
+      vendor
+        .pick({
+          id: true,
+          name: true,
+          status: true,
+          createdAt: true,
+          updatedAt: true,
+        })
+        .extend({
+          owner: z.object({ id: z.cuid(), username: z.string() }),
+          staffCount: z.number(),
+        }),
+    ),
     pagination: z.object({
       total: z.number(),
       page: z.number(),
@@ -50,10 +64,11 @@ export namespace VendorValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = z.object({
+    ownerId: z.cuid(),
     name: z.string().min(1, 'Name is required').max(255),
     description: z.string().optional(),
-    image: z.url('Invalid image URL'),
-    address: z.string().min(1, 'Address is required').max(500),
+    image: z.url('Invalid image URL').optional(),
+    address: z.string().min(1, 'Address is required').max(500).optional(),
   })
   export type CreateInput = z.infer<typeof createInput>
   export const createOutput = z.object({ id: z.cuid() })
@@ -61,28 +76,55 @@ export namespace VendorValidators {
 
   export const updateStatusInput = z.object({
     id: z.cuid(),
-    status: z.enum(vendorStatus),
+    status: z.enum(statuses),
   })
   export type UpdateStatusInput = z.infer<typeof updateStatusInput>
   export const updateStatusOutput = z.object({ id: z.cuid() })
   export type UpdateStatusOutput = z.infer<typeof updateStatusOutput>
 
-  export const updateInput = createInput.extend({ id: z.cuid() })
+  export const updateInput = createInput
+    .omit({ ownerId: true })
+    .extend({ id: z.cuid() })
   export type UpdateInput = z.infer<typeof updateInput>
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
 
-  export const addStaffInput = z.object({
+  export const allStaffsInput = z.object({
     vendorId: z.cuid(),
-    userId: z.cuid(),
   })
-  export type AddStaffInput = z.infer<typeof addStaffInput>
-  export const addStaffOutput = z.void()
-  export type AddStaffOutput = z.infer<typeof addStaffOutput>
+  export type AllStaffsInput = z.infer<typeof allStaffsInput>
+  export const allStaffsOutput = z.array(
+    z.object({
+      id: z.cuid(),
+      username: z.string(),
+      email: z.email(),
+      assignedAt: z.date(),
+    }),
+  )
+  export type AllStaffsOutput = z.infer<typeof allStaffsOutput>
+
+  export const inviteStaffInput = z.object({
+    vendorId: z.cuid(),
+    email: z.email('Invalid email address'),
+  })
+  export type InviteStaffInput = z.infer<typeof inviteStaffInput>
+  export const inviteStaffOutput = z.void()
+  export type InviteStaffOutput = z.infer<typeof inviteStaffOutput>
+
+  export const acceptStaffInvitationInput = z.object({
+    token: z.string(),
+  })
+  export type AcceptStaffInvitationInput = z.infer<
+    typeof acceptStaffInvitationInput
+  >
+  export const acceptStaffInvitationOutput = z.void()
+  export type AcceptStaffInvitationOutput = z.infer<
+    typeof acceptStaffInvitationOutput
+  >
 
   export const removeStaffInput = z.object({
     vendorId: z.cuid(),
-    userId: z.cuid(),
+    staffId: z.cuid(),
   })
   export type RemoveStaffInput = z.infer<typeof removeStaffInput>
   export const removeStaffOutput = z.void()

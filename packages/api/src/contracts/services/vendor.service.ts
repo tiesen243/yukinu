@@ -17,9 +17,18 @@ export interface IVendorService {
     input: VendorValidators.UpdateInput,
   ): Promise<VendorValidators.UpdateOutput>
 
-  addStaff(
-    input: VendorValidators.AddStaffInput,
-  ): Promise<VendorValidators.AddStaffOutput>
+  allStaffs(
+    input: VendorValidators.AllStaffsInput,
+  ): Promise<VendorValidators.AllStaffsOutput>
+
+  inviteStaff(
+    input: VendorValidators.InviteStaffInput,
+  ): Promise<VendorValidators.InviteStaffOutput>
+
+  acceptStaffInvitation(
+    input: VendorValidators.AcceptStaffInvitationInput,
+    userId: VendorValidators.VendorStaff['userId'],
+  ): Promise<VendorValidators.AcceptStaffInvitationOutput>
 
   removeStaff(
     input: VendorValidators.RemoveStaffInput,
