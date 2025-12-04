@@ -204,9 +204,9 @@ export class VendorService extends BaseService implements IVendorService {
       .orderBy(users.username)
   }
 
-  async addStaff(
-    input: VendorValidators.AddStaffInput,
-  ): Promise<VendorValidators.AddStaffOutput> {
+  async inviteStaff(
+    input: VendorValidators.InviteStaffInput,
+  ): Promise<VendorValidators.InviteStaffOutput> {
     const { and, eq } = this._orm
     const { users, vendorStaffs, vendors, verifications } = this._schema
     const { vendorId, email } = input

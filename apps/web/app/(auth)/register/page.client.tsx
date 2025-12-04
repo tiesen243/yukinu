@@ -21,12 +21,13 @@ export const RegisterForm: React.FC = () => {
     },
     schema: AuthValidators.registerInput,
     onSubmit: trpc.auth.register.mutate,
-    onError: ({ message }) => toast.error(message),
     onSuccess: () => {
       toast.success('Registration successful!', {
         description: 'Please check your email to verify your account.',
       })
     },
+    onError: ({ message }) =>
+      toast.error('Registration failed', { description: message }),
   })
 
   return (

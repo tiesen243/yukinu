@@ -42,7 +42,8 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
     schema: VendorValidators.updateInput.omit({ id: true }),
     onSubmit: mutateAsync,
     onSuccess: () => toast.success('Store updated successfully!'),
-    onError: ({ message }) => toast.error(message),
+    onError: ({ message }) =>
+      toast.error('Failed to update store', { description: message }),
   })
 
   return (

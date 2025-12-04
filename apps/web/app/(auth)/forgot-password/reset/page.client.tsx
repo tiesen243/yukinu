@@ -19,11 +19,12 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
     defaultValues: { token, newPassword: '', confirmNewPassword: '' },
     schema: AuthValidators.resetPasswordInput,
     onSubmit: trpc.auth.resetPassword.mutate,
-    onError: ({ message }) => toast.error(message),
     onSuccess: () => {
       toast.success('Password has been reset successfully!')
       router.push('/login')
     },
+    onError: ({ message }) =>
+      toast.error('Failed to reset password', { description: message }),
   })
 
   return (

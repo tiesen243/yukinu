@@ -39,7 +39,8 @@ export default function ProductsNewPage() {
     ...trpc.product.create.mutationOptions(),
     meta: { filter: trpc.product.all.queryFilter() },
     onSuccess: () => toast.success('Product created successfully!'),
-    onError: ({ message }) => toast.error(message),
+    onError: ({ message }) =>
+      toast.error('Failed to create product', { description: message }),
   })
 
   const form = useForm({

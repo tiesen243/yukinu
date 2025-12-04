@@ -44,7 +44,8 @@ const LoginForm: React.FC = () => {
     },
     schema: AuthValidators.loginInput,
     onSubmit: signIn,
-    onError: ({ message }) => toast.error(message),
+    onError: ({ message }) =>
+      toast.error('Login failed', { description: message }),
     onSuccess: () => {
       toast.success('Logged in successfully!')
       void navigate('/')

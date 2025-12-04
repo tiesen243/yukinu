@@ -16,33 +16,36 @@ import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export const DeleteVariantButton: React.FC<{
+export const RestoreProductButton: React.FC<{
   productId: string
-  variantId: string
-}> = ({ productId, variantId }) => {
+  isAdmin?: boolean
+}> = ({ productId, isAdmin }) => {
   const trpc = useTRPC()
+
   const { mutate, isPending } = useMutation({
-    ...trpc.product.deleteVariant.mutationOptions(),
-    meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
-    onSuccess: () => toast.success('Variant deleted successfully'),
+    ...trpc.product.restore.mutationOptions(),
+    onSuccess: () => toast.success('Product restored successfully'),
     onError: ({ message }) =>
-      toast.error('Failed to delete variant', { description: message }),
+      toast.error('Failed to restore product', { description: message }),
+    meta: {
+      filter: isAdmin
+        ? trpc.product.all.queryFilter()
+        : trpc.product.allByVendor.queryFilter(),
+    },
   })
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
-        Delete
+      <AlertDialogTrigger className='text-primary underline-offset-4 hover:underline'>
+        Restore
       </AlertDialogTrigger>
-
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to delete this variant?
+            Are you sure you want to restore this product?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The variant will be permanently
-            removed from the product.
+            The product will be available for sale again.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -52,16 +55,14 @@ export const DeleteVariantButton: React.FC<{
               Cancel
             </Button>
           </AlertDialogCancel>
-
           <AlertDialogAction asChild>
             <Button
-              variant='destructive'
-              disabled={isPending}
               onClick={() => {
-                mutate({ id: variantId })
+                mutate({ id: productId })
               }}
+              disabled={isPending}
             >
-              {isPending ? 'Deleting...' : 'Delete'}
+              {isPending ? 'Restoring...' : 'Restore'}
             </Button>
           </AlertDialogAction>
         </AlertDialogFooter>

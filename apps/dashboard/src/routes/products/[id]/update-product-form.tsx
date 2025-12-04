@@ -27,20 +27,21 @@ import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { ProductValidators } from '@yukinu/validators/product'
 
-import type { Route } from './+types/_index'
 import { useTRPC } from '@/lib/trpc/react'
 
-export const UpdateProductForm: React.FC<
-  Pick<Route.ComponentProps, 'loaderData'>
-> = ({ loaderData }) => {
+export const UpdateProductForm: React.FC<{
+  data: ProductValidators.OneOutput
+}> = ({ data }) => {
   const trpc = useTRPC()
   const navigate = useNavigate()
 
   const { data: product, refetch } = useQuery({
-    ...trpc.product.one.queryOptions({ id: loaderData.id }),
-    initialData: loaderData,
+    ...trpc.product.one.queryOptions({ id: data.id }),
+    initialData: data,
   })
-  const { data } = useQuery(trpc.category.all.queryOptions({ limit: 100 }))
+  const { data: _data } = useQuery(
+    trpc.category.all.queryOptions({ limit: 100 }),
+  )
   const { mutateAsync } = useMutation({
     ...trpc.product.update.mutationOptions(),
     meta: { filter: trpc.product.all.queryFilter() },
@@ -48,7 +49,8 @@ export const UpdateProductForm: React.FC<
       toast.success('Product updated successfully!')
       void refetch()
     },
-    onError: ({ message }) => toast.error(message),
+    onError: ({ message }) =>
+      toast.error('Failed to update product', { description: message }),
   })
 
   const form = useForm({
@@ -119,7 +121,7 @@ export const UpdateProductForm: React.FC<
                     onChange={field.onChange}
                   >
                     <SelectOption value=''>Select a category</SelectOption>
-                    {data?.categories.map((category) => (
+                    {_data?.categories.map((category) => (
                       <SelectOption key={category.id} value={category.id}>
                         {category.name}
                       </SelectOption>

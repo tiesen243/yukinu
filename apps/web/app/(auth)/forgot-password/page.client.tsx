@@ -16,8 +16,9 @@ export const ForgotPasswordForm: React.FC = () => {
     defaultValues: { email: '' },
     schema: AuthValidators.forgotPasswordInput,
     onSubmit: trpc.auth.forgotPassword.mutate,
-    onError: ({ message }) => toast.error(message),
     onSuccess: () => toast.success('Password reset email sent!'),
+    onError: ({ message }) =>
+      toast.error('Failed to send reset email', { description: message }),
   })
 
   return (

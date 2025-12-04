@@ -103,13 +103,13 @@ export namespace VendorValidators {
   )
   export type AllStaffsOutput = z.infer<typeof allStaffsOutput>
 
-  export const addStaffInput = z.object({
+  export const inviteStaffInput = z.object({
     vendorId: z.cuid(),
     email: z.email('Invalid email address'),
   })
-  export type AddStaffInput = z.infer<typeof addStaffInput>
-  export const addStaffOutput = z.void()
-  export type AddStaffOutput = z.infer<typeof addStaffOutput>
+  export type InviteStaffInput = z.infer<typeof inviteStaffInput>
+  export const inviteStaffOutput = z.void()
+  export type InviteStaffOutput = z.infer<typeof inviteStaffOutput>
 
   export const acceptStaffInvitationInput = z.object({
     token: z.string(),

@@ -1,3 +1,5 @@
+import { useQuery } from '@tanstack/react-query'
+
 import {
   Table,
   TableBody,
@@ -8,8 +10,10 @@ import {
 } from '@yukinu/ui/table'
 
 import type { Route } from './+types/_index'
+import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 import { DeleteVariantButton } from '@/routes/products/[id]/delete-variant-button'
+import { EditVariantButton } from '@/routes/products/[id]/edit-variant-button'
 import { UpdateProductForm } from '@/routes/products/[id]/update-product-form'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
@@ -20,9 +24,15 @@ export const loader = ({ request, params }: Route.LoaderArgs) => {
 export default function ProductsUpdatePage({
   loaderData,
 }: Route.ComponentProps) {
+  const trpc = useTRPC()
+  const { data } = useQuery({
+    ...trpc.product.one.queryOptions({ id: loaderData.id }),
+    initialData: loaderData,
+  })
+
   return (
     <>
-      <UpdateProductForm loaderData={loaderData} />
+      <UpdateProductForm data={data} />
 
       <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm'>
         <Table>
@@ -36,7 +46,7 @@ export default function ProductsUpdatePage({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loaderData.variants.map((variant) => (
+            {data.variants.map((variant) => (
               <TableRow key={variant.id}>
                 <TableCell>{variant.sku}</TableCell>
                 <TableCell>
@@ -46,8 +56,13 @@ export default function ProductsUpdatePage({
                 </TableCell>
                 <TableCell>${variant.price}</TableCell>
                 <TableCell>{variant.stock}</TableCell>
-                <TableCell>
-                  <DeleteVariantButton id={variant.id} />
+                <TableCell className='space-x-2'>
+                  <EditVariantButton productId={data.id} variant={variant} />
+
+                  <DeleteVariantButton
+                    productId={data.id}
+                    variantId={variant.id}
+                  />
                 </TableCell>
               </TableRow>
             ))}
