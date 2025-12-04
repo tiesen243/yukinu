@@ -84,7 +84,7 @@ const navs = [
       {
         icon: PackageIcon,
         title: 'Products',
-        url: '/admin/products',
+        url: '/products/admin',
         roles: ['admin', 'moderator'],
       },
       {
@@ -115,7 +115,7 @@ const navs = [
         icon: StoreIcon,
         title: 'My Store',
         url: '/vendor/my-store',
-        roles: ['vendor_owner', 'vendor_staff'],
+        roles: ['vendor_owner'],
       },
       {
         icon: ShoppingBagIcon,

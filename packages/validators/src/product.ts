@@ -127,7 +127,7 @@ export namespace ProductValidators {
       ),
       images: z.array(productImage.omit({ productId: true })),
       variants: z.array(
-        productVariant.omit({ id: true, productId: true }).extend({
+        productVariant.omit({ productId: true }).extend({
           options: z.array(z.object({ name: z.string(), value: z.string() })),
         }),
       ),

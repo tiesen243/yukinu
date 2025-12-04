@@ -14,7 +14,6 @@ export interface User {
 }
 
 export interface Account {
-  id: string
   userId: string
   provider: string
   accountId: string
@@ -85,7 +84,7 @@ export interface AuthConfig {
       find(
         provider: string,
         accountId: string,
-      ): Promise<Pick<Account, 'id' | 'userId' | 'password'> | null>
+      ): Promise<Pick<Account, 'userId' | 'password'> | null>
       create(data: Omit<Account, 'id'>): Promise<void>
     }
     session: {

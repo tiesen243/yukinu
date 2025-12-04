@@ -119,6 +119,7 @@ export class ProductService extends BaseService implements IProductService {
         .where(eq(productImages.productId, id)),
       this._db
         .select({
+          id: productVariants.id,
           sku: productVariants.sku,
           price: productVariants.price,
           stock: productVariants.stock,
