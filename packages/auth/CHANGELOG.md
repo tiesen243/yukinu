@@ -1,5 +1,15 @@
 # @yukinu/auth
 
+## 0.3.2
+
+### Patch Changes
+
+- [#236](https://github.com/tiesen243/yukinu/pull/236) [`e8453d9`](https://github.com/tiesen243/yukinu/commit/e8453d9bf2095e4d2c19a5d11555fdbec9d3069b) Thanks [@tiesen243](https://github.com/tiesen243)! - added user management
+
+- Updated dependencies [[`e8453d9`](https://github.com/tiesen243/yukinu/commit/e8453d9bf2095e4d2c19a5d11555fdbec9d3069b)]:
+  - @yukinu/validators@0.3.2
+  - @yukinu/db@0.3.2
+
 ## 0.3.1
 
 ### Patch Changes
