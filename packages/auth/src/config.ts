@@ -31,7 +31,9 @@ export const authOptions = {
 
         if (!record) return null
         if (record.status === 'inactive')
-          throw new Error('User account is inactive')
+          throw new Error(
+            'Your account is banned from our platform. Please contact support for more information.',
+          )
 
         return record
       },
