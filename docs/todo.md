@@ -38,8 +38,7 @@ nav_order: 5
 - [x] Manage product variants (size, color, etc.)
 - [ ] Manage vendor-specific orders
 - [ ] Update order status (processing → shipped → delivered)
-- [ ] Manage vendor product collections (CRUD)
-- [x] Manage vendor members (add / assign roles / remove)
+- [x] Manage vendor members (add / remove)
 
 ## Admin
 
