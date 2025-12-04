@@ -185,21 +185,23 @@ export namespace ProductValidators {
   export type RestoreOutput = z.infer<typeof restoreOutput>
 
   export const createVariantInput = productVariant.omit({ id: true }).extend({
+    vendorId: z.cuid(),
     options: z.array(z.string().min(1).max(100)),
   })
   export type CreateVariantInput = z.infer<typeof createVariantInput>
   export const createVariantOutput = z.object({ id: z.cuid() })
   export type CreateVariantOutput = z.infer<typeof createVariantOutput>
 
-  export const updateVariantInput = productVariant.omit({
-    productId: true,
-    sku: true,
-  })
+  export const updateVariantInput = productVariant
+    .omit({ productId: true, sku: true })
+    .extend({ vendorId: z.cuid() })
   export type UpdateVariantInput = z.infer<typeof updateVariantInput>
   export const updateVariantOutput = z.object({ id: z.cuid() })
   export type UpdateVariantOutput = z.infer<typeof updateVariantOutput>
 
-  export const deleteVariantInput = productVariant.pick({ id: true })
+  export const deleteVariantInput = productVariant.pick({ id: true }).extend({
+    vendorId: z.cuid(),
+  })
   export type DeleteVariantInput = z.infer<typeof deleteVariantInput>
   export const deleteVariantOutput = z.object({ id: z.cuid() })
   export type DeleteVariantOutput = z.infer<typeof deleteVariantOutput>

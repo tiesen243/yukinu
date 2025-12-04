@@ -81,25 +81,37 @@ export const productRouter = createTRPCRouter({
       message: 'Product variant created successfully',
       role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(ProductValidators.createVariantInput)
+    .input(ProductValidators.createVariantInput.omit({ vendorId: true }))
     .output(ProductValidators.createVariantOutput)
-    .mutation(({ ctx, input }) => ctx.services.product.createVariant(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.product.createVariant({ ...input, vendorId: ctx.vendorId }),
+    ),
 
   updateVariant: vendorProcedure
     .meta({
       message: 'Product variant updated successfully',
       role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(ProductValidators.updateVariantInput)
+    .input(ProductValidators.updateVariantInput.omit({ vendorId: true }))
     .output(ProductValidators.updateVariantOutput)
-    .mutation(({ ctx, input }) => ctx.services.product.updateVariant(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.product.updateVariant({
+        ...input,
+        vendorId: ctx.vendorId,
+      }),
+    ),
 
   deleteVariant: vendorProcedure
     .meta({
       message: 'Product variant deleted successfully',
       role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(ProductValidators.deleteVariantInput)
+    .input(ProductValidators.deleteVariantInput.omit({ vendorId: true }))
     .output(ProductValidators.deleteVariantOutput)
-    .mutation(({ ctx, input }) => ctx.services.product.deleteVariant(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.product.deleteVariant({
+        ...input,
+        vendorId: ctx.vendorId,
+      }),
+    ),
 })

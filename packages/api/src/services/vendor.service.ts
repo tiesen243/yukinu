@@ -216,7 +216,14 @@ export class VendorService extends BaseService implements IVendorService {
       .from(users)
       .where(eq(users.email, email))
       .limit(1)
-    if (user?.role !== 'user')
+
+    if (!user)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with email ${email} not found`,
+      })
+
+    if (user.role !== 'user')
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'This user cannot be added as vendor staff',
@@ -281,6 +288,7 @@ export class VendorService extends BaseService implements IVendorService {
 
   async acceptStaffInvitation(
     input: VendorValidators.AcceptStaffInvitationInput,
+    userId: string,
   ): Promise<VendorValidators.AcceptStaffInvitationOutput> {
     const { eq } = this._orm
     const { vendorStaffs, verifications } = this._schema
@@ -291,10 +299,10 @@ export class VendorService extends BaseService implements IVendorService {
       .from(verifications)
       .where(eq(verifications.token, token))
       .limit(1)
-    if (!verification)
+    if (verification?.userId !== userId)
       throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'The invitation token is invalid.',
+        code: 'FORBIDDEN',
+        message: 'Invalid invitation token.',
       })
 
     return this._db.transaction(async (tx) => {

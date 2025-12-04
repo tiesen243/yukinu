@@ -27,6 +27,7 @@ export interface IVendorService {
 
   acceptStaffInvitation(
     input: VendorValidators.AcceptStaffInvitationInput,
+    userId: string,
   ): Promise<VendorValidators.AcceptStaffInvitationOutput>
 
   removeStaff(

@@ -40,7 +40,7 @@ export const EditVariantButton: React.FC<{
       price: variant.price,
       stock: variant.stock,
     },
-    schema: ProductValidators.updateVariantInput,
+    schema: ProductValidators.updateVariantInput.omit({ vendorId: true }),
     onSubmit: mutateAsync,
     onSuccess: () => {
       setOpen(false)

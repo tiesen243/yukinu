@@ -416,9 +416,28 @@ export class ProductService extends BaseService implements IProductService {
   async updateVariant(
     input: ProductValidators.UpdateVariantInput,
   ): Promise<ProductValidators.UpdateVariantOutput> {
-    const { eq } = this._orm
-    const { productVariants } = this._schema
-    const { id, ...data } = input
+    const { and, eq } = this._orm
+    const { productVariants, products } = this._schema
+    const { id, vendorId, ...data } = input
+
+    const [variant] = await this._db
+      .select({ id: productVariants.id })
+      .from(productVariants)
+      .innerJoin(products, eq(products.id, productVariants.productId))
+      .where(
+        and(
+          eq(productVariants.id, id),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .limit(1)
+    if (!variant)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
 
     const [updated] = await this._db
       .update(productVariants)
@@ -437,9 +456,28 @@ export class ProductService extends BaseService implements IProductService {
   async deleteVariant(
     input: ProductValidators.DeleteVariantInput,
   ): Promise<ProductValidators.DeleteVariantOutput> {
-    const { eq } = this._orm
-    const { productVariants } = this._schema
-    const { id } = input
+    const { and, eq } = this._orm
+    const { productVariants, products } = this._schema
+    const { id, vendorId } = input
+
+    const [variant] = await this._db
+      .select({ id: productVariants.id })
+      .from(productVariants)
+      .innerJoin(products, eq(products.id, productVariants.productId))
+      .where(
+        and(
+          eq(productVariants.id, id),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .limit(1)
+    if (!variant)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product variant with id ${id} not found`,
+      })
 
     const [deleted] = await this._db
       .delete(productVariants)

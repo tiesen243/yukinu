@@ -61,7 +61,21 @@ export class CategoryService extends BaseService implements ICategoryService {
     const { categories } = this._schema
     const { parentId, ...data } = input
 
-    if (parentId) await this.one({ id: parentId })
+    if (parentId) {
+      let currentId: string | null = parentId
+      const visited = new Set([input.parentId])
+      while (currentId) {
+        const parent = await this.one({ id: currentId })
+        if (visited.has(parent.parentId ?? undefined)) {
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Circular parent-child relationship detected',
+          })
+        }
+        if (parent.parentId) visited.add(parent.parentId)
+        currentId = parent.parentId
+      }
+    }
     const [result] = await this._db
       .insert(categories)
       .values({ ...data, parentId: parentId ?? null })

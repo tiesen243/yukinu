@@ -348,10 +348,13 @@ export default function ProductsNewPage() {
                       type='button'
                       variant='secondary'
                       onClick={() => {
-                        const newVariants = [...field.value]
-                        if (!newVariants[vIndex]) return
-                        newVariants[vIndex].options.push('')
-                        field.onChange(newVariants)
+                        field.onChange(
+                          field.value.map((v, i) =>
+                            i === vIndex
+                              ? { ...v, options: [...v.options, ''] }
+                              : v,
+                          ),
+                        )
                       }}
                     >
                       Add Option
