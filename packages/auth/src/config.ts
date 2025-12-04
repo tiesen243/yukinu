@@ -21,10 +21,13 @@ export const authOptions = {
           .select()
           .from(users)
           .where(
-            orm.or(
-              orm.eq(users.id, identifier),
-              orm.eq(users.email, identifier),
-              orm.eq(users.username, identifier),
+            orm.and(
+              orm.or(
+                orm.eq(users.id, identifier),
+                orm.eq(users.email, identifier),
+                orm.eq(users.username, identifier),
+              ),
+              orm.eq(users.status, 'active'),
             ),
           )
           .limit(1)

@@ -7,9 +7,9 @@ import { BaseService } from '@/services/base.service'
 
 export class UserService extends BaseService implements IUserService {
   async all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
-    const { and, eq, ilike, or } = this._orm
+    const { and, asc, eq, ilike, or } = this._orm
     const { users } = this._schema
-    const { search, status, page, limit } = input
+    const { search, status, role, page, limit } = input
     const offset = (page - 1) * limit
 
     const whereClauses = []
@@ -21,6 +21,7 @@ export class UserService extends BaseService implements IUserService {
         ),
       )
     if (status) whereClauses.push(eq(users.status, status))
+    if (role) whereClauses.push(eq(users.role, role))
     const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
     const [usersList, total] = await Promise.all([
@@ -28,6 +29,7 @@ export class UserService extends BaseService implements IUserService {
         .select()
         .from(users)
         .where(whereClause)
+        .orderBy(asc(users.username))
         .offset(offset)
         .limit(limit),
       this._db.$count(users, whereClause),
@@ -57,14 +59,44 @@ export class UserService extends BaseService implements IUserService {
     return user
   }
 
-  async updateStatus(
-    input: UserValidators.UpdateStatusInput,
-  ): Promise<UserValidators.UpdateStatusOutput> {
+  async update(
+    input: UserValidators.UpdateInput,
+  ): Promise<UserValidators.UpdateOutput> {
     const { eq } = this._orm
     const { users } = this._schema
     const { id, status, role } = input
 
-    await this._db.update(users).set({ status, role }).where(eq(users.id, id))
+    const [updated] = await this._db
+      .update(users)
+      .set({ status, role })
+      .where(eq(users.id, id))
+      .returning({ id: users.id })
+    if (!updated)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    return { id }
+  }
+
+  async delete(
+    input: UserValidators.DeleteInput,
+    userId: UserValidators.User['id'],
+  ): Promise<UserValidators.DeleteOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id } = input
+
+    if (id === userId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You cannot delete your own account',
+      })
+
+    const [deleted] = await this._db
+      .delete(users)
+      .where(eq(users.id, id))
+      .returning({ id: users.id })
+    if (!deleted)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
 
     return { id }
   }

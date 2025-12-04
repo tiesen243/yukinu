@@ -20,7 +20,7 @@ import {
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
   return (
     <>
-      <div className='flex items-center justify-between gap-4'>
+      <div className='my-6 flex items-center justify-between gap-4'>
         <SearchForm />
 
         <div className='flex-1' />

@@ -25,7 +25,7 @@ export default function CategoriesPage() {
         Manage and view all categories in the system.
       </p>
 
-      <div className='flex items-center justify-between gap-4'>
+      <div className='my-6 flex items-center justify-between gap-4'>
         <SearchForm />
 
         <div className='flex-1' />
