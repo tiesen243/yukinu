@@ -186,7 +186,7 @@ export namespace ProductValidators {
 
   export const createVariantInput = productVariant.omit({ id: true }).extend({
     vendorId: z.cuid(),
-    options: z.array(z.string().min(1).max(100)),
+    options: z.array(z.string().min(1).max(100)).nonempty(),
   })
   export type CreateVariantInput = z.infer<typeof createVariantInput>
   export const createVariantOutput = z.object({ id: z.cuid() })

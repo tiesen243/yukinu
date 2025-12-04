@@ -291,7 +291,7 @@ export class VendorService extends BaseService implements IVendorService {
     userId: string,
   ): Promise<VendorValidators.AcceptStaffInvitationOutput> {
     const { eq } = this._orm
-    const { vendorStaffs, verifications } = this._schema
+    const { vendorStaffs, vendors, verifications } = this._schema
     const { token } = input
 
     const [verification] = await this._db
@@ -299,7 +299,10 @@ export class VendorService extends BaseService implements IVendorService {
       .from(verifications)
       .where(eq(verifications.token, token))
       .limit(1)
-    if (verification?.userId !== userId)
+    if (
+      verification?.userId !== userId &&
+      !verification?.type.startsWith('invite_')
+    )
       throw new TRPCError({
         code: 'FORBIDDEN',
         message: 'Invalid invitation token.',
@@ -314,11 +317,24 @@ export class VendorService extends BaseService implements IVendorService {
         })
       }
 
-      const [_, vendorId] = verification.type.split('_')
-      if (!vendorId)
+      const vendorId = verification.type.slice('invite_'.length)
+      const [vendor] = await tx
+        .select({ id: vendors.id, staffId: vendorStaffs.userId })
+        .from(vendors)
+        .where(eq(vendors.id, vendorId))
+        .leftJoin(vendorStaffs, eq(vendorStaffs.userId, verification.userId))
+        .limit(1)
+
+      if (!vendor)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Vendor with ID ${vendorId} not found`,
+        })
+
+      if (vendor.staffId)
         throw new TRPCError({
           code: 'BAD_REQUEST',
-          message: 'Invalid invitation token type.',
+          message: 'You are already a staff member of this vendor',
         })
 
       await tx

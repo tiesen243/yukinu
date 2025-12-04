@@ -227,6 +227,8 @@ export class ProductService extends BaseService implements IProductService {
         }),
       )
 
+      if (vrts.length === 0) return { id: product.id }
+
       const results = await Promise.all(
         vrts.map(async (vrt) => {
           const [variant = { id: '' }] = await tx
@@ -258,12 +260,13 @@ export class ProductService extends BaseService implements IProductService {
       const skuCombinations = this._cartesianProduct(
         results.map((r) => r.options.map(String)),
       )
-      await tx.insert(productVariants).values(
-        skuCombinations.map((skus) => ({
-          productId: product.id,
-          sku: skus.join('-'),
-        })),
-      )
+      if (skuCombinations.length > 0)
+        await tx.insert(productVariants).values(
+          skuCombinations.map((skus) => ({
+            productId: product.id,
+            sku: skus.join('-'),
+          })),
+        )
 
       return { id: product.id }
     })
@@ -275,7 +278,7 @@ export class ProductService extends BaseService implements IProductService {
     const { and, eq } = this._orm
     const { attributes, productAttributes, productImages, products } =
       this._schema
-    const { id, vendorId, attributes: attrs = [], ...data } = input
+    const { id, vendorId, attributes: attrs, images, ...data } = input
 
     const [product] = await this._db
       .select({ id: products.id })
@@ -307,7 +310,7 @@ export class ProductService extends BaseService implements IProductService {
       await tx.delete(productImages).where(eq(productImages.productId, id))
       await tx
         .insert(productImages)
-        .values(data.images.map((url) => ({ productId: id, url })))
+        .values(images.map((url) => ({ productId: id, url })))
 
       await tx
         .delete(productAttributes)
