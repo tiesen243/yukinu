@@ -1,5 +1,5 @@
 import { Button } from '@yukinu/ui/button'
-import { PackagePlusIcon, SearchIcon, Trash2Icon } from '@yukinu/ui/icons'
+import { PackageIcon, SearchIcon, Trash2Icon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 
 import { useProductQueryStates } from '@/routes/products/_hook'
@@ -41,9 +41,9 @@ export const ToggleProductStatusButton = () => {
         }))
       }
     >
-      {query.status === 'active' ? <Trash2Icon /> : <PackagePlusIcon />}
+      {query.status === 'active' ? <Trash2Icon /> : <PackageIcon />}
       <span className='sr-only md:not-sr-only'>
-        {query.status === 'active' ? 'Trash' : 'All'}
+        {query.status === 'active' ? 'Trash' : 'All Products'}
       </span>
     </Button>
   )

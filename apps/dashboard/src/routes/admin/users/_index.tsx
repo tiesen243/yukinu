@@ -26,7 +26,8 @@ export default function UsersPage() {
         <div className='flex-1' />
 
         <UserFilterButton />
-        <Button variant='outline'>
+
+        <Button variant='outline' disabled>
           <DownloadIcon />
           <span className='sr-only md:not-sr-only'>Export</span>
         </Button>

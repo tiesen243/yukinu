@@ -34,7 +34,7 @@ export default function CategoriesPage() {
           </Link>
         </Button>
 
-        <Button variant='outline'>
+        <Button variant='outline' disabled>
           <DownloadIcon />
           <span className='sr-only md:not-sr-only'>Export</span>
         </Button>

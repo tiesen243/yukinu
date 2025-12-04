@@ -23,7 +23,7 @@ export default function VendorsPage() {
       <div className='my-6 flex items-center justify-between gap-4'>
         <SearchForm />
 
-        <Button variant='outline'>
+        <Button variant='outline' disabled>
           <DownloadIcon />
           <span className='sr-only md:not-sr-only'>Export</span>
         </Button>

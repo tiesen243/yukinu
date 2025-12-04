@@ -18,8 +18,11 @@ export const SearchForm: React.FC = () => {
 
         const rawQ = formData.get('q')
         const q = typeof rawQ === 'string' ? rawQ.trim() : ''
-        const role = formData.get('role') as never
-
+        const rawRole = formData.get('role')
+        const role =
+          typeof rawRole === 'string'
+            ? (rawRole as typeof query.role)
+            : query.role
         if (q === query.search && role === query.role) return
 
         await setQuery((prev) => ({ ...prev, search: q, role, page: 1 }))
@@ -27,7 +30,12 @@ export const SearchForm: React.FC = () => {
     >
       <Input name='q' defaultValue={query.search} placeholder='Search...' />
 
-      <Select id='role' name='role' className='w-fit'>
+      <Select
+        id='role'
+        name='role'
+        className='w-fit'
+        defaultValue={query.role ?? ''}
+      >
         <SelectOption value=''>all</SelectOption>
         {UserValidators.roles.map((role) => (
           <SelectOption key={role} value={role}>
