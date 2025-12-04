@@ -33,7 +33,7 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 7 }, (_, cellIndex) => (
+        {Array.from({ length: 9 }, (_, cellIndex) => (
           <TableCell key={cellIndex}>
             <div className='animate-pulse rounded bg-muted/50'>&nbsp;</div>
           </TableCell>

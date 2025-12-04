@@ -316,6 +316,11 @@ export class VendorService extends BaseService implements IVendorService {
       await tx
         .insert(vendorStaffs)
         .values({ vendorId, userId: verification.userId })
+      await tx
+        .update(users)
+        .set({ role: 'vendor_staff' })
+        .where(eq(users.id, verification.userId))
+      await tx.delete(verifications).where(eq(verifications.token, token))
     })
   }
 
@@ -326,20 +331,24 @@ export class VendorService extends BaseService implements IVendorService {
     const { vendorStaffs } = this._schema
     const { vendorId, staffId } = input
 
-    const [deletedStaff] = await this._db
-      .delete(vendorStaffs)
-      .where(
-        and(
-          eq(vendorStaffs.vendorId, vendorId),
-          eq(vendorStaffs.userId, staffId),
-        ),
-      )
-      .returning({ id: vendorStaffs.userId })
+    return this._db.transaction(async (tx) => {
+      const [deletedStaff] = await tx
+        .delete(vendorStaffs)
+        .where(
+          and(
+            eq(vendorStaffs.vendorId, vendorId),
+            eq(vendorStaffs.userId, staffId),
+          ),
+        )
+        .returning({ id: vendorStaffs.userId })
 
-    if (!deletedStaff?.id)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `Staff with ID ${staffId} not found in your vendor`,
-      })
+      if (!deletedStaff?.id)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Staff with ID ${staffId} not found in your vendor`,
+        })
+
+      await tx.update(users).set({ role: 'user' }).where(eq(users.id, staffId))
+    })
   }
 }
