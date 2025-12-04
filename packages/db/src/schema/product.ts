@@ -1,3 +1,4 @@
+import type { AnyPgColumn } from 'drizzle-orm/pg-core'
 import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
@@ -9,7 +10,9 @@ export const categories = pgTable(
   'categories',
   (t) => ({
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    parentId: t.varchar({ length: 24 }),
+    parentId: t
+      .varchar({ length: 24 })
+      .references((): AnyPgColumn => categories.id),
     name: t.varchar({ length: 100 }).notNull(),
     image: t.varchar({ length: 500 }),
     description: t.text(),

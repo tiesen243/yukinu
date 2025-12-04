@@ -84,7 +84,7 @@ const navs = [
       {
         icon: PackageIcon,
         title: 'Products',
-        url: '/products/admin',
+        url: '/admin/products',
         roles: ['admin', 'moderator'],
       },
       {

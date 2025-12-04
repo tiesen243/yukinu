@@ -22,3 +22,4 @@ if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
 
 export type * from '@/types'
 export * as orm from 'drizzle-orm'
+export { alias } from 'drizzle-orm/pg-core'

@@ -84,7 +84,7 @@ const EditVendorButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary hover:underline'>
+      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
         Edit Status
       </DialogTrigger>
 

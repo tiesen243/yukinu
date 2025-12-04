@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server'
 
 import type { CategoryValidators } from '@yukinu/validators/category'
+import { alias } from '@yukinu/db'
 
 import type { ICategoryService } from '@/contracts/services/category.service'
 import { BaseService } from '@/services/base.service'
@@ -9,24 +10,35 @@ export class CategoryService extends BaseService implements ICategoryService {
   async all(
     input: CategoryValidators.AllInput,
   ): Promise<CategoryValidators.AllOutput> {
-    const { asc, ilike } = this._orm
+    const { and, asc, ilike, isNull } = this._orm
     const { categories } = this._schema
-    const { search, page, limit } = input
+    const { search, isOnlyParent, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClause = search
-      ? ilike(categories.name, `%${search}%`)
-      : undefined
+    const whereClauses = []
+    if (search) whereClauses.push(ilike(categories.name, `%${search}%`))
+    if (isOnlyParent) whereClauses.push(isNull(categories.parentId))
 
+    const parent = alias(categories, 'parent')
     const [categoriesList, total] = await Promise.all([
       this._db
-        .select()
+        .select({
+          id: categories.id,
+          name: categories.name,
+          description: categories.description,
+          image: categories.image,
+          parent: {
+            id: parent.id,
+            name: parent.name,
+          },
+        })
         .from(categories)
-        .where(whereClause)
+        .where(and(...whereClauses))
+        .leftJoin(parent, this._orm.eq(categories.parentId, parent.id))
         .offset(offset)
         .limit(limit)
         .orderBy(asc(categories.name)),
-      this._db.$count(categories, whereClause),
+      this._db.$count(categories, and(...whereClauses)),
     ])
     const totalPages = Math.ceil(total / limit)
 
@@ -43,10 +55,21 @@ export class CategoryService extends BaseService implements ICategoryService {
     const { categories } = this._schema
     const { id } = input
 
+    const parent = alias(categories, 'parent')
     const [category] = await this._db
-      .select()
+      .select({
+        id: categories.id,
+        name: categories.name,
+        description: categories.description,
+        image: categories.image,
+        parent: {
+          id: parent.id,
+          name: parent.name,
+        },
+      })
       .from(categories)
       .where(eq(categories.id, id))
+      .leftJoin(parent, eq(categories.parentId, parent.id))
       .limit(1)
 
     if (!category)
@@ -61,24 +84,24 @@ export class CategoryService extends BaseService implements ICategoryService {
     const { categories } = this._schema
     const { parentId, ...data } = input
 
-    if (parentId) {
-      let currentId: string | null = parentId
+    if (parentId && parentId !== 'no-parent') {
+      let currentId = parentId
       const visited = new Set([input.parentId])
       while (currentId) {
         const parent = await this.one({ id: currentId })
-        if (visited.has(parent.parentId ?? undefined)) {
+        if (visited.has(parent.parent?.id)) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'Circular parent-child relationship detected',
           })
         }
-        if (parent.parentId) visited.add(parent.parentId)
-        currentId = parent.parentId
+        if (parent.parent?.id) visited.add(parent.parent.id)
+        currentId = parent.parent?.id ?? ''
       }
     }
     const [result] = await this._db
       .insert(categories)
-      .values({ ...data, parentId: parentId ?? null })
+      .values({ ...data, parentId: parentId === 'no-parent' ? null : parentId })
       .returning({ id: categories.id })
 
     if (!result?.id)
@@ -95,28 +118,32 @@ export class CategoryService extends BaseService implements ICategoryService {
   ): Promise<CategoryValidators.UpdateOutput> {
     const { eq } = this._orm
     const { categories } = this._schema
-    const { id, name, description, parentId } = input
+    const { id, name, description, parentId = null } = input
 
     const category = await this.one({ id })
-    if (parentId !== category.parentId) {
-      let currentId: string | null = parentId ?? null
+    if (parentId !== category.parent?.id && parentId !== 'no-parent') {
+      let currentId = parentId
       const visited = new Set([input.parentId])
       while (currentId) {
         const parent = await this.one({ id: currentId })
-        if (visited.has(parent.parentId ?? undefined) || parent.id === id) {
+        if (visited.has(parent.parent?.id) || parent.id === id) {
           throw new TRPCError({
             code: 'BAD_REQUEST',
             message: 'Circular parent-child relationship detected',
           })
         }
-        if (parent.parentId) visited.add(parent.parentId)
-        currentId = parent.parentId
+        if (parent.parent?.id) visited.add(parent.parent.id)
+        currentId = parent.parent?.id ?? null
       }
     }
 
     await this._db
       .update(categories)
-      .set({ name, description })
+      .set({
+        name,
+        description,
+        parentId: parentId === 'no-parent' ? null : parentId,
+      })
       .where(eq(categories.id, id))
 
     return { id }
