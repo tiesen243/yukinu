@@ -91,8 +91,6 @@ const EditUserButton: React.FC<{
     onSuccess: () => {
       toast.success('User updated successfully')
       setOpen(false)
-      setStatus(user.status)
-      setRole(user.role)
     },
     onError: ({ message }) =>
       toast.error('Failed to update user', { description: message }),

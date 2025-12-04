@@ -1,3 +1,5 @@
+import { Button } from '@yukinu/ui/button'
+import { DownloadIcon } from '@yukinu/ui/icons'
 import {
   Table,
   TableBody,
@@ -18,7 +20,14 @@ export default function VendorsPage() {
         Manage and view all vendors in your organization from this dashboard.
       </p>
 
-      <SearchForm />
+      <div className='my-6 flex items-center justify-between gap-4'>
+        <SearchForm />
+
+        <Button variant='outline'>
+          <DownloadIcon />
+          <span className='sr-only md:not-sr-only'>Export</span>
+        </Button>
+      </div>
 
       <section className='rounded-lg bg-card p-6 text-card-foreground shadow-sm'>
         <Table>

@@ -21,18 +21,19 @@ export const authOptions = {
           .select()
           .from(users)
           .where(
-            orm.and(
-              orm.or(
-                orm.eq(users.id, identifier),
-                orm.eq(users.email, identifier),
-                orm.eq(users.username, identifier),
-              ),
-              orm.eq(users.status, 'active'),
+            orm.or(
+              orm.eq(users.id, identifier),
+              orm.eq(users.email, identifier),
+              orm.eq(users.username, identifier),
             ),
           )
           .limit(1)
 
-        return record ?? null
+        if (!record) return null
+        if (record.status === 'inactive')
+          throw new Error('User account is inactive')
+
+        return record
       },
       async create(data) {
         const username =

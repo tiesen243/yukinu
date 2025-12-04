@@ -1,13 +1,7 @@
-import {
-  parseAsBoolean,
-  parseAsInteger,
-  parseAsString,
-  useQueryStates,
-} from 'nuqs'
+import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
 const parser = {
   search: parseAsString.withDefault(''),
-  isOnlyParent: parseAsBoolean.withDefault(false),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),
 }

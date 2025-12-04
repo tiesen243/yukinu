@@ -27,8 +27,8 @@ export const SearchForm: React.FC = () => {
     >
       <Input name='q' defaultValue={query.search} placeholder='Search...' />
 
-      <Select id='role' name='role' className='w-40'>
-        <SelectOption value=''>All Roles</SelectOption>
+      <Select id='role' name='role' className='w-fit'>
+        <SelectOption value=''>all</SelectOption>
         {UserValidators.roles.map((role) => (
           <SelectOption key={role} value={role}>
             {role.split('_').join(' ')}
@@ -49,7 +49,6 @@ export const UserFilterButton: React.FC = () => {
   return (
     <Button
       variant='outline'
-      size='icon'
       onClick={async () => {
         await setQuery((prev) => ({
           ...prev,
@@ -59,10 +58,8 @@ export const UserFilterButton: React.FC = () => {
       }}
     >
       {query.status === 'inactive' ? <CheckIcon /> : <BanIcon />}
-      <span className='sr-only'>
-        {query.status === 'active'
-          ? 'Show Inactive Users'
-          : 'Show Active Users'}
+      <span className='sr-only md:not-sr-only'>
+        {query.status === 'inactive' ? 'Active Users' : 'Banned Users'}
       </span>
     </Button>
   )

@@ -23,7 +23,7 @@ export const userRouter = createTRPCRouter({
 
   update: protectedProcedure
     .meta({
-      message: 'User status updated successfully',
+      message: 'User updated successfully',
       role: ['admin'],
     })
     .input(UserValidators.updateInput)

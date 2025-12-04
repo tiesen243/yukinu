@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 
 import { Button } from '@yukinu/ui/button'
-import { PlusIcon } from '@yukinu/ui/icons'
+import { DownloadIcon, PlusIcon } from '@yukinu/ui/icons'
 import {
   Table,
   TableBody,
@@ -12,10 +12,7 @@ import {
 
 import { CategoriesList } from '@/routes/admin/categories/categories-list'
 import { CategoriesPagination } from '@/routes/admin/categories/categories-pagination'
-import {
-  ParentCategoryOnlyToggle,
-  SearchForm,
-} from '@/routes/admin/categories/search-form'
+import { SearchForm } from '@/routes/admin/categories/search-form'
 
 export default function CategoriesPage() {
   return (
@@ -30,13 +27,16 @@ export default function CategoriesPage() {
 
         <div className='flex-1' />
 
-        <ParentCategoryOnlyToggle />
-
-        <Button variant='outline' size='icon' asChild>
+        <Button variant='outline' asChild>
           <Link to='/admin/categories/new'>
             <PlusIcon />
-            <span className='sr-only'>Add New Category</span>
+            <span className='sr-only md:not-sr-only'>Add</span>
           </Link>
+        </Button>
+
+        <Button variant='outline'>
+          <DownloadIcon />
+          <span className='sr-only md:not-sr-only'>Export</span>
         </Button>
       </div>
 
