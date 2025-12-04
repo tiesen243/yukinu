@@ -47,9 +47,9 @@ export default function CategoriesEditPage({
   const { mutateAsync } = useMutation({
     ...trpc.category.update.mutationOptions(),
     meta: { filter: trpc.category.all.queryFilter() },
-    onSuccess: () => toast.success('Category created successfully'),
+    onSuccess: () => toast.success('Category updated successfully'),
     onError: ({ message }) =>
-      toast.error('Failed to create category', { description: message }),
+      toast.error('Failed to update category', { description: message }),
   })
 
   const form = useForm({
@@ -124,11 +124,13 @@ export default function CategoriesEditPage({
                 <FieldLabel htmlFor={meta.fieldId}>Parent Category</FieldLabel>
                 <Select {...field}>
                   <SelectOption value='no-parent'>No Parent</SelectOption>
-                  {data?.categories.map((category) => (
-                    <SelectOption key={category.id} value={category.id}>
-                      {category.name}
-                    </SelectOption>
-                  ))}
+                  {data?.categories
+                    .filter((cat) => cat.id !== category.id)
+                    .map((category) => (
+                      <SelectOption key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectOption>
+                    ))}
                 </Select>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>

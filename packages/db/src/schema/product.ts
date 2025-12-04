@@ -12,7 +12,7 @@ export const categories = pgTable(
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     parentId: t
       .varchar({ length: 24 })
-      .references((): AnyPgColumn => categories.id),
+      .references((): AnyPgColumn => categories.id, { onDelete: 'set null' }),
     name: t.varchar({ length: 100 }).notNull(),
     image: t.varchar({ length: 500 }),
     description: t.text(),

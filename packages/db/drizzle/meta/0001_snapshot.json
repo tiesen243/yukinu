@@ -502,7 +502,7 @@
           "tableTo": "categories",
           "columnsTo": ["id"],
           "onUpdate": "no action",
-          "onDelete": "no action"
+          "onDelete": "set null"
         }
       },
       "compositePrimaryKeys": {},

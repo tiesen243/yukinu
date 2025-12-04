@@ -49,13 +49,13 @@ export const CategoriesList: React.FC = () => {
         >
           Edit
         </Link>
-        <DeleteVendorButton category={category} />
+        <DeleteCategoryButton category={category} />
       </TableCell>
     </TableRow>
   ))
 }
 
-const DeleteVendorButton: React.FC<{
+const DeleteCategoryButton: React.FC<{
   category: CategoryValidators.AllOutput['categories'][number]
 }> = ({ category }) => {
   const trpc = useTRPC()
@@ -64,12 +64,12 @@ const DeleteVendorButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.category.delete.mutationOptions(),
     onSuccess: () => {
-      toast.success('Category updated successfully')
+      toast.success('Category deleted successfully')
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to update category', { description: message }),
-    meta: { filter: trpc.vendor.all.queryFilter() },
+      toast.error('Failed to delete category', { description: message }),
+    meta: { filter: trpc.category.all.queryFilter() },
   })
 
   return (

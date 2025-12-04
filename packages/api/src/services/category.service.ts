@@ -118,10 +118,14 @@ export class CategoryService extends BaseService implements ICategoryService {
   ): Promise<CategoryValidators.UpdateOutput> {
     const { eq } = this._orm
     const { categories } = this._schema
-    const { id, name, description, parentId = null } = input
+    const { id, name, description, parentId } = input
 
     const category = await this.one({ id })
-    if (parentId !== category.parent?.id && parentId !== 'no-parent') {
+    if (
+      parentId &&
+      parentId !== category.parent?.id &&
+      parentId !== 'no-parent'
+    ) {
       let currentId = parentId
       const visited = new Set([input.parentId])
       while (currentId) {
@@ -133,7 +137,7 @@ export class CategoryService extends BaseService implements ICategoryService {
           })
         }
         if (parent.parent?.id) visited.add(parent.parent.id)
-        currentId = parent.parent?.id ?? null
+        currentId = parent.parent?.id ?? ''
       }
     }
 
@@ -142,7 +146,9 @@ export class CategoryService extends BaseService implements ICategoryService {
       .set({
         name,
         description,
-        parentId: parentId === 'no-parent' ? null : parentId,
+        ...(parentId !== undefined && {
+          parentId: parentId === 'no-parent' ? null : parentId,
+        }),
       })
       .where(eq(categories.id, id))
 

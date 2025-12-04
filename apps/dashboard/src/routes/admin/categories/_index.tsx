@@ -12,8 +12,10 @@ import {
 
 import { CategoriesList } from '@/routes/admin/categories/categories-list'
 import { CategoriesPagination } from '@/routes/admin/categories/categories-pagination'
-import { ParentCategoryOnlyToggle } from '@/routes/admin/categories/search-form'
-import { SearchForm } from '@/routes/admin/vendors/search-form'
+import {
+  ParentCategoryOnlyToggle,
+  SearchForm,
+} from '@/routes/admin/categories/search-form'
 
 export default function CategoriesPage() {
   return (
