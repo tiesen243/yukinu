@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.3.1
+
+### Patch Changes
+
+- [#234](https://github.com/tiesen243/yukinu/pull/234) [`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b) Thanks [@tiesen243](https://github.com/tiesen243)! - added categories management
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,20 @@
 # @yukinu/dashboard
 
+## 0.4.1
+
+### Patch Changes
+
+- [#234](https://github.com/tiesen243/yukinu/pull/234) [`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b) Thanks [@tiesen243](https://github.com/tiesen243)! - added categories management
+
+- [#234](https://github.com/tiesen243/yukinu/pull/234) [`92423d9`](https://github.com/tiesen243/yukinu/commit/92423d9072f116f15fbc7b46e31b66f2a0673776) Thanks [@tiesen243](https://github.com/tiesen243)! - set null when delete parent id
+
+- Updated dependencies [[`4514ee0`](https://github.com/tiesen243/yukinu/commit/4514ee054b8fe703c3d4ae7ed06aa5311e16763b)]:
+  - @yukinu/validators@0.3.1
+  - @yukinu/api@0.3.1
+  - @yukinu/db@0.3.1
+  - @yukinu/auth@0.3.1
+  - @yukinu/email@0.2.1
+
 ## 0.4.0
 
 ### Minor Changes
