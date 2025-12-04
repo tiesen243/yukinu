@@ -1,6 +1,6 @@
 {
-  "id": "d01b0d74-46bf-48df-84f5-9d690c706b68",
-  "prevId": "28b98aca-b462-4ae8-9111-30af72e52152",
+  "id": "61de065a-c2dd-4d72-88fc-cba7a1827f79",
+  "prevId": "4a74ff06-9cad-4505-8bd7-1fbd101e9483",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -494,7 +494,17 @@
           "concurrently": false
         }
       },
-      "foreignKeys": {},
+      "foreignKeys": {
+        "categories_parent_id_categories_id_fk": {
+          "name": "categories_parent_id_categories_id_fk",
+          "tableFrom": "categories",
+          "columnsFrom": ["parent_id"],
+          "tableTo": "categories",
+          "columnsTo": ["id"],
+          "onUpdate": "no action",
+          "onDelete": "set null"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

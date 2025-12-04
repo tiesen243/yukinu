@@ -17,9 +17,10 @@ export class VendorService extends BaseService implements IVendorService {
     const { search, status, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClause = []
-    if (search) whereClause.push(ilike(vendors.name, `%${search}%`))
-    if (status) whereClause.push(eq(vendors.status, status))
+    const whereClauses = []
+    if (search) whereClauses.push(ilike(vendors.name, `%${search}%`))
+    if (status) whereClauses.push(eq(vendors.status, status))
+    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
     const [vendorsList, total] = await Promise.all([
       this._db
@@ -33,7 +34,7 @@ export class VendorService extends BaseService implements IVendorService {
           updatedAt: vendors.updatedAt,
         })
         .from(vendors)
-        .where(and(...whereClause))
+        .where(whereClause)
         .innerJoin(users, eq(users.id, vendors.ownerId))
         .leftJoin(vendorStaffs, eq(vendorStaffs.vendorId, vendors.id))
         .orderBy(desc(vendors.createdAt))
@@ -41,7 +42,7 @@ export class VendorService extends BaseService implements IVendorService {
         .limit(limit)
         .groupBy(vendors.id, users.id),
 
-      this._db.$count(vendors, and(...whereClause)),
+      this._db.$count(vendors, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 

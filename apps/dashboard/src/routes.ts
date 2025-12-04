@@ -15,8 +15,12 @@ export default [
     route('/apply-vendor', './routes/apply-vendor.tsx'),
 
     layout('./routes/admin/__layout.tsx', [
+      route('/admin/categories', './routes/admin/categories/_index.tsx'),
+      route('/admin/categories/new', './routes/admin/categories/new.tsx'),
+      route('/admin/categories/:id', './routes/admin/categories/edit.tsx'),
+
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
-      route('/products/admin', './routes/products/admin.tsx'),
+      route('/admin/products', './routes/admin/products.tsx'),
     ]),
 
     layout('./routes/products/__layout.tsx', [

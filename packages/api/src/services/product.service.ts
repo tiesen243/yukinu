@@ -21,12 +21,13 @@ export class ProductService extends BaseService implements IProductService {
     const { search, categoryId, vendorId, isDeleted, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClause = []
-    if (search) whereClause.push(ilike(products.name, `%${search}%`))
-    if (categoryId) whereClause.push(eq(products.categoryId, categoryId))
-    if (vendorId) whereClause.push(eq(products.vendorId, vendorId))
-    if (isDeleted) whereClause.push(isNotNull(products.deletedAt))
-    else whereClause.push(isNull(products.deletedAt))
+    const whereClauses = []
+    if (search) whereClauses.push(ilike(products.name, `%${search}%`))
+    if (categoryId) whereClauses.push(eq(products.categoryId, categoryId))
+    if (vendorId) whereClauses.push(eq(products.vendorId, vendorId))
+    if (isDeleted) whereClauses.push(isNotNull(products.deletedAt))
+    else whereClauses.push(isNull(products.deletedAt))
+    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
     const [productsList, total] = await Promise.all([
       this._db
@@ -44,7 +45,7 @@ export class ProductService extends BaseService implements IProductService {
           updatedAt: products.updatedAt,
         })
         .from(products)
-        .where(and(...whereClause))
+        .where(whereClause)
         .limit(limit)
         .offset(offset)
         .leftJoin(categories, eq(categories.id, products.categoryId))
@@ -53,7 +54,7 @@ export class ProductService extends BaseService implements IProductService {
         .leftJoin(productVariants, eq(productVariants.productId, products.id))
         .orderBy(desc(products.createdAt))
         .groupBy(products.id, categories.id),
-      this._db.$count(products, and(...whereClause)),
+      this._db.$count(products, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 

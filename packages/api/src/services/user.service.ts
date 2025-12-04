@@ -12,24 +12,25 @@ export class UserService extends BaseService implements IUserService {
     const { search, status, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClause = []
+    const whereClauses = []
     if (search)
-      whereClause.push(
+      whereClauses.push(
         or(
           ilike(users.username, `%${search}%`),
           ilike(users.email, `%${search}%`),
         ),
       )
-    if (status) whereClause.push(eq(users.status, status))
+    if (status) whereClauses.push(eq(users.status, status))
+    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
     const [usersList, total] = await Promise.all([
       this._db
         .select()
         .from(users)
-        .where(and(...whereClause))
+        .where(whereClause)
         .offset(offset)
         .limit(limit),
-      this._db.$count(users, and(...whereClause)),
+      this._db.$count(users, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 
