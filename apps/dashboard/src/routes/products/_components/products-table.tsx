@@ -26,7 +26,7 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
         <div className='flex-1' />
 
         {!isAdmin && (
-          <Button variant='outline' size='icon' asChild>
+          <Button variant='outline' asChild>
             <Link to='/products/new'>
               <PlusIcon />
               <span className='sr-only md:not-sr-only'>Add Product</span>
