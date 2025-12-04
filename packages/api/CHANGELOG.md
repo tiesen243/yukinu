@@ -1,5 +1,31 @@
 # @yukinu/api
 
+## 0.3.0
+
+### Minor Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87) Thanks [@tiesen243](https://github.com/tiesen243)! - done product management features
+
+### Patch Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`46edbfb`](https://github.com/tiesen243/yukinu/commit/46edbfbeb87930ce5a644324d3bf6a9c8997b906) Thanks [@tiesen243](https://github.com/tiesen243)! - added invite email
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`ddda95a`](https://github.com/tiesen243/yukinu/commit/ddda95ae08b7ea7b3704efd1f305186c50dfa32a) Thanks [@tiesen243](https://github.com/tiesen243)! - added product attributes and parent category api
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`b2d1872`](https://github.com/tiesen243/yukinu/commit/b2d187233bf6c367155f068333172fd96cd22b60) Thanks [@tiesen243](https://github.com/tiesen243)! - get products
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`ffa0edc`](https://github.com/tiesen243/yukinu/commit/ffa0edcc4ec7c3e4a520fc28591c24d711df8838) Thanks [@tiesen243](https://github.com/tiesen243)! - add missing create product images
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa) Thanks [@tiesen243](https://github.com/tiesen243)! - resolve comment
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`5c418e2`](https://github.com/tiesen243/yukinu/commit/5c418e243720ef177b89557798aef701d05d82e0) Thanks [@tiesen243](https://github.com/tiesen243)! - product attributes
+
+- Updated dependencies [[`46edbfb`](https://github.com/tiesen243/yukinu/commit/46edbfbeb87930ce5a644324d3bf6a9c8997b906), [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87), [`ddda95a`](https://github.com/tiesen243/yukinu/commit/ddda95ae08b7ea7b3704efd1f305186c50dfa32a), [`812e48d`](https://github.com/tiesen243/yukinu/commit/812e48d7b29f6367d8a10a0a14d391caf63abb4a), [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa), [`5c418e2`](https://github.com/tiesen243/yukinu/commit/5c418e243720ef177b89557798aef701d05d82e0)]:
+  - @yukinu/email@0.2.0
+  - @yukinu/validators@0.3.0
+  - @yukinu/auth@0.3.0
+  - @yukinu/db@0.3.0
+
 ## 0.2.2
 
 ### Patch Changes

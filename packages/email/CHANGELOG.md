@@ -1,5 +1,20 @@
 # @yukinu/email
 
+## 0.2.0
+
+### Minor Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87) Thanks [@tiesen243](https://github.com/tiesen243)! - done product management features
+
+### Patch Changes
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`46edbfb`](https://github.com/tiesen243/yukinu/commit/46edbfbeb87930ce5a644324d3bf6a9c8997b906) Thanks [@tiesen243](https://github.com/tiesen243)! - added invite email
+
+- [#232](https://github.com/tiesen243/yukinu/pull/232) [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa) Thanks [@tiesen243](https://github.com/tiesen243)! - resolve comment
+
+- Updated dependencies [[`e0f212c`](https://github.com/tiesen243/yukinu/commit/e0f212c5040bba1c8be493944f1a955c137f7a87), [`5625181`](https://github.com/tiesen243/yukinu/commit/5625181b337c62ff6f3fabfe9f8a952fbf63b4fa)]:
+  - @yukinu/validators@0.3.0
+
 ## 0.1.0
 
 ### Minor Changes
