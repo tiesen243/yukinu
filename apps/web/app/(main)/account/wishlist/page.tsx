@@ -6,6 +6,8 @@ import {
 } from '@/app/(main)/account/wishlist/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
+export const dynamic = 'force-dynamic'
+
 export default function AccountWishlistPage() {
   void getQueryClient().prefetchQuery(trpc.user.wishlist.queryOptions({}))
 
