@@ -8,9 +8,9 @@ nav_order: 5
 
 - [x] Register an account
 - [x] Login
-- [ ] Browse product list
-- [ ] View product details
-- [ ] Search and filter products
+- [x] Browse product list
+- [x] View product details
+- [x] Search and filter products
 - [ ] View vendors list
 - [ ] View products by vendor
 - [x] Reset password (forgot password)
@@ -19,8 +19,8 @@ nav_order: 5
 
 - [x] Update personal profile
 - [x] Manage shipping addresses (CRUD)
-- [ ] Add product to wishlist
-- [ ] Remove product from wishlist
+- [x] Add product to wishlist
+- [x] Remove product from wishlist
 - [ ] Add product to cart _(if available)_
 - [ ] Place an order (checkout)
 - [ ] Make payment
@@ -61,4 +61,4 @@ nav_order: 5
 - [ ] Messaging/chat between user & vendor
 - [ ] Vendor payout system
 - [ ] Coupon / voucher management
-- [ ] Email notifications & marketing automation
+- [x] Email notifications & marketing automation
