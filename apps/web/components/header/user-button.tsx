@@ -16,6 +16,7 @@ import {
 } from '@yukinu/ui/dropdown-menu'
 import {
   HeartIcon,
+  LayoutDashboardIcon,
   LogOutIcon,
   ReceiptTextIcon,
   ShieldIcon,
@@ -24,6 +25,7 @@ import {
 } from '@yukinu/ui/icons'
 
 import { ThemeSwitcher } from '@/components/header/theme-switcher'
+import { getDashboardUrl } from '@/lib/utils'
 
 export const UserButton = () => {
   const { status, session, signOut } = useSession()
@@ -72,6 +74,12 @@ export const UserButton = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <a href={getDashboardUrl()}>
+              <LayoutDashboardIcon /> Dashboard
+            </a>
+          </DropdownMenuItem>
+
           <ThemeSwitcher />
 
           <DropdownMenuItem onSelect={signOut}>

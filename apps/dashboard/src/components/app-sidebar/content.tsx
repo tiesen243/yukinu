@@ -6,6 +6,7 @@ import {
   BuildingIcon,
   FileTextIcon,
   HelpCircleIcon,
+  HomeIcon,
   LayoutDashboardIcon,
   ListOrderedIcon,
   Loader2Icon,
@@ -28,11 +29,19 @@ import {
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
 
+import { getWebUrl } from '@/lib/utils'
+
 const navs = [
   {
     id: 'dashboard',
     title: 'Dashboard',
     items: [
+      {
+        icon: HomeIcon,
+        title: 'Home',
+        url: getWebUrl(),
+        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
+      },
       {
         icon: LayoutDashboardIcon,
         title: 'Overview',
@@ -145,13 +154,13 @@ const navs = [
         icon: TicketsIcon,
         title: 'Tickets',
         url: '/support/tickets',
-        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
       },
       {
         icon: HelpCircleIcon,
         title: 'FAQ',
         url: '/support/faq',
-        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
       },
     ],
   },
