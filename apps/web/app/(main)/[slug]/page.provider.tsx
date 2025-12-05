@@ -1,9 +1,10 @@
 'use client'
 
 import * as React from 'react'
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
 import type { ProductValidators } from '@yukinu/validators/product'
+import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -18,6 +19,9 @@ const PageContext = React.createContext<{
 
   handleChangeImage: (url: string) => void
   handleOptionChange: (type: string, value: string) => void
+
+  toggleWishlistItem: () => void
+  isTogglingWishlistItem: boolean
 } | null>(null)
 
 interface PageProviderProps {
@@ -64,6 +68,15 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     [],
   )
 
+  const { mutate, isPending: isTogglingWishlistItem } = useMutation({
+    ...trpc.user.toggleWishlistItem.mutationOptions(),
+    meta: { filter: trpc.user.wishlist.queryOptions({}) },
+    onSuccess: ({ added }) =>
+      toast.success(added ? 'Added to wishlist' : 'Removed from wishlist'),
+    onError: ({ message }) =>
+      toast.error('Failed to toggle wishlist item', { description: message }),
+  })
+
   const value = React.useMemo(() => {
     const selectedVariant = product.variants.find((variant) =>
       optionTypes.every((type) =>
@@ -89,14 +102,21 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
 
       handleChangeImage,
       handleOptionChange,
+
+      toggleWishlistItem: () => {
+        mutate({ productId: product.id })
+      },
+      isTogglingWishlistItem,
     }
   }, [
     currentImage,
     handleChangeImage,
     handleOptionChange,
+    isTogglingWishlistItem,
     optionTypes,
     product,
     selectedOptions,
+    mutate,
   ])
 
   return <PageContext value={value}>{children}</PageContext>
