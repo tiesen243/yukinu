@@ -12,18 +12,24 @@ import {
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 
 export const AddToCartButton: React.FC = () => {
-  const { selectedVariant, toggleWishlistItem, isTogglingWishlistItem } =
-    usePage()
+  const {
+    product: { variants, stock },
+    selectedVariant,
+    toggleWishlistItem,
+    isTogglingWishlistItem,
+  } = usePage()
   const [quantity, setQuantity] = useState(1)
 
   return (
-    <div className='flex flex-col gap-4'>
+    <section className='flex flex-col gap-4'>
+      <h4 className='sr-only'>Add to Cart section</h4>
+
       <div className='flex items-center gap-4'>
         <InputGroup>
           <InputGroupAddon align='inline-start'>
             <InputGroupButton
               onClick={() => {
-                if (!selectedVariant) return
+                if (variants.length > 0 ? !selectedVariant : stock === 0) return
                 if (quantity > 1) setQuantity((prev) => prev - 1)
               }}
             >
@@ -33,13 +39,19 @@ export const AddToCartButton: React.FC = () => {
 
           <InputGroupInput
             value={quantity}
+            disabled={variants.length > 0 ? !selectedVariant : stock === 0}
             onChange={(e) => {
               const qty = parseInt(e.target.value, 10)
-              if (!selectedVariant) return
+              const maxStock =
+                variants.length > 0
+                  ? selectedVariant
+                    ? selectedVariant.stock
+                    : stock
+                  : 0
+              if (!maxStock) return
 
               if (isNaN(qty) || qty < 1) setQuantity(1)
-              else if (qty > selectedVariant.stock)
-                setQuantity(selectedVariant.stock)
+              else if (qty > maxStock) setQuantity(maxStock)
               else setQuantity(qty)
             }}
           />
@@ -47,9 +59,14 @@ export const AddToCartButton: React.FC = () => {
           <InputGroupAddon align='inline-end'>
             <InputGroupButton
               onClick={() => {
-                if (!selectedVariant) return
-                if (quantity < selectedVariant.stock)
-                  setQuantity((prev) => prev + 1)
+                const maxStock =
+                  variants.length > 0
+                    ? selectedVariant
+                      ? selectedVariant.stock
+                      : 0
+                    : stock
+                if (!maxStock) return
+                if (quantity < maxStock) setQuantity((prev) => prev + 1)
               }}
             >
               <PlusIcon />
@@ -67,10 +84,11 @@ export const AddToCartButton: React.FC = () => {
       <div className='flex w-full items-center gap-2'>
         <Button
           className='flex-1'
-          disabled={!selectedVariant || selectedVariant.stock < 1}
+          disabled={variants.length > 0 ? !selectedVariant : stock === 0}
         >
           Add to Cart
         </Button>
+
         <Button
           variant='outline'
           size='icon'
@@ -81,6 +99,6 @@ export const AddToCartButton: React.FC = () => {
           <span className='sr-only'>Add to wishlist</span>
         </Button>
       </div>
-    </div>
+    </section>
   )
 }

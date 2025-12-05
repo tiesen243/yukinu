@@ -219,6 +219,9 @@
     border-color: var(--color-border);
     outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
 
+    scrollbar-color: var(--color-accent-foreground) var(--color-accent);
+    scrollbar-width: thin;
+
     ::selection {
       background-color: var(--color-accent);
       color: var(--color-accent-foreground);

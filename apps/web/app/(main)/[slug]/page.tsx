@@ -45,10 +45,16 @@ export default async function ProductDetailsPage({
   const id = slug.split('-').pop()
   if (!id) return notFound()
 
+  const product = await getQueryClient().ensureQueryData(
+    trpc.product.one.queryOptions({ id }),
+  )
+
   return (
     <HydrateClient>
-      <main className='container flex flex-1 flex-col py-6'>
-        <h1 className='sr-only'>Product {id} Details Page</h1>
+      <main className='container flex flex-1 flex-col gap-6 py-6'>
+        <h1 className='sr-only'>
+          Product {product.name} Details Information page
+        </h1>
 
         <Suspense
           fallback={

@@ -10,11 +10,9 @@ import { ProductVendor } from '@/app/(main)/[slug]/_components/product-vendor'
 
 export const ProductDetails: React.FC = () => {
   return (
-    <section className='space-y-6'>
-      <h2 className='sr-only'>Product Details section</h2>
-
-      <section className='grid gap-4 rounded-lg bg-card p-6 shadow-md md:grid-cols-3'>
-        <h3 className='sr-only'>Product Information section</h3>
+    <>
+      <section className='grid gap-6 rounded-lg bg-card p-6 shadow-md md:grid-cols-3 dark:border'>
+        <h2 className='sr-only'>Product Details section</h2>
 
         <ProductImages />
 
@@ -26,6 +24,6 @@ export const ProductDetails: React.FC = () => {
       <ProductDescription />
 
       <ProductReviews />
-    </section>
+    </>
   )
 }
