@@ -6,7 +6,7 @@ import { slugify } from '@yukinu/lib/slugify'
 
 import { getWebUrl } from '@/lib/utils'
 
-export const revalidate = 24 * 60 * 60 // 24 hours
+export const revalidate = 86400 // 24 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = (path: string): string => new URL(path, getWebUrl()).toString()
