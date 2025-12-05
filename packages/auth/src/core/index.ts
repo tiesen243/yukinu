@@ -1,4 +1,5 @@
 import type { UserValidators } from '@yukinu/validators/user'
+import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
 import { AuthValidators } from '@yukinu/validators/auth'
 
 import type { AuthConfig, Session, SessionWithUser } from '@/types'
@@ -229,7 +230,9 @@ export function Auth(config: AuthConfig) {
         }
 
         const result = await createSession(userId, {
-          ipAddress: request.headers.get('X-Forwarded-For'),
+          ipAddress:
+            request.headers.get('X-Forwarded-For') ??
+            request.headers.get('x-real-ip'),
           userAgent: request.headers.get('User-Agent'),
         })
 
@@ -281,7 +284,9 @@ export function Auth(config: AuthConfig) {
         const userData = AuthValidators.loginInput.parse(data)
 
         const result = await signIn(userData, {
-          ipAddress: request.headers.get('X-Forwarded-For'),
+          ipAddress:
+            request.headers.get('X-Forwarded-For') ??
+            request.headers.get('x-real-ip'),
           userAgent: request.headers.get('User-Agent'),
         })
         response = contentType.includes('application/json')
@@ -378,8 +383,17 @@ export function Auth(config: AuthConfig) {
     return response
   }
 
+  const bucket = new TokenBucketRateLimit<string>(5, 60)
   async function handler(request: Request): Promise<Response> {
     let response: Response
+
+    const ip =
+      request.headers.get('x-forwarded-for') ??
+      request.headers.get('x-real-ip') ??
+      'unknown'
+    if (!bucket.consume(ip, 1))
+      return new Response('Too Many Requests', { status: 429 })
+
     if (request.method === 'OPTIONS')
       response = new Response(null, { status: 204 })
     else if (request.method === 'GET') response = await handleGet(request)

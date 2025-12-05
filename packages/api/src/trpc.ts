@@ -4,6 +4,7 @@ import SuperJSON from 'superjson'
 import { validateAccessToken } from '@yukinu/auth'
 import { db, orm } from '@yukinu/db'
 import * as schema from '@yukinu/db/schema'
+import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
 import { AuthService } from '@/services/auth.service'
@@ -58,14 +59,30 @@ const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
 
+const bucket = new TokenBucketRateLimit<string>(10, 60)
+const rateLimitMiddleware = t.middleware(async ({ ctx, next }) => {
+  const ip =
+    ctx.headers.get('x-forwarded-for') ??
+    ctx.headers.get('x-real-ip') ??
+    'unknown'
+
+  if (!bucket.consume(ip, 1))
+    throw new TRPCError({
+      code: 'TOO_MANY_REQUESTS',
+      message: 'Rate limit exceeded',
+    })
+
+  return next()
+})
+
 const loggingMiddleware = t.middleware(
   async ({ ctx, next, type, path, meta }) => {
     console.log(
       '[tRPC] >>> Request from',
       ctx.headers.get('x-trpc-source') ?? 'unknown',
-      'by',
-      ctx.session?.userId ?? 'guest',
+      `by ${ctx.session?.userId ?? 'guest'}`,
       `at ${path}`,
+      `on ${new Date().toISOString()}`,
     )
 
     const start = performance.now()
@@ -84,7 +101,9 @@ const loggingMiddleware = t.middleware(
   },
 )
 
-const publicProcedure = t.procedure.use(loggingMiddleware)
+const publicProcedure = t.procedure
+  .use(loggingMiddleware)
+  .use(rateLimitMiddleware)
 const protectedProcedure = publicProcedure.use(({ ctx, meta, next }) => {
   if (!ctx.session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
 

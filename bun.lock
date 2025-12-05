@@ -17,7 +17,7 @@
     },
     "apps/dashboard": {
       "name": "@yukinu/dashboard",
-      "version": "0.4.2",
+      "version": "0.5.2",
       "dependencies": {
         "@react-router/node": "^7.10.1",
         "@react-router/serve": "^7.10.1",
@@ -56,7 +56,7 @@
     },
     "apps/web": {
       "name": "@yukinu/web",
-      "version": "0.4.2",
+      "version": "0.5.1",
       "dependencies": {
         "@tanstack/react-query": "catalog:",
         "@trpc/client": "catalog:trpc",
@@ -90,12 +90,13 @@
     },
     "packages/api": {
       "name": "@yukinu/api",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "dependencies": {
         "@trpc/server": "catalog:trpc",
         "@yukinu/auth": "workspace:*",
         "@yukinu/db": "workspace:*",
         "@yukinu/email": "workspace:*",
+        "@yukinu/lib": "workspace:*",
         "@yukinu/validators": "workspace:*",
         "superjson": "catalog:trpc",
       },
@@ -112,9 +113,10 @@
     },
     "packages/auth": {
       "name": "@yukinu/auth",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "dependencies": {
         "@yukinu/db": "workspace:*",
+        "@yukinu/lib": "workspace:*",
         "@yukinu/validators": "workspace:*",
       },
       "devDependencies": {
@@ -135,7 +137,7 @@
     },
     "packages/db": {
       "name": "@yukinu/db",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "dependencies": {
         "@yukinu/lib": "workspace:*",
         "@yukinu/validators": "workspace:*",
@@ -155,7 +157,7 @@
     },
     "packages/email": {
       "name": "@yukinu/email",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "dependencies": {
         "@react-email/components": "^1.0.1",
         "@yukinu/validators": "workspace:*",
@@ -178,7 +180,7 @@
     },
     "packages/lib": {
       "name": "@yukinu/lib",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "@tanstack/react-query": "catalog:",
         "superjson": "catalog:trpc",
@@ -197,7 +199,7 @@
     },
     "packages/ui": {
       "name": "@yukinu/ui",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "dependencies": {
         "@radix-ui/react-alert-dialog": "^1.1.15",
         "@radix-ui/react-avatar": "^1.1.11",
@@ -234,7 +236,7 @@
     },
     "packages/validators": {
       "name": "@yukinu/validators",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "dependencies": {
         "@yukinu/lib": "workspace:*",
         "zod": "catalog:",
