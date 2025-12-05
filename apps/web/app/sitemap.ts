@@ -6,12 +6,12 @@ import { slugify } from '@yukinu/lib/slugify'
 
 import { getWebUrl } from '@/lib/utils'
 
-export const revalidate = false
+export const revalidate = 24 * 60 * 60 // 24 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const url = (path: string): string => new URL(path, getWebUrl()).toString()
 
-  const statics: string[] = ['/', '/home', '/about', '/contact', '/search']
+  const statics: string[] = ['/home', '/about', '/contact', '/search']
   const productsList = await db
     .select({ id: products.id, name: products.name })
     .from(products)
