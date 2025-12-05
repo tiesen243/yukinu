@@ -37,12 +37,6 @@ const navs = [
     title: 'Dashboard',
     items: [
       {
-        icon: HomeIcon,
-        title: 'Home',
-        url: getWebUrl(),
-        roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
-      },
-      {
         icon: LayoutDashboardIcon,
         title: 'Overview',
         url: '/',
@@ -176,6 +170,14 @@ export const AppSidebarContent: React.FC = () => {
       <SidebarGroupLabel>{nav.title}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <a href={getWebUrl()} target='_blank' rel='noreferrer'>
+                <HomeIcon /> Visit Website
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+
           {nav.items.map(
             (item) =>
               item.roles.includes(session.user.role) && (
