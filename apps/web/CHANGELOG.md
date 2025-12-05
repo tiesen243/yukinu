@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.5.1
+
+### Patch Changes
+
+- [#242](https://github.com/tiesen243/yukinu/pull/242) [`a1604dd`](https://github.com/tiesen243/yukinu/commit/a1604dd4513b1cbd78d81d59cfcd8073749fa378) Thanks [@tiesen243](https://github.com/tiesen243)! - fix ui
+
 ## 0.5.0
 
 ### Minor Changes

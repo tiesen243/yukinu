@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.5.1
+
+### Patch Changes
+
+- [#242](https://github.com/tiesen243/yukinu/pull/242) [`dcc3da1`](https://github.com/tiesen243/yukinu/commit/dcc3da113c64b94531e50c6a66bfdda2ce1474c6) Thanks [@tiesen243](https://github.com/tiesen243)! - fix active state of home button
+
 ## 0.5.0
 
 ### Minor Changes
