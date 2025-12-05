@@ -38,7 +38,7 @@ export const WishlistItems: React.FC = () => {
         />
       </CardHeader>
 
-      <CardFooter>
+      <CardFooter className='justify-between'>
         <CardTitle className='line-clamp-1 text-lg'>
           {item.product.name}
         </CardTitle>
