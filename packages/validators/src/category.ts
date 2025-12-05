@@ -11,7 +11,8 @@ export namespace CategoryValidators {
   export type Category = z.infer<typeof category>
 
   export const allInput = z.object({
-    search: z.string().optional(),
+    search: z.string().nullable(),
+    istopLevelOnly: z.boolean().default(false),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
   })

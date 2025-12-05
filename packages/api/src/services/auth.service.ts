@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto'
 import { TRPCError } from '@trpc/server'
 
+import type { SessionWithUser } from '@yukinu/auth'
 import type { AuthValidators } from '@yukinu/validators/auth'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
@@ -11,6 +12,35 @@ import { BaseService } from '@/services/base.service'
 
 export class AuthService extends BaseService implements IAuthService {
   private readonly _password = new Password()
+
+  async getCurrentUser(
+    userId: NonNullable<SessionWithUser['user']>['id'],
+  ): Promise<SessionWithUser> {
+    const { eq } = this._orm
+    const { sessions, users } = this._schema
+
+    const [session] = await this._db
+      .select({
+        token: sessions.token,
+        user: {
+          id: users.id,
+          email: users.email,
+          username: users.username,
+          role: users.role,
+          image: users.image,
+        },
+        ipAddress: sessions.ipAddress,
+        userAgent: sessions.userAgent,
+        expiresAt: sessions.expiresAt,
+      })
+      .from(sessions)
+      .where(eq(sessions.userId, userId))
+      .innerJoin(users, eq(users.id, sessions.userId))
+      .limit(1)
+
+    if (!session) throw new TRPCError({ code: 'UNAUTHORIZED' })
+    return session
+  }
 
   async register(
     input: AuthValidators.RegisterInput,

@@ -3,6 +3,10 @@ import { AuthValidators } from '@yukinu/validators/auth'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc'
 
 export const authRouter = createTRPCRouter({
+  getCurrentUser: protectedProcedure
+    .meta({ message: 'Current user fetched successfully.' })
+    .query(({ ctx }) => ctx.services.auth.getCurrentUser(ctx.session.userId)),
+
   register: publicProcedure
     .meta({ message: 'Registration successful.' })
     .input(AuthValidators.registerInput)

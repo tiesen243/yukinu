@@ -15,6 +15,7 @@ import type { Route } from './+types/root'
 import { Providers } from '@/components/providers'
 import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
+import { getWebUrl } from '@/lib/utils'
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -101,6 +102,8 @@ export const meta: Route.MetaFunction = () =>
   createMetadata({
     title: 'Dashboard',
     openGraph: {
-      images: [{ url: `/api/og?title=Dashboard`, alt: 'Dashboard' }],
+      images: [
+        { url: `${getWebUrl()}/api/og?title=Dashboard`, alt: 'Dashboard' },
+      ],
     },
   })

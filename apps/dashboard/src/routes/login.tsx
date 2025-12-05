@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
@@ -16,6 +16,8 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthValidators } from '@yukinu/validators/auth'
 
+import { getWebUrl } from '@/lib/utils'
+
 export default function LoginPage() {
   return (
     <main className='grid min-h-dvh place-items-center'>
@@ -27,6 +29,11 @@ export default function LoginPage() {
           </FieldDescription>
 
           <LoginForm />
+
+          <FieldDescription>
+            Don't have an account?{' '}
+            <Link to={`${getWebUrl()}/register`}>Register here.</Link>
+          </FieldDescription>
         </FieldSet>
       </form>
     </main>

@@ -1,7 +1,9 @@
 import * as z from 'zod'
 
 export namespace ProductValidators {
-  const numeric = z.string().regex(/^\d+(\.\d+)?$/)
+  const numeric = z.string().regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, {
+    error: 'Invalid price format',
+  })
 
   export const product = z.object({
     id: z.cuid(),
@@ -70,10 +72,27 @@ export namespace ProductValidators {
   })
   export type Review = z.infer<typeof productReview>
 
+  export const orderByField = ['name', 'price', 'sold', 'createdAt'] as const
+  export type OrderByField = (typeof orderByField)[number]
+
+  export const orderByDirections = ['asc', 'desc'] as const
+  export type OrderByDirection = (typeof orderByDirections)[number]
+
+  export const orderBy = orderByField
+    .map(
+      (field) =>
+        orderByDirections.map(
+          (direction) => `${field}_${direction}`,
+        ) as `${OrderByField}_${OrderByDirection}`[],
+    )
+    .flat()
+  export type OrderBy = `${OrderByField}_${OrderByDirection}`
+
   export const allInput = z.object({
-    search: z.string().optional(),
-    categoryId: z.cuid().optional(),
-    vendorId: z.cuid().optional(),
+    search: z.string().nullable(),
+    categoryId: z.cuid().nullable(),
+    vendorId: z.cuid().nullable(),
+    orderBy: z.enum(orderBy).nullable(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
     isDeleted: z.boolean().default(false),

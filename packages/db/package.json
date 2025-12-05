@@ -34,7 +34,7 @@
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
-    "drizzle-kit": "^0.31.7",
+    "drizzle-kit": "^0.31.8",
     "eslint": "catalog:",
     "prettier": "catalog:",
     "tsdown": "catalog:",

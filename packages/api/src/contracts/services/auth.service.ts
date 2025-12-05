@@ -1,6 +1,11 @@
+import type { SessionWithUser } from '@yukinu/auth'
 import type { AuthValidators } from '@yukinu/validators/auth'
 
 export interface IAuthService {
+  getCurrentUser(
+    userId: NonNullable<SessionWithUser['user']>['id'],
+  ): Promise<SessionWithUser>
+
   register(
     input: AuthValidators.RegisterInput,
   ): Promise<AuthValidators.RegisterOutput>

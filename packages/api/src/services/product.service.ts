@@ -10,7 +10,8 @@ export class ProductService extends BaseService implements IProductService {
   async all(
     input: ProductValidators.AllInput,
   ): Promise<ProductValidators.AllOutput> {
-    const { and, desc, eq, ilike, max, min, isNull, isNotNull, sql } = this._orm
+    const { and, asc, desc, eq, ilike, max, min, isNull, isNotNull, sql } =
+      this._orm
     const {
       categories,
       productImages,
@@ -18,7 +19,8 @@ export class ProductService extends BaseService implements IProductService {
       productVariants,
       products,
     } = this._schema
-    const { search, categoryId, vendorId, isDeleted, page, limit } = input
+    const { search, categoryId, vendorId, isDeleted, page, limit, orderBy } =
+      input
     const offset = (page - 1) * limit
 
     const whereClauses = []
@@ -29,31 +31,41 @@ export class ProductService extends BaseService implements IProductService {
     else whereClauses.push(isNull(products.deletedAt))
     const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
+    const productsQuery = this._db
+      .select({
+        id: products.id,
+        name: products.name,
+        category: categories.name,
+        image: min(productImages.url),
+        price: products.price,
+        minPrice: sql<string>`LEAST(${min(productVariants.price)}, ${products.price})`,
+        maxPrice: sql<string>`GREATEST(${max(productVariants.price)}, ${products.price})`,
+        sold: products.sold,
+        rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
+        createdAt: products.createdAt,
+        updatedAt: products.updatedAt,
+      })
+      .from(products)
+      .where(whereClause)
+      .limit(limit)
+      .offset(offset)
+      .leftJoin(categories, eq(categories.id, products.categoryId))
+      .leftJoin(productImages, eq(productImages.productId, products.id))
+      .leftJoin(productReviews, eq(productReviews.productId, products.id))
+      .leftJoin(productVariants, eq(productVariants.productId, products.id))
+      .groupBy(products.id, categories.id)
+
+    if (orderBy) {
+      const [field, direction] = orderBy.split('_') as [
+        ProductValidators.OrderByField,
+        ProductValidators.OrderByDirection,
+      ]
+      const directionSql = direction === 'asc' ? asc : desc
+      productsQuery.orderBy(directionSql(products[field]))
+    }
+
     const [productsList, total] = await Promise.all([
-      this._db
-        .select({
-          id: products.id,
-          name: products.name,
-          category: categories.name,
-          image: min(productImages.url),
-          price: products.price,
-          minPrice: sql<string>`LEAST(${min(productVariants.price)}, ${products.price})`,
-          maxPrice: sql<string>`GREATEST(${max(productVariants.price)}, ${products.price})`,
-          sold: products.sold,
-          rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
-          createdAt: products.createdAt,
-          updatedAt: products.updatedAt,
-        })
-        .from(products)
-        .where(whereClause)
-        .limit(limit)
-        .offset(offset)
-        .leftJoin(categories, eq(categories.id, products.categoryId))
-        .leftJoin(productImages, eq(productImages.productId, products.id))
-        .leftJoin(productReviews, eq(productReviews.productId, products.id))
-        .leftJoin(productVariants, eq(productVariants.productId, products.id))
-        .orderBy(desc(products.createdAt))
-        .groupBy(products.id, categories.id),
+      productsQuery,
       this._db.$count(products, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
