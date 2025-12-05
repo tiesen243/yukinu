@@ -10,7 +10,7 @@ const links = [
     label: 'FAQ',
     isExternal: true,
   },
-]
+] as const
 
 export const QuickLinks: React.FC = () => (
   <nav>
