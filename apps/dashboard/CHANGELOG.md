@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.5.2
+
+### Patch Changes
+
+- [#245](https://github.com/tiesen243/yukinu/pull/245) [`da9b8fb`](https://github.com/tiesen243/yukinu/commit/da9b8fb02acc9dc27de393aef9b055bee4abece8) Thanks [@tiesen243](https://github.com/tiesen243)! - fix go to website
+
 ## 0.5.1
 
 ### Patch Changes
