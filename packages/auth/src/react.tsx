@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import type { AuthValidators } from '@yukinu/validators/auth'
 
@@ -23,6 +23,7 @@ type SessionContextValue = (
 interface SessionProviderProps {
   children: React.ReactNode
   session?: SessionWithUser
+  getSessionFn?: () => Promise<SessionWithUser>
   basePath?: string
 }
 
@@ -36,17 +37,25 @@ const useSession = () => {
 }
 
 function SessionProvider(props: Readonly<SessionProviderProps>) {
-  const { session, basePath = '/api/auth', children } = props
+  const { session, getSessionFn, basePath = '/api/auth', children } = props
 
-  const { data, isLoading, refetch } = useQuery({
+  const queryClient = useQueryClient()
+
+  const defaultGetSessionFn = async () => {
+    const res = await fetch(`${basePath}/get-session`)
+    if (!res.ok) throw new Error('Failed to fetch session')
+    return res.json() as Promise<SessionWithUser>
+  }
+
+  const { data, isLoading } = useQuery({
     queryKey: ['auth', 'get-session'],
+    queryFn: getSessionFn ?? defaultGetSessionFn,
     initialData: session,
     enabled: !session,
-    queryFn: async () => {
-      const res = await fetch(`${basePath}/get-session`)
-      if (!res.ok) throw new Error('Failed to fetch session')
-      return res.json() as Promise<SessionWithUser>
-    },
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    refetchOnWindowFocus: false,
+    refetchOnMount: !session,
+    retry: false,
   })
 
   const { mutateAsync: signIn } = useMutation({
@@ -60,7 +69,8 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
       if (!res.ok) throw new Error(await res.text())
       return res.json() as Promise<AuthValidators.LoginOutput>
     },
-    onSuccess: () => refetch(),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['auth', 'get-session'] }),
   })
 
   const { mutateAsync: signOut } = useMutation({
@@ -69,7 +79,8 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
       const res = await fetch(`${basePath}/sign-out`, { method: 'POST' })
       if (!res.ok) throw new Error('Failed to sign out')
     },
-    onSuccess: () => refetch(),
+    onSuccess: () =>
+      queryClient.setQueryData(['auth', 'get-session'], { user: null }),
   })
 
   const value = React.useMemo(() => {

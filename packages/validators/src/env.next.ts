@@ -14,7 +14,8 @@ export const env = createEnv({
   client: {
     // Application settings
     NEXT_PUBLIC_APP_NAME: z._default(z.string(), 'My App'),
-    NEXT_PUBLIC_APP_URL: z.optional(z.string()),
+    NEXT_PUBLIC_WEB_URL: z.optional(z.string()),
+    NEXT_PUBLIC_DASHBOARD_URL: z.optional(z.string()),
     NEXT_PUBLIC_TRPC_USE_STREAMING: z._default(
       z.enum(['true', 'false']),
       'true',
@@ -25,7 +26,8 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
 
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
-    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
+    NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
     NEXT_PUBLIC_TRPC_USE_STREAMING: process.env.NEXT_PUBLIC_TRPC_USE_STREAMING,
   },
 

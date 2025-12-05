@@ -59,7 +59,7 @@ export namespace UserValidators {
   export type WishlistItem = z.infer<typeof wishlistItem>
 
   export const allInput = z.object({
-    search: z.string().optional(),
+    search: z.string().nullable(),
     status: z.enum(statuses).nullable(),
     role: z.enum(roles).nullable(),
     page: z.number().min(1).default(1),

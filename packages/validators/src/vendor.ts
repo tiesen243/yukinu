@@ -25,7 +25,7 @@ export namespace VendorValidators {
   export type VendorStaff = z.infer<typeof vendorStaff>
 
   export const allInput = z.object({
-    search: z.string().optional(),
+    search: z.string().nullable(),
     status: z.enum(statuses).nullable(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),

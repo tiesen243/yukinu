@@ -8,7 +8,7 @@ import {
 import { UserValidators } from '@yukinu/validators/user'
 
 const parser = {
-  search: parseAsString.withDefault(''),
+  search: parseAsString,
   status: parseAsStringEnum([...UserValidators.statuses]).withDefault('active'),
   role: parseAsStringEnum([...UserValidators.roles]),
   page: parseAsInteger.withDefault(1),

@@ -40,7 +40,9 @@ export default function CategoriesEditPage({
     initialData: loaderData,
   })
 
-  const { data } = useQuery(trpc.category.all.queryOptions({ limit: 100 }))
+  const { data } = useQuery(
+    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+  )
 
   const { mutateAsync } = useMutation({
     ...trpc.category.update.mutationOptions(),

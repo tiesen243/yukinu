@@ -69,7 +69,7 @@ export const UserButton: React.FC = () => {
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem onSelect={() => signOut()}>
+            <DropdownMenuItem onSelect={signOut}>
               <LogOutIcon /> Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

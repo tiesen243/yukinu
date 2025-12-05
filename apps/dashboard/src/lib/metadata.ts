@@ -2,7 +2,7 @@ import type { MetaDescriptor } from 'react-router'
 
 import { env } from '@yukinu/validators/env.vite'
 
-import { getBaseUrl } from '@/lib/utils'
+import { getDashboardUrl } from '@/lib/utils'
 
 export interface Metadata {
   title?: string
@@ -15,7 +15,7 @@ export interface Metadata {
 
 export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
   const siteName = env.VITE_APP_NAME
-  const baseUrl = getBaseUrl()
+  const baseUrl = getDashboardUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
   const description =

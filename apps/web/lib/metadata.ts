@@ -2,7 +2,7 @@ import type { Metadata as NextMetadata } from 'next'
 
 import { env } from '@yukinu/validators/env.next'
 
-import { getBaseUrl } from '@/lib/utils'
+import { getWebUrl } from '@/lib/utils'
 
 export interface Metadata extends NextMetadata {
   title?: string
@@ -12,7 +12,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
   const siteName = env.NEXT_PUBLIC_APP_NAME
   const siteDescription =
     'An e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience.'
-  const baseUrl = getBaseUrl()
+  const baseUrl = getWebUrl()
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
   const description = override.description ?? siteDescription

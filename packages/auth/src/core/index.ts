@@ -314,6 +314,10 @@ export function Auth(config: AuthConfig) {
           'Set-Cookie',
           serializeCookie(keys.token, '', { ...cookie, maxAge: 0 }),
         )
+        response.headers.append(
+          'Set-Cookie',
+          serializeCookie(keys.accessToken, '', { ...cookie, maxAge: 0 }),
+        )
       }
 
       /*
