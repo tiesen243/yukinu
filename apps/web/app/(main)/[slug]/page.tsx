@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Script from 'next/script'
 
 import { Loader2Icon } from '@yukinu/ui/icons'
+import { env } from '@yukinu/validators/env.next'
 
 import { ProductDetails } from '@/app/(main)/[slug]/page.client'
 import { PageProvider } from '@/app/(main)/[slug]/page.provider'
@@ -58,29 +59,26 @@ export default async function ProductDetailsPage({
 
   return (
     <>
-      <Script id='product-schema' type='application/ld+json'>
-        {JSON.stringify({
-          '@context': 'https://schema.org/',
-          '@type': 'Product',
-          name: product.name,
-          image: product.images.map((img) => img.url),
-          description: product.description,
-          sku: product.variants.map((variant) => variant.sku).join(', '),
-          brand: {
-            '@type': 'Brand',
-            name: product.vendor?.name ?? 'Unknown',
-          },
-          category: product.category?.name ?? 'General',
-          offers: {
-            '@type': 'Offer',
-            url: `${getWebUrl()}/${slug}`,
-            priceCurrency: 'USD',
-            price: product.price,
-            availability:
-              product.stock > 0
-                ? 'https://schema.org/InStock'
-                : 'https://schema.org/OutOfStock',
-            itemCondition: 'https://schema.org/NewCondition',
+      <Script
+        id='product-schema'
+        type='application/ld+json'
+        // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org/',
+            '@type': 'Product',
+            productID: product.id,
+            name: product.name,
+            image: product.images.map((img) => img.url),
+            description: product.description,
+            sku: product.variants.at(0)?.sku ?? 'N/A',
+            brand: {
+              '@type': 'Thing',
+              name:
+                product.attributes.find((attr) => attr.name === 'brand')
+                  ?.value ?? 'Generic',
+            },
+            category: product.category?.name ?? 'General',
             aggregateRating: avgRating
               ? {
                   '@type': 'AggregateRating',
@@ -98,9 +96,24 @@ export default async function ProductDetailsPage({
               },
               reviewBody: review.comment,
             })),
-          },
-        })}
-      </Script>
+            offers: {
+              '@type': 'Offer',
+              url: `${getWebUrl()}/${slug}`,
+              priceCurrency: 'USD',
+              price: product.price,
+              availability:
+                product.stock > 0
+                  ? 'https://schema.org/InStock'
+                  : 'https://schema.org/OutOfStock',
+              itemCondition: 'https://schema.org/NewCondition',
+              seller: {
+                '@type': 'Organization',
+                name: product.vendor?.name ?? env.NEXT_PUBLIC_APP_NAME,
+              },
+            },
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
 
       <HydrateClient>
         <main className='container flex flex-1 flex-col gap-6 py-6'>
