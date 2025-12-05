@@ -1,5 +1,14 @@
 # @yukinu/validators
 
+## 0.3.3
+
+### Patch Changes
+
+- [#239](https://github.com/tiesen243/yukinu/pull/239) [`36e8f0b`](https://github.com/tiesen243/yukinu/commit/36e8f0befbc9be77806ef4b76d26d9ed935afd19) Thanks [@tiesen243](https://github.com/tiesen243)! - added home page
+
+- Updated dependencies [[`36e8f0b`](https://github.com/tiesen243/yukinu/commit/36e8f0befbc9be77806ef4b76d26d9ed935afd19)]:
+  - @yukinu/lib@0.1.1
+
 ## 0.3.2
 
 ### Patch Changes
