@@ -20,7 +20,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   return (
     <Link
       {...props}
-      href={`/search?category=${category.id}`}
+      href={`/search?c=${category.id}`}
       className={cn(
         'group/category-card flex flex-col gap-6 rounded-lg border bg-card pb-6 text-card-foreground shadow-sm transition-colors hover:border-accent hover:bg-accent/20 hover:text-accent-foreground',
         className,
