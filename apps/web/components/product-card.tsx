@@ -55,7 +55,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </CardHeader>
 
     <CardFooter className='flex-col items-start justify-end gap-2'>
-      <CardTitle className='text-lg'>{product.name}</CardTitle>
+      <CardTitle className='line-clamp-1 text-lg'>{product.name}</CardTitle>
       <CardDescription>
         ${product.minPrice} - ${product.maxPrice}
       </CardDescription>

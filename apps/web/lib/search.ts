@@ -12,7 +12,7 @@ export const productsParsers = {
   categoryId: parseAsString,
   vendorId: parseAsString,
   page: parseAsInteger.withDefault(1),
-  limit: parseAsInteger.withDefault(10),
+  limit: parseAsInteger.withDefault(8),
   orderBy: parseAsStringEnum(ProductValidators.orderBy).withDefault(
     'createdAt_desc',
   ),
