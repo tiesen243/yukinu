@@ -12,6 +12,7 @@ import {
 } from '@yukinu/ui/dropdown-menu'
 import {
   EllipsisVerticalIcon,
+  HomeIcon,
   LogOutIcon,
   MoonIcon,
   SunIcon,
@@ -22,6 +23,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@yukinu/ui/sidebar'
+
+import { getWebUrl } from '@/lib/utils'
 
 export const UserButton: React.FC = () => {
   const { status, session, signOut } = useSession()
@@ -57,6 +60,12 @@ export const UserButton: React.FC = () => {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
+              <DropdownMenuItem asChild>
+                <a href={getWebUrl()}>
+                  <HomeIcon /> Go to Website
+                </a>
+              </DropdownMenuItem>
+
               <DropdownMenuItem
                 onSelect={() => {
                   setTheme(theme === 'light' ? 'dark' : 'light')
