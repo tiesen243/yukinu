@@ -19,7 +19,11 @@ export const SearchForm: React.FC = () => {
         await setQuery((prev) => ({ ...prev, search: q, page: 1 }))
       }}
     >
-      <Input name='q' defaultValue={query.search} placeholder='Search...' />
+      <Input
+        name='q'
+        defaultValue={query.search ?? ''}
+        placeholder='Search...'
+      />
       <Button type='submit' variant='ghost' size='icon'>
         <SearchIcon /> <span className='sr-only'>Search</span>
       </Button>

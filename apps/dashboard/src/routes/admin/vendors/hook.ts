@@ -8,7 +8,7 @@ import {
 import { VendorValidators } from '@yukinu/validators/vendor'
 
 const parser = {
-  search: parseAsString.withDefault(''),
+  search: parseAsString,
   status: parseAsStringEnum([...VendorValidators.statuses]),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),

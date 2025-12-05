@@ -20,7 +20,7 @@ import { ThemeProvider } from '@yukinu/ui'
 import { env } from '@yukinu/validators/env.vite'
 
 import { TRPCProvider } from '@/lib/trpc/react'
-import { getBaseUrl } from '@/lib/utils'
+import { getDashboardUrl } from '@/lib/utils'
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {
@@ -35,7 +35,7 @@ export function Providers({
 
   const configs = {
     transformer: SuperJSON,
-    url: getBaseUrl() + '/api/trpc',
+    url: getDashboardUrl() + '/api/trpc',
     headers() {
       const headers = new Headers()
       headers.set('x-trpc-source', 'dashboard')
@@ -71,7 +71,7 @@ export function Providers({
     <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
       <QueryClientProvider client={queryClient}>
         <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-          <SessionProvider>
+          <SessionProvider getSessionFn={trpcClient.auth.getCurrentUser.query}>
             <NuqsAdapter>{children}</NuqsAdapter>
           </SessionProvider>
         </TRPCProvider>

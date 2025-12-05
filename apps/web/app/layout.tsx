@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { cn } from '@yukinu/ui'
 import { Toaster } from '@yukinu/ui/sonner'
 
+import { Footer } from '@/components/footer'
 import { Providers } from '@/components/providers'
 import { createMetadata } from '@/lib/metadata'
 
@@ -32,6 +33,8 @@ export default function RootLayout({
       >
         <Providers>
           {children}
+
+          <Footer />
 
           <Toaster richColors />
         </Providers>

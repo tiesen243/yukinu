@@ -10,14 +10,16 @@ export class CategoryService extends BaseService implements ICategoryService {
   async all(
     input: CategoryValidators.AllInput,
   ): Promise<CategoryValidators.AllOutput> {
-    const { asc, ilike } = this._orm
+    const { and, asc, ilike, isNull } = this._orm
     const { categories } = this._schema
-    const { search, page, limit } = input
+    const { search, istopLevelOnly, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClause = search
-      ? ilike(categories.name, `%${search}%`)
-      : undefined
+    const whereClauses = []
+    if (search) whereClauses.push(ilike(categories.name, `%${search}%`))
+    if (istopLevelOnly) whereClauses.push(isNull(categories.parentId))
+    const whereClause =
+      whereClauses.length > 0 ? and(...whereClauses) : undefined
 
     const parent = alias(categories, 'parent')
     const [categoriesList, total] = await Promise.all([

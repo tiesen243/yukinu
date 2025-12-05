@@ -28,7 +28,11 @@ export const SearchForm: React.FC = () => {
         await setQuery((prev) => ({ ...prev, search: q, role, page: 1 }))
       }}
     >
-      <Input name='q' defaultValue={query.search} placeholder='Search...' />
+      <Input
+        name='q'
+        defaultValue={query.search ?? ''}
+        placeholder='Search...'
+      />
 
       <Select
         id='role'

@@ -20,7 +20,7 @@ import { ThemeProvider } from '@yukinu/ui'
 import { env } from '@yukinu/validators/env.next'
 
 import { TRPCProvider } from '@/lib/trpc/react'
-import { getBaseUrl } from '@/lib/utils'
+import { getWebUrl } from '@/lib/utils'
 
 let clientQueryClientSingleton: QueryClient | undefined = undefined
 const getQueryClient = () => {
@@ -35,7 +35,7 @@ export function Providers({
 
   const configs = {
     transformer: SuperJSON,
-    url: getBaseUrl() + '/api/trpc',
+    url: getWebUrl() + '/api/trpc',
     headers() {
       const headers = new Headers()
       headers.set('x-trpc-source', 'web')
@@ -71,7 +71,7 @@ export function Providers({
     <ThemeProvider attribute='class' disableTransitionOnChange enableSystem>
       <QueryClientProvider client={queryClient}>
         <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-          <SessionProvider>
+          <SessionProvider getSessionFn={trpcClient.auth.getCurrentUser.query}>
             <NuqsAdapter>{children}</NuqsAdapter>
           </SessionProvider>
         </TRPCProvider>

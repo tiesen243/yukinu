@@ -1,13 +1,47 @@
-export default function HomePage() {
+import { Suspense } from 'react'
+
+import {
+  CategoriesList,
+  CategoriesListSkeleton,
+  ProductsList,
+  ProductsListSkeleton,
+} from '@/app/(main)/page.client'
+import { productsCache } from '@/lib/search'
+import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
+
+export default async function HomePage({ searchParams }: PageProps<'/'>) {
+  const query = await productsCache.parse(searchParams)
+
+  void getQueryClient().prefetchQuery(
+    trpc.product.all.queryOptions({ ...query, limit: 3 }),
+  )
+
+  void getQueryClient().prefetchQuery(
+    trpc.category.all.queryOptions({ search: null, istopLevelOnly: true }),
+  )
+
   return (
-    <main className='container flex-1 py-4'>
-      lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-      velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-      cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
-      est laborum.
-    </main>
+    <HydrateClient>
+      <main className='container flex-1 py-6'>
+        <h1 className='sr-only'>Home Page</h1>
+
+        <section className='grid gap-4 md:grid-cols-3 md:grid-rows-2'>
+          <h2 className='sr-only'>New Products</h2>
+          <Suspense fallback={<ProductsListSkeleton />}>
+            <ProductsList />
+          </Suspense>
+        </section>
+
+        <section className='mt-6 rounded-xl bg-card p-6 shadow-sm'>
+          <h2 className='fold-bold mb-4 text-2xl'>Categories</h2>
+
+          <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5'>
+            <Suspense fallback={<CategoriesListSkeleton />}>
+              <CategoriesList />
+            </Suspense>
+          </div>
+        </section>
+      </main>
+    </HydrateClient>
   )
 }

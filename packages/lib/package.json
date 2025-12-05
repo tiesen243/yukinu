@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/lib",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -8,6 +8,7 @@
     "./create-id": "./dist/create-id.mjs",
     "./create-query-client": "./dist/create-query-client.mjs",
     "./rate-limit": "./dist/rate-limit.mjs",
+    "./slugify": "./dist/slugify.mjs",
     "./package.json": "./package.json"
   },
   "scripts": {
