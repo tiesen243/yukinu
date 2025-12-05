@@ -1,5 +1,26 @@
 # @yukinu/dashboard
 
+## 0.5.0
+
+### Minor Changes
+
+- [#239](https://github.com/tiesen243/yukinu/pull/239) [`f2c8fc2`](https://github.com/tiesen243/yukinu/commit/f2c8fc28d67e8f6a62d19ce950d1085c5f30db6c) Thanks [@tiesen243](https://github.com/tiesen243)! - check todo list
+
+### Patch Changes
+
+- [#239](https://github.com/tiesen243/yukinu/pull/239) [`36e8f0b`](https://github.com/tiesen243/yukinu/commit/36e8f0befbc9be77806ef4b76d26d9ed935afd19) Thanks [@tiesen243](https://github.com/tiesen243)! - added home page
+
+- [#239](https://github.com/tiesen243/yukinu/pull/239) [`d02a687`](https://github.com/tiesen243/yukinu/commit/d02a6878df3aca19864c1ce3cb2ab2674ec37f1d) Thanks [@tiesen243](https://github.com/tiesen243)! - added link to another app
+
+- Updated dependencies [[`36e8f0b`](https://github.com/tiesen243/yukinu/commit/36e8f0befbc9be77806ef4b76d26d9ed935afd19)]:
+  - @yukinu/validators@0.3.3
+  - @yukinu/auth@0.3.3
+  - @yukinu/api@0.3.3
+  - @yukinu/lib@0.1.1
+  - @yukinu/db@0.3.3
+  - @yukinu/ui@0.2.1
+  - @yukinu/email@0.2.3
+
 ## 0.4.2
 
 ### Patch Changes
