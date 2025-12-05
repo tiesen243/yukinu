@@ -6,7 +6,6 @@ import {
   BuildingIcon,
   FileTextIcon,
   HelpCircleIcon,
-  HomeIcon,
   LayoutDashboardIcon,
   ListOrderedIcon,
   Loader2Icon,
@@ -28,8 +27,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
-
-import { getWebUrl } from '@/lib/utils'
 
 const navs = [
   {
@@ -170,14 +167,6 @@ export const AppSidebarContent: React.FC = () => {
       <SidebarGroupLabel>{nav.title}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href={getWebUrl()} target='_blank' rel='noreferrer'>
-                <HomeIcon /> Visit Website
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-
           {nav.items.map(
             (item) =>
               item.roles.includes(session.user.role) && (
