@@ -115,6 +115,12 @@ export async function GET(request: NextRequest) {
                 color: foregroundColor,
 
                 margin: '0 0 24px 0',
+                overflow: 'hidden',
+
+                lineClamp: 2,
+                boxOrient: 'vertical',
+                display: '-webkit-box',
+                textOverflow: 'ellipsis',
               }}
             >
               {title}
@@ -131,23 +137,41 @@ export async function GET(request: NextRequest) {
                 overflow: 'hidden',
                 margin: 0,
                 opacity: 0.75,
+
+                lineClamp: 8,
+                boxOrient: 'vertical',
+                display: '-webkit-box',
+                textOverflow: 'ellipsis',
+
+                whiteSpace: 'pre-wrap',
               }}
             >
               {description}
             </p>
           </div>
+
           {image && (
-            <img
-              src={image}
-              alt={title}
+            <div
               style={{
+                display: 'flex',
                 flex: 1,
                 border: `0.5px solid ${foregroundColor}cc`,
                 borderRadius: '16px',
-                aspectRatio: '1 / 1',
-                objectFit: 'cover',
+                height: '100%',
               }}
-            />
+            >
+              <img
+                src={image}
+                alt={`${title}-og`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: '16px',
+
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
           )}
         </div>
 

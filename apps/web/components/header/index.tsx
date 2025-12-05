@@ -1,8 +1,10 @@
+import { Suspense } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import { env } from '@yukinu/validators/env.next'
 
+import { SearchForm } from '@/components/header/search-form'
 import { UserButton } from '@/components/header/user-button'
 
 export function Header() {
@@ -17,10 +19,14 @@ export function Header() {
             height={36}
             className='dark:invert'
           />
-          <span className='text-lg font-bold'>{env.NEXT_PUBLIC_APP_NAME}</span>
+          <span className='sr-only text-lg font-bold md:not-sr-only'>
+            {env.NEXT_PUBLIC_APP_NAME}
+          </span>
         </Link>
 
-        <ul></ul>
+        <Suspense fallback={null}>
+          <SearchForm />
+        </Suspense>
 
         <UserButton />
       </nav>

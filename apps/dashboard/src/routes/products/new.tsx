@@ -34,7 +34,9 @@ export default function ProductsNewPage() {
   const trpc = useTRPC()
   const navigate = useNavigate()
 
-  const { data } = useQuery(trpc.category.all.queryOptions({ limit: 100 }))
+  const { data } = useQuery(
+    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+  )
   const { mutateAsync } = useMutation({
     ...trpc.product.create.mutationOptions(),
     meta: { filter: trpc.product.all.queryFilter() },

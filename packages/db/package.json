@@ -27,7 +27,7 @@
   "dependencies": {
     "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "drizzle-orm": "^0.44.7",
+    "drizzle-orm": "^0.45.0",
     "postgres": "^3.4.7"
   },
   "devDependencies": {
