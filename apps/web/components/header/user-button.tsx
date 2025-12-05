@@ -74,7 +74,7 @@ export const UserButton = () => {
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem asChild>
             <a href={getDashboardUrl()}>
               <LayoutDashboardIcon /> Dashboard
             </a>

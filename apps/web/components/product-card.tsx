@@ -48,7 +48,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       <Badge
         variant='outline'
-        className='absolute top-2 right-2 backdrop-blur-xl group-hover/product-card:border-accent'
+        className='absolute top-2 right-2 bg-accent/60 text-accent-foreground backdrop-blur-xl group-hover/product-card:border-accent'
       >
         {product.category}
       </Badge>
