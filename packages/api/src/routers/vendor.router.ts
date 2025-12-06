@@ -64,10 +64,10 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor staff fetched successfully',
       role: ['vendor_owner'],
     })
-    .input(VendorValidators.allStaffsInput.omit({ vendorId: true }))
+    .input(VendorValidators.allStaffsInput.omit({ id: true }))
     .output(VendorValidators.allStaffsOutput)
     .query(({ ctx, input }) =>
-      ctx.services.vendor.allStaffs({ ...input, vendorId: ctx.vendorId }),
+      ctx.services.vendor.allStaffs({ ...input, id: ctx.vendorId }),
     ),
 
   inviteStaff: vendorProcedure

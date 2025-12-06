@@ -21,10 +21,10 @@ import {
   InputGroupButton,
   InputGroupInput,
   InputGroupText,
+  InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
-import { Textarea } from '@yukinu/ui/textarea'
 import { ProductValidators } from '@yukinu/validators/product'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -101,10 +101,19 @@ export const UpdateProductForm: React.FC<{
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                  <Textarea
-                    {...field}
-                    placeholder='Write a brief description about the product'
-                  />
+                  <InputGroup>
+                    <InputGroupTextarea
+                      {...field}
+                      placeholder='Write a brief description about the product'
+                    />
+                    <InputGroupAddon align='block-end'>
+                      <InputGroupText
+                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
+                      >
+                        {field.value?.length ?? 0}/2000
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

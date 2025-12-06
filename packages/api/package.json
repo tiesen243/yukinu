@@ -25,6 +25,7 @@
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
     "@yukinu/email": "workspace:*",
+    "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*",
     "superjson": "catalog:trpc"
   },

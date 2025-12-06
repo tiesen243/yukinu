@@ -9,17 +9,17 @@ export const ProductVendor: React.FC = () => {
   } = usePage()
 
   return (
-    <section className='flex items-center gap-4 rounded-lg bg-card p-6 shadow-md'>
-      <h3 className='sr-only'>Vendor Information</h3>
+    <section className='flex items-center gap-4 rounded-lg bg-card p-6 shadow-md dark:border'>
+      <h2 className='sr-only'>Vendor Information</h2>
 
-      <Avatar className='size-20'>
+      <Avatar className='size-14'>
         <AvatarImage src={vendor?.image ?? ''} alt={vendor?.name ?? 'Vendor'} />
         <AvatarFallback>
           {vendor?.name ? vendor.name.charAt(0).toUpperCase() : 'V'}
         </AvatarFallback>
       </Avatar>
 
-      <div className='flex flex-1 flex-col gap-2'>
+      <div className='flex flex-1 flex-col items-start justify-between gap-2 text-center sm:flex-row sm:items-center'>
         <p className='text-xl font-semibold'>{vendor?.name}</p>
 
         <div className='flex gap-4'>

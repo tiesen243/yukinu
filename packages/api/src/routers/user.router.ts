@@ -51,9 +51,14 @@ export const userRouter = createTRPCRouter({
 
   updateProfile: protectedProcedure
     .meta({ message: 'User profile updated successfully' })
-    .input(UserValidators.updateProfileInput)
+    .input(UserValidators.updateProfileInput.omit({ id: true }))
     .output(UserValidators.updateProfileOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.updateProfile(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.updateProfile({
+        ...input,
+        id: ctx.session.userId,
+      }),
+    ),
 
   allAddresses: protectedProcedure
     .meta({ message: 'User addresses fetched successfully' })

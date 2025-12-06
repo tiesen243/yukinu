@@ -32,6 +32,7 @@ export const users = pgTable(
     image: t.varchar({ length: 500 }),
     createdAt,
     updatedAt,
+    deletedAt: t.timestamp({ mode: 'date' }),
   }),
   (t) => [
     uniqueIndex('users_username_idx').on(t.username),
@@ -68,6 +69,7 @@ export const sessions = pgTable(
     expiresAt: t.timestamp({ mode: 'date' }).notNull(),
     ipAddress: t.varchar({ length: 45 }),
     userAgent: t.text(),
+    createdAt,
   }),
   (t) => [
     index('sessions_user_id_idx').on(t.userId),

@@ -38,7 +38,7 @@ export const WishlistItems: React.FC = () => {
         />
       </CardHeader>
 
-      <CardFooter>
+      <CardFooter className='justify-between'>
         <CardTitle className='line-clamp-1 text-lg'>
           {item.product.name}
         </CardTitle>
@@ -56,7 +56,7 @@ export const WishlistItemsSkeleton: React.FC = () =>
     >
       <CardHeader className='relative flex-1 animate-pulse overflow-hidden rounded-t-xl bg-muted p-0' />
 
-      <CardFooter>
+      <CardFooter className='justify-between'>
         <CardTitle className='w-3/4 animate-pulse rounded-md bg-muted'>
           &nbsp;
         </CardTitle>

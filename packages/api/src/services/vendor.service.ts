@@ -190,7 +190,7 @@ export class VendorService extends BaseService implements IVendorService {
   ): Promise<VendorValidators.AllStaffsOutput> {
     const { eq } = this._orm
     const { vendorStaffs } = this._schema
-    const { vendorId } = input
+    const { id } = input
 
     return this._db
       .select({
@@ -200,7 +200,7 @@ export class VendorService extends BaseService implements IVendorService {
         assignedAt: vendorStaffs.assignedAt,
       })
       .from(vendorStaffs)
-      .where(eq(vendorStaffs.vendorId, vendorId))
+      .where(eq(vendorStaffs.vendorId, id))
       .innerJoin(users, eq(users.id, vendorStaffs.userId))
       .orderBy(users.username)
   }

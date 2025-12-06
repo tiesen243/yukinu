@@ -45,6 +45,7 @@ export default function UsersPage() {
               <TableHead>Email Verified</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Updated At</TableHead>
+              <TableHead>Deleted At</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
