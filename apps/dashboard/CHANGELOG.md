@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.6.1
+
+### Patch Changes
+
+- [#252](https://github.com/tiesen243/yukinu/pull/252) [`6cc401d`](https://github.com/tiesen243/yukinu/commit/6cc401de96ed8440d710311b7b5a1d2fe96bf1b7) Thanks [@tiesen243](https://github.com/tiesen243)! - fix ui error
+
 ## 0.6.0
 
 ### Minor Changes
