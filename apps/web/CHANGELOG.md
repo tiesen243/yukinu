@@ -1,5 +1,34 @@
 # @yukinu/web
 
+## 0.6.0
+
+### Minor Changes
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`54e6856`](https://github.com/tiesen243/yukinu/commit/54e68564f16b4ac2c2c5e60a1be8b8b193955037) Thanks [@tiesen243](https://github.com/tiesen243)! - complete management account information feature
+
+### Patch Changes
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`c3f0fba`](https://github.com/tiesen243/yukinu/commit/c3f0fba5f5e263a4131d542e711b5f986e26e162) Thanks [@tiesen243](https://github.com/tiesen243)! - created account layout
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`3d0b1d6`](https://github.com/tiesen243/yukinu/commit/3d0b1d6d33ed431568b7f93a17e13a7d7387d8ae) Thanks [@tiesen243](https://github.com/tiesen243)! - added change user info form
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`8745d4d`](https://github.com/tiesen243/yukinu/commit/8745d4da317ad6d7fb67e05c2343fe5855628985) Thanks [@tiesen243](https://github.com/tiesen243)! - crud user address
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`9b61cd6`](https://github.com/tiesen243/yukinu/commit/9b61cd6bb35e82d5175c1faccf8124d6caa4da2d) Thanks [@tiesen243](https://github.com/tiesen243)! - added JSON-LD schema generation for product details
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`e0015d5`](https://github.com/tiesen243/yukinu/commit/e0015d5506c17ab5f119c96d8c1a8055f71a6306) Thanks [@tiesen243](https://github.com/tiesen243)! - fix product detail overflow ui
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`ade64bb`](https://github.com/tiesen243/yukinu/commit/ade64bb35725998b2e33595d6e9d722bcfedc29c) Thanks [@tiesen243](https://github.com/tiesen243)! - update jsonld
+
+- Updated dependencies [[`33e3428`](https://github.com/tiesen243/yukinu/commit/33e3428317aab6295bd2513388f1a975a2aec09b), [`2cdbddc`](https://github.com/tiesen243/yukinu/commit/2cdbddc04a2db9614cc842ac1d04e659ff786321), [`54e6856`](https://github.com/tiesen243/yukinu/commit/54e68564f16b4ac2c2c5e60a1be8b8b193955037)]:
+  - @yukinu/auth@0.4.0
+  - @yukinu/api@0.4.0
+  - @yukinu/validators@0.4.0
+  - @yukinu/email@0.3.0
+  - @yukinu/lib@0.2.0
+  - @yukinu/db@0.4.0
+  - @yukinu/ui@0.3.0
+
 ## 0.5.1
 
 ### Patch Changes

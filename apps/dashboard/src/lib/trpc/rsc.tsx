@@ -5,6 +5,8 @@ import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { appRouter, createCaller, createTRPCContext } from '@yukinu/api'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
 
+import { createClient } from '@/lib/trpc/create-client'
+
 const createRscContext = cache(async (opts: { headers: Headers }) => {
   const heads = new Headers(opts.headers)
   heads.set('x-trpc-source', 'rsc')
@@ -21,6 +23,7 @@ const createTRPC = (opts: { headers: Headers }) =>
   createTRPCOptionsProxy({
     ctx: () => createRscContext(opts),
     queryClient: getQueryClient,
+    client: createClient(),
     router: appRouter,
   })
 

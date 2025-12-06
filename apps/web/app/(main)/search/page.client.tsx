@@ -46,6 +46,7 @@ export const ProductsSearchPagination: React.FC = () => {
       {getPaginationRange(query.page, pagination.totalPages).map(
         (item, idx) => (
           <Button
+            // eslint-disable-next-line @eslint-react/no-array-index-key
             key={`pagination-item-${idx}`}
             variant='outline'
             size='icon'

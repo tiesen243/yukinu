@@ -1,5 +1,24 @@
 # @yukinu/api
 
+## 0.4.0
+
+### Minor Changes
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`54e6856`](https://github.com/tiesen243/yukinu/commit/54e68564f16b4ac2c2c5e60a1be8b8b193955037) Thanks [@tiesen243](https://github.com/tiesen243)! - complete management account information feature
+
+### Patch Changes
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`33e3428`](https://github.com/tiesen243/yukinu/commit/33e3428317aab6295bd2513388f1a975a2aec09b) Thanks [@tiesen243](https://github.com/tiesen243)! - fix rate limit handle
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`2cdbddc`](https://github.com/tiesen243/yukinu/commit/2cdbddc04a2db9614cc842ac1d04e659ff786321) Thanks [@tiesen243](https://github.com/tiesen243)! - added rate limit
+
+- Updated dependencies [[`33e3428`](https://github.com/tiesen243/yukinu/commit/33e3428317aab6295bd2513388f1a975a2aec09b), [`2cdbddc`](https://github.com/tiesen243/yukinu/commit/2cdbddc04a2db9614cc842ac1d04e659ff786321), [`54e6856`](https://github.com/tiesen243/yukinu/commit/54e68564f16b4ac2c2c5e60a1be8b8b193955037)]:
+  - @yukinu/auth@0.4.0
+  - @yukinu/validators@0.4.0
+  - @yukinu/email@0.3.0
+  - @yukinu/lib@0.2.0
+  - @yukinu/db@0.4.0
+
 ## 0.3.3
 
 ### Patch Changes

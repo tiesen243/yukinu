@@ -9,11 +9,11 @@ export namespace ProductValidators {
     id: z.cuid(),
     vendorId: z.cuid(),
     categoryId: z.cuid(),
-    name: z.string().min(1).max(255),
+    name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
     description: z.string().nullable(),
     price: numeric,
-    stock: z.int().min(0),
-    sold: z.int().min(0),
+    stock: z.int().min(0, 'Stock cannot be negative'),
+    sold: z.int().min(0, 'Sold cannot be negative'),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -22,42 +22,42 @@ export namespace ProductValidators {
   export const productImage = z.object({
     id: z.cuid(),
     productId: z.cuid(),
-    url: z.url(),
+    url: z.url('Invalid image URL'),
   })
   export type Image = z.infer<typeof productImage>
 
   export const attribute = z.object({
     id: z.cuid(),
-    name: z.string().min(1).max(100),
+    name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   })
   export type Attribute = z.infer<typeof attribute>
 
   export const productAttribute = z.object({
     productId: z.cuid(),
     attributeId: z.cuid(),
-    value: z.string().min(1).max(255),
+    value: z.string().min(1, 'Value is required').max(255, 'Value is too long'),
   })
   export type ProductAttribute = z.infer<typeof productAttribute>
 
   export const variant = z.object({
     id: z.cuid(),
-    name: z.string().min(1).max(100),
+    name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   })
   export type Variant = z.infer<typeof variant>
 
   export const variantOption = z.object({
-    id: z.int().min(1000),
+    id: z.int().min(1000, 'ID must be at least 1000'),
     variantId: z.cuid(),
-    name: z.string().min(1).max(100),
+    name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   })
   export type VariantOption = z.infer<typeof variantOption>
 
   export const productVariant = z.object({
     id: z.cuid(),
     productId: z.cuid(),
-    sku: z.string().min(1).max(100),
+    sku: z.string().min(1, 'SKU is required').max(100, 'SKU is too long'),
     price: numeric,
-    stock: z.int().min(0),
+    stock: z.int().min(0, 'Stock cannot be negative'),
   })
   export type ProductVariant = z.infer<typeof productVariant>
 
@@ -65,8 +65,11 @@ export namespace ProductValidators {
     id: z.cuid(),
     productId: z.cuid(),
     userId: z.cuid(),
-    rating: z.number().min(1).max(5),
-    comment: z.string().nullable(),
+    rating: z
+      .number()
+      .min(1, 'Rating must be at least 1')
+      .max(5, 'Rating cannot be more than 5'),
+    comment: z.string('Comment must be a valid string').nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -167,18 +170,38 @@ export namespace ProductValidators {
   export const createInput = product
     .omit({ id: true, sold: true, createdAt: true, updatedAt: true })
     .extend({
-      description: z.string().min(1).max(1000).optional(),
+      description: z
+        .string()
+        .min(1, 'Description is required')
+        .max(2000, 'Description is too long')
+        .optional(),
       images: z.array(z.url()),
       attributes: z.array(
         z.object({
-          name: z.string().min(1).max(100),
-          value: z.string().min(1).max(255),
+          name: z
+            .string()
+            .min(1, 'Name is required')
+            .max(100, 'Name is too long'),
+          value: z
+            .string()
+            .min(1, 'Value is required')
+            .max(255, 'Value is too long'),
         }),
       ),
       variants: z.array(
         z.object({
-          name: z.string().min(1).max(100),
-          options: z.array(z.string().min(1).max(100)),
+          name: z
+            .string()
+            .min(1, 'Name is required')
+            .max(100, 'Name is too long'),
+          options: z
+            .array(
+              z
+                .string()
+                .min(1, 'Option is required')
+                .max(100, 'Option is too long'),
+            )
+            .nonempty(),
         }),
       ),
     })
@@ -205,7 +228,11 @@ export namespace ProductValidators {
 
   export const createVariantInput = productVariant.omit({ id: true }).extend({
     vendorId: z.cuid(),
-    options: z.array(z.string().min(1).max(100)).nonempty(),
+    options: z
+      .array(
+        z.string().min(1, 'Option is required').max(100, 'Option is too long'),
+      )
+      .nonempty(),
   })
   export type CreateVariantInput = z.infer<typeof createVariantInput>
   export const createVariantOutput = z.object({ id: z.cuid() })

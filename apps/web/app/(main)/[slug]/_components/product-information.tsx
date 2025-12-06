@@ -17,9 +17,9 @@ export const ProductInformation: React.FC = () => {
 
   return (
     <section className='flex flex-col gap-6 md:col-span-2'>
-      <span>{category?.name}</span>
+      <span className='text-sm text-accent-foreground'>{category?.name}</span>
 
-      <h4 className='-mt-4 text-3xl text-balance'>{name}</h4>
+      <h3 className='-mt-4 text-3xl font-medium text-balance'>{name}</h3>
 
       <div className='flex items-center gap-4'>
         <span className='flex items-center gap-1 font-medium'>
@@ -43,11 +43,11 @@ export const ProductInformation: React.FC = () => {
       </p>
 
       <section className='flex-1'>
-        <h5 className='sr-only'>Purchase Options section</h5>
+        <h4 className='sr-only'>Purchase Options section</h4>
 
-        <div className='mb-4 flex flex-col gap-4'>
+        <ul className='mb-4 flex flex-col gap-4'>
           {optionTypes.map((type) => (
-            <div key={type} className='flex items-center gap-4'>
+            <li key={type} className='flex items-center gap-4'>
               <p className='font-medium capitalize'>{type}</p>
 
               <RadioGroup
@@ -80,9 +80,9 @@ export const ProductInformation: React.FC = () => {
                   </Label>
                 ))}
               </RadioGroup>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <AddToCartButton />

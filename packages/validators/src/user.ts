@@ -26,13 +26,18 @@ export namespace UserValidators {
     image: z.url().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    deletedAt: z.date().nullable(),
   })
   export type User = z.infer<typeof user>
 
   export const profile = z.object({
     id: z.cuid(),
-    fullName: z.string().min(1).max(255).nullable(),
-    bio: z.string().nullable(),
+    fullName: z
+      .string()
+      .min(1, 'Full name is required')
+      .max(255, 'Full name is too long')
+      .nullable(),
+    bio: z.string().max(1000, 'Bio is too long').nullable(),
     gender: z.enum(genders).nullable(),
     dateOfBirth: z.iso.date().nullable(),
   })
@@ -41,13 +46,32 @@ export namespace UserValidators {
   export const address = z.object({
     id: z.cuid(),
     userId: z.cuid(),
-    recipientName: z.string().min(1).max(255),
-    phoneNumber: z.string().min(1).max(20),
-    street: z.string().min(1).max(255),
-    city: z.string().min(1).max(100),
-    state: z.string().min(1).max(100),
-    postalCode: z.string().min(1).max(20),
-    country: z.string().min(1).max(100),
+    recipientName: z
+      .string()
+      .min(1, 'Recipient name is required')
+      .max(255, 'Recipient name is too long'),
+    phoneNumber: z
+      .string()
+      .regex(
+        /^\(\+\d{1,3}\)\s\d{2,4}(?:\s\d{2,4}){1,3}$/,
+        'Invalid phone number',
+      ),
+    street: z
+      .string()
+      .min(1, 'Street is required')
+      .max(255, 'Street is too long'),
+    city: z.string().min(1, 'City is required').max(100, 'City is too long'),
+    state: z.string().min(1, 'State is required').max(100, 'State is too long'),
+    postalCode: z
+      .string()
+      .regex(
+        /^[A-Za-z0-9][A-Za-z0-9\- ]{1,8}[A-Za-z0-9]$/,
+        'Invalid postal code',
+      ),
+    country: z
+      .string()
+      .min(1, 'Country is required')
+      .max(100, 'Country is too long'),
   })
   export type Address = z.infer<typeof address>
 
@@ -99,7 +123,7 @@ export namespace UserValidators {
   export const profileInput = z.object({ userId: z.cuid() })
   export type ProfileInput = z.infer<typeof profileInput>
   export const profileOutput = user
-    .omit({ status: true, updatedAt: true })
+    .omit({ status: true, updatedAt: true, deletedAt: true })
     .extend({ profile: profile.omit({ id: true }) })
   export type ProfileOutput = z.infer<typeof profileOutput>
 

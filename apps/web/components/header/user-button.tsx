@@ -18,8 +18,6 @@ import {
   HeartIcon,
   LayoutDashboardIcon,
   LogOutIcon,
-  ReceiptTextIcon,
-  ShieldIcon,
   ShoppingCartIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
@@ -106,15 +104,5 @@ const menuItems = [
     icon: ShoppingCartIcon,
     label: 'My Cart',
     href: '/account/cart',
-  },
-  {
-    icon: ReceiptTextIcon,
-    label: 'Order History',
-    href: '/account/orders',
-  },
-  {
-    icon: ShieldIcon,
-    label: 'Security',
-    href: '/account/security',
   },
 ] as const

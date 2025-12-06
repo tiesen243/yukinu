@@ -12,8 +12,8 @@ export const ProductImages: React.FC = () => {
   } = usePage()
 
   return (
-    <section className='flex flex-col gap-4'>
-      <h4 className='sr-only'>Product Images section</h4>
+    <section className='flex flex-col gap-4 overflow-hidden'>
+      <h3 className='sr-only'>Product Images section</h3>
 
       <div className='relative aspect-square w-full rounded-md border'>
         <Image
@@ -26,13 +26,14 @@ export const ProductImages: React.FC = () => {
         />
       </div>
 
-      <div className='flex items-center gap-4 overflow-x-auto py-2'>
+      <div className='flex items-center gap-4 overflow-x-auto pb-2'>
         {images.map(({ id, url }) => (
           <button
             key={id}
-            className={cn('aspect-square size-20 shrink-0 rounded-md border', {
-              'border-accent': currentImage === url,
-            })}
+            className={cn(
+              'aspect-square size-20 shrink-0 rounded-md border transition-colors',
+              { 'border-primary bg-accent/40': currentImage === url },
+            )}
             onClick={() => {
               handleChangeImage(url)
             }}

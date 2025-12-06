@@ -1,5 +1,6 @@
 import { db, orm } from '@yukinu/db'
 import { accounts, profiles, sessions, users } from '@yukinu/db/schema'
+import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
 
 import type { AuthConfig } from '@/types'
@@ -30,6 +31,12 @@ export const authOptions = {
           .limit(1)
 
         if (!record) return null
+
+        if (record.deletedAt)
+          throw new Error(
+            'This account has been deleted. If you believe this is a mistake, please contact support.',
+          )
+
         if (record.status === 'inactive')
           throw new Error(
             'Your account is banned from our platform. Please contact support for more information.',
@@ -50,6 +57,13 @@ export const authOptions = {
         await db
           .insert(profiles)
           .values({ id: result.id, fullName: data.username })
+
+        await sendEmail({
+          to: data.email,
+          subject: 'Welcome to Yukinu!',
+          template: 'Welcome',
+          data: { username: data.username },
+        })
 
         return result
       },

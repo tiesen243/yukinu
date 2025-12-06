@@ -19,6 +19,50 @@ export const authRouter = createTRPCRouter({
     .output(AuthValidators.verifyEmailOutput)
     .mutation(({ ctx, input }) => ctx.services.auth.verifyEmail(input)),
 
+  allSessions: protectedProcedure
+    .meta({ message: 'All sessions fetched successfully.' })
+    .input(AuthValidators.allSessionsInput.omit({ userId: true }))
+    .output(AuthValidators.allSessionsOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.auth.allSessions({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
+
+  deleteSession: protectedProcedure
+    .meta({ message: 'Session deleted successfully.' })
+    .input(AuthValidators.deleteSessionInput.omit({ userId: true }))
+    .output(AuthValidators.deleteSessionOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.auth.deleteSession({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
+
+  changeUsername: protectedProcedure
+    .meta({ message: 'Username changed successfully.' })
+    .input(AuthValidators.changeUsernameInput.omit({ userId: true }))
+    .output(AuthValidators.changeUsernameOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.auth.changeUsername({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
+
+  deleteAccount: protectedProcedure
+    .meta({ message: 'Account deleted successfully.' })
+    .input(AuthValidators.deleteAccountInput.omit({ userId: true }))
+    .output(AuthValidators.deleteAccountOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.auth.deleteAccount({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
+
   changePassword: protectedProcedure
     .meta({ message: 'Password changed successfully.' })
     .input(AuthValidators.changePasswordInput.omit({ userId: true }))

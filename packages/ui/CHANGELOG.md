@@ -1,5 +1,11 @@
 # @yukinu/ui
 
+## 0.3.0
+
+### Minor Changes
+
+- [#249](https://github.com/tiesen243/yukinu/pull/249) [`54e6856`](https://github.com/tiesen243/yukinu/commit/54e68564f16b4ac2c2c5e60a1be8b8b193955037) Thanks [@tiesen243](https://github.com/tiesen243)! - complete management account information feature
+
 ## 0.2.1
 
 ### Patch Changes

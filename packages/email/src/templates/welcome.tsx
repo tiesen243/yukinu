@@ -4,14 +4,11 @@ import { EmailLayout } from '@/templates/_layout'
 
 interface WelcomeEmailProps {
   username: string
-  verificationLink: string
+  verificationLink?: string
 }
 
 export default function Welcome(props: WelcomeEmailProps) {
-  const {
-    username = 'Yukikaze',
-    verificationLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  } = props
+  const { username = 'Yukikaze', verificationLink } = props
 
   return (
     <EmailLayout>
@@ -23,29 +20,33 @@ export default function Welcome(props: WelcomeEmailProps) {
         below:
       </Text>
 
-      <Section style={{ textAlign: 'center', margin: '20px 0' }}>
-        <Button
-          href={verificationLink}
-          style={{
-            backgroundColor: '#5a7de4',
-            color: 'white',
-            textDecoration: 'none',
-            padding: '10px 16px',
-            borderRadius: '6px',
-            fontWeight: '500',
-            fontSize: '14px',
-            lineHeight: '20px',
-            margin: '0 auto',
-          }}
-        >
-          Verify Email
-        </Button>
-      </Section>
+      {verificationLink && (
+        <>
+          <Section style={{ textAlign: 'center', margin: '20px 0' }}>
+            <Button
+              href={verificationLink}
+              style={{
+                backgroundColor: '#5a7de4',
+                color: 'white',
+                textDecoration: 'none',
+                padding: '10px 16px',
+                borderRadius: '6px',
+                fontWeight: '500',
+                fontSize: '14px',
+                lineHeight: '20px',
+                margin: '0 auto',
+              }}
+            >
+              Verify Email
+            </Button>
+          </Section>
 
-      <Text>
-        or copy and paste the following link into your browser:{' '}
-        <Link href={verificationLink}>{verificationLink}</Link>
-      </Text>
+          <Text>
+            or copy and paste the following link into your browser:{' '}
+            <Link href={verificationLink}>{verificationLink}</Link>
+          </Text>
+        </>
+      )}
 
       <Text>
         If you did not sign up for a Yukinu account, please ignore this email.

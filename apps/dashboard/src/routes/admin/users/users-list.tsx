@@ -70,6 +70,7 @@ export const UsersList: React.FC = () => {
       <TableCell>{user.emailVerified?.toLocaleDateString()}</TableCell>
       <TableCell>{user.createdAt.toLocaleDateString()}</TableCell>
       <TableCell>{user.updatedAt.toLocaleDateString()}</TableCell>
+      <TableCell>{user.deletedAt?.toLocaleDateString() ?? 'N/A'}</TableCell>
       <TableCell className='space-x-2'>
         <EditUserButton user={user} />
         <DeleteUserButton user={user} />
