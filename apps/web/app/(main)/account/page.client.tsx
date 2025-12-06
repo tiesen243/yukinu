@@ -102,23 +102,19 @@ export const ProfileSummarySkeleton: React.FC = () => (
         <Field>
           <FieldLabel>Username</FieldLabel>
           <InputGroup>
-            <InputGroupInput className='h-10 bg-muted/50' readOnly />
+            <InputGroupInput readOnly />
             <InputGroupAddon align='inline-end'>
-              <InputGroupText className='h-10 bg-muted/50'>
-                Loading...
-              </InputGroupText>
+              <InputGroupText>Loading...</InputGroupText>
             </InputGroupAddon>
           </InputGroup>
         </Field>
 
-        <Field className='mt-6'>
+        <Field>
           <FieldLabel>Email Address</FieldLabel>
           <InputGroup>
-            <InputGroupInput className='h-10 bg-muted/50' readOnly />
+            <InputGroupInput readOnly />
             <InputGroupAddon align='inline-end'>
-              <InputGroupText className='h-10 bg-muted/50'>
-                Loading...
-              </InputGroupText>
+              <InputGroupText>Loading...</InputGroupText>
             </InputGroupAddon>
           </InputGroup>
         </Field>
@@ -180,13 +176,17 @@ export function UpdateProfileForm() {
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
-                <Image
-                  src={value ?? ''}
-                  alt='Profile Image'
-                  width={80}
-                  height={80}
-                  className='h-20 w-20 rounded-full object-cover'
-                />
+                {value ? (
+                  <Image
+                    src={value}
+                    alt='Profile Image'
+                    width={80}
+                    height={80}
+                    className='size-20 rounded-full object-cover'
+                  />
+                ) : (
+                  <div className='size-20 rounded-full bg-muted' />
+                )}
               </Field>
             )}
           />
@@ -284,7 +284,7 @@ export const UpdateProfileFormSkeleton: React.FC = () => (
             </FieldDescription>
           </FieldContent>
 
-          <div className='h-20 w-20 rounded-full bg-muted' />
+          <div className='size-20 rounded-full bg-muted' />
         </Field>
 
         <Field>
