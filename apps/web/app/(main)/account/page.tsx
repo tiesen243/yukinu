@@ -3,7 +3,9 @@ import { Suspense } from 'react'
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import {
   ProfileSummary,
+  ProfileSummarySkeleton,
   UpdateProfileForm,
+  UpdateProfileFormSkeleton,
 } from '@/app/(main)/account/page.client'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
@@ -22,13 +24,13 @@ export default function AccountPage() {
       <section className='flex flex-col gap-6 px-6 pt-6'>
         <h2 className='sr-only'>Profile Information section</h2>
 
-        <Suspense>
+        <Suspense fallback={<ProfileSummarySkeleton />}>
           <ProfileSummary />
         </Suspense>
 
-        <hr />
+        <hr className='my-4' />
 
-        <Suspense>
+        <Suspense fallback={<UpdateProfileFormSkeleton />}>
           <UpdateProfileForm />
         </Suspense>
       </section>

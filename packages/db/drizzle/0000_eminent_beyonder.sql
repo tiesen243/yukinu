@@ -34,6 +34,7 @@ CREATE TABLE "order_items" (
 CREATE TABLE "orders" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"user_id" varchar(24) NOT NULL,
+	"voucher_id" varchar(24),
 	"total_amount" numeric(10, 2) NOT NULL,
 	"status" "order_status" DEFAULT 'pending' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
@@ -46,6 +47,15 @@ CREATE TABLE "payments" (
 	"amount" numeric(10, 2) NOT NULL,
 	"status" "payment_status" DEFAULT 'pending' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "vouchers" (
+	"id" varchar(24) PRIMARY KEY NOT NULL,
+	"code" varchar(50) NOT NULL,
+	"discount_amount" numeric(10, 2) NOT NULL,
+	"expiry_date" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "vouchers_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
 CREATE TABLE "attributes" (
@@ -130,7 +140,8 @@ CREATE TABLE "sessions" (
 	"token" varchar(64) NOT NULL,
 	"expires_at" timestamp NOT NULL,
 	"ip_address" varchar(45),
-	"user_agent" text
+	"user_agent" text,
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
@@ -142,7 +153,8 @@ CREATE TABLE "users" (
 	"status" "user_status" DEFAULT 'active' NOT NULL,
 	"image" varchar(500),
 	"created_at" timestamp DEFAULT now() NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL
+	"updated_at" timestamp DEFAULT now() NOT NULL,
+	"deleted_at" timestamp
 );
 --> statement-breakpoint
 CREATE TABLE "verifications" (
@@ -185,6 +197,7 @@ ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY 
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "orders" ADD CONSTRAINT "orders_voucher_id_vouchers_id_fk" FOREIGN KEY ("voucher_id") REFERENCES "public"."vouchers"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "payments" ADD CONSTRAINT "payments_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "categories" ADD CONSTRAINT "categories_parent_id_categories_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "product_attributes" ADD CONSTRAINT "product_attributes_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint

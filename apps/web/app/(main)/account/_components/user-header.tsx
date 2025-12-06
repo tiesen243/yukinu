@@ -18,7 +18,7 @@ export const UserHeader: React.FC = () => {
   const { user } = session
 
   return (
-    <div className='flex h-16 items-start gap-2 border-b border-sidebar-border px-6'>
+    <div className='flex h-16 items-start gap-2 border-b px-6'>
       <Avatar className='size-12'>
         <AvatarImage src={user.image ?? ''} alt={user.username} />
         <AvatarFallback>{user.username.charAt(0).toUpperCase()}</AvatarFallback>

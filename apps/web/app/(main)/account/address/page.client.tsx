@@ -33,7 +33,7 @@ export const AddressesList: React.FC = () => {
   return data.addresses.map((address) => (
     <div
       key={address.id}
-      className='relative flex flex-col gap-1 border-b pb-4 last:border-0'
+      className='relative flex flex-col gap-1 border-b pb-4'
     >
       <div className='flex items-center gap-2 font-medium'>
         <p>{address.recipientName}</p>
@@ -60,7 +60,7 @@ export const AddressesListSkeleton: React.FC = () =>
   Array.from({ length: 3 }, (_, i) => (
     <div
       key={i}
-      className='relative flex animate-pulse flex-col gap-1 border-b pb-4 last:border-0'
+      className='relative flex animate-pulse flex-col gap-1 border-b pb-4'
     >
       <div className='h-6 w-1/3 rounded-md bg-muted' />
       <div className='h-6 w-1/4 rounded-md bg-muted' />

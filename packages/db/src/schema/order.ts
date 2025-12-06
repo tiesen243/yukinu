@@ -28,6 +28,9 @@ export const orders = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => users.id, { onDelete: 'set null' }),
+    voucherId: t
+      .varchar({ length: 24 })
+      .references(() => vouchers.id, { onDelete: 'set null' }),
     totalAmount: t.numeric({ precision: 10, scale: 2 }).notNull(),
     status: orderStatusEnum().default('pending').notNull(),
     createdAt,
@@ -69,3 +72,11 @@ export const payments = pgTable(
   }),
   (t) => [index('payments_order_id_idx').on(t.orderId)],
 )
+
+export const vouchers = pgTable('vouchers', (t) => ({
+  id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+  code: t.varchar({ length: 50 }).notNull().unique(),
+  discountAmount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  expiryDate: t.timestamp().notNull(),
+  createdAt,
+}))

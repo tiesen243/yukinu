@@ -76,8 +76,10 @@ export default function AppVendorPage() {
                 <InputGroup>
                   <Textarea {...field} placeholder='Vendor Description' />
                   <InputGroupAddon align='block-end'>
-                    <InputGroupText className='ml-auto'>
-                      {field.value?.length ?? 0} / 2000 chars
+                    <InputGroupText
+                      className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
+                    >
+                      {field.value?.length ?? 0}/2000
                     </InputGroupText>
                   </InputGroupAddon>
                 </InputGroup>

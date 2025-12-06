@@ -26,6 +26,7 @@ export namespace UserValidators {
     image: z.url().nullable(),
     createdAt: z.date(),
     updatedAt: z.date(),
+    deletedAt: z.date().nullable(),
   })
   export type User = z.infer<typeof user>
 
@@ -122,7 +123,7 @@ export namespace UserValidators {
   export const profileInput = z.object({ userId: z.cuid() })
   export type ProfileInput = z.infer<typeof profileInput>
   export const profileOutput = user
-    .omit({ status: true, updatedAt: true })
+    .omit({ status: true, updatedAt: true, deletedAt: true })
     .extend({ profile: profile.omit({ id: true }) })
   export type ProfileOutput = z.infer<typeof profileOutput>
 

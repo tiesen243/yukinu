@@ -138,6 +138,43 @@ export class AuthService extends BaseService implements IAuthService {
     })
   }
 
+  allSessions(
+    input: AuthValidators.AllSessionsInput,
+  ): Promise<AuthValidators.AllSessionsOutput> {
+    const { eq } = this._orm
+    const { sessions } = this._schema
+    const { userId } = input
+
+    return this._db
+      .select({
+        id: sessions.id,
+        userAgent: sessions.userAgent,
+        ipAddress: sessions.ipAddress,
+        createdAt: sessions.createdAt,
+      })
+      .from(sessions)
+      .where(eq(sessions.userId, userId))
+  }
+
+  async deleteSession(
+    input: AuthValidators.DeleteSessionInput,
+  ): Promise<AuthValidators.DeleteSessionOutput> {
+    const { and, eq } = this._orm
+    const { sessions } = this._schema
+    const { userId, sessionId } = input
+
+    const deleteCount = await this._db
+      .delete(sessions)
+      .where(and(eq(sessions.id, sessionId), eq(sessions.userId, userId)))
+      .returning({ id: sessions.id })
+
+    if (deleteCount.length === 0)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'The session to delete was not found.',
+      })
+  }
+
   async changeUsername(
     input: AuthValidators.ChangeUsernameInput,
   ): Promise<AuthValidators.ChangeUsernameOutput> {
@@ -176,17 +213,45 @@ export class AuthService extends BaseService implements IAuthService {
 
     await this._db.update(users).set({ username }).where(eq(users.id, userId))
   }
+
+  async deleteAccount(
+    input: AuthValidators.DeleteAccountInput,
+  ): Promise<AuthValidators.DeleteAccountOutput> {
+    const { and, eq } = this._orm
+    const { accounts, sessions, users } = this._schema
+    const { userId, password } = input
+
+    const [account] = await this._db
+      .select({ password: accounts.password })
+      .from(accounts)
+      .where(
+        and(eq(accounts.userId, userId), eq(accounts.provider, 'credentials')),
+      )
+    if (!account?.password)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You do not have a password set. Cannot delete account.',
+      })
+
+    if (!(await this._password.verify(account.password, password)))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'The provided password is incorrect.',
+      })
+
+    await this._db
+      .update(users)
+      .set({ deletedAt: new Date() })
+      .where(eq(users.id, userId))
+    await this._db.delete(sessions).where(eq(sessions.userId, userId))
+  }
+
   async changePassword(
     input: AuthValidators.ChangePasswordInput,
   ): Promise<AuthValidators.ChangePasswordOutput> {
     const { and, eq } = this._orm
-    const { accounts, users } = this._schema
-    const { userId, currentPassword, newPassword } = input
-
-    const whereClause = and(
-      eq(accounts.userId, userId),
-      eq(accounts.provider, 'credentials'),
-    )
+    const { accounts, sessions, users } = this._schema
+    const { userId, currentPassword, newPassword, isLogOut } = input
 
     return this._db.transaction(async (tx) => {
       const [account] = await tx
@@ -195,51 +260,65 @@ export class AuthService extends BaseService implements IAuthService {
           email: users.email,
           username: users.username,
         })
-        .from(accounts)
-        .where(whereClause)
-        .innerJoin(users, eq(users.id, accounts.userId))
+        .from(users)
+        .where(eq(users.id, userId))
+        .leftJoin(
+          accounts,
+          and(
+            eq(accounts.userId, users.id),
+            eq(accounts.provider, 'credentials'),
+          ),
+        )
         .limit(1)
 
       if (!account?.password) {
         const newPasswordHash = await this._password.hash(newPassword)
-        return void tx.insert(accounts).values({
+        await tx.insert(accounts).values({
           userId,
           provider: 'credentials',
           accountId: userId,
           password: newPasswordHash,
         })
+      } else {
+        if (!currentPassword)
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'Current password is required to change the password.',
+          })
+
+        if (currentPassword === newPassword)
+          throw new TRPCError({
+            code: 'BAD_REQUEST',
+            message: 'The new password must be different from the current one.',
+          })
+
+        if (!(await this._password.verify(account.password, currentPassword)))
+          throw new TRPCError({
+            code: 'FORBIDDEN',
+            message: 'The current password is incorrect.',
+          })
+
+        const newPasswordHash = await this._password.hash(newPassword)
+        await tx
+          .update(accounts)
+          .set({ password: newPasswordHash })
+          .where(
+            and(
+              eq(accounts.userId, userId),
+              eq(accounts.provider, 'credentials'),
+            ),
+          )
       }
 
-      if (!currentPassword)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Current password is required to change the password.',
+      if (isLogOut) await tx.delete(sessions).where(eq(sessions.userId, userId))
+
+      if (account)
+        await sendEmail({
+          to: account.email,
+          subject: 'Yukinu Password Changed',
+          template: 'ChangePassword',
+          data: { username: account.username },
         })
-
-      if (currentPassword === newPassword)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'The new password must be different from the current one.',
-        })
-
-      if (!(await this._password.verify(account.password, currentPassword)))
-        throw new TRPCError({
-          code: 'FORBIDDEN',
-          message: 'The current password is incorrect.',
-        })
-
-      const newPasswordHash = await this._password.hash(newPassword)
-      await tx
-        .update(accounts)
-        .set({ password: newPasswordHash })
-        .where(whereClause)
-
-      await sendEmail({
-        to: account.email,
-        subject: 'Yukinu Password Changed',
-        template: 'ChangePassword',
-        data: { username: account.username },
-      })
     })
   }
 

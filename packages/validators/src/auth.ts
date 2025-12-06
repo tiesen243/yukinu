@@ -45,6 +45,28 @@ export namespace AuthValidators {
   export const loginOutput = z.object({ token: z.string() })
   export type LoginOutput = z.infer<typeof loginOutput>
 
+  export const allSessionsInput = z.object({
+    userId: z.cuid(),
+  })
+  export type AllSessionsInput = z.infer<typeof allSessionsInput>
+  export const allSessionsOutput = z.array(
+    z.object({
+      id: z.string(),
+      userAgent: z.string().nullable(),
+      ipAddress: z.string().nullable(),
+      createdAt: z.date(),
+    }),
+  )
+  export type AllSessionsOutput = z.infer<typeof allSessionsOutput>
+
+  export const deleteSessionInput = z.object({
+    sessionId: z.string(),
+    userId: z.cuid(),
+  })
+  export type DeleteSessionInput = z.infer<typeof deleteSessionInput>
+  export const deleteSessionOutput = z.void()
+  export type DeleteSessionOutput = z.infer<typeof deleteSessionOutput>
+
   export const changeUsernameInput = z.object({
     userId: z.cuid(),
     username: z
@@ -61,12 +83,20 @@ export namespace AuthValidators {
   export const changeUsernameOutput = z.void()
   export type ChangeUsernameOutput = z.infer<typeof changeUsernameOutput>
 
+  export const deleteAccountInput = z.object({
+    userId: z.cuid(),
+    password: passwordRegex,
+  })
+  export type DeleteAccountInput = z.infer<typeof deleteAccountInput>
+  export const deleteAccountOutput = z.void()
+  export type DeleteAccountOutput = z.infer<typeof deleteAccountOutput>
+
   export const changePasswordInput = z
     .object({
       userId: z.cuid(),
       currentPassword: z.string().optional(),
       newPassword: passwordRegex,
-      confirmNewPassword: z.string('Please confirm your new password'),
+      confirmNewPassword: z.string().min(1, 'Please confirm your new password'),
       isLogOut: z.boolean().default(true),
     })
     .refine((data) => data.newPassword === data.confirmNewPassword, {

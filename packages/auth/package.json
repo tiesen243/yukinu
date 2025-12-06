@@ -28,6 +28,7 @@
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
     "@yukinu/db": "workspace:*",
+    "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*"
   },

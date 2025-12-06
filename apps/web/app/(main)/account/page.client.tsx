@@ -22,6 +22,8 @@ import {
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldLegend,
+  FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { PencilIcon } from '@yukinu/ui/icons'
@@ -32,6 +34,7 @@ import {
   InputGroupButton,
   InputGroupInput,
   InputGroupText,
+  InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
@@ -49,30 +52,80 @@ export const ProfileSummary: React.FC = () => {
     <section className='flex flex-col gap-7'>
       <h3 className='sr-only'>Profile Summary section</h3>
 
-      <Field>
-        <FieldLabel>Username</FieldLabel>
-        <InputGroup>
-          <InputGroupInput value={data.username} readOnly />
-          <InputGroupAddon align='inline-end'>
-            <ChangeUsernameForm username={data.username} />
-          </InputGroupAddon>
-        </InputGroup>
-      </Field>
+      <FieldSet>
+        <FieldLegend>Account Overview</FieldLegend>
+        <FieldDescription>
+          Here are your current account details. You can update your profile
+          information whenever you need.
+        </FieldDescription>
 
-      <Field>
-        <FieldLabel>Email Address</FieldLabel>
-        <InputGroup>
-          <InputGroupInput value={data.email} readOnly />
-          <InputGroupAddon align='inline-end'>
-            <InputGroupText>
-              {data.emailVerified ? 'Verified' : 'Unverified'}
-            </InputGroupText>
-          </InputGroupAddon>
-        </InputGroup>
-      </Field>
+        <FieldGroup>
+          <Field>
+            <FieldLabel>Username</FieldLabel>
+            <InputGroup>
+              <InputGroupInput value={data.username} readOnly />
+              <InputGroupAddon align='inline-end'>
+                <ChangeUsernameForm username={data.username} />
+              </InputGroupAddon>
+            </InputGroup>
+          </Field>
+
+          <Field>
+            <FieldLabel>Email Address</FieldLabel>
+            <InputGroup>
+              <InputGroupInput value={data.email} readOnly />
+              <InputGroupAddon align='inline-end'>
+                <InputGroupText>
+                  {data.emailVerified ? 'Verified' : 'Unverified'}
+                </InputGroupText>
+              </InputGroupAddon>
+            </InputGroup>
+          </Field>
+        </FieldGroup>
+      </FieldSet>
     </section>
   )
 }
+
+export const ProfileSummarySkeleton: React.FC = () => (
+  <section className='flex flex-col gap-7'>
+    <h3 className='sr-only'>Profile Summary section</h3>
+
+    <FieldSet className='animate-pulse'>
+      <FieldLegend>Account Overview</FieldLegend>
+      <FieldDescription>
+        Here are your current account details. You can update your profile
+        information whenever you need.
+      </FieldDescription>
+
+      <FieldGroup>
+        <Field>
+          <FieldLabel>Username</FieldLabel>
+          <InputGroup>
+            <InputGroupInput className='h-10 bg-muted/50' readOnly />
+            <InputGroupAddon align='inline-end'>
+              <InputGroupText className='h-10 bg-muted/50'>
+                Loading...
+              </InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </Field>
+
+        <Field className='mt-6'>
+          <FieldLabel>Email Address</FieldLabel>
+          <InputGroup>
+            <InputGroupInput className='h-10 bg-muted/50' readOnly />
+            <InputGroupAddon align='inline-end'>
+              <InputGroupText className='h-10 bg-muted/50'>
+                Loading...
+              </InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </Field>
+      </FieldGroup>
+    </FieldSet>
+  </section>
+)
 
 export function UpdateProfileForm() {
   const trpc = useTRPC()
@@ -101,99 +154,166 @@ export function UpdateProfileForm() {
     <form onSubmit={form.handleSubmit}>
       <h3 className='sr-only'>Update Profile form</h3>
 
-      <FieldGroup>
-        <form.Field
-          name='image'
-          render={({ meta, field: { value, ...field } }) => (
-            <Field
-              orientation='horizontal'
-              data-invalid={meta.errors.length > 0}
-              className='gap-6'
-            >
-              <FieldContent>
-                <FieldLabel htmlFor={meta.fieldId}>
-                  Profile Image URL
-                </FieldLabel>
+      <FieldSet>
+        <FieldLegend>Update your personal information below</FieldLegend>
+        <FieldDescription>
+          Make sure to keep your profile information up to date.
+        </FieldDescription>
+
+        <FieldGroup>
+          <form.Field
+            name='image'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field
+                orientation='horizontal'
+                data-invalid={meta.errors.length > 0}
+                className='gap-6'
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={meta.fieldId}>
+                    Profile Image URL
+                  </FieldLabel>
+                  <Input {...field} value={value ?? ''} />
+                  <FieldDescription>
+                    This will be replaced with an upload widget in the future.
+                  </FieldDescription>
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </FieldContent>
+
+                <Image
+                  src={value ?? ''}
+                  alt='Profile Image'
+                  width={80}
+                  height={80}
+                  className='h-20 w-20 rounded-full object-cover'
+                />
+              </Field>
+            )}
+          />
+
+          <form.Field
+            name='fullName'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Full Name</FieldLabel>
                 <Input {...field} value={value ?? ''} />
-                <FieldDescription>
-                  This will be replaced with an upload widget in the future.
-                </FieldDescription>
                 <FieldError id={meta.errorId} errors={meta.errors} />
-              </FieldContent>
+              </Field>
+            )}
+          />
 
-              <Image
-                src={value ?? ''}
-                alt='Profile Image'
-                width={80}
-                height={80}
-                className='h-20 w-20 rounded-full object-cover'
-              />
-            </Field>
-          )}
-        />
+          <form.Field
+            name='bio'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Bio</FieldLabel>
+                <InputGroup>
+                  <InputGroupTextarea {...field} value={value ?? ''} />
+                  <InputGroupAddon align='block-end'>
+                    <InputGroupText
+                      className={`ml-auto ${value && value.length > 2000 ? 'text-destructive' : ''}`}
+                    >
+                      {value?.length ?? 0}/2000
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-        <form.Field
-          name='fullName'
-          render={({ meta, field: { value, ...field } }) => (
-            <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>Full Name</FieldLabel>
-              <Input {...field} value={value ?? ''} />
-              <FieldError id={meta.errorId} errors={meta.errors} />
-            </Field>
-          )}
-        />
-
-        <form.Field
-          name='bio'
-          render={({ meta, field: { value, ...field } }) => (
-            <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>Bio</FieldLabel>
-              <Textarea {...field} value={value ?? ''} />
-              <FieldError id={meta.errorId} errors={meta.errors} />
-            </Field>
-          )}
-        />
-
-        <form.Field
-          name='gender'
-          render={({ meta, field: { value, ...field } }) => (
-            <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>Gender</FieldLabel>
-              <Select {...field} value={value ?? ''}>
-                <SelectOption value='' disabled>
-                  Select your gender
-                </SelectOption>
-                {UserValidators.genders.map((gender) => (
-                  <SelectOption key={gender} value={gender}>
-                    {gender}
+          <form.Field
+            name='gender'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Gender</FieldLabel>
+                <Select {...field} value={value ?? ''}>
+                  <SelectOption value='' disabled>
+                    Select your gender
                   </SelectOption>
-                ))}
-              </Select>
-              <FieldError id={meta.errorId} errors={meta.errors} />
-            </Field>
-          )}
-        />
+                  {UserValidators.genders.map((gender) => (
+                    <SelectOption key={gender} value={gender}>
+                      {gender}
+                    </SelectOption>
+                  ))}
+                </Select>
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-        <form.Field
-          name='dateOfBirth'
-          render={({ meta, field: { value, ...field } }) => (
-            <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>Date of Birth</FieldLabel>
-              <Input type='date' {...field} value={value ?? ''} />
-              <FieldError id={meta.errorId} errors={meta.errors} />
-            </Field>
-          )}
-        />
+          <form.Field
+            name='dateOfBirth'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Date of Birth</FieldLabel>
+                <Input type='date' {...field} value={value ?? ''} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-        <Field>
-          <Button type='submit' disabled={form.state.isPending}>
-            {form.state.isPending ? 'Saving...' : 'Save Changes'}
-          </Button>
-        </Field>
-      </FieldGroup>
+          <Field>
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </Field>
+        </FieldGroup>
+      </FieldSet>
     </form>
   )
 }
+
+export const UpdateProfileFormSkeleton: React.FC = () => (
+  <div className='animate-pulse'>
+    <h3 className='sr-only'>Update Profile form</h3>
+
+    <FieldSet>
+      <FieldLegend>Update your personal information below</FieldLegend>
+      <FieldDescription>
+        Make sure to keep your profile information up to date.
+      </FieldDescription>
+
+      <FieldGroup>
+        <Field orientation='horizontal' className='gap-6'>
+          <FieldContent>
+            <FieldLabel>Profile Image URL</FieldLabel>
+            <Input readOnly />
+            <FieldDescription>
+              This will be replaced with an upload widget in the future.
+            </FieldDescription>
+          </FieldContent>
+
+          <div className='h-20 w-20 rounded-full bg-muted' />
+        </Field>
+
+        <Field>
+          <FieldLabel>Full Name</FieldLabel>
+          <Input readOnly />
+        </Field>
+
+        <Field>
+          <FieldLabel>Bio</FieldLabel>
+          <Textarea readOnly />
+        </Field>
+
+        <Field>
+          <FieldLabel>Gender</FieldLabel>
+          <Input readOnly />
+        </Field>
+
+        <Field>
+          <FieldLabel>Date of Birth</FieldLabel>
+          <Input readOnly />
+        </Field>
+
+        <Field>
+          <Button disabled>Save Changes</Button>
+        </Field>
+      </FieldGroup>
+    </FieldSet>
+  </div>
+)
 
 const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
   const [open, setOpen] = useState(false)
@@ -232,41 +352,43 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit}>
-          <FieldGroup>
-            <form.Field
-              name='username'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>New Username</FieldLabel>
-                  <Input {...field} />
-                  <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
+        <FieldGroup>
+          <form.Field
+            name='username'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>New Username</FieldLabel>
+                <Input {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-            <form.Field
-              name='password'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-                  <Input type='password' {...field} />
-                  <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
-          </FieldGroup>
+          <form.Field
+            name='password'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
+                <Input type='password' {...field} />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
+        </FieldGroup>
 
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant='outline'>Cancel</Button>
-            </DialogClose>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant='outline'>Cancel</Button>
+          </DialogClose>
 
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Changing...' : 'Change Username'}
-            </Button>
-          </DialogFooter>
-        </form>
+          <Button
+            type='submit'
+            onClick={form.handleSubmit}
+            disabled={form.state.isPending}
+          >
+            {form.state.isPending ? 'Changing...' : 'Change Username'}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
