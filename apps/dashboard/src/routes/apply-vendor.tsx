@@ -14,9 +14,9 @@ import {
   InputGroup,
   InputGroupAddon,
   InputGroupText,
+  InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
-import { Textarea } from '@yukinu/ui/textarea'
 import { VendorValidators } from '@yukinu/validators/vendor'
 
 import { useTRPCClient } from '@/lib/trpc/react'
@@ -74,7 +74,10 @@ export default function AppVendorPage() {
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
 
                 <InputGroup>
-                  <Textarea {...field} placeholder='Vendor Description' />
+                  <InputGroupTextarea
+                    {...field}
+                    placeholder='Vendor Description'
+                  />
                   <InputGroupAddon align='block-end'>
                     <InputGroupText
                       className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
