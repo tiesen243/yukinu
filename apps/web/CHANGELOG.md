@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.6.1
+
+### Patch Changes
+
+- [#255](https://github.com/tiesen243/yukinu/pull/255) [`adb2a41`](https://github.com/tiesen243/yukinu/commit/adb2a41c2a08237cccff81ff5fa03203fc7e42ce) Thanks [@tiesen243](https://github.com/tiesen243)! - fix ui
+
 ## 0.6.0
 
 ### Minor Changes
