@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { RegisterForm } from '@/app/(auth)/register/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function RegisterPage() {
   return (
@@ -42,3 +43,19 @@ export default function RegisterPage() {
     </main>
   )
 }
+
+const title = 'Register'
+const description =
+  'Sign up to unlock personalized features, manage your preferences, and join our community.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/register`,
+  },
+})

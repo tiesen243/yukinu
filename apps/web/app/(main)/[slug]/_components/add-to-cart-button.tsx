@@ -34,10 +34,12 @@ export const AddToCartButton: React.FC = () => {
               }}
             >
               <MinusIcon />
+              <span className='sr-only'>Decrease quantity</span>
             </InputGroupButton>
           </InputGroupAddon>
 
           <InputGroupInput
+            aria-label='Quantity'
             value={quantity}
             disabled={variants.length > 0 ? !selectedVariant : stock === 0}
             onChange={(e) => {
@@ -70,6 +72,7 @@ export const AddToCartButton: React.FC = () => {
               }}
             >
               <PlusIcon />
+              <span className='sr-only'>Increase quantity</span>
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroup>

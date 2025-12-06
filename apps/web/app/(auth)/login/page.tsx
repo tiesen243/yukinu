@@ -11,6 +11,7 @@ import {
 } from '@yukinu/ui/field'
 
 import { LoginForm } from '@/app/(auth)/login/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function LoginPage() {
   return (
@@ -49,3 +50,19 @@ export default function LoginPage() {
     </main>
   )
 }
+
+const title = 'Login'
+const description =
+  'Access your account to manage your preferences, view order history, and enjoy personalized features.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/login`,
+  },
+})
