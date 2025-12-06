@@ -2,6 +2,7 @@ import {
   ProductsSearchPagination,
   ProductsSearchResults,
 } from '@/app/(main)/search/page.client'
+import { createMetadata } from '@/lib/metadata'
 import { productsCache } from '@/lib/search'
 
 export default async function SearchPage({
@@ -19,3 +20,19 @@ export default async function SearchPage({
     </main>
   )
 }
+
+const title = 'Find Products Instantly'
+const description =
+  'Discover and search a wide range of products available in our store. Filter, browse, and find exactly what you need.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/search`,
+  },
+})

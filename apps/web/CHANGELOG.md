@@ -1,5 +1,17 @@
 # @yukinu/web
 
+## 0.6.2
+
+### Patch Changes
+
+- [#258](https://github.com/tiesen243/yukinu/pull/258) [`a390547`](https://github.com/tiesen243/yukinu/commit/a390547c1bd9e1e414e86a757623682acc534304) Thanks [@tiesen243](https://github.com/tiesen243)! - add seo metadata
+
+## 0.6.1
+
+### Patch Changes
+
+- [#255](https://github.com/tiesen243/yukinu/pull/255) [`adb2a41`](https://github.com/tiesen243/yukinu/commit/adb2a41c2a08237cccff81ff5fa03203fc7e42ce) Thanks [@tiesen243](https://github.com/tiesen243)! - fix ui
+
 ## 0.6.0
 
 ### Minor Changes

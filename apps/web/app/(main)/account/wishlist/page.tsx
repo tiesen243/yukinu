@@ -5,6 +5,7 @@ import {
   WishlistItems,
   WishlistItemsSkeleton,
 } from '@/app/(main)/account/wishlist/page.client'
+import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export const dynamic = 'force-dynamic'
@@ -29,3 +30,19 @@ export default function AccountWishlistPage() {
     </HydrateClient>
   )
 }
+
+const title = 'My Wishlist'
+const description =
+  "View and manage the items you've saved to your wishlist for future reference or purchase."
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/account/wishlist`,
+  },
+})

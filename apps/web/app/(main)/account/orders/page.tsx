@@ -1,4 +1,5 @@
 import { AccountHeader } from '@/app/(main)/account/_components/header'
+import { createMetadata } from '@/lib/metadata'
 
 export default function AccountOrdersPage() {
   return (
@@ -14,3 +15,19 @@ export default function AccountOrdersPage() {
     </>
   )
 }
+
+const title = 'My Orders'
+const description =
+  'Review your past orders, track current shipments, and manage returns or exchanges all in one place.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/account/orders`,
+  },
+})

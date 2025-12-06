@@ -11,36 +11,6 @@ import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 import { getWebUrl } from '@/lib/utils'
 
-export const generateMetadata = async ({ params }: PageProps<'/[slug]'>) => {
-  const { slug } = await params
-  const id = slug.split('-').pop()
-  if (!id) return notFound()
-
-  try {
-    const product = await getQueryClient().ensureQueryData(
-      trpc.product.one.queryOptions({ id }),
-    )
-
-    return createMetadata({
-      title: product.name,
-      description: product.description,
-      openGraph: {
-        images: [
-          ...product.images.map((img, idx) => ({
-            url: img.url,
-            alt: `${product.name} Image ${idx + 1}`,
-          })),
-          `/api/og?title=${encodeURIComponent(product.name)}&description=${encodeURIComponent(
-            product.description ?? '',
-          )}&image=${encodeURIComponent(product.images[0]?.url ?? '')}`,
-        ],
-      },
-    })
-  } catch {
-    notFound()
-  }
-}
-
 export default async function ProductDetailsPage({
   params,
 }: PageProps<'/[slug]'>) {
@@ -138,6 +108,37 @@ export default async function ProductDetailsPage({
         </HydrateClient>
       </>
     )
+  } catch {
+    notFound()
+  }
+}
+
+export const generateMetadata = async ({ params }: PageProps<'/[slug]'>) => {
+  const { slug } = await params
+  const id = slug.split('-').pop()
+  if (!id) return notFound()
+
+  try {
+    const product = await getQueryClient().ensureQueryData(
+      trpc.product.one.queryOptions({ id }),
+    )
+
+    return createMetadata({
+      title: product.name,
+      description: product.description,
+      openGraph: {
+        images: [
+          ...product.images.map((img, idx) => ({
+            url: img.url,
+            alt: `${product.name} Image ${idx + 1}`,
+          })),
+          `/api/og?title=${encodeURIComponent(product.name)}&description=${encodeURIComponent(
+            product.description ?? '',
+          )}&image=${encodeURIComponent(product.images[0]?.url ?? '')}`,
+        ],
+        url: `/${slug}`,
+      },
+    })
   } catch {
     notFound()
   }

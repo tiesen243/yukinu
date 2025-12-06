@@ -40,7 +40,7 @@ export const AddressesList: React.FC = () => {
         <hr className='h-6 border-l border-muted-foreground' />
         <p className='text-sm text-muted-foreground'>{address.phoneNumber}</p>
       </div>
-      <p>{address.street},</p>
+      <p>{address.street}</p>
       <p>
         {address.city}, {address.state}, {address.country} ({address.postalCode}
         )

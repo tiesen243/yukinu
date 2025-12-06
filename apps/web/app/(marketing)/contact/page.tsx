@@ -1,14 +1,5 @@
 import { createMetadata } from '@/lib/metadata'
 
-const title = 'Contact Us'
-const description =
-  'Get in touch with us for any inquiries, support, or feedback regarding our services.'
-export const metadata = createMetadata({
-  title,
-  description,
-  openGraph: { images: [`/api/og?title=${title}&description=${description}`] },
-})
-
 export default function ContactPage() {
   return (
     <main className='container flex-1 py-6'>
@@ -82,3 +73,19 @@ export default function ContactPage() {
     </main>
   )
 }
+
+const title = 'Contact Us'
+const description =
+  'Get in touch with our team for any inquiries, support, or feedback. We are here to assist you and provide the information you need.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/contact`,
+  },
+})

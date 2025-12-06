@@ -7,6 +7,7 @@ import {
   SessionsList,
   SessionsListSkeleton,
 } from '@/app/(main)/account/security/page.client'
+import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export const dynamic = 'force-dynamic'
@@ -48,3 +49,19 @@ export default function AccountSecurityPage() {
     </HydrateClient>
   )
 }
+
+const title = 'Security Settings'
+const description =
+  'Manage your password, and other security settings to keep your account safe.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/account/security`,
+  },
+})
