@@ -239,11 +239,13 @@ export class AuthService extends BaseService implements IAuthService {
         message: 'The provided password is incorrect.',
       })
 
-    await this._db
-      .update(users)
-      .set({ deletedAt: new Date() })
-      .where(eq(users.id, userId))
-    await this._db.delete(sessions).where(eq(sessions.userId, userId))
+    return this._db.transaction(async (tx) => {
+      await tx
+        .update(users)
+        .set({ deletedAt: new Date() })
+        .where(eq(users.id, userId))
+      await tx.delete(sessions).where(eq(sessions.userId, userId))
+    })
   }
 
   async changePassword(

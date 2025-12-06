@@ -46,8 +46,8 @@ export const AddToCartButton: React.FC = () => {
                 variants.length > 0
                   ? selectedVariant
                     ? selectedVariant.stock
-                    : stock
-                  : 0
+                    : 0
+                  : stock
               if (!maxStock) return
 
               if (isNaN(qty) || qty < 1) setQuantity(1)

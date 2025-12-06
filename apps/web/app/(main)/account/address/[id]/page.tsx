@@ -19,7 +19,7 @@ export default async function EditAddressPage({
         description='Update your address information.'
       />
 
-      <form className='px-6 pt-6'>
+      <section className='px-6 pt-6'>
         <h2 className='sr-only'>Edit Address {id} form</h2>
 
         <Suspense
@@ -34,7 +34,7 @@ export default async function EditAddressPage({
         >
           <EditAddressForm id={id} />
         </Suspense>
-      </form>
+      </section>
     </HydrateClient>
   )
 }

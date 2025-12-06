@@ -61,12 +61,13 @@ const createTRPCRouter = t.router
 
 const bucket = new TokenBucketRateLimit<string>(10, 60)
 const rateLimitMiddleware = t.middleware(async ({ ctx, next }) => {
-  const ip =
+  const identifier =
+    ctx.session?.userId ??
     ctx.headers.get('x-forwarded-for') ??
     ctx.headers.get('x-real-ip') ??
     'unknown'
 
-  if (!bucket.consume(ip, 1))
+  if (!bucket.consume(identifier, 1))
     throw new TRPCError({
       code: 'TOO_MANY_REQUESTS',
       message: 'Rate limit exceeded',

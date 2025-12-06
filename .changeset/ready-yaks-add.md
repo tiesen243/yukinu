@@ -2,4 +2,4 @@
 '@yukinu/web': patch
 ---
 
-added jsonld
+added JSON-LD schema generation for product details

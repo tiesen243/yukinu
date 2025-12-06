@@ -352,29 +352,33 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <FieldGroup>
-          <form.Field
-            name='username'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>New Username</FieldLabel>
-                <Input {...field} />
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
+        <form id='change-username-form' onSubmit={form.handleSubmit}>
+          <FieldSet>
+            <FieldGroup>
+              <form.Field
+                name='username'
+                render={({ meta, field }) => (
+                  <Field data-invalid={meta.errors.length > 0}>
+                    <FieldLabel htmlFor={meta.fieldId}>New Username</FieldLabel>
+                    <Input {...field} />
+                    <FieldError id={meta.errorId} errors={meta.errors} />
+                  </Field>
+                )}
+              />
 
-          <form.Field
-            name='password'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-                <Input type='password' {...field} />
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
-        </FieldGroup>
+              <form.Field
+                name='password'
+                render={({ meta, field }) => (
+                  <Field data-invalid={meta.errors.length > 0}>
+                    <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
+                    <Input type='password' {...field} />
+                    <FieldError id={meta.errorId} errors={meta.errors} />
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
+        </form>
 
         <DialogFooter>
           <DialogClose asChild>
@@ -383,7 +387,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
 
           <Button
             type='submit'
-            onClick={form.handleSubmit}
+            form='change-username-form'
             disabled={form.state.isPending}
           >
             {form.state.isPending ? 'Changing...' : 'Change Username'}

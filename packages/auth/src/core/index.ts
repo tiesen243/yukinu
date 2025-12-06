@@ -383,7 +383,7 @@ export function Auth(config: AuthConfig) {
     return response
   }
 
-  const bucket = new TokenBucketRateLimit<string>(5, 60)
+  const bucket = new TokenBucketRateLimit<string>(10, 60)
   async function handler(request: Request): Promise<Response> {
     let response: Response
 
@@ -391,7 +391,7 @@ export function Auth(config: AuthConfig) {
       request.headers.get('x-forwarded-for') ??
       request.headers.get('x-real-ip') ??
       'unknown'
-    if (!bucket.consume(ip, 1))
+    if (!bucket.consume(ip, request.method === 'POST' ? 2 : 1))
       return new Response('Too Many Requests', { status: 429 })
 
     if (request.method === 'OPTIONS')
