@@ -15,13 +15,12 @@ export default function Welcome(props: WelcomeEmailProps) {
       <Text>Hi {username},</Text>
       <Text>Welcome to Yukinu! We're excited to have you on board.</Text>
 
-      <Text>
-        To get started, please verify your email address by clicking the link
-        below:
-      </Text>
-
       {verificationLink && (
         <>
+          <Text>
+            To get started, please verify your email address by clicking the
+            link below:
+          </Text>
           <Section style={{ textAlign: 'center', margin: '20px 0' }}>
             <Button
               href={verificationLink}
