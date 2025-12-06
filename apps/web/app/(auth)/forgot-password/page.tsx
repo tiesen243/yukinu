@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { ForgotPasswordForm } from '@/app/(auth)/forgot-password/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function ForgotPasswordPage() {
   return (
@@ -28,3 +29,19 @@ export default function ForgotPasswordPage() {
     </main>
   )
 }
+
+const title = 'Forgot Password'
+const description =
+  "Can't remember your password? No worries! Enter your email address to receive a password reset link and regain access to your account."
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/forgot-password`,
+  },
+})

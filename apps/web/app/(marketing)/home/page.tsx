@@ -1,15 +1,5 @@
 import { createMetadata } from '@/lib/metadata'
 
-const title = 'Home'
-const description =
-  'Welcome to our homepage! Discover our services and offerings.'
-
-export const metadata = createMetadata({
-  title,
-  description,
-  openGraph: { images: [`/api/og?title=${title}&description=${description}`] },
-})
-
 export default function HomePage() {
   return (
     <main className='container flex-1 py-6'>
@@ -83,3 +73,19 @@ export default function HomePage() {
     </main>
   )
 }
+
+const title = 'Home'
+const description =
+  'Welcome to our website. Explore our features and offerings designed to provide you with the best experience.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/home`,
+  },
+})

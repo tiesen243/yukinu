@@ -9,9 +9,11 @@ import {
   AddressesList,
   AddressesListSkeleton,
 } from '@/app/(main)/account/address/page.client'
+import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export const dynamic = 'force-dynamic'
+
 export default function AddressPage() {
   void getQueryClient().prefetchQuery(trpc.user.allAddresses.queryOptions({}))
 
@@ -38,3 +40,19 @@ export default function AddressPage() {
     </HydrateClient>
   )
 }
+
+const title = 'My Addresses'
+const description =
+  'View, add, and manage your saved shipping addresses for faster checkout.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/account/address`,
+  },
+})

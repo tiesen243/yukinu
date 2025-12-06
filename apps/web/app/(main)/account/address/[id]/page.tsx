@@ -1,9 +1,11 @@
 import { Suspense } from 'react'
+import { notFound } from 'next/navigation'
 
 import { Loader2Icon } from '@yukinu/ui/icons'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { EditAddressForm } from '@/app/(main)/account/address/[id]/page.client'
+import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export default async function EditAddressPage({
@@ -37,4 +39,34 @@ export default async function EditAddressPage({
       </section>
     </HydrateClient>
   )
+}
+
+export const generateMetadata = async ({
+  params,
+}: PageProps<'/account/address/[id]'>) => {
+  const { id } = await params
+
+  try {
+    const address = await getQueryClient().ensureQueryData(
+      trpc.user.oneAddress.queryOptions({ id }),
+    )
+
+    const title = `Edit Address: ${address.recipientName}`
+    const description = `Update the address information for ${address.recipientName}. If needed, you can modify the recipient's name, street address, city, postal code, and other relevant details.`
+
+    return createMetadata({
+      title,
+      description,
+      openGraph: {
+        images: [
+          `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+            description,
+          )}`,
+        ],
+        url: `/account/address/${id}/edit`,
+      },
+    })
+  } catch {
+    notFound()
+  }
 }

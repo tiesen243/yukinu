@@ -1,6 +1,7 @@
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { ResetPasswordForm } from '@/app/(auth)/forgot-password/reset/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default async function ResetPasswordPage({
   searchParams,
@@ -39,3 +40,19 @@ export default async function ResetPasswordPage({
     </main>
   )
 }
+
+const title = 'Reset Your Password'
+const description =
+  'Set a new password to regain access to your account and keep it secure.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/forgot-password/reset`,
+  },
+})

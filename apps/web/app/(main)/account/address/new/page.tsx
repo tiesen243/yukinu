@@ -1,5 +1,6 @@
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { NewAddressForm } from '@/app/(main)/account/address/new/page.client'
+import { createMetadata } from '@/lib/metadata'
 
 export default function NewAddressPage() {
   return (
@@ -17,3 +18,19 @@ export default function NewAddressPage() {
     </>
   )
 }
+
+const title = 'Add New Address'
+const description =
+  'Add a new shipping address to your account for faster checkout.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/account/address/new`,
+  },
+})

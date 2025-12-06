@@ -7,6 +7,7 @@ import {
   UpdateProfileForm,
   UpdateProfileFormSkeleton,
 } from '@/app/(main)/account/page.client'
+import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export const dynamic = 'force-dynamic'
@@ -37,3 +38,19 @@ export default function AccountPage() {
     </HydrateClient>
   )
 }
+
+const title = 'My Profile'
+const description =
+  'View and update your personal details, email, and password to keep your account secure.'
+export const metadata = createMetadata({
+  title,
+  description,
+  openGraph: {
+    images: [
+      `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+        description,
+      )}`,
+    ],
+    url: `/account`,
+  },
+})
