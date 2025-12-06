@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.6.2
+
+### Patch Changes
+
+- [#258](https://github.com/tiesen243/yukinu/pull/258) [`a390547`](https://github.com/tiesen243/yukinu/commit/a390547c1bd9e1e414e86a757623682acc534304) Thanks [@tiesen243](https://github.com/tiesen243)! - add seo metadata
+
 ## 0.6.1
 
 ### Patch Changes
