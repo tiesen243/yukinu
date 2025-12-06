@@ -10,6 +10,11 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupText,
+} from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { VendorValidators } from '@yukinu/validators/vendor'
@@ -67,7 +72,15 @@ export default function AppVendorPage() {
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <Textarea {...field} placeholder='Vendor Description' />
+
+                <InputGroup>
+                  <Textarea {...field} placeholder='Vendor Description' />
+                  <InputGroupAddon align='block-end'>
+                    <InputGroupText className='ml-auto'>
+                      {field.value?.length ?? 0} / 2000 chars
+                    </InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

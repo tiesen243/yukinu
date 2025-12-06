@@ -138,6 +138,44 @@ export class AuthService extends BaseService implements IAuthService {
     })
   }
 
+  async changeUsername(
+    input: AuthValidators.ChangeUsernameInput,
+  ): Promise<AuthValidators.ChangeUsernameOutput> {
+    const { and, eq } = this._orm
+    const { accounts, users } = this._schema
+    const { userId, username, password } = input
+
+    const [existingUser] = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.username, username))
+      .limit(1)
+    if (existingUser)
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: 'The username is already taken.',
+      })
+
+    const [account] = await this._db
+      .select({ password: accounts.password })
+      .from(accounts)
+      .where(
+        and(eq(accounts.userId, userId), eq(accounts.provider, 'credentials')),
+      )
+    if (!account?.password)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You do not have a password set. Cannot change username.',
+      })
+
+    if (!(await this._password.verify(account.password, password)))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'The provided password is incorrect.',
+      })
+
+    await this._db.update(users).set({ username }).where(eq(users.id, userId))
+  }
   async changePassword(
     input: AuthValidators.ChangePasswordInput,
   ): Promise<AuthValidators.ChangePasswordOutput> {

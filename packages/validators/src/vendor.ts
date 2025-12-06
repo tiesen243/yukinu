@@ -8,9 +8,17 @@ export namespace VendorValidators {
     id: z.cuid(),
     ownerId: z.cuid().nullable(),
     name: z.string().min(1).max(255),
-    description: z.string().nullable(),
-    image: z.url().nullable(),
-    address: z.string().min(1).max(500).nullable(),
+    description: z
+      .string()
+      .min(1, 'Description is required')
+      .max(2000, 'Description is too long')
+      .nullable(),
+    image: z.url('Invalid image URL').nullable(),
+    address: z
+      .string()
+      .min(1, 'Address is required')
+      .max(500, 'Address is too long')
+      .nullable(),
     status: z.enum(statuses),
     createdAt: z.date(),
     updatedAt: z.date(),
@@ -65,19 +73,24 @@ export namespace VendorValidators {
 
   export const createInput = z.object({
     ownerId: z.cuid(),
-    name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().optional(),
+    name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
+    description: z
+      .string()
+      .min(1, 'Description is required')
+      .max(2000, 'Description is too long')
+      .optional(),
     image: z.url('Invalid image URL').optional(),
-    address: z.string().min(1, 'Address is required').max(500).optional(),
+    address: z
+      .string()
+      .min(1, 'Address is required')
+      .max(500, 'Address is too long')
+      .optional(),
   })
-  export type CreateInput = z.infer<typeof createInput>
+  export type CreateInput = NonNullable<z.infer<typeof createInput>>
   export const createOutput = z.object({ id: z.cuid() })
   export type CreateOutput = z.infer<typeof createOutput>
 
-  export const updateStatusInput = z.object({
-    id: z.cuid(),
-    status: z.enum(statuses),
-  })
+  export const updateStatusInput = vendor.pick({ id: true, status: true })
   export type UpdateStatusInput = z.infer<typeof updateStatusInput>
   export const updateStatusOutput = z.object({ id: z.cuid() })
   export type UpdateStatusOutput = z.infer<typeof updateStatusOutput>
@@ -89,9 +102,7 @@ export namespace VendorValidators {
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
 
-  export const allStaffsInput = z.object({
-    vendorId: z.cuid(),
-  })
+  export const allStaffsInput = vendor.pick({ id: true })
   export type AllStaffsInput = z.infer<typeof allStaffsInput>
   export const allStaffsOutput = z.array(
     z.object({

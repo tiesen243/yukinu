@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import {
   HeartIcon,
   MapPinIcon,
@@ -10,26 +9,13 @@ import {
   UserIcon,
 } from '@yukinu/ui/icons'
 
+import { UserHeader } from '@/app/(main)/account/_components/user-header'
+
 export default function AccountLayout({ children }: LayoutProps<'/account'>) {
   return (
     <div className='container flex h-dvh w-full flex-1 flex-col gap-6 py-6 md:flex-row'>
       <aside className='rounded-xl bg-sidebar py-6 text-sidebar-foreground shadow-sm md:sticky md:top-20 md:left-0 md:w-1/4 dark:border'>
-        <div className='flex h-16 items-start gap-2 border-b border-sidebar-border px-6'>
-          <Avatar className='size-12'>
-            <AvatarImage
-              src='https://github.com/tiesen243.png'
-              alt='Tiesen243'
-            />
-            <AvatarFallback>T</AvatarFallback>
-          </Avatar>
-
-          <div className='flex w-max flex-col gap-1 overflow-hidden'>
-            <p className='truncate'>tiesen243</p>
-            <p className='truncate text-sm text-muted-foreground'>
-              tiesen243@tiesen.id.vn
-            </p>
-          </div>
-        </div>
+        <UserHeader />
 
         <nav className='flex w-full flex-row gap-2 overflow-x-auto px-6 pt-4 pb-2 md:flex-col md:pb-0'>
           {sidebarLinks.map((link) => (

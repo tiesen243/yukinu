@@ -4,14 +4,14 @@ export namespace CategoryValidators {
   export const category = z.object({
     id: z.cuid(),
     parentId: z.cuid().nullable(),
-    name: z.string().min(1).max(255),
-    image: z.url().nullable(),
-    description: z.string().nullable(),
+    name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
+    image: z.url('Invalid image URL').nullable(),
+    description: z.string('Description must be a valid string').nullable(),
   })
   export type Category = z.infer<typeof category>
 
   export const allInput = z.object({
-    search: z.string().nullable(),
+    search: z.string('Search must be a valid string').nullable(),
     istopLevelOnly: z.boolean().default(false),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
@@ -46,7 +46,11 @@ export namespace CategoryValidators {
   export const createInput = z.object({
     parentId: z.union([z.cuid(), z.literal('no-parent')]).optional(),
     name: z.string().min(1, 'Name is required').max(255),
-    description: z.string().optional(),
+    description: z
+      .string('Description must be a valid string')
+      .min(1, 'Description is required')
+      .max(1000, 'Description is too long')
+      .optional(),
     image: z.url('Invalid image URL').optional(),
   })
   export type CreateInput = z.infer<typeof createInput>
