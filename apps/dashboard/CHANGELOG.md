@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.6.4
+
+### Patch Changes
+
+- [#267](https://github.com/tiesen243/yukinu/pull/267) [`84457d8`](https://github.com/tiesen243/yukinu/commit/84457d862b1ffef54775fbdaec676bcac8799ab1) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
 ## 0.6.3
 
 ### Patch Changes
