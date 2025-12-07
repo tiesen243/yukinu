@@ -377,9 +377,9 @@ export class ProductService extends BaseService implements IProductService {
     return { id }
   }
 
-  async reciateVariant(
-    input: ProductValidators.ReciateVariantInput,
-  ): Promise<ProductValidators.ReciateVariantOutput> {
+  async recreateVariant(
+    input: ProductValidators.RecreateVariantInput,
+  ): Promise<ProductValidators.RecreateVariantOutput> {
     const { and, eq } = this._orm
     const { productVariants, products } = this._schema
     const { id, vendorId, variants: vrts } = input

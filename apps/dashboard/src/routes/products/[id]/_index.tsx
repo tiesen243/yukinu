@@ -52,7 +52,7 @@ export default function ProductsUpdatePage({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableCell>No.</TableCell>
+              <TableHead>No.</TableHead>
               <TableHead>SKU</TableHead>
               <TableHead>Options</TableHead>
               <TableHead>Price</TableHead>

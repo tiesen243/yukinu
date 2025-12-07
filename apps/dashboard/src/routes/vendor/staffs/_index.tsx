@@ -12,8 +12,6 @@ import { StaffsList } from '@/routes/vendor/staffs/staffs-list'
 export default function VendorStaffsPage() {
   return (
     <>
-      <h1 className='sr-only'>Staffs Management page</h1>
-
       <div className='flex items-center justify-between'>
         <div>
           <h1 className='text-3xl font-bold'>Staffs Management</h1>

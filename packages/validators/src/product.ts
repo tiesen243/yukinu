@@ -224,12 +224,12 @@ export namespace ProductValidators {
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
 
-  export const reciateVariantInput = createInput
+  export const recreateVariantInput = createInput
     .pick({ variants: true, vendorId: true })
     .extend({ id: z.cuid() })
-  export type ReciateVariantInput = z.infer<typeof reciateVariantInput>
-  export const reciateVariantOutput = z.object({ id: z.cuid() })
-  export type ReciateVariantOutput = z.infer<typeof reciateVariantOutput>
+  export type RecreateVariantInput = z.infer<typeof recreateVariantInput>
+  export const recreateVariantOutput = z.object({ id: z.cuid() })
+  export type RecreateVariantOutput = z.infer<typeof recreateVariantOutput>
 
   export const updateVariantInput = productVariant
     .omit({ productId: true, sku: true })

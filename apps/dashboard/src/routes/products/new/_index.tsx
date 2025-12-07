@@ -271,6 +271,7 @@ export default function ProductsNewPage() {
                           aria-invalid={field['aria-invalid']}
                         />
                         <Button
+                          type='button'
                           variant='outline'
                           size='icon'
                           onClick={() => {
@@ -342,6 +343,7 @@ export default function ProductsNewPage() {
                           />
                           <InputGroupAddon align='inline-end'>
                             <InputGroupButton
+                              type='button'
                               onClick={() => {
                                 field.onChange(
                                   field.value.filter((_, i) => i !== vIndex),
@@ -376,6 +378,7 @@ export default function ProductsNewPage() {
                               />
                               <InputGroupAddon align='inline-end'>
                                 <InputGroupButton
+                                  type='button'
                                   onClick={() => {
                                     const newVariants = [...field.value]
                                     if (!newVariants[vIndex]) return

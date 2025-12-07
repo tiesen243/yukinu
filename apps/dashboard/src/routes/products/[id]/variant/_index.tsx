@@ -34,19 +34,19 @@ export default function CreateProductVariantsPage({
   const navigate = useNavigate()
 
   const { mutateAsync } = useMutation({
-    ...trpc.product.reciateVariant.mutationOptions(),
+    ...trpc.product.recreateVariant.mutationOptions(),
     meta: { filter: trpc.product.one.queryFilter({ id: params.id }) },
-    onSuccess: () => toast.success('Successfully reciated variants'),
+    onSuccess: () => toast.success('Successfully recreated variants'),
     onError: ({ message }) =>
-      toast.error('Failed to reciate variants', { description: message }),
+      toast.error('Failed to recreate variants', { description: message }),
   })
 
   const form = useForm({
     defaultValues: {
       id: params.id,
-      variants: [{ name: '', options: [] }],
-    } as Omit<ProductValidators.ReciateVariantInput, 'vendorId'>,
-    schema: ProductValidators.reciateVariantInput.omit({ vendorId: true }),
+      variants: [{ name: '', options: [''] }],
+    } as Omit<ProductValidators.RecreateVariantInput, 'vendorId'>,
+    schema: ProductValidators.recreateVariantInput.omit({ vendorId: true }),
     onSubmit: mutateAsync,
     onSuccess: () => void navigate(`/products/${params.id}`),
   })
@@ -60,7 +60,7 @@ export default function CreateProductVariantsPage({
         className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
       >
         <FieldSet>
-          <FieldLegend>Reciate Product Variants</FieldLegend>
+          <FieldLegend>Recreate Product Variants</FieldLegend>
           <FieldDescription className='flex items-center gap-2 text-warning'>
             <TriangleAlertIcon size={16} /> This action will delete all existing
             variants and create new ones.
@@ -90,6 +90,7 @@ export default function CreateProductVariantsPage({
                         />
                         <InputGroupAddon align='inline-end'>
                           <InputGroupButton
+                            type='button'
                             onClick={() => {
                               field.onChange(
                                 field.value.filter((_, i) => i !== vIndex),
@@ -124,6 +125,7 @@ export default function CreateProductVariantsPage({
                             />
                             <InputGroupAddon align='inline-end'>
                               <InputGroupButton
+                                type='button'
                                 onClick={() => {
                                   const newVariants = [...field.value]
                                   if (!newVariants[vIndex]) return
@@ -185,7 +187,7 @@ export default function CreateProductVariantsPage({
 
           <Field>
             <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Reciating...' : 'Reciate Variants'}
+              {form.state.isPending ? 'Recreating...' : 'Recreate Variants'}
             </Button>
           </Field>
         </FieldSet>
