@@ -1,5 +1,11 @@
 # @yukinu/ui
 
+## 0.3.2
+
+### Patch Changes
+
+- [#264](https://github.com/tiesen243/yukinu/pull/264) [`e57ab42`](https://github.com/tiesen243/yukinu/commit/e57ab42bf8ae2f4ef05189054c240baf83b89fe0) Thanks [@tiesen243](https://github.com/tiesen243)! - change shadow color in dark mode
+
 ## 0.3.1
 
 ### Patch Changes
