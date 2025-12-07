@@ -42,7 +42,7 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
         </Button>
       </div>
 
-      <section className='rounded-lg bg-card p-6 text-card-foreground shadow-sm'>
+      <section className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
         <Table>
           <TableHeader>
             <TableRow>

@@ -1,3 +1,6 @@
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router'
+
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
@@ -10,52 +13,53 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupText,
-  InputGroupTextarea,
-} from '@yukinu/ui/input-group'
+import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
-import { VendorValidators } from '@yukinu/validators/vendor'
+import { Textarea } from '@yukinu/ui/textarea'
+import { CategoryValidators } from '@yukinu/validators/category'
 
-import { useTRPCClient } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc/react'
 
-export default function AppVendorPage() {
-  const trpc = useTRPCClient()
+export default function CategoriesNewPage() {
+  const trpc = useTRPC()
+  const navigate = useNavigate()
+
+  const { data } = useQuery(
+    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+  )
+
+  const { mutateAsync } = useMutation({
+    ...trpc.category.create.mutationOptions(),
+    meta: { filter: trpc.category.all.queryFilter() },
+    onSuccess: () => toast.success('Category created successfully'),
+    onError: ({ message }) =>
+      toast.error('Failed to create category', { description: message }),
+  })
 
   const form = useForm({
     defaultValues: {
+      parentId: undefined,
       name: '',
       description: undefined,
       image: undefined,
-      address: undefined,
-    } as Omit<VendorValidators.CreateInput, 'ownerId'>,
-    schema: VendorValidators.createInput.omit({ ownerId: true }),
-    onSubmit: trpc.vendor.create.mutate,
-    onSuccess: () =>
-      toast.success('Vendor application submitted successfully!', {
-        description:
-          'Thank you for applying. We will review your application and get back to you soon.',
-      }),
-    onError: ({ message }) =>
-      toast.error('Failed to submit vendor application.', {
-        description: message,
-      }),
+    } as CategoryValidators.CreateInput,
+    schema: CategoryValidators.createInput,
+    onSubmit: mutateAsync,
+    onSuccess: () => void navigate('/admin/categories'),
   })
 
   return (
     <>
-      <h1 className='sr-only'>Apply as Vendor page</h1>
+      <h1 className='sr-only'>Create New Category page</h1>
 
       <form
         onSubmit={form.handleSubmit}
         className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
       >
         <FieldSet>
-          <FieldLegend>Vendor Application</FieldLegend>
+          <FieldLegend>Create New Category</FieldLegend>
           <FieldDescription>
-            Please fill out the form below to apply as a vendor on our platform.
+            Use the form below to create a new category in the system.
           </FieldDescription>
 
           <FieldGroup>
@@ -64,7 +68,7 @@ export default function AppVendorPage() {
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
-                  <Input {...field} placeholder='Vendor Name' />
+                  <Input {...field} placeholder='Category Name' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
@@ -75,21 +79,7 @@ export default function AppVendorPage() {
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-
-                  <InputGroup>
-                    <InputGroupTextarea
-                      {...field}
-                      placeholder='Vendor Description'
-                      className='field-sizing-content max-h-52'
-                    />
-                    <InputGroupAddon align='block-end'>
-                      <InputGroupText
-                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
-                      >
-                        {field.value?.length ?? 0}/2000
-                      </InputGroupText>
-                    </InputGroupAddon>
-                  </InputGroup>
+                  <Textarea {...field} placeholder='Category Description' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
@@ -102,12 +92,11 @@ export default function AppVendorPage() {
                   <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                   <Input
                     {...field}
-                    type='url'
                     placeholder='https://example.com/image.jpg'
                   />
                   <FieldDescription id={meta.descriptionId}>
-                    This will be replaced with an image upload dropzone in the
-                    future.
+                    URL of the category image. Will be replaced with upload
+                    dropzone later.
                   </FieldDescription>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
@@ -115,11 +104,20 @@ export default function AppVendorPage() {
             />
 
             <form.Field
-              name='address'
+              name='parentId'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                  <Input {...field} placeholder='Vendor Address' />
+                  <FieldLabel htmlFor={meta.fieldId}>
+                    Parent Category
+                  </FieldLabel>
+                  <Select {...field}>
+                    <SelectOption value='no-parent'>No Parent</SelectOption>
+                    {data?.categories.map((category) => (
+                      <SelectOption key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectOption>
+                    ))}
+                  </Select>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
@@ -127,7 +125,7 @@ export default function AppVendorPage() {
 
             <Field>
               <Button type='submit' disabled={form.state.isPending}>
-                {form.state.isPending ? 'Submitting...' : 'Submit Application'}
+                {form.state.isPending ? 'Creating...' : 'Create Category'}
               </Button>
             </Field>
           </FieldGroup>

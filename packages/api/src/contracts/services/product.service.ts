@@ -21,9 +21,9 @@ export interface IProductService {
     input: ProductValidators.RestoreInput,
   ): Promise<ProductValidators.RestoreOutput>
 
-  createVariant(
-    input: ProductValidators.CreateVariantInput,
-  ): Promise<ProductValidators.CreateVariantOutput>
+  recreateVariant(
+    input: ProductValidators.RecreateVariantInput,
+  ): Promise<ProductValidators.RecreateVariantOutput>
 
   updateVariant(
     input: ProductValidators.UpdateVariantInput,

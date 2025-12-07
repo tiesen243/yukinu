@@ -32,6 +32,8 @@ export default function InvitePage() {
 
   return (
     <main className='grid min-h-dvh place-items-center'>
+      <h1 className='sr-only'>Accept Staff Invitation</h1>
+
       <form
         method='POST'
         className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'

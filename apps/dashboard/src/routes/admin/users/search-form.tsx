@@ -18,10 +18,13 @@ export const SearchForm: React.FC = () => {
 
         const rawQ = formData.get('q')
         const q = typeof rawQ === 'string' ? rawQ.trim() : ''
+
         const rawRole = formData.get('role')
         const role =
           typeof rawRole === 'string'
-            ? (rawRole as typeof query.role)
+            ? rawRole === ''
+              ? null
+              : (rawRole as typeof query.role)
             : query.role
         if (q === query.search && role === query.role) return
 

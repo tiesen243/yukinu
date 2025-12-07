@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server'
 
+import type { Database } from '@yukinu/db'
 import type { ProductValidators } from '@yukinu/validators/product'
 
 import type { IProductService } from '@/contracts/services/product.service'
@@ -189,10 +190,7 @@ export class ProductService extends BaseService implements IProductService {
       categories,
       productAttributes,
       productImages,
-      productVariants,
       products,
-      variantOptions,
-      variants,
     } = this._schema
     const { attributes: attrs, images, variants: vrts, ...data } = input
 
@@ -240,48 +238,7 @@ export class ProductService extends BaseService implements IProductService {
         }),
       )
 
-      if (vrts.length === 0) return { id: product.id }
-
-      const results = await Promise.all(
-        vrts.map(async (vrt) => {
-          const [variant = { id: '' }] = await tx
-            .insert(variants)
-            .values({ name: vrt.name.toLowerCase() })
-            .onConflictDoUpdate({
-              target: variants.name,
-              set: { name: vrt.name.toLowerCase() },
-            })
-            .returning({ id: variants.id })
-          const options = await tx
-            .insert(variantOptions)
-            .values(
-              vrt.options.map((option) => ({
-                variantId: variant.id,
-                value: option.toLowerCase(),
-              })),
-            )
-            .onConflictDoUpdate({
-              target: [variantOptions.variantId, variantOptions.value],
-              set: { variantId: variant.id },
-            })
-            .returning({ id: variantOptions.id })
-
-          return { id: variant.id, options: options.map((o) => o.id) }
-        }),
-      )
-
-      const skuCombinations = this._cartesianProduct(
-        results.map((r) => r.options.map(String)),
-      )
-      if (skuCombinations.length > 0)
-        await tx.insert(productVariants).values(
-          skuCombinations.map((skus) => ({
-            productId: product.id,
-            sku: skus.join('-'),
-          })),
-        )
-
-      return { id: product.id }
+      return this._createVariants(product.id, vrts, tx)
     })
   }
 
@@ -420,12 +377,34 @@ export class ProductService extends BaseService implements IProductService {
     return { id }
   }
 
-  createVariant(
-    _input: ProductValidators.CreateVariantInput,
-  ): Promise<ProductValidators.CreateVariantOutput> {
-    throw new TRPCError({
-      code: 'NOT_IMPLEMENTED',
-      message: 'Method not implemented.',
+  async recreateVariant(
+    input: ProductValidators.RecreateVariantInput,
+  ): Promise<ProductValidators.RecreateVariantOutput> {
+    const { and, eq } = this._orm
+    const { productVariants, products } = this._schema
+    const { id, vendorId, variants: vrts } = input
+
+    const [product] = await this._db
+      .select({ id: products.id })
+      .from(products)
+      .where(
+        and(
+          eq(products.id, id),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .limit(1)
+    if (!product)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
+
+    return this._db.transaction(async (tx) => {
+      await tx.delete(productVariants).where(eq(productVariants.productId, id))
+      return this._createVariants(product.id, vrts, tx)
     })
   }
 
@@ -513,5 +492,55 @@ export class ProductService extends BaseService implements IProductService {
       (acc, curr) => acc.flatMap((a) => curr.map((b) => [...a, b])),
       [[]],
     )
+  }
+
+  private async _createVariants(
+    productId: string,
+    vrts: ProductValidators.CreateInput['variants'],
+    tx: Database,
+  ) {
+    const { productVariants, variants, variantOptions } = this._schema
+
+    if (vrts.length === 0) return { id: productId }
+
+    const results = await Promise.all(
+      vrts.map(async (vrt) => {
+        const [variant = { id: '' }] = await tx
+          .insert(variants)
+          .values({ name: vrt.name.toLowerCase() })
+          .onConflictDoUpdate({
+            target: variants.name,
+            set: { name: vrt.name.toLowerCase() },
+          })
+          .returning({ id: variants.id })
+        const options = await tx
+          .insert(variantOptions)
+          .values(
+            vrt.options.map((option) => ({
+              variantId: variant.id,
+              value: option.toLowerCase(),
+            })),
+          )
+          .onConflictDoUpdate({
+            target: [variantOptions.variantId, variantOptions.value],
+            set: { variantId: variant.id },
+          })
+          .returning({ id: variantOptions.id })
+
+        return { id: variant.id, options: options.map((o) => o.id) }
+      }),
+    )
+
+    const skuCombinations = this._cartesianProduct(
+      results.map((r) => r.options.map(String)),
+    )
+    if (skuCombinations.length > 0)
+      await tx
+        .insert(productVariants)
+        .values(
+          skuCombinations.map((skus) => ({ productId, sku: skus.join('-') })),
+        )
+
+    return { id: productId }
   }
 }

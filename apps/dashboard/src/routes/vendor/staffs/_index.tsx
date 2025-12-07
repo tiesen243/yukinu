@@ -23,7 +23,7 @@ export default function VendorStaffsPage() {
         <InviteStaffButton />
       </div>
 
-      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm'>
+      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
         <Table>
           <TableHeader>
             <TableRow>
