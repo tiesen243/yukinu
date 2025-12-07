@@ -8,7 +8,7 @@ import {
 import SuperJSON from 'superjson'
 
 import type { AppRouter } from '@yukinu/api'
-import { env } from '@yukinu/validators/env.next'
+import { env } from '@yukinu/validators/env.vite'
 
 import { getDashboardUrl } from '@/lib/utils'
 
@@ -38,7 +38,7 @@ export const createClient = () =>
         retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30000),
       }),
       splitLink({
-        condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
+        condition: () => env.VITE_TRPC_USE_STREAMING === 'true',
         true: httpBatchStreamLink(configs),
         false: httpBatchLink(configs),
       }),

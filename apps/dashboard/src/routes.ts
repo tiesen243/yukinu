@@ -16,8 +16,14 @@ export default [
 
     layout('./routes/admin/__layout.tsx', [
       route('/admin/categories', './routes/admin/categories/_index.tsx'),
-      route('/admin/categories/new', './routes/admin/categories/new.tsx'),
-      route('/admin/categories/:id', './routes/admin/categories/edit.tsx'),
+      route(
+        '/admin/categories/new',
+        './routes/admin/categories/new/_index.tsx',
+      ),
+      route(
+        '/admin/categories/:id',
+        './routes/admin/categories/[id]/_index.tsx',
+      ),
 
       route('/admin/users', './routes/admin/users/_index.tsx'),
 
@@ -27,8 +33,12 @@ export default [
 
     layout('./routes/products/__layout.tsx', [
       route('/products', './routes/products/_index.tsx'),
-      route('/products/new', './routes/products/new.tsx'),
+      route('/products/new', './routes/products/new/_index.tsx'),
       route('/products/:id', './routes/products/[id]/_index.tsx'),
+      route(
+        '/products/:id/variant',
+        './routes/products/[id]/variant/_index.tsx',
+      ),
     ]),
 
     layout('./routes/vendor/__layout.tsx', [

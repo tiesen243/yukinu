@@ -59,7 +59,7 @@ const createCallerFactory = t.createCallerFactory
 
 const createTRPCRouter = t.router
 
-const bucket = new TokenBucketRateLimit<string>(10, 60)
+const bucket = new TokenBucketRateLimit<string>(20, 60)
 const rateLimitMiddleware = t.middleware(async ({ ctx, next }) => {
   const identifier =
     ctx.session?.userId ??

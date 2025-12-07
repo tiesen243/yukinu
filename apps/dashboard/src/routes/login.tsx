@@ -21,6 +21,8 @@ import { getWebUrl } from '@/lib/utils'
 export default function LoginPage() {
   return (
     <main className='grid min-h-dvh place-items-center'>
+      <h1 className='sr-only'>Login page</h1>
+
       <form className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
         <FieldSet>
           <FieldLegend>Login</FieldLegend>

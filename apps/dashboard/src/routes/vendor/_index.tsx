@@ -52,80 +52,83 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
   })
 
   return (
-    <form
-      onSubmit={form.handleSubmit}
-      className='rounded-lg bg-card p-6 text-card-foreground shadow-sm'
-    >
-      <FieldSet>
-        <FieldLegend>My Store</FieldLegend>
-        <FieldDescription>
-          Update your store details and preferences below.
-        </FieldDescription>
+    <>
+      <h1 className='sr-only'>My Store page</h1>
+      <form
+        onSubmit={form.handleSubmit}
+        className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
+      >
+        <FieldSet>
+          <FieldLegend>My Store</FieldLegend>
+          <FieldDescription>
+            Update your store details and preferences below.
+          </FieldDescription>
 
-        <FieldGroup>
-          <form.Field
-            name='name'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Store Name</FieldLabel>
-                <Input {...field} />
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
+          <FieldGroup>
+            <form.Field
+              name='name'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Store Name</FieldLabel>
+                  <Input {...field} />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
 
-          <form.Field
-            name='description'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <InputGroup>
-                  <InputGroupTextarea
-                    {...field}
-                    placeholder='Vendor Description'
-                  />
-                  <InputGroupAddon align='block-end'>
-                    <InputGroupText
-                      className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
-                    >
-                      {field.value?.length ?? 0}/2000
-                    </InputGroupText>
-                  </InputGroupAddon>
-                </InputGroup>
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
+            <form.Field
+              name='description'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+                  <InputGroup>
+                    <InputGroupTextarea
+                      {...field}
+                      placeholder='Vendor Description'
+                    />
+                    <InputGroupAddon align='block-end'>
+                      <InputGroupText
+                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
+                      >
+                        {field.value?.length ?? 0}/2000
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
 
-          <form.Field
-            name='image'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                <Input {...field} />
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
+            <form.Field
+              name='image'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
+                  <Input {...field} />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
 
-          <form.Field
-            name='address'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                <Input {...field} />
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
+            <form.Field
+              name='address'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
+                  <Input {...field} />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
 
-          <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Saving...' : 'Save Changes'}
-            </Button>
-          </Field>
-        </FieldGroup>
-      </FieldSet>
-    </form>
+            <Field>
+              <Button type='submit' disabled={form.state.isPending}>
+                {form.state.isPending ? 'Saving...' : 'Save Changes'}
+              </Button>
+            </Field>
+          </FieldGroup>
+        </FieldSet>
+      </form>
+    </>
   )
 }

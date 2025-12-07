@@ -23,6 +23,7 @@ export const SearchForm: React.FC = () => {
           name='q'
           defaultValue={query.search ?? ''}
           placeholder='Search...'
+          aria-label='Search'
         />
         <InputGroupAddon align='inline-end'>
           <InputGroupButton>

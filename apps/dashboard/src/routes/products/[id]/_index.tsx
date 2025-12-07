@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link } from 'react-router'
 
+import { buttonVariants } from '@yukinu/ui/button'
 import {
   Table,
   TableBody,
@@ -32,12 +34,25 @@ export default function ProductsUpdatePage({
 
   return (
     <>
+      <h1 className='sr-only'>Update Product page</h1>
+
       <UpdateProductForm data={data} />
 
-      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm'>
+      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
+        <div className='mb-6 flex items-center justify-between gap-4'>
+          <h2 className='text-2xl font-semibold'>Product Variants</h2>
+          <Link
+            to={`/products/${data.id}/variant`}
+            className={buttonVariants()}
+          >
+            Reciate New Variant
+          </Link>
+        </div>
+
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>No.</TableHead>
               <TableHead>SKU</TableHead>
               <TableHead>Options</TableHead>
               <TableHead>Price</TableHead>
@@ -46,8 +61,9 @@ export default function ProductsUpdatePage({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.variants.map((variant) => (
+            {data.variants.map((variant, index) => (
               <TableRow key={variant.id}>
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>{variant.sku}</TableCell>
                 <TableCell>
                   {variant.options

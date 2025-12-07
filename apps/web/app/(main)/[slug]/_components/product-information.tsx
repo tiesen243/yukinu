@@ -47,11 +47,11 @@ export const ProductInformation: React.FC = () => {
 
         <ul className='mb-4 flex flex-col gap-4'>
           {optionTypes.map((type) => (
-            <li key={type} className='flex items-center gap-4'>
+            <li key={type} className='flex items-baseline gap-4'>
               <p className='font-medium capitalize'>{type}</p>
 
               <RadioGroup
-                className='flex'
+                className='flex flex-wrap'
                 value={selectedOptions[type]}
                 onValueChange={(value) => {
                   handleOptionChange(type, value)

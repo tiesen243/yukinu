@@ -41,12 +41,14 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       <TableCell>{new Date(product.createdAt).toLocaleDateString()}</TableCell>
       <TableCell>{new Date(product.updatedAt).toLocaleDateString()}</TableCell>
       <TableCell className='space-x-2'>
-        <Link
-          to={`/products/${product.id}`}
-          className='text-primary underline-offset-4 hover:underline'
-        >
-          Edit
-        </Link>
+        {!isAdmin && (
+          <Link
+            to={`/products/${product.id}`}
+            className='text-primary underline-offset-4 hover:underline'
+          >
+            Edit
+          </Link>
+        )}
 
         {query.status === 'inactive' ? (
           <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
