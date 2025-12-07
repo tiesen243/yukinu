@@ -45,7 +45,7 @@ export default function ProductsUpdatePage({
             to={`/products/${data.id}/variant`}
             className={buttonVariants()}
           >
-            Reciate New Variant
+            Recreate New Variant
           </Link>
         </div>
 
