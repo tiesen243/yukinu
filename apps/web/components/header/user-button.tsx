@@ -49,6 +49,8 @@ export const UserButton = () => {
             {user.username.charAt(0).toUpperCase()}
           </AvatarFallback>
         </Avatar>
+
+        <span className='sr-only'>User menu</span>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align='end'>

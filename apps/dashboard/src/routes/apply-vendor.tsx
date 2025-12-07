@@ -77,6 +77,7 @@ export default function AppVendorPage() {
                   <InputGroupTextarea
                     {...field}
                     placeholder='Vendor Description'
+                    className='field-sizing-content max-h-52'
                   />
                   <InputGroupAddon align='block-end'>
                     <InputGroupText

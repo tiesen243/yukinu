@@ -9,7 +9,7 @@ export const ProductDescription: React.FC = () => {
     <section className='rounded-lg bg-card p-6 shadow-md dark:border'>
       <h2 className='mb-6 text-2xl font-semibold text-balance'>Overview</h2>
 
-      <p className='mb-8 text-base text-pretty whitespace-pre-wrap'>
+      <p className='mb-8 overflow-x-auto text-base text-pretty whitespace-pre-wrap'>
         {description?.split('\\n').join('\n')}
       </p>
 

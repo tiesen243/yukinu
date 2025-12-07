@@ -10,7 +10,12 @@ export const UsersPagination: React.FC = () => {
   const trpc = useTRPC()
   const [query, setQuery] = useUserQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.user.all.queryOptions({
+      ...query,
+      role: query.role ?? null,
+    }),
+  )
 
   if (isLoading || !data?.pagination) return
 

@@ -201,7 +201,7 @@ export namespace ProductValidators {
                 .min(1, 'Option is required')
                 .max(100, 'Option is too long'),
             )
-            .nonempty(),
+            .nonempty('At least one variant option is required'),
         }),
       ),
     })
@@ -226,14 +226,9 @@ export namespace ProductValidators {
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
 
-  export const createVariantInput = productVariant.omit({ id: true }).extend({
-    vendorId: z.cuid(),
-    options: z
-      .array(
-        z.string().min(1, 'Option is required').max(100, 'Option is too long'),
-      )
-      .nonempty(),
-  })
+  export const createVariantInput = createInput
+    .pick({ variants: true, vendorId: true })
+    .extend({ id: z.cuid() })
   export type CreateVariantInput = z.infer<typeof createVariantInput>
   export const createVariantOutput = z.object({ id: z.cuid() })
   export type CreateVariantOutput = z.infer<typeof createVariantOutput>

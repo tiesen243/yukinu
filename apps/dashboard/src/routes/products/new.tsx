@@ -52,7 +52,7 @@ export default function ProductsNewPage() {
       categoryId: '',
       price: '',
       stock: 0,
-      images: [],
+      images: [''],
       attributes: [],
       variants: [],
     } as Omit<ProductValidators.CreateInput, 'vendorId'>,
@@ -116,11 +116,7 @@ export default function ProductsNewPage() {
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
-                  <Select
-                    id={meta.fieldId}
-                    value={field.value}
-                    onChange={field.onChange}
-                  >
+                  <Select {...field}>
                     <SelectOption value=''>Select a category</SelectOption>
                     {data?.categories.map((category) => (
                       <SelectOption key={category.id} value={category.id}>
@@ -166,8 +162,13 @@ export default function ProductsNewPage() {
           <form.Field
             name='images'
             render={({ meta, field }) => (
-              <FieldGroup>
-                <FieldLabel htmlFor={meta.fieldId}>Images</FieldLabel>
+              <FieldGroup data-invalid={meta.errors.length > 0}>
+                <FieldLabel
+                  htmlFor={meta.fieldId}
+                  className={meta.errors.length > 0 ? 'text-destructive' : ''}
+                >
+                  Images
+                </FieldLabel>
                 <FieldDescription id={meta.descriptionId}>
                   Add URLs of images for the product. You can add multiple
                   images.
@@ -183,10 +184,15 @@ export default function ProductsNewPage() {
                           field.onChange(newImages)
                         }}
                         placeholder='https://example.com/image.jpg'
+                        aria-label={`Image URL ${index + 1}`}
+                        aria-describedby={field['aria-describedby']}
+                        aria-invalid={field['aria-invalid']}
                       />
                       <InputGroupAddon align='inline-end'>
                         <InputGroupButton
                           onClick={() => {
+                            if (field.value.length === 1) return
+
                             const newImages = field.value.filter(
                               (_, i) => i !== index,
                             )
@@ -194,6 +200,7 @@ export default function ProductsNewPage() {
                           }}
                         >
                           <MinusIcon />
+                          <span className='sr-only'>Remove Image URL</span>
                         </InputGroupButton>
                       </InputGroupAddon>
                     </InputGroup>
@@ -221,7 +228,12 @@ export default function ProductsNewPage() {
             name='attributes'
             render={({ meta, field }) => (
               <FieldGroup>
-                <FieldLabel htmlFor={meta.fieldId}>Attributes</FieldLabel>
+                <FieldLabel
+                  htmlFor={meta.fieldId}
+                  className={meta.errors.length > 0 ? 'text-destructive' : ''}
+                >
+                  Attributes
+                </FieldLabel>
                 <FieldDescription id={meta.descriptionId}>
                   Define custom attributes for the product (e.g., material,
                   brand).
@@ -238,6 +250,9 @@ export default function ProductsNewPage() {
                           field.onChange(newAttributes)
                         }}
                         placeholder='e.g., Color, Size'
+                        aria-label='Attribute Name'
+                        aria-describedby={field['aria-describedby']}
+                        aria-invalid={field['aria-invalid']}
                       />
                       <Input
                         value={attribute.value}
@@ -248,6 +263,9 @@ export default function ProductsNewPage() {
                           field.onChange(newAttributes)
                         }}
                         placeholder='e.g., Red, Large'
+                        aria-label='Attribute Value'
+                        aria-describedby={field['aria-describedby']}
+                        aria-invalid={field['aria-invalid']}
                       />
                       <Button
                         variant='outline'
@@ -259,6 +277,7 @@ export default function ProductsNewPage() {
                         }}
                       >
                         <MinusIcon />
+                        <span className='sr-only'>Remove Attribute</span>
                       </Button>
                     </div>
                   </Field>
@@ -287,7 +306,12 @@ export default function ProductsNewPage() {
             name='variants'
             render={({ meta, field }) => (
               <FieldGroup>
-                <FieldLabel htmlFor={meta.fieldId}>Variants</FieldLabel>
+                <FieldLabel
+                  htmlFor={meta.fieldId}
+                  className={meta.errors.length > 0 ? 'text-destructive' : ''}
+                >
+                  Variants
+                </FieldLabel>
                 <FieldDescription id={meta.descriptionId}>
                   Define product variants and their options (e.g., Size: Small,
                   Medium, Large).
@@ -306,6 +330,9 @@ export default function ProductsNewPage() {
                             field.onChange(newVariants)
                           }}
                           placeholder='e.g., Size'
+                          aria-label='Variant Name'
+                          aria-describedby={field['aria-describedby']}
+                          aria-invalid={field['aria-invalid']}
                         />
                         <InputGroupAddon align='inline-end'>
                           <InputGroupButton
@@ -316,6 +343,7 @@ export default function ProductsNewPage() {
                             }}
                           >
                             <MinusIcon />
+                            <span className='sr-only'>Remove Variant</span>
                           </InputGroupButton>
                         </InputGroupAddon>
                       </InputGroup>
@@ -336,6 +364,9 @@ export default function ProductsNewPage() {
                                 field.onChange(newVariants)
                               }}
                               placeholder='e.g., s, m, l'
+                              aria-label='Variant Option'
+                              aria-describedby={field['aria-describedby']}
+                              aria-invalid={field['aria-invalid']}
                             />
                             <InputGroupAddon align='inline-end'>
                               <InputGroupButton
@@ -349,6 +380,7 @@ export default function ProductsNewPage() {
                                 }}
                               >
                                 <MinusIcon />
+                                <span className='sr-only'>Remove Option</span>
                               </InputGroupButton>
                             </InputGroupAddon>
                           </InputGroup>
