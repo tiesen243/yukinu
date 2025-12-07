@@ -105,7 +105,12 @@ export class ProductService extends BaseService implements IProductService {
         stock: products.stock,
         sold: products.sold,
         category: { id: categories.id, name: categories.name },
-        vendor: { id: vendors.id, name: vendors.name, image: vendors.image },
+        vendor: {
+          id: vendors.id,
+          name: vendors.name,
+          image: vendors.image,
+          address: vendors.address,
+        },
         createdAt: products.createdAt,
         updatedAt: products.updatedAt,
       })
