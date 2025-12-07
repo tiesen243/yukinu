@@ -1,5 +1,19 @@
 # @yukinu/web
 
+## 0.6.3
+
+### Patch Changes
+
+- [#261](https://github.com/tiesen243/yukinu/pull/261) [`6f9448a`](https://github.com/tiesen243/yukinu/commit/6f9448a5f991713c4f6ee54008b3df6bab03e87e) Thanks [@tiesen243](https://github.com/tiesen243)! - added reciate product variants
+
+- Updated dependencies [[`6f9448a`](https://github.com/tiesen243/yukinu/commit/6f9448a5f991713c4f6ee54008b3df6bab03e87e)]:
+  - @yukinu/validators@0.4.1
+  - @yukinu/api@0.4.1
+  - @yukinu/ui@0.3.1
+  - @yukinu/auth@0.4.1
+  - @yukinu/db@0.4.1
+  - @yukinu/email@0.3.1
+
 ## 0.6.2
 
 ### Patch Changes
