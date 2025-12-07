@@ -20,7 +20,10 @@ export const ProductVendor: React.FC = () => {
       </Avatar>
 
       <div className='flex flex-1 flex-col items-start justify-between gap-2 text-center sm:flex-row sm:items-center'>
-        <p className='text-xl font-semibold'>{vendor?.name}</p>
+        <div className='flex flex-col items-start gap-2'>
+          <p className='text-xl font-semibold'>{vendor?.name}</p>
+          <p className='text-sm text-muted-foreground'>{vendor?.address}</p>
+        </div>
 
         <div className='flex gap-4'>
           <Button size='sm'>Contact</Button>

@@ -152,6 +152,7 @@ export namespace ProductValidators {
           id: z.cuid(),
           name: z.string(),
           image: z.url().nullable(),
+          address: z.string().nullable(),
         })
         .nullable(),
       attributes: z.array(
