@@ -28,27 +28,39 @@ export namespace ProductValidators {
 
   export const attribute = z.object({
     id: z.cuid(),
-    name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
+    name: z
+      .string()
+      .min(1, "Attribute's name is required")
+      .max(100, "Attribute's name is too long"),
   })
   export type Attribute = z.infer<typeof attribute>
 
   export const productAttribute = z.object({
     productId: z.cuid(),
     attributeId: z.cuid(),
-    value: z.string().min(1, 'Value is required').max(255, 'Value is too long'),
+    value: z
+      .string()
+      .min(1, "Attribute's value is required")
+      .max(255, "Attribute's value is too long"),
   })
   export type ProductAttribute = z.infer<typeof productAttribute>
 
   export const variant = z.object({
     id: z.cuid(),
-    name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
+    name: z
+      .string()
+      .min(1, "Variant's name is required")
+      .max(100, "Variant's name is too long"),
   })
   export type Variant = z.infer<typeof variant>
 
   export const variantOption = z.object({
     id: z.int().min(1000, 'ID must be at least 1000'),
     variantId: z.cuid(),
-    name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
+    value: z
+      .string()
+      .min(1, "Variant option's value is required")
+      .max(100, "Variant option's value is too long"),
   })
   export type VariantOption = z.infer<typeof variantOption>
 
@@ -178,29 +190,15 @@ export namespace ProductValidators {
       images: z.array(z.url()),
       attributes: z.array(
         z.object({
-          name: z
-            .string()
-            .min(1, 'Name is required')
-            .max(100, 'Name is too long'),
-          value: z
-            .string()
-            .min(1, 'Value is required')
-            .max(255, 'Value is too long'),
+          name: attribute.shape.name,
+          value: productAttribute.shape.value,
         }),
       ),
       variants: z.array(
         z.object({
-          name: z
-            .string()
-            .min(1, 'Name is required')
-            .max(100, 'Name is too long'),
+          name: variant.shape.name,
           options: z
-            .array(
-              z
-                .string()
-                .min(1, 'Option is required')
-                .max(100, 'Option is too long'),
-            )
+            .array(variantOption.shape.value)
             .nonempty('At least one variant option is required'),
         }),
       ),
@@ -226,12 +224,12 @@ export namespace ProductValidators {
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
 
-  export const createVariantInput = createInput
+  export const reciateVariantInput = createInput
     .pick({ variants: true, vendorId: true })
     .extend({ id: z.cuid() })
-  export type CreateVariantInput = z.infer<typeof createVariantInput>
-  export const createVariantOutput = z.object({ id: z.cuid() })
-  export type CreateVariantOutput = z.infer<typeof createVariantOutput>
+  export type ReciateVariantInput = z.infer<typeof reciateVariantInput>
+  export const reciateVariantOutput = z.object({ id: z.cuid() })
+  export type ReciateVariantOutput = z.infer<typeof reciateVariantOutput>
 
   export const updateVariantInput = productVariant
     .omit({ productId: true, sku: true })

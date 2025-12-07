@@ -76,15 +76,15 @@ export const productRouter = createTRPCRouter({
       }),
     ),
 
-  createVariant: vendorProcedure
+  reciateVariant: vendorProcedure
     .meta({
       message: 'Product variant created successfully',
       role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(ProductValidators.createVariantInput.omit({ vendorId: true }))
-    .output(ProductValidators.createVariantOutput)
+    .input(ProductValidators.reciateVariantInput.omit({ vendorId: true }))
+    .output(ProductValidators.reciateVariantOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.product.createVariant({ ...input, vendorId: ctx.vendorId }),
+      ctx.services.product.reciateVariant({ ...input, vendorId: ctx.vendorId }),
     ),
 
   updateVariant: vendorProcedure

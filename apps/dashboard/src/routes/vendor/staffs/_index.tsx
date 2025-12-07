@@ -12,6 +12,8 @@ import { StaffsList } from '@/routes/vendor/staffs/staffs-list'
 export default function VendorStaffsPage() {
   return (
     <>
+      <h1 className='sr-only'>Staffs Management page</h1>
+
       <div className='flex items-center justify-between'>
         <div>
           <h1 className='text-3xl font-bold'>Staffs Management</h1>
@@ -23,7 +25,7 @@ export default function VendorStaffsPage() {
         <InviteStaffButton />
       </div>
 
-      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm'>
+      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
         <Table>
           <TableHeader>
             <TableRow>

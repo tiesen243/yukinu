@@ -72,7 +72,7 @@ export const UpdateProductForm: React.FC<{
   return (
     <form
       onSubmit={form.handleSubmit}
-      className='rounded-lg bg-card p-6 text-card-foreground shadow-sm'
+      className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
     >
       <FieldSet>
         <FieldLegend>Update Product</FieldLegend>
@@ -192,10 +192,13 @@ export const UpdateProductForm: React.FC<{
                           field.onChange(newImages)
                         }}
                         placeholder='https://example.com/image.jpg'
+                        aria-label={`Image URL ${index + 1}`}
                       />
                       <InputGroupAddon align='inline-end'>
                         <InputGroupButton
                           onClick={() => {
+                            if (field.value.length === 1) return
+
                             const newImages = field.value.filter(
                               (_, i) => i !== index,
                             )
@@ -203,6 +206,7 @@ export const UpdateProductForm: React.FC<{
                           }}
                         >
                           <MinusIcon />
+                          <span className='sr-only'>Remove Image URL</span>
                         </InputGroupButton>
                       </InputGroupAddon>
                     </InputGroup>
@@ -210,7 +214,7 @@ export const UpdateProductForm: React.FC<{
                 ))}
                 <Button
                   type='button'
-                  variant='secondary'
+                  variant='outline'
                   onClick={() => {
                     field.onChange([...field.value, ''])
                   }}
@@ -246,6 +250,7 @@ export const UpdateProductForm: React.FC<{
                           field.onChange(newAttributes)
                         }}
                         placeholder='e.g., material, brand'
+                        aria-label='Attribute Name'
                       />
                       <Input
                         value={attribute.value}
@@ -256,8 +261,10 @@ export const UpdateProductForm: React.FC<{
                           field.onChange(newAttributes)
                         }}
                         placeholder='e.g., cotton, nike'
+                        aria-label='Attribute Value'
                       />
                       <Button
+                        type='button'
                         variant='outline'
                         size='icon'
                         onClick={() => {
@@ -267,6 +274,7 @@ export const UpdateProductForm: React.FC<{
                         }}
                       >
                         <MinusIcon />
+                        <span className='sr-only'>Remove Attribute</span>
                       </Button>
                     </div>
                   </Field>
@@ -275,7 +283,7 @@ export const UpdateProductForm: React.FC<{
                 <Field>
                   <Button
                     type='button'
-                    variant='secondary'
+                    variant='outline'
                     onClick={() => {
                       field.onChange([...field.value, { name: '', value: '' }])
                     }}
