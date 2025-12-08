@@ -14,6 +14,11 @@ export const orderStatusEnum = pgEnum('order_status', [
   'returned',
 ])
 
+export const paymentMethodEnum = pgEnum('payment_method', [
+  'bank_transfer',
+  'cash_on_delivery',
+])
+
 export const paymentStatusEnum = pgEnum('payment_status', [
   'pending',
   'completed',
@@ -23,7 +28,7 @@ export const paymentStatusEnum = pgEnum('payment_status', [
 export const orders = pgTable(
   'orders',
   (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    id: t.integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
     userId: t
       .varchar({ length: 24 })
       .notNull()
@@ -43,7 +48,7 @@ export const orderItems = pgTable(
   'order_items',
   (t) => ({
     orderId: t
-      .varchar({ length: 24 })
+      .integer()
       .notNull()
       .references(() => orders.id, { onDelete: 'cascade' }),
     productId: t
@@ -58,25 +63,27 @@ export const orderItems = pgTable(
   ],
 )
 
-export const payments = pgTable(
-  'payments',
+export const transactions = pgTable(
+  'transactions',
   (t) => ({
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     orderId: t
-      .varchar({ length: 24 })
+      .integer()
       .notNull()
       .references(() => orders.id, { onDelete: 'cascade' }),
     amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    method: paymentMethodEnum().notNull(),
     status: paymentStatusEnum().default('pending').notNull(),
     createdAt,
+    updatedAt,
   }),
-  (t) => [index('payments_order_id_idx').on(t.orderId)],
+  (t) => [index('transactions_order_id_idx').on(t.orderId)],
 )
 
 export const vouchers = pgTable('vouchers', (t) => ({
   id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
   code: t.varchar({ length: 50 }).notNull().unique(),
-  discountAmount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  discountAmount: t.numeric({ precision: 10, scale: 2 }),
+  discountPercentage: t.integer(),
   expiryDate: t.timestamp().notNull(),
-  createdAt,
 }))
