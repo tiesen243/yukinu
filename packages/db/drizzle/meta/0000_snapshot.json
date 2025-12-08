@@ -1,5 +1,5 @@
 {
-  "id": "8604e1ae-e52e-4a89-9b0f-cc9aec92f827",
+  "id": "a2ad411b-eead-434e-8cc5-8a2cbc5a083d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -189,6 +189,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "product_variant_id": {
+          "name": "product_variant_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "quantity": {
           "name": "quantity",
           "type": "integer",
@@ -237,6 +243,15 @@
           "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
+        },
+        "order_items_product_variant_id_products_id_fk": {
+          "name": "order_items_product_variant_id_products_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "products",
+          "columnsFrom": ["product_variant_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {
@@ -275,7 +290,13 @@
           "name": "user_id",
           "type": "varchar(24)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "address_id": {
+          "name": "address_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
         },
         "voucher_id": {
           "name": "voucher_id",
@@ -287,7 +308,8 @@
           "name": "total_amount",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'0.00'"
         },
         "status": {
           "name": "status",
@@ -335,6 +357,15 @@
           "tableFrom": "orders",
           "tableTo": "users",
           "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "orders_address_id_addresses_id_fk": {
+          "name": "orders_address_id_addresses_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "addresses",
+          "columnsFrom": ["address_id"],
           "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
@@ -1856,7 +1887,7 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": ["admin", "moderator", "vendor_owner", "vendor_staff", "user"]
+      "values": ["user", "admin", "vendor_owner", "vendor_staff", "moderator"]
     },
     "public.user_status": {
       "name": "user_status",

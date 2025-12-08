@@ -1,29 +1,25 @@
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
+import { OrderValidators } from '@yukinu/validators/order'
 
-import { products, users } from '@/schema'
+import { addresses, products, users } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const orderStatusEnum = pgEnum('order_status', [
-  'pending',
-  'processing',
-  'shipped',
-  'delivered',
-  'cancelled',
-  'returned',
-])
+export const orderStatusEnum = pgEnum(
+  'order_status',
+  OrderValidators.orderStatuses,
+)
 
-export const paymentMethodEnum = pgEnum('payment_method', [
-  'bank_transfer',
-  'cash_on_delivery',
-])
+export const paymentMethodEnum = pgEnum(
+  'payment_method',
+  OrderValidators.paymentMethods,
+)
 
-export const paymentStatusEnum = pgEnum('payment_status', [
-  'pending',
-  'completed',
-  'failed',
-])
+export const paymentStatusEnum = pgEnum(
+  'payment_status',
+  OrderValidators.paymentStatuses,
+)
 
 export const orders = pgTable(
   'orders',
@@ -31,12 +27,17 @@ export const orders = pgTable(
     id: t.integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
     userId: t
       .varchar({ length: 24 })
-      .notNull()
       .references(() => users.id, { onDelete: 'set null' }),
+    addressId: t
+      .varchar({ length: 24 })
+      .references(() => addresses.id, { onDelete: 'set null' }),
     voucherId: t
       .varchar({ length: 24 })
       .references(() => vouchers.id, { onDelete: 'set null' }),
-    totalAmount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    totalAmount: t
+      .numeric({ precision: 10, scale: 2 })
+      .notNull()
+      .default('0.00'),
     status: orderStatusEnum().default('pending').notNull(),
     createdAt,
     updatedAt,
@@ -52,6 +53,9 @@ export const orderItems = pgTable(
       .notNull()
       .references(() => orders.id, { onDelete: 'cascade' }),
     productId: t
+      .varchar({ length: 24 })
+      .references(() => products.id, { onDelete: 'set null' }),
+    productVariantId: t
       .varchar({ length: 24 })
       .references(() => products.id, { onDelete: 'set null' }),
     quantity: t.integer().notNull(),

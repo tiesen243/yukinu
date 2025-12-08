@@ -1,16 +1,16 @@
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
+import { UserValidators } from '@yukinu/validators/user'
 
 import { products, users } from '@/schema'
 
-export const genderEnum = pgEnum('gender', ['male', 'female', 'other'])
+export const genderEnum = pgEnum('gender', UserValidators.genders)
 
-export const ticketStatusEnum = pgEnum('ticket_status', [
-  'open',
-  'resolved',
-  'closed',
-])
+export const ticketStatusEnum = pgEnum(
+  'ticket_status',
+  UserValidators.ticketStatuses,
+)
 
 export const profiles = pgTable('profiles', (t) => ({
   id: t

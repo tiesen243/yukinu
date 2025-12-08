@@ -9,6 +9,7 @@
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",
     "./env.vite": "./dist/env.vite.mjs",
+    "./order": "./dist/order.mjs",
     "./product": "./dist/product.mjs",
     "./user": "./dist/user.mjs",
     "./vendor": "./dist/vendor.mjs",
