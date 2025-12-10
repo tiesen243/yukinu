@@ -7,18 +7,13 @@ import {
 } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
+import { UserValidators } from '@yukinu/validators/user'
 
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const userRoleEnum = pgEnum('user_role', [
-  'admin',
-  'moderator',
-  'vendor_owner',
-  'vendor_staff',
-  'user',
-])
+export const userRoleEnum = pgEnum('user_role', UserValidators.roles)
 
-export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
+export const userStatusEnum = pgEnum('user_status', UserValidators.statuses)
 
 export const users = pgTable(
   'users',

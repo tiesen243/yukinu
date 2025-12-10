@@ -19,7 +19,7 @@ export const ProductImages: React.FC = () => {
         <Image
           src={currentImage ?? '/assets/logo.svg'}
           alt={`${name}-image`}
-          className={cn('object-contain p-4', {
+          className={cn('rounded-md object-contain p-0.5', {
             'dark:invert': !currentImage,
           })}
           fill
@@ -31,21 +31,19 @@ export const ProductImages: React.FC = () => {
           <button
             key={id}
             className={cn(
-              'aspect-square size-20 shrink-0 rounded-md border transition-colors',
+              'relative aspect-square size-20 shrink-0 rounded-md border transition-colors',
               { 'border-primary bg-accent/40': currentImage === url },
             )}
             onClick={() => {
               handleChangeImage(url)
             }}
           >
-            <div className='relative aspect-square w-full'>
-              <Image
-                src={url}
-                alt={`${name}-thumbnail-${id}`}
-                className='object-contain p-1'
-                fill
-              />
-            </div>
+            <Image
+              src={`${url}?q=60`}
+              alt={`${name}-thumbnail-${id}`}
+              className='rounded-md object-contain p-0.5'
+              fill
+            />
           </button>
         ))}
       </div>

@@ -118,7 +118,7 @@ export class UserService extends BaseService implements IUserService {
   async profile(
     input: UserValidators.ProfileInput,
   ): Promise<UserValidators.ProfileOutput> {
-    const { eq } = this._orm
+    const { eq, sql } = this._orm
     const { users, profiles } = this._schema
     const { userId } = input
 
@@ -134,7 +134,7 @@ export class UserService extends BaseService implements IUserService {
         profile: {
           fullName: profiles.fullName,
           bio: profiles.bio,
-          gender: profiles.gender,
+          gender: sql<UserValidators.Gender | null>`${profiles.gender}`,
           dateOfBirth: profiles.dateOfBirth,
         },
       })

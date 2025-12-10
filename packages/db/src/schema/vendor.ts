@@ -1,15 +1,15 @@
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
+import { VendorValidators } from '@yukinu/validators/vendor'
 
 import { users } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const vendorStatusEnum = pgEnum('vendor_status', [
-  'pending',
-  'approved',
-  'suspended',
-])
+export const vendorStatusEnum = pgEnum(
+  'vendor_status',
+  VendorValidators.statuses,
+)
 
 export const vendors = pgTable(
   'vendors',

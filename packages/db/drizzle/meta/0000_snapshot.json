@@ -1,5 +1,5 @@
 {
-  "id": "ccdf6090-aaa7-4bad-90ea-16bd35e6ce39",
+  "id": "9e95f86f-e969-4195-a248-a42536abc332",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -177,14 +177,32 @@
       "name": "order_items",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
         "order_id": {
           "name": "order_id",
-          "type": "varchar(24)",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "product_id": {
           "name": "product_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "product_variant_id": {
+          "name": "product_variant_id",
           "type": "varchar(24)",
           "primaryKey": false,
           "notNull": false
@@ -200,6 +218,13 @@
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
+        },
+        "is_completed": {
+          "name": "is_completed",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         }
       },
       "indexes": {
@@ -217,6 +242,65 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "order_items_vendor_id_idx": {
+          "name": "order_items_vendor_id_idx",
+          "columns": [
+            {
+              "expression": "vendor_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "order_items_order_product_uq_idx": {
+          "name": "order_items_order_product_uq_idx",
+          "columns": [
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "product_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"order_items\".\"product_variant_id\" is null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "order_items_order_product_variant_uq_idx": {
+          "name": "order_items_order_product_variant_uq_idx",
+          "columns": [
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "product_variant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"order_items\".\"product_variant_id\" is not null",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -229,6 +313,15 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
+        "order_items_vendor_id_vendors_id_fk": {
+          "name": "order_items_vendor_id_vendors_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "vendors",
+          "columnsFrom": ["vendor_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
         "order_items_product_id_products_id_fk": {
           "name": "order_items_product_id_products_id_fk",
           "tableFrom": "order_items",
@@ -237,14 +330,18 @@
           "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
+        },
+        "order_items_product_variant_id_product_variants_id_fk": {
+          "name": "order_items_product_variant_id_product_variants_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "product_variants",
+          "columnsFrom": ["product_variant_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "order_items_order_id_product_id_pk": {
-          "name": "order_items_order_id_product_id_pk",
-          "columns": ["order_id", "product_id"]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -256,15 +353,32 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(24)",
+          "type": "integer",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "identity": {
+            "type": "always",
+            "name": "orders_id_seq",
+            "schema": "public",
+            "increment": "1",
+            "startWith": "1000",
+            "minValue": "1",
+            "maxValue": "2147483647",
+            "cache": "1",
+            "cycle": false
+          }
         },
         "user_id": {
           "name": "user_id",
           "type": "varchar(24)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "address_id": {
+          "name": "address_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
         },
         "voucher_id": {
           "name": "voucher_id",
@@ -276,7 +390,8 @@
           "name": "total_amount",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'0.00'"
         },
         "status": {
           "name": "status",
@@ -328,6 +443,15 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
+        "orders_address_id_addresses_id_fk": {
+          "name": "orders_address_id_addresses_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "addresses",
+          "columnsFrom": ["address_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
         "orders_voucher_id_vouchers_id_fk": {
           "name": "orders_voucher_id_vouchers_id_fk",
           "tableFrom": "orders",
@@ -344,8 +468,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.payments": {
-      "name": "payments",
+    "public.transactions": {
+      "name": "transactions",
       "schema": "",
       "columns": {
         "id": {
@@ -356,13 +480,20 @@
         },
         "order_id": {
           "name": "order_id",
-          "type": "varchar(24)",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
         "amount": {
           "name": "amount",
           "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "method": {
+          "name": "method",
+          "type": "payment_method",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
         },
@@ -380,11 +511,18 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {
-        "payments_order_id_idx": {
-          "name": "payments_order_id_idx",
+        "transactions_order_id_idx": {
+          "name": "transactions_order_id_idx",
           "columns": [
             {
               "expression": "order_id",
@@ -400,9 +538,9 @@
         }
       },
       "foreignKeys": {
-        "payments_order_id_orders_id_fk": {
-          "name": "payments_order_id_orders_id_fk",
-          "tableFrom": "payments",
+        "transactions_order_id_orders_id_fk": {
+          "name": "transactions_order_id_orders_id_fk",
+          "tableFrom": "transactions",
           "tableTo": "orders",
           "columnsFrom": ["order_id"],
           "columnsTo": ["id"],
@@ -436,20 +574,19 @@
           "name": "discount_amount",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "discount_percentage": {
+          "name": "discount_percentage",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         },
         "expiry_date": {
           "name": "expiry_date",
           "type": "timestamp",
           "primaryKey": false,
           "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
         }
       },
       "indexes": {},
@@ -1636,8 +1773,7 @@
         },
         "gender": {
           "name": "gender",
-          "type": "gender",
-          "typeSchema": "public",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": false
         },
@@ -1655,6 +1791,68 @@
           "tableFrom": "profiles",
           "tableTo": "users",
           "columnsFrom": ["id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.tickets": {
+      "name": "tickets",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subject": {
+          "name": "subject",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "ticket_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'open'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tickets_user_id_users_id_fk": {
+          "name": "tickets_user_id_users_id_fk",
+          "tableFrom": "tickets",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -1757,6 +1955,11 @@
         "returned"
       ]
     },
+    "public.payment_method": {
+      "name": "payment_method",
+      "schema": "public",
+      "values": ["bank_transfer", "cash_on_delivery"]
+    },
     "public.payment_status": {
       "name": "payment_status",
       "schema": "public",
@@ -1765,17 +1968,17 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": ["admin", "moderator", "vendor_owner", "vendor_staff", "user"]
+      "values": ["user", "admin", "vendor_owner", "vendor_staff", "moderator"]
     },
     "public.user_status": {
       "name": "user_status",
       "schema": "public",
       "values": ["active", "inactive"]
     },
-    "public.gender": {
-      "name": "gender",
+    "public.ticket_status": {
+      "name": "ticket_status",
       "schema": "public",
-      "values": ["male", "female", "other"]
+      "values": ["open", "resolved", "closed"]
     }
   },
   "schemas": {},

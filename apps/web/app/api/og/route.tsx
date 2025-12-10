@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
 
     const backgroundColor = theme === 'dark' ? '#000000' : '#fafafa'
     const foregroundColor = theme === 'dark' ? '#ffffff' : '#000000'
-    const primaryColor = theme === 'dark' ? '#dbe6f6' : '#293478'
+    const primaryColor = theme === 'dark' ? '#dbe6f6' : '#14185a'
 
     const [geistRegular, geistMedium, geistBold] = await Promise.all([
       getFont('Geist-Regular', 400),

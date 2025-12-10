@@ -233,4 +233,13 @@
     color: var(--color-foreground);
     letter-spacing: var(--tracking-normal);
   }
+
+  input[type='number'] {
+    appearance: textfield;
+    -webkit-inner-spin-button,
+    -webkit-outer-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
 }

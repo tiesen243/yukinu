@@ -22,6 +22,9 @@ const PageContext = React.createContext<{
 
   toggleWishlistItem: () => void
   isTogglingWishlistItem: boolean
+
+  addItemToCart: (quantity: number) => void
+  isAddingItemToCart: boolean
 } | null>(null)
 
 interface PageProviderProps {
@@ -68,13 +71,22 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     [],
   )
 
-  const { mutate, isPending: isTogglingWishlistItem } = useMutation({
-    ...trpc.user.toggleWishlistItem.mutationOptions(),
-    meta: { filter: trpc.user.wishlist.queryOptions({}) },
-    onSuccess: ({ added }) =>
-      toast.success(added ? 'Added to wishlist' : 'Removed from wishlist'),
+  const { mutate: toggleWishlistItem, isPending: isTogglingWishlistItem } =
+    useMutation({
+      ...trpc.user.toggleWishlistItem.mutationOptions(),
+      meta: { filter: trpc.user.wishlist.queryOptions({}) },
+      onSuccess: ({ added }) =>
+        toast.success(added ? 'Added to wishlist' : 'Removed from wishlist'),
+      onError: ({ message }) =>
+        toast.error('Failed to toggle wishlist item', { description: message }),
+    })
+
+  const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
+    ...trpc.order.addItemToCart.mutationOptions(),
+    meta: { filter: trpc.order.one.queryOptions({ status: 'pending' }) },
+    onSuccess: () => toast.success('Added to cart'),
     onError: ({ message }) =>
-      toast.error('Failed to toggle wishlist item', { description: message }),
+      toast.error('Failed to add item to cart', { description: message }),
   })
 
   const value = React.useMemo(() => {
@@ -104,19 +116,36 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
       handleOptionChange,
 
       toggleWishlistItem: () => {
-        mutate({ productId: product.id })
+        toggleWishlistItem({ productId: product.id })
       },
       isTogglingWishlistItem,
+
+      addItemToCart: (quantity: number) => {
+        const unitPrice =
+          product.variants.length > 0 ? selectedVariant?.price : product.price
+        if (!unitPrice) return toast.error('Selected variant is not available')
+
+        addItemToCart({
+          vendorId: product.vendor?.id ?? null,
+          productId: product.id,
+          unitPrice: unitPrice,
+          variantId: selectedVariant?.id,
+          quantity,
+        })
+      },
+      isAddingItemToCart,
     }
   }, [
+    addItemToCart,
     currentImage,
     handleChangeImage,
     handleOptionChange,
+    isAddingItemToCart,
     isTogglingWishlistItem,
     optionTypes,
     product,
     selectedOptions,
-    mutate,
+    toggleWishlistItem,
   ])
 
   return <PageContext value={value}>{children}</PageContext>

@@ -17,6 +17,8 @@ export const AddToCartButton: React.FC = () => {
     selectedVariant,
     toggleWishlistItem,
     isTogglingWishlistItem,
+    addItemToCart,
+    isAddingItemToCart,
   } = usePage()
   const [quantity, setQuantity] = useState(1)
 
@@ -78,18 +80,28 @@ export const AddToCartButton: React.FC = () => {
         </InputGroup>
 
         <p className='text-sm whitespace-nowrap text-muted-foreground'>
-          {selectedVariant
-            ? `${selectedVariant.stock} items available`
-            : 'This option is unavailable'}
+          {variants.length > 0
+            ? selectedVariant
+              ? `${selectedVariant.stock} items available`
+              : 'This option is unavailable'
+            : `${stock} items available`}
         </p>
       </div>
 
       <div className='flex w-full items-center gap-2'>
         <Button
           className='flex-1'
-          disabled={variants.length > 0 ? !selectedVariant : stock === 0}
+          onClick={() => {
+            addItemToCart(quantity)
+          }}
+          disabled={
+            isAddingItemToCart ||
+            (variants.length > 0
+              ? !selectedVariant || selectedVariant.stock === 0
+              : stock === 0)
+          }
         >
-          Add to Cart
+          {isAddingItemToCart ? 'Adding...' : 'Add to Cart'}
         </Button>
 
         <Button

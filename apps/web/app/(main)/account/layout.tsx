@@ -30,7 +30,7 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
         </nav>
       </aside>
 
-      <main className='relative w-full rounded-xl bg-card py-6 shadow-sm dark:border'>
+      <main className='w-full overflow-x-hidden rounded-xl bg-card py-6 shadow-sm dark:border'>
         {children}
       </main>
     </div>

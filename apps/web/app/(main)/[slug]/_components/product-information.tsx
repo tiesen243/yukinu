@@ -16,10 +16,12 @@ export const ProductInformation: React.FC = () => {
   } = usePage()
 
   return (
-    <section className='flex flex-col gap-6 md:col-span-2'>
-      <span className='text-sm text-accent-foreground'>{category?.name}</span>
+    <section className='flex flex-col gap-6 overflow-hidden md:col-span-2'>
+      {category && (
+        <span className='text-sm text-accent-foreground'>{category.name}</span>
+      )}
 
-      <h3 className='-mt-4 text-3xl font-medium text-balance'>{name}</h3>
+      <h3 className='text-3xl font-medium text-balance'>{name}</h3>
 
       <div className='flex items-center gap-4'>
         <span className='flex items-center gap-1 font-medium'>

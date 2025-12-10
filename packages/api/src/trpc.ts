@@ -9,6 +9,7 @@ import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
 import type { TRPCContext, TRPCMeta } from '@/types'
 import { AuthService } from '@/services/auth.service'
 import { CategoryService } from '@/services/category.service'
+import { OrderService } from '@/services/order.service'
 import { ProductService } from '@/services/product.service'
 import { UserService } from '@/services/user.service'
 import { VendorService } from '@/services/vendor.service'
@@ -20,6 +21,7 @@ const createTRPCContext = async (opts: {
 
   const authService = new AuthService(db, orm, schema)
   const categoryService = new CategoryService(db, orm, schema)
+  const orderService = new OrderService(db, orm, schema)
   const productService = new ProductService(db, orm, schema)
   const userService = new UserService(db, orm, schema)
   const vendorService = new VendorService(db, orm, schema)
@@ -30,6 +32,7 @@ const createTRPCContext = async (opts: {
     services: {
       auth: authService,
       category: categoryService,
+      order: orderService,
       product: productService,
       user: userService,
       vendor: vendorService,
