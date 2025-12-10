@@ -25,6 +25,7 @@ export class OrderService extends BaseService implements IOrderService {
       transactions,
       variantOptions,
       variants,
+      vendors,
       vouchers,
     } = this._schema
     const { id, userId, status } = input
@@ -102,6 +103,7 @@ export class OrderService extends BaseService implements IOrderService {
     const items = await this._db
       .select({
         id: orderItems.id,
+        vendorId: vendors.id,
         productId: products.id,
         productName: products.name,
         productImage: min(productImages.url),
@@ -123,6 +125,7 @@ export class OrderService extends BaseService implements IOrderService {
         eq(productVariants.id, orderItems.productVariantId),
       )
       .leftJoinLateral(variantData, sql`TRUE`)
+      .leftJoin(vendors, eq(vendors.id, orderItems.vendorId))
       .where(eq(orders.id, orderId))
       .groupBy(
         orderItems.id,
@@ -151,7 +154,8 @@ export class OrderService extends BaseService implements IOrderService {
   ): Promise<OrderValidators.AddItemToCartOutput> {
     const { isNotNull, isNull } = this._orm
     const { orderItems } = this._schema
-    const { userId, productId, variantId, unitPrice, quantity } = input
+    const { userId, vendorId, productId, variantId, unitPrice, quantity } =
+      input
 
     return this._db.transaction(async (tx) => {
       const cartId = await this._getUserCart(userId, tx)
@@ -160,6 +164,7 @@ export class OrderService extends BaseService implements IOrderService {
         .insert(orderItems)
         .values({
           orderId: cartId,
+          vendorId,
           productId,
           productVariantId: variantId ?? null,
           unitPrice,
@@ -180,19 +185,22 @@ export class OrderService extends BaseService implements IOrderService {
   async removeItemFromCart(
     input: OrderValidators.RemoveItemFromCartInput,
   ): Promise<OrderValidators.RemoveItemFromCartOutput> {
-    const { eq } = this._orm
+    const { and, eq } = this._orm
     const { orderItems } = this._schema
-    const { itemId } = input
+    const { itemId, userId } = input
 
-    const [result] = await this._db
-      .delete(orderItems)
-      .where(eq(orderItems.id, itemId))
-      .returning({ id: orderItems.productId })
-    if (!result)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'Item not found in cart.',
-      })
+    return this._db.transaction(async (tx) => {
+      const cartId = await this._getUserCart(userId, tx)
+      const [result] = await tx
+        .delete(orderItems)
+        .where(and(eq(orderItems.orderId, cartId), eq(orderItems.id, itemId)))
+        .returning({ id: orderItems.productId })
+      if (!result)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Item not found in cart.',
+        })
+    })
   }
 
   private async _getUserCart(

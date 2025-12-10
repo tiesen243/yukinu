@@ -69,6 +69,7 @@ export const CartItemsList: React.FC = () => {
       </TableCell>
       <TableCell className='space-x-4'>
         <EditButton
+          vendorId={item.vendorId}
           productId={item.productId}
           variantId={item.productVariantId}
           unitPrice={item.unitPrice}
@@ -95,6 +96,7 @@ export const CartItemsListSkeleton: React.FC = () =>
   ))
 
 const EditButton: React.FC<{
+  vendorId: string | null
   productId: string | null
   variantId: string | null
   unitPrice: string
@@ -102,7 +104,16 @@ const EditButton: React.FC<{
   variant: Record<string, string>
   quantity: number
   stock: number | null
-}> = ({ productId, variantId, unitPrice, name, variant, quantity, stock }) => {
+}> = ({
+  vendorId,
+  productId,
+  variantId,
+  unitPrice,
+  name,
+  variant,
+  quantity,
+  stock,
+}) => {
   const [localQuantity, setLocalQuantity] = React.useState(quantity)
   const [open, setOpen] = React.useState(false)
 
@@ -150,7 +161,6 @@ const EditButton: React.FC<{
           </InputGroupAddon>
           <InputGroupInput
             type='number'
-            className='apppearance-none'
             disabled={isPending}
             value={localQuantity}
             onChange={(e) => {
@@ -190,6 +200,7 @@ const EditButton: React.FC<{
               if (!productId) return
 
               mutate({
+                vendorId,
                 productId,
                 unitPrice,
                 quantity: localQuantity,

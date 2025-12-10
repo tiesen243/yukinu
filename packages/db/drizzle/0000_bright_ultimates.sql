@@ -31,7 +31,8 @@ CREATE TABLE "order_items" (
 	"product_id" varchar(24),
 	"product_variant_id" varchar(24),
 	"quantity" integer NOT NULL,
-	"unit_price" numeric(10, 2) NOT NULL
+	"unit_price" numeric(10, 2) NOT NULL,
+	"is_completed" boolean DEFAULT false NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "orders" (

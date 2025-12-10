@@ -126,6 +126,7 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
         if (!unitPrice) return toast.error('Selected variant is not available')
 
         addItemToCart({
+          vendorId: product.vendor?.id ?? null,
           productId: product.id,
           unitPrice: unitPrice,
           variantId: selectedVariant?.id,

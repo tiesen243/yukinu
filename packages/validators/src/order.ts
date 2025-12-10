@@ -66,8 +66,7 @@ export namespace OrderValidators {
         .min(0, 'Discount percentage cannot be negative')
         .max(100, 'Discount percentage cannot exceed 100')
         .nullable(),
-      createdAt: z.date(),
-      updatedAt: z.date(),
+      expiryDate: z.date(),
     })
     .refine(
       (data) =>
@@ -127,6 +126,7 @@ export namespace OrderValidators {
     items: z.array(
       z.object({
         id: z.cuid().nullable(),
+        vendorId: z.cuid().nullable(),
         productId: z.cuid().nullable(),
         productName: z.string().nullable(),
         productImage: z.string().nullable(),
@@ -166,6 +166,7 @@ export namespace OrderValidators {
 
   export const addItemToCartInput = z.object({
     userId: z.cuid(),
+    vendorId: z.cuid().nullable(),
     productId: z.cuid(),
     variantId: z.cuid().optional(),
     unitPrice: numeric,
