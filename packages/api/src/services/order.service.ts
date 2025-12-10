@@ -14,6 +14,19 @@ export class OrderService extends BaseService implements IOrderService {
   async one(
     input: OrderValidators.OneInput,
   ): Promise<OrderValidators.OneOutput> {
+    const { and, eq, isNotNull, min, sql } = this._orm
+    const {
+      addresses,
+      orderItems,
+      orders,
+      productImages,
+      productVariants,
+      products,
+      transactions,
+      variantOptions,
+      variants,
+      vouchers,
+    } = this._schema
     const { id, userId, status } = input
 
     let orderId: number
@@ -26,8 +39,99 @@ export class OrderService extends BaseService implements IOrderService {
           'Either order ID or status "pending" with user ID must be provided.',
       })
 
-    console.log('orderId', orderId)
-    throw new Error('Method not implemented.')
+    const [order] = await this._db
+      .select({
+        id: orders.id,
+        userId: orders.userId,
+        status: orders.status,
+        totalAmount: orders.totalAmount,
+        address: {
+          recipientName: addresses.recipientName,
+          phoneNumber: addresses.phoneNumber,
+          street: addresses.street,
+          city: addresses.city,
+          state: addresses.state,
+          postalCode: addresses.postalCode,
+          country: addresses.country,
+        },
+        transaction: {
+          id: transactions.id,
+          amount: transactions.amount,
+          method: transactions.method,
+          status: transactions.status,
+          updatedAt: transactions.updatedAt,
+        },
+        voucher: {
+          code: vouchers.code,
+          discountAmount: vouchers.discountAmount,
+          discountPercentage: vouchers.discountPercentage,
+        },
+        createdAt: orders.createdAt,
+        updatedAt: orders.updatedAt,
+      })
+      .from(orders)
+      .where(eq(orders.id, orderId))
+      .limit(1)
+      .leftJoin(addresses, eq(addresses.id, orders.addressId))
+      .leftJoin(vouchers, eq(vouchers.id, orders.voucherId))
+      .leftJoin(transactions, eq(transactions.orderId, orders.id))
+    if (!order)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Order not found.',
+      })
+
+    const variantData = this._db
+      .select({
+        variant: sql<
+          Record<string, string>
+        >`jsonb_object_agg(${variants.name}, ${variantOptions.value})`.as(
+          'variant',
+        ),
+      })
+      .from(variantOptions)
+      .leftJoin(variants, eq(variants.id, variantOptions.variantId))
+      .where(
+        and(
+          isNotNull(productVariants.sku),
+          sql`${variantOptions.id} = ANY(string_to_array(${productVariants.sku}, '-')::int[])`,
+        ),
+      )
+      .as('variant_data')
+
+    const items = await this._db
+      .select({
+        id: orderItems.id,
+        productId: products.id,
+        productName: products.name,
+        productImage: min(productImages.url),
+        productVariantId: productVariants.id,
+        unitPrice: orderItems.unitPrice,
+        quantity: orderItems.quantity,
+        stock: products.stock,
+        variantStock: productVariants.stock,
+        variant: sql<
+          Record<string, string>
+        >`COALESCE(${variantData.variant}, '{}'::jsonb)`.as('variant'),
+      })
+      .from(orders)
+      .innerJoin(orderItems, eq(orderItems.orderId, orders.id))
+      .leftJoin(products, eq(products.id, orderItems.productId))
+      .leftJoin(productImages, eq(productImages.productId, products.id))
+      .leftJoin(
+        productVariants,
+        eq(productVariants.id, orderItems.productVariantId),
+      )
+      .leftJoinLateral(variantData, sql`TRUE`)
+      .where(eq(orders.id, orderId))
+      .groupBy(
+        orderItems.id,
+        products.id,
+        productVariants.id,
+        variantData.variant,
+      )
+
+    return { ...order, items }
   }
 
   checkout(
@@ -76,25 +180,19 @@ export class OrderService extends BaseService implements IOrderService {
   async removeItemFromCart(
     input: OrderValidators.RemoveItemFromCartInput,
   ): Promise<OrderValidators.RemoveItemFromCartOutput> {
-    const { and, eq } = this._orm
+    const { eq } = this._orm
     const { orderItems } = this._schema
-    const { userId, itemId } = input
+    const { itemId } = input
 
-    return this._db.transaction(async (tx) => {
-      const cartId = await this._getUserCart(userId, tx)
-
-      const [result] = await tx
-        .delete(orderItems)
-        .where(
-          and(eq(orderItems.orderId, cartId), eq(orderItems.productId, itemId)),
-        )
-        .returning({ id: orderItems.productId })
-      if (!result)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Item not found in cart.',
-        })
-    })
+    const [result] = await this._db
+      .delete(orderItems)
+      .where(eq(orderItems.id, itemId))
+      .returning({ id: orderItems.productId })
+    if (!result)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Item not found in cart.',
+      })
   }
 
   private async _getUserCart(

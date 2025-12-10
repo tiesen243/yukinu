@@ -46,8 +46,8 @@ export namespace OrderValidators {
     id: z.cuid(),
     orderId: z.number().min(1000, 'ID must be at least 1000'),
     amount: numeric,
-    paymentMethod: z.enum(paymentMethods),
-    paymentStatus: z.enum(paymentStatuses),
+    method: z.enum(paymentMethods),
+    status: z.enum(paymentStatuses),
     createdAt: z.date(),
     updatedAt: z.date(),
   })
@@ -92,14 +92,55 @@ export namespace OrderValidators {
     status: z.enum(orderStatuses).optional(),
   })
   export type OneInput = z.infer<typeof oneInput>
-  export const oneOutput = order.extend({
+  export const oneOutput = z.object({
+    id: order.shape.id,
+    userId: order.shape.userId,
+    status: order.shape.status,
+    totalAmount: order.shape.totalAmount,
+    address: z
+      .object({
+        recipientName: z.string(),
+        phoneNumber: z.string(),
+        street: z.string(),
+        city: z.string(),
+        state: z.string(),
+        postalCode: z.string(),
+        country: z.string(),
+      })
+      .nullable(),
+    transaction: z
+      .object({
+        id: transaction.shape.id,
+        amount: transaction.shape.amount,
+        method: transaction.shape.method,
+        status: transaction.shape.status,
+        updatedAt: transaction.shape.updatedAt,
+      })
+      .nullable(),
+    voucher: z
+      .object({
+        code: voucher.shape.code,
+        discountAmount: voucher.shape.discountAmount,
+        discountPercentage: voucher.shape.discountPercentage,
+      })
+      .nullable(),
     items: z.array(
-      orderItem.omit({ orderId: true, productVariantId: true }).extend({
+      z.object({
+        id: z.cuid().nullable(),
+        productId: z.cuid().nullable(),
         productName: z.string().nullable(),
-        productImage: z.url().nullable(),
-        productVariant: z.string().nullable(),
+        productImage: z.string().nullable(),
+        productVariantId: z.cuid().nullable(),
+        unitPrice: numeric,
+        quantity: z.number().int().min(1, 'Quantity must be at least 1'),
+        variant: z.record(z.string(), z.string()),
+
+        stock: z.number().int().min(0).nullable(),
+        variantStock: z.number().int().min(0).nullable(),
       }),
     ),
+    createdAt: order.shape.createdAt,
+    updatedAt: order.shape.updatedAt,
   })
   export type OneOutput = z.infer<typeof oneOutput>
 
@@ -107,7 +148,7 @@ export namespace OrderValidators {
     id: order.shape.id,
     addressId: order.shape.addressId,
     voucherCode: voucher.shape.code.optional(),
-    paymentMethod: transaction.shape.paymentMethod,
+    paymentMethod: transaction.shape.method,
   })
   export type CheckoutInput = z.infer<typeof checkoutInput>
   export const checkoutOutput = z.void()

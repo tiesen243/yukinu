@@ -6,13 +6,7 @@ export default defineConfig({
   // base: mode === 'development' ? '/dashboard' : '/',
   plugins: [reactRouter(), tailwindcss()],
   resolve: { tsconfigPaths: true },
-  build: {
-    // assetsDir: 'dashboard/assets',
-    rollupOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === 'SOURCEMAP_ERROR') return
-        warn(warning)
-      },
-    },
-  },
+  // build: {
+  // assetsDir: 'dashboard/assets',
+  // },
 })

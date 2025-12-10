@@ -83,6 +83,7 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
     ...trpc.order.addItemToCart.mutationOptions(),
+    meta: { filter: trpc.order.one.queryOptions({ status: 'pending' }) },
     onSuccess: () => toast.success('Added to cart'),
     onError: ({ message }) =>
       toast.error('Failed to add item to cart', { description: message }),
