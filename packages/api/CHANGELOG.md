@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.4.3
+
+### Patch Changes
+
+- [#275](https://github.com/tiesen243/yukinu/pull/275) [`ac30cd6`](https://github.com/tiesen243/yukinu/commit/ac30cd677085dbd2ef5626c79eaca165ad632047) Thanks [@tiesen243](https://github.com/tiesen243)! - fix order.one query
+
 ## 0.4.2
 
 ### Patch Changes
