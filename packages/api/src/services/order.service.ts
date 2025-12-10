@@ -129,9 +129,10 @@ export class OrderService extends BaseService implements IOrderService {
       .where(eq(orders.id, orderId))
       .groupBy(
         orderItems.id,
-        products.id,
         productVariants.id,
+        products.id,
         variantData.variant,
+        vendors.id,
       )
 
     return { ...order, items }
