@@ -240,8 +240,8 @@ CREATE INDEX "vendor_staffs_vendor_id_idx" ON "vendor_staffs" USING btree ("vend
 CREATE INDEX "vendors_owner_id_idx" ON "vendors" USING btree ("owner_id");--> statement-breakpoint
 CREATE INDEX "order_items_order_id_idx" ON "order_items" USING btree ("order_id");--> statement-breakpoint
 CREATE INDEX "order_items_vendor_id_idx" ON "order_items" USING btree ("vendor_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "order_items_order_product_uq_idx" ON "order_items" USING btree ("order_id","product_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "order_items_order_product_variant_uq_idx" ON "order_items" USING btree ("order_id","product_variant_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "order_items_order_product_uq_idx" ON "order_items" USING btree ("order_id","product_id") WHERE "order_items"."product_variant_id" is null;--> statement-breakpoint
+CREATE UNIQUE INDEX "order_items_order_product_variant_uq_idx" ON "order_items" USING btree ("order_id","product_variant_id") WHERE "order_items"."product_variant_id" is not null;--> statement-breakpoint
 CREATE INDEX "orders_user_id_idx" ON "orders" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "transactions_order_id_idx" ON "transactions" USING btree ("order_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "attributes_name_idx" ON "attributes" USING btree ("name");--> statement-breakpoint

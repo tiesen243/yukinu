@@ -1,5 +1,5 @@
 {
-  "id": "ca094908-f369-423a-92b0-2349533ae058",
+  "id": "2c8198d5-92bc-4f80-a7a6-252df2fb026f",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -268,6 +268,7 @@
             }
           ],
           "isUnique": true,
+          "where": "\"order_items\".\"product_variant_id\" is null",
           "concurrently": false,
           "method": "btree",
           "with": {}
@@ -289,6 +290,7 @@
             }
           ],
           "isUnique": true,
+          "where": "\"order_items\".\"product_variant_id\" is not null",
           "concurrently": false,
           "method": "btree",
           "with": {}

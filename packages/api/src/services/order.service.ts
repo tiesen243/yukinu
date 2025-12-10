@@ -45,6 +45,7 @@ export class OrderService extends BaseService implements IOrderService {
   addItemToCart(
     input: OrderValidators.AddItemToCartInput,
   ): Promise<OrderValidators.AddItemToCartOutput> {
+    const { isNotNull, isNull } = this._orm
     const { orderItems } = this._schema
     const { userId, productId, variantId, unitPrice, quantity } = input
 
@@ -64,6 +65,9 @@ export class OrderService extends BaseService implements IOrderService {
           target: variantId
             ? [orderItems.orderId, orderItems.productVariantId]
             : [orderItems.orderId, orderItems.productId],
+          targetWhere: variantId
+            ? isNotNull(orderItems.productVariantId)
+            : isNull(orderItems.productVariantId),
           set: { quantity, unitPrice },
         })
     })

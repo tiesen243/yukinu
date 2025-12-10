@@ -1,3 +1,4 @@
+import { isNotNull, isNull } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
@@ -68,11 +69,12 @@ export const orderItems = pgTable(
   (t) => [
     index('order_items_order_id_idx').on(t.orderId),
     index('order_items_vendor_id_idx').on(t.vendorId),
-    uniqueIndex('order_items_order_product_uq_idx').on(t.orderId, t.productId),
-    uniqueIndex('order_items_order_product_variant_uq_idx').on(
-      t.orderId,
-      t.productVariantId,
-    ),
+    uniqueIndex('order_items_order_product_uq_idx')
+      .on(t.orderId, t.productId)
+      .where(isNull(t.productVariantId)),
+    uniqueIndex('order_items_order_product_variant_uq_idx')
+      .on(t.orderId, t.productVariantId)
+      .where(isNotNull(t.productVariantId)),
   ],
 )
 
