@@ -208,7 +208,7 @@ const EditButton: React.FC<{
               })
             }}
           >
-            Save changes
+            {isPending ? 'Saving...' : 'Save changes'}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -224,8 +224,8 @@ const RemoveButton: React.FC<{ itemId: string | null }> = ({ itemId }) => {
     ...trpc.order.removeItemFromCart.mutationOptions(),
     meta: { filter: trpc.order.one.queryFilter({ status: 'pending' }) },
     onSuccess: () => {
-      setOpen(false)
       toast.success('Item removed from cart')
+      setOpen(false)
     },
     onError: ({ message }) =>
       toast.error('Failed to remove item', { description: message }),
@@ -257,7 +257,7 @@ const RemoveButton: React.FC<{ itemId: string | null }> = ({ itemId }) => {
               mutate({ itemId })
             }}
           >
-            Remove
+            {isPending ? 'Removing...' : 'Remove'}
           </Button>
         </DialogFooter>
       </DialogContent>

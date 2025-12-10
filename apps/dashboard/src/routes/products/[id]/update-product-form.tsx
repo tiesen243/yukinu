@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
 
 import { Button } from '@yukinu/ui/button'
 import {
@@ -33,7 +32,6 @@ export const UpdateProductForm: React.FC<{
   data: ProductValidators.OneOutput
 }> = ({ data }) => {
   const trpc = useTRPC()
-  const navigate = useNavigate()
 
   const { data: product, refetch } = useQuery({
     ...trpc.product.one.queryOptions({ id: data.id }),
@@ -66,7 +64,6 @@ export const UpdateProductForm: React.FC<{
     } as Omit<ProductValidators.UpdateInput, 'vendorId'>,
     schema: ProductValidators.updateInput.omit({ vendorId: true }),
     onSubmit: mutateAsync,
-    onSuccess: () => void navigate('/products'),
   })
 
   return (
@@ -152,6 +149,10 @@ export const UpdateProductForm: React.FC<{
                     </InputGroupAddon>
                     <InputGroupInput {...field} placeholder='0.00' />
                   </InputGroup>
+                  <FieldDescription id={meta.descriptionId}>
+                    Leave blank or set to 0.00 if the product has variants, as
+                    each variant can have its own price.
+                  </FieldDescription>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

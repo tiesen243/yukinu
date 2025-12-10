@@ -11,7 +11,7 @@ export namespace ProductValidators {
     categoryId: z.cuid(),
     name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
     description: z.string().nullable(),
-    price: numeric,
+    price: numeric.default('0.00'),
     stock: z.int().min(0, 'Stock cannot be negative'),
     sold: z.int().min(0, 'Sold cannot be negative'),
     createdAt: z.date(),
