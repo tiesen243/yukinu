@@ -16,6 +16,9 @@ export namespace UserValidators {
   export const genders = ['male', 'female', 'other'] as const
   export type Gender = (typeof genders)[number]
 
+  export const ticketStatuses = ['open', 'resolved', 'closed'] as const
+  export type TicketStatus = (typeof ticketStatuses)[number]
+
   export const user = z.object({
     id: z.cuid(),
     username: z.string(),

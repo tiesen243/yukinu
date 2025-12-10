@@ -1,7 +1,31 @@
+import { Suspense } from 'react'
+
+import {
+  Table,
+  TableBody,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@yukinu/ui/table'
+
 import { AccountHeader } from '@/app/(main)/account/_components/header'
+import {
+  CartItemsList,
+  CartItemsListSkeleton,
+  CartItemsTotal,
+  CartItemsTotalSkeleton,
+} from '@/app/(main)/account/cart/page.client'
 import { createMetadata } from '@/lib/metadata'
+import { getQueryClient, trpc } from '@/lib/trpc/rsc'
+
+export const dynamic = 'force-dynamic'
 
 export default function AccountCartPage() {
+  void getQueryClient().prefetchQuery(
+    trpc.order.one.queryOptions({ status: 'pending' }),
+  )
+
   return (
     <>
       <AccountHeader
@@ -9,8 +33,33 @@ export default function AccountCartPage() {
         description='View and manage the items in your shopping cart before proceeding to checkout.'
       />
 
-      <section>
+      <section className='w-auto flex-1 overflow-x-auto px-6 pt-6'>
         <h2 className='sr-only'>Cart Items List section</h2>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className='w-full'>Product</TableHead>
+              <TableHead className='min-w-32'>Variant</TableHead>
+              <TableHead>Quantity</TableHead>
+              <TableHead>Unit Price</TableHead>
+              <TableHead>Total Price</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            <Suspense fallback={<CartItemsListSkeleton />}>
+              <CartItemsList />
+            </Suspense>
+          </TableBody>
+
+          <TableFooter>
+            <Suspense fallback={<CartItemsTotalSkeleton />}>
+              <CartItemsTotal />
+            </Suspense>
+          </TableFooter>
+        </Table>
       </section>
     </>
   )

@@ -65,13 +65,13 @@
   "catalog": {
     "@ianvs/prettier-plugin-sort-imports": "^4.7.0",
     "@tanstack/react-query": "^5.90.12",
-    "@types/node": "^24.10.1",
+    "@types/node": "^24.10.2",
     "eslint": "^9.39.1",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.7.2",
-    "tsdown": "^0.17.0",
+    "tsdown": "^0.17.2",
     "typescript": "^5.9.3",
-    "nuqs": "^2.8.3",
+    "nuqs": "^2.8.4",
     "zod": "^4.1.13"
   },
   "catalogs": {

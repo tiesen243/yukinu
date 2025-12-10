@@ -36,7 +36,7 @@ export default function ResetPassword(props: ResetPasswordEmailProps) {
         <Button
           href={resetLink}
           style={{
-            backgroundColor: '#5a7de4',
+            backgroundColor: '#3f5ec2',
             color: 'white',
             textDecoration: 'none',
             padding: '10px 16px',
