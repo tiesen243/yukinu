@@ -11,8 +11,20 @@ export class ProductService extends BaseService implements IProductService {
   async all(
     input: ProductValidators.AllInput,
   ): Promise<ProductValidators.AllOutput> {
-    const { and, asc, desc, eq, ilike, max, min, isNull, isNotNull, sql } =
-      this._orm
+    const {
+      and,
+      asc,
+      desc,
+      or,
+      eq,
+      inArray,
+      ilike,
+      max,
+      min,
+      isNull,
+      isNotNull,
+      sql,
+    } = this._orm
     const {
       categories,
       productImages,
@@ -26,7 +38,19 @@ export class ProductService extends BaseService implements IProductService {
 
     const whereClauses = []
     if (search) whereClauses.push(ilike(products.name, `%${search}%`))
-    if (categoryId) whereClauses.push(eq(products.categoryId, categoryId))
+    if (categoryId)
+      whereClauses.push(
+        or(
+          eq(products.categoryId, categoryId),
+          inArray(
+            products.categoryId,
+            this._db
+              .select({ id: categories.id })
+              .from(categories)
+              .where(eq(categories.parentId, categoryId)),
+          ),
+        ),
+      )
     if (vendorId) whereClauses.push(eq(products.vendorId, vendorId))
     if (isDeleted) whereClauses.push(isNotNull(products.deletedAt))
     else whereClauses.push(isNull(products.deletedAt))
