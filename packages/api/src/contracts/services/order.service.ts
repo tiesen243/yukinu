@@ -17,10 +17,6 @@ export interface IOrderService {
     input: OrderValidators.AddItemToCartInput,
   ): Promise<OrderValidators.AddItemToCartOutput>
 
-  updateItemInCart(
-    input: OrderValidators.UpdateItemInCartInput,
-  ): Promise<OrderValidators.UpdateItemInCartOutput>
-
   removeItemFromCart(
     input: OrderValidators.RemoveItemFromCartInput,
   ): Promise<OrderValidators.RemoveItemFromCartOutput>

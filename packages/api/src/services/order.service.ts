@@ -1,3 +1,6 @@
+import { TRPCError } from '@trpc/server'
+
+import type { Database } from '@yukinu/db'
 import type { OrderValidators } from '@yukinu/validators/order'
 
 import type { IOrderService } from '@/contracts/services/order.service'
@@ -8,10 +11,22 @@ export class OrderService extends BaseService implements IOrderService {
     throw new Error('Method not implemented.')
   }
 
-  one(input: OrderValidators.OneInput): Promise<OrderValidators.OneOutput> {
-    const { userId, status } = input
+  async one(
+    input: OrderValidators.OneInput,
+  ): Promise<OrderValidators.OneOutput> {
+    const { id, userId, status } = input
 
-    if (status === 'pending') return this._getUserCart(userId)
+    let orderId: number
+    if (status === 'pending') orderId = await this._getUserCart(userId)
+    else if (id) orderId = id
+    else
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message:
+          'Either order ID or status "pending" with user ID must be provided.',
+      })
+
+    console.log('orderId', orderId)
     throw new Error('Method not implemented.')
   }
 
@@ -28,26 +43,85 @@ export class OrderService extends BaseService implements IOrderService {
   }
 
   addItemToCart(
-    _input: OrderValidators.AddItemToCartInput,
+    input: OrderValidators.AddItemToCartInput,
   ): Promise<OrderValidators.AddItemToCartOutput> {
-    throw new Error('Method not implemented.')
+    const { orderItems } = this._schema
+    const { userId, productId, variantId, unitPrice, quantity } = input
+
+    return this._db.transaction(async (tx) => {
+      const cartId = await this._getUserCart(userId, tx)
+
+      await tx
+        .insert(orderItems)
+        .values({
+          orderId: cartId,
+          productId,
+          productVariantId: variantId ?? null,
+          unitPrice,
+          quantity,
+        })
+        .onConflictDoUpdate({
+          target: variantId
+            ? [orderItems.orderId, orderItems.productVariantId]
+            : [orderItems.orderId, orderItems.productId],
+          set: { quantity, unitPrice },
+        })
+    })
   }
 
-  updateItemInCart(
-    _input: OrderValidators.UpdateItemInCartInput,
-  ): Promise<OrderValidators.UpdateItemInCartOutput> {
-    throw new Error('Method not implemented.')
-  }
-
-  removeItemFromCart(
-    _input: OrderValidators.RemoveItemFromCartInput,
+  async removeItemFromCart(
+    input: OrderValidators.RemoveItemFromCartInput,
   ): Promise<OrderValidators.RemoveItemFromCartOutput> {
-    throw new Error('Method not implemented.')
+    const { and, eq } = this._orm
+    const { orderItems } = this._schema
+    const { userId, itemId } = input
+
+    return this._db.transaction(async (tx) => {
+      const cartId = await this._getUserCart(userId, tx)
+
+      const [result] = await tx
+        .delete(orderItems)
+        .where(
+          and(eq(orderItems.orderId, cartId), eq(orderItems.productId, itemId)),
+        )
+        .returning({ id: orderItems.productId })
+      if (!result)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Item not found in cart.',
+        })
+    })
   }
 
-  private _getUserCart(
-    _userId: OrderValidators.OneInput['userId'],
-  ): Promise<OrderValidators.OneOutput> {
-    throw new Error('Method not implemented.')
+  private async _getUserCart(
+    userId: OrderValidators.OneInput['userId'],
+    tx: Database = this._db,
+  ): Promise<number> {
+    const { and, eq } = this._orm
+    const { orders } = this._schema
+
+    if (!userId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'User ID is required to get the cart.',
+      })
+
+    let [cart] = await tx
+      .select({ id: orders.id })
+      .from(orders)
+      .where(and(eq(orders.userId, userId), eq(orders.status, 'pending')))
+    if (!cart)
+      [cart] = await tx
+        .insert(orders)
+        .values({ userId, status: 'pending' })
+        .returning({ id: orders.id })
+
+    if (!cart?.id)
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to create or retrieve the cart.',
+      })
+
+    return cart.id
   }
 }

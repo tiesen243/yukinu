@@ -1,5 +1,5 @@
 {
-  "id": "a2ad411b-eead-434e-8cc5-8a2cbc5a083d",
+  "id": "ca094908-f369-423a-92b0-2349533ae058",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -177,11 +177,23 @@
       "name": "order_items",
       "schema": "",
       "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
         "order_id": {
           "name": "order_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
         },
         "product_id": {
           "name": "product_id",
@@ -223,6 +235,63 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "order_items_vendor_id_idx": {
+          "name": "order_items_vendor_id_idx",
+          "columns": [
+            {
+              "expression": "vendor_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "order_items_order_product_uq_idx": {
+          "name": "order_items_order_product_uq_idx",
+          "columns": [
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "product_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "order_items_order_product_variant_uq_idx": {
+          "name": "order_items_order_product_variant_uq_idx",
+          "columns": [
+            {
+              "expression": "order_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "product_variant_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -235,6 +304,15 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
+        "order_items_vendor_id_vendors_id_fk": {
+          "name": "order_items_vendor_id_vendors_id_fk",
+          "tableFrom": "order_items",
+          "tableTo": "vendors",
+          "columnsFrom": ["vendor_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
         "order_items_product_id_products_id_fk": {
           "name": "order_items_product_id_products_id_fk",
           "tableFrom": "order_items",
@@ -244,22 +322,17 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "order_items_product_variant_id_products_id_fk": {
-          "name": "order_items_product_variant_id_products_id_fk",
+        "order_items_product_variant_id_product_variants_id_fk": {
+          "name": "order_items_product_variant_id_product_variants_id_fk",
           "tableFrom": "order_items",
-          "tableTo": "products",
+          "tableTo": "product_variants",
           "columnsFrom": ["product_variant_id"],
           "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {
-        "order_items_order_id_product_id_pk": {
-          "name": "order_items_order_id_product_id_pk",
-          "columns": ["order_id", "product_id"]
-        }
-      },
+      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},

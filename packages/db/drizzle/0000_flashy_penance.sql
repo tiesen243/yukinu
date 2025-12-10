@@ -26,12 +26,13 @@ CREATE TABLE "vendors" (
 );
 --> statement-breakpoint
 CREATE TABLE "order_items" (
+	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"order_id" integer NOT NULL,
+	"vendor_id" varchar(24),
 	"product_id" varchar(24),
 	"product_variant_id" varchar(24),
 	"quantity" integer NOT NULL,
-	"unit_price" numeric(10, 2) NOT NULL,
-	CONSTRAINT "order_items_order_id_product_id_pk" PRIMARY KEY("order_id","product_id")
+	"unit_price" numeric(10, 2) NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "orders" (
@@ -210,8 +211,9 @@ ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_vendor_id_vendors_id_f
 ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_order_id_orders_id_fk" FOREIGN KEY ("order_id") REFERENCES "public"."orders"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "order_items" ADD CONSTRAINT "order_items_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "order_items" ADD CONSTRAINT "order_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "order_items" ADD CONSTRAINT "order_items_product_variant_id_products_id_fk" FOREIGN KEY ("product_variant_id") REFERENCES "public"."products"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "order_items" ADD CONSTRAINT "order_items_product_variant_id_product_variants_id_fk" FOREIGN KEY ("product_variant_id") REFERENCES "public"."product_variants"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_address_id_addresses_id_fk" FOREIGN KEY ("address_id") REFERENCES "public"."addresses"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "orders" ADD CONSTRAINT "orders_voucher_id_vouchers_id_fk" FOREIGN KEY ("voucher_id") REFERENCES "public"."vouchers"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -237,6 +239,9 @@ ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_product_id_products_
 CREATE INDEX "vendor_staffs_vendor_id_idx" ON "vendor_staffs" USING btree ("vendor_id");--> statement-breakpoint
 CREATE INDEX "vendors_owner_id_idx" ON "vendors" USING btree ("owner_id");--> statement-breakpoint
 CREATE INDEX "order_items_order_id_idx" ON "order_items" USING btree ("order_id");--> statement-breakpoint
+CREATE INDEX "order_items_vendor_id_idx" ON "order_items" USING btree ("vendor_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "order_items_order_product_uq_idx" ON "order_items" USING btree ("order_id","product_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "order_items_order_product_variant_uq_idx" ON "order_items" USING btree ("order_id","product_variant_id");--> statement-breakpoint
 CREATE INDEX "orders_user_id_idx" ON "orders" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "transactions_order_id_idx" ON "transactions" USING btree ("order_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "attributes_name_idx" ON "attributes" USING btree ("name");--> statement-breakpoint

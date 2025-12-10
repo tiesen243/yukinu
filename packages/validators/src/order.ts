@@ -124,26 +124,19 @@ export namespace OrderValidators {
   export type UpdateOutput = z.infer<typeof updateOutput>
 
   export const addItemToCartInput = z.object({
-    id: order.shape.id,
+    userId: z.cuid(),
     productId: z.cuid(),
+    variantId: z.cuid().optional(),
+    unitPrice: numeric,
     quantity: z.number().int().min(1, 'Quantity must be at least 1'),
   })
   export type AddItemToCartInput = z.infer<typeof addItemToCartInput>
   export const addItemToCartOutput = z.void()
   export type AddItemToCartOutput = z.infer<typeof addItemToCartOutput>
 
-  export const updateItemInCartInput = z.object({
-    id: order.shape.id,
-    productId: z.cuid(),
-    quantity: z.number().int().min(1, 'Quantity must be at least 1'),
-  })
-  export type UpdateItemInCartInput = z.infer<typeof updateItemInCartInput>
-  export const updateItemInCartOutput = z.void()
-  export type UpdateItemInCartOutput = z.infer<typeof updateItemInCartOutput>
-
   export const removeItemFromCartInput = z.object({
-    id: order.shape.id,
-    productId: z.cuid(),
+    userId: z.cuid(),
+    itemId: z.cuid(),
   })
   export type RemoveItemFromCartInput = z.infer<typeof removeItemFromCartInput>
   export const removeItemFromCartOutput = z.void()
