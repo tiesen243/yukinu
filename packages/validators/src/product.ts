@@ -168,13 +168,19 @@ export namespace ProductValidators {
       ),
       reviews: z.array(
         productReview
-          .omit({ productId: true, userId: true, updatedAt: true })
+          .omit({
+            productId: true,
+            userId: true,
+            createdAt: true,
+            updatedAt: true,
+          })
           .extend({
             user: z.object({
               id: z.cuid(),
               username: z.string(),
               image: z.url().nullable(),
             }),
+            createdAt: z.coerce.date().transform((d) => new Date(d)),
           }),
       ),
     })

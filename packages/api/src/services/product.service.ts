@@ -104,7 +104,7 @@ export class ProductService extends BaseService implements IProductService {
   async one(
     input: ProductValidators.OneInput,
   ): Promise<ProductValidators.OneOutput> {
-    const { and, asc, eq, inArray, isNull } = this._orm
+    const { and, eq, isNull, sql } = this._orm
     const {
       attributes,
       categories,
@@ -120,6 +120,33 @@ export class ProductService extends BaseService implements IProductService {
     } = this._schema
     const { id } = input
 
+    const imagesAgg = sql<ProductValidators.OneOutput['images']>`
+      jsonb_agg(distinct jsonb_build_object(
+        'id', ${productImages.id}, 
+        'url', ${productImages.url}
+      )) filter (where ${productImages.id} is not null)
+    `.as('images')
+
+    const attributesAgg = sql<ProductValidators.OneOutput['attributes']>`
+      jsonb_agg(distinct jsonb_build_object(
+        'name', ${attributes.name}, 'value', ${productAttributes.value}
+      )) filter (where ${attributes.id} is not null)
+    `.as('attributes')
+
+    const reviewsAgg = sql<ProductValidators.OneOutput['reviews']>`
+      jsonb_agg(distinct jsonb_build_object(
+        'id', ${productReviews.id},
+        'rating', ${productReviews.rating},
+        'comment', ${productReviews.comment},
+        'user', jsonb_build_object(
+          'id', ${users.id},
+          'username', ${users.username},
+          'image', ${users.image}
+        ),
+        'createdAt', ${productReviews.createdAt}
+      )) filter (where ${productReviews.id} is not null)
+    `.as('reviews')
+
     const [product] = await this._db
       .select({
         id: products.id,
@@ -129,85 +156,63 @@ export class ProductService extends BaseService implements IProductService {
         stock: products.stock,
         sold: products.sold,
         category: { id: categories.id, name: categories.name },
+        images: imagesAgg,
+        attributes: attributesAgg,
         vendor: {
           id: vendors.id,
           name: vendors.name,
           image: vendors.image,
           address: vendors.address,
         },
+        reviews: reviewsAgg,
         createdAt: products.createdAt,
         updatedAt: products.updatedAt,
       })
       .from(products)
       .leftJoin(categories, eq(categories.id, products.categoryId))
+      .leftJoin(productImages, eq(productImages.productId, products.id))
+      .leftJoin(productAttributes, eq(productAttributes.productId, products.id))
+      .leftJoin(attributes, eq(attributes.id, productAttributes.attributeId))
+      .leftJoin(productReviews, eq(productReviews.productId, products.id))
+      .leftJoin(users, eq(users.id, productReviews.userId))
       .leftJoin(vendors, eq(vendors.id, products.vendorId))
       .where(and(eq(products.id, id), isNull(products.deletedAt)))
       .limit(1)
+      .groupBy(products.id, categories.id, vendors.id)
+
     if (!product)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Product with id ${id} not found`,
       })
 
-    const [attrs, images, vrts, reviews] = await Promise.all([
-      this._db
-        .select({ name: attributes.name, value: productAttributes.value })
-        .from(productAttributes)
-        .where(eq(productAttributes.productId, id))
-        .innerJoin(attributes, eq(attributes.id, productAttributes.attributeId))
-        .orderBy(asc(attributes.name)),
-      this._db
-        .select({ id: productImages.id, url: productImages.url })
-        .from(productImages)
-        .where(eq(productImages.productId, id)),
-      this._db
-        .select({
-          id: productVariants.id,
-          sku: productVariants.sku,
-          price: productVariants.price,
-          stock: productVariants.stock,
-        })
-        .from(productVariants)
-        .where(eq(productVariants.productId, id)),
-      this._db
-        .select({
-          id: productReviews.id,
-          rating: productReviews.rating,
-          comment: productReviews.comment,
-          user: {
-            id: users.id,
-            username: users.username,
-            image: users.image,
-          },
-          createdAt: productReviews.createdAt,
-        })
-        .from(productReviews)
-        .where(eq(productReviews.productId, id))
-        .innerJoin(users, eq(users.id, productReviews.userId)),
-    ])
+    const variantOptionsAgg = sql<
+      ProductValidators.OneOutput['variants'][number]['options']
+    >`
+      jsonb_agg(jsonb_build_object(
+        'name', ${variants.name}, 
+        'value', ${variantOptions.value}
+      ))
+    `.as('options')
 
-    const variantsList = await Promise.all(
-      vrts.map(async (vrt) => {
-        const ids = vrt.sku.split('-').map((v) => parseInt(v, 10))
+    const vrts = await this._db
+      .select({
+        id: productVariants.id,
+        sku: productVariants.sku,
+        price: productVariants.price,
+        stock: productVariants.stock,
+        options: variantOptionsAgg,
+      })
+      .from(productVariants)
+      .leftJoin(
+        variantOptions,
+        sql`${variantOptions.id} = ANY(string_to_array(${productVariants.sku}, '-')::int[])`,
+      )
+      .leftJoin(variants, eq(variants.id, variantOptions.variantId))
+      .where(eq(productVariants.productId, id))
+      .groupBy(productVariants.id)
 
-        const options = await this._db
-          .select({ name: variants.name, value: variantOptions.value })
-          .from(variantOptions)
-          .where(inArray(variantOptions.id, ids))
-          .innerJoin(variants, eq(variants.id, variantOptions.variantId))
-          .orderBy(asc(variantOptions.value))
-
-        return { ...vrt, options }
-      }),
-    )
-
-    return {
-      ...product,
-      images,
-      attributes: attrs,
-      variants: variantsList,
-      reviews,
-    }
+    return { ...product, variants: vrts }
   }
 
   async create(
