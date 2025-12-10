@@ -1,5 +1,5 @@
 {
-  "id": "2c8198d5-92bc-4f80-a7a6-252df2fb026f",
+  "id": "f9b50f27-31c1-4976-8494-1933f1c47c27",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1766,8 +1766,7 @@
         },
         "gender": {
           "name": "gender",
-          "type": "gender",
-          "typeSchema": "public",
+          "type": "varchar(50)",
           "primaryKey": false,
           "notNull": false
         },
@@ -1968,11 +1967,6 @@
       "name": "user_status",
       "schema": "public",
       "values": ["active", "inactive"]
-    },
-    "public.gender": {
-      "name": "gender",
-      "schema": "public",
-      "values": ["male", "female", "other"]
     },
     "public.ticket_status": {
       "name": "ticket_status",

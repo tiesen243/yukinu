@@ -5,8 +5,6 @@ import { UserValidators } from '@yukinu/validators/user'
 
 import { products, users } from '@/schema'
 
-export const genderEnum = pgEnum('gender', UserValidators.genders)
-
 export const ticketStatusEnum = pgEnum(
   'ticket_status',
   UserValidators.ticketStatuses,
@@ -19,7 +17,7 @@ export const profiles = pgTable('profiles', (t) => ({
     .references(() => users.id, { onDelete: 'cascade' }),
   fullName: t.varchar({ length: 255 }),
   bio: t.text(),
-  gender: genderEnum(),
+  gender: t.varchar({ length: 50 }),
   dateOfBirth: t.date(),
 }))
 

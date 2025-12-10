@@ -4,7 +4,6 @@ CREATE TYPE "public"."payment_method" AS ENUM('bank_transfer', 'cash_on_delivery
 CREATE TYPE "public"."payment_status" AS ENUM('pending', 'completed', 'failed');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'vendor_owner', 'vendor_staff', 'moderator');--> statement-breakpoint
 CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive');--> statement-breakpoint
-CREATE TYPE "public"."gender" AS ENUM('male', 'female', 'other');--> statement-breakpoint
 CREATE TYPE "public"."ticket_status" AS ENUM('open', 'resolved', 'closed');--> statement-breakpoint
 CREATE TABLE "vendor_staffs" (
 	"vendor_id" varchar(24) NOT NULL,
@@ -187,7 +186,7 @@ CREATE TABLE "profiles" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"full_name" varchar(255),
 	"bio" text,
-	"gender" "gender",
+	"gender" varchar(50),
 	"date_of_birth" date
 );
 --> statement-breakpoint
