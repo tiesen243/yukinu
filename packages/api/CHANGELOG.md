@@ -1,5 +1,17 @@
 # @yukinu/api
 
+## 0.4.2
+
+### Patch Changes
+
+- [#272](https://github.com/tiesen243/yukinu/pull/272) [`c79bbf1`](https://github.com/tiesen243/yukinu/commit/c79bbf1f9345fd34e0a428ae012776e46e9e4002) Thanks [@tiesen243](https://github.com/tiesen243)! - update add to cart logic
+
+- [#272](https://github.com/tiesen243/yukinu/pull/272) [`e037b2b`](https://github.com/tiesen243/yukinu/commit/e037b2bc9ece556947d9d8d12d40de3d076f53f5) Thanks [@tiesen243](https://github.com/tiesen243)! - update add to cart
+
+- Updated dependencies [[`6deb47d`](https://github.com/tiesen243/yukinu/commit/6deb47d20e98615122e99e1713051883bdd5113e), [`be12be4`](https://github.com/tiesen243/yukinu/commit/be12be456f124a75a7485e9730f869d1e9dd3af7)]:
+  - @yukinu/db@0.4.2
+  - @yukinu/auth@0.4.2
+
 ## 0.4.1
 
 ### Patch Changes
