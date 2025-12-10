@@ -1,5 +1,13 @@
 # @yukinu/db
 
+## 0.4.2
+
+### Patch Changes
+
+- [#272](https://github.com/tiesen243/yukinu/pull/272) [`6deb47d`](https://github.com/tiesen243/yukinu/commit/6deb47d20e98615122e99e1713051883bdd5113e) Thanks [@tiesen243](https://github.com/tiesen243)! - update database
+
+- [#272](https://github.com/tiesen243/yukinu/pull/272) [`be12be4`](https://github.com/tiesen243/yukinu/commit/be12be456f124a75a7485e9730f869d1e9dd3af7) Thanks [@tiesen243](https://github.com/tiesen243)! - remove gender enum
+
 ## 0.4.1
 
 ### Patch Changes
