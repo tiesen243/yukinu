@@ -5,7 +5,7 @@ import { ArrowRightIcon } from '@yukinu/ui/icons'
 
 export const CTASection: React.FC = () => {
   return (
-    <section className='bg-accent/60 px-4 py-20 text-accent-foreground sm:px-6 md:py-32 lg:px-8'>
+    <section className='bg-accent/20 px-4 py-20 text-accent-foreground sm:px-6 md:py-32 lg:px-8 dark:bg-accent/10'>
       <div className='container space-y-6 text-center'>
         <h2 className='text-3xl font-bold sm:text-4xl lg:text-5xl'>
           Ready to transform your shopping experience?

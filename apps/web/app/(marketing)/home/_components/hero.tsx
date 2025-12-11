@@ -49,7 +49,9 @@ export const HeroSection: React.FC = () => (
             className='rounded-xl border bg-card p-6 text-center text-accent-foreground transition-colors hover:border-accent hover:bg-accent/20 hover:text-primary'
           >
             <p className='text-2xl font-bold'>{item.title}</p>
-            <p className='text-sm text-muted-foreground'>{item.description}</p>
+            <p className='text-sm text-accent-foreground/70'>
+              {item.description}
+            </p>
           </div>
         ))}
       </div>

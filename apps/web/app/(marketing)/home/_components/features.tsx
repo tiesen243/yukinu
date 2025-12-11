@@ -28,9 +28,9 @@ export const FeaturesSection: React.FC = () => (
           key={feature.title}
           className='rounded-lg border bg-card p-8 text-accent-foreground transition-colors hover:border-accent hover:bg-accent/20 hover:text-primary'
         >
-          <feature.icon className='mb-4 h-12 w-12' />
+          <feature.icon className='mb-4 size-12' />
           <h3 className='mb-3 text-lg font-semibold'>{feature.title}</h3>
-          <p className='text-muted-foreground'>{feature.description}</p>
+          <p className='text-accent-foreground/70'>{feature.description}</p>
         </div>
       ))}
     </div>

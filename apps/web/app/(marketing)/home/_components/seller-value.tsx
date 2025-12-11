@@ -13,19 +13,19 @@ export const SellerValue: React.FC = () => (
     <h2 className='sr-only'>Value for Sellers</h2>
 
     <div className='container grid grid-cols-1 items-center gap-12 lg:grid-cols-2'>
-      <section className='order-2 flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/20 p-8 md:p-12 lg:order-1'>
+      <section className='order-2 flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/20 p-8 md:p-12 lg:order-1 dark:bg-accent/10'>
         <h3 className='sr-only'>
           Business growth and sales optimization section
         </h3>
 
         <div className='space-y-4 text-center'>
-          <BarChart3Icon className='mx-auto size-20 text-primary/30' />
+          <BarChart3Icon className='mx-auto size-20 text-accent' />
           <p className='text-accent-foreground/60'>Grow your business</p>
         </div>
       </section>
 
       <section className='order-1 space-y-8 lg:order-2'>
-        <span className='mb-0 inline-block rounded-full bg-card px-4 py-2 text-sm font-medium text-primary shadow-sm dark:border'>
+        <span className='mb-0 inline-block rounded-full border-accent bg-accent/40 px-4 py-2 text-sm font-medium text-accent-foreground shadow-sm dark:border'>
           For Vendors
         </span>
         <h3 className='my-6 text-3xl leading-tight font-bold text-balance text-foreground sm:text-4xl'>
@@ -41,9 +41,9 @@ export const SellerValue: React.FC = () => (
 
           {benefits.map(({ icon: Icon, title, desc }) => (
             <div className='flex items-start gap-4' key={title}>
-              <Icon className='size-6 shrink-0 text-primary' />
+              <Icon className='size-6 shrink-0 text-accent-foreground' />
               <div>
-                <p className='font-semibold text-foreground'>{title}</p>
+                <p className='font-semibold'>{title}</p>
                 <span className='text-muted-foreground'>{desc}</span>
               </div>
             </div>
