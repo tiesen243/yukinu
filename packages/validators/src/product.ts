@@ -114,6 +114,22 @@ export namespace ProductValidators {
   })
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
+    category: z
+      .object({
+        id: z.cuid(),
+        name: z.string(),
+        description: z.string().nullable(),
+        image: z.url().nullable(),
+      })
+      .nullable(),
+    vendor: z
+      .object({
+        id: z.cuid(),
+        name: z.string(),
+        description: z.string().nullable(),
+        image: z.url().nullable(),
+      })
+      .nullable(),
     products: z.array(
       product
         .pick({

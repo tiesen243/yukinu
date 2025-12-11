@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
 
@@ -36,8 +38,8 @@ export const ProductVendor: React.FC = () => {
         <div className='flex gap-4'>
           <Button size='sm'>Contact</Button>
 
-          <Button variant='outline' size='sm'>
-            View Shop
+          <Button variant='outline' size='sm' asChild>
+            <Link href={`/search?v=${vendor.id}`}>View Shop</Link>
           </Button>
         </div>
       </div>

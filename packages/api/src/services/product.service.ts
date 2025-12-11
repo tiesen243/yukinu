@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
 import type { ProductValidators } from '@yukinu/validators/product'
+import { vendors } from '@yukinu/db/schema'
 
 import type { IProductService } from '@/contracts/services/product.service'
 import { BaseService } from '@/services/base.service'
@@ -89,13 +90,42 @@ export class ProductService extends BaseService implements IProductService {
       productsQuery.orderBy(directionSql(products[field]))
     }
 
-    const [productsList, total] = await Promise.all([
+    const categoyQuery = categoryId
+      ? this._db
+          .select({
+            id: categories.id,
+            name: categories.name,
+            description: categories.description,
+            image: categories.image,
+          })
+          .from(categories)
+          .where(eq(categories.id, categoryId))
+          .limit(1)
+      : Promise.resolve([])
+    const vendorQuery = vendorId
+      ? this._db
+          .select({
+            id: vendors.id,
+            name: vendors.name,
+            image: vendors.image,
+            description: vendors.address,
+          })
+          .from(vendors)
+          .where(eq(vendors.id, vendorId))
+          .limit(1)
+      : Promise.resolve([])
+
+    const [productsList, [category], [vendor], total] = await Promise.all([
       productsQuery,
+      categoyQuery,
+      vendorQuery,
       this._db.$count(products, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 
     return {
+      category: category ?? null,
+      vendor: vendor ?? null,
       products: productsList,
       pagination: { total, page, limit, totalPages },
     }
@@ -120,20 +150,24 @@ export class ProductService extends BaseService implements IProductService {
     } = this._schema
     const { id } = input
 
-    const imagesAgg = sql<ProductValidators.OneOutput['images']>`
+    const imagesAgg = sql<ProductValidators.OneOutput['images']>`coalesce(
       jsonb_agg(distinct jsonb_build_object(
         'id', ${productImages.id}, 
         'url', ${productImages.url}
-      )) filter (where ${productImages.id} is not null)
-    `.as('images')
+      )) filter (where ${productImages.productId} is not null),
+      '[]'::jsonb
+    )`.as('images')
 
-    const attributesAgg = sql<ProductValidators.OneOutput['attributes']>`
+    const attributesAgg = sql<
+      ProductValidators.OneOutput['attributes']
+    >`coalesce(
       jsonb_agg(distinct jsonb_build_object(
         'name', ${attributes.name}, 'value', ${productAttributes.value}
-      )) filter (where ${attributes.id} is not null)
-    `.as('attributes')
+      )) filter (where ${productAttributes.productId} is not null),
+      '[]'::jsonb
+    )`.as('attributes')
 
-    const reviewsAgg = sql<ProductValidators.OneOutput['reviews']>`
+    const reviewsAgg = sql<ProductValidators.OneOutput['reviews']>`coalesce(
       jsonb_agg(distinct jsonb_build_object(
         'id', ${productReviews.id},
         'rating', ${productReviews.rating},
@@ -144,8 +178,9 @@ export class ProductService extends BaseService implements IProductService {
           'image', ${users.image}
         ),
         'createdAt', ${productReviews.createdAt}
-      )) filter (where ${productReviews.id} is not null)
-    `.as('reviews')
+      )) filter (where ${productReviews.productId} is not null),
+      '[]'::jsonb
+    )`.as('reviews')
 
     const [product] = await this._db
       .select({
@@ -188,12 +223,13 @@ export class ProductService extends BaseService implements IProductService {
 
     const variantOptionsAgg = sql<
       ProductValidators.OneOutput['variants'][number]['options']
-    >`
-      jsonb_agg(jsonb_build_object(
+    >`coalesce(
+      jsonb_agg(distinct jsonb_build_object(
         'name', ${variants.name}, 
         'value', ${variantOptions.value}
-      ))
-    `.as('options')
+      )) filter (where ${variantOptions.variantId} is not null),
+      '[]'::jsonb
+    )`.as('options')
 
     const vrts = await this._db
       .select({

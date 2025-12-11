@@ -30,6 +30,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
         <Image
           src={category.image ?? '/assets/logo.svg'}
           alt={category.name}
+          loading='eager'
           className={cn(
             'rounded-t-lg object-cover transition-transform group-hover/category-card:scale-105',
             { 'dark:invert': category.image == null },
