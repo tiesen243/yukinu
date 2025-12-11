@@ -15,9 +15,7 @@ export const ProductsPagination: React.FC<{ isAdmin?: boolean }> = ({
   const queryOptions = isAdmin
     ? trpc.product.all.queryOptions
     : trpc.product.allByVendor.queryOptions
-  const { data, isLoading } = useQuery(
-    queryOptions({ ...query, isDeleted: query.status === 'inactive' }),
-  )
+  const { data, isLoading } = useQuery(queryOptions(query))
 
   if (isLoading || !data?.pagination) return
 

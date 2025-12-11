@@ -20,7 +20,6 @@ export class ProductService extends BaseService implements IProductService {
       eq,
       inArray,
       ilike,
-      max,
       min,
       isNull,
       isNotNull,
@@ -64,12 +63,11 @@ export class ProductService extends BaseService implements IProductService {
         category: categories.name,
         image: min(productImages.url),
         price: products.price,
-        minPrice: sql<string>`LEAST(${min(productVariants.price)}, ${products.price})`,
-        maxPrice: sql<string>`GREATEST(${max(productVariants.price)}, ${products.price})`,
         sold: products.sold,
         rating: sql<string>`COALESCE(ROUND(AVG(${productReviews.rating}), 2), 0)`,
         createdAt: products.createdAt,
         updatedAt: products.updatedAt,
+        deletedAt: products.deletedAt,
       })
       .from(products)
       .where(whereClause)
@@ -242,7 +240,7 @@ export class ProductService extends BaseService implements IProductService {
       .from(productVariants)
       .leftJoin(
         variantOptions,
-        sql`${variantOptions.id} = ANY(string_to_array(${productVariants.sku}, '-')::int[])`,
+        sql`${variantOptions.id} = ANY(string_to_array(substring(${productVariants.sku} from 6), '-')::int[])`,
       )
       .leftJoin(variants, eq(variants.id, variantOptions.variantId))
       .where(eq(productVariants.productId, id))
@@ -264,16 +262,18 @@ export class ProductService extends BaseService implements IProductService {
     } = this._schema
     const { attributes: attrs, images, variants: vrts, ...data } = input
 
-    const [category] = await this._db
-      .select({ id: categories.id })
-      .from(categories)
-      .where(eq(categories.id, data.categoryId))
-      .limit(1)
-    if (!category)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: `Category with id ${data.categoryId} does not exist`,
-      })
+    if (data.categoryId) {
+      const [category] = await this._db
+        .select({ id: categories.id })
+        .from(categories)
+        .where(eq(categories.id, data.categoryId))
+        .limit(1)
+      if (!category)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Category with id ${data.categoryId} does not exist`,
+        })
+    }
 
     return this._db.transaction(async (tx) => {
       const [product] = await tx
@@ -316,9 +316,43 @@ export class ProductService extends BaseService implements IProductService {
     input: ProductValidators.UpdateInput,
   ): Promise<ProductValidators.UpdateOutput> {
     const { and, eq } = this._orm
-    const { attributes, productAttributes, productImages, products } =
-      this._schema
+    const {
+      attributes,
+      categories,
+      productAttributes,
+      productImages,
+      products,
+    } = this._schema
     const { id, vendorId, attributes: attrs, images, ...data } = input
+    if (!vendorId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Vendor ID is required for updating a product',
+      })
+
+    const [productToUpdate] = await this._db
+      .select({ categoryId: products.categoryId })
+      .from(products)
+      .where(eq(products.id, id))
+      .limit(1)
+    if (!productToUpdate)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
+
+    if (data.categoryId && data.categoryId !== productToUpdate.categoryId) {
+      const [category] = await this._db
+        .select({ id: categories.id })
+        .from(categories)
+        .where(eq(categories.id, data.categoryId))
+        .limit(1)
+      if (!category)
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: `Category with id ${data.categoryId} does not exist`,
+        })
+    }
 
     const [product] = await this._db
       .select({ id: products.id })
@@ -447,12 +481,53 @@ export class ProductService extends BaseService implements IProductService {
     return { id }
   }
 
+  async permanentDelete(
+    input: ProductValidators.PermanentDeleteInput,
+  ): Promise<ProductValidators.PermanentDeleteOutput> {
+    const { and, eq } = this._orm
+    const { products } = this._schema
+    const { id, vendorId } = input
+
+    const [product] = await this._db
+      .select({ id: products.id, deletedAt: products.deletedAt })
+      .from(products)
+      .where(
+        and(
+          eq(products.id, id),
+          vendorId === MINMOD_ACCESS
+            ? undefined
+            : eq(products.vendorId, vendorId),
+        ),
+      )
+      .limit(1)
+    if (!product)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
+
+    if (product.deletedAt === null)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Product with id ${id} must be deleted before permanent deletion`,
+      })
+
+    await this._db.delete(products).where(this._orm.eq(products.id, id))
+
+    return { id }
+  }
+
   async recreateVariant(
     input: ProductValidators.RecreateVariantInput,
   ): Promise<ProductValidators.RecreateVariantOutput> {
     const { and, eq } = this._orm
     const { productVariants, products } = this._schema
     const { id, vendorId, variants: vrts } = input
+    if (!vendorId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Vendor ID is required for recreating product variants',
+      })
 
     const [product] = await this._db
       .select({ id: products.id })
@@ -605,11 +680,12 @@ export class ProductService extends BaseService implements IProductService {
       results.map((r) => r.options.map(String)),
     )
     if (skuCombinations.length > 0)
-      await tx
-        .insert(productVariants)
-        .values(
-          skuCombinations.map((skus) => ({ productId, sku: skus.join('-') })),
-        )
+      await tx.insert(productVariants).values(
+        skuCombinations.map((skus) => ({
+          productId,
+          sku: `${productId.slice(-4)}-${skus.join('-')}`,
+        })),
+      )
 
     return { id: productId }
   }

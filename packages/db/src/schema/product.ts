@@ -124,7 +124,7 @@ export const productVariants = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => products.id, { onDelete: 'cascade' }),
-    sku: t.varchar({ length: 100 }).notNull(), // Stock Keeping Unit: variant_options ids joined by '-'
+    sku: t.varchar({ length: 100 }).notNull(),
     price: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
     stock: t.integer().notNull().default(0),
   }),

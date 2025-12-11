@@ -21,6 +21,10 @@ export interface IProductService {
     input: ProductValidators.RestoreInput,
   ): Promise<ProductValidators.RestoreOutput>
 
+  permanentDelete(
+    input: ProductValidators.PermanentDeleteInput,
+  ): Promise<ProductValidators.PermanentDeleteOutput>
+
   recreateVariant(
     input: ProductValidators.RecreateVariantInput,
   ): Promise<ProductValidators.RecreateVariantOutput>

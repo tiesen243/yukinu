@@ -7,8 +7,8 @@ export namespace ProductValidators {
 
   export const product = z.object({
     id: z.cuid(),
-    vendorId: z.cuid(),
-    categoryId: z.cuid(),
+    vendorId: z.cuid().nullable(),
+    categoryId: z.cuid().nullable(),
     name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
     description: z.string().nullable(),
     price: numeric.default('0.00'),
@@ -16,6 +16,7 @@ export namespace ProductValidators {
     sold: z.int().min(0, 'Sold cannot be negative'),
     createdAt: z.date(),
     updatedAt: z.date(),
+    deletedAt: z.date().nullable(),
   })
   export type Product = z.infer<typeof product>
 
@@ -139,13 +140,12 @@ export namespace ProductValidators {
           sold: true,
           createdAt: true,
           updatedAt: true,
+          deletedAt: true,
         })
         .extend({
           category: z.string().nullable(),
           image: z.url().nullable(),
           rating: z.string(),
-          minPrice: numeric,
-          maxPrice: numeric,
         }),
     ),
     pagination: z.object({
@@ -160,7 +160,7 @@ export namespace ProductValidators {
   export const oneInput = z.object({ id: z.cuid() })
   export type OneInput = z.infer<typeof oneInput>
   export const oneOutput = product
-    .omit({ categoryId: true, vendorId: true })
+    .omit({ categoryId: true, vendorId: true, deletedAt: true })
     .extend({
       category: z.object({ id: z.cuid(), name: z.string() }).nullable(),
       vendor: z
@@ -203,7 +203,13 @@ export namespace ProductValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = product
-    .omit({ id: true, sold: true, createdAt: true, updatedAt: true })
+    .omit({
+      id: true,
+      sold: true,
+      createdAt: true,
+      updatedAt: true,
+      deletedAt: true,
+    })
     .extend({
       description: z
         .string()
@@ -246,6 +252,14 @@ export namespace ProductValidators {
   export type RestoreInput = z.infer<typeof restoreInput>
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
+
+  export const permanentDeleteInput = z.object({
+    id: z.cuid(),
+    vendorId: z.cuid(),
+  })
+  export type PermanentDeleteInput = z.infer<typeof permanentDeleteInput>
+  export const permanentDeleteOutput = z.object({ id: z.cuid() })
+  export type PermanentDeleteOutput = z.infer<typeof permanentDeleteOutput>
 
   export const recreateVariantInput = createInput
     .pick({ variants: true, vendorId: true })

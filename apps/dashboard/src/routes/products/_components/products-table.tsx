@@ -16,8 +16,11 @@ import {
   SearchForm,
   ToggleProductStatusButton,
 } from '@/routes/products/_components/search-form'
+import { useProductQueryStates } from '@/routes/products/_hook'
 
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
+  const [query] = useProductQueryStates()
+
   return (
     <>
       <div className='my-6 flex items-center justify-between gap-4'>
@@ -53,7 +56,9 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
               <TableHead>Rating</TableHead>
               <TableHead>Price</TableHead>
               <TableHead>Created At</TableHead>
-              <TableHead>Updated At</TableHead>
+              <TableHead>
+                {!query.isDeleted ? 'Updated At' : 'Deleted At'}
+              </TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>

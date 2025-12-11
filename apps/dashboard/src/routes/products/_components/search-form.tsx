@@ -40,14 +40,14 @@ export const ToggleProductStatusButton = () => {
       onClick={() =>
         setQuery((prev) => ({
           ...prev,
-          status: prev.status === 'active' ? 'inactive' : 'active',
+          isDeleted: !prev.isDeleted,
           page: 1,
         }))
       }
     >
-      {query.status === 'active' ? <Trash2Icon /> : <PackageIcon />}
+      {query.isDeleted ? <PackageIcon /> : <Trash2Icon />}
       <span className='sr-only md:not-sr-only'>
-        {query.status === 'active' ? 'Trash' : 'All Products'}
+        {query.isDeleted ? 'All Products' : 'Deleted Products'}
       </span>
     </Button>
   )
