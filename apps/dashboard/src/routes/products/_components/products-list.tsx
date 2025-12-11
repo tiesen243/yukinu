@@ -5,6 +5,7 @@ import { TableCell, TableRow } from '@yukinu/ui/table'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { DeleteProductButton } from '@/routes/products/_components/delete-product-button'
+import { PermanentDeleteProductButton } from '@/routes/products/_components/permanent-delete-button'
 import { RestoreProductButton } from '@/routes/products/_components/restore-product-button'
 import { useProductQueryStates } from '@/routes/products/_hook'
 
@@ -15,9 +16,7 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const queryOptions = isAdmin
     ? trpc.product.all.queryOptions
     : trpc.product.allByVendor.queryOptions
-  const { data, isLoading } = useQuery(
-    queryOptions({ ...query, isDeleted: query.status === 'inactive' }),
-  )
+  const { data, isLoading } = useQuery(queryOptions(query))
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
@@ -38,10 +37,14 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       <TableCell>{product.sold}</TableCell>
       <TableCell>{product.rating}</TableCell>
       <TableCell>{product.price}</TableCell>
-      <TableCell>{new Date(product.createdAt).toLocaleDateString()}</TableCell>
-      <TableCell>{new Date(product.updatedAt).toLocaleDateString()}</TableCell>
+      <TableCell>{product.createdAt.toLocaleDateString()}</TableCell>
+      <TableCell>
+        {!query.isDeleted
+          ? product.updatedAt.toLocaleDateString()
+          : product.deletedAt?.toLocaleDateString()}
+      </TableCell>
       <TableCell className='space-x-2'>
-        {!isAdmin && (
+        {!isAdmin && !query.isDeleted && (
           <Link
             to={`/products/${product.id}`}
             className='text-primary underline-offset-4 hover:underline'
@@ -50,8 +53,11 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           </Link>
         )}
 
-        {query.status === 'inactive' ? (
-          <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
+        {query.isDeleted ? (
+          <>
+            <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
+            <PermanentDeleteProductButton productId={product.id} />
+          </>
         ) : (
           <DeleteProductButton productId={product.id} isAdmin={isAdmin} />
         )}

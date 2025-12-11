@@ -76,6 +76,20 @@ export const productRouter = createTRPCRouter({
       }),
     ),
 
+  permanentDelete: vendorProcedure
+    .meta({
+      message: 'Product permanently deleted successfully',
+      role: ['admin', 'moderator', 'vendor_owner'],
+    })
+    .input(ProductValidators.permanentDeleteInput.omit({ vendorId: true }))
+    .output(ProductValidators.permanentDeleteOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.product.permanentDelete({
+        ...input,
+        vendorId: ctx.vendorId,
+      }),
+    ),
+
   recreateVariant: vendorProcedure
     .meta({
       message: 'Product variants recreated successfully',

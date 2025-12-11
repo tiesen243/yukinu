@@ -17,16 +17,19 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
       <aside className='shrink-0 rounded-xl bg-card py-6 text-card-foreground shadow-sm md:w-1/4 dark:border'>
         <UserHeader />
 
-        <nav className='flex w-full flex-row gap-2 overflow-x-auto px-6 pt-4 pb-2 md:flex-col md:pb-0'>
-          {sidebarLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className='inline-flex items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm font-medium whitespace-nowrap ring-ring hover:border-primary hover:bg-sidebar-accent hover:text-sidebar-accent-foreground dark:hover:bg-sidebar-accent/50 [&_svg]:size-4'
-            >
-              <link.icon className='hidden md:flex' /> {link.label}
-            </Link>
-          ))}
+        <nav className='px-6 pt-4'>
+          <ul className='flex flex-row gap-4 overflow-x-auto pb-2 md:flex-col md:gap-2 md:pb-0'>
+            {sidebarLinks.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className='inline-flex w-full items-center gap-2 rounded-lg border border-transparent py-1 text-sm font-medium whitespace-nowrap ring-ring hover:text-muted-foreground md:px-3 md:py-2 md:hover:border-primary md:hover:bg-sidebar-accent md:hover:text-sidebar-accent-foreground md:dark:hover:bg-sidebar-accent/50 [&_svg]:size-4'
+                >
+                  <link.icon className='hidden md:flex' /> {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </nav>
       </aside>
 

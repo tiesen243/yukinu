@@ -121,11 +121,7 @@ export const UpdateProductForm: React.FC<{
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
-                  <Select
-                    id={meta.fieldId}
-                    value={field.value}
-                    onChange={field.onChange}
-                  >
+                  <Select {...field} value={field.value ?? ''}>
                     <SelectOption value=''>Select a category</SelectOption>
                     {_data?.categories.map((category) => (
                       <SelectOption key={category.id} value={category.id}>
@@ -149,10 +145,6 @@ export const UpdateProductForm: React.FC<{
                     </InputGroupAddon>
                     <InputGroupInput {...field} placeholder='0.00' />
                   </InputGroup>
-                  <FieldDescription id={meta.descriptionId}>
-                    Leave blank or set to 0.00 if the product has variants, as
-                    each variant can have its own price.
-                  </FieldDescription>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

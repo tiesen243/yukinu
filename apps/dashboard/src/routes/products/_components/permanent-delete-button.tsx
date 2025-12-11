@@ -16,21 +16,18 @@ import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export const DeleteProductButton: React.FC<{
+export const PermanentDeleteProductButton: React.FC<{
   productId: string
-  isAdmin?: boolean
-}> = ({ productId, isAdmin }) => {
+}> = ({ productId }) => {
   const trpc = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.product.delete.mutationOptions(),
-    onSuccess: () => toast.success('Product deleted successfully'),
+    ...trpc.product.permanentDelete.mutationOptions(),
+    onSuccess: () => toast.success('Product permanently deleted'),
     onError: ({ message }) =>
       toast.error('Failed to delete product', { description: message }),
     meta: {
-      filter: isAdmin
-        ? trpc.product.all.queryFilter()
-        : trpc.product.allByVendor.queryFilter(),
+      filter: trpc.product.all.queryFilter(),
     },
   })
 
@@ -42,11 +39,11 @@ export const DeleteProductButton: React.FC<{
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure you want to delete this product?
+            Are you sure you want to permanently delete this product?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            You can restore the product within 30 days. After that, it will be
-            permanently deleted.
+            This action is irreversible. The product will be permanently deleted
+            and cannot be restored.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

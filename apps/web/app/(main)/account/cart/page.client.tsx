@@ -2,8 +2,10 @@
 
 import * as React from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 
+import { slugify } from '@yukinu/lib/slugify'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -36,7 +38,10 @@ export const CartItemsList: React.FC = () => {
   return data.items.map((item) => (
     <TableRow key={item.id}>
       <TableCell>
-        <div className='flex items-center gap-2'>
+        <Link
+          href={`/${slugify(item.productName ?? '')}-${item.productId}`}
+          className='flex items-center gap-2'
+        >
           <Image
             src={item.productImage ?? '/assets/logo.svg'}
             alt={`thumbnail of ${item.productName}`}
@@ -45,7 +50,7 @@ export const CartItemsList: React.FC = () => {
             height={20}
           />
           <span>{item.productName}</span>
-        </div>
+        </Link>
       </TableCell>
       <TableCell>
         {Object.entries(item.variant).map(([key, value]) => (
