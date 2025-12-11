@@ -47,3 +47,17 @@ export const vendorStaffs = pgTable(
     index('vendor_staffs_vendor_id_idx').on(t.vendorId),
   ],
 )
+
+export const payouts = pgTable(
+  'payouts',
+  (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    vendorId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => vendors.id, { onDelete: 'cascade' }),
+    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    processedAt: t.timestamp({ mode: 'date' }),
+  }),
+  (t) => [index('payouts_vendor_id_idx').on(t.vendorId)],
+)

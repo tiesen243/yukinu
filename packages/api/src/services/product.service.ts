@@ -454,36 +454,46 @@ export class ProductService extends BaseService implements IProductService {
   async restore(
     input: ProductValidators.RestoreInput,
   ): Promise<ProductValidators.RestoreOutput> {
-    const { and, eq, isNotNull } = this._orm
+    const { and, eq } = this._orm
     const { products } = this._schema
     const { id, vendorId } = input
 
-    const [restored] = await this._db
-      .update(products)
-      .set({ deletedAt: null })
+    const [targetProduct] = await this._db
+      .select({ deletedAt: products.deletedAt })
+      .from(products)
       .where(
         and(
           eq(products.id, id),
-          isNotNull(products.deletedAt),
           vendorId === MINMOD_ACCESS
             ? undefined
             : eq(products.vendorId, vendorId),
         ),
       )
-      .returning({ id: products.id })
+      .limit(1)
 
-    if (!restored)
+    if (!targetProduct)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Product with id ${id} not found`,
       })
 
+    if (targetProduct.deletedAt === null)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Product with id ${id} is not deleted`,
+      })
+
+    await this._db
+      .update(products)
+      .set({ deletedAt: null })
+      .where(eq(products.id, id))
+
     return { id }
   }
 
-  async permanentDelete(
-    input: ProductValidators.PermanentDeleteInput,
-  ): Promise<ProductValidators.PermanentDeleteOutput> {
+  async permanentlyDelete(
+    input: ProductValidators.PermanentlyDeleteInput,
+  ): Promise<ProductValidators.PermanentlyDeleteOutput> {
     const { and, eq } = this._orm
     const { products } = this._schema
     const { id, vendorId } = input
@@ -509,7 +519,7 @@ export class ProductService extends BaseService implements IProductService {
     if (product.deletedAt === null)
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `Product with id ${id} must be deleted before permanent deletion`,
+        message: `Product with id ${id} must be soft-deleted before permanent deletion`,
       })
 
     await this._db.delete(products).where(this._orm.eq(products.id, id))

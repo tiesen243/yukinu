@@ -1,3 +1,4 @@
+import { Activity } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 
@@ -44,26 +45,25 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           : product.deletedAt?.toLocaleDateString()}
       </TableCell>
       <TableCell className='space-x-2'>
-        {!isAdmin && !query.isDeleted && (
-          <Link
-            to={`/products/${product.id}`}
-            className='text-primary underline-offset-4 hover:underline'
-          >
-            Edit
-          </Link>
-        )}
+        <Activity mode={query.isDeleted ? 'visible' : 'hidden'}>
+          <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
+          <PermanentDeleteProductButton
+            productId={product.id}
+            isAdmin={isAdmin}
+          />
+        </Activity>
 
-        {query.isDeleted ? (
-          <>
-            <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
-            <PermanentDeleteProductButton
-              productId={product.id}
-              isAdmin={isAdmin}
-            />
-          </>
-        ) : (
+        <Activity mode={query.isDeleted ? 'hidden' : 'visible'}>
+          {!isAdmin && (
+            <Link
+              to={`/products/${product.id}`}
+              className='text-primary underline-offset-4 hover:underline'
+            >
+              Edit
+            </Link>
+          )}
           <DeleteProductButton productId={product.id} isAdmin={isAdmin} />
-        )}
+        </Activity>
       </TableCell>
     </TableRow>
   ))

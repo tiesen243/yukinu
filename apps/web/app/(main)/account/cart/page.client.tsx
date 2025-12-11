@@ -40,7 +40,7 @@ export const CartItemsList: React.FC = () => {
       <TableCell>
         <Link
           href={`/${slugify(item.productName ?? '')}-${item.productId}`}
-          className='flex items-center gap-2'
+          className={`flex items-center gap-2 ${item.productId ? '' : 'pointer-events-none opacity-50'}`}
         >
           <Image
             src={item.productImage ?? '/assets/logo.svg'}
@@ -49,7 +49,7 @@ export const CartItemsList: React.FC = () => {
             width={20}
             height={20}
           />
-          <span>{item.productName}</span>
+          <span>{item.productName ?? 'Deleted Product'}</span>
         </Link>
       </TableCell>
       <TableCell>
@@ -136,7 +136,9 @@ const EditButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
+      <DialogTrigger
+        className={`text-primary underline-offset-4 hover:underline ${productId ? '' : 'pointer-events-none opacity-50'}`}
+      >
         Edit
       </DialogTrigger>
 

@@ -253,13 +253,13 @@ export namespace ProductValidators {
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
 
-  export const permanentDeleteInput = z.object({
+  export const permanentlyDeleteInput = z.object({
     id: z.cuid(),
     vendorId: z.cuid(),
   })
-  export type PermanentDeleteInput = z.infer<typeof permanentDeleteInput>
-  export const permanentDeleteOutput = z.object({ id: z.cuid() })
-  export type PermanentDeleteOutput = z.infer<typeof permanentDeleteOutput>
+  export type PermanentlyDeleteInput = z.infer<typeof permanentlyDeleteInput>
+  export const permanentlyDeleteOutput = z.object({ id: z.cuid() })
+  export type PermanentlyDeleteOutput = z.infer<typeof permanentlyDeleteOutput>
 
   export const recreateVariantInput = createInput
     .pick({ variants: true, vendorId: true })

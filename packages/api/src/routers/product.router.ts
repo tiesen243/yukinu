@@ -81,10 +81,10 @@ export const productRouter = createTRPCRouter({
       message: 'Product permanently deleted successfully',
       role: ['admin', 'moderator', 'vendor_owner'],
     })
-    .input(ProductValidators.permanentDeleteInput.omit({ vendorId: true }))
-    .output(ProductValidators.permanentDeleteOutput)
+    .input(ProductValidators.permanentlyDeleteInput.omit({ vendorId: true }))
+    .output(ProductValidators.permanentlyDeleteOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.product.permanentDelete({
+      ctx.services.product.permanentlyDelete({
         ...input,
         vendorId: ctx.vendorId,
       }),
