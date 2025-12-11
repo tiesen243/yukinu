@@ -29,7 +29,7 @@ import { useTRPC } from '@/lib/trpc/react'
 export const FilterFormMobile: React.FC = () => (
   <Collapsible className='relative md:hidden'>
     <CollapsibleTrigger asChild>
-      <Button variant='outline' className='w-full'>
+      <Button variant='outline' className='w-full justify-start'>
         <FilterIcon /> Filters
       </Button>
     </CollapsibleTrigger>

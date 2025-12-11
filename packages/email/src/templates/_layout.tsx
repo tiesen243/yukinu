@@ -69,7 +69,7 @@ export function EmailLayout({ preview, children }: Readonly<EmailLayoutProps>) {
 
         <Section style={{ textAlign: 'center', color: '#525252' }}>
           <Text>@ {new Date().getFullYear()} Yukinu. All rights reserved.</Text>
-          <Text>67 Skibidi St, Sigma City, 346936 - Alpha</Text>
+          <Text>67 Skibidi Street, Ligma City, Goon 693618, Earth</Text>
         </Section>
       </Body>
     </Html>
