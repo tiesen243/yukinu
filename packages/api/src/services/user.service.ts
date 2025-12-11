@@ -9,7 +9,7 @@ export class UserService extends BaseService implements IUserService {
   async all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
     const { and, asc, eq, ilike, or } = this._orm
     const { users } = this._schema
-    const { search, status, role, page, limit } = input
+    const { search, role, page, limit } = input
     const offset = (page - 1) * limit
 
     const whereClauses = []
@@ -20,7 +20,6 @@ export class UserService extends BaseService implements IUserService {
           ilike(users.email, `%${search}%`),
         ),
       )
-    if (status) whereClauses.push(eq(users.status, status))
     if (role) whereClauses.push(eq(users.role, role))
     const whereClause = whereClauses.length ? and(...whereClauses) : undefined
 
@@ -92,13 +91,16 @@ export class UserService extends BaseService implements IUserService {
       })
 
     const [targetUser] = await this._db
-      .select({ role: users.role })
+      .select({ role: users.role, deletedAt: users.deletedAt })
       .from(users)
       .where(eq(users.id, id))
       .limit(1)
 
     if (!targetUser)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with ID ${id} not found`,
+      })
 
     const criticalRoles = ['admin', 'moderator', 'vendor_owner', 'vendor_staff']
     if (criticalRoles.includes(targetUser.role))
@@ -108,9 +110,57 @@ export class UserService extends BaseService implements IUserService {
       })
 
     await this._db
-      .delete(users)
+      .update(users)
+      .set({ deletedAt: new Date() })
       .where(eq(users.id, id))
       .returning({ id: users.id })
+
+    return { id }
+  }
+
+  async restore(
+    input: UserValidators.RestoreInput,
+  ): Promise<UserValidators.RestoreOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id } = input
+
+    const [restored] = await this._db
+      .update(users)
+      .set({ deletedAt: null })
+      .where(eq(users.id, id))
+      .returning({ id: users.id })
+    if (!restored)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
+    return { id }
+  }
+
+  async permanentlyDelete(
+    input: UserValidators.PermanentlyDeleteInput,
+  ): Promise<UserValidators.PermanentlyDeleteOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id } = input
+
+    const [targetUser] = await this._db
+      .select()
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1)
+
+    if (!targetUser)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with ID ${id} not found`,
+      })
+    if (targetUser.deletedAt === null)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `User with ID ${id} must be soft-deleted before permanent deletion`,
+      })
+
+    await this._db.delete(users).where(eq(users.id, id))
 
     return { id }
   }

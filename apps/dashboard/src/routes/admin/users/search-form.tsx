@@ -1,5 +1,5 @@
 import { Button } from '@yukinu/ui/button'
-import { BanIcon, CheckIcon, SearchIcon } from '@yukinu/ui/icons'
+import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { UserValidators } from '@yukinu/validators/user'
@@ -55,27 +55,5 @@ export const SearchForm: React.FC = () => {
         <SearchIcon /> <span className='sr-only'>Search</span>
       </Button>
     </form>
-  )
-}
-
-export const UserFilterButton: React.FC = () => {
-  const [query, setQuery] = useUserQueryStates()
-
-  return (
-    <Button
-      variant='outline'
-      onClick={async () => {
-        await setQuery((prev) => ({
-          ...prev,
-          status: prev.status === 'active' ? 'inactive' : 'active',
-          page: 1,
-        }))
-      }}
-    >
-      {query.status === 'inactive' ? <CheckIcon /> : <BanIcon />}
-      <span className='sr-only md:not-sr-only'>
-        {query.status === 'inactive' ? 'Active Users' : 'Banned Users'}
-      </span>
-    </Button>
   )
 }

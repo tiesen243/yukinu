@@ -33,13 +33,31 @@ export const userRouter = createTRPCRouter({
   delete: protectedProcedure
     .meta({
       message: 'User deleted successfully',
-      role: ['admin'],
+      role: ['admin', 'moderator'],
     })
     .input(UserValidators.deleteInput)
     .output(UserValidators.deleteOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.user.delete(input, ctx.session.userId),
     ),
+
+  restore: protectedProcedure
+    .meta({
+      message: 'User restored successfully',
+      role: ['admin', 'moderator'],
+    })
+    .input(UserValidators.restoreInput)
+    .output(UserValidators.restoreOutput)
+    .mutation(({ ctx, input }) => ctx.services.user.restore(input)),
+
+  permanentlyDelete: protectedProcedure
+    .meta({
+      message: 'User permanently deleted successfully',
+      role: ['admin'],
+    })
+    .input(UserValidators.permanentlyDeleteInput)
+    .output(UserValidators.permanentlyDeleteOutput)
+    .mutation(({ ctx, input }) => ctx.services.user.permanentlyDelete(input)),
 
   profile: protectedProcedure
     .meta({ message: 'User profile fetched successfully' })

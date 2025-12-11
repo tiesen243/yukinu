@@ -8,7 +8,7 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 
-import { SearchForm, UserFilterButton } from '@/routes/admin/users/search-form'
+import { SearchForm } from '@/routes/admin/users/search-form'
 import { UsersList } from '@/routes/admin/users/users-list'
 import { UsersPagination } from '@/routes/admin/users/users-pagination'
 
@@ -24,8 +24,6 @@ export default function UsersPage() {
         <SearchForm />
 
         <div className='flex-1' />
-
-        <UserFilterButton />
 
         <Button variant='outline' disabled>
           <DownloadIcon />

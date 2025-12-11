@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Activity, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { cn } from '@yukinu/ui'
@@ -77,8 +77,15 @@ export const UsersList: React.FC = () => {
       <TableCell>{user.updatedAt.toLocaleDateString()}</TableCell>
       <TableCell>{user.deletedAt?.toLocaleDateString() ?? 'N/A'}</TableCell>
       <TableCell className='space-x-2'>
-        <EditUserButton user={user} />
-        <DeleteUserButton user={user} />
+        <Activity mode={user.deletedAt ? 'visible' : 'hidden'}>
+          <RestoreUserButton user={user} />
+          <PermamentlyDeleteUserButton user={user} />
+        </Activity>
+
+        <Activity mode={user.deletedAt ? 'hidden' : 'visible'}>
+          <EditUserButton user={user} />
+          <DeleteUserButton user={user} />
+        </Activity>
       </TableCell>
     </TableRow>
   ))
@@ -201,6 +208,95 @@ const DeleteUserButton: React.FC<{
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete User</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete user "{user.username}"? You can
+            restore the user later from the deleted users section.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className='bg-destructive text-white hover:bg-destructive/90'
+            onClick={() => {
+              mutate({ id: user.id })
+            }}
+            disabled={isPending}
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
+const RestoreUserButton: React.FC<{
+  user: UserValidators.AllOutput['users'][number]
+}> = ({ user }) => {
+  const trpc = useTRPC()
+
+  const { mutate, isPending } = useMutation({
+    ...trpc.user.restore.mutationOptions(),
+    onSuccess: () => {
+      toast.success('User restored successfully')
+    },
+    onError: ({ message }) =>
+      toast.error('Failed to restore user', { description: message }),
+    meta: { filter: trpc.user.all.queryFilter() },
+  })
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger className='text-primary underline-offset-4 hover:underline'>
+        Restore
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Restore User</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to restore user "{user.username}"?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            className='bg-primary text-white hover:bg-primary/90'
+            onClick={() => {
+              mutate({ id: user.id })
+            }}
+            disabled={isPending}
+          >
+            {isPending ? 'Restoring...' : 'Restore'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
+const PermamentlyDeleteUserButton: React.FC<{
+  user: UserValidators.AllOutput['users'][number]
+}> = ({ user }) => {
+  const trpc = useTRPC()
+
+  const { mutate, isPending } = useMutation({
+    ...trpc.user.permanentlyDelete.mutationOptions(),
+    onSuccess: () => {
+      toast.success('User permanently deleted successfully')
+    },
+    onError: ({ message }) =>
+      toast.error('Failed to delete user', { description: message }),
+    meta: { filter: trpc.user.all.queryFilter() },
+  })
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+        Delete
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Permanently Delete User</AlertDialogTitle>
           <AlertDialogDescription>
             Are you sure you want to delete user "{user.username}"? This action
             cannot be undone.

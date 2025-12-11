@@ -481,9 +481,9 @@ export class ProductService extends BaseService implements IProductService {
     return { id }
   }
 
-  async permanentDelete(
-    input: ProductValidators.PermanentDeleteInput,
-  ): Promise<ProductValidators.PermanentDeleteOutput> {
+  async permanentlyDelete(
+    input: ProductValidators.PermanentlyDeleteInput,
+  ): Promise<ProductValidators.PermanentlyDeleteOutput> {
     const { and, eq } = this._orm
     const { products } = this._schema
     const { id, vendorId } = input
@@ -509,7 +509,7 @@ export class ProductService extends BaseService implements IProductService {
     if (product.deletedAt === null)
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `Product with id ${id} must be deleted before permanent deletion`,
+        message: `Product with id ${id} must be soft-deleted before permanent deletion`,
       })
 
     await this._db.delete(products).where(this._orm.eq(products.id, id))

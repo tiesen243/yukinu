@@ -1,9 +1,72 @@
 {
-  "id": "9e95f86f-e969-4195-a248-a42536abc332",
+  "id": "8a8cc796-57c0-4d98-a04e-4ca56fad1910",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.payouts": {
+      "name": "payouts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "processed_at": {
+          "name": "processed_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "payouts_vendor_id_idx": {
+          "name": "payouts_vendor_id_idx",
+          "columns": [
+            {
+              "expression": "vendor_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "payouts_vendor_id_vendors_id_fk": {
+          "name": "payouts_vendor_id_vendors_id_fk",
+          "tableFrom": "payouts",
+          "tableTo": "vendors",
+          "columnsFrom": ["vendor_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.vendor_staffs": {
       "name": "vendor_staffs",
       "schema": "",
@@ -666,15 +729,15 @@
           "primaryKey": false,
           "notNull": true
         },
-        "image": {
-          "name": "image",
-          "type": "varchar(500)",
-          "primaryKey": false,
-          "notNull": false
-        },
         "description": {
           "name": "description",
           "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "image": {
+          "name": "image",
+          "type": "varchar(500)",
           "primaryKey": false,
           "notNull": false
         }
