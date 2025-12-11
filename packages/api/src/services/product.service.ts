@@ -335,8 +335,13 @@ export class ProductService extends BaseService implements IProductService {
       .from(products)
       .where(eq(products.id, id))
       .limit(1)
+    if (!productToUpdate)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `Product with id ${id} not found`,
+      })
 
-    if (data.categoryId && data.categoryId !== productToUpdate?.categoryId) {
+    if (data.categoryId && data.categoryId !== productToUpdate.categoryId) {
       const [category] = await this._db
         .select({ id: categories.id })
         .from(categories)
