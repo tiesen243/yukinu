@@ -27,7 +27,7 @@ import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
 export const loader = ({ request }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
-  return getQueryClient().ensureQueryData(trpc.vendor.me.queryOptions())
+  return getQueryClient().ensureQueryData(trpc.vendor.me.queryOptions({}))
 }
 
 export default function MyStorePage({ loaderData }: Route.ComponentProps) {

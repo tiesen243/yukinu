@@ -5,6 +5,13 @@ CREATE TYPE "public"."payment_status" AS ENUM('pending', 'completed', 'failed');
 CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'vendor_owner', 'vendor_staff', 'moderator');--> statement-breakpoint
 CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive');--> statement-breakpoint
 CREATE TYPE "public"."ticket_status" AS ENUM('open', 'resolved', 'closed');--> statement-breakpoint
+CREATE TABLE "payouts" (
+	"id" varchar(24) PRIMARY KEY NOT NULL,
+	"vendor_id" varchar(24) NOT NULL,
+	"amount" numeric(10, 2) NOT NULL,
+	"processed_at" timestamp
+);
+--> statement-breakpoint
 CREATE TABLE "vendor_staffs" (
 	"vendor_id" varchar(24) NOT NULL,
 	"user_id" varchar(24) NOT NULL,
@@ -74,8 +81,8 @@ CREATE TABLE "categories" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"parent_id" varchar(24),
 	"name" varchar(100) NOT NULL,
-	"image" varchar(500),
-	"description" text
+	"description" text,
+	"image" varchar(500)
 );
 --> statement-breakpoint
 CREATE TABLE "product_attributes" (
@@ -207,6 +214,7 @@ CREATE TABLE "wishlist_items" (
 	CONSTRAINT "wishlist_items_user_id_product_id_pk" PRIMARY KEY("user_id","product_id")
 );
 --> statement-breakpoint
+ALTER TABLE "payouts" ADD CONSTRAINT "payouts_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
@@ -236,6 +244,7 @@ ALTER TABLE "profiles" ADD CONSTRAINT "profiles_id_users_id_fk" FOREIGN KEY ("id
 ALTER TABLE "tickets" ADD CONSTRAINT "tickets_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE INDEX "payouts_vendor_id_idx" ON "payouts" USING btree ("vendor_id");--> statement-breakpoint
 CREATE INDEX "vendor_staffs_vendor_id_idx" ON "vendor_staffs" USING btree ("vendor_id");--> statement-breakpoint
 CREATE INDEX "vendors_owner_id_idx" ON "vendors" USING btree ("owner_id");--> statement-breakpoint
 CREATE INDEX "order_items_order_id_idx" ON "order_items" USING btree ("order_id");--> statement-breakpoint

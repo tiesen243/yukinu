@@ -87,7 +87,6 @@ export namespace UserValidators {
 
   export const allInput = z.object({
     search: z.string().nullable(),
-    status: z.enum(statuses).nullable(),
     role: z.enum(roles).nullable(),
     page: z.number().min(1).default(1),
     limit: z.number().min(1).max(100).default(10),
@@ -118,10 +117,23 @@ export namespace UserValidators {
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
 
-  export const deleteInput = z.object({ id: z.cuid() })
+  export const deleteInput = z.object({ id: z.cuid(), userId: z.cuid() })
   export type DeleteInput = z.infer<typeof deleteInput>
   export const deleteOutput = z.object({ id: z.cuid() })
   export type DeleteOutput = z.infer<typeof deleteOutput>
+
+  export const restoreInput = z.object({ id: z.cuid() })
+  export type RestoreInput = z.infer<typeof restoreInput>
+  export const restoreOutput = z.object({ id: z.cuid() })
+  export type RestoreOutput = z.infer<typeof restoreOutput>
+
+  export const permanentlyDeleteInput = z.object({
+    id: z.cuid(),
+    userId: z.cuid(),
+  })
+  export type PermanentlyDeleteInput = z.infer<typeof permanentlyDeleteInput>
+  export const permanentlyDeleteOutput = z.object({ id: z.cuid() })
+  export type PermanentlyDeleteOutput = z.infer<typeof permanentlyDeleteOutput>
 
   export const profileInput = z.object({ userId: z.cuid() })
   export type ProfileInput = z.infer<typeof profileInput>

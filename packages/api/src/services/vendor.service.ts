@@ -289,11 +289,10 @@ export class VendorService extends BaseService implements IVendorService {
 
   async acceptStaffInvitation(
     input: VendorValidators.AcceptStaffInvitationInput,
-    userId: VendorValidators.VendorStaff['userId'],
   ): Promise<VendorValidators.AcceptStaffInvitationOutput> {
     const { eq } = this._orm
     const { vendorStaffs, vendors, verifications } = this._schema
-    const { token } = input
+    const { token, userId } = input
 
     const [verification] = await this._db
       .select()

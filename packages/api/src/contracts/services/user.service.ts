@@ -11,8 +11,15 @@ export interface IUserService {
 
   delete(
     input: UserValidators.DeleteInput,
-    userId: UserValidators.User['id'],
   ): Promise<UserValidators.DeleteOutput>
+
+  restore(
+    input: UserValidators.RestoreInput,
+  ): Promise<UserValidators.RestoreOutput>
+
+  permanentlyDelete(
+    input: UserValidators.PermanentlyDeleteInput,
+  ): Promise<UserValidators.PermanentlyDeleteOutput>
 
   profile(
     input: UserValidators.ProfileInput,
