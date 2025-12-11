@@ -1,6 +1,6 @@
 import { CoreValuesSection } from '@/app/(marketing)/about/_components/core-values'
 import { HeroSection } from '@/app/(marketing)/about/_components/hero'
-import { MissionAndVisionSection } from '@/app/(marketing)/about/_components/mission-and-vison'
+import { MissionAndVisionSection } from '@/app/(marketing)/about/_components/mission-and-vision'
 import { StorySection } from '@/app/(marketing)/about/_components/story'
 import { TeamSection } from '@/app/(marketing)/about/_components/team'
 import { createMetadata } from '@/lib/metadata'
