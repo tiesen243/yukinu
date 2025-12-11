@@ -13,9 +13,9 @@ interface InviteProps {
 export default function Invite(props: InviteProps) {
   const {
     username = 'Yukikaze',
-    inviterName = 'Pepe',
-    inviterEmail = 'pepe@tiesen.id.vn',
-    vendorName = 'Tiesen',
+    inviterName = 'Yuki',
+    inviterEmail = 'yuki@example.com',
+    vendorName = 'Yukinu',
     inviteLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   } = props
 

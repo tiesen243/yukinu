@@ -17,9 +17,9 @@ If you believe that your copyrighted work has been copied in a way that constitu
 
 **Contact Information:**
 
-Email: copyright@yukinu.tiesen.id.vn
+Email: copyright@tiesen.id.vn
 
-Address: 67 Skibidi St., Ligma City, Goon
+Address: 67 Skibidi Street, Ligma City, Goon 693618, Earth
 
 Upon receipt of a valid DMCA notice, we will remove or disable access to the allegedly infringing material and take reasonable steps to notify the user who posted the material.
 

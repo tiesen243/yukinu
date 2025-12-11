@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { StarIcon } from '@yukinu/ui/icons'
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
@@ -17,11 +19,18 @@ export const ProductInformation: React.FC = () => {
 
   return (
     <section className='flex flex-col gap-6 overflow-hidden md:col-span-2'>
-      {category && (
-        <span className='text-sm text-accent-foreground'>{category.name}</span>
-      )}
+      <div>
+        {category && (
+          <Link
+            href={`/search?c=${category.id}`}
+            className='text-sm text-accent-foreground transition-colors hover:text-accent-foreground/80'
+          >
+            {category.name}
+          </Link>
+        )}
 
-      <h3 className='text-3xl font-medium text-balance'>{name}</h3>
+        <h3 className='text-3xl font-medium text-balance'>{name}</h3>
+      </div>
 
       <div className='flex items-center gap-4'>
         <span className='flex items-center gap-1 font-medium'>

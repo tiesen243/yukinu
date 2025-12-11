@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server'
 
 import type { Database } from '@yukinu/db'
 import type { ProductValidators } from '@yukinu/validators/product'
+import { vendors } from '@yukinu/db/schema'
 
 import type { IProductService } from '@/contracts/services/product.service'
 import { BaseService } from '@/services/base.service'
@@ -11,8 +12,20 @@ export class ProductService extends BaseService implements IProductService {
   async all(
     input: ProductValidators.AllInput,
   ): Promise<ProductValidators.AllOutput> {
-    const { and, asc, desc, eq, ilike, max, min, isNull, isNotNull, sql } =
-      this._orm
+    const {
+      and,
+      asc,
+      desc,
+      or,
+      eq,
+      inArray,
+      ilike,
+      max,
+      min,
+      isNull,
+      isNotNull,
+      sql,
+    } = this._orm
     const {
       categories,
       productImages,
@@ -26,7 +39,19 @@ export class ProductService extends BaseService implements IProductService {
 
     const whereClauses = []
     if (search) whereClauses.push(ilike(products.name, `%${search}%`))
-    if (categoryId) whereClauses.push(eq(products.categoryId, categoryId))
+    if (categoryId)
+      whereClauses.push(
+        or(
+          eq(products.categoryId, categoryId),
+          inArray(
+            products.categoryId,
+            this._db
+              .select({ id: categories.id })
+              .from(categories)
+              .where(eq(categories.parentId, categoryId)),
+          ),
+        ),
+      )
     if (vendorId) whereClauses.push(eq(products.vendorId, vendorId))
     if (isDeleted) whereClauses.push(isNotNull(products.deletedAt))
     else whereClauses.push(isNull(products.deletedAt))
@@ -65,13 +90,42 @@ export class ProductService extends BaseService implements IProductService {
       productsQuery.orderBy(directionSql(products[field]))
     }
 
-    const [productsList, total] = await Promise.all([
+    const categoryQuery = categoryId
+      ? this._db
+          .select({
+            id: categories.id,
+            name: categories.name,
+            description: categories.description,
+            image: categories.image,
+          })
+          .from(categories)
+          .where(eq(categories.id, categoryId))
+          .limit(1)
+      : Promise.resolve([])
+    const vendorQuery = vendorId
+      ? this._db
+          .select({
+            id: vendors.id,
+            name: vendors.name,
+            image: vendors.image,
+            description: vendors.address,
+          })
+          .from(vendors)
+          .where(eq(vendors.id, vendorId))
+          .limit(1)
+      : Promise.resolve([])
+
+    const [productsList, [category], [vendor], total] = await Promise.all([
       productsQuery,
+      categoryQuery,
+      vendorQuery,
       this._db.$count(products, whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
 
     return {
+      category: category ?? null,
+      vendor: vendor ?? null,
       products: productsList,
       pagination: { total, page, limit, totalPages },
     }
@@ -80,7 +134,7 @@ export class ProductService extends BaseService implements IProductService {
   async one(
     input: ProductValidators.OneInput,
   ): Promise<ProductValidators.OneOutput> {
-    const { and, asc, eq, inArray, isNull } = this._orm
+    const { and, eq, isNull, sql } = this._orm
     const {
       attributes,
       categories,
@@ -96,6 +150,38 @@ export class ProductService extends BaseService implements IProductService {
     } = this._schema
     const { id } = input
 
+    const imagesAgg = sql<ProductValidators.OneOutput['images']>`coalesce(
+      jsonb_agg(distinct jsonb_build_object(
+        'id', ${productImages.id}, 
+        'url', ${productImages.url}
+      )) filter (where ${productImages.productId} is not null),
+      '[]'::jsonb
+    )`.as('images')
+
+    const attributesAgg = sql<
+      ProductValidators.OneOutput['attributes']
+    >`coalesce(
+      jsonb_agg(distinct jsonb_build_object(
+        'name', ${attributes.name}, 'value', ${productAttributes.value}
+      )) filter (where ${productAttributes.productId} is not null),
+      '[]'::jsonb
+    )`.as('attributes')
+
+    const reviewsAgg = sql<ProductValidators.OneOutput['reviews']>`coalesce(
+      jsonb_agg(distinct jsonb_build_object(
+        'id', ${productReviews.id},
+        'rating', ${productReviews.rating},
+        'comment', ${productReviews.comment},
+        'user', jsonb_build_object(
+          'id', ${users.id},
+          'username', ${users.username},
+          'image', ${users.image}
+        ),
+        'createdAt', ${productReviews.createdAt}
+      )) filter (where ${productReviews.productId} is not null),
+      '[]'::jsonb
+    )`.as('reviews')
+
     const [product] = await this._db
       .select({
         id: products.id,
@@ -105,85 +191,64 @@ export class ProductService extends BaseService implements IProductService {
         stock: products.stock,
         sold: products.sold,
         category: { id: categories.id, name: categories.name },
+        images: imagesAgg,
+        attributes: attributesAgg,
         vendor: {
           id: vendors.id,
           name: vendors.name,
           image: vendors.image,
           address: vendors.address,
         },
+        reviews: reviewsAgg,
         createdAt: products.createdAt,
         updatedAt: products.updatedAt,
       })
       .from(products)
       .leftJoin(categories, eq(categories.id, products.categoryId))
+      .leftJoin(productImages, eq(productImages.productId, products.id))
+      .leftJoin(productAttributes, eq(productAttributes.productId, products.id))
+      .leftJoin(attributes, eq(attributes.id, productAttributes.attributeId))
+      .leftJoin(productReviews, eq(productReviews.productId, products.id))
+      .leftJoin(users, eq(users.id, productReviews.userId))
       .leftJoin(vendors, eq(vendors.id, products.vendorId))
       .where(and(eq(products.id, id), isNull(products.deletedAt)))
       .limit(1)
+      .groupBy(products.id, categories.id, vendors.id)
+
     if (!product)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Product with id ${id} not found`,
       })
 
-    const [attrs, images, vrts, reviews] = await Promise.all([
-      this._db
-        .select({ name: attributes.name, value: productAttributes.value })
-        .from(productAttributes)
-        .where(eq(productAttributes.productId, id))
-        .innerJoin(attributes, eq(attributes.id, productAttributes.attributeId))
-        .orderBy(asc(attributes.name)),
-      this._db
-        .select({ id: productImages.id, url: productImages.url })
-        .from(productImages)
-        .where(eq(productImages.productId, id)),
-      this._db
-        .select({
-          id: productVariants.id,
-          sku: productVariants.sku,
-          price: productVariants.price,
-          stock: productVariants.stock,
-        })
-        .from(productVariants)
-        .where(eq(productVariants.productId, id)),
-      this._db
-        .select({
-          id: productReviews.id,
-          rating: productReviews.rating,
-          comment: productReviews.comment,
-          user: {
-            id: users.id,
-            username: users.username,
-            image: users.image,
-          },
-          createdAt: productReviews.createdAt,
-        })
-        .from(productReviews)
-        .where(eq(productReviews.productId, id))
-        .innerJoin(users, eq(users.id, productReviews.userId)),
-    ])
+    const variantOptionsAgg = sql<
+      ProductValidators.OneOutput['variants'][number]['options']
+    >`coalesce(
+      jsonb_agg(distinct jsonb_build_object(
+        'name', ${variants.name}, 
+        'value', ${variantOptions.value}
+      )) filter (where ${variantOptions.variantId} is not null),
+      '[]'::jsonb
+    )`.as('options')
 
-    const variantsList = await Promise.all(
-      vrts.map(async (vrt) => {
-        const ids = vrt.sku.split('-').map((v) => parseInt(v, 10))
+    const vrts = await this._db
+      .select({
+        id: productVariants.id,
+        sku: productVariants.sku,
+        price: productVariants.price,
+        stock: productVariants.stock,
+        options: variantOptionsAgg,
+      })
+      .from(productVariants)
+      .leftJoin(
+        variantOptions,
+        sql`${variantOptions.id} = ANY(string_to_array(${productVariants.sku}, '-')::int[])`,
+      )
+      .leftJoin(variants, eq(variants.id, variantOptions.variantId))
+      .where(eq(productVariants.productId, id))
+      .groupBy(productVariants.id)
 
-        const options = await this._db
-          .select({ name: variants.name, value: variantOptions.value })
-          .from(variantOptions)
-          .where(inArray(variantOptions.id, ids))
-          .innerJoin(variants, eq(variants.id, variantOptions.variantId))
-          .orderBy(asc(variantOptions.value))
-
-        return { ...vrt, options }
-      }),
-    )
-
-    return {
-      ...product,
-      images,
-      attributes: attrs,
-      variants: variantsList,
-      reviews,
-    }
+    return { ...product, variants: vrts }
   }
 
   async create(

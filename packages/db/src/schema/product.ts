@@ -14,8 +14,8 @@ export const categories = pgTable(
       .varchar({ length: 24 })
       .references((): AnyPgColumn => categories.id, { onDelete: 'set null' }),
     name: t.varchar({ length: 100 }).notNull(),
-    image: t.varchar({ length: 500 }),
     description: t.text(),
+    image: t.varchar({ length: 500 }),
   }),
   (t) => [uniqueIndex('categories_name_idx').on(t.name)],
 )

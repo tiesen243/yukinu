@@ -26,7 +26,7 @@ export const SearchForm: React.FC = () => {
           aria-label='Search'
         />
         <InputGroupAddon align='inline-end'>
-          <InputGroupButton>
+          <InputGroupButton type='submit'>
             <SearchIcon />
             <span className='sr-only'>Search</span>
           </InputGroupButton>
