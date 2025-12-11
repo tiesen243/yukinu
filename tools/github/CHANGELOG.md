@@ -1,5 +1,11 @@
 # @yukinu/github
 
+## 0.2.0
+
+### Minor Changes
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`5a34f9e`](https://github.com/tiesen243/yukinu/commit/5a34f9ebd57cdd0effbeebb1421ad0d6778e2781) Thanks [@tiesen243](https://github.com/tiesen243)! - completed search product feature
+
 ## 0.1.1
 
 ### Patch Changes

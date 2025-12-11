@@ -1,5 +1,11 @@
 # @yukinu/eslint-config
 
+## 0.4.0
+
+### Minor Changes
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`5a34f9e`](https://github.com/tiesen243/yukinu/commit/5a34f9ebd57cdd0effbeebb1421ad0d6778e2781) Thanks [@tiesen243](https://github.com/tiesen243)! - completed search product feature
+
 ## 0.3.0
 
 ### Minor Changes
