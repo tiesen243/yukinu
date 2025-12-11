@@ -4,7 +4,6 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./a": "./dist/a.mjs",
     "./auth": "./dist/auth.mjs",
     "./category": "./dist/category.mjs",
     "./env": "./dist/env.mjs",

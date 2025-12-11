@@ -90,7 +90,7 @@ export class ProductService extends BaseService implements IProductService {
       productsQuery.orderBy(directionSql(products[field]))
     }
 
-    const categoyQuery = categoryId
+    const categoryQuery = categoryId
       ? this._db
           .select({
             id: categories.id,
@@ -117,7 +117,7 @@ export class ProductService extends BaseService implements IProductService {
 
     const [productsList, [category], [vendor], total] = await Promise.all([
       productsQuery,
-      categoyQuery,
+      categoryQuery,
       vendorQuery,
       this._db.$count(products, whereClause),
     ])
