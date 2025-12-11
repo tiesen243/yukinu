@@ -19,7 +19,7 @@ export function Footer() {
       <div className='container grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <div className='md:col-span-2 lg:col-span-1'>
           <Link href='/' className='flex items-center gap-2'>
-            <div className='flex size-9 items-center justify-center rounded-lg bg-primary/20'>
+            <div className='flex size-9 items-center justify-center rounded-lg bg-accent'>
               <Image
                 src='/assets/logo.svg'
                 alt='Yukinu Logo'

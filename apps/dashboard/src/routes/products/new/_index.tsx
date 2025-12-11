@@ -143,6 +143,10 @@ export default function ProductsNewPage() {
                       </InputGroupAddon>
                       <InputGroupInput {...field} placeholder='0.00' />
                     </InputGroup>
+                    <FieldDescription id={meta.descriptionId}>
+                      Leave blank or set to 0.00 if the product has variants, as
+                      each variant can have its own price.
+                    </FieldDescription>
                     <FieldError id={meta.errorId} errors={meta.errors} />
                   </Field>
                 )}

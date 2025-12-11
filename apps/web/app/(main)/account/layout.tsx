@@ -14,7 +14,7 @@ import { UserHeader } from '@/app/(main)/account/_components/user-header'
 export default function AccountLayout({ children }: LayoutProps<'/account'>) {
   return (
     <div className='container flex h-dvh w-full flex-1 flex-col gap-6 py-6 md:flex-row'>
-      <aside className='rounded-xl bg-card py-6 text-card-foreground shadow-sm md:sticky md:top-20 md:left-0 md:w-1/4 dark:border'>
+      <aside className='shrink-0 rounded-xl bg-card py-6 text-card-foreground shadow-sm md:w-1/4 dark:border'>
         <UserHeader />
 
         <nav className='flex w-full flex-row gap-2 overflow-x-auto px-6 pt-4 pb-2 md:flex-col md:pb-0'>

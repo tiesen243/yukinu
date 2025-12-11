@@ -1,5 +1,18 @@
 # @yukinu/validators
 
+## 0.5.0
+
+### Minor Changes
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`5a34f9e`](https://github.com/tiesen243/yukinu/commit/5a34f9ebd57cdd0effbeebb1421ad0d6778e2781) Thanks [@tiesen243](https://github.com/tiesen243)! - completed search product feature
+
+### Patch Changes
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`4dd5361`](https://github.com/tiesen243/yukinu/commit/4dd5361f7f29b81c14d3715288935cf6f1c6f0ba) Thanks [@tiesen243](https://github.com/tiesen243)! - update get one product query
+
+- Updated dependencies [[`5a34f9e`](https://github.com/tiesen243/yukinu/commit/5a34f9ebd57cdd0effbeebb1421ad0d6778e2781)]:
+  - @yukinu/lib@0.3.0
+
 ## 0.4.1
 
 ### Patch Changes

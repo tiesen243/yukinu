@@ -11,7 +11,7 @@ export namespace ProductValidators {
     categoryId: z.cuid(),
     name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
     description: z.string().nullable(),
-    price: numeric,
+    price: numeric.default('0.00'),
     stock: z.int().min(0, 'Stock cannot be negative'),
     sold: z.int().min(0, 'Sold cannot be negative'),
     createdAt: z.date(),
@@ -114,6 +114,22 @@ export namespace ProductValidators {
   })
   export type AllInput = z.infer<typeof allInput>
   export const allOutput = z.object({
+    category: z
+      .object({
+        id: z.cuid(),
+        name: z.string(),
+        description: z.string().nullable(),
+        image: z.url().nullable(),
+      })
+      .nullable(),
+    vendor: z
+      .object({
+        id: z.cuid(),
+        name: z.string(),
+        description: z.string().nullable(),
+        image: z.url().nullable(),
+      })
+      .nullable(),
     products: z.array(
       product
         .pick({
@@ -168,13 +184,19 @@ export namespace ProductValidators {
       ),
       reviews: z.array(
         productReview
-          .omit({ productId: true, userId: true, updatedAt: true })
+          .omit({
+            productId: true,
+            userId: true,
+            createdAt: true,
+            updatedAt: true,
+          })
           .extend({
             user: z.object({
               id: z.cuid(),
               username: z.string(),
               image: z.url().nullable(),
             }),
+            createdAt: z.coerce.date().transform((d) => new Date(d)),
           }),
       ),
     })

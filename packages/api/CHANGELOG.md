@@ -1,5 +1,24 @@
 # @yukinu/api
 
+## 0.5.0
+
+### Minor Changes
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`5a34f9e`](https://github.com/tiesen243/yukinu/commit/5a34f9ebd57cdd0effbeebb1421ad0d6778e2781) Thanks [@tiesen243](https://github.com/tiesen243)! - completed search product feature
+
+### Patch Changes
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`4dd5361`](https://github.com/tiesen243/yukinu/commit/4dd5361f7f29b81c14d3715288935cf6f1c6f0ba) Thanks [@tiesen243](https://github.com/tiesen243)! - update get one product query
+
+- [#278](https://github.com/tiesen243/yukinu/pull/278) [`a0a795b`](https://github.com/tiesen243/yukinu/commit/a0a795bc92b539d5263cc152c89bef5b101b3239) Thanks [@tiesen243](https://github.com/tiesen243)! - added find product via parent category
+
+- Updated dependencies [[`4dd5361`](https://github.com/tiesen243/yukinu/commit/4dd5361f7f29b81c14d3715288935cf6f1c6f0ba), [`5a34f9e`](https://github.com/tiesen243/yukinu/commit/5a34f9ebd57cdd0effbeebb1421ad0d6778e2781)]:
+  - @yukinu/validators@0.5.0
+  - @yukinu/db@0.5.0
+  - @yukinu/auth@0.5.0
+  - @yukinu/email@0.4.0
+  - @yukinu/lib@0.3.0
+
 ## 0.4.3
 
 ### Patch Changes
