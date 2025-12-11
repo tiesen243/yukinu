@@ -20,7 +20,7 @@ export const SellerValue: React.FC = () => (
 
         <div className='space-y-4 text-center'>
           <BarChart3Icon className='mx-auto size-20 text-accent' />
-          <p className='text-accent-foreground/60'>Grow your business</p>
+          <p className='text-accent-foreground/70'>Grow your business</p>
         </div>
       </section>
 

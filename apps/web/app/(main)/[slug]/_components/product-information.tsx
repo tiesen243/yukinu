@@ -72,7 +72,8 @@ export const ProductInformation: React.FC = () => {
                   new Set(
                     variants
                       .map((v) => v.options.find((o) => o.name === type)?.value)
-                      .filter(Boolean),
+                      .filter(Boolean)
+                      .sort(),
                   ),
                 ).map((value, idx) => (
                   <Label

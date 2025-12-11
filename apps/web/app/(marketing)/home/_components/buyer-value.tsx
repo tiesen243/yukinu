@@ -50,7 +50,7 @@ export const BuyerValue: React.FC = () => {
 
         <div className='space-y-4 text-center'>
           <ShoppingBagIcon className='mx-auto size-20 text-accent' />
-          <p className='text-accent-foreground/60'>
+          <p className='text-accent-foreground/70'>
             Premium shopping experience
           </p>
         </div>
