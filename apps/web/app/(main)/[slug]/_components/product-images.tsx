@@ -6,7 +6,7 @@ import { usePage } from '@/app/(main)/[slug]/page.provider'
 
 export const ProductImages: React.FC = () => {
   const {
-    product: { name, images },
+    product: { id, images },
     currentImage,
     handleChangeImage,
   } = usePage()
@@ -18,7 +18,7 @@ export const ProductImages: React.FC = () => {
       <div className='relative aspect-square w-full rounded-md border'>
         <Image
           src={currentImage ?? '/assets/logo.svg'}
-          alt={`${name}-image`}
+          alt={`${id}-main-image`}
           className={cn('rounded-md object-contain p-0.5', {
             'dark:invert': !currentImage,
           })}
@@ -26,7 +26,7 @@ export const ProductImages: React.FC = () => {
         />
       </div>
 
-      <div className='flex items-center gap-4 overflow-x-auto pb-2'>
+      <div className='flex items-center gap-4 overflow-x-auto overflow-y-hidden pb-2'>
         {images.map(({ id, url }) => (
           <button
             key={id}
@@ -39,8 +39,8 @@ export const ProductImages: React.FC = () => {
             }}
           >
             <Image
-              src={`${url}?q=60`}
-              alt={`${name}-thumbnail-${id}`}
+              src={url}
+              alt={`thumbnail-${id}`}
               className='rounded-md object-contain p-0.5'
               fill
             />

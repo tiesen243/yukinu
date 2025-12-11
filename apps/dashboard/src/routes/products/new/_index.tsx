@@ -39,7 +39,7 @@ export default function ProductsNewPage() {
   )
   const { mutateAsync } = useMutation({
     ...trpc.product.create.mutationOptions(),
-    meta: { filter: trpc.product.all.queryFilter() },
+    meta: { filter: trpc.product.allByVendor.queryFilter() },
     onSuccess: () => toast.success('Product created successfully!'),
     onError: ({ message }) =>
       toast.error('Failed to create product', { description: message }),
@@ -49,8 +49,8 @@ export default function ProductsNewPage() {
     defaultValues: {
       name: '',
       description: '',
-      categoryId: '',
-      price: '',
+      categoryId: null,
+      price: '0.00',
       stock: 0,
       images: [''],
       attributes: [],
@@ -119,7 +119,7 @@ export default function ProductsNewPage() {
                 render={({ meta, field }) => (
                   <Field data-invalid={meta.errors.length > 0}>
                     <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
-                    <Select {...field}>
+                    <Select {...field} value={field.value ?? ''}>
                       <SelectOption value=''>Select a category</SelectOption>
                       {data?.categories.map((category) => (
                         <SelectOption key={category.id} value={category.id}>
@@ -143,10 +143,6 @@ export default function ProductsNewPage() {
                       </InputGroupAddon>
                       <InputGroupInput {...field} placeholder='0.00' />
                     </InputGroup>
-                    <FieldDescription id={meta.descriptionId}>
-                      Leave blank or set to 0.00 if the product has variants, as
-                      each variant can have its own price.
-                    </FieldDescription>
                     <FieldError id={meta.errorId} errors={meta.errors} />
                   </Field>
                 )}

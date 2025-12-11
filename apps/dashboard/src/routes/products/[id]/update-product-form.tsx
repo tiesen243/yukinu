@@ -42,7 +42,7 @@ export const UpdateProductForm: React.FC<{
   )
   const { mutateAsync } = useMutation({
     ...trpc.product.update.mutationOptions(),
-    meta: { filter: trpc.product.all.queryFilter() },
+    meta: { filter: trpc.product.allByVendor.queryFilter() },
     onSuccess: () => {
       toast.success('Product updated successfully!')
       void refetch()
@@ -55,8 +55,8 @@ export const UpdateProductForm: React.FC<{
     defaultValues: {
       id: product.id,
       name: product.name,
-      description: product.description ?? undefined,
-      categoryId: product.category?.id ?? undefined,
+      description: product.description,
+      categoryId: product.category?.id ?? null,
       price: product.price,
       stock: product.stock,
       images: product.images.map((img) => img.url),
@@ -121,11 +121,7 @@ export const UpdateProductForm: React.FC<{
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
-                  <Select
-                    id={meta.fieldId}
-                    value={field.value}
-                    onChange={field.onChange}
-                  >
+                  <Select {...field} value={field.value ?? ''}>
                     <SelectOption value=''>Select a category</SelectOption>
                     {_data?.categories.map((category) => (
                       <SelectOption key={category.id} value={category.id}>
@@ -149,10 +145,6 @@ export const UpdateProductForm: React.FC<{
                     </InputGroupAddon>
                     <InputGroupInput {...field} placeholder='0.00' />
                   </InputGroup>
-                  <FieldDescription id={meta.descriptionId}>
-                    Leave blank or set to 0.00 if the product has variants, as
-                    each variant can have its own price.
-                  </FieldDescription>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

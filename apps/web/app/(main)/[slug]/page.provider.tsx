@@ -50,16 +50,9 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     new Set(product.variants.flatMap((v) => v.options.map((o) => o.name))),
   )
 
-  const [selectedOptions, setSelectedOptions] = React.useState(() =>
-    Object.fromEntries(
-      optionTypes.map((type) => [
-        type,
-        product.variants
-          .find((v) => v.options.some((o) => o.name === type))
-          ?.options.find((o) => o.name === type)?.value ?? '',
-      ]),
-    ),
-  )
+  const [selectedOptions, setSelectedOptions] = React.useState<
+    Record<string, string>
+  >({})
 
   const handleOptionChange = React.useCallback(
     (type: string, value: string) => {
