@@ -42,7 +42,7 @@ export const UpdateProductForm: React.FC<{
   )
   const { mutateAsync } = useMutation({
     ...trpc.product.update.mutationOptions(),
-    meta: { filter: trpc.product.all.queryFilter() },
+    meta: { filter: trpc.product.allByVendor.queryFilter() },
     onSuccess: () => {
       toast.success('Product updated successfully!')
       void refetch()
@@ -55,8 +55,8 @@ export const UpdateProductForm: React.FC<{
     defaultValues: {
       id: product.id,
       name: product.name,
-      description: product.description ?? undefined,
-      categoryId: product.category?.id ?? undefined,
+      description: product.description,
+      categoryId: product.category?.id ?? null,
       price: product.price,
       stock: product.stock,
       images: product.images.map((img) => img.url),

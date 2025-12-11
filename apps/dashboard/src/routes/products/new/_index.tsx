@@ -39,7 +39,7 @@ export default function ProductsNewPage() {
   )
   const { mutateAsync } = useMutation({
     ...trpc.product.create.mutationOptions(),
-    meta: { filter: trpc.product.all.queryFilter() },
+    meta: { filter: trpc.product.allByVendor.queryFilter() },
     onSuccess: () => toast.success('Product created successfully!'),
     onError: ({ message }) =>
       toast.error('Failed to create product', { description: message }),
