@@ -54,7 +54,7 @@ export const InviteStaffButton: React.FC = () => {
           <Input
             type='email'
             id='email'
-            placeholder='yuki@tiesen.id.vn'
+            placeholder='yukikaze@example.com'
             value={email}
             onChange={(e) => {
               setEmail(e.target.value)

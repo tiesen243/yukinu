@@ -20,7 +20,7 @@ export const ContactForm: React.FC = () => (
             id='email'
             name='email'
             type='email'
-            placeholder='yukikaze@tiesen.id.vn'
+            placeholder='yukikaze@example.com'
           />
         </Field>
 
