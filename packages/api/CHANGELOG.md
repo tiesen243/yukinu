@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.5.2
+
+### Patch Changes
+
+- [#289](https://github.com/tiesen243/yukinu/pull/289) [`6f89d85`](https://github.com/tiesen243/yukinu/commit/6f89d859c0945b4e9b772a83a5bee13dd87ff381) Thanks [@tiesen243](https://github.com/tiesen243)! - added permanently delete user
+
 ## 0.5.1
 
 ### Patch Changes
