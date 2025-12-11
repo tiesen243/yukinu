@@ -35,10 +35,10 @@ export const userRouter = createTRPCRouter({
       message: 'User deleted successfully',
       role: ['admin', 'moderator'],
     })
-    .input(UserValidators.deleteInput)
+    .input(UserValidators.deleteInput.omit({ userId: true }))
     .output(UserValidators.deleteOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.user.delete(input, ctx.session.userId),
+      ctx.services.user.delete({ ...input, userId: ctx.session.userId }),
     ),
 
   restore: protectedProcedure
@@ -55,9 +55,14 @@ export const userRouter = createTRPCRouter({
       message: 'User permanently deleted successfully',
       role: ['admin'],
     })
-    .input(UserValidators.permanentlyDeleteInput)
+    .input(UserValidators.permanentlyDeleteInput.omit({ userId: true }))
     .output(UserValidators.permanentlyDeleteOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.permanentlyDelete(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.permanentlyDelete({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 
   profile: protectedProcedure
     .meta({ message: 'User profile fetched successfully' })

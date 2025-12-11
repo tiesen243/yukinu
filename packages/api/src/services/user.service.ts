@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 
-import type { UserValidators } from '@yukinu/validators/user'
+import { UserValidators } from '@yukinu/validators/user'
 
 import type { IUserService } from '@/contracts/services/user.service'
 import { BaseService } from '@/services/base.service'
@@ -78,11 +78,10 @@ export class UserService extends BaseService implements IUserService {
 
   async delete(
     input: UserValidators.DeleteInput,
-    userId: UserValidators.User['id'],
   ): Promise<UserValidators.DeleteOutput> {
     const { eq } = this._orm
     const { users } = this._schema
-    const { id } = input
+    const { id, userId } = input
 
     if (id === userId)
       throw new TRPCError({
@@ -102,11 +101,11 @@ export class UserService extends BaseService implements IUserService {
         message: `User with ID ${id} not found`,
       })
 
-    const criticalRoles = ['admin', 'moderator', 'vendor_owner', 'vendor_staff']
-    if (criticalRoles.includes(targetUser.role))
+    const crs: string[] = UserValidators.roles.filter((r) => r !== 'user')
+    if (crs.includes(targetUser.role))
       throw new TRPCError({
         code: 'FORBIDDEN',
-        message: `You cannot delete users with critical roles (${criticalRoles.join(', ')})`,
+        message: `You cannot delete users with critical roles (${crs.join(', ')})`,
       })
 
     await this._db
@@ -125,26 +124,8 @@ export class UserService extends BaseService implements IUserService {
     const { users } = this._schema
     const { id } = input
 
-    const [restored] = await this._db
-      .update(users)
-      .set({ deletedAt: null })
-      .where(eq(users.id, id))
-      .returning({ id: users.id })
-    if (!restored)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
-
-    return { id }
-  }
-
-  async permanentlyDelete(
-    input: UserValidators.PermanentlyDeleteInput,
-  ): Promise<UserValidators.PermanentlyDeleteOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
-    const { id } = input
-
     const [targetUser] = await this._db
-      .select()
+      .select({ deletedAt: users.deletedAt })
       .from(users)
       .where(eq(users.id, id))
       .limit(1)
@@ -154,10 +135,57 @@ export class UserService extends BaseService implements IUserService {
         code: 'NOT_FOUND',
         message: `User with ID ${id} not found`,
       })
+
+    if (targetUser.deletedAt === null)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `User with ID ${id} is not deleted`,
+      })
+
+    await this._db
+      .update(users)
+      .set({ deletedAt: null })
+      .where(eq(users.id, id))
+
+    return { id }
+  }
+
+  async permanentlyDelete(
+    input: UserValidators.PermanentlyDeleteInput,
+  ): Promise<UserValidators.PermanentlyDeleteOutput> {
+    const { eq } = this._orm
+    const { users } = this._schema
+    const { id, userId } = input
+
+    if (id === userId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You cannot permanently delete your own account',
+      })
+
+    const [targetUser] = await this._db
+      .select({ role: users.role, deletedAt: users.deletedAt })
+      .from(users)
+      .where(eq(users.id, id))
+      .limit(1)
+
+    if (!targetUser)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with ID ${id} not found`,
+      })
+
     if (targetUser.deletedAt === null)
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: `User with ID ${id} must be soft-deleted before permanent deletion`,
+      })
+
+    const crs: string[] = UserValidators.roles.filter((r) => r !== 'user')
+    if (crs.includes(targetUser.role))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: `You cannot delete users with critical roles (${crs.join(', ')})`,
       })
 
     await this._db.delete(users).where(eq(users.id, id))

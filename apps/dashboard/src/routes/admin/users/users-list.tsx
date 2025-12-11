@@ -234,11 +234,13 @@ const RestoreUserButton: React.FC<{
   user: UserValidators.AllOutput['users'][number]
 }> = ({ user }) => {
   const trpc = useTRPC()
+  const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
     ...trpc.user.restore.mutationOptions(),
     onSuccess: () => {
       toast.success('User restored successfully')
+      setOpen(false)
     },
     onError: ({ message }) =>
       toast.error('Failed to restore user', { description: message }),
@@ -246,7 +248,7 @@ const RestoreUserButton: React.FC<{
   })
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger className='text-primary underline-offset-4 hover:underline'>
         Restore
       </AlertDialogTrigger>

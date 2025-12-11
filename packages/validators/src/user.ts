@@ -117,7 +117,7 @@ export namespace UserValidators {
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>
 
-  export const deleteInput = z.object({ id: z.cuid() })
+  export const deleteInput = z.object({ id: z.cuid(), userId: z.cuid() })
   export type DeleteInput = z.infer<typeof deleteInput>
   export const deleteOutput = z.object({ id: z.cuid() })
   export type DeleteOutput = z.infer<typeof deleteOutput>
@@ -127,7 +127,10 @@ export namespace UserValidators {
   export const restoreOutput = z.object({ id: z.cuid() })
   export type RestoreOutput = z.infer<typeof restoreOutput>
 
-  export const permanentlyDeleteInput = z.object({ id: z.cuid() })
+  export const permanentlyDeleteInput = z.object({
+    id: z.cuid(),
+    userId: z.cuid(),
+  })
   export type PermanentlyDeleteInput = z.infer<typeof permanentlyDeleteInput>
   export const permanentlyDeleteOutput = z.object({ id: z.cuid() })
   export type PermanentlyDeleteOutput = z.infer<typeof permanentlyDeleteOutput>

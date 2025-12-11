@@ -124,6 +124,7 @@ export namespace VendorValidators {
 
   export const acceptStaffInvitationInput = z.object({
     token: z.string(),
+    userId: z.cuid(),
   })
   export type AcceptStaffInvitationInput = z.infer<
     typeof acceptStaffInvitationInput

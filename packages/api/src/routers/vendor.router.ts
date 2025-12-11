@@ -22,7 +22,8 @@ export const VendorRouter = createTRPCRouter({
 
   me: vendorProcedure
     .meta({ message: 'Vendor fetched successfully', role: ['vendor_owner'] })
-    .output(VendorValidators.oneOutput.omit({ id: true }))
+    .input(VendorValidators.oneInput.omit({ id: true }))
+    .output(VendorValidators.oneOutput)
     .query(({ ctx }) => ctx.services.vendor.one({ id: ctx.vendorId })),
 
   create: protectedProcedure
@@ -83,10 +84,13 @@ export const VendorRouter = createTRPCRouter({
 
   acceptStaffInvitation: protectedProcedure
     .meta({ message: 'Vendor invitation accepted successfully' })
-    .input(VendorValidators.acceptStaffInvitationInput)
+    .input(VendorValidators.acceptStaffInvitationInput.omit({ userId: true }))
     .output(VendorValidators.acceptStaffInvitationOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.vendor.acceptStaffInvitation(input, ctx.session.userId),
+      ctx.services.vendor.acceptStaffInvitation({
+        ...input,
+        userId: ctx.session.userId,
+      }),
     ),
 
   removeStaff: vendorProcedure

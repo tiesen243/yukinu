@@ -24,10 +24,7 @@ export const authRouter = createTRPCRouter({
     .input(AuthValidators.allSessionsInput.omit({ userId: true }))
     .output(AuthValidators.allSessionsOutput)
     .query(({ ctx, input }) =>
-      ctx.services.auth.allSessions({
-        ...input,
-        userId: ctx.session.userId,
-      }),
+      ctx.services.auth.allSessions({ ...input, userId: ctx.session.userId }),
     ),
 
   deleteSession: protectedProcedure
