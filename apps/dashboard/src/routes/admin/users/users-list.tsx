@@ -209,7 +209,7 @@ const DeleteUserButton: React.FC<{
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className='text-destructive-foreground bg-destructive hover:bg-destructive/90'
+            className='bg-destructive text-white hover:bg-destructive/90'
             onClick={() => {
               mutate({ id: user.id })
             }}
