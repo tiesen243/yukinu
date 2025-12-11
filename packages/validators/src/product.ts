@@ -203,7 +203,13 @@ export namespace ProductValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = product
-    .omit({ id: true, sold: true, createdAt: true, updatedAt: true })
+    .omit({
+      id: true,
+      sold: true,
+      createdAt: true,
+      updatedAt: true,
+      deletedAt: true,
+    })
     .extend({
       description: z
         .string()
