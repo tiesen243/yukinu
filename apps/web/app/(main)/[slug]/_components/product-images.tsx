@@ -18,7 +18,7 @@ export const ProductImages: React.FC = () => {
       <div className='relative aspect-square w-full rounded-md border'>
         <Image
           src={currentImage ?? '/assets/logo.svg'}
-          alt={`thumbnail-${id}`}
+          alt={`${id}-main-image`}
           className={cn('rounded-md object-contain p-0.5', {
             'dark:invert': !currentImage,
           })}

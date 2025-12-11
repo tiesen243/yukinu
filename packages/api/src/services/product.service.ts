@@ -262,7 +262,7 @@ export class ProductService extends BaseService implements IProductService {
     } = this._schema
     const { attributes: attrs, images, variants: vrts, ...data } = input
 
-    if (data.categoryId || data.categoryId !== null) {
+    if (data.categoryId) {
       const [category] = await this._db
         .select({ id: categories.id })
         .from(categories)
@@ -330,7 +330,13 @@ export class ProductService extends BaseService implements IProductService {
         message: 'Vendor ID is required for updating a product',
       })
 
-    if (data.categoryId || data.categoryId !== null) {
+    const [productToUpdate] = await this._db
+      .select({ categoryId: products.categoryId })
+      .from(products)
+      .where(eq(products.id, id))
+      .limit(1)
+
+    if (data.categoryId && data.categoryId !== productToUpdate?.categoryId) {
       const [category] = await this._db
         .select({ id: categories.id })
         .from(categories)
@@ -489,10 +495,16 @@ export class ProductService extends BaseService implements IProductService {
         ),
       )
       .limit(1)
-    if (product?.deletedAt === null)
+    if (!product)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `Product with id ${id} not found or cannot be deleted permanently`,
+        message: `Product with id ${id} not found`,
+      })
+
+    if (product.deletedAt === null)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Product with id ${id} must be deleted before permanent deletion`,
       })
 
     await this._db.delete(products).where(this._orm.eq(products.id, id))

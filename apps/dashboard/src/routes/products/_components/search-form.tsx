@@ -33,7 +33,6 @@ export const SearchForm: React.FC = () => {
 
 export const ToggleProductStatusButton = () => {
   const [query, setQuery] = useProductQueryStates()
-  console.log(query.isDeleted)
 
   return (
     <Button

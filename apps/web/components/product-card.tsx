@@ -39,10 +39,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         src={product.image ?? '/assets/logo.svg'}
         alt={product.name}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-        loading='eager'
         className={cn(
           'rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105',
-          { 'dark:invert': product.image == null },
+          { 'dark:invert': !product.image },
         )}
         fill
       />

@@ -56,7 +56,10 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         {query.isDeleted ? (
           <>
             <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
-            <PermanentDeleteProductButton productId={product.id} />
+            <PermanentDeleteProductButton
+              productId={product.id}
+              isAdmin={isAdmin}
+            />
           </>
         ) : (
           <DeleteProductButton productId={product.id} isAdmin={isAdmin} />

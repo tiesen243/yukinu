@@ -18,7 +18,8 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export const PermanentDeleteProductButton: React.FC<{
   productId: string
-}> = ({ productId }) => {
+  isAdmin?: boolean
+}> = ({ productId, isAdmin }) => {
   const trpc = useTRPC()
 
   const { mutate, isPending } = useMutation({
@@ -27,7 +28,9 @@ export const PermanentDeleteProductButton: React.FC<{
     onError: ({ message }) =>
       toast.error('Failed to delete product', { description: message }),
     meta: {
-      filter: trpc.product.all.queryFilter(),
+      filter: isAdmin
+        ? trpc.product.all.queryFilter()
+        : trpc.product.allByVendor.queryFilter(),
     },
   })
 
