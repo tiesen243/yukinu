@@ -7,17 +7,14 @@ import { cn } from '@yukinu/ui'
 import { Badge } from '@yukinu/ui/badge'
 import {
   Card,
+  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@yukinu/ui/card'
 import { StarIcon } from '@yukinu/ui/icons'
 
-interface ProductCardProps extends Omit<
-  React.ComponentProps<typeof Link>,
-  'href'
-> {
+interface ProductCardProps extends React.ComponentProps<typeof Card> {
   product: ProductValidators.AllOutput['products'][number]
 }
 
@@ -26,15 +23,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   className,
   ...props
 }) => (
-  <Link
+  <Card
     {...props}
-    href={`/${slugify(product.name)}-${product.id}`}
     className={cn(
-      'group/product-card flex aspect-square flex-col gap-6 rounded-xl border bg-card pb-6 text-card-foreground shadow-sm transition-colors hover:border-accent hover:bg-accent/20 hover:text-accent-foreground',
+      'group/product-card flex aspect-square pt-0 transition-colors hover:border-accent hover:bg-accent/20 hover:text-accent-foreground',
       className,
     )}
+    render={<Link href={`/${slugify(product.name)}-${product.id}`} />}
   >
-    <CardHeader className='relative flex-1 overflow-hidden rounded-t-xl p-0'>
+    <CardHeader className='relative flex-1 overflow-hidden rounded-t-xl'>
       <Image
         src={product.image ?? '/assets/logo.svg'}
         alt={product.name}
@@ -56,7 +53,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       )}
     </CardHeader>
 
-    <CardFooter className='flex-col items-start justify-end gap-2'>
+    <CardContent className='flex-col items-start justify-end gap-2'>
       <CardTitle className='line-clamp-1 text-lg'>{product.name}</CardTitle>
 
       <CardDescription>
@@ -65,14 +62,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           currency: 'USD',
         }).format(parseFloat(product.price))}
       </CardDescription>
+
       <CardDescription className='flex w-full items-center justify-between'>
         <p className='flex items-center gap-1'>
           <StarIcon className='size-4' /> {product.rating}
         </p>
         <p>Sold {product.sold}</p>
       </CardDescription>
-    </CardFooter>
-  </Link>
+    </CardContent>
+  </Card>
 )
 
 export const ProductCardSkeleton: React.FC<
@@ -81,7 +79,7 @@ export const ProductCardSkeleton: React.FC<
   <Card {...props} className={cn('aspect-square pt-0', className)}>
     <CardHeader className='flex-1 animate-pulse bg-muted' />
 
-    <CardFooter className='flex-col items-start justify-end gap-2'>
+    <CardContent className='flex-col items-start justify-end gap-2'>
       <CardTitle className='w-3/4 animate-pulse rounded-md bg-muted text-lg'>
         &nbsp;
       </CardTitle>
@@ -92,6 +90,6 @@ export const ProductCardSkeleton: React.FC<
       <CardDescription className='w-full animate-pulse rounded-md bg-muted'>
         &nbsp;
       </CardDescription>
-    </CardFooter>
+    </CardContent>
   </Card>
 )

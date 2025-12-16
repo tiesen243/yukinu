@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -19,14 +20,14 @@ export default function InvitePage() {
   if (!token)
     return (
       <main className='grid min-h-dvh place-items-center'>
-        <div className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
-          <FieldSet>
+        <Card>
+          <FieldSet className='px-4'>
             <FieldLegend>Error</FieldLegend>
             <FieldDescription>
               No token provided. Please check the link in your email.
             </FieldDescription>
           </FieldSet>
-        </div>
+        </Card>
       </main>
     )
 
@@ -34,11 +35,8 @@ export default function InvitePage() {
     <main className='grid min-h-dvh place-items-center'>
       <h1 className='sr-only'>Accept Staff Invitation</h1>
 
-      <form
-        method='POST'
-        className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'
-      >
-        <FieldSet>
+      <Card render={<form method='POST' />}>
+        <FieldSet className='px-4'>
           <FieldLegend>Accept Staff Invitation</FieldLegend>
           <FieldDescription>
             Please click the button below to accept your staff invitation.
@@ -46,7 +44,7 @@ export default function InvitePage() {
 
           <AcceptInviteForm token={token} />
         </FieldSet>
-      </form>
+      </Card>
     </main>
   )
 }

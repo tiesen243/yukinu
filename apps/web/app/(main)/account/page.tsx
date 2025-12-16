@@ -22,7 +22,7 @@ export default function AccountPage() {
         description='View and update your personal details, email, and password to keep your account secure.'
       />
 
-      <section className='flex flex-col gap-6 px-6 pt-6'>
+      <section className='flex flex-col gap-4 px-4'>
         <h2 className='sr-only'>Profile Information section</h2>
 
         <Suspense fallback={<ProfileSummarySkeleton />}>

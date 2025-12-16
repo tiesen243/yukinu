@@ -1,3 +1,4 @@
+import { Card } from '@yukinu/ui/card'
 import {
   LockIcon,
   PackageIcon,
@@ -6,6 +7,7 @@ import {
   TruckIcon,
   ZapIcon,
 } from '@yukinu/ui/icons'
+import { Typography } from '@yukinu/ui/typography'
 
 export const FeaturesSection: React.FC = () => (
   <section
@@ -13,25 +15,25 @@ export const FeaturesSection: React.FC = () => (
     className='bg-card px-4 py-20 sm:px-6 md:py-32 lg:px-8'
   >
     <div className='container mb-16 text-center'>
-      <h2 className='mb-4 text-3xl font-bold text-foreground sm:text-4xl'>
-        Why choose Yukinu?
-      </h2>
-      <p className='mx-auto max-w-2xl text-lg text-foreground/70'>
+      <Typography variant='h2'>Why choose Yukinu?</Typography>
+      <Typography className='mx-auto max-w-2xl text-muted-foreground'>
         We've built the platform to make online shopping easier, safer, and more
         rewarding.
-      </p>
+      </Typography>
     </div>
 
     <div className='container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3'>
       {features.map((feature) => (
-        <div
+        <Card
           key={feature.title}
-          className='rounded-lg border bg-card p-8 text-accent-foreground transition-colors hover:border-accent hover:bg-accent/20 hover:text-primary'
+          className='gap-2 px-4 text-accent-foreground transition-colors hover:border-accent hover:bg-accent/20 hover:text-primary'
         >
-          <feature.icon className='mb-4 size-12' />
-          <h3 className='mb-3 text-lg font-semibold'>{feature.title}</h3>
-          <p className='text-accent-foreground/70'>{feature.description}</p>
-        </div>
+          <feature.icon className='size-12' />
+          <Typography variant='h6' render={<h3>{feature.title}</h3>} />
+          <Typography className='text-accent-foreground/70'>
+            {feature.description}
+          </Typography>
+        </Card>
       ))}
     </div>
   </section>

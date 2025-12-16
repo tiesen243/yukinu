@@ -1,5 +1,7 @@
 import { Suspense } from 'react'
 
+import { Typography } from '@yukinu/ui/typography'
+
 import {
   CategoriesList,
   CategoriesListSkeleton,
@@ -22,7 +24,7 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
 
   return (
     <HydrateClient>
-      <main className='container flex-1 py-6'>
+      <main className='container flex-1 py-4'>
         <h1 className='sr-only'>Home Page</h1>
 
         <section className='grid gap-4 md:grid-cols-3 md:grid-rows-2'>
@@ -33,7 +35,7 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
         </section>
 
         <section className='mt-6'>
-          <h2 className='mb-4 text-2xl font-bold'>Categories</h2>
+          <Typography variant='h2'>Categories</Typography>
 
           <div className='grid grid-cols-2 gap-4 sm:grid-cols-4 md:grid-cols-5'>
             <Suspense fallback={<CategoriesListSkeleton />}>

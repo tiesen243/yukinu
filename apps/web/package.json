@@ -24,7 +24,7 @@
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.0.8",
+    "next": "^16.0.10",
     "nuqs": "catalog:",
     "react": "catalog:react",
     "react-dom": "catalog:react",

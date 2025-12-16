@@ -33,9 +33,11 @@ export const UserButton = () => {
 
   if (status === 'unauthenticated')
     return (
-      <Button variant='ghost' asChild>
-        <Link href='/login'>Sign In</Link>
-      </Button>
+      <Button
+        variant='ghost'
+        nativeButton={false}
+        render={<Link href='/login'>Sign In</Link>}
+      />
     )
 
   const { user } = session
@@ -53,36 +55,44 @@ export const UserButton = () => {
         <span className='sr-only'>User menu</span>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align='end'>
-        <DropdownMenuLabel className='flex flex-col gap-2'>
-          <span>{user.username}</span>
-          <span className='text-sm text-muted-foreground'>{user.email}</span>
-        </DropdownMenuLabel>
+      <DropdownMenuContent align='end' className='w-56'>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className='flex flex-col gap-2'>
+            <span className='text-sm'>{user.username}</span>
+            <span className='text-muted-foreground'>{user.email}</span>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
           {menuItems.map((item) => (
-            <DropdownMenuItem key={item.href} asChild>
-              <Link href={item.href}>
-                <item.icon /> {item.label}
-              </Link>
-            </DropdownMenuItem>
+            <DropdownMenuItem
+              key={item.href}
+              nativeButton={false}
+              render={
+                <Link href={item.href}>
+                  <item.icon /> {item.label}
+                </Link>
+              }
+            />
           ))}
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <a href={getDashboardUrl()}>
-              <LayoutDashboardIcon /> Dashboard
-            </a>
-          </DropdownMenuItem>
+          <DropdownMenuItem
+            render={
+              <a href={getDashboardUrl()}>
+                <LayoutDashboardIcon /> Dashboard
+              </a>
+            }
+          />
 
           <ThemeSwitcher />
 
-          <DropdownMenuItem onSelect={signOut}>
+          <DropdownMenuItem variant='destructive' onClick={signOut}>
             <LogOutIcon /> Sign Out
           </DropdownMenuItem>
         </DropdownMenuGroup>

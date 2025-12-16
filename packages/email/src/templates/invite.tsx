@@ -11,13 +11,7 @@ interface InviteProps {
 }
 
 export default function Invite(props: InviteProps) {
-  const {
-    username = 'Yukikaze',
-    inviterName = 'Yuki',
-    inviterEmail = 'yuki@example.com',
-    vendorName = 'Yukinu',
-    inviteLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  } = props
+  const { username, inviterName, inviterEmail, vendorName, inviteLink } = props
 
   return (
     <EmailLayout preview={`${inviterName} has invited you to join Yukinu!`}>

@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router'
 
 import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -23,8 +24,8 @@ export default function LoginPage() {
     <main className='grid min-h-dvh place-items-center'>
       <h1 className='sr-only'>Login page</h1>
 
-      <form className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
-        <FieldSet>
+      <Card render={<form method='POST' />}>
+        <FieldSet className='px-4'>
           <FieldLegend>Login</FieldLegend>
           <FieldDescription>
             Welcome back! Please enter your credentials to log in.
@@ -37,7 +38,7 @@ export default function LoginPage() {
             <Link to={`${getWebUrl()}/register`}>Register here.</Link>
           </FieldDescription>
         </FieldSet>
-      </form>
+      </Card>
     </main>
   )
 }

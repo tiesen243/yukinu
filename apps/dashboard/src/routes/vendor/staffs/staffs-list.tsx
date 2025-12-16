@@ -79,11 +79,13 @@ const RemoveStaffButton: React.FC<{
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='secondary' disabled={isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
+          />
           <Button
             onClick={() => {
               mutate({ staffId })

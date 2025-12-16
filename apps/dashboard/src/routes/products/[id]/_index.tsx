@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 
-import { buttonVariants } from '@yukinu/ui/button'
+import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Typography } from '@yukinu/ui/typography'
 
 import type { Route } from './+types/_index'
 import { useTRPC } from '@/lib/trpc/react'
@@ -34,19 +36,16 @@ export default function ProductsUpdatePage({
 
   return (
     <>
-      <h1 className='sr-only'>Update Product page</h1>
+      <h2 className='sr-only'>Update Product section</h2>
 
       <UpdateProductForm data={data} />
 
-      <section className='mt-6 rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
-        <div className='mb-6 flex items-center justify-between gap-4'>
-          <h2 className='text-2xl font-semibold'>Product Variants</h2>
-          <Link
-            to={`/products/${data.id}/variant`}
-            className={buttonVariants()}
-          >
+      <Card render={<section className='mt-4 px-4' />}>
+        <div className='flex items-center justify-between gap-4'>
+          <Typography variant='h3'>Product Variants</Typography>
+          <Button render={<Link to={`/products/${data.id}/variant`} />}>
             Recreate New Variant
-          </Link>
+          </Button>
         </div>
 
         <Table>
@@ -84,7 +83,7 @@ export default function ProductsUpdatePage({
             ))}
           </TableBody>
         </Table>
-      </section>
+      </Card>
     </>
   )
 }

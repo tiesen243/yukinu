@@ -37,9 +37,7 @@ export const InviteStaffButton: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button>Invite New Staff</Button>
-      </DialogTrigger>
+      <DialogTrigger render={<Button>Invite New Staff</Button>} />
 
       <DialogContent>
         <DialogHeader>
@@ -63,11 +61,13 @@ export const InviteStaffButton: React.FC = () => {
         </Field>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
+          />
 
           <Button
             onClick={() => {

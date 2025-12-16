@@ -24,18 +24,22 @@ export default function AddressPage() {
         description='View, add, and manage your saved shipping addresses for faster checkout.'
       />
 
-      <section className='flex flex-col gap-4 px-6 pt-6'>
+      <section className='flex flex-col gap-4 px-4'>
         <h2 className='sr-only'>Address List section</h2>
 
         <Suspense fallback={<AddressesListSkeleton />}>
           <AddressesList />
         </Suspense>
 
-        <Button variant='outline' asChild>
-          <Link href='/account/address/new'>
-            <PlusIcon /> Add New Address
-          </Link>
-        </Button>
+        <Button
+          variant='outline'
+          nativeButton={false}
+          render={
+            <Link href='/account/address/new'>
+              <PlusIcon /> Add New Address
+            </Link>
+          }
+        />
       </section>
     </HydrateClient>
   )

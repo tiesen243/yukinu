@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -49,88 +50,76 @@ export default function CategoriesNewPage() {
   })
 
   return (
-    <>
-      <h1 className='sr-only'>Create New Category page</h1>
+    <Card render={<form onSubmit={form.handleSubmit} />}>
+      <FieldSet className='px-4'>
+        <FieldLegend>Create New Category</FieldLegend>
+        <FieldDescription>
+          Use the form below to create a new category in the system.
+        </FieldDescription>
 
-      <form
-        onSubmit={form.handleSubmit}
-        className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
-      >
-        <FieldSet>
-          <FieldLegend>Create New Category</FieldLegend>
-          <FieldDescription>
-            Use the form below to create a new category in the system.
-          </FieldDescription>
+        <FieldGroup>
+          <form.Field
+            name='name'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
+                <Input {...field} placeholder='Category Name' />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-          <FieldGroup>
-            <form.Field
-              name='name'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
-                  <Input {...field} placeholder='Category Name' />
-                  <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
+          <form.Field
+            name='description'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+                <Textarea {...field} placeholder='Category Description' />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-            <form.Field
-              name='description'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                  <Textarea {...field} placeholder='Category Description' />
-                  <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
+          <form.Field
+            name='image'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
+                <Input {...field} placeholder='https://example.com/image.jpg' />
+                <FieldDescription id={meta.descriptionId}>
+                  URL of the category image. Will be replaced with upload
+                  dropzone later.
+                </FieldDescription>
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-            <form.Field
-              name='image'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                  <Input
-                    {...field}
-                    placeholder='https://example.com/image.jpg'
-                  />
-                  <FieldDescription id={meta.descriptionId}>
-                    URL of the category image. Will be replaced with upload
-                    dropzone later.
-                  </FieldDescription>
-                  <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
+          <form.Field
+            name='parentId'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={meta.fieldId}>Parent Category</FieldLabel>
+                <Select {...field}>
+                  <SelectOption value='no-parent'>No Parent</SelectOption>
+                  {data?.categories.map((category) => (
+                    <SelectOption key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectOption>
+                  ))}
+                </Select>
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
 
-            <form.Field
-              name='parentId'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>
-                    Parent Category
-                  </FieldLabel>
-                  <Select {...field}>
-                    <SelectOption value='no-parent'>No Parent</SelectOption>
-                    {data?.categories.map((category) => (
-                      <SelectOption key={category.id} value={category.id}>
-                        {category.name}
-                      </SelectOption>
-                    ))}
-                  </Select>
-                  <FieldError id={meta.errorId} errors={meta.errors} />
-                </Field>
-              )}
-            />
-
-            <Field>
-              <Button type='submit' disabled={form.state.isPending}>
-                {form.state.isPending ? 'Creating...' : 'Create Category'}
-              </Button>
-            </Field>
-          </FieldGroup>
-        </FieldSet>
-      </form>
-    </>
+          <Field>
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Creating...' : 'Create Category'}
+            </Button>
+          </Field>
+        </FieldGroup>
+      </FieldSet>
+    </Card>
   )
 }

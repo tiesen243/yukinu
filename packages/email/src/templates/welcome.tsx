@@ -8,7 +8,7 @@ interface WelcomeEmailProps {
 }
 
 export default function Welcome(props: WelcomeEmailProps) {
-  const { username = 'Yukikaze', verificationLink } = props
+  const { username, verificationLink } = props
 
   return (
     <EmailLayout>

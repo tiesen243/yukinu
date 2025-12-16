@@ -33,7 +33,7 @@ export default function AccountCartPage() {
         description='View and manage the items in your shopping cart before proceeding to checkout.'
       />
 
-      <section className='w-auto flex-1 overflow-x-auto px-6 pt-6'>
+      <section className='px-4'>
         <h2 className='sr-only'>Cart Items List section</h2>
 
         <Table>

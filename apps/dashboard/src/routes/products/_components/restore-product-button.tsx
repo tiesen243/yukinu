@@ -11,7 +11,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -50,20 +49,14 @@ export const RestoreProductButton: React.FC<{
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
-          </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              onClick={() => {
-                mutate({ id: productId })
-              }}
-              disabled={isPending}
-            >
-              {isPending ? 'Restoring...' : 'Restore'}
-            </Button>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              mutate({ id: productId })
+            }}
+            disabled={isPending}
+          >
+            {isPending ? 'Restoring...' : 'Restore'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -21,7 +21,7 @@ export default async function EditAddressPage({
         description='Update your address information.'
       />
 
-      <section className='px-6 pt-6'>
+      <section className='px-4'>
         <h2 className='sr-only'>Edit Address {id} form</h2>
 
         <Suspense

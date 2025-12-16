@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 import { Button } from '@yukinu/ui/button'
 import { MapPinIcon, ShoppingBagIcon, StarIcon } from '@yukinu/ui/icons'
+import { Typography } from '@yukinu/ui/typography'
 
 export const BuyerValue: React.FC = () => {
   return (
@@ -17,14 +18,14 @@ export const BuyerValue: React.FC = () => {
         <span className='mb-0 inline-block rounded-full border-accent bg-accent/40 px-4 py-2 text-sm font-medium text-accent-foreground shadow-sm dark:border'>
           For Shoppers
         </span>
-        <h3 className='my-6 text-3xl leading-tight font-bold text-balance text-foreground sm:text-4xl'>
+        <Typography variant='h3'>
           Shop smarter, save more, enjoy better
-        </h3>
-        <p className='text-lg leading-relaxed text-foreground/70'>
+        </Typography>
+        <Typography className='text-muted-foreground'>
           Browse thousands of products from verified sellers, compare prices in
           real-time, and make informed decisions. Get personalized
           recommendations based on your preferences.
-        </p>
+        </Typography>
 
         <section className='space-y-4'>
           <h4 className='sr-only'>Benefits for Shoppers</h4>
@@ -33,16 +34,20 @@ export const BuyerValue: React.FC = () => {
             <div className='flex items-start gap-4' key={title}>
               <Icon className='size-6 shrink-0 text-accent-foreground' />
               <div>
-                <p className='font-semibold'>{title}</p>
-                <span className='text-muted-foreground'>{desc}</span>
+                <Typography className='font-semibold'>{title}</Typography>
+                <Typography className='text-muted-foreground' render={<span />}>
+                  {desc}
+                </Typography>
               </div>
             </div>
           ))}
         </section>
 
-        <Button size='lg' asChild>
-          <Link href='/'>Start Shopping</Link>
-        </Button>
+        <Button
+          size='lg'
+          nativeButton={false}
+          render={<Link href='/'>Start Shopping</Link>}
+        />
       </section>
 
       <section className='flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/20 p-8 md:p-12 dark:bg-accent/10'>
@@ -50,9 +55,9 @@ export const BuyerValue: React.FC = () => {
 
         <div className='space-y-4 text-center'>
           <ShoppingBagIcon className='mx-auto size-20 text-accent' />
-          <p className='text-accent-foreground/70'>
+          <Typography className='text-accent-foreground/70'>
             Premium shopping experience
-          </p>
+          </Typography>
         </div>
       </section>
     </section>

@@ -10,7 +10,7 @@ export default function NewAddressPage() {
         description='Add a new shipping address to your account for faster checkout.'
       />
 
-      <section className='px-6 pt-6'>
+      <section className='px-4'>
         <h2 className='sr-only'>Add New Address form</h2>
 
         <NewAddressForm />
