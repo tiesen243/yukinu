@@ -29,9 +29,11 @@ export default function Error({ error }: Readonly<ErrorProps>) {
         <p className='text-lg font-medium'>{error.message}</p>
       </div>
 
-      <Button size='sm' asChild>
-        <Link href='/'>Take me home</Link>
-      </Button>
+      <Button
+        size='sm'
+        nativeButton={false}
+        render={<Link href='/'>Take me home</Link>}
+      />
 
       {
         // eslint-disable-next-line no-restricted-properties

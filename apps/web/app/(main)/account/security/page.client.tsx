@@ -82,11 +82,14 @@ const SessionItem: React.FC<{
       </p>
 
       <AlertDialog>
-        <AlertDialogTrigger className='absolute top-0 right-0' asChild>
-          <Button variant='outline' size='icon-sm'>
-            <XIcon />
-          </Button>
-        </AlertDialogTrigger>
+        <AlertDialogTrigger
+          className='absolute top-0 right-0'
+          render={
+            <Button variant='outline' size='icon-sm'>
+              <XIcon />
+            </Button>
+          }
+        />
 
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -103,7 +106,7 @@ const SessionItem: React.FC<{
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className='bg-destructive hover:bg-destructive/90'
+              variant='destructive'
               onClick={() => {
                 mutate({ sessionId: session.id })
               }}
@@ -217,7 +220,7 @@ export const ChangePasswordForm: React.FC = () => {
                   {...field}
                   checked={value}
                   onCheckedChange={(value) => {
-                    onChange(Boolean(value))
+                    onChange(value)
                   }}
                 />
                 <FieldLabel htmlFor={meta.fieldId}>
@@ -262,9 +265,10 @@ export const DeleteAccountButton: React.FC = () => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='w-full' asChild>
-        <Button variant='destructive'>Delete Account</Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger
+        className='w-full'
+        render={<Button variant='destructive'>Delete Account</Button>}
+      />
 
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -300,7 +304,7 @@ export const DeleteAccountButton: React.FC = () => {
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            className='bg-destructive hover:bg-destructive/90'
+            variant='destructive'
             disabled={form.state.isPending}
             onClick={form.handleSubmit}
           >

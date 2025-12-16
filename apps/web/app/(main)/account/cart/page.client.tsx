@@ -198,9 +198,13 @@ const EditButton: React.FC<{
         </InputGroup>
 
         <DialogFooter>
-          <DialogClose disabled={isPending} asChild>
-            <Button variant='outline'>Cancel</Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
+          />
           <Button
             disabled={isPending}
             onClick={() => {
@@ -253,9 +257,10 @@ const RemoveButton: React.FC<{ itemId: string | null }> = ({ itemId }) => {
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose disabled={isPending} asChild>
-            <Button variant='outline'>Cancel</Button>
-          </DialogClose>
+          <DialogClose
+            disabled={isPending}
+            render={<Button variant='outline'>Cancel</Button>}
+          />
           <Button
             variant='destructive'
             disabled={isPending}

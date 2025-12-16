@@ -87,7 +87,7 @@ export default async function ProductDetailsPage({
         />
 
         <HydrateClient>
-          <main className='container flex flex-1 flex-col gap-6 py-6'>
+          <main className='container flex flex-1 flex-col gap-6 py-4'>
             <h1 className='sr-only'>
               Product {product.name} Details Information page
             </h1>

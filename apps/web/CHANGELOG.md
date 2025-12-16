@@ -1,5 +1,26 @@
 # @yukinu/web
 
+## 0.8.0
+
+### Minor Changes
+
+- [#292](https://github.com/tiesen243/yukinu/pull/292) [`ab60f3f`](https://github.com/tiesen243/yukinu/commit/ab60f3f138bdf599f39b22813a1f059be6ac7e1e) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migrate all components to base ui
+
+### Patch Changes
+
+- [#292](https://github.com/tiesen243/yukinu/pull/292) [`4f89407`](https://github.com/tiesen243/yukinu/commit/4f8940792e9ffc608571950f9abff2a18d0ff39b) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migrate web
+
+- [#292](https://github.com/tiesen243/yukinu/pull/292) [`b586379`](https://github.com/tiesen243/yukinu/commit/b586379e6af88ac2fd7966520ff861d19b3b35e4) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migrate landing pages
+
+- Updated dependencies [[`33fbed1`](https://github.com/tiesen243/yukinu/commit/33fbed10616c7e91ddad7cd09ef86e49a504dca4), [`ab60f3f`](https://github.com/tiesen243/yukinu/commit/ab60f3f138bdf599f39b22813a1f059be6ac7e1e)]:
+  - @yukinu/ui@0.5.0
+  - @yukinu/email@0.5.0
+  - @yukinu/api@0.6.0
+  - @yukinu/auth@0.6.0
+  - @yukinu/db@0.6.0
+  - @yukinu/lib@0.4.0
+  - @yukinu/validators@0.6.0
+
 ## 0.7.2
 
 ### Patch Changes

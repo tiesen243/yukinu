@@ -1,4 +1,5 @@
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import { DownloadIcon } from '@yukinu/ui/icons'
 import {
   Table,
@@ -7,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Typography } from '@yukinu/ui/typography'
 
 import { SearchForm } from '@/routes/admin/vendors/search-form'
 import { VendorsList } from '@/routes/admin/vendors/vendors-list'
@@ -15,12 +17,12 @@ import { VendorsPagination } from '@/routes/admin/vendors/vendors-pagination'
 export default function VendorsPage() {
   return (
     <>
-      <h1 className='text-3xl font-bold'>Vendors Management</h1>
-      <p className='mt-2 text-muted-foreground'>
+      <Typography variant='h2'>Vendors Management</Typography>
+      <Typography className='text-muted-foreground'>
         Manage and view all vendors in your organization from this dashboard.
-      </p>
+      </Typography>
 
-      <div className='my-6 flex items-center justify-between gap-4'>
+      <div className='my-4 flex items-center justify-between gap-4'>
         <SearchForm />
 
         <Button variant='outline' disabled>
@@ -29,7 +31,7 @@ export default function VendorsPage() {
         </Button>
       </div>
 
-      <section className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
+      <Card render={<section className='px-4' />}>
         <Table>
           <TableHeader>
             <TableRow>
@@ -50,7 +52,7 @@ export default function VendorsPage() {
         </Table>
 
         <VendorsPagination />
-      </section>
+      </Card>
     </>
   )
 }

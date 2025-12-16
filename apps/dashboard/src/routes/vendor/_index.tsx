@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -54,10 +55,7 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <h1 className='sr-only'>My Store page</h1>
-      <form
-        onSubmit={form.handleSubmit}
-        className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
-      >
+      <Card render={<form onSubmit={form.handleSubmit} />}>
         <FieldSet>
           <FieldLegend>My Store</FieldLegend>
           <FieldDescription>
@@ -128,7 +126,7 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
             </Field>
           </FieldGroup>
         </FieldSet>
-      </form>
+      </Card>
     </>
   )
 }

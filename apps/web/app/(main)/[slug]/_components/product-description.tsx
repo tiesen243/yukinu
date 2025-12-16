@@ -1,3 +1,8 @@
+'use client'
+
+import { Card } from '@yukinu/ui/card'
+import { Typography } from '@yukinu/ui/typography'
+
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 
 export const ProductDescription: React.FC = () => {
@@ -6,22 +11,22 @@ export const ProductDescription: React.FC = () => {
   } = usePage()
 
   return (
-    <article className='flex flex-col gap-6 rounded-lg bg-card p-6 shadow-md dark:border'>
-      <h2 className='text-2xl font-semibold text-balance'>Overview</h2>
-      <p className='overflow-x-auto text-base text-pretty whitespace-pre-wrap'>
+    <Card render={<section className='px-4' />}>
+      <Typography variant='h4' render={<h2>Overview</h2>} />
+      <Typography className='overflow-x-auto whitespace-pre-wrap'>
         {description?.split('\\n').join('\n')}
-      </p>
+      </Typography>
 
-      <section className='flex flex-col gap-4'>
-        <h3 className='text-xl font-semibold text-balance'>Specifications</h3>
-        <ul className='flex flex-col gap-2 text-pretty capitalize'>
+      <section>
+        <Typography variant='h5' render={<h3>Specifications</h3>} />
+        <Typography variant='ul' className='capitalize'>
           {attributes.map((attr) => (
             <li key={attr.name}>
               <strong>{attr.name}:</strong> {attr.value}
             </li>
           ))}
-        </ul>
+        </Typography>
       </section>
-    </article>
+    </Card>
   )
 }

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { Card } from '@yukinu/ui/card'
 import {
   HeartIcon,
   MapPinIcon,
@@ -13,11 +14,11 @@ import { UserHeader } from '@/app/(main)/account/_components/user-header'
 
 export default function AccountLayout({ children }: LayoutProps<'/account'>) {
   return (
-    <div className='container flex h-dvh w-full flex-1 flex-col gap-6 py-6 md:flex-row'>
-      <aside className='shrink-0 rounded-xl bg-card py-6 text-card-foreground shadow-sm md:w-1/4 dark:border'>
+    <div className='container flex h-dvh w-full flex-1 flex-col gap-4 py-4 md:flex-row'>
+      <Card render={<aside />} className='shrink-0 md:w-1/4'>
         <UserHeader />
 
-        <nav className='px-6 pt-4'>
+        <nav className='px-4'>
           <ul className='flex flex-row gap-4 overflow-x-auto pb-2 md:flex-col md:gap-2 md:pb-0'>
             {sidebarLinks.map((link) => (
               <li key={link.href}>
@@ -31,11 +32,11 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
             ))}
           </ul>
         </nav>
-      </aside>
+      </Card>
 
-      <main className='w-full overflow-x-hidden rounded-xl bg-card py-6 shadow-sm dark:border'>
+      <Card render={<main />} className='w-full overflow-x-hidden'>
         {children}
-      </main>
+      </Card>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -48,11 +49,8 @@ export default function AppVendorPage() {
     <>
       <h1 className='sr-only'>Apply as Vendor page</h1>
 
-      <form
-        onSubmit={form.handleSubmit}
-        className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
-      >
-        <FieldSet>
+      <Card render={<form onSubmit={form.handleSubmit} />}>
+        <FieldSet className='px-4'>
           <FieldLegend>Vendor Application</FieldLegend>
           <FieldDescription>
             Please fill out the form below to apply as a vendor on our platform.
@@ -132,7 +130,7 @@ export default function AppVendorPage() {
             </Field>
           </FieldGroup>
         </FieldSet>
-      </form>
+      </Card>
     </>
   )
 }

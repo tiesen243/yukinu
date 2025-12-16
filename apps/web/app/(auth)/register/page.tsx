@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { Card } from '@yukinu/ui/card'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { RegisterForm } from '@/app/(auth)/register/page.client'
@@ -8,17 +9,14 @@ import { createMetadata } from '@/lib/metadata'
 export default function RegisterPage() {
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <form className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
-        <FieldSet>
+      <Card render={<form method='POST' />}>
+        <FieldSet className='px-4'>
           <FieldLegend>Register</FieldLegend>
           <FieldDescription>Create your account</FieldDescription>
-
           <RegisterForm />
-
           <FieldDescription>
             Already have an account? <Link href='/login'>Log in here</Link>.
           </FieldDescription>
-
           <FieldDescription>
             By registering, you agree to our{' '}
             <Link
@@ -39,7 +37,7 @@ export default function RegisterPage() {
             .
           </FieldDescription>
         </FieldSet>
-      </form>
+      </Card>
     </main>
   )
 }

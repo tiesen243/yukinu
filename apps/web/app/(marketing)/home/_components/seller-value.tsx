@@ -5,6 +5,7 @@ import {
   UsersIcon,
   ZapIcon,
 } from '@yukinu/ui/icons'
+import { Typography } from '@yukinu/ui/typography'
 
 import { getDashboardUrl } from '@/lib/utils'
 
@@ -20,7 +21,9 @@ export const SellerValue: React.FC = () => (
 
         <div className='space-y-4 text-center'>
           <BarChart3Icon className='mx-auto size-20 text-accent' />
-          <p className='text-accent-foreground/70'>Grow your business</p>
+          <Typography className='text-accent-foreground/70'>
+            Grow your business
+          </Typography>
         </div>
       </section>
 
@@ -28,13 +31,13 @@ export const SellerValue: React.FC = () => (
         <span className='mb-0 inline-block rounded-full border-accent bg-accent/40 px-4 py-2 text-sm font-medium text-accent-foreground shadow-sm dark:border'>
           For Vendors
         </span>
-        <h3 className='my-6 text-3xl leading-tight font-bold text-balance text-foreground sm:text-4xl'>
+        <Typography variant='h3'>
           Reach thousands of buyers and grow your business
-        </h3>
-        <p className='text-lg leading-relaxed text-foreground/70'>
+        </Typography>
+        <Typography className='text-muted-foreground'>
           List your products, manage inventory, and reach a massive audience.
           Our commission-based model means you only pay when you sell.
-        </p>
+        </Typography>
 
         <section className='space-y-4'>
           <h4 className='sr-only'>Benefits for Vendors</h4>
@@ -43,22 +46,29 @@ export const SellerValue: React.FC = () => (
             <div className='flex items-start gap-4' key={title}>
               <Icon className='size-6 shrink-0 text-accent-foreground' />
               <div>
-                <p className='font-semibold'>{title}</p>
-                <span className='text-muted-foreground'>{desc}</span>
+                <Typography className='font-semibold'>{title}</Typography>
+                <Typography className='text-muted-foreground' render={<span />}>
+                  {desc}
+                </Typography>
               </div>
             </div>
           ))}
         </section>
 
-        <Button size='lg' variant='outline' asChild>
-          <a
-            href={`${getDashboardUrl()}/apply-vendor`}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Apply as Vendor
-          </a>
-        </Button>
+        <Button
+          size='lg'
+          variant='outline'
+          nativeButton={false}
+          render={
+            <a
+              href={`${getDashboardUrl()}/apply-vendor`}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Apply as Vendor
+            </a>
+          }
+        />
       </section>
     </div>
   </section>

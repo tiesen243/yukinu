@@ -1,8 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 
 import { StarIcon } from '@yukinu/ui/icons'
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
+import { Typography } from '@yukinu/ui/typography'
 
 import { AddToCartButton } from '@/app/(main)/[slug]/_components/add-to-cart-button'
 import { usePage } from '@/app/(main)/[slug]/page.provider'
@@ -29,7 +32,9 @@ export const ProductInformation: React.FC = () => {
           </Link>
         )}
 
-        <h3 className='text-3xl font-medium text-balance'>{name}</h3>
+        <Typography variant='h3' className='my-0'>
+          {name}
+        </Typography>
       </div>
 
       <div className='flex items-center gap-4'>
@@ -49,9 +54,9 @@ export const ProductInformation: React.FC = () => {
         <span className='text-sm font-medium'>{sold} Sold</span>
       </div>
 
-      <p className='mb-4 text-2xl font-semibold text-accent-foreground'>
+      <Typography variant='h4' className='my-0 text-accent-foreground'>
         ${selectedVariant ? selectedVariant.price : price}
-      </p>
+      </Typography>
 
       <section className='flex-1'>
         <h4 className='sr-only'>Purchase Options section</h4>
@@ -65,7 +70,7 @@ export const ProductInformation: React.FC = () => {
                 className='flex flex-wrap'
                 value={selectedOptions[type]}
                 onValueChange={(value) => {
-                  handleOptionChange(type, value)
+                  handleOptionChange(type, String(value))
                 }}
               >
                 {Array.from(

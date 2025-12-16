@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -67,11 +68,8 @@ export const UpdateProductForm: React.FC<{
   })
 
   return (
-    <form
-      onSubmit={form.handleSubmit}
-      className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
-    >
-      <FieldSet>
+    <Card render={<form onSubmit={form.handleSubmit} />}>
+      <FieldSet className='px-4'>
         <FieldLegend>Update Product</FieldLegend>
         <FieldDescription>
           Modify the details of your product below.
@@ -297,6 +295,6 @@ export const UpdateProductForm: React.FC<{
           </Field>
         </FieldGroup>
       </FieldSet>
-    </form>
+    </Card>
   )
 }

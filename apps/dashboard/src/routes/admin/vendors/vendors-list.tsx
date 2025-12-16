@@ -117,11 +117,13 @@ const EditVendorButton: React.FC<{
         </RadioGroup>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
+          />
           <Button
             onClick={() => {
               mutate({ id: vendor.id, status })

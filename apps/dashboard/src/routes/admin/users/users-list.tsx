@@ -164,11 +164,13 @@ const EditUserButton: React.FC<{
         </FieldGroup>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
+          />
           <Button
             onClick={() => {
               mutate({ id: user.id, status, role })
@@ -216,7 +218,7 @@ const DeleteUserButton: React.FC<{
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className='bg-destructive text-white hover:bg-destructive/90'
+            variant='destructive'
             onClick={() => {
               mutate({ id: user.id })
             }}
@@ -262,7 +264,6 @@ const RestoreUserButton: React.FC<{
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className='bg-primary text-white hover:bg-primary/90'
             onClick={() => {
               mutate({ id: user.id })
             }}
@@ -307,7 +308,7 @@ const PermamentlyDeleteUserButton: React.FC<{
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            className='bg-destructive text-white hover:bg-destructive/90'
+            variant='destructive'
             onClick={() => {
               mutate({ id: user.id })
             }}

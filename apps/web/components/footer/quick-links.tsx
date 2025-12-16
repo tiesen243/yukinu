@@ -1,5 +1,7 @@
 import Link from 'next/link'
 
+import { Typography } from '@yukinu/ui/typography'
+
 const links = [
   { href: '/home', label: 'Home', isExternal: false },
   { href: '/search', label: 'Shop', isExternal: false },
@@ -14,7 +16,8 @@ const links = [
 
 export const QuickLinks: React.FC = () => (
   <nav>
-    <h3 className='mb-2 text-base font-semibold'>Quick Links</h3>
+    <Typography variant='h6' className='mt-0' render={<p>Quick Links</p>} />
+
     <ul className='space-y-1 text-sm'>
       {links.map((link) => (
         <li key={link.href}>

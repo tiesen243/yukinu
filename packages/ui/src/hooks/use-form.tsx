@@ -1,5 +1,3 @@
-'use client'
-
 import * as React from 'react'
 
 interface FormError<TValue extends Record<string, unknown>> {

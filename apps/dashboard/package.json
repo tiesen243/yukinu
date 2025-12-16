@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/dashboard",
-  "version": "0.7.2",
+  "version": "0.8.0",
   "private": false,
   "type": "module",
   "scripts": {
@@ -46,6 +46,6 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
-    "vite": "^8.0.0-beta.1"
+    "vite": "^8.0.0-beta.2"
   }
 }

@@ -1,12 +1,12 @@
+import { Typography } from '@yukinu/ui/typography'
+
 export const MapSection: React.FC = () => (
-  <section className='container py-16 md:py-24'>
+  <section className='container py-12'>
     <div className='mb-12 text-center'>
-      <h2 className='mb-4 text-2xl font-bold text-foreground md:text-3xl'>
-        Visit Our Office
-      </h2>
-      <p className='text-muted-foreground'>
+      <Typography variant='h2'>Visit Our Office</Typography>
+      <Typography className='text-muted-foreground'>
         Stop by for a chat or reach out via any of our contact methods
-      </p>
+      </Typography>
     </div>
 
     <div className='h-96 overflow-hidden rounded-xl bg-card shadow-sm'>

@@ -218,6 +218,7 @@
   * {
     border-color: var(--color-border);
     outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
+    text-underline-offset: 4px;
 
     scrollbar-color: var(--color-accent-foreground) var(--color-accent);
     scrollbar-width: thin;

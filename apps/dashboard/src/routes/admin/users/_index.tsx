@@ -1,4 +1,5 @@
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import { DownloadIcon } from '@yukinu/ui/icons'
 import {
   Table,
@@ -7,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Typography } from '@yukinu/ui/typography'
 
 import { SearchForm } from '@/routes/admin/users/search-form'
 import { UsersList } from '@/routes/admin/users/users-list'
@@ -15,12 +17,12 @@ import { UsersPagination } from '@/routes/admin/users/users-pagination'
 export default function UsersPage() {
   return (
     <>
-      <h1 className='text-3xl font-bold'>Users Management</h1>
-      <p className='mt-2 text-muted-foreground'>
+      <Typography variant='h2'>Users Management</Typography>
+      <Typography className='text-muted-foreground'>
         Manage and monitor all registered users in the system.
-      </p>
+      </Typography>
 
-      <div className='my-6 flex items-center justify-between gap-4'>
+      <div className='my-4 flex items-center justify-between gap-4'>
         <SearchForm />
 
         <div className='flex-1' />
@@ -31,7 +33,7 @@ export default function UsersPage() {
         </Button>
       </div>
 
-      <section className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
+      <Card render={<section className='px-4' />}>
         <Table>
           <TableHeader>
             <TableRow>
@@ -54,7 +56,7 @@ export default function UsersPage() {
         </Table>
 
         <UsersPagination />
-      </section>
+      </Card>
     </>
   )
 }

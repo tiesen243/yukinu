@@ -1,17 +1,13 @@
 import { useTheme } from '@yukinu/ui'
 import {
-  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
 } from '@yukinu/ui/dropdown-menu'
-import {
-  CheckIcon,
-  ContrastIcon,
-  LaptopIcon,
-  MoonIcon,
-  SunIcon,
-} from '@yukinu/ui/icons'
+import { ContrastIcon, LaptopIcon, MoonIcon, SunIcon } from '@yukinu/ui/icons'
 
 export const ThemeSwitcher: React.FC = () => {
   const { theme, setTheme } = useTheme()
@@ -22,29 +18,21 @@ export const ThemeSwitcher: React.FC = () => {
         <ContrastIcon /> Display
       </DropdownMenuSubTrigger>
 
-      <DropdownMenuSubContent>
-        <DropdownMenuItem
-          onSelect={() => {
-            setTheme('light')
-          }}
-        >
-          <SunIcon /> Light {theme === 'light' && <CheckIcon />}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => {
-            setTheme('dark')
-          }}
-        >
-          <MoonIcon /> Dark {theme === 'dark' && <CheckIcon />}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={() => {
-            setTheme('system')
-          }}
-        >
-          <LaptopIcon /> System {theme === 'system' && <CheckIcon />}
-        </DropdownMenuItem>
-      </DropdownMenuSubContent>
+      <DropdownMenuPortal>
+        <DropdownMenuSubContent>
+          <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+            <DropdownMenuRadioItem value='light'>
+              <SunIcon /> Light
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value='dark'>
+              <MoonIcon /> Dark
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem value='system'>
+              <LaptopIcon /> System
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+        </DropdownMenuSubContent>
+      </DropdownMenuPortal>
     </DropdownMenuSub>
   )
 }

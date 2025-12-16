@@ -6,11 +6,6 @@ import { useQueryStates } from 'nuqs'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from '@yukinu/ui/collapsible'
-import {
   Field,
   FieldGroup,
   FieldLabel,
@@ -25,20 +20,6 @@ import { ProductValidators } from '@yukinu/validators/product'
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
 import { productsOptions, productsParsers } from '@/lib/search'
 import { useTRPC } from '@/lib/trpc/react'
-
-export const FilterFormMobile: React.FC = () => (
-  <Collapsible className='relative md:hidden'>
-    <CollapsibleTrigger asChild>
-      <Button variant='outline' className='w-full justify-start'>
-        <FilterIcon /> Filters
-      </Button>
-    </CollapsibleTrigger>
-
-    <CollapsibleContent className='absolute left-0 z-40 mt-6 w-full rounded-xl bg-card p-6 text-card-foreground shadow-sm dark:border'>
-      <FilterForm />
-    </CollapsibleContent>
-  </Collapsible>
-)
 
 export const FilterForm: React.FC = () => {
   const [query, setQuery] = useQueryStates(productsParsers, productsOptions)

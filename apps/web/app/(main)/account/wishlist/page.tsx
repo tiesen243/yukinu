@@ -20,7 +20,7 @@ export default function AccountWishlistPage() {
         description="View and manage the items you've saved to your wishlist for future reference or purchase."
       />
 
-      <section className='grid max-h-full grid-cols-1 gap-4 overflow-y-auto px-6 pt-6 sm:grid-cols-2 lg:grid-cols-3'>
+      <section className='grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3'>
         <h2 className='sr-only'>Wishlist Items List section</h2>
 
         <Suspense fallback={<WishlistItemsSkeleton />}>
