@@ -16,20 +16,29 @@ export default function DashboardLayout() {
   if (status === 'unauthenticated') return <Navigate to='/login' replace />
 
   return (
-    <SidebarProvider>
+    <SidebarProvider
+      style={
+        {
+          '--sidebar-width': 'calc(var(--spacing) * 72)',
+          '--header-height': 'calc(var(--spacing) * 12)',
+        } as React.CSSProperties
+      }
+    >
       <AppSidebar variant='inset' />
 
       <SidebarInset>
-        <header className='sticky inset-0 z-50 flex h-14 shrink-0 items-center gap-4 rounded-t-md border-t-2 border-b border-t-sidebar px-4 backdrop-blur-2xl backdrop-saturate-150'>
-          <SidebarTrigger />
-          <Separator
-            orientation='vertical'
-            className='data-[orientation=vertical]:h-6'
-          />
-          <Breadcrumb />
+        <header className='sticky inset-0 flex h-(--header-height) shrink-0 items-center gap-2 border-b backdrop-blur-xl backdrop-saturate-150 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height) md:relative'>
+          <div className='flex w-full items-center gap-1 px-4 lg:gap-2'>
+            <SidebarTrigger />
+            <Separator
+              orientation='vertical'
+              className='data-[orientation=vertical]:h-6'
+            />
+            <Breadcrumb />
+          </div>
         </header>
 
-        <main className='flex-1 overflow-y-auto p-4'>
+        <main className='flex-1 flex-col p-4'>
           <h1 className='sr-only'>Dashboard Content</h1>
 
           <Outlet />
