@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@yukinu/ui/button'
 import { Field, FieldGroup, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { Input } from '@yukinu/ui/input'
@@ -7,6 +9,8 @@ export const ContactForm: React.FC = () => (
   <form
     onSubmit={(e) => {
       e.preventDefault()
+      const formData = new FormData(e.currentTarget)
+      console.log(Object.fromEntries(formData.entries()))
     }}
   >
     <FieldSet>
