@@ -44,7 +44,7 @@ export default async function SearchPage({
           <FilterIcon /> Filters
         </CollapsibleTrigger>
 
-        <CollapsibleContent className='absolute left-0 z-40 mt-4 w-full rounded-xl border bg-card p-4 text-card-foreground shadow-sm'>
+        <CollapsibleContent className='absolute left-0 z-40 mt-4 h-(--collapsible-panel-height) w-full rounded-xl border bg-card p-4 text-card-foreground shadow-sm transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0'>
           <Suspense>
             <FilterForm />
           </Suspense>

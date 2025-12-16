@@ -55,7 +55,7 @@ export default function AccountSecurityPage() {
           <ChevronRightIcon className='transition-transform' />
         </CollapsibleTrigger>
 
-        <CollapsibleContent className='pt-4'>
+        <CollapsibleContent className='h-(--collapsible-panel-height) pt-4 transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0'>
           <DeleteAccountButton />
         </CollapsibleContent>
       </Collapsible>

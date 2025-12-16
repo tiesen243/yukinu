@@ -54,7 +54,7 @@ export default function MarketingLayout({ children }: LayoutProps<'/'>) {
               </Button>
             </div>
 
-            <CollapsibleTrigger className='md:hidden data-[state=closed]:[&_[data-slot="close-icon"]]:hidden data-[state=open]:[&_svg[data-slot="open-icon"]]:hidden'>
+            <CollapsibleTrigger className='md:hidden aria-[expanded=false]:[&_svg[data-slot="close-icon"]]:hidden aria-expanded:[&_svg[data-slot="open-icon"]]:hidden'>
               <MenuIcon data-slot='open-icon' />
               <XIcon data-slot='close-icon' />
               <span className='sr-only'>Toggle Menu</span>
@@ -62,7 +62,7 @@ export default function MarketingLayout({ children }: LayoutProps<'/'>) {
           </div>
         </nav>
 
-        <CollapsibleContent className='absolute top-14 z-50 w-full border-b bg-popover/60 py-4 text-popover-foreground backdrop-blur-xl backdrop-saturate-150 md:hidden'>
+        <CollapsibleContent className='absolute top-14 z-50 h-(--collapsible-panel-height) w-full border-b bg-popover/60 py-4 text-popover-foreground opacity-100 backdrop-blur-xl backdrop-saturate-150 transition-[height,opacity] ease-out data-ending-style:h-0 data-ending-style:opacity-0 data-starting-style:h-0 data-starting-style:opacity-0 md:hidden'>
           <nav className='container flex flex-col gap-4'>
             {navLinks.map((link) => (
               <Link
