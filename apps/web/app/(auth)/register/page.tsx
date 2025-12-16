@@ -9,7 +9,10 @@ import { createMetadata } from '@/lib/metadata'
 export default function RegisterPage() {
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <Card render={<form method='POST' />}>
+      <Card
+        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
+        render={<form method='POST' />}
+      >
         <FieldSet className='px-4'>
           <FieldLegend>Register</FieldLegend>
           <FieldDescription>Create your account</FieldDescription>

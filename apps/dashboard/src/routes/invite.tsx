@@ -20,7 +20,9 @@ export default function InvitePage() {
   if (!token)
     return (
       <main className='grid min-h-dvh place-items-center'>
-        <Card>
+        <h1 className='sr-only'>Accept Staff Invitation page</h1>
+
+        <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
           <FieldSet className='px-4'>
             <FieldLegend>Error</FieldLegend>
             <FieldDescription>
@@ -33,9 +35,12 @@ export default function InvitePage() {
 
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <h1 className='sr-only'>Accept Staff Invitation</h1>
+      <h1 className='sr-only'>Accept Staff Invitation page</h1>
 
-      <Card render={<form method='POST' />}>
+      <Card
+        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
+        render={<form method='POST' />}
+      >
         <FieldSet className='px-4'>
           <FieldLegend>Accept Staff Invitation</FieldLegend>
           <FieldDescription>
