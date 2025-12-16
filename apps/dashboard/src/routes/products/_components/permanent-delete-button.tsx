@@ -11,7 +11,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -51,21 +50,17 @@ export const PermanentDeleteProductButton: React.FC<{
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
+          <AlertDialogCancel variant='outline' disabled={isPending}>
+            Cancel
           </AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              onClick={() => {
-                mutate({ id: productId })
-              }}
-              disabled={isPending}
-              variant='destructive'
-            >
-              {isPending ? 'Deleting...' : 'Delete'}
-            </Button>
+          <AlertDialogAction
+            variant='destructive'
+            onClick={() => {
+              mutate({ id: productId })
+            }}
+            disabled={isPending}
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

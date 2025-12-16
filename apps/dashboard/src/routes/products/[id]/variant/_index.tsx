@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
@@ -52,146 +53,139 @@ export default function CreateProductVariantsPage({
   })
 
   return (
-    <>
-      <h1 className='sr-only'>Reciate Product Variants page</h1>
+    <Card render={<form onSubmit={form.handleSubmit} />}>
+      <FieldSet className='px-4'>
+        <FieldLegend>Recreate Product Variants</FieldLegend>
+        <FieldDescription className='flex items-center gap-2 text-warning'>
+          <TriangleAlertIcon size={16} /> This action will delete all existing
+          variants and create new ones.
+        </FieldDescription>
 
-      <form
-        onSubmit={form.handleSubmit}
-        className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'
-      >
-        <FieldSet>
-          <FieldLegend>Recreate Product Variants</FieldLegend>
-          <FieldDescription className='flex items-center gap-2 text-warning'>
-            <TriangleAlertIcon size={16} /> This action will delete all existing
-            variants and create new ones.
-          </FieldDescription>
-
-          <form.Field
-            name='variants'
-            render={({ meta, field }) => (
-              <FieldGroup>
-                {field.value.map((variant, vIndex) => (
-                  <FieldGroup key={`variant-${vIndex}`}>
-                    <Field>
-                      <FieldLabel>Variant Name</FieldLabel>
-                      <InputGroup>
-                        <InputGroupInput
-                          value={variant.name}
-                          onChange={(e) => {
-                            const newVariants = [...field.value]
-                            if (!newVariants[vIndex]) return
-                            newVariants[vIndex].name = e.target.value
-                            field.onChange(newVariants)
+        <form.Field
+          name='variants'
+          render={({ meta, field }) => (
+            <FieldGroup>
+              {field.value.map((variant, vIndex) => (
+                <FieldGroup key={`variant-${vIndex}`}>
+                  <Field>
+                    <FieldLabel>Variant Name</FieldLabel>
+                    <InputGroup>
+                      <InputGroupInput
+                        value={variant.name}
+                        onChange={(e) => {
+                          const newVariants = [...field.value]
+                          if (!newVariants[vIndex]) return
+                          newVariants[vIndex].name = e.target.value
+                          field.onChange(newVariants)
+                        }}
+                        placeholder='e.g., Size'
+                        aria-label='Variant Name'
+                        aria-describedby={field['aria-describedby']}
+                        aria-invalid={field['aria-invalid']}
+                      />
+                      <InputGroupAddon align='inline-end'>
+                        <InputGroupButton
+                          type='button'
+                          onClick={() => {
+                            field.onChange(
+                              field.value.filter((_, i) => i !== vIndex),
+                            )
                           }}
-                          placeholder='e.g., Size'
-                          aria-label='Variant Name'
-                          aria-describedby={field['aria-describedby']}
-                          aria-invalid={field['aria-invalid']}
-                        />
-                        <InputGroupAddon align='inline-end'>
-                          <InputGroupButton
-                            type='button'
-                            onClick={() => {
-                              field.onChange(
-                                field.value.filter((_, i) => i !== vIndex),
-                              )
-                            }}
-                          >
-                            <MinusIcon />
-                            <span className='sr-only'>Remove Variant</span>
-                          </InputGroupButton>
-                        </InputGroupAddon>
-                      </InputGroup>
-                    </Field>
+                        >
+                          <MinusIcon />
+                          <span className='sr-only'>Remove Variant</span>
+                        </InputGroupButton>
+                      </InputGroupAddon>
+                    </InputGroup>
+                  </Field>
 
-                    <FieldGroup>
-                      <FieldLabel>Options</FieldLabel>
-                      {variant.options.map((option, oIndex) => (
-                        <Field key={`variant-${vIndex}-option-${oIndex}`}>
-                          <InputGroup>
-                            <InputGroupInput
-                              value={option}
-                              onChange={(e) => {
+                  <FieldGroup>
+                    <FieldLabel>Options</FieldLabel>
+                    {variant.options.map((option, oIndex) => (
+                      <Field key={`variant-${vIndex}-option-${oIndex}`}>
+                        <InputGroup>
+                          <InputGroupInput
+                            value={option}
+                            onChange={(e) => {
+                              const newVariants = [...field.value]
+                              if (!newVariants[vIndex]) return
+                              newVariants[vIndex].options[oIndex] =
+                                e.target.value
+                              field.onChange(newVariants)
+                            }}
+                            placeholder='e.g., s, m, l'
+                            aria-label='Variant Option'
+                            aria-describedby={field['aria-describedby']}
+                            aria-invalid={field['aria-invalid']}
+                          />
+                          <InputGroupAddon align='inline-end'>
+                            <InputGroupButton
+                              type='button'
+                              onClick={() => {
                                 const newVariants = [...field.value]
                                 if (!newVariants[vIndex]) return
-                                newVariants[vIndex].options[oIndex] =
-                                  e.target.value
+                                newVariants[vIndex].options = newVariants[
+                                  vIndex
+                                ].options.filter((_, i) => i !== oIndex)
                                 field.onChange(newVariants)
                               }}
-                              placeholder='e.g., s, m, l'
-                              aria-label='Variant Option'
-                              aria-describedby={field['aria-describedby']}
-                              aria-invalid={field['aria-invalid']}
-                            />
-                            <InputGroupAddon align='inline-end'>
-                              <InputGroupButton
-                                type='button'
-                                onClick={() => {
-                                  const newVariants = [...field.value]
-                                  if (!newVariants[vIndex]) return
-                                  newVariants[vIndex].options = newVariants[
-                                    vIndex
-                                  ].options.filter((_, i) => i !== oIndex)
-                                  field.onChange(newVariants)
-                                }}
-                              >
-                                <MinusIcon />
-                                <span className='sr-only'>Remove Option</span>
-                              </InputGroupButton>
-                            </InputGroupAddon>
-                          </InputGroup>
-                          <FieldError />
-                        </Field>
-                      ))}
-                    </FieldGroup>
-
-                    <Button
-                      type='button'
-                      variant='outline'
-                      onClick={() => {
-                        field.onChange(
-                          field.value.map((v, i) =>
-                            i === vIndex
-                              ? { ...v, options: [...v.options, ''] }
-                              : v,
-                          ),
-                        )
-                      }}
-                    >
-                      Add Option
-                    </Button>
-
-                    <FieldSeparator />
+                            >
+                              <MinusIcon />
+                              <span className='sr-only'>Remove Option</span>
+                            </InputGroupButton>
+                          </InputGroupAddon>
+                        </InputGroup>
+                        <FieldError />
+                      </Field>
+                    ))}
                   </FieldGroup>
-                ))}
 
-                <Field>
                   <Button
                     type='button'
                     variant='outline'
                     onClick={() => {
-                      field.onChange([
-                        ...field.value,
-                        { name: '', options: [''] },
-                      ])
+                      field.onChange(
+                        field.value.map((v, i) =>
+                          i === vIndex
+                            ? { ...v, options: [...v.options, ''] }
+                            : v,
+                        ),
+                      )
                     }}
                   >
-                    Add Variant
+                    Add Option
                   </Button>
-                </Field>
 
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </FieldGroup>
-            )}
-          />
+                  <FieldSeparator />
+                </FieldGroup>
+              ))}
 
-          <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Recreating...' : 'Recreate Variants'}
-            </Button>
-          </Field>
-        </FieldSet>
-      </form>
-    </>
+              <Field>
+                <Button
+                  type='button'
+                  variant='outline'
+                  onClick={() => {
+                    field.onChange([
+                      ...field.value,
+                      { name: '', options: [''] },
+                    ])
+                  }}
+                >
+                  Add Variant
+                </Button>
+              </Field>
+
+              <FieldError id={meta.errorId} errors={meta.errors} />
+            </FieldGroup>
+          )}
+        />
+
+        <Field>
+          <Button type='submit' disabled={form.state.isPending}>
+            {form.state.isPending ? 'Recreating...' : 'Recreate Variants'}
+          </Button>
+        </Field>
+      </FieldSet>
+    </Card>
   )
 }

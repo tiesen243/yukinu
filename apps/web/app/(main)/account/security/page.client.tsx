@@ -106,7 +106,7 @@ const SessionItem: React.FC<{
           <AlertDialogFooter>
             <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className='bg-destructive hover:bg-destructive/90'
+              variant='destructive'
               onClick={() => {
                 mutate({ sessionId: session.id })
               }}
@@ -304,7 +304,7 @@ export const DeleteAccountButton: React.FC = () => {
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            className='bg-destructive hover:bg-destructive/90'
+            variant='destructive'
             disabled={form.state.isPending}
             onClick={form.handleSubmit}
           >

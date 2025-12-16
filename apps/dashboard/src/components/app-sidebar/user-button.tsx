@@ -37,15 +37,17 @@ export const UserButton: React.FC = () => {
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton
-              size='lg'
-              className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground dark:data-[state=open]:bg-sidebar-accent/50'
-            >
-              <UserAvatar {...session.user} />
-              <EllipsisVerticalIcon className='ml-auto size-4' />
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger
+            render={
+              <SidebarMenuButton
+                size='lg'
+                className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground dark:data-[state=open]:bg-sidebar-accent/50'
+              >
+                <UserAvatar {...session.user} />
+                <EllipsisVerticalIcon className='ml-auto size-4' />
+              </SidebarMenuButton>
+            }
+          ></DropdownMenuTrigger>
 
           <DropdownMenuContent
             className='w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg'
@@ -53,21 +55,25 @@ export const UserButton: React.FC = () => {
             align='end'
             sideOffset={4}
           >
-            <DropdownMenuLabel className='flex items-center gap-2 p-0 px-1 py-1.5 text-left text-sm font-normal'>
-              <UserAvatar {...session.user} />
-            </DropdownMenuLabel>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className='flex items-center gap-2 p-0 px-1 py-1.5 text-left text-sm font-normal'>
+                <UserAvatar {...session.user} />
+              </DropdownMenuLabel>
+            </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild>
-                <a href={getWebUrl()}>
-                  <HomeIcon /> Go to Website
-                </a>
-              </DropdownMenuItem>
+              <DropdownMenuItem
+                render={
+                  <a href={getWebUrl()}>
+                    <HomeIcon /> Go to Website
+                  </a>
+                }
+              />
 
               <DropdownMenuItem
-                onSelect={() => {
+                onClick={() => {
                   setTheme(theme === 'light' ? 'dark' : 'light')
                 }}
               >
@@ -78,7 +84,7 @@ export const UserButton: React.FC = () => {
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem onSelect={signOut}>
+            <DropdownMenuItem onClick={signOut}>
               <LogOutIcon /> Log out
             </DropdownMenuItem>
           </DropdownMenuContent>

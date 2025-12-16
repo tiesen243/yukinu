@@ -106,16 +106,14 @@ const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
+            variant='destructive'
             onClick={() => {
               mutate({ id })
             }}
             disabled={isPending}
-            render={
-              <Button variant='destructive'>
-                {isPending ? 'Deleting...' : 'Delete'}
-              </Button>
-            }
-          />
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

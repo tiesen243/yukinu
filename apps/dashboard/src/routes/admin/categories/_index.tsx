@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import { DownloadIcon, PlusIcon } from '@yukinu/ui/icons'
 import {
   Table,
@@ -9,6 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Typography } from '@yukinu/ui/typography'
 
 import { CategoriesList } from '@/routes/admin/categories/categories-list'
 import { CategoriesPagination } from '@/routes/admin/categories/categories-pagination'
@@ -17,22 +19,25 @@ import { SearchForm } from '@/routes/admin/categories/search-form'
 export default function CategoriesPage() {
   return (
     <>
-      <h1 className='text-3xl font-bold'>Categories Management</h1>
-      <p className='mt-2 text-muted-foreground'>
+      <Typography variant='h2'>Categories Management</Typography>
+      <Typography className='text-muted-foreground'>
         Manage and view all categories in the system.
-      </p>
+      </Typography>
 
-      <div className='my-6 flex items-center justify-between gap-4'>
+      <div className='my-4 flex items-center justify-between gap-4'>
         <SearchForm />
 
         <div className='flex-1' />
 
-        <Button variant='outline' asChild>
-          <Link to='/admin/categories/new'>
-            <PlusIcon />
-            <span className='sr-only md:not-sr-only'>Add</span>
-          </Link>
-        </Button>
+        <Button
+          variant='outline'
+          render={
+            <Link to='/admin/categories/new'>
+              <PlusIcon />
+              <span className='sr-only md:not-sr-only'>Add</span>
+            </Link>
+          }
+        />
 
         <Button variant='outline' disabled>
           <DownloadIcon />
@@ -40,7 +45,7 @@ export default function CategoriesPage() {
         </Button>
       </div>
 
-      <section className='rounded-lg bg-card p-6 text-card-foreground shadow-sm dark:border'>
+      <Card render={<section className='px-4' />}>
         <Table>
           <TableHeader>
             <TableRow>
@@ -57,7 +62,7 @@ export default function CategoriesPage() {
         </Table>
 
         <CategoriesPagination />
-      </section>
+      </Card>
     </>
   )
 }

@@ -20,7 +20,7 @@ export default function DashboardLayout() {
       <AppSidebar variant='inset' />
 
       <SidebarInset>
-        <header className='flex h-14 shrink-0 items-center gap-4 border-b px-4'>
+        <header className='sticky inset-0 z-50 flex h-14 shrink-0 items-center gap-4 rounded-t-md border-t-2 border-b border-t-sidebar px-4 backdrop-blur-2xl backdrop-saturate-150'>
           <SidebarTrigger />
           <Separator
             orientation='vertical'
@@ -28,7 +28,10 @@ export default function DashboardLayout() {
           />
           <Breadcrumb />
         </header>
+
         <main className='flex-1 overflow-y-auto p-4'>
+          <h1 className='sr-only'>Dashboard Content</h1>
+
           <Outlet />
         </main>
       </SidebarInset>

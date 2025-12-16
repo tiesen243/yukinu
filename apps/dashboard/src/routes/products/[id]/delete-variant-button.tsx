@@ -11,7 +11,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -47,22 +46,18 @@ export const DeleteVariantButton: React.FC<{
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
+          <AlertDialogCancel variant='outline' disabled={isPending}>
+            Cancel
           </AlertDialogCancel>
 
-          <AlertDialogAction asChild>
-            <Button
-              variant='destructive'
-              disabled={isPending}
-              onClick={() => {
-                mutate({ id: variantId })
-              }}
-            >
-              {isPending ? 'Deleting...' : 'Delete'}
-            </Button>
+          <AlertDialogAction
+            variant='destructive'
+            disabled={isPending}
+            onClick={() => {
+              mutate({ id: variantId })
+            }}
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,3 +1,4 @@
+import { Card } from '@yukinu/ui/card'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { VerifyEmailForm } from '@/app/(auth)/verify-email/page.client'
@@ -11,24 +12,21 @@ export default async function VerifyEmailPage({
   if (!token)
     return (
       <main className='grid min-h-dvh place-items-center'>
-        <div className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'>
-          <FieldSet>
+        <Card>
+          <FieldSet className='px-4'>
             <FieldLegend>Error</FieldLegend>
             <FieldDescription>
               No token provided. Please check the link in your email.
             </FieldDescription>
           </FieldSet>
-        </div>
+        </Card>
       </main>
     )
 
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <form
-        method='POST'
-        className='w-full max-w-xl rounded-xl p-6 text-card-foreground sm:border sm:bg-card sm:shadow-sm'
-      >
-        <FieldSet>
+      <Card render={<form method='POST' />}>
+        <FieldSet className='px-4'>
           <FieldLegend>Verify Email</FieldLegend>
           <FieldDescription>
             Click the button below to verify your email address.
@@ -36,7 +34,7 @@ export default async function VerifyEmailPage({
 
           <VerifyEmailForm token={String(token)} />
         </FieldSet>
-      </form>
+      </Card>
     </main>
   )
 }
