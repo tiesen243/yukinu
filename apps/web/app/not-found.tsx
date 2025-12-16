@@ -24,9 +24,11 @@ export default function DocsNotFoundError() {
         <p className='text-lg font-medium'>Page Not Found</p>
       </div>
 
-      <Button size='sm' asChild>
-        <Link href='/'>Take me home</Link>
-      </Button>
+      <Button
+        size='sm'
+        nativeButton={false}
+        render={<Link href='/'>Take me home</Link>}
+      />
     </main>
   )
 }

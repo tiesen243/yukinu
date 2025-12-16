@@ -7,6 +7,7 @@ import {
   InstagramIcon,
   XFormerTwitterIcon,
 } from '@yukinu/ui/icons'
+import { Typography } from '@yukinu/ui/typography'
 import { env } from '@yukinu/validators/env.next'
 
 import { LegalLinks } from '@/components/footer/legal-links'
@@ -28,18 +29,18 @@ export function Footer() {
                 className='dark:invert'
               />
             </div>
-            <span className='text-lg font-bold'>
+            <Typography variant='h5' render={<span />}>
               {env.NEXT_PUBLIC_APP_NAME}
-            </span>
+            </Typography>
           </Link>
 
-          <p className='my-4 text-sm text-muted-foreground'>
+          <Typography className='text-sm lg:text-sm'>
             An e-commerce platform that enables customers to discover, compare,
             and purchase products from multiple sellers in one place, with fast
             browsing, secure checkout, and a smooth user experience
-          </p>
+          </Typography>
 
-          <div className='flex flex-wrap items-center gap-4 [&_svg]:size-5 [&_svg]:transition-colors [&_svg]:hover:text-accent-foreground'>
+          <div className='mt-4 flex flex-wrap items-center gap-4 [&_svg]:size-5 [&_svg]:transition-colors [&_svg]:hover:text-accent-foreground'>
             <GithubIcon />
             <FacebookIcon />
             <InstagramIcon />
@@ -56,10 +57,10 @@ export function Footer() {
 
       <hr className='container my-6 border-t' />
 
-      <div className='container text-center text-sm'>
+      <Typography className='text-center text-sm text-muted-foreground lg:text-sm'>
         © {new Date().getFullYear()} {env.NEXT_PUBLIC_APP_NAME}. All rights
         reserved.
-      </div>
+      </Typography>
     </footer>
   )
 }

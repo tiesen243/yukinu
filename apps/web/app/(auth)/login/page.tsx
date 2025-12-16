@@ -37,10 +37,18 @@ export default function LoginPage() {
             <FieldSeparator className='sm:[&>span]:bg-card'>or</FieldSeparator>
 
             <Field orientation='responsive' className='[&>button]:flex-1'>
-              <Button variant='outline' formAction='/api/auth/facebook'>
+              <Button
+                type='submit'
+                variant='outline'
+                formAction='/api/auth/facebook'
+              >
                 Continue with Facebook
               </Button>
-              <Button variant='outline' formAction='/api/auth/google'>
+              <Button
+                type='submit'
+                variant='outline'
+                formAction='/api/auth/google'
+              >
                 Continue with Google
               </Button>
             </Field>

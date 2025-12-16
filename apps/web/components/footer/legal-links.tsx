@@ -1,3 +1,5 @@
+import { Typography } from '@yukinu/ui/typography'
+
 const links = [
   {
     href: 'https://tiesen243.github.io/yukinu/legal/term-of-service.html',
@@ -23,7 +25,8 @@ const links = [
 
 export const LegalLinks: React.FC = () => (
   <nav>
-    <h3 className='mb-2 text-base font-semibold'>Legal</h3>
+    <Typography variant='h6' className='mt-0' render={<p>Legal</p>} />
+
     <ul className='space-y-1 text-sm'>
       {links.map((link) => (
         <li key={link.href}>

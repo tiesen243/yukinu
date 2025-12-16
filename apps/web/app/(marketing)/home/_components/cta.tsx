@@ -2,24 +2,30 @@ import Link from 'next/link'
 
 import { Button } from '@yukinu/ui/button'
 import { ArrowRightIcon } from '@yukinu/ui/icons'
+import { Typography } from '@yukinu/ui/typography'
 
 export const CTASection: React.FC = () => {
   return (
     <section className='bg-accent/20 px-4 py-20 text-accent-foreground sm:px-6 md:py-32 lg:px-8 dark:bg-accent/10'>
       <div className='container space-y-6 text-center'>
-        <h2 className='text-3xl font-bold sm:text-4xl lg:text-5xl'>
+        <Typography variant='h2'>
           Ready to transform your shopping experience?
-        </h2>
-        <p className='mx-auto max-w-2xl text-lg text-muted-foreground'>
+        </Typography>
+        <Typography className='mx-auto max-w-2xl text-muted-foreground'>
           Join Yukinu today and discover the future of multi-vendor e-commerce.
           Whether you're a buyer or seller, we have a place for you.
-        </p>
+        </Typography>
 
-        <Button size='lg' variant='secondary' asChild>
-          <Link href='/'>
-            Get Started Now <ArrowRightIcon />
-          </Link>
-        </Button>
+        <Button
+          size='lg'
+          variant='secondary'
+          nativeButton={false}
+          render={
+            <Link href='/'>
+              Get Started Now <ArrowRightIcon />
+            </Link>
+          }
+        />
       </div>
     </section>
   )
