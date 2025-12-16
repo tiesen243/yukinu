@@ -1,5 +1,15 @@
 # @yukinu/ui
 
+## 0.5.0
+
+### Minor Changes
+
+- [#292](https://github.com/tiesen243/yukinu/pull/292) [`ab60f3f`](https://github.com/tiesen243/yukinu/commit/ab60f3f138bdf599f39b22813a1f059be6ac7e1e) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migrate all components to base ui
+
+### Patch Changes
+
+- [#292](https://github.com/tiesen243/yukinu/pull/292) [`33fbed1`](https://github.com/tiesen243/yukinu/commit/33fbed10616c7e91ddad7cd09ef86e49a504dca4) Thanks [@tiesen243](https://github.com/tiesen243)! - migrate to base ui
+
 ## 0.4.0
 
 ### Minor Changes
