@@ -1,5 +1,12 @@
 import { Suspense } from 'react'
 
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@yukinu/ui/collapsible'
+import { ChevronRightIcon } from '@yukinu/ui/icons'
+
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import {
   ChangePasswordForm,
@@ -22,7 +29,7 @@ export default function AccountSecurityPage() {
         description='Manage your password, two-factor authentication, and other security settings to keep your account safe.'
       />
 
-      <section className='flex flex-col gap-4 px-6 py-6'>
+      <section className='flex flex-col gap-4 px-4'>
         <h2 className='text-lg font-medium'>Where you are logged in</h2>
 
         <Suspense fallback={<SessionsListSkeleton />}>
@@ -32,7 +39,7 @@ export default function AccountSecurityPage() {
 
       <hr />
 
-      <section className='mb-6 px-6 pt-6'>
+      <section className='px-4'>
         <h2 className='sr-only'>Change Password section</h2>
 
         <ChangePasswordForm />
@@ -40,12 +47,18 @@ export default function AccountSecurityPage() {
 
       <hr />
 
-      <section className='px-6 pt-6'>
-        <h2 className='mb-4 text-lg font-medium text-destructive'>
-          Delete Account
-        </h2>
-        <DeleteAccountButton />
-      </section>
+      <Collapsible render={<section />} className='px-4'>
+        <h2 className='sr-only'>Delete Account</h2>
+
+        <CollapsibleTrigger className='flex w-full items-center justify-between text-lg font-medium text-destructive aria-expanded:[&>svg]:rotate-90'>
+          <p>Danger Zone</p>
+          <ChevronRightIcon className='transition-transform' />
+        </CollapsibleTrigger>
+
+        <CollapsibleContent className='pt-4'>
+          <DeleteAccountButton />
+        </CollapsibleContent>
+      </Collapsible>
     </HydrateClient>
   )
 }

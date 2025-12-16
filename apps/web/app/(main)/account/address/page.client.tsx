@@ -25,7 +25,7 @@ export const AddressesList: React.FC = () => {
 
   if (data.addresses.length === 0)
     return (
-      <p className='my-6 text-center text-sm text-muted-foreground'>
+      <p className='text-center text-sm text-muted-foreground'>
         No addresses found.
       </p>
     )
@@ -47,9 +47,12 @@ export const AddressesList: React.FC = () => {
       </p>
 
       <div className='absolute top-0 right-0 grid gap-2'>
-        <Button variant='outline' size='sm' asChild>
-          <Link href={`/account/address/${address.id}`}>Edit</Link>
-        </Button>
+        <Button
+          variant='outline'
+          size='sm'
+          nativeButton={false}
+          render={<Link href={`/account/address/${address.id}`}>Edit</Link>}
+        />
         <DeleteAddressButton id={address.id} />
       </div>
     </div>
@@ -81,11 +84,13 @@ const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant='destructive' size='sm'>
-          Delete
-        </Button>
-      </AlertDialogTrigger>
+      <AlertDialogTrigger
+        render={
+          <Button variant='destructive' size='sm'>
+            Delete
+          </Button>
+        }
+      />
 
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -105,12 +110,12 @@ const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
               mutate({ id })
             }}
             disabled={isPending}
-            asChild
-          >
-            <Button variant='destructive'>
-              {isPending ? 'Deleting...' : 'Delete'}
-            </Button>
-          </AlertDialogAction>
+            render={
+              <Button variant='destructive'>
+                {isPending ? 'Deleting...' : 'Delete'}
+              </Button>
+            }
+          />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

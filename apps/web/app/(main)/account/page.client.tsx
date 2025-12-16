@@ -163,7 +163,7 @@ export function UpdateProfileForm() {
               <Field
                 orientation='horizontal'
                 data-invalid={meta.errors.length > 0}
-                className='gap-6'
+                className='gap-4'
               >
                 <FieldContent>
                   <FieldLabel htmlFor={meta.fieldId}>
@@ -275,7 +275,7 @@ export const UpdateProfileFormSkeleton: React.FC = () => (
       </FieldDescription>
 
       <FieldGroup>
-        <Field orientation='horizontal' className='gap-6'>
+        <Field orientation='horizontal' className='gap-4'>
           <FieldContent>
             <FieldLabel>Profile Image URL</FieldLabel>
             <Input readOnly />
@@ -338,11 +338,13 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <InputGroupButton>
-          <PencilIcon />
-        </InputGroupButton>
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          <InputGroupButton>
+            <PencilIcon />
+          </InputGroupButton>
+        }
+      />
 
       <DialogContent>
         <DialogHeader>
@@ -381,9 +383,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         </form>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline'>Cancel</Button>
-          </DialogClose>
+          <DialogClose render={<Button variant='outline'>Cancel</Button>} />
 
           <Button
             type='submit'

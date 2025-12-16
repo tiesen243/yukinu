@@ -9,6 +9,7 @@ import {
   FieldSeparator,
   FieldSet,
 } from '@yukinu/ui/field'
+import { FacebookIcon, GoogleIcon } from '@yukinu/ui/icons'
 
 import { LoginForm } from '@/app/(auth)/login/page.client'
 import { createMetadata } from '@/lib/metadata'
@@ -36,20 +37,23 @@ export default function LoginPage() {
           <FieldGroup>
             <FieldSeparator className='sm:[&>span]:bg-card'>or</FieldSeparator>
 
-            <Field orientation='responsive' className='[&>button]:flex-1'>
+            <Field
+              orientation='responsive'
+              className='@md/field-group:[&>button]:flex-1'
+            >
               <Button
                 type='submit'
                 variant='outline'
                 formAction='/api/auth/facebook'
               >
-                Continue with Facebook
+                <FacebookIcon /> Continue with Facebook
               </Button>
               <Button
                 type='submit'
                 variant='outline'
                 formAction='/api/auth/google'
               >
-                Continue with Google
+                <GoogleIcon /> Continue with Google
               </Button>
             </Field>
           </FieldGroup>

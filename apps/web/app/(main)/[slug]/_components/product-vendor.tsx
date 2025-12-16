@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
@@ -38,9 +40,12 @@ export const ProductVendor: React.FC = () => {
         <div className='flex gap-4'>
           <Button size='sm'>Contact</Button>
 
-          <Button variant='outline' size='sm' asChild>
-            <Link href={`/search?v=${vendor.id}`}>View Shop</Link>
-          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            nativeButton={false}
+            render={<Link href={`/search?v=${vendor.id}`}>View Shop</Link>}
+          />
         </div>
       </div>
     </section>

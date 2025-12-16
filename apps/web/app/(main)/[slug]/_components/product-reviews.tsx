@@ -1,4 +1,8 @@
+'use client'
+
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
+import { Card } from '@yukinu/ui/card'
+import { Typography } from '@yukinu/ui/typography'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 
@@ -9,13 +13,16 @@ export const ProductReviews: React.FC = () => {
   } = usePage()
 
   return (
-    <section className='rounded-lg bg-card p-6 shadow-md dark:border'>
-      <h2 className='mb-6 text-2xl font-semibold'>
-        Reviews ({avgRating.toFixed(1)}/5)
-      </h2>
+    <Card render={<section className='px-4' />}>
+      <Typography
+        variant='h4'
+        render={<h2>Reviews ({avgRating.toFixed(1)}/5)</h2>}
+      />
 
       {reviews.length === 0 ? (
-        <p className='text-sm text-muted-foreground'>No reviews yet.</p>
+        <Typography className='text-muted-foreground'>
+          No reviews yet.
+        </Typography>
       ) : (
         <ul className='grid gap-4'>
           {reviews.map((review) => (
@@ -45,6 +52,6 @@ export const ProductReviews: React.FC = () => {
           ))}
         </ul>
       )}
-    </section>
+    </Card>
   )
 }
