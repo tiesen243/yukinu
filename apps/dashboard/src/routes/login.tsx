@@ -24,7 +24,10 @@ export default function LoginPage() {
     <main className='grid min-h-dvh place-items-center'>
       <h1 className='sr-only'>Login page</h1>
 
-      <Card render={<form method='POST' />}>
+      <Card
+        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
+        render={<form method='POST' />}
+      >
         <FieldSet className='px-4'>
           <FieldLegend>Login</FieldLegend>
           <FieldDescription>
