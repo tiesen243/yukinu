@@ -383,7 +383,13 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         </form>
 
         <DialogFooter>
-          <DialogClose render={<Button variant='outline'>Cancel</Button>} />
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={form.state.isPending}>
+                Cancel
+              </Button>
+            }
+          />
 
           <Button
             type='submit'

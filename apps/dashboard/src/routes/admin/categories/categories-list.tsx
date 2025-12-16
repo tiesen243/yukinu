@@ -88,11 +88,13 @@ const DeleteCategoryButton: React.FC<{
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant='outline' disabled={isPending}>
-              Cancel
-            </Button>
-          </DialogClose>
+          <DialogClose
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
+          />
 
           <Button
             variant='destructive'

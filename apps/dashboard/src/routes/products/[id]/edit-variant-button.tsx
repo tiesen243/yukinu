@@ -87,9 +87,13 @@ export const EditVariantButton: React.FC<{
             />
 
             <DialogFooter>
-              <DialogClose render={<Button variant='outline' />}>
-                Cancel
-              </DialogClose>
+              <DialogClose
+                render={
+                  <Button variant='outline' disabled={form.state.isPending}>
+                    Cancel
+                  </Button>
+                }
+              />
 
               <Button disabled={form.state.isPending}>Save Changes</Button>
             </DialogFooter>

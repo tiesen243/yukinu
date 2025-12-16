@@ -46,9 +46,7 @@ export const DeleteVariantButton: React.FC<{
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel variant='outline' disabled={isPending}>
-            Cancel
-          </AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
 
           <AlertDialogAction
             variant='destructive'

@@ -199,8 +199,11 @@ const EditButton: React.FC<{
 
         <DialogFooter>
           <DialogClose
-            disabled={isPending}
-            render={<Button variant='outline'>Cancel</Button>}
+            render={
+              <Button variant='outline' disabled={isPending}>
+                Cancel
+              </Button>
+            }
           />
           <Button
             disabled={isPending}

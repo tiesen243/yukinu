@@ -8,10 +8,7 @@ interface ResetPasswordEmailProps {
 }
 
 export default function ResetPassword(props: ResetPasswordEmailProps) {
-  const {
-    username = 'Yukikaze',
-    resetLink = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-  } = props
+  const { username, resetLink } = props
 
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',

@@ -7,7 +7,7 @@ interface ChangePasswordProps {
 }
 
 export default function ChangePassword(props: ChangePasswordProps) {
-  const { username = 'Yukikaze' } = props
+  const { username } = props
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'medium',
     timeStyle: 'medium',

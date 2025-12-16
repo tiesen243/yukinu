@@ -77,9 +77,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
         <p className='text-lg font-medium'>{details}</p>
       </div>
 
-      <Button size='sm' asChild>
-        <Link to='/'>Take me home</Link>
-      </Button>
+      <Button
+        size='sm'
+        nativeButton={false}
+        render={<Link to='/'>Take me home</Link>}
+      />
 
       {stack && (
         <pre className='w-full overflow-x-auto p-4'>
