@@ -1,5 +1,11 @@
 # @yukinu/prettier-config
 
+## 0.3.0
+
+### Minor Changes
+
+- [#292](https://github.com/tiesen243/yukinu/pull/292) [`ab60f3f`](https://github.com/tiesen243/yukinu/commit/ab60f3f138bdf599f39b22813a1f059be6ac7e1e) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migrate all components to base ui
+
 ## 0.2.0
 
 ### Minor Changes
