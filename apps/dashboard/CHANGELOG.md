@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.8.1
+
+### Patch Changes
+
+- [#295](https://github.com/tiesen243/yukinu/pull/295) [`7e0d641`](https://github.com/tiesen243/yukinu/commit/7e0d641ff3737b9811c331f017440db254c2f48c) Thanks [@tiesen243](https://github.com/tiesen243)! - style auth form
+
 ## 0.8.0
 
 ### Minor Changes
