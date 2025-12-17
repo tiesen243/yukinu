@@ -13,7 +13,7 @@ export interface TRPCMeta {
 }
 
 export interface TRPCContext {
-  headers: Headers
+  req: Request
   session: { userId: string; role: UserValidators.Role } | null
   services: {
     auth: IAuthService

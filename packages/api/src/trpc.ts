@@ -15,9 +15,9 @@ import { UserService } from '@/services/user.service'
 import { VendorService } from '@/services/vendor.service'
 
 const createTRPCContext = async (opts: {
-  headers: Headers
+  req: Request
 }): Promise<TRPCContext> => {
-  const session = await validateAccessToken(opts.headers)
+  const session = await validateAccessToken(opts.req.headers)
 
   const authService = new AuthService(db, orm, schema)
   const categoryService = new CategoryService(db, orm, schema)
@@ -27,7 +27,7 @@ const createTRPCContext = async (opts: {
   const vendorService = new VendorService(db, orm, schema)
 
   return {
-    headers: opts.headers,
+    req: opts.req,
     session,
     services: {
       auth: authService,
@@ -66,8 +66,8 @@ const bucket = new TokenBucketRateLimit<string>(20, 60)
 const rateLimitMiddleware = t.middleware(async ({ ctx, next }) => {
   const identifier =
     ctx.session?.userId ??
-    ctx.headers.get('x-forwarded-for') ??
-    ctx.headers.get('x-real-ip') ??
+    ctx.req.headers.get('x-forwarded-for') ??
+    ctx.req.headers.get('x-real-ip') ??
     'unknown'
 
   if (!bucket.consume(identifier, 1))
@@ -83,7 +83,7 @@ const loggingMiddleware = t.middleware(
   async ({ ctx, next, type, path, meta }) => {
     console.log(
       '[tRPC] >>> Request from',
-      ctx.headers.get('x-trpc-source') ?? 'unknown',
+      ctx.req.headers.get('x-trpc-source') ?? 'unknown',
       `by ${ctx.session?.userId ?? 'guest'}`,
       `at ${path}`,
       `on ${new Date().toISOString()}`,
