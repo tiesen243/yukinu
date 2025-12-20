@@ -14,8 +14,8 @@
   },
   "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@react-router/node": "^7.10.1",
-    "@react-router/serve": "^7.10.1",
+    "@react-router/node": "^7.11.0",
+    "@react-router/serve": "^7.11.0",
     "@tanstack/react-query": "catalog:",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
@@ -31,11 +31,11 @@
     "nuqs": "catalog:",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.10.1",
+    "react-router": "^7.11.0",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.10.1",
+    "@react-router/dev": "^7.11.0",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
@@ -46,6 +46,6 @@
     "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:",
-    "vite": "^8.0.0-beta.2"
+    "vite": "^8.0.0-beta.3"
   }
 }

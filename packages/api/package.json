@@ -30,7 +30,7 @@
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
-    "@types/bun": "^1.3.4",
+    "@types/bun": "^1.3.5",
     "@yukinu/eslint-config": "workspace:*",
     "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
