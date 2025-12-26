@@ -44,7 +44,7 @@ export default function CategoriesPage() {
         </Button>
       </div>
 
-      <Card render={<section className='px-4' />}>
+      <Card className='px-4' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

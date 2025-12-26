@@ -40,7 +40,7 @@ export default function ProductsUpdatePage({
 
       <UpdateProductForm data={data} />
 
-      <Card render={<section className='mt-4 px-4' />}>
+      <Card className='mt-4 px-4' render={<section />}>
         <div className='flex items-center justify-between gap-4'>
           <Typography variant='h3'>Product Variants</Typography>
           <Button render={<Link to={`/products/${data.id}/variant`} />}>
