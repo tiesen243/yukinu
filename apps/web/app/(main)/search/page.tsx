@@ -38,7 +38,8 @@ export default async function SearchPage({
 
       <Collapsible className='relative md:hidden'>
         <CollapsibleTrigger
-          render={<Button variant='outline' className='w-full justify-start' />}
+          className='w-full justify-start'
+          render={<Button variant='outline' />}
         >
           <FilterIcon /> Filters
         </CollapsibleTrigger>

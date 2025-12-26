@@ -12,7 +12,7 @@ import Link from 'next/link'
 export default function MarketingLayout({ children }: LayoutProps<'/'>) {
   return (
     <>
-      <Collapsible render={<header className='group/header sticky inset-0' />}>
+      <Collapsible className='group/header sticky inset-0' render={<header />}>
         <nav className='flex h-14 items-center border-b bg-popover/60 text-popover-foreground backdrop-blur-xl backdrop-saturate-150 group-data-[state=open]/header:border-transparent'>
           <div className='container flex items-center justify-between gap-6'>
             <Link href='/' className='flex items-center gap-2'>
