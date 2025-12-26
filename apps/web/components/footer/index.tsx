@@ -15,11 +15,11 @@ import { QuickLinks } from '@/components/footer/quick-links'
 
 export function Footer() {
   return (
-    <footer className='border-t bg-popover py-8 text-popover-foreground'>
+    <footer className='border-t bg-card py-8 text-card-foreground'>
       <div className='container grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <div className='md:col-span-2 lg:col-span-1'>
           <Link href='/' className='flex items-center gap-2'>
-            <div className='flex size-9 items-center justify-center rounded-lg bg-accent'>
+            <div className='flex size-9 items-center justify-center rounded-lg bg-primary/40 border border-primary'>
               <Image
                 src='/assets/logo.svg'
                 alt='Yukinu Logo'

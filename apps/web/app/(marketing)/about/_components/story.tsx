@@ -1,10 +1,10 @@
 import { Typography } from '@yukinu/ui/typography'
 
 export const StorySection: React.FC = () => (
-  <section className='bg-accent/20 py-16 text-accent-foreground dark:bg-accent/10'>
+  <section className='bg-card py-16 text-card-foreground'>
     <h2 className='sr-only'>Our Story section</h2>
 
-    <article className='container [&>p]:text-accent-foreground [&>p:not(:first-child)]:mt-2'>
+    <article className='container [&>p]:text-muted-foreground'>
       <Typography variant='h3'>Our Story</Typography>
 
       <Typography>

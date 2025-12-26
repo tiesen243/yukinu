@@ -10,17 +10,20 @@ import { Typography } from '@yukinu/ui/typography'
 import { getDashboardUrl } from '@/lib/utils'
 
 export const SellerValue: React.FC = () => (
-  <section id='for-sellers' className='bg-card py-20 md:py-32'>
+  <section
+    id='for-sellers'
+    className='bg-card text-card-foreground py-20 md:py-32'
+  >
     <h2 className='sr-only'>Value for Sellers</h2>
 
     <div className='container grid grid-cols-1 items-center gap-12 lg:grid-cols-2'>
-      <section className='order-2 flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/20 p-8 md:p-12 lg:order-1 dark:bg-accent/10'>
+      <section className='order-2 flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/40 p-8 md:p-12 lg:order-1'>
         <h3 className='sr-only'>
           Business growth and sales optimization section
         </h3>
 
         <div className='space-y-4 text-center'>
-          <BarChart3Icon className='mx-auto size-20 text-accent' />
+          <BarChart3Icon className='mx-auto size-20 text-primary' />
           <Typography className='text-accent-foreground/70'>
             Grow your business
           </Typography>
@@ -39,11 +42,9 @@ export const SellerValue: React.FC = () => (
           Our commission-based model means you only pay when you sell.
         </Typography>
 
-        <section className='space-y-4'>
-          <h4 className='sr-only'>Benefits for Vendors</h4>
-
+        <ul className='space-y-4'>
           {benefits.map(({ icon: Icon, title, desc }) => (
-            <div className='flex items-start gap-4' key={title}>
+            <li className='flex items-start gap-4' key={title}>
               <Icon className='size-6 shrink-0 text-accent-foreground' />
               <div>
                 <Typography className='font-semibold'>{title}</Typography>
@@ -51,9 +52,9 @@ export const SellerValue: React.FC = () => (
                   {desc}
                 </Typography>
               </div>
-            </div>
+            </li>
           ))}
-        </section>
+        </ul>
 
         <Button
           size='lg'

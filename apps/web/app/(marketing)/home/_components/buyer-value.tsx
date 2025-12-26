@@ -26,11 +26,9 @@ export const BuyerValue: React.FC = () => {
           recommendations based on your preferences.
         </Typography>
 
-        <section className='space-y-4'>
-          <h4 className='sr-only'>Benefits for Shoppers</h4>
-
+        <ul className='space-y-4'>
           {benefits.map(({ icon: Icon, title, desc }) => (
-            <div className='flex items-start gap-4' key={title}>
+            <li className='flex items-start gap-4' key={title}>
               <Icon className='size-6 shrink-0 text-accent-foreground' />
               <div>
                 <Typography className='font-semibold'>{title}</Typography>
@@ -38,9 +36,9 @@ export const BuyerValue: React.FC = () => {
                   {desc}
                 </Typography>
               </div>
-            </div>
+            </li>
           ))}
-        </section>
+        </ul>
 
         <Button
           size='lg'
@@ -49,11 +47,11 @@ export const BuyerValue: React.FC = () => {
         />
       </section>
 
-      <section className='flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/20 p-8 md:p-12 dark:bg-accent/10'>
+      <section className='flex aspect-square items-center justify-center rounded-xl border border-accent bg-accent/40 p-8 md:p-12'>
         <h3 className='sr-only'>Premium shopping experience section</h3>
 
         <div className='space-y-4 text-center'>
-          <ShoppingBagIcon className='mx-auto size-20 text-accent' />
+          <ShoppingBagIcon className='mx-auto size-20 text-primary' />
           <Typography className='text-accent-foreground/70'>
             Premium shopping experience
           </Typography>

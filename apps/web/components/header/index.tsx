@@ -14,8 +14,8 @@ export function Header() {
           <Image
             src='/assets/logo.svg'
             alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
-            width={36}
-            height={36}
+            width={28}
+            height={28}
             className='dark:invert'
           />
           <span className='sr-only text-lg font-bold md:not-sr-only'>

@@ -19,8 +19,8 @@ export default function MarketingLayout({ children }: LayoutProps<'/'>) {
               <Image
                 src='/assets/logo.svg'
                 alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
-                width={36}
-                height={36}
+                width={28}
+                height={28}
                 className='dark:invert'
               />
               <span className='text-lg font-bold'>
