@@ -42,7 +42,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [
-      "npx oxfmt@0.18.0 --write",
+      "bunx oxfmt@0.18.0 --write",
       "git add --all"
     ],
     "*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}": [
