@@ -4,12 +4,12 @@
   "private": true,
   "type": "module",
   "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./package.json": "./package.json"
   },
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -24,7 +24,7 @@
     "resend": "^6.6.0"
   },
   "devDependencies": {
-    "@react-email/preview-server": "5.0.8",
+    "@react-email/preview-server": "5.1.0",
     "@yukinu/tsconfig": "workspace:*",
     "react-email": "^5.1.0",
     "tsdown": "catalog:dev",
