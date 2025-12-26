@@ -33,7 +33,14 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectValue,
+} from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { AuthValidators } from '@yukinu/validators/auth'
@@ -60,10 +67,13 @@ export const ProfileSummary: React.FC = () => {
 
         <FieldGroup>
           <Field>
-            <FieldLabel>Username</FieldLabel>
+            <FieldLabel htmlFor='username'>Username</FieldLabel>
             <InputGroup>
-              <InputGroupInput value={data.username} readOnly />
-              <InputGroupAddon align='inline-end'>
+              <InputGroupInput id='username' value={data.username} readOnly />
+              <InputGroupAddon
+                align='inline-end'
+                onClick={(e) => e.stopPropagation()}
+              >
                 <ChangeUsernameForm username={data.username} />
               </InputGroupAddon>
             </InputGroup>
@@ -207,7 +217,11 @@ export function UpdateProfileForm() {
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Bio</FieldLabel>
                 <InputGroup>
-                  <InputGroupTextarea {...field} value={value ?? ''} />
+                  <InputGroupTextarea
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Tell us about yourself...'
+                  />
                   <InputGroupAddon align='block-end'>
                     <InputGroupText
                       className={`ml-auto ${value && value.length > 2000 ? 'text-destructive' : ''}`}
@@ -223,18 +237,32 @@ export function UpdateProfileForm() {
 
           <form.Field
             name='gender'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field: { onChange, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Gender</FieldLabel>
-                <Select {...field} value={value ?? ''}>
-                  <SelectOption value='' disabled>
-                    Select your gender
-                  </SelectOption>
-                  {UserValidators.genders.map((gender) => (
-                    <SelectOption key={gender} value={gender}>
-                      {gender}
-                    </SelectOption>
-                  ))}
+                <Select
+                  {...field}
+                  onValueChange={onChange}
+                  items={[
+                    ...UserValidators.genders.map((gender) => ({
+                      label: gender,
+                      value: gender,
+                    })),
+                    { label: 'Select gender', value: null },
+                  ]}
+                >
+                  <SelectTrigger className='w-full'>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {UserValidators.genders.map((gender) => (
+                        <SelectItem key={gender} value={gender}>
+                          {gender}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
                 </Select>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
@@ -338,6 +366,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
+        variant='ghost'
         render={
           <InputGroupButton>
             <PencilIcon />

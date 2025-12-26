@@ -30,8 +30,19 @@ function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
   return <DialogPrimitive.Portal data-slot='dialog-portal' {...props} />
 }
 
-function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
-  return <DialogPrimitive.Close data-slot='dialog-close' {...props} />
+function DialogClose({
+  className,
+  variant = 'outline',
+  size = 'default',
+  ...props
+}: DialogPrimitive.Close.Props & VariantProps<typeof buttonVariants>) {
+  return (
+    <DialogPrimitive.Close
+      data-slot='dialog-close'
+      className={cn(buttonVariants({ variant, size, className }))}
+      {...props}
+    />
+  )
 }
 
 function DialogOverlay({
@@ -102,29 +113,19 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
 
 function DialogFooter({
   className,
-  showCloseButton = false,
   children,
   ...props
-}: React.ComponentProps<'div'> & {
-  showCloseButton?: boolean
-}) {
+}: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot='dialog-footer'
       className={cn(
-        'bg-muted/50 -mx-4 -mb-4 rounded-b-xl border-t p-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
+        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
         className,
       )}
       {...props}
     >
       {children}
-      {showCloseButton && (
-        <DialogPrimitive.Close
-          className={cn(buttonVariants({ variant: 'outline' }))}
-        >
-          Close
-        </DialogPrimitive.Close>
-      )}
     </div>
   )
 }

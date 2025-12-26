@@ -83,12 +83,11 @@ const SessionItem: React.FC<{
       <AlertDialog>
         <AlertDialogTrigger
           className='absolute top-0 right-0'
-          render={
-            <Button variant='outline' size='icon-sm'>
-              <XIcon />
-            </Button>
-          }
-        />
+          variant='outline'
+          size='icon-sm'
+        >
+          <XIcon />
+        </AlertDialogTrigger>
 
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -264,10 +263,9 @@ export const DeleteAccountButton: React.FC = () => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger
-        className='w-full'
-        render={<Button variant='destructive'>Delete Account</Button>}
-      />
+      <AlertDialogTrigger className='w-full' variant='destructive'>
+        Delete Account
+      </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>

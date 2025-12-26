@@ -36,7 +36,7 @@ export const InviteStaffButton: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button>Invite New Staff</Button>} />
+      <DialogTrigger>Invite New Staff</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>

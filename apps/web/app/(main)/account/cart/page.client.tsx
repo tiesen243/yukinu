@@ -256,10 +256,7 @@ const RemoveButton: React.FC<{ itemId: string | null }> = ({ itemId }) => {
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose
-            disabled={isPending}
-            render={<Button variant='outline'>Cancel</Button>}
-          />
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             variant='destructive'
             disabled={isPending}
