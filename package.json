@@ -50,6 +50,10 @@
     "turbo": "^2.7.2"
   },
   "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,md}": [
+      "npx oxfmt --write",
+      "git add --all"
+    ],
     "*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}": [
       "bun run lint:fix",
       "git add --all"
