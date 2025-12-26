@@ -40,21 +40,9 @@
     "stop:prod": "docker compose -f ./docker-compose.prod.yml down",
     "typecheck": "turbo run typecheck"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,md}": [
-      "bunx oxfmt@0.18.0 --write",
-      "git add --all"
-    ],
-    "*.{js,mjs,cjs,jsx,ts,mts,cts,tsx}": [
-      "bun run lint:fix",
-      "git add --all"
-    ]
-  },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.2",
     "@changesets/cli": "^2.29.8",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
     "oxfmt": "^0.20.0",
     "oxlint": "^1.35.0",
     "turbo": "^2.7.2"
