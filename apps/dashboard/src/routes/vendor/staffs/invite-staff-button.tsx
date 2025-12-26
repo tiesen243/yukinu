@@ -60,14 +60,7 @@ export const InviteStaffButton: React.FC = () => {
         </Field>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
-
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ email })

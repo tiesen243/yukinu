@@ -14,7 +14,7 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { CategoryValidators } from '@yukinu/validators/category'
@@ -117,19 +117,23 @@ export default function CategoriesEditPage({
 
           <form.Field
             name='parentId'
-            render={({ meta, field }) => (
+            render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Parent Category</FieldLabel>
-                <Select {...field}>
-                  <SelectOption value='no-parent'>No Parent</SelectOption>
+                {value === undefined && (
+                  <FieldDescription id={meta.descriptionId}>
+                    This category has no parent category.
+                  </FieldDescription>
+                )}
+                <NativeSelect {...field} value={value ?? ''}>
                   {data?.categories
                     .filter((cat) => cat.id !== category.id)
                     .map((category) => (
-                      <SelectOption key={category.id} value={category.id}>
+                      <NativeSelectOption key={category.id} value={category.id}>
                         {category.name}
-                      </SelectOption>
+                      </NativeSelectOption>
                     ))}
-                </Select>
+                </NativeSelect>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

@@ -29,7 +29,7 @@ export const DeleteVariantButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
 

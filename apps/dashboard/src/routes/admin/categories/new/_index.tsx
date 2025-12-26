@@ -12,7 +12,7 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { CategoryValidators } from '@yukinu/validators/category'
@@ -38,7 +38,7 @@ export default function CategoriesNewPage() {
 
   const form = useForm({
     defaultValues: {
-      parentId: undefined,
+      parentId: null,
       name: '',
       description: undefined,
       image: undefined,
@@ -96,17 +96,19 @@ export default function CategoriesNewPage() {
 
           <form.Field
             name='parentId'
-            render={({ meta, field }) => (
+            render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Parent Category</FieldLabel>
-                <Select {...field}>
-                  <SelectOption value='no-parent'>No Parent</SelectOption>
+                <NativeSelect {...field} value={value ?? ''}>
+                  <NativeSelectOption value='' disabled>
+                    No Parent
+                  </NativeSelectOption>
                   {data?.categories.map((category) => (
-                    <SelectOption key={category.id} value={category.id}>
+                    <NativeSelectOption key={category.id} value={category.id}>
                       {category.name}
-                    </SelectOption>
+                    </NativeSelectOption>
                   ))}
-                </Select>
+                </NativeSelect>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

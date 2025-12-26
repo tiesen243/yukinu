@@ -22,7 +22,7 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
 import { ProductValidators } from '@yukinu/validators/product'
 
@@ -118,14 +118,16 @@ export const UpdateProductForm: React.FC<{
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
-                  <Select {...field} value={field.value ?? ''}>
-                    <SelectOption value=''>Select a category</SelectOption>
+                  <NativeSelect {...field} value={field.value ?? ''}>
+                    <NativeSelectOption value='' disabled>
+                      Select a category
+                    </NativeSelectOption>
                     {_data?.categories.map((category) => (
-                      <SelectOption key={category.id} value={category.id}>
+                      <NativeSelectOption key={category.id} value={category.id}>
                         {category.name}
-                      </SelectOption>
+                      </NativeSelectOption>
                     ))}
-                  </Select>
+                  </NativeSelect>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

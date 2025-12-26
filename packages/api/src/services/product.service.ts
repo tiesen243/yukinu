@@ -304,7 +304,7 @@ export class ProductService extends BaseService implements IProductService {
           await tx.insert(productAttributes).values({
             productId: product.id,
             attributeId: attribute.id,
-            value: attr.value.toLowerCase(),
+            value: attr.value,
           })
         }),
       )
@@ -406,14 +406,14 @@ export class ProductService extends BaseService implements IProductService {
             .values({
               productId: id,
               attributeId: attribute.id,
-              value: attr.value.toLowerCase(),
+              value: attr.value,
             })
             .onConflictDoUpdate({
               target: [
                 productAttributes.productId,
                 productAttributes.attributeId,
               ],
-              set: { value: attr.value.toLowerCase() },
+              set: { value: attr.value },
             })
         }),
       )

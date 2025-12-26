@@ -56,7 +56,7 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
     <>
       <h1 className='sr-only'>My Store page</h1>
       <Card render={<form onSubmit={form.handleSubmit} />}>
-        <FieldSet>
+        <FieldSet className='px-4'>
           <FieldLegend>My Store</FieldLegend>
           <FieldDescription>
             Update your store details and preferences below.

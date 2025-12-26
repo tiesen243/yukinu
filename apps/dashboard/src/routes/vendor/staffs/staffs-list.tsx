@@ -64,7 +64,7 @@ const RemoveStaffButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <DialogTrigger variant='link' className='text-destructive'>
         Remove
       </DialogTrigger>
 
@@ -78,13 +78,7 @@ const RemoveStaffButton: React.FC<{
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ staffId })

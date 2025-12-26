@@ -18,12 +18,12 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
     <Card
       {...props}
       className={cn(
-        'group/category-card pt-0 transition-colors hover:border-accent hover:bg-accent/20 hover:text-accent-foreground',
+        'group/category-card pt-0 aspect-square transition-colors hover:border-accent hover:bg-accent/20 hover:text-accent-foreground',
         className,
       )}
       render={<Link href={`/search?c=${category.id}`} />}
     >
-      <CardHeader className='relative aspect-square overflow-hidden rounded-t-lg'>
+      <div className='relative flex-1 overflow-hidden'>
         <Image
           src={category.image ?? '/assets/logo.svg'}
           alt={category.name}
@@ -35,11 +35,11 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           fill
         />
-      </CardHeader>
+      </div>
 
-      <CardContent>
+      <CardHeader>
         <CardTitle className='truncate text-lg'>{category.name}</CardTitle>
-      </CardContent>
+      </CardHeader>
     </Card>
   )
 }

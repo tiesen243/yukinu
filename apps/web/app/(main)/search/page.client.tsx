@@ -12,7 +12,7 @@ import {
 } from '@yukinu/ui/field'
 import { FilterIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { ProductValidators } from '@yukinu/validators/product'
 import { useQueryStates } from 'nuqs'
 
@@ -67,32 +67,37 @@ export const FilterForm: React.FC = () => {
 
           <Field>
             <FieldLabel htmlFor='categoryId'>Category</FieldLabel>
-            <Select
+            <NativeSelect
               id='categoryId'
               name='categoryId'
               defaultValue={query.categoryId ?? ''}
             >
-              <SelectOption value=''>All Categories</SelectOption>
+              <NativeSelectOption value=''>All</NativeSelectOption>
               {data?.categories.map((category) => (
-                <SelectOption key={category.id} value={category.id}>
+                <NativeSelectOption key={category.id} value={category.id}>
                   {category.name}
-                </SelectOption>
+                </NativeSelectOption>
               ))}
-            </Select>
+            </NativeSelect>
           </Field>
 
           <Field>
             <FieldLabel htmlFor='orderBy'>Sort By</FieldLabel>
-            <Select id='orderBy' name='orderBy' defaultValue={query.orderBy}>
+            <NativeSelect
+              id='orderBy'
+              name='orderBy'
+              defaultValue={query.orderBy}
+            >
               {ProductValidators.orderBy.map((order) => {
                 const [field, direction] = order.split('_')
+
                 return (
-                  <SelectOption key={order} value={order}>
+                  <NativeSelectOption key={order} value={order}>
                     {field} ({direction})
-                  </SelectOption>
+                  </NativeSelectOption>
                 )
               })}
-            </Select>
+            </NativeSelect>
           </Field>
 
           <Field>

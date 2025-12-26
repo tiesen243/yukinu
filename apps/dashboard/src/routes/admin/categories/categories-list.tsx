@@ -74,7 +74,7 @@ const DeleteCategoryButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <DialogTrigger variant='link' className='text-destructive'>
         Delete
       </DialogTrigger>
 
@@ -88,14 +88,7 @@ const DeleteCategoryButton: React.FC<{
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
-
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             variant='destructive'
             disabled={isPending}

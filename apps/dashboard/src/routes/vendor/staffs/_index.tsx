@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Typography } from '@yukinu/ui/typography'
 
 import { InviteStaffButton } from '@/routes/vendor/staffs/invite-staff-button'
 import { StaffsList } from '@/routes/vendor/staffs/staffs-list'
@@ -13,18 +14,18 @@ import { StaffsList } from '@/routes/vendor/staffs/staffs-list'
 export default function VendorStaffsPage() {
   return (
     <>
-      <div className='flex items-center justify-between'>
+      <div className='flex items-center justify-between mb-4'>
         <div>
-          <h1 className='text-3xl font-bold'>Staffs Management</h1>
-          <p className='mt-2 text-muted-foreground'>
+          <Typography variant='h2'>Staffs Management</Typography>
+          <Typography className='text-muted-foreground'>
             Manage and view all staffs in your vendor from this dashboard.
-          </p>
+          </Typography>
         </div>
 
         <InviteStaffButton />
       </div>
 
-      <Card render={<section />}>
+      <Card render={<section className='px-4' />}>
         <Table>
           <TableHeader>
             <TableRow>

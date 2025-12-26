@@ -48,9 +48,7 @@ export const EditVariantButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Edit
-      </DialogTrigger>
+      <DialogTrigger variant='link'>Edit</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -86,14 +84,7 @@ export const EditVariantButton: React.FC<{
             />
 
             <DialogFooter>
-              <DialogClose
-                render={
-                  <Button variant='outline' disabled={form.state.isPending}>
-                    Cancel
-                  </Button>
-                }
-              />
-
+              <DialogClose disabled={form.state.isPending}>Cancel</DialogClose>
               <Button disabled={form.state.isPending}>Save Changes</Button>
             </DialogFooter>
           </FieldGroup>

@@ -25,8 +25,8 @@ import {
 } from '@yukinu/ui/dialog'
 import { Field, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { Label } from '@yukinu/ui/label'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
 import { UserValidators } from '@yukinu/validators/user'
@@ -111,9 +111,7 @@ const EditUserButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Edit
-      </DialogTrigger>
+      <DialogTrigger variant='link'>Edit</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -126,7 +124,7 @@ const EditUserButton: React.FC<{
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor='role'>Role</FieldLabel>
-            <Select
+            <NativeSelect
               id='role'
               value={role}
               onChange={(e) => {
@@ -134,9 +132,9 @@ const EditUserButton: React.FC<{
               }}
             >
               {UserValidators.roles.map((role) => (
-                <SelectOption key={role} label={role} value={role} />
+                <NativeSelectOption key={role} label={role} value={role} />
               ))}
-            </Select>
+            </NativeSelect>
           </Field>
 
           <Field>
@@ -154,8 +152,7 @@ const EditUserButton: React.FC<{
                     },
                   )}
                 >
-                  <RadioGroupItem id={status} value={status} />
-                  {status}
+                  <RadioGroupItem id={status} value={status} /> {status}
                 </Label>
               ))}
             </RadioGroup>
@@ -163,13 +160,7 @@ const EditUserButton: React.FC<{
         </FieldGroup>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ id: user.id, status, role })
@@ -203,7 +194,7 @@ const DeleteUserButton: React.FC<{
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -250,9 +241,7 @@ const RestoreUserButton: React.FC<{
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Restore
-      </AlertDialogTrigger>
+      <AlertDialogTrigger variant='link'>Restore</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Restore User</AlertDialogTitle>
@@ -293,7 +282,7 @@ const PermamentlyDeleteUserButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>

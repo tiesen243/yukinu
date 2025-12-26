@@ -83,9 +83,7 @@ const EditVendorButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Edit Status
-      </DialogTrigger>
+      <DialogTrigger variant='link'>Edit Status</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -116,13 +114,7 @@ const EditVendorButton: React.FC<{
         </RadioGroup>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ id: vendor.id, status })
