@@ -17,8 +17,8 @@ export const FeaturesSection: React.FC = () => (
     <div className='container mb-16 text-center'>
       <Typography variant='h2'>Why choose Yukinu?</Typography>
       <Typography className='mx-auto max-w-2xl text-muted-foreground'>
-        We've built the platform to make online shopping easier, safer, and more
-        rewarding.
+        We&apos;ve built the platform to make online shopping easier, safer, and
+        more rewarding.
       </Typography>
     </div>
 

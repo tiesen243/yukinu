@@ -103,11 +103,11 @@ Below are the main scripts available in the project. You can run these using `bu
 - **db:push**: Pushes the Prisma schema to the database for the database package.
 - **db:studio**: Opens Prisma Studio for the database package.
 - **dev**: Starts development servers for all packages using Turbo.
-- **format**: Checks code formatting using Prettier with caching.
-- **format:fix**: Fixes code formatting issues using Prettier with caching.
+- **format**: Checks code formatting using Oxfmt.
+- **format:fix**: Fixes code formatting issues using Oxfmt.
 - **postinstall**: Runs workspace linting after dependencies are installed.
-- **lint**: Checks code for linting issues using ESLint with caching.
-- **lint:fix**: Fixes linting issues using ESLint with caching.
+- **lint**: Checks code for linting issues using Oxlint.
+- **lint:fix**: Fixes linting issues using Oxlint.
 - **lint:ws**: Runs workspace-level linting using Sherif.
 - **prepare**: Sets up Git hooks using Husky.
 - **start:db**: Starts the PostgreSQL database using Docker Compose.

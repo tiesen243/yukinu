@@ -1,8 +1,7 @@
-import { Activity } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router'
-
 import { TableCell, TableRow } from '@yukinu/ui/table'
+import { Activity } from 'react'
+import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { DeleteProductButton } from '@/routes/products/_components/delete-product-button'
@@ -40,9 +39,9 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       <TableCell>{product.price}</TableCell>
       <TableCell>{product.createdAt.toLocaleDateString()}</TableCell>
       <TableCell>
-        {!query.isDeleted
-          ? product.updatedAt.toLocaleDateString()
-          : product.deletedAt?.toLocaleDateString()}
+        {query.isDeleted
+          ? product.deletedAt?.toLocaleDateString()
+          : product.updatedAt.toLocaleDateString()}
       </TableCell>
       <TableCell className='space-x-2'>
         <Activity mode={query.isDeleted ? 'visible' : 'hidden'}>

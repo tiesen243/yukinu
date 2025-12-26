@@ -1,8 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,6 +28,7 @@ import { XIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthValidators } from '@yukinu/validators/auth'
+import { useRouter } from 'next/navigation'
 
 import { useTRPC, useTRPCClient } from '@/lib/trpc/react'
 

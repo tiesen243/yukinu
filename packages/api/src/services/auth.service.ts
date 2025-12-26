@@ -1,14 +1,15 @@
-import { randomBytes } from 'node:crypto'
-import { TRPCError } from '@trpc/server'
-
+import type { IAuthService } from '@/contracts/services/auth.service'
 import type { SessionWithUser } from '@yukinu/auth'
 import type { AuthValidators } from '@yukinu/validators/auth'
+
+import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
 
-import type { IAuthService } from '@/contracts/services/auth.service'
 import { BaseService } from '@/services/base.service'
+
+import { randomBytes } from 'node:crypto'
 
 export class AuthService extends BaseService implements IAuthService {
   private readonly _password = new Password()
@@ -248,7 +249,7 @@ export class AuthService extends BaseService implements IAuthService {
     })
   }
 
-  async changePassword(
+  changePassword(
     input: AuthValidators.ChangePasswordInput,
   ): Promise<AuthValidators.ChangePasswordOutput> {
     const { and, eq } = this._orm
@@ -273,6 +274,7 @@ export class AuthService extends BaseService implements IAuthService {
         )
         .limit(1)
 
+      // oxlint-disable-next-line no-negated-condition
       if (!account?.password) {
         const newPasswordHash = await this._password.hash(newPassword)
         await tx.insert(accounts).values({

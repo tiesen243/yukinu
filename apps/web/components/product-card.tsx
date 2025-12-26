@@ -1,7 +1,5 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
 import type { ProductValidators } from '@yukinu/validators/product'
+
 import { slugify } from '@yukinu/lib/slugify'
 import { cn } from '@yukinu/ui'
 import { Badge } from '@yukinu/ui/badge'
@@ -13,6 +11,8 @@ import {
   CardTitle,
 } from '@yukinu/ui/card'
 import { StarIcon } from '@yukinu/ui/icons'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface ProductCardProps extends React.ComponentProps<typeof Card> {
   product: ProductValidators.AllOutput['products'][number]

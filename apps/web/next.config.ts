@@ -1,16 +1,14 @@
 import '@yukinu/validators/env'
 
-import path from 'node:path'
 import type { NextConfig } from 'next'
+
+import path from 'node:path'
 
 const nextConfig = {
   typedRoutes: true,
   reactStrictMode: true,
   images: { unoptimized: true },
   typescript: { ignoreBuildErrors: true },
-  experimental: {
-    turbopackFileSystemCacheForDev: true,
-  },
 
   transpilePackages: [
     '@yukinu/api',
@@ -20,10 +18,10 @@ const nextConfig = {
     '@yukinu/lib',
     '@yukinu/ui',
     '@yukinu/validators',
-    'prettier',
   ],
 
   // Enable standalone build output if specified (for Docker deployment)
+  // oxlint-disable-next-line no-process-env
   ...(process.env.NEXT_BUILD_OUTPUT === 'standalone' && {
     output: 'standalone',
     outputFileTracingRoot: path.join(__dirname, '../../'),

@@ -1,7 +1,4 @@
-/* eslint-disable @eslint-react/no-array-index-key */
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -28,6 +25,7 @@ import {
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { ProductValidators } from '@yukinu/validators/product'
+import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 

@@ -1,9 +1,9 @@
-import { TRPCError } from '@trpc/server'
-
+import type { ICategoryService } from '@/contracts/services/category.service'
 import type { CategoryValidators } from '@yukinu/validators/category'
+
+import { TRPCError } from '@trpc/server'
 import { alias } from '@yukinu/db'
 
-import type { ICategoryService } from '@/contracts/services/category.service'
 import { BaseService } from '@/services/base.service'
 
 export class CategoryService extends BaseService implements ICategoryService {
@@ -87,6 +87,7 @@ export class CategoryService extends BaseService implements ICategoryService {
       let currentId = parentId
       const visited = new Set([parentId])
       while (currentId) {
+        // oxlint-disable-next-line no-await-in-loop
         const parent = await this.one({ id: currentId })
         if (visited.has(parent.parent?.id ?? '')) {
           throw new TRPCError({
@@ -128,6 +129,7 @@ export class CategoryService extends BaseService implements ICategoryService {
       let currentId = parentId
       const visited = new Set([parentId])
       while (currentId) {
+        // oxlint-disable-next-line no-await-in-loop
         const parent = await this.one({ id: currentId })
         if (visited.has(parent.parent?.id ?? '') || parent.id === id) {
           throw new TRPCError({

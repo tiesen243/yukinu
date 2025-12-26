@@ -1,9 +1,9 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
 import type { CategoryValidators } from '@yukinu/validators/category'
+
 import { cn } from '@yukinu/ui'
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface CategoryCardProps extends React.ComponentProps<typeof Card> {
   category: CategoryValidators.AllOutput['categories'][number]
@@ -30,7 +30,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
           loading='eager'
           className={cn(
             'rounded-t-lg object-cover transition-transform group-hover/category-card:scale-105',
-            { 'dark:invert': category.image == null },
+            { 'dark:invert': category.image === null },
           )}
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           fill

@@ -1,10 +1,10 @@
-import { TRPCError } from '@trpc/server'
-
+import type { IProductService } from '@/contracts/services/product.service'
 import type { Database } from '@yukinu/db'
 import type { ProductValidators } from '@yukinu/validators/product'
+
+import { TRPCError } from '@trpc/server'
 import { vendors } from '@yukinu/db/schema'
 
-import type { IProductService } from '@/contracts/services/product.service'
 import { BaseService } from '@/services/base.service'
 import { MINMOD_ACCESS } from '@/trpc'
 
@@ -54,7 +54,8 @@ export class ProductService extends BaseService implements IProductService {
     if (vendorId) whereClauses.push(eq(products.vendorId, vendorId))
     if (isDeleted) whereClauses.push(isNotNull(products.deletedAt))
     else whereClauses.push(isNull(products.deletedAt))
-    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
+    const whereClause =
+      whereClauses.length > 0 ? and(...whereClauses) : undefined
 
     const productsQuery = this._db
       .select({

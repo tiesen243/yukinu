@@ -1,6 +1,7 @@
 import type { VariantProps } from 'class-variance-authority'
-import { Activity, useMemo } from 'react'
+
 import { cva } from 'class-variance-authority'
+import { Activity, useMemo } from 'react'
 
 import { Label } from '@/components/label'
 import { Separator } from '@/components/separator'
@@ -181,36 +182,28 @@ function FieldError({
   errors?: ({ message?: string } | undefined)[]
 }) {
   const content = useMemo(() => {
-    if (children) {
-      return children
-    }
+    if (children) return children
 
-    if (!errors?.length) {
-      return null
-    }
+    if (!errors?.length) return null
 
     const uniqueErrors = [
       ...new Map(errors.map((error) => [error?.message, error])).values(),
     ]
 
-    if (uniqueErrors.length == 1) {
-      return uniqueErrors[0]?.message
-    }
+    if (uniqueErrors.length === 1) return uniqueErrors[0]?.message
 
     return (
       <ul className='ml-4 flex list-disc flex-col gap-1'>
         {uniqueErrors.map(
           (error, index) =>
-            // eslint-disable-next-line @eslint-react/no-array-index-key
+            // oxlint-disable-next-line no-array-index-key
             error?.message && <li key={index}>{error.message}</li>,
         )}
       </ul>
     )
   }, [children, errors])
 
-  if (!content) {
-    return null
-  }
+  if (!content) return null
 
   return (
     <div

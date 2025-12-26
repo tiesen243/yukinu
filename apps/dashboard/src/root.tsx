@@ -1,3 +1,7 @@
+import type { Route } from './+types/root'
+
+import { Button } from '@yukinu/ui/button'
+import { Toaster } from '@yukinu/ui/sonner'
 import {
   isRouteErrorResponse,
   Link,
@@ -8,10 +12,6 @@ import {
   ScrollRestoration,
 } from 'react-router'
 
-import { Button } from '@yukinu/ui/button'
-import { Toaster } from '@yukinu/ui/sonner'
-
-import type { Route } from './+types/root'
 import { Providers } from '@/components/providers'
 import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'

@@ -1,9 +1,8 @@
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import { ArrowRightIcon, StarIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
+import Link from 'next/link'
 
 import { getDashboardUrl } from '@/lib/utils'
 
@@ -38,6 +37,7 @@ export const HeroSection: React.FC = () => (
         variant='outline'
         nativeButton={false}
         render={
+          // oxlint-disable-next-line no-html-link-for-pages
           <a
             href={`${getDashboardUrl()}/apply-vendor`}
             target='_blank'

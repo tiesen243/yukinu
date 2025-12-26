@@ -1,8 +1,6 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { useQueryStates } from 'nuqs'
-
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -16,6 +14,7 @@ import { FilterIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { Select, SelectOption } from '@yukinu/ui/select'
 import { ProductValidators } from '@yukinu/validators/product'
+import { useQueryStates } from 'nuqs'
 
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
 import { productsOptions, productsParsers } from '@/lib/search'
@@ -189,7 +188,6 @@ export const ProductsSearchPagination: React.FC = () => {
       {getPaginationRange(query.page, pagination.totalPages).map(
         (item, idx) => (
           <Button
-            // eslint-disable-next-line @eslint-react/no-array-index-key
             key={`pagination-item-${idx}`}
             variant='outline'
             size='icon'

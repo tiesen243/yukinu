@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Collapsible,
@@ -9,6 +6,8 @@ import {
 } from '@yukinu/ui/collapsible'
 import { MenuIcon, XIcon } from '@yukinu/ui/icons'
 import { env } from '@yukinu/validators/env.next'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function MarketingLayout({ children }: LayoutProps<'/'>) {
   return (

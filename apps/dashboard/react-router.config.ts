@@ -1,6 +1,6 @@
 import type { Config } from '@react-router/dev/config'
-import { vercelPreset } from '@vercel/react-router/vite'
 
+import { vercelPreset } from '@vercel/react-router/vite'
 import { env } from '@yukinu/validators/env'
 
 export default {

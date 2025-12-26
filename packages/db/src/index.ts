@@ -1,7 +1,6 @@
+import { env } from '@yukinu/validators/env'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
-
-import { env } from '@yukinu/validators/env'
 
 const createDrizzleClient = () => {
   const conn = postgres({

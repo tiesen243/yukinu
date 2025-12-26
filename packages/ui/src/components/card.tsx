@@ -1,5 +1,5 @@
-import * as React from 'react'
 import { mergeProps, useRender } from '@base-ui/react'
+import * as React from 'react'
 
 import { cn } from '@/utils'
 

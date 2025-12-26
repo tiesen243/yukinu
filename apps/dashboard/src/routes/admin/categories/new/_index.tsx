@@ -1,6 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -18,6 +16,7 @@ import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { CategoryValidators } from '@yukinu/validators/category'
+import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 

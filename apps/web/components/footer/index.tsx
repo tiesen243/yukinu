@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
 import {
   FacebookIcon,
   GithubIcon,
@@ -9,6 +6,8 @@ import {
 } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 import { env } from '@yukinu/validators/env.next'
+import Image from 'next/image'
+import Link from 'next/link'
 
 import { LegalLinks } from '@/components/footer/legal-links'
 import { Newsletter } from '@/components/footer/newsletter'

@@ -24,8 +24,8 @@ export const TeamSection: React.FC = () => (
 
     <Typography className='mx-auto mt-12 max-w-2xl text-center text-muted-foreground'>
       Our diverse team brings expertise across e-commerce, technology,
-      operations, and customer service. We're united by our passion for building
-      the best multi-vendor platform on the web.
+      operations, and customer service. We&apos;re united by our passion for
+      building the best multi-vendor platform on the web.
     </Typography>
   </section>
 )

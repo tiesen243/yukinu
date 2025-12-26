@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -11,6 +9,7 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 import { FacebookIcon, GoogleIcon } from '@yukinu/ui/icons'
+import Link from 'next/link'
 
 import { LoginForm } from '@/app/(auth)/login/page.client'
 import { createMetadata } from '@/lib/metadata'

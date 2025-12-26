@@ -1,9 +1,8 @@
 'use client'
 
+import { Button } from '@yukinu/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { Button } from '@yukinu/ui/button'
 
 export default function DocsNotFoundError() {
   return (

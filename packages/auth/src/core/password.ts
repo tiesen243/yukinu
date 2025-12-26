@@ -1,6 +1,6 @@
-import { scrypt } from 'node:crypto'
-
 import { constantTimeEqual, decodeHex, encodeHex } from '@/core/crypto'
+
+import { scrypt } from 'node:crypto'
 
 export class Password {
   constructor(private readonly dkLen = 64) {}
@@ -20,7 +20,7 @@ export class Password {
     return constantTimeEqual(targetKey, decodeHex(key ?? ''))
   }
 
-  private async generateKey(data: string, salt?: string): Promise<Uint8Array> {
+  private generateKey(data: string, salt?: string): Promise<Uint8Array> {
     const textEncoder = new TextEncoder()
     return new Promise((resolve, reject) => {
       scrypt(

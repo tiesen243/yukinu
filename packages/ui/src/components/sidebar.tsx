@@ -1,11 +1,12 @@
 'use client'
 
 import type { VariantProps } from 'class-variance-authority'
-import * as React from 'react'
+
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import { cva } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
+import * as React from 'react'
 
 import { Button } from '@/components/button'
 import { Input } from '@/components/input'
@@ -68,7 +69,6 @@ function SidebarProvider({
 
   // This is the internal state of the sidebar.
   // We use openProp and setOpenProp for control from outside the component.
-  // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [_open, _setOpen] = React.useState(defaultOpen)
   const open = openProp ?? _open
   const setOpen = React.useCallback(
@@ -286,6 +286,7 @@ function SidebarRail({ className, ...props }: React.ComponentProps<'button'>) {
       data-sidebar='rail'
       data-slot='sidebar-rail'
       aria-label='Toggle Sidebar'
+      type='button'
       tabIndex={-1}
       onClick={toggleSidebar}
       title='Toggle Sidebar'
@@ -519,7 +520,7 @@ function SidebarMenuButton({
       },
       props,
     ),
-    render: !tooltip ? render : TooltipTrigger,
+    render: tooltip ? TooltipTrigger : render,
     state: {
       slot: 'sidebar-menu-button',
       sidebar: 'menu-button',
@@ -606,7 +607,6 @@ function SidebarMenuSkeleton({
   showIcon?: boolean
 }) {
   // Random width between 50 to 90%.
-  // eslint-disable-next-line @eslint-react/naming-convention/use-state
   const [width] = React.useState(() => {
     return `${Math.floor(Math.random() * 40) + 50}%`
   })

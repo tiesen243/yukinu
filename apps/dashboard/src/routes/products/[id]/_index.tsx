@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router'
+import type { Route } from './+types/_index'
 
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -12,8 +12,8 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 import { Typography } from '@yukinu/ui/typography'
+import { Link } from 'react-router'
 
-import type { Route } from './+types/_index'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 import { DeleteVariantButton } from '@/routes/products/[id]/delete-variant-button'

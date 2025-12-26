@@ -1,5 +1,3 @@
-import { Link } from 'react-router'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import { DownloadIcon, PlusIcon } from '@yukinu/ui/icons'
@@ -10,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Link } from 'react-router'
 
 import { ProductsList } from '@/routes/products/_components/products-list'
 import { ProductsPagination } from '@/routes/products/_components/products-pagination'
@@ -62,7 +61,7 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
               <TableHead>Price</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>
-                {!query.isDeleted ? 'Updated At' : 'Deleted At'}
+                {query.isDeleted ? 'Deleted At' : 'Updated At'}
               </TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>

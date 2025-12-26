@@ -60,6 +60,7 @@ export const SellerValue: React.FC = () => (
           variant='outline'
           nativeButton={false}
           render={
+            // oxlint-disable-next-line no-html-link-for-pages
             <a
               href={`${getDashboardUrl()}/apply-vendor`}
               target='_blank'

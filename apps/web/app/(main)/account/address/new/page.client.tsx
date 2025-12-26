@@ -1,8 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
@@ -15,6 +13,7 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { UserValidators } from '@yukinu/validators/user'
+import { useRouter } from 'next/navigation'
 
 import { useTRPC } from '@/lib/trpc/react'
 

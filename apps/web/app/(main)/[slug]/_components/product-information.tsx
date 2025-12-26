@@ -1,11 +1,10 @@
 'use client'
 
-import Link from 'next/link'
-
 import { StarIcon } from '@yukinu/ui/icons'
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { Typography } from '@yukinu/ui/typography'
+import Link from 'next/link'
 
 import { AddToCartButton } from '@/app/(main)/[slug]/_components/add-to-cart-button'
 import { usePage } from '@/app/(main)/[slug]/page.provider'
@@ -78,11 +77,10 @@ export const ProductInformation: React.FC = () => {
                     variants
                       .map((v) => v.options.find((o) => o.name === type)?.value)
                       .filter(Boolean)
-                      .sort(),
+                      .toSorted(),
                   ),
                 ).map((value, idx) => (
                   <Label
-                    // eslint-disable-next-line @eslint-react/no-array-index-key
                     key={`${type}-option-${value}-${idx}`}
                     htmlFor={`${type}-option-${value}`}
                     className='flex items-start gap-3 rounded-lg border p-3 hover:bg-accent/20 has-aria-checked:border-primary has-aria-checked:bg-primary/20'

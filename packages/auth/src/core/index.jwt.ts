@@ -1,4 +1,5 @@
 import type { AuthConfig, Session, SessionWithUser } from '@/types'
+
 import { generateStateOrCode } from '@/core/crypto'
 import { JWT } from '@/core/jwt'
 import { Password } from '@/core/password'
@@ -53,6 +54,7 @@ export function Auth(config: AuthConfig) {
 
   async function signIn(
     data: { email: string; password: string },
+    // oxlint-disable-next-line no-object-as-default-parameter
     opts: Pick<Session, 'ipAddress' | 'userAgent'> = {
       ipAddress: null,
       userAgent: null,
@@ -70,17 +72,18 @@ export function Auth(config: AuthConfig) {
     return createSession(user.id, opts)
   }
 
+  // oxlint-disable-next-line require-await
   async function signOut(opts: { headers: Headers }): Promise<void> {
     const cookies = parseCookies(opts.headers.get('Cookie'))
     const token =
       cookies[keys.token] ??
       opts.headers.get('Authorization')?.replace('Bearer ', '') ??
       ''
-    if (!token) return
+    if (!token) return undefined
 
     // For JWT, sign-out is typically handled client-side by deleting the token.
     // If using a token blacklist, implement that logic here.
-    return Promise.resolve()
+    return undefined
   }
 
   const handleGet = async (request: Request): Promise<Response> => {
@@ -317,6 +320,7 @@ const defaultConfig = {
   cookie: {
     Path: '/',
     HttpOnly: true,
+    // oxlint-disable-next-line no-process-env
     Secure: process.env.NODE_ENV === 'production',
     SameSite: 'lax',
   },

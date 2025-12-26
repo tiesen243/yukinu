@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon } from '@yukinu/ui/icons'
 

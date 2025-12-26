@@ -1,3 +1,4 @@
+import { ProductValidators } from '@yukinu/validators/product'
 import {
   parseAsBoolean,
   parseAsInteger,
@@ -5,8 +6,6 @@ import {
   parseAsStringEnum,
   useQueryStates,
 } from 'nuqs'
-
-import { ProductValidators } from '@yukinu/validators/product'
 
 const parser = {
   search: parseAsString,

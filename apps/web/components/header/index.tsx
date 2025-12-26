@@ -1,8 +1,7 @@
-import { Suspense } from 'react'
+import { env } from '@yukinu/validators/env.next'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { env } from '@yukinu/validators/env.next'
+import { Suspense } from 'react'
 
 import { SearchForm } from '@/components/header/search-form'
 import { UserButton } from '@/components/header/user-button'

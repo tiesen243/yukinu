@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
+import type { Route } from './+types/_index'
 
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -18,12 +18,12 @@ import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { CategoryValidators } from '@yukinu/validators/category'
+import { useNavigate } from 'react-router'
 
-import type { Route } from './+types/_index'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
-export const loader = async ({ request, params }: Route.LoaderArgs) => {
+export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
   return getQueryClient().ensureQueryData(
     trpc.category.one.queryOptions(params),

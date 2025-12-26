@@ -1,8 +1,6 @@
-import { useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router'
-
 import type { CategoryValidators } from '@yukinu/validators/category'
+
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -16,6 +14,8 @@ import {
 } from '@yukinu/ui/dialog'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
+import { useState } from 'react'
+import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { useCategoryQueryStates } from '@/routes/admin/categories/hook'
@@ -82,8 +82,8 @@ const DeleteCategoryButton: React.FC<{
         <DialogHeader>
           <DialogTitle>Delete Category</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete the category "{category.name}"? This
-            action cannot be undone.
+            Are you sure you want to delete the category &quot;{category.name}
+            &quot;? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 

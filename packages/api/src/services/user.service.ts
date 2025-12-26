@@ -1,8 +1,8 @@
-import { TRPCError } from '@trpc/server'
+import type { IUserService } from '@/contracts/services/user.service'
 
+import { TRPCError } from '@trpc/server'
 import { UserValidators } from '@yukinu/validators/user'
 
-import type { IUserService } from '@/contracts/services/user.service'
 import { BaseService } from '@/services/base.service'
 
 export class UserService extends BaseService implements IUserService {
@@ -21,7 +21,8 @@ export class UserService extends BaseService implements IUserService {
         ),
       )
     if (role) whereClauses.push(eq(users.role, role))
-    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
+    const whereClause =
+      whereClauses.length > 0 ? and(...whereClauses) : undefined
 
     const [usersList, total] = await Promise.all([
       this._db
@@ -328,7 +329,7 @@ export class UserService extends BaseService implements IUserService {
     return { id }
   }
 
-  async wishlist(
+  wishlist(
     input: UserValidators.WishlistInput,
   ): Promise<UserValidators.WishlistOutput> {
     const { eq, min } = this._orm
@@ -373,9 +374,8 @@ export class UserService extends BaseService implements IUserService {
     if (existingItem) {
       await this._db.delete(wishlistItems).where(whereClause)
       return { added: false }
-    } else {
-      await this._db.insert(wishlistItems).values({ userId, productId })
-      return { added: true }
     }
+    await this._db.insert(wishlistItems).values({ userId, productId })
+    return { added: true }
   }
 }

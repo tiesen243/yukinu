@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .from(products)
     .limit(1000)
 
-  return Promise.resolve([
+  return [
     {
       url: url('/'),
       changeFrequency: 'yearly',
@@ -33,5 +33,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     })),
-  ])
+  ]
 }

@@ -1,11 +1,10 @@
+import { VendorValidators } from '@yukinu/validators/vendor'
 import {
   parseAsInteger,
   parseAsString,
   parseAsStringEnum,
   useQueryStates,
 } from 'nuqs'
-
-import { VendorValidators } from '@yukinu/validators/vendor'
 
 const parser = {
   search: parseAsString,

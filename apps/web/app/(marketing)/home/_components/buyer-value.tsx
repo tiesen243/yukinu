@@ -1,10 +1,9 @@
 'use client'
 
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import { MapPinIcon, ShoppingBagIcon, StarIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
+import Link from 'next/link'
 
 export const BuyerValue: React.FC = () => {
   return (

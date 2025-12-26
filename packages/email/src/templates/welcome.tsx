@@ -13,7 +13,7 @@ export default function Welcome(props: WelcomeEmailProps) {
   return (
     <EmailLayout>
       <Text>Hi {username},</Text>
-      <Text>Welcome to Yukinu! We're excited to have you on board.</Text>
+      <Text>Welcome to Yukinu! We&apos;re excited to have you on board.</Text>
 
       {verificationLink && (
         <>

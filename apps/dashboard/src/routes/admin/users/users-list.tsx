@@ -1,6 +1,4 @@
-import { Activity, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
 import { cn } from '@yukinu/ui'
 import {
   AlertDialog,
@@ -32,6 +30,7 @@ import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
 import { UserValidators } from '@yukinu/validators/user'
+import { Activity, useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { useUserQueryStates } from '@/routes/admin/users/hook'
@@ -211,8 +210,8 @@ const DeleteUserButton: React.FC<{
         <AlertDialogHeader>
           <AlertDialogTitle>Delete User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete user "{user.username}"? You can
-            restore the user later from the deleted users section.
+            Are you sure you want to delete user &quot;{user.username}&quot;?
+            You can restore the user later from the deleted users section.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -258,7 +257,7 @@ const RestoreUserButton: React.FC<{
         <AlertDialogHeader>
           <AlertDialogTitle>Restore User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to restore user "{user.username}"?
+            Are you sure you want to restore user &quot;{user.username}&quot;?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -301,8 +300,8 @@ const PermamentlyDeleteUserButton: React.FC<{
         <AlertDialogHeader>
           <AlertDialogTitle>Permanently Delete User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete user "{user.username}"? This action
-            cannot be undone.
+            Are you sure you want to delete user &quot;{user.username}&quot;?
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

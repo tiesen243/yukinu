@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -172,7 +171,6 @@ export const UpdateProductForm: React.FC<{
                   images.
                 </FieldDescription>
                 {field.value.map((url, index) => (
-                  // eslint-disable-next-line @eslint-react/no-array-index-key
                   <Field key={`image-${index}`}>
                     <InputGroup>
                       <InputGroupInput
@@ -229,7 +227,6 @@ export const UpdateProductForm: React.FC<{
                   Define custom attributes for the product.
                 </FieldDescription>
                 {field.value.map((attribute, index) => (
-                  // eslint-disable-next-line @eslint-react/no-array-index-key
                   <Field key={`attribute-${index}`}>
                     <div className='flex gap-2'>
                       <Input

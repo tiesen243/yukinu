@@ -1,9 +1,6 @@
 'use client'
 
-import Image from 'next/image'
-import Link from 'next/link'
 import { useSuspenseQuery } from '@tanstack/react-query'
-
 import { slugify } from '@yukinu/lib/slugify'
 import { cn } from '@yukinu/ui'
 import {
@@ -14,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@yukinu/ui/card'
+import Image from 'next/image'
+import Link from 'next/link'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -36,7 +35,7 @@ export const WishlistItems: React.FC = () => {
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className={cn(
             'rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105',
-            { 'dark:invert': item.product.image == null },
+            { 'dark:invert': item.product.image === null },
           )}
           fill
         />

@@ -1,10 +1,6 @@
 'use client'
 
-import * as React from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-
 import { slugify } from '@yukinu/lib/slugify'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -26,6 +22,9 @@ import {
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
+import Image from 'next/image'
+import Link from 'next/link'
+import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -184,11 +183,11 @@ const EditButton: React.FC<{
           <InputGroupAddon align='inline-end'>
             <InputGroupButton
               disabled={
-                stock !== null ? localQuantity >= stock || isPending : isPending
+                stock === null ? isPending : localQuantity >= stock || isPending
               }
               onClick={() => {
                 setLocalQuantity((qty) =>
-                  stock !== null ? (qty < stock ? qty + 1 : qty) : qty + 1,
+                  stock === null ? qty + 1 : qty < stock ? qty + 1 : qty,
                 )
               }}
             >

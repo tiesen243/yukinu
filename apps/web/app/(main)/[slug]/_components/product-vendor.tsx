@@ -1,9 +1,8 @@
 'use client'
 
-import Link from 'next/link'
-
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
+import Link from 'next/link'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 
@@ -12,7 +11,7 @@ export const ProductVendor: React.FC = () => {
     product: { vendor },
   } = usePage()
 
-  if (vendor == null)
+  if (vendor === null)
     return (
       <section className='flex items-center gap-4 rounded-lg bg-card p-6 shadow-md dark:border'>
         <h2 className='sr-only'>Vendor Information</h2>

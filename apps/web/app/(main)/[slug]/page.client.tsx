@@ -1,6 +1,5 @@
-import * as React from 'react'
-
 import { Card } from '@yukinu/ui/card'
+import * as React from 'react'
 
 import { ProductDescription } from '@/app/(main)/[slug]/_components/product-description'
 import { ProductImages } from '@/app/(main)/[slug]/_components/product-images'

@@ -111,15 +111,6 @@ export namespace OrderValidators {
         country: z.string(),
       })
       .nullable(),
-    transaction: z
-      .object({
-        id: transaction.shape.id,
-        amount: transaction.shape.amount,
-        method: transaction.shape.method,
-        status: transaction.shape.status,
-        updatedAt: transaction.shape.updatedAt,
-      })
-      .nullable(),
     voucher: z
       .object({
         code: voucher.shape.code,

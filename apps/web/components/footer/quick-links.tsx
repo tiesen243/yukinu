@@ -1,6 +1,5 @@
-import Link from 'next/link'
-
 import { Typography } from '@yukinu/ui/typography'
+import Link from 'next/link'
 
 const links = [
   { href: '/home', label: 'Home', isExternal: false },
