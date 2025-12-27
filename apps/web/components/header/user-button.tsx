@@ -57,7 +57,9 @@ export const UserButton = () => {
       <DropdownMenuContent align='end' className='w-56'>
         <DropdownMenuGroup>
           <DropdownMenuLabel className='flex flex-col gap-2'>
-            <span className='text-sm'>{user.username}</span>
+            <span className='text-sm text-popover-foreground'>
+              {user.username}
+            </span>
             <span className='text-muted-foreground'>{user.email}</span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>

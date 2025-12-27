@@ -43,10 +43,11 @@ import {
 } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
+import { useUploadThing } from '@yukinu/uploadthing/react'
 import { AuthValidators } from '@yukinu/validators/auth'
 import { UserValidators } from '@yukinu/validators/user'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -180,6 +181,11 @@ export function UpdateProfileForm() {
                   </FieldLabel>
                   <InputGroup>
                     <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupUploadButton
+                        onUploadComplete={(url) => field.onChange(url)}
+                      />
+                    </InputGroupAddon>
                     <InputGroupAddon align='inline-end'>
                       <InputGroupButton
                         onClick={async () => {
@@ -454,5 +460,41 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  )
+}
+
+const InputGroupUploadButton: React.FC<{
+  onUploadComplete: (url: string) => void
+}> = ({ onUploadComplete }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const ut = useUploadThing('avatarUploader', {
+    onClientUploadComplete: ([res]) => {
+      if (res?.ufsUrl) onUploadComplete(res.ufsUrl)
+      else toast.error('Failed to upload avatar')
+    },
+  })
+
+  return (
+    <>
+      <input
+        ref={inputRef}
+        type='file'
+        accept='image/*'
+        onChange={(e) => {
+          const selectedFile = e.target.files?.[0]
+          if (!selectedFile) return
+
+          ut.startUpload([selectedFile])
+        }}
+        hidden
+      />
+      <InputGroupButton
+        disabled={ut.isUploading}
+        onClick={() => inputRef.current?.click()}
+      >
+        {ut.isUploading ? 'Uploading...' : 'Upload'}
+      </InputGroupButton>
+    </>
   )
 }

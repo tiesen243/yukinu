@@ -27,6 +27,7 @@ import { toast } from '@yukinu/ui/sonner'
 import { ProductValidators } from '@yukinu/validators/product'
 import { useNavigate } from 'react-router'
 
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function ProductsNewPage() {
@@ -86,20 +87,22 @@ export default function ProductsNewPage() {
 
             <form.Field
               name='description'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
+              render={({ meta, field: { value = '', ...field } }) => (
+                <Field
+                  data-invalid={meta.errors.length > 0 || value.length > 2000}
+                >
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
+                      value={value}
+                      aria-invalid={
+                        field['aria-invalid'] || value.length > 2000
+                      }
                       placeholder='Write a brief description about the product'
                     />
-                    <InputGroupAddon align='block-end'>
-                      <InputGroupText
-                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
-                      >
-                        {field.value?.length ?? 0}/2000
-                      </InputGroupText>
+                    <InputGroupAddon align='block-end' className='justify-end'>
+                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
@@ -186,6 +189,16 @@ export default function ProductsNewPage() {
                         aria-describedby={field['aria-describedby']}
                         aria-invalid={field['aria-invalid']}
                       />
+                      <InputGroupAddon align='inline-end'>
+                        <InputGroupUploadButton
+                          endpoint='productImageUploader'
+                          onUploadComplete={(uploadedUrl) => {
+                            const newImages = [...field.value]
+                            newImages[index] = uploadedUrl
+                            field.onChange(newImages)
+                          }}
+                        />
+                      </InputGroupAddon>
                       <InputGroupAddon align='inline-end'>
                         <InputGroupButton
                           onClick={() => {

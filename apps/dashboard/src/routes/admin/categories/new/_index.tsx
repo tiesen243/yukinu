@@ -12,12 +12,19 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
-import { Textarea } from '@yukinu/ui/textarea'
 import { CategoryValidators } from '@yukinu/validators/category'
 import { useNavigate } from 'react-router'
 
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function CategoriesNewPage() {
@@ -70,10 +77,22 @@ export default function CategoriesNewPage() {
 
           <form.Field
             name='description'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
+            render={({ meta, field: { value = '', ...field } }) => (
+              <Field
+                data-invalid={meta.errors.length > 0 || value.length > 1000}
+              >
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <Textarea {...field} placeholder='Category Description' />
+                <InputGroup>
+                  <InputGroupTextarea
+                    {...field}
+                    value={value}
+                    aria-invalid={field['aria-invalid'] || value.length > 1000}
+                    placeholder='Category Description'
+                  />
+                  <InputGroupAddon align='block-end' className='justify-end'>
+                    <InputGroupText>{value.length ?? 0}/1000</InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
@@ -84,11 +103,21 @@ export default function CategoriesNewPage() {
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                <Input {...field} placeholder='https://example.com/image.jpg' />
-                <FieldDescription id={meta.descriptionId}>
-                  URL of the category image. Will be replaced with upload
-                  dropzone later.
-                </FieldDescription>
+                <InputGroup>
+                  <InputGroupInput
+                    {...field}
+                    type='url'
+                    placeholder='https://example.com/image.jpg'
+                  />
+                  <InputGroupAddon align='inline-end'>
+                    <InputGroupUploadButton
+                      endpoint='categoryImageUploader'
+                      onUploadComplete={(url) => {
+                        form.setValue('image', url)
+                      }}
+                    />
+                  </InputGroupAddon>
+                </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
