@@ -178,7 +178,32 @@ export function UpdateProfileForm() {
                   <FieldLabel htmlFor={meta.fieldId}>
                     Profile Image URL
                   </FieldLabel>
-                  <Input {...field} value={value ?? ''} />
+                  <InputGroup>
+                    <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupButton
+                        onClick={async () => {
+                          const buffer = new TextEncoder().encode(
+                            data.email.trim().toLowerCase(),
+                          )
+                          const hashBuffer = await crypto.subtle.digest(
+                            'SHA-256',
+                            buffer,
+                          )
+                          const hashedEmail = Array.from(
+                            new Uint8Array(hashBuffer),
+                          )
+                            .map((b) => b.toString(16).padStart(2, '0'))
+                            .join('')
+                          return field.onChange(
+                            `https://1.gravatar.com/avatar/${hashedEmail}?s=512&d=identicon`,
+                          )
+                        }}
+                      >
+                        Using Gravatar
+                      </InputGroupButton>
+                    </InputGroupAddon>
+                  </InputGroup>
                   <FieldDescription>
                     This will be replaced with an upload widget in the future.
                   </FieldDescription>
