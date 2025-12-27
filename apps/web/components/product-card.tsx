@@ -1,10 +1,7 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
 import type { ProductValidators } from '@yukinu/validators/product'
+
 import { slugify } from '@yukinu/lib/slugify'
 import { cn } from '@yukinu/ui'
-import { Badge } from '@yukinu/ui/badge'
 import {
   Card,
   CardContent,
@@ -13,6 +10,8 @@ import {
   CardTitle,
 } from '@yukinu/ui/card'
 import { StarIcon } from '@yukinu/ui/icons'
+import Image from 'next/image'
+import Link from 'next/link'
 
 interface ProductCardProps extends React.ComponentProps<typeof Card> {
   product: ProductValidators.AllOutput['products'][number]
@@ -26,34 +25,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   <Card
     {...props}
     className={cn(
-      'group/product-card flex aspect-square pt-0 transition-colors hover:border-accent hover:bg-accent/20 hover:text-accent-foreground',
+      'group/product-card flex aspect-square pt-0 transition-colors hover:ring-primary hover:bg-accent/40 hover:text-accent-foreground',
       className,
     )}
     render={<Link href={`/${slugify(product.name)}-${product.id}`} />}
   >
-    <CardHeader className='relative flex-1 overflow-hidden rounded-t-xl'>
+    <div className='relative flex-1 overflow-hidden'>
       <Image
         src={product.image ?? '/assets/logo.svg'}
         alt={product.name}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         className={cn(
-          'rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105',
+          'object-cover transition-transform group-hover/product-card:scale-105',
           { 'dark:invert': !product.image },
         )}
         fill
       />
+    </div>
 
-      {product.category && (
-        <Badge
-          variant='outline'
-          className='absolute top-2 right-2 bg-accent/60 text-accent-foreground backdrop-blur-xl group-hover/product-card:border-accent'
-        >
-          {product.category}
-        </Badge>
-      )}
-    </CardHeader>
-
-    <CardContent className='flex-col items-start justify-end gap-2'>
+    <CardHeader>
       <CardTitle className='line-clamp-1 text-lg'>{product.name}</CardTitle>
 
       <CardDescription>
@@ -69,7 +59,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </p>
         <p>Sold {product.sold}</p>
       </CardDescription>
-    </CardContent>
+    </CardHeader>
   </Card>
 )
 

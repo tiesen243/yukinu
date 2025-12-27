@@ -1,8 +1,7 @@
-import { isNotNull, isNull } from 'drizzle-orm'
-import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
-
 import { createId } from '@yukinu/lib/create-id'
 import { OrderValidators } from '@yukinu/validators/order'
+import { isNotNull, isNull } from 'drizzle-orm'
+import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { addresses, products, productVariants, users, vendors } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
@@ -79,27 +78,54 @@ export const orderItems = pgTable(
   ],
 )
 
-export const transactions = pgTable(
-  'transactions',
+export const vouchers = pgTable(
+  'vouchers',
+  (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    code: t.varchar({ length: 50 }).notNull().unique(),
+    discountAmount: t.numeric({ precision: 10, scale: 2 }),
+    discountPercentage: t.integer(),
+    expiryDate: t.timestamp().notNull(),
+  }),
+  (t) => [uniqueIndex('vouchers_code_uq_idx').on(t.code)],
+)
+
+export const payments = pgTable(
+  'payments',
   (t) => ({
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     orderId: t
       .integer()
       .notNull()
-      .references(() => orders.id, { onDelete: 'cascade' }),
-    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+      .references(() => orders.id, { onDelete: 'restrict' }),
     method: paymentMethodEnum().notNull(),
+    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    methodReference: t.varchar({ length: 255 }),
     status: paymentStatusEnum().default('pending').notNull(),
     createdAt,
     updatedAt,
   }),
-  (t) => [index('transactions_order_id_idx').on(t.orderId)],
+  (t) => [index('payments_order_id_idx').on(t.orderId)],
 )
 
-export const vouchers = pgTable('vouchers', (t) => ({
-  id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-  code: t.varchar({ length: 50 }).notNull().unique(),
-  discountAmount: t.numeric({ precision: 10, scale: 2 }),
-  discountPercentage: t.integer(),
-  expiryDate: t.timestamp().notNull(),
-}))
+export const transactions = pgTable(
+  'transactions',
+  (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    paymentId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => payments.id, { onDelete: 'restrict' }),
+    gateway: t.varchar({ length: 100 }).notNull(),
+    transactionDate: t.timestamp().notNull().defaultNow(),
+    amountIn: t.numeric({ precision: 20, scale: 2 }).notNull().default('0.00'),
+    amountOut: t.numeric({ precision: 20, scale: 2 }).notNull().default('0.00'),
+    transactionContent: t.text(),
+    referenceNumber: t.varchar({ length: 255 }),
+    body: t.text(),
+    createdAt: t.timestamp().notNull().defaultNow(),
+  }),
+  (t) => [
+    uniqueIndex('transactions_reference_number_uq_idx').on(t.referenceNumber),
+  ],
+)

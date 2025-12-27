@@ -1,8 +1,9 @@
+import type { AuthConfig, Session, SessionWithUser } from '@/types'
 import type { UserValidators } from '@yukinu/validators/user'
+
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
 import { AuthValidators } from '@yukinu/validators/auth'
 
-import type { AuthConfig, Session, SessionWithUser } from '@/types'
 import {
   constantTimeEqual,
   decodeHex,
@@ -136,6 +137,7 @@ export function Auth(config: AuthConfig) {
 
   async function signIn(
     data: AuthValidators.LoginInput,
+    // oxlint-disable-next-line no-object-as-default-parameter
     opts: Pick<Session, 'ipAddress' | 'userAgent'> = {
       ipAddress: null,
       userAgent: null,
@@ -443,6 +445,7 @@ const defaultConfig = {
   cookie: {
     Path: '/',
     HttpOnly: true,
+    // oxlint-disable-next-line no-process-env
     Secure: process.env.NODE_ENV === 'production',
     SameSite: 'lax',
   },

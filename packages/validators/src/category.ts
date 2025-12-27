@@ -44,7 +44,7 @@ export namespace CategoryValidators {
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const createInput = z.object({
-    parentId: z.union([z.cuid(), z.literal('no-parent')]).optional(),
+    parentId: z.cuid().nullable(),
     name: z.string().min(1, 'Name is required').max(255),
     description: z
       .string('Description must be a valid string')

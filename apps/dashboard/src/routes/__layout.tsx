@@ -1,5 +1,3 @@
-import { Navigate, Outlet } from 'react-router'
-
 import { useSession } from '@yukinu/auth/react'
 import { Separator } from '@yukinu/ui/separator'
 import {
@@ -7,6 +5,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@yukinu/ui/sidebar'
+import { Navigate, Outlet } from 'react-router'
 
 import { AppSidebar } from '@/components/app-sidebar'
 import { Breadcrumb } from '@/components/breadcrumb'

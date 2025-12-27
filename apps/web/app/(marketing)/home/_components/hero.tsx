@@ -1,18 +1,13 @@
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
-import { ArrowRightIcon, StarIcon } from '@yukinu/ui/icons'
+import { ArrowRightIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
+import Link from 'next/link'
 
 import { getDashboardUrl } from '@/lib/utils'
 
 export const HeroSection: React.FC = () => (
   <section className='container flex max-w-4xl flex-col justify-center gap-4 py-20 text-center md:py-32 lg:py-40'>
-    <div className='mx-auto inline-flex w-fit items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-medium text-accent-foreground'>
-      <StarIcon className='size-4' /> Welcome to the future of shopping
-    </div>
-
     <Typography variant='h2'>
       Discover products from{' '}
       <span className='text-primary'>multiple sellers</span> in one place
@@ -38,6 +33,7 @@ export const HeroSection: React.FC = () => (
         variant='outline'
         nativeButton={false}
         render={
+          // oxlint-disable-next-line no-html-link-for-pages
           <a
             href={`${getDashboardUrl()}/apply-vendor`}
             target='_blank'
@@ -57,7 +53,7 @@ export const HeroSection: React.FC = () => (
         {trustedBy.map((item) => (
           <Card
             key={item.title}
-            className='gap-2 text-center text-accent-foreground transition-colors hover:border-accent hover:bg-accent/20 hover:text-primary'
+            className='gap-2 text-center text-accent-foreground transition-colors hover:ring-accent hover:bg-accent/20 hover:text-primary'
           >
             <Typography>{item.title}</Typography>
             <Typography className='text-sm text-accent-foreground/70 lg:text-base'>

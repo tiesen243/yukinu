@@ -1,8 +1,5 @@
 'use client'
 
-import Form from 'next/form'
-import { useQueryStates } from 'nuqs'
-
 import { SearchIcon } from '@yukinu/ui/icons'
 import {
   InputGroup,
@@ -10,6 +7,8 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
+import Form from 'next/form'
+import { useQueryStates } from 'nuqs'
 
 import { productsOptions, productsParsers } from '@/lib/search'
 

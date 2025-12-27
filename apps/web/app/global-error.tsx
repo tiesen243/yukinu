@@ -1,9 +1,8 @@
 'use client'
 
+import { Button } from '@yukinu/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { Button } from '@yukinu/ui/button'
 
 interface ErrorProps {
   error: Error & { digest?: string }
@@ -36,7 +35,7 @@ export default function Error({ error }: Readonly<ErrorProps>) {
       />
 
       {
-        // eslint-disable-next-line no-restricted-properties
+        // oxlint-disable-next-line no-process-env
         process.env.NODE_ENV === 'development' && (
           <pre className='w-full overflow-x-auto p-4'>
             <code>{error.stack}</code>

@@ -1,6 +1,5 @@
-import { Navigate, Outlet } from 'react-router'
-
 import { useSession } from '@yukinu/auth/react'
+import { Navigate, Outlet } from 'react-router'
 
 export default function VendorLayout() {
   const { session, status } = useSession()

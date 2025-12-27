@@ -1,41 +1,37 @@
 {
-  "id": "8a8cc796-57c0-4d98-a04e-4ca56fad1910",
+  "id": "caa791b6-3272-41fe-8fa0-2ba752a11ec7",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.payouts": {
-      "name": "payouts",
+    "public.vendor_balances": {
+      "name": "vendor_balances",
       "schema": "",
       "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(24)",
-          "primaryKey": true,
-          "notNull": true
-        },
         "vendor_id": {
           "name": "vendor_id",
           "type": "varchar(24)",
           "primaryKey": false,
           "notNull": true
         },
-        "amount": {
-          "name": "amount",
+        "balance": {
+          "name": "balance",
           "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "'0.00'"
         },
-        "processed_at": {
-          "name": "processed_at",
+        "updated_at": {
+          "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {
-        "payouts_vendor_id_idx": {
-          "name": "payouts_vendor_id_idx",
+        "vendor_balances_vendor_id_idx": {
+          "name": "vendor_balances_vendor_id_idx",
           "columns": [
             {
               "expression": "vendor_id",
@@ -51,17 +47,22 @@
         }
       },
       "foreignKeys": {
-        "payouts_vendor_id_vendors_id_fk": {
-          "name": "payouts_vendor_id_vendors_id_fk",
-          "tableFrom": "payouts",
+        "vendor_balances_vendor_id_vendors_id_fk": {
+          "name": "vendor_balances_vendor_id_vendors_id_fk",
+          "tableFrom": "vendor_balances",
           "tableTo": "vendors",
           "columnsFrom": ["vendor_id"],
           "columnsTo": ["id"],
-          "onDelete": "cascade",
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
-      "compositePrimaryKeys": {},
+      "compositePrimaryKeys": {
+        "vendor_balances_vendor_id_pk": {
+          "name": "vendor_balances_vendor_id_pk",
+          "columns": ["vendor_id"]
+        }
+      },
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
@@ -139,6 +140,91 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.vendor_transactions": {
+      "name": "vendor_transactions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "vendor_id": {
+          "name": "vendor_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "order_item_id": {
+          "name": "order_item_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount_in": {
+          "name": "amount_in",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "amount_out": {
+          "name": "amount_out",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "vendor_transactions_vendor_id_idx": {
+          "name": "vendor_transactions_vendor_id_idx",
+          "columns": [
+            {
+              "expression": "vendor_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "vendor_transactions_vendor_id_vendors_id_fk": {
+          "name": "vendor_transactions_vendor_id_vendors_id_fk",
+          "tableFrom": "vendor_transactions",
+          "tableTo": "vendors",
+          "columnsFrom": ["vendor_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "vendor_transactions_order_item_id_order_items_id_fk": {
+          "name": "vendor_transactions_order_item_id_order_items_id_fk",
+          "tableFrom": "vendor_transactions",
+          "tableTo": "order_items",
+          "columnsFrom": ["order_item_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.vendors": {
       "name": "vendors",
       "schema": "",
@@ -176,6 +262,36 @@
         "address": {
           "name": "address",
           "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contact": {
+          "name": "contact",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payout_account_name": {
+          "name": "payout_account_name",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payout_account_number": {
+          "name": "payout_account_number",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payout_bank_code": {
+          "name": "payout_bank_code",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "payout_bank_ref": {
+          "name": "payout_bank_ref",
+          "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false
         },
@@ -531,8 +647,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.transactions": {
-      "name": "transactions",
+    "public.payments": {
+      "name": "payments",
       "schema": "",
       "columns": {
         "id": {
@@ -547,18 +663,24 @@
           "primaryKey": false,
           "notNull": true
         },
-        "amount": {
-          "name": "amount",
-          "type": "numeric(10, 2)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "method": {
           "name": "method",
           "type": "payment_method",
           "typeSchema": "public",
           "primaryKey": false,
           "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "method_reference": {
+          "name": "method_reference",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
         },
         "status": {
           "name": "status",
@@ -584,8 +706,8 @@
         }
       },
       "indexes": {
-        "transactions_order_id_idx": {
-          "name": "transactions_order_id_idx",
+        "payments_order_id_idx": {
+          "name": "payments_order_id_idx",
           "columns": [
             {
               "expression": "order_id",
@@ -601,13 +723,116 @@
         }
       },
       "foreignKeys": {
-        "transactions_order_id_orders_id_fk": {
-          "name": "transactions_order_id_orders_id_fk",
-          "tableFrom": "transactions",
+        "payments_order_id_orders_id_fk": {
+          "name": "payments_order_id_orders_id_fk",
+          "tableFrom": "payments",
           "tableTo": "orders",
           "columnsFrom": ["order_id"],
           "columnsTo": ["id"],
-          "onDelete": "cascade",
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.transactions": {
+      "name": "transactions",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(24)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "payment_id": {
+          "name": "payment_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "gateway": {
+          "name": "gateway",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_date": {
+          "name": "transaction_date",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "amount_in": {
+          "name": "amount_in",
+          "type": "numeric(20, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0.00'"
+        },
+        "amount_out": {
+          "name": "amount_out",
+          "type": "numeric(20, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0.00'"
+        },
+        "transaction_content": {
+          "name": "transaction_content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reference_number": {
+          "name": "reference_number",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "body": {
+          "name": "body",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "transactions_reference_number_uq_idx": {
+          "name": "transactions_reference_number_uq_idx",
+          "columns": [
+            {
+              "expression": "reference_number",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "transactions_payment_id_payments_id_fk": {
+          "name": "transactions_payment_id_payments_id_fk",
+          "tableFrom": "transactions",
+          "tableTo": "payments",
+          "columnsFrom": ["payment_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
           "onUpdate": "no action"
         }
       },
@@ -652,7 +877,23 @@
           "notNull": true
         }
       },
-      "indexes": {},
+      "indexes": {
+        "vouchers_code_uq_idx": {
+          "name": "vouchers_code_uq_idx",
+          "columns": [
+            {
+              "expression": "code",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -2009,14 +2250,7 @@
     "public.order_status": {
       "name": "order_status",
       "schema": "public",
-      "values": [
-        "pending",
-        "processing",
-        "shipped",
-        "delivered",
-        "cancelled",
-        "returned"
-      ]
+      "values": ["pending", "confirmed", "shipped", "completed", "cancelled"]
     },
     "public.payment_method": {
       "name": "payment_method",
@@ -2026,7 +2260,7 @@
     "public.payment_status": {
       "name": "payment_status",
       "schema": "public",
-      "values": ["pending", "completed", "failed"]
+      "values": ["pending", "success", "failed", "refunded"]
     },
     "public.user_role": {
       "name": "user_role",

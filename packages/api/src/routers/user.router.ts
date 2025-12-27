@@ -26,9 +26,11 @@ export const userRouter = createTRPCRouter({
       message: 'User updated successfully',
       role: ['admin'],
     })
-    .input(UserValidators.updateInput)
+    .input(UserValidators.updateInput.omit({ userId: true }))
     .output(UserValidators.updateOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.update(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.update({ ...input, userId: ctx.session.userId }),
+    ),
 
   delete: protectedProcedure
     .meta({

@@ -7,18 +7,22 @@ export namespace OrderValidators {
 
   export const orderStatuses = [
     'pending',
-    'processing',
+    'confirmed',
     'shipped',
-    'delivered',
+    'completed',
     'cancelled',
-    'returned',
   ] as const
   export type OrderStatus = (typeof orderStatuses)[number]
 
   export const paymentMethods = ['bank_transfer', 'cash_on_delivery'] as const
   export type PaymentMethod = (typeof paymentMethods)[number]
 
-  export const paymentStatuses = ['pending', 'completed', 'failed'] as const
+  export const paymentStatuses = [
+    'pending',
+    'success',
+    'failed',
+    'refunded',
+  ] as const
   export type PaymentStatus = (typeof paymentStatuses)[number]
 
   export const order = z.object({
@@ -105,15 +109,6 @@ export namespace OrderValidators {
         state: z.string(),
         postalCode: z.string(),
         country: z.string(),
-      })
-      .nullable(),
-    transaction: z
-      .object({
-        id: transaction.shape.id,
-        amount: transaction.shape.amount,
-        method: transaction.shape.method,
-        status: transaction.shape.status,
-        updatedAt: transaction.shape.updatedAt,
       })
       .nullable(),
     voucher: z

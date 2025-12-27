@@ -108,11 +108,9 @@ export namespace UserValidators {
   export const oneOutput = user
   export type OneOutput = z.infer<typeof oneOutput>
 
-  export const updateInput = user.pick({
-    id: true,
-    status: true,
-    role: true,
-  })
+  export const updateInput = user
+    .pick({ id: true, status: true, role: true })
+    .extend({ userId: z.cuid() })
   export type UpdateInput = z.infer<typeof updateInput>
   export const updateOutput = z.object({ id: z.cuid() })
   export type UpdateOutput = z.infer<typeof updateOutput>

@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -23,10 +22,11 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
 import { ProductValidators } from '@yukinu/validators/product'
 
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const UpdateProductForm: React.FC<{
@@ -93,20 +93,22 @@ export const UpdateProductForm: React.FC<{
 
             <form.Field
               name='description'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
+              render={({ meta, field: { value = '', ...field } }) => (
+                <Field
+                  data-invalid={meta.errors.length > 0 || value.length > 2000}
+                >
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
+                      value={value}
+                      aria-invalid={
+                        field['aria-invalid'] || value.length > 2000
+                      }
                       placeholder='Write a brief description about the product'
                     />
-                    <InputGroupAddon align='block-end'>
-                      <InputGroupText
-                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
-                      >
-                        {field.value?.length ?? 0}/2000
-                      </InputGroupText>
+                    <InputGroupAddon align='block-end' className='justify-end'>
+                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
@@ -119,14 +121,16 @@ export const UpdateProductForm: React.FC<{
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
-                  <Select {...field} value={field.value ?? ''}>
-                    <SelectOption value=''>Select a category</SelectOption>
+                  <NativeSelect {...field} value={field.value ?? ''}>
+                    <NativeSelectOption value='' disabled>
+                      Select a category
+                    </NativeSelectOption>
                     {_data?.categories.map((category) => (
-                      <SelectOption key={category.id} value={category.id}>
+                      <NativeSelectOption key={category.id} value={category.id}>
                         {category.name}
-                      </SelectOption>
+                      </NativeSelectOption>
                     ))}
-                  </Select>
+                  </NativeSelect>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
@@ -172,7 +176,6 @@ export const UpdateProductForm: React.FC<{
                   images.
                 </FieldDescription>
                 {field.value.map((url, index) => (
-                  // eslint-disable-next-line @eslint-react/no-array-index-key
                   <Field key={`image-${index}`}>
                     <InputGroup>
                       <InputGroupInput
@@ -185,6 +188,16 @@ export const UpdateProductForm: React.FC<{
                         placeholder='https://example.com/image.jpg'
                         aria-label={`Image URL ${index + 1}`}
                       />
+                      <InputGroupAddon align='inline-end'>
+                        <InputGroupUploadButton
+                          endpoint='productImageUploader'
+                          onUploadComplete={(uploadedUrl) => {
+                            const newImages = [...field.value]
+                            newImages[index] = uploadedUrl
+                            field.onChange(newImages)
+                          }}
+                        />
+                      </InputGroupAddon>
                       <InputGroupAddon align='inline-end'>
                         <InputGroupButton
                           onClick={() => {
@@ -229,7 +242,6 @@ export const UpdateProductForm: React.FC<{
                   Define custom attributes for the product.
                 </FieldDescription>
                 {field.value.map((attribute, index) => (
-                  // eslint-disable-next-line @eslint-react/no-array-index-key
                   <Field key={`attribute-${index}`}>
                     <div className='flex gap-2'>
                       <Input

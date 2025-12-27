@@ -1,7 +1,5 @@
 'use client'
 
-import Link from 'next/link'
-
 import { useSession } from '@yukinu/auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
@@ -21,6 +19,7 @@ import {
   ShoppingCartIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
+import Link from 'next/link'
 
 import { ThemeSwitcher } from '@/components/header/theme-switcher'
 import { getDashboardUrl } from '@/lib/utils'
@@ -58,7 +57,9 @@ export const UserButton = () => {
       <DropdownMenuContent align='end' className='w-56'>
         <DropdownMenuGroup>
           <DropdownMenuLabel className='flex flex-col gap-2'>
-            <span className='text-sm'>{user.username}</span>
+            <span className='text-sm text-popover-foreground'>
+              {user.username}
+            </span>
             <span className='text-muted-foreground'>{user.email}</span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
@@ -84,6 +85,7 @@ export const UserButton = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             render={
+              // oxlint-disable-next-line no-html-link-for-pages
               <a href={getDashboardUrl()}>
                 <LayoutDashboardIcon /> Dashboard
               </a>

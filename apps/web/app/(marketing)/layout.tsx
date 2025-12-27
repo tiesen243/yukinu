@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Collapsible,
@@ -9,19 +6,21 @@ import {
 } from '@yukinu/ui/collapsible'
 import { MenuIcon, XIcon } from '@yukinu/ui/icons'
 import { env } from '@yukinu/validators/env.next'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function MarketingLayout({ children }: LayoutProps<'/'>) {
   return (
     <>
-      <Collapsible render={<header className='group/header sticky inset-0' />}>
+      <Collapsible className='group/header sticky inset-0' render={<header />}>
         <nav className='flex h-14 items-center border-b bg-popover/60 text-popover-foreground backdrop-blur-xl backdrop-saturate-150 group-data-[state=open]/header:border-transparent'>
           <div className='container flex items-center justify-between gap-6'>
             <Link href='/' className='flex items-center gap-2'>
               <Image
                 src='/assets/logo.svg'
                 alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
-                width={36}
-                height={36}
+                width={28}
+                height={28}
                 className='dark:invert'
               />
               <span className='text-lg font-bold'>

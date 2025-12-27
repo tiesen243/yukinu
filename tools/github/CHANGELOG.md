@@ -1,5 +1,11 @@
 # @yukinu/github
 
+## 0.3.1
+
+### Patch Changes
+
+- [#299](https://github.com/tiesen243/yukinu/pull/299) [`ed456b2`](https://github.com/tiesen243/yukinu/commit/ed456b2c7d4912dca37db02796602bbb4377b580) Thanks [@tiesen243](https://github.com/tiesen243)! - migrate to oxc
+
 ## 0.3.0
 
 ### Minor Changes

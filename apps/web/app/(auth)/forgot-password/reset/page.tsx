@@ -32,7 +32,8 @@ export default async function ResetPasswordPage({
         <FieldSet className='px-4'>
           <FieldLegend>Reset Password</FieldLegend>
           <FieldDescription>
-            Enter your new password below. Make sure it's strong and secure.
+            Enter your new password below. Make sure it&apos;s strong and
+            secure.
           </FieldDescription>
           <ResetPasswordForm token={String(token)} />
         </FieldSet>

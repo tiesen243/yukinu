@@ -1,8 +1,8 @@
-import { TRPCError } from '@trpc/server'
+import type { IUserService } from '@/contracts/services/user.service'
 
+import { TRPCError } from '@trpc/server'
 import { UserValidators } from '@yukinu/validators/user'
 
-import type { IUserService } from '@/contracts/services/user.service'
 import { BaseService } from '@/services/base.service'
 
 export class UserService extends BaseService implements IUserService {
@@ -21,7 +21,8 @@ export class UserService extends BaseService implements IUserService {
         ),
       )
     if (role) whereClauses.push(eq(users.role, role))
-    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
+    const whereClause =
+      whereClauses.length > 0 ? and(...whereClauses) : undefined
 
     const [usersList, total] = await Promise.all([
       this._db
@@ -63,16 +64,33 @@ export class UserService extends BaseService implements IUserService {
   ): Promise<UserValidators.UpdateOutput> {
     const { eq } = this._orm
     const { users } = this._schema
-    const { id, status, role } = input
+    const { id, userId, status, role } = input
 
-    const [updated] = await this._db
-      .update(users)
-      .set({ status, role })
+    if (id === userId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'You cannot update your own role or status',
+      })
+
+    const [targetUser] = await this._db
+      .select({ role: users.role })
+      .from(users)
       .where(eq(users.id, id))
-      .returning({ id: users.id })
-    if (!updated)
+      .limit(1)
+
+    if (!targetUser)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
 
+    const crs: string[] = UserValidators.roles.filter(
+      (r) => ['moderator', 'user'].includes(r) === false,
+    )
+    if (crs.includes(targetUser.role))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: `You cannot update users with critical roles (${crs.join(', ')})`,
+      })
+
+    await this._db.update(users).set({ status, role }).where(eq(users.id, id))
     return { id }
   }
 
@@ -328,7 +346,7 @@ export class UserService extends BaseService implements IUserService {
     return { id }
   }
 
-  async wishlist(
+  wishlist(
     input: UserValidators.WishlistInput,
   ): Promise<UserValidators.WishlistOutput> {
     const { eq, min } = this._orm
@@ -373,9 +391,8 @@ export class UserService extends BaseService implements IUserService {
     if (existingItem) {
       await this._db.delete(wishlistItems).where(whereClause)
       return { added: false }
-    } else {
-      await this._db.insert(wishlistItems).values({ userId, productId })
-      return { added: true }
     }
+    await this._db.insert(wishlistItems).values({ userId, productId })
+    return { added: true }
   }
 }

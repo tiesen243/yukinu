@@ -1,6 +1,7 @@
+import type { OAuthAccount } from '@/types'
+
 import { env } from '@yukinu/validators/env'
 
-import type { OAuthAccount } from '@/types'
 import { generateCodeChallenge } from '@/core/crypto'
 
 export abstract class BaseProvider {
@@ -24,17 +25,18 @@ export abstract class BaseProvider {
   ): Promise<OAuthAccount>
 
   protected createCallbackUrl() {
+    // oxlint-disable-next-line no-process-env
     let baseUrl = `http://localhost:${process.env.PORT ?? 3000}`
     if (env.VERCEL_PROJECT_PRODUCTION_URL)
       baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
     return `${baseUrl}/api/auth/${this.providerName}`
   }
 
-  protected async createAuthorizationUrlWithoutPkce(
+  protected createAuthorizationUrlWithoutPkce(
     endpoint: string,
     state: string,
     scopes: string[],
-  ): Promise<URL> {
+  ): URL {
     const url = new URL(endpoint)
     url.searchParams.set('response_type', 'code')
     url.searchParams.set('client_id', this.clientId)
@@ -43,7 +45,7 @@ export abstract class BaseProvider {
     if (scopes.length > 0) url.searchParams.set('scope', scopes.join(' '))
     url.searchParams.set('redirect_uri', this.redirectUri)
 
-    return Promise.resolve(url)
+    return url
   }
 
   protected async createAuthorizationUrlWithPKCE(
@@ -53,11 +55,7 @@ export abstract class BaseProvider {
     codeVerifier: string,
     codeChallengeMethod: 'S256' | 'plain' = 'S256',
   ): Promise<URL> {
-    const url = await this.createAuthorizationUrlWithoutPkce(
-      endpoint,
-      state,
-      scopes,
-    )
+    const url = this.createAuthorizationUrlWithoutPkce(endpoint, state, scopes)
 
     if (codeChallengeMethod === 'S256') {
       const codeChallenge = await generateCodeChallenge(codeVerifier)
@@ -108,9 +106,9 @@ export abstract class BaseProvider {
   private encodeCredentials(clientId: string, clientSecret: string): string {
     const credentials = `${clientId}:${clientSecret}`
     const bytes = new TextEncoder().encode(credentials)
-    return btoa(String.fromCharCode(...bytes))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '')
+    return btoa(String.fromCodePoint(...bytes))
+      .replaceAll('+', '-')
+      .replaceAll('/', '_')
+      .replaceAll('=', '')
   }
 }

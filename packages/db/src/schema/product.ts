@@ -1,7 +1,7 @@
 import type { AnyPgColumn } from 'drizzle-orm/pg-core'
-import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createId } from '@yukinu/lib/create-id'
+import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { users, vendors } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'

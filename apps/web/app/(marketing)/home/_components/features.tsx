@@ -12,13 +12,13 @@ import { Typography } from '@yukinu/ui/typography'
 export const FeaturesSection: React.FC = () => (
   <section
     id='features'
-    className='bg-card px-4 py-20 sm:px-6 md:py-32 lg:px-8'
+    className='bg-card text-card-foreground px-4 py-20 sm:px-6 md:py-32 lg:px-8'
   >
     <div className='container mb-16 text-center'>
       <Typography variant='h2'>Why choose Yukinu?</Typography>
       <Typography className='mx-auto max-w-2xl text-muted-foreground'>
-        We've built the platform to make online shopping easier, safer, and more
-        rewarding.
+        We&apos;ve built the platform to make online shopping easier, safer, and
+        more rewarding.
       </Typography>
     </div>
 
@@ -26,7 +26,7 @@ export const FeaturesSection: React.FC = () => (
       {features.map((feature) => (
         <Card
           key={feature.title}
-          className='gap-2 px-4 text-accent-foreground transition-colors hover:border-accent hover:bg-accent/20 hover:text-primary'
+          className='gap-2 px-4 bg-background/80 text-accent-foreground transition-colors hover:ring-accent hover:bg-accent/20 hover:text-primary'
         >
           <feature.icon className='size-12' />
           <Typography variant='h6' render={<h3>{feature.title}</h3>} />

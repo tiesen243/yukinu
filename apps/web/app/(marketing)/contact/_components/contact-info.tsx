@@ -2,17 +2,16 @@ import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 
 export const ContactInfo: React.FC = () => (
-  <div className='space-y-8'>
+  <div className='space-y-4 px-4'>
     {contactInfo.map((info) => (
       <div key={info.title} className='flex gap-4'>
-        <div className='flex size-10 shrink-0 items-center justify-center rounded-lg border border-accent bg-accent/20 dark:bg-accent/10'>
+        <div className='flex size-10 shrink-0 items-center justify-center rounded-lg border border-accent bg-accent/20'>
           <info.icon className='size-5 text-accent-foreground' />
         </div>
         <div>
-          <Typography
-            variant='h5'
-            render={<h3 className='my-0'>{info.title}</h3>}
-          />
+          <Typography variant='h5' className='my-0' render={<p />}>
+            {info.title}
+          </Typography>
           {info.details.map((detail) => (
             <Typography key={detail} className='text-muted-foreground'>
               {detail}

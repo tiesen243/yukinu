@@ -1,7 +1,6 @@
-/* eslint-disable @eslint-react/no-array-index-key */
-import { useMutation } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
+import type { Route } from './+types/_index'
 
+import { useMutation } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -24,8 +23,8 @@ import {
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
 import { ProductValidators } from '@yukinu/validators/product'
+import { useNavigate } from 'react-router'
 
-import type { Route } from './+types/_index'
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function CreateProductVariantsPage({

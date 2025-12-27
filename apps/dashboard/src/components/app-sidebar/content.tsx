@@ -1,5 +1,3 @@
-import { NavLink } from 'react-router'
-
 import { useSession } from '@yukinu/auth/react'
 import {
   BarChart2Icon,
@@ -27,6 +25,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
+import { NavLink } from 'react-router'
 
 const navs = [
   {

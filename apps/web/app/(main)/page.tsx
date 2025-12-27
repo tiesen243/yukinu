@@ -1,6 +1,5 @@
-import { Suspense } from 'react'
-
 import { Typography } from '@yukinu/ui/typography'
+import { Suspense } from 'react'
 
 import {
   CategoriesList,

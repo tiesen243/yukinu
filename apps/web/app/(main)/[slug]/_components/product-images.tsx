@@ -1,8 +1,7 @@
 'use client'
 
-import Image from 'next/image'
-
 import { cn } from '@yukinu/ui'
+import Image from 'next/image'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 
@@ -33,6 +32,7 @@ export const ProductImages: React.FC = () => {
         {images.map(({ id, url }) => (
           <button
             key={id}
+            type='button'
             className={cn(
               'relative aspect-square size-20 shrink-0 rounded-md border transition-colors',
               { 'border-primary bg-accent/40': currentImage === url },

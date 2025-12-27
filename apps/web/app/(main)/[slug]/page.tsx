@@ -1,9 +1,8 @@
-import { Suspense } from 'react'
-import { notFound } from 'next/navigation'
-import Script from 'next/script'
-
 import { Loader2Icon } from '@yukinu/ui/icons'
 import { env } from '@yukinu/validators/env.next'
+import { notFound } from 'next/navigation'
+import Script from 'next/script'
+import { Suspense } from 'react'
 
 import { ProductDetails } from '@/app/(main)/[slug]/page.client'
 import { PageProvider } from '@/app/(main)/[slug]/page.provider'
@@ -23,17 +22,17 @@ export default async function ProductDetailsPage({
       trpc.product.one.queryOptions({ id }),
     )
 
-    const avgRating = product.reviews.length
-      ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
-        product.reviews.length
-      : 0
+    const avgRating =
+      product.reviews.length > 0
+        ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+          product.reviews.length
+        : 0
 
     return (
       <>
         <Script
           id='product-schema'
           type='application/ld+json'
-          // eslint-disable-next-line @eslint-react/dom/no-dangerously-set-innerhtml
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               '@context': 'https://schema.org/',
@@ -82,7 +81,7 @@ export default async function ProductDetailsPage({
                   name: product.vendor?.name ?? env.NEXT_PUBLIC_APP_NAME,
                 },
               },
-            }).replace(/</g, '\\u003c'),
+            }).replaceAll('<', '\\u003c'),
           }}
         />
 

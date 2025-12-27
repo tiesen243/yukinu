@@ -1,16 +1,12 @@
+import { ChevronRightIcon } from '@yukinu/ui/icons'
 import * as React from 'react'
 import { Link, useLocation } from 'react-router'
 
-import { ChevronRightIcon } from '@yukinu/ui/icons'
+const prettySegment = (segment: string) =>
+  segment.replaceAll('-', ' ').replaceAll(/\b\w/g, (char) => char.toUpperCase())
 
 export const Breadcrumb = () => {
   const location = useLocation()
-
-  const prettySegment = (segment: string) => {
-    return segment
-      .replace(/-/g, ' ')
-      .replace(/\b\w/g, (char) => char.toUpperCase())
-  }
 
   return (
     <nav className='flex items-center gap-2 text-sm'>

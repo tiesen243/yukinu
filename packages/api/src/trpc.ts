@@ -1,12 +1,12 @@
-import { initTRPC, TRPCError } from '@trpc/server'
-import SuperJSON from 'superjson'
+import type { TRPCContext, TRPCMeta } from '@/types'
 
+import { initTRPC, TRPCError } from '@trpc/server'
 import { validateAccessToken } from '@yukinu/auth'
 import { db, orm } from '@yukinu/db'
 import * as schema from '@yukinu/db/schema'
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
+import SuperJSON from 'superjson'
 
-import type { TRPCContext, TRPCMeta } from '@/types'
 import { AuthService } from '@/services/auth.service'
 import { CategoryService } from '@/services/category.service'
 import { OrderService } from '@/services/order.service'
@@ -63,7 +63,7 @@ const createCallerFactory = t.createCallerFactory
 const createTRPCRouter = t.router
 
 const bucket = new TokenBucketRateLimit<string>(20, 60)
-const rateLimitMiddleware = t.middleware(async ({ ctx, next }) => {
+const rateLimitMiddleware = t.middleware(({ ctx, next }) => {
   const identifier =
     ctx.session?.userId ??
     ctx.headers.get('x-forwarded-for') ??

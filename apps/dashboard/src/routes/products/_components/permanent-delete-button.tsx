@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query'
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,7 +34,7 @@ export const PermanentDeleteProductButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>

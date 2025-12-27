@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import {
   Table,
   TableBody,
@@ -8,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from '@yukinu/ui/table'
+import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import {

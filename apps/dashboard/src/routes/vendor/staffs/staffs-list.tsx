@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -14,6 +12,7 @@ import {
 } from '@yukinu/ui/dialog'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
+import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -65,13 +64,13 @@ const RemoveStaffButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <DialogTrigger variant='link' className='text-destructive'>
         Remove
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Remove Staff "{username}"?</DialogTitle>
+          <DialogTitle>Remove Staff &quot;{username}&quot;?</DialogTitle>
           <DialogDescription>
             This action cannot be undone. The staff will lose access to the
             vendor dashboard and all associated resources.
@@ -79,13 +78,7 @@ const RemoveStaffButton: React.FC<{
         </DialogHeader>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ staffId })

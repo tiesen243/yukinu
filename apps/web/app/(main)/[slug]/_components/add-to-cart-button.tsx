@@ -1,7 +1,5 @@
 'use client'
 
-import { useState } from 'react'
-
 import { Button } from '@yukinu/ui/button'
 import { HeartIcon, MinusIcon, PlusIcon } from '@yukinu/ui/icons'
 import {
@@ -10,6 +8,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
+import { useState } from 'react'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 

@@ -1,8 +1,8 @@
-import { Readable, Writable } from 'node:stream'
-import zlib from 'node:zlib'
+import { env } from '@yukinu/validators/env'
 import { defineConfig } from 'drizzle-kit'
 
-import { env } from '@yukinu/validators/env'
+import { Readable, Writable } from 'node:stream'
+import zlib from 'node:zlib'
 
 export default defineConfig({
   dialect: 'postgresql',

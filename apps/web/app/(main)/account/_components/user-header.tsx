@@ -1,10 +1,9 @@
 'use client'
 
-import { useLayoutEffect } from 'react'
-import { useRouter } from 'next/navigation'
-
 import { useSession } from '@yukinu/auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
+import { useRouter } from 'next/navigation'
+import { useLayoutEffect } from 'react'
 
 export const UserHeader: React.FC = () => {
   const { status, session } = useSession()

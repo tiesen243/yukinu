@@ -1,11 +1,11 @@
 export function slugify(text: string): string {
   return text
-    .replace(/Đ/g, 'D')
-    .replace(/đ/g, 'd')
+    .replaceAll('Đ', 'D')
+    .replaceAll('đ', 'd')
     .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
+    .replaceAll(/[\u0300-\u036F]/g, '')
     .toLowerCase()
     .trim()
-    .replace(/[\s\W-]+/g, '-')
-    .replace(/^-+|-+$/g, '')
+    .replaceAll(/[\s\W-]+/g, '-')
+    .replaceAll(/^-+|-+$/g, '')
 }

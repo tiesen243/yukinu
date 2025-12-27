@@ -1,5 +1,3 @@
-import { Link, useNavigate } from 'react-router'
-
 import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -16,6 +14,7 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthValidators } from '@yukinu/validators/auth'
+import { Link, useNavigate } from 'react-router'
 
 import { getWebUrl } from '@/lib/utils'
 
@@ -37,7 +36,7 @@ export default function LoginPage() {
           <LoginForm />
 
           <FieldDescription>
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link to={`${getWebUrl()}/register`}>Register here.</Link>
           </FieldDescription>
         </FieldSet>

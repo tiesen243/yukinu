@@ -1,0 +1,38 @@
+{
+  "name": "@yukinu/uploadthing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    ".": "./dist/index.mjs",
+    "./config": "./dist/config.mjs",
+    "./react": "./dist/react.mjs",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit",
+    "~dev": "tsdown --watch ./src"
+  },
+  "dependencies": {
+    "@uploadthing/react": "^7.3.3",
+    "@yukinu/auth": "workspace:*",
+    "@yukinu/validators": "workspace:*",
+    "uploadthing": "^7.7.4"
+  },
+  "devDependencies": {
+    "@yukinu/tsconfig": "workspace:*",
+    "tsdown": "catalog:dev",
+    "typescript": "catalog:dev"
+  },
+  "peerDependencies": {
+    "@types/react": "catalog:react",
+    "@uploadthing/shared": "^7.1.10",
+    "next": "catalog:react",
+    "react": "catalog:react"
+  }
+}

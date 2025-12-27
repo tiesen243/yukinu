@@ -30,7 +30,6 @@ export const useMediaQuery = (
   })
 
   const handleChange = React.useCallback(() => {
-    // eslint-disable-next-line @eslint-react/hooks-extra/no-direct-set-state-in-use-effect
     setMatches(getMatches(query))
   }, [getMatches, query])
 

@@ -1,16 +1,16 @@
 {
   "name": "@yukinu/db",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "type": "module",
+  "main": "./dist/index.mjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "exports": {
     ".": "./dist/index.mjs",
     "./schema": "./dist/schema/index.mjs",
     "./package.json": "./package.json"
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
   "scripts": {
     "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
@@ -18,12 +18,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "~dev": "tsdown --watch ./src"
   },
-  "prettier": "@yukinu/prettier-config",
   "dependencies": {
     "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*",
@@ -31,13 +28,9 @@
     "postgres": "^3.4.7"
   },
   "devDependencies": {
-    "@yukinu/eslint-config": "workspace:*",
-    "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "drizzle-kit": "^0.31.8",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
-    "tsdown": "catalog:",
-    "typescript": "catalog:"
+    "tsdown": "catalog:dev",
+    "typescript": "catalog:dev"
   }
 }

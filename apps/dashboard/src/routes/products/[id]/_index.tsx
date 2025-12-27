@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router'
+import type { Route } from './+types/_index'
 
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -12,8 +12,8 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 import { Typography } from '@yukinu/ui/typography'
+import { Link } from 'react-router'
 
-import type { Route } from './+types/_index'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 import { DeleteVariantButton } from '@/routes/products/[id]/delete-variant-button'
@@ -40,7 +40,7 @@ export default function ProductsUpdatePage({
 
       <UpdateProductForm data={data} />
 
-      <Card render={<section className='mt-4 px-4' />}>
+      <Card className='mt-4 px-4' render={<section />}>
         <div className='flex items-center justify-between gap-4'>
           <Typography variant='h3'>Product Variants</Typography>
           <Button render={<Link to={`/products/${data.id}/variant`} />}>

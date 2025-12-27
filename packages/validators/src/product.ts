@@ -94,14 +94,12 @@ export namespace ProductValidators {
   export const orderByDirections = ['asc', 'desc'] as const
   export type OrderByDirection = (typeof orderByDirections)[number]
 
-  export const orderBy = orderByField
-    .map(
-      (field) =>
-        orderByDirections.map(
-          (direction) => `${field}_${direction}`,
-        ) as `${OrderByField}_${OrderByDirection}`[],
-    )
-    .flat()
+  export const orderBy = orderByField.flatMap(
+    (field) =>
+      orderByDirections.map(
+        (direction) => `${field}_${direction}`,
+      ) as `${OrderByField}_${OrderByDirection}`[],
+  )
   export type OrderBy = `${OrderByField}_${OrderByDirection}`
 
   export const allInput = z.object({

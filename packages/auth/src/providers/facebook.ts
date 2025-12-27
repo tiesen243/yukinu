@@ -1,4 +1,5 @@
 import type { OAuth2Token, OAuthAccount } from '@/types'
+
 import { BaseProvider } from '@/providers/base'
 
 export class Facebook extends BaseProvider {
