@@ -1,6 +1,7 @@
-import type { FileRouter } from 'uploadthing/types'
+import type { FileRouter, RouteHandlerConfig } from 'uploadthing/types'
 
 import { auth } from '@yukinu/auth'
+import { env } from '@yukinu/validators/env'
 import { createUploadthing, UploadThingError } from 'uploadthing/server'
 
 const f = createUploadthing()
@@ -39,3 +40,7 @@ export const ourFileRouter = {
 } as const satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter
+
+export const config = {
+  token: env.UPLOADTHING_TOKEN,
+} satisfies RouteHandlerConfig

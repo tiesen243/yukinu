@@ -1,5 +1,7 @@
-import { createNextHandler } from '@yukinu/uploadthing'
+import { createNextRouteHandler } from '@yukinu/uploadthing'
+import { ourFileRouter, config } from '@yukinu/uploadthing/config'
 
-const handler = createNextHandler()
-export const GET = handler.GET
-export const POST = handler.POST
+export const { GET, POST } = createNextRouteHandler({
+  router: ourFileRouter,
+  config,
+})
