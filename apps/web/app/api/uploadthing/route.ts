@@ -1,3 +1,5 @@
 import { createNextHandler } from '@yukinu/uploadthing'
 
-export const { GET, POST } = createNextHandler()
+const handler = createNextHandler()
+export const GET = handler.GET
+export const POST = handler.POST

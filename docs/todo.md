@@ -11,8 +11,7 @@ nav_order: 5
 - [x] Browse product list
 - [x] View product details
 - [x] Search and filter products
-- [ ] View vendors list
-- [ ] View products by vendor
+- [x] View products by vendor
 - [x] Reset password (forgot password)
 
 ## User (Customer)
@@ -21,7 +20,7 @@ nav_order: 5
 - [x] Manage shipping addresses (CRUD)
 - [x] Add product to wishlist
 - [x] Remove product from wishlist
-- [ ] Add product to cart _(if available)_
+- [x] Add product to cart
 - [ ] Place an order (checkout)
 - [ ] Make payment
 - [ ] Track order status
@@ -57,8 +56,6 @@ nav_order: 5
 
 ## Optional Enhancements
 
-- [ ] Integrate shipping provider (tracking)
-- [ ] Messaging/chat between user & vendor
 - [ ] Vendor payout system
 - [ ] Coupon / voucher management
 - [x] Email notifications & marketing automation

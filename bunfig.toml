@@ -3,5 +3,5 @@ linker = "isolated"
 linkWorkspacePackages = true
 
 [run]
-bun = true
+bun = false
 silent = true
