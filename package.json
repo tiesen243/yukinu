@@ -31,7 +31,6 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "lint:ws": "bunx sherif@latest",
-    "prepare": "husky",
     "start:db": "docker compose -f ./docker-compose.yml up db -d",
     "start:dev": "docker compose -f ./docker-compose.yml up -d",
     "start:prod": "docker compose -f ./docker-compose.prod.yml up -d",
