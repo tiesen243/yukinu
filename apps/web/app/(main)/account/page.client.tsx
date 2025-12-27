@@ -210,9 +210,6 @@ export function UpdateProfileForm() {
                       </InputGroupButton>
                     </InputGroupAddon>
                   </InputGroup>
-                  <FieldDescription>
-                    This will be replaced with an upload widget in the future.
-                  </FieldDescription>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
@@ -336,10 +333,15 @@ export const UpdateProfileFormSkeleton: React.FC = () => (
         <Field orientation='horizontal' className='gap-4'>
           <FieldContent>
             <FieldLabel>Profile Image URL</FieldLabel>
-            <Input readOnly />
-            <FieldDescription>
-              This will be replaced with an upload widget in the future.
-            </FieldDescription>
+            <InputGroup>
+              <InputGroupInput readOnly />
+              <InputGroupAddon align='inline-end'>
+                <InputGroupText>Loading...</InputGroupText>
+              </InputGroupAddon>
+              <InputGroupAddon align='inline-end'>
+                <InputGroupText>Loading...</InputGroupText>
+              </InputGroupAddon>
+            </InputGroup>
           </FieldContent>
 
           <div className='size-20 rounded-full bg-muted' />
