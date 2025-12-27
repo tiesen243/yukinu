@@ -1,7 +1,6 @@
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
-
 import { createId } from '@yukinu/lib/create-id'
 import { UserValidators } from '@yukinu/validators/user'
+import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { products, users } from '@/schema'
 

@@ -20,6 +20,7 @@ import {
 import { toast } from '@yukinu/ui/sonner'
 import { VendorValidators } from '@yukinu/validators/vendor'
 
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPCClient } from '@/lib/trpc/react'
 
 export default function AppVendorPage() {
@@ -70,22 +71,22 @@ export default function AppVendorPage() {
 
             <form.Field
               name='description'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
+              render={({ meta, field: { value = '', ...field } }) => (
+                <Field
+                  data-invalid={meta.errors.length > 0 || value.length > 2000}
+                >
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
+                      value={value}
+                      aria-invalid={
+                        field['aria-invalid'] || value.length > 2000
+                      }
                       placeholder='Vendor Description'
-                      className='field-sizing-content max-h-52'
                     />
-                    <InputGroupAddon align='block-end'>
-                      <InputGroupText
-                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
-                      >
-                        {field.value?.length ?? 0}/2000
-                      </InputGroupText>
+                    <InputGroupAddon align='block-end' className='justify-end'>
+                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
@@ -98,15 +99,19 @@ export default function AppVendorPage() {
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                  <Input
-                    {...field}
-                    type='url'
-                    placeholder='https://example.com/image.jpg'
-                  />
-                  <FieldDescription id={meta.descriptionId}>
-                    This will be replaced with an image upload dropzone in the
-                    future.
-                  </FieldDescription>
+                  <InputGroup>
+                    <Input
+                      {...field}
+                      type='url'
+                      placeholder='https://example.com/image.jpg'
+                    />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupUploadButton
+                        endpoint='avatarUploader'
+                        onUploadComplete={(url) => field.onChange(url)}
+                      />
+                    </InputGroupAddon>
+                  </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

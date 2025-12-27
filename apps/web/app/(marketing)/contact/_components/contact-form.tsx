@@ -7,13 +7,14 @@ import { Textarea } from '@yukinu/ui/textarea'
 
 export const ContactForm: React.FC = () => (
   <form
+    className='px-4 flex-1'
     onSubmit={(e) => {
       e.preventDefault()
       const formData = new FormData(e.currentTarget)
       console.log(Object.fromEntries(formData.entries()))
     }}
   >
-    <FieldSet>
+    <FieldSet className='h-full'>
       <legend className='sr-only'>Contact Us</legend>
 
       <FieldGroup className='flex-1'>

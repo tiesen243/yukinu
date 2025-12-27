@@ -1,11 +1,11 @@
-import { TRPCError } from '@trpc/server'
-
+import type { IVendorService } from '@/contracts/services/vendor.service'
 import type { VendorValidators } from '@yukinu/validators/vendor'
+
+import { TRPCError } from '@trpc/server'
 import { users } from '@yukinu/db/schema'
 import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
 
-import type { IVendorService } from '@/contracts/services/vendor.service'
 import { BaseService } from '@/services/base.service'
 
 export class VendorService extends BaseService implements IVendorService {
@@ -20,7 +20,8 @@ export class VendorService extends BaseService implements IVendorService {
     const whereClauses = []
     if (search) whereClauses.push(ilike(vendors.name, `%${search}%`))
     if (status) whereClauses.push(eq(vendors.status, status))
-    const whereClause = whereClauses.length ? and(...whereClauses) : undefined
+    const whereClause =
+      whereClauses.length > 0 ? and(...whereClauses) : undefined
 
     const [vendorsList, total] = await Promise.all([
       this._db
@@ -185,7 +186,7 @@ export class VendorService extends BaseService implements IVendorService {
     return { id }
   }
 
-  async allStaffs(
+  allStaffs(
     input: VendorValidators.AllStaffsInput,
   ): Promise<VendorValidators.AllStaffsOutput> {
     const { eq } = this._orm
@@ -348,7 +349,7 @@ export class VendorService extends BaseService implements IVendorService {
     })
   }
 
-  async removeStaff(
+  removeStaff(
     input: VendorValidators.RemoveStaffInput,
   ): Promise<VendorValidators.RemoveStaffOutput> {
     const { and, eq } = this._orm

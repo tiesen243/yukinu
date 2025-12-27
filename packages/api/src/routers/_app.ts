@@ -1,4 +1,5 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
+
 import { lazy } from '@trpc/server'
 
 import { createTRPCRouter } from '@/trpc'

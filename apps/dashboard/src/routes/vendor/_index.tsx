@@ -1,5 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
+import type { Route } from './+types/_index'
 
+import { useMutation } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -16,13 +17,14 @@ import { Input } from '@yukinu/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
 import { VendorValidators } from '@yukinu/validators/vendor'
 
-import type { Route } from './+types/_index'
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
@@ -56,7 +58,7 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
     <>
       <h1 className='sr-only'>My Store page</h1>
       <Card render={<form onSubmit={form.handleSubmit} />}>
-        <FieldSet>
+        <FieldSet className='px-4'>
           <FieldLegend>My Store</FieldLegend>
           <FieldDescription>
             Update your store details and preferences below.
@@ -68,7 +70,7 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Store Name</FieldLabel>
-                  <Input {...field} />
+                  <Input {...field} placeholder='Vendor Name' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
@@ -76,20 +78,22 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
 
             <form.Field
               name='description'
-              render={({ meta, field }) => (
-                <Field data-invalid={meta.errors.length > 0}>
+              render={({ meta, field: { value = '', ...field } }) => (
+                <Field
+                  data-invalid={meta.errors.length > 0 || value.length > 2000}
+                >
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
+                      value={value}
+                      aria-invalid={
+                        field['aria-invalid'] || value.length > 2000
+                      }
                       placeholder='Vendor Description'
                     />
-                    <InputGroupAddon align='block-end'>
-                      <InputGroupText
-                        className={`ml-auto ${field.value && field.value.length > 2000 ? 'text-destructive' : ''}`}
-                      >
-                        {field.value?.length ?? 0}/2000
-                      </InputGroupText>
+                    <InputGroupAddon align='block-end' className='justify-end'>
+                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
@@ -102,7 +106,19 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                  <Input {...field} />
+                  <InputGroup>
+                    <InputGroupInput
+                      {...field}
+                      type='url'
+                      placeholder='https://example.com/image.jpg'
+                    />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupUploadButton
+                        endpoint='avatarUploader'
+                        onUploadComplete={(url) => field.onChange(url)}
+                      />
+                    </InputGroupAddon>
+                  </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

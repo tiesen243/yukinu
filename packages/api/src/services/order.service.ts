@@ -1,9 +1,9 @@
-import { TRPCError } from '@trpc/server'
-
+import type { IOrderService } from '@/contracts/services/order.service'
 import type { Database } from '@yukinu/db'
 import type { OrderValidators } from '@yukinu/validators/order'
 
-import type { IOrderService } from '@/contracts/services/order.service'
+import { TRPCError } from '@trpc/server'
+
 import { BaseService } from '@/services/base.service'
 
 export class OrderService extends BaseService implements IOrderService {
@@ -22,7 +22,6 @@ export class OrderService extends BaseService implements IOrderService {
       productImages,
       productVariants,
       products,
-      transactions,
       variantOptions,
       variants,
       vendors,
@@ -55,13 +54,6 @@ export class OrderService extends BaseService implements IOrderService {
           postalCode: addresses.postalCode,
           country: addresses.country,
         },
-        transaction: {
-          id: transactions.id,
-          amount: transactions.amount,
-          method: transactions.method,
-          status: transactions.status,
-          updatedAt: transactions.updatedAt,
-        },
         voucher: {
           code: vouchers.code,
           discountAmount: vouchers.discountAmount,
@@ -75,7 +67,6 @@ export class OrderService extends BaseService implements IOrderService {
       .limit(1)
       .leftJoin(addresses, eq(addresses.id, orders.addressId))
       .leftJoin(vouchers, eq(vouchers.id, orders.voucherId))
-      .leftJoin(transactions, eq(transactions.orderId, orders.id))
     if (!order)
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -183,7 +174,7 @@ export class OrderService extends BaseService implements IOrderService {
     })
   }
 
-  async removeItemFromCart(
+  removeItemFromCart(
     input: OrderValidators.RemoveItemFromCartInput,
   ): Promise<OrderValidators.RemoveItemFromCartOutput> {
     const { and, eq } = this._orm

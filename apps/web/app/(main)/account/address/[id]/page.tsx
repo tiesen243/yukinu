@@ -1,7 +1,6 @@
-import { Suspense } from 'react'
-import { notFound } from 'next/navigation'
-
 import { Loader2Icon } from '@yukinu/ui/icons'
+import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { EditAddressForm } from '@/app/(main)/account/address/[id]/page.client'

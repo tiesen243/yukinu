@@ -1,7 +1,6 @@
-import Link from 'next/link'
-
 import { Card } from '@yukinu/ui/card'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
+import Link from 'next/link'
 
 import { RegisterForm } from '@/app/(auth)/register/page.client'
 import { createMetadata } from '@/lib/metadata'

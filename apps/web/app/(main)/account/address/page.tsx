@@ -1,8 +1,7 @@
-import { Suspense } from 'react'
-import Link from 'next/link'
-
 import { Button } from '@yukinu/ui/button'
 import { PlusIcon } from '@yukinu/ui/icons'
+import Link from 'next/link'
+import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import {

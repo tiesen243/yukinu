@@ -1,8 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,6 +28,7 @@ import { XIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthValidators } from '@yukinu/validators/auth'
+import { useRouter } from 'next/navigation'
 
 import { useTRPC, useTRPCClient } from '@/lib/trpc/react'
 
@@ -84,12 +83,11 @@ const SessionItem: React.FC<{
       <AlertDialog>
         <AlertDialogTrigger
           className='absolute top-0 right-0'
-          render={
-            <Button variant='outline' size='icon-sm'>
-              <XIcon />
-            </Button>
-          }
-        />
+          variant='outline'
+          size='icon-sm'
+        >
+          <XIcon />
+        </AlertDialogTrigger>
 
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -265,10 +263,9 @@ export const DeleteAccountButton: React.FC = () => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger
-        className='w-full'
-        render={<Button variant='destructive'>Delete Account</Button>}
-      />
+      <AlertDialogTrigger className='w-full' variant='destructive'>
+        Delete Account
+      </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>

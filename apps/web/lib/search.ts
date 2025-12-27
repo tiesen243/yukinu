@@ -1,11 +1,10 @@
+import { ProductValidators } from '@yukinu/validators/product'
 import {
   createSearchParamsCache,
   parseAsInteger,
   parseAsString,
   parseAsStringEnum,
 } from 'nuqs/server'
-
-import { ProductValidators } from '@yukinu/validators/product'
 
 export const productsParsers = {
   search: parseAsString,

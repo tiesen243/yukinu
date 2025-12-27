@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -8,6 +6,7 @@ import {
   CollapsibleTrigger,
 } from '@yukinu/ui/collapsible'
 import { FilterIcon } from '@yukinu/ui/icons'
+import { Suspense } from 'react'
 
 import {
   AdditionalInfo,
@@ -39,7 +38,8 @@ export default async function SearchPage({
 
       <Collapsible className='relative md:hidden'>
         <CollapsibleTrigger
-          render={<Button variant='outline' className='w-full justify-start' />}
+          className='w-full justify-start'
+          render={<Button variant='outline' />}
         >
           <FilterIcon /> Filters
         </CollapsibleTrigger>

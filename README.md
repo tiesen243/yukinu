@@ -54,10 +54,8 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 │   ├── ui               # Shared UI components (shadcn/ui)
 │   └── validators       # Zod validators
 ├── tools
-│   ├── eslint           # ESLint configs
 │   ├── github           # Github workflows/scripts
 │   ├── nginx            # Deployment config
-│   ├── prettier         # Prettier configs
 │   └── typescript       # TS base configs
 ├── docs                 # Developer & legal documentation
 └── docker-compose.yml   # Local deployment (NGINX + Postgres + Apps)

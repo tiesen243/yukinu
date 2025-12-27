@@ -1,9 +1,10 @@
+import type { AuthConfig } from '@/types'
+
 import { db, orm } from '@yukinu/db'
 import { accounts, profiles, sessions, users } from '@yukinu/db/schema'
 import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
 
-import type { AuthConfig } from '@/types'
 import { Facebook } from '@/providers/facebook'
 import { Google } from '@/providers/google'
 

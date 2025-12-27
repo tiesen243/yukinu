@@ -18,6 +18,7 @@ export const MapSection: React.FC = () => (
         loading='lazy'
         className='border-0'
         referrerPolicy='no-referrer-when-downgrade'
+        sandbox='allow-scripts allow-popups'
         allowFullScreen
       />
     </div>

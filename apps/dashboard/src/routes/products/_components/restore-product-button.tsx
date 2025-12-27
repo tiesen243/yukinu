@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query'
-
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,9 +34,7 @@ export const RestoreProductButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Restore
-      </AlertDialogTrigger>
+      <AlertDialogTrigger variant='link'>Restore</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

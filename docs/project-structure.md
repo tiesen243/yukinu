@@ -49,20 +49,15 @@ Shared code reused across both applications.
 | `packages/ui`         | Shared React UI components, styling                   |
 | `packages/validators` | Zod validation schemas                                |
 
-All packages follow the same structure:  
-`src/` for code and `tsconfig.json`, `eslint.config.js`, and versioned CHANGELOG.
-
 ## 4. Tools
 
 Contains build and development infrastructure.
 
 | Directory          | Purpose                                             |
 | ------------------ | --------------------------------------------------- |
-| `tools/eslint`     | Shared ESLint configurations for all workspaces     |
-| `tools/prettier`   | Code formatting configuration                       |
-| `tools/typescript` | Shared tsconfig base presets                        |
 | `tools/github`     | CI/CD workflow scripts (e.g., build, deploy)        |
 | `tools/nginx`      | Reverse proxy configuration and certificates folder |
+| `tools/typescript` | Shared tsconfig base presets                        |
 
 ## 5. Documentation
 

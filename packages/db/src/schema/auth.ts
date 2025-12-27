@@ -1,3 +1,5 @@
+import { createId } from '@yukinu/lib/create-id'
+import { UserValidators } from '@yukinu/validators/user'
 import {
   index,
   pgEnum,
@@ -5,9 +7,6 @@ import {
   primaryKey,
   uniqueIndex,
 } from 'drizzle-orm/pg-core'
-
-import { createId } from '@yukinu/lib/create-id'
-import { UserValidators } from '@yukinu/validators/user'
 
 import { createdAt, updatedAt } from '@/schema/shared'
 

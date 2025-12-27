@@ -40,8 +40,10 @@ export class JWT<TValue extends Record<string, unknown>> {
       ...options.headers,
     }
 
-    const payload = { ...payloadClaims } as Record<string, unknown>
-    payload.exp = Math.floor(Date.now() / 1000) + (options.expiresIn ?? 3600)
+    const payload = {
+      ...payloadClaims,
+      exp: Math.floor(Date.now() / 1000) + (options.expiresIn ?? 3600),
+    } as Record<string, unknown>
 
     if (options.audiences) payload.aud = options.audiences
     if (options.subject) payload.sub = options.subject

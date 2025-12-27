@@ -1,13 +1,12 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-
 import { Button } from '@yukinu/ui/button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { AuthValidators } from '@yukinu/validators/auth'
+import { useRouter } from 'next/navigation'
 
 import { useTRPCClient } from '@/lib/trpc/react'
 

@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 import { Card } from '@yukinu/ui/card'
 import {
   HeartIcon,
@@ -9,6 +7,7 @@ import {
   ShoppingCartIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
+import Link from 'next/link'
 
 import { UserHeader } from '@/app/(main)/account/_components/user-header'
 

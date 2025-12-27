@@ -1,6 +1,4 @@
-import { Activity, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
 import { cn } from '@yukinu/ui'
 import {
   AlertDialog,
@@ -27,11 +25,12 @@ import {
 } from '@yukinu/ui/dialog'
 import { Field, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { Label } from '@yukinu/ui/label'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
 import { UserValidators } from '@yukinu/validators/user'
+import { Activity, useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { useUserQueryStates } from '@/routes/admin/users/hook'
@@ -112,9 +111,7 @@ const EditUserButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Edit
-      </DialogTrigger>
+      <DialogTrigger variant='link'>Edit</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -127,7 +124,7 @@ const EditUserButton: React.FC<{
         <FieldGroup>
           <Field>
             <FieldLabel htmlFor='role'>Role</FieldLabel>
-            <Select
+            <NativeSelect
               id='role'
               value={role}
               onChange={(e) => {
@@ -135,9 +132,9 @@ const EditUserButton: React.FC<{
               }}
             >
               {UserValidators.roles.map((role) => (
-                <SelectOption key={role} label={role} value={role} />
+                <NativeSelectOption key={role} label={role} value={role} />
               ))}
-            </Select>
+            </NativeSelect>
           </Field>
 
           <Field>
@@ -155,8 +152,7 @@ const EditUserButton: React.FC<{
                     },
                   )}
                 >
-                  <RadioGroupItem id={status} value={status} />
-                  {status}
+                  <RadioGroupItem id={status} value={status} /> {status}
                 </Label>
               ))}
             </RadioGroup>
@@ -164,13 +160,7 @@ const EditUserButton: React.FC<{
         </FieldGroup>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ id: user.id, status, role })
@@ -204,15 +194,15 @@ const DeleteUserButton: React.FC<{
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete user "{user.username}"? You can
-            restore the user later from the deleted users section.
+            Are you sure you want to delete user &quot;{user.username}&quot;?
+            You can restore the user later from the deleted users section.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -251,14 +241,12 @@ const RestoreUserButton: React.FC<{
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Restore
-      </AlertDialogTrigger>
+      <AlertDialogTrigger variant='link'>Restore</AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Restore User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to restore user "{user.username}"?
+            Are you sure you want to restore user &quot;{user.username}&quot;?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -294,15 +282,15 @@ const PermamentlyDeleteUserButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='text-destructive underline-offset-4 hover:underline'>
+      <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Permanently Delete User</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete user "{user.username}"? This action
-            cannot be undone.
+            Are you sure you want to delete user &quot;{user.username}&quot;?
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

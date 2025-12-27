@@ -1,8 +1,7 @@
-import { Suspense } from 'react'
+import { env } from '@yukinu/validators/env.next'
 import Image from 'next/image'
 import Link from 'next/link'
-
-import { env } from '@yukinu/validators/env.next'
+import { Suspense } from 'react'
 
 import { SearchForm } from '@/components/header/search-form'
 import { UserButton } from '@/components/header/user-button'
@@ -15,8 +14,8 @@ export function Header() {
           <Image
             src='/assets/logo.svg'
             alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
-            width={36}
-            height={36}
+            width={28}
+            height={28}
             className='dark:invert'
           />
           <span className='sr-only text-lg font-bold md:not-sr-only'>

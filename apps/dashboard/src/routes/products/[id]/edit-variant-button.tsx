@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -17,6 +15,7 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
 import { ProductValidators } from '@yukinu/validators/product'
+import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -49,9 +48,7 @@ export const EditVariantButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-primary underline-offset-4 hover:underline'>
-        Edit
-      </DialogTrigger>
+      <DialogTrigger variant='link'>Edit</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -87,14 +84,7 @@ export const EditVariantButton: React.FC<{
             />
 
             <DialogFooter>
-              <DialogClose
-                render={
-                  <Button variant='outline' disabled={form.state.isPending}>
-                    Cancel
-                  </Button>
-                }
-              />
-
+              <DialogClose disabled={form.state.isPending}>Cancel</DialogClose>
               <Button disabled={form.state.isPending}>Save Changes</Button>
             </DialogFooter>
           </FieldGroup>

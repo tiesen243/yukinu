@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router'
+import type { Route } from './+types/_index'
 
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -14,16 +14,23 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from '@yukinu/ui/input-group'
+import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
-import { Textarea } from '@yukinu/ui/textarea'
 import { CategoryValidators } from '@yukinu/validators/category'
+import { useNavigate } from 'react-router'
 
-import type { Route } from './+types/_index'
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
-export const loader = async ({ request, params }: Route.LoaderArgs) => {
+export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
   return getQueryClient().ensureQueryData(
     trpc.category.one.queryOptions(params),
@@ -91,10 +98,22 @@ export default function CategoriesEditPage({
 
           <form.Field
             name='description'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
+            render={({ meta, field: { value = '', ...field } }) => (
+              <Field
+                data-invalid={meta.errors.length > 0 || value.length > 1000}
+              >
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
-                <Textarea {...field} placeholder='Category Description' />
+                <InputGroup>
+                  <InputGroupTextarea
+                    {...field}
+                    value={value}
+                    aria-invalid={field['aria-invalid'] || value.length > 1000}
+                    placeholder='Category Description'
+                  />
+                  <InputGroupAddon align='block-end' className='justify-end'>
+                    <InputGroupText>{value.length ?? 0}/1000</InputGroupText>
+                  </InputGroupAddon>
+                </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
@@ -105,11 +124,21 @@ export default function CategoriesEditPage({
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
-                <Input {...field} placeholder='https://example.com/image.jpg' />
-                <FieldDescription id={meta.descriptionId}>
-                  URL of the category image. Will be replaced with upload
-                  dropzone later.
-                </FieldDescription>
+                <InputGroup>
+                  <InputGroupInput
+                    {...field}
+                    type='url'
+                    placeholder='https://example.com/image.jpg'
+                  />
+                  <InputGroupAddon align='inline-end'>
+                    <InputGroupUploadButton
+                      endpoint='categoryImageUploader'
+                      onUploadComplete={(url) => {
+                        form.setValue('image', url)
+                      }}
+                    />
+                  </InputGroupAddon>
+                </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
@@ -117,19 +146,18 @@ export default function CategoriesEditPage({
 
           <form.Field
             name='parentId'
-            render={({ meta, field }) => (
+            render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Parent Category</FieldLabel>
-                <Select {...field}>
-                  <SelectOption value='no-parent'>No Parent</SelectOption>
+                <NativeSelect {...field} value={value ?? ''}>
                   {data?.categories
                     .filter((cat) => cat.id !== category.id)
                     .map((category) => (
-                      <SelectOption key={category.id} value={category.id}>
+                      <NativeSelectOption key={category.id} value={category.id}>
                         {category.name}
-                      </SelectOption>
+                      </NativeSelectOption>
                     ))}
-                </Select>
+                </NativeSelect>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

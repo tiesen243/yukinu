@@ -30,6 +30,7 @@ export const LegalLinks: React.FC = () => (
     <ul className='space-y-1 text-sm'>
       {links.map((link) => (
         <li key={link.href}>
+          {/* oxlint-disable-next-line no-html-link-for-pages */}
           <a
             href={link.href}
             className='hover:underline'

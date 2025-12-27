@@ -1,7 +1,14 @@
 import { Button } from '@yukinu/ui/button'
 import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@yukinu/ui/select'
 import { UserValidators } from '@yukinu/validators/user'
 
 import { useUserQueryStates } from '@/routes/admin/users/hook'
@@ -40,15 +47,28 @@ export const SearchForm: React.FC = () => {
       <Select
         id='role'
         name='role'
-        className='w-fit'
         defaultValue={query.role ?? ''}
+        items={[
+          ...UserValidators.roles.map((role) => ({
+            label: role.split('_').join(' '),
+            value: role,
+          })),
+          { label: 'all', value: '' },
+        ]}
       >
-        <SelectOption value=''>all</SelectOption>
-        {UserValidators.roles.map((role) => (
-          <SelectOption key={role} value={role}>
-            {role.split('_').join(' ')}
-          </SelectOption>
-        ))}
+        <SelectTrigger className='w-fit'>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectItem value=''>all</SelectItem>
+            {UserValidators.roles.map((role) => (
+              <SelectItem key={role} value={role}>
+                {role.split('_').join(' ')}
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
       </Select>
 
       <Button type='submit' variant='ghost' size='icon'>

@@ -1,11 +1,10 @@
-import { Suspense } from 'react'
-
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@yukinu/ui/collapsible'
 import { ChevronRightIcon } from '@yukinu/ui/icons'
+import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import {

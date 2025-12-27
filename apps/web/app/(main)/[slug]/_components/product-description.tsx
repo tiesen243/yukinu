@@ -11,7 +11,7 @@ export const ProductDescription: React.FC = () => {
   } = usePage()
 
   return (
-    <Card render={<section className='px-4' />}>
+    <Card className='px-4' render={<section />}>
       <Typography variant='h4' render={<h2>Overview</h2>} />
       <Typography className='overflow-x-auto whitespace-pre-wrap'>
         {description?.split('\\n').join('\n')}

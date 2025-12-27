@@ -1,7 +1,6 @@
-import Link from 'next/link'
-
 import { Card } from '@yukinu/ui/card'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
+import Link from 'next/link'
 
 import { ForgotPasswordForm } from '@/app/(auth)/forgot-password/page.client'
 import { createMetadata } from '@/lib/metadata'
@@ -16,8 +15,8 @@ export default function ForgotPasswordPage() {
         <FieldSet className='px-4'>
           <FieldLegend>Forgot Password</FieldLegend>
           <FieldDescription>
-            Enter your email address below and we'll send you a link to reset
-            your password.
+            Enter your email address below and we&apos;ll send you a link to
+            reset your password.
           </FieldDescription>
           <ForgotPasswordForm />
           <FieldDescription>

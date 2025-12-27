@@ -1,6 +1,4 @@
-import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -15,6 +13,7 @@ import {
 import { Field, FieldLabel } from '@yukinu/ui/field'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
+import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -37,7 +36,7 @@ export const InviteStaffButton: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button>Invite New Staff</Button>} />
+      <DialogTrigger>Invite New Staff</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -61,14 +60,7 @@ export const InviteStaffButton: React.FC = () => {
         </Field>
 
         <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
-
+          <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
               mutate({ email })

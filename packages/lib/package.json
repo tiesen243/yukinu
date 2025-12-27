@@ -14,25 +14,18 @@
   "scripts": {
     "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "~dev": "tsdown --watch"
   },
-  "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-query": "catalog:prod",
     "superjson": "catalog:trpc",
-    "zod": "catalog:"
+    "zod": "catalog:prod"
   },
   "devDependencies": {
-    "@types/node": "catalog:",
-    "@yukinu/eslint-config": "workspace:*",
-    "@yukinu/prettier-config": "workspace:*",
+    "@types/node": "catalog:dev",
     "@yukinu/tsconfig": "workspace:*",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
-    "tsdown": "catalog:",
-    "typescript": "catalog:"
+    "tsdown": "catalog:dev",
+    "typescript": "catalog:dev"
   }
 }

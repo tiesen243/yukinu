@@ -46,7 +46,7 @@ The repository contains three main sections:
 
 - **apps/** — Web App (Marketplace) + Vendor Dashboard
 - **packages/** — Shared modules: API, Auth, Database, UI, Validators
-- **tools/** — Dev infrastructure: ESLint, Prettier, TypeScript, NGINX, CI/CD scripts
+- **tools/** — Dev infrastructure: TypeScript, NGINX, CI/CD scripts
 
 > More details: [Project Structure](./project-structure.md)
 

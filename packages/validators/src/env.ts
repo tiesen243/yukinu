@@ -1,6 +1,5 @@
-import * as z from 'zod/mini'
-
 import { createEnv } from '@yukinu/lib/create-env'
+import * as z from 'zod/mini'
 
 export const env = createEnv({
   server: {

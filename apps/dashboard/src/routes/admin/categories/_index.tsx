@@ -1,5 +1,3 @@
-import { Link } from 'react-router'
-
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import { DownloadIcon, PlusIcon } from '@yukinu/ui/icons'
@@ -11,6 +9,7 @@ import {
   TableRow,
 } from '@yukinu/ui/table'
 import { Typography } from '@yukinu/ui/typography'
+import { Link } from 'react-router'
 
 import { CategoriesList } from '@/routes/admin/categories/categories-list'
 import { CategoriesPagination } from '@/routes/admin/categories/categories-pagination'
@@ -45,7 +44,7 @@ export default function CategoriesPage() {
         </Button>
       </div>
 
-      <Card render={<section className='px-4' />}>
+      <Card className='px-4' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

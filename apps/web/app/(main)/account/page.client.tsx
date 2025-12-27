@@ -1,9 +1,6 @@
 'use client'
 
-import { useState } from 'react'
-import Image from 'next/image'
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -36,11 +33,21 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
-import { Select, SelectOption } from '@yukinu/ui/select'
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectValue,
+} from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
+import { useUploadThing } from '@yukinu/uploadthing/react'
 import { AuthValidators } from '@yukinu/validators/auth'
 import { UserValidators } from '@yukinu/validators/user'
+import Image from 'next/image'
+import { useRef, useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -61,10 +68,13 @@ export const ProfileSummary: React.FC = () => {
 
         <FieldGroup>
           <Field>
-            <FieldLabel>Username</FieldLabel>
+            <FieldLabel htmlFor='username'>Username</FieldLabel>
             <InputGroup>
-              <InputGroupInput value={data.username} readOnly />
-              <InputGroupAddon align='inline-end'>
+              <InputGroupInput id='username' value={data.username} readOnly />
+              <InputGroupAddon
+                align='inline-end'
+                onClick={(e) => e.stopPropagation()}
+              >
                 <ChangeUsernameForm username={data.username} />
               </InputGroupAddon>
             </InputGroup>
@@ -169,7 +179,37 @@ export function UpdateProfileForm() {
                   <FieldLabel htmlFor={meta.fieldId}>
                     Profile Image URL
                   </FieldLabel>
-                  <Input {...field} value={value ?? ''} />
+                  <InputGroup>
+                    <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupUploadButton
+                        onUploadComplete={(url) => field.onChange(url)}
+                      />
+                    </InputGroupAddon>
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupButton
+                        onClick={async () => {
+                          const buffer = new TextEncoder().encode(
+                            data.email.trim().toLowerCase(),
+                          )
+                          const hashBuffer = await crypto.subtle.digest(
+                            'SHA-256',
+                            buffer,
+                          )
+                          const hashedEmail = Array.from(
+                            new Uint8Array(hashBuffer),
+                          )
+                            .map((b) => b.toString(16).padStart(2, '0'))
+                            .join('')
+                          return field.onChange(
+                            `https://1.gravatar.com/avatar/${hashedEmail}?s=512&d=identicon`,
+                          )
+                        }}
+                      >
+                        Using Gravatar
+                      </InputGroupButton>
+                    </InputGroupAddon>
+                  </InputGroup>
                   <FieldDescription>
                     This will be replaced with an upload widget in the future.
                   </FieldDescription>
@@ -208,7 +248,11 @@ export function UpdateProfileForm() {
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Bio</FieldLabel>
                 <InputGroup>
-                  <InputGroupTextarea {...field} value={value ?? ''} />
+                  <InputGroupTextarea
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Tell us about yourself...'
+                  />
                   <InputGroupAddon align='block-end'>
                     <InputGroupText
                       className={`ml-auto ${value && value.length > 2000 ? 'text-destructive' : ''}`}
@@ -224,18 +268,32 @@ export function UpdateProfileForm() {
 
           <form.Field
             name='gender'
-            render={({ meta, field: { value, ...field } }) => (
+            render={({ meta, field: { onChange, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Gender</FieldLabel>
-                <Select {...field} value={value ?? ''}>
-                  <SelectOption value='' disabled>
-                    Select your gender
-                  </SelectOption>
-                  {UserValidators.genders.map((gender) => (
-                    <SelectOption key={gender} value={gender}>
-                      {gender}
-                    </SelectOption>
-                  ))}
+                <Select
+                  {...field}
+                  onValueChange={onChange}
+                  items={[
+                    ...UserValidators.genders.map((gender) => ({
+                      label: gender,
+                      value: gender,
+                    })),
+                    { label: 'Select gender', value: null },
+                  ]}
+                >
+                  <SelectTrigger className='w-full'>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {UserValidators.genders.map((gender) => (
+                        <SelectItem key={gender} value={gender}>
+                          {gender}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
                 </Select>
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
@@ -339,6 +397,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
+        variant='ghost'
         render={
           <InputGroupButton>
             <PencilIcon />
@@ -401,5 +460,41 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  )
+}
+
+const InputGroupUploadButton: React.FC<{
+  onUploadComplete: (url: string) => void
+}> = ({ onUploadComplete }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const ut = useUploadThing('avatarUploader', {
+    onClientUploadComplete: ([res]) => {
+      if (res?.ufsUrl) onUploadComplete(res.ufsUrl)
+      else toast.error('Failed to upload avatar')
+    },
+  })
+
+  return (
+    <>
+      <input
+        ref={inputRef}
+        type='file'
+        accept='image/*'
+        onChange={(e) => {
+          const selectedFile = e.target.files?.[0]
+          if (!selectedFile) return
+
+          ut.startUpload([selectedFile])
+        }}
+        hidden
+      />
+      <InputGroupButton
+        disabled={ut.isUploading}
+        onClick={() => inputRef.current?.click()}
+      >
+        {ut.isUploading ? 'Uploading...' : 'Upload'}
+      </InputGroupButton>
+    </>
   )
 }

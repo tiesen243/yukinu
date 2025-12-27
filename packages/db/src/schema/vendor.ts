@@ -1,9 +1,8 @@
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
-
 import { createId } from '@yukinu/lib/create-id'
 import { VendorValidators } from '@yukinu/validators/vendor'
+import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { users } from '@/schema'
+import { orderItems, users } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
 export const vendorStatusEnum = pgEnum(
@@ -22,6 +21,11 @@ export const vendors = pgTable(
     description: t.text(),
     image: t.varchar({ length: 500 }),
     address: t.varchar({ length: 500 }),
+    contact: t.varchar({ length: 100 }),
+    payoutAccountName: t.varchar({ length: 255 }),
+    payoutAccountNumber: t.varchar({ length: 100 }),
+    payoutBankCode: t.varchar({ length: 50 }),
+    payoutBankRef: t.varchar({ length: 100 }),
     status: vendorStatusEnum().default('pending').notNull(),
     createdAt,
     updatedAt,
@@ -48,16 +52,36 @@ export const vendorStaffs = pgTable(
   ],
 )
 
-export const payouts = pgTable(
-  'payouts',
+export const vendorBalances = pgTable(
+  'vendor_balances',
+  (t) => ({
+    vendorId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => vendors.id, { onDelete: 'restrict' }),
+    balance: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
+    updatedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
+  }),
+  (t) => [
+    primaryKey({ columns: [t.vendorId] }),
+    index('vendor_balances_vendor_id_idx').on(t.vendorId),
+  ],
+)
+
+export const vendorTransactions = pgTable(
+  'vendor_transactions',
   (t) => ({
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     vendorId: t
       .varchar({ length: 24 })
       .notNull()
-      .references(() => vendors.id, { onDelete: 'cascade' }),
-    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
-    processedAt: t.timestamp({ mode: 'date' }),
+      .references(() => vendors.id, { onDelete: 'restrict' }),
+    orderItemId: t
+      .varchar({ length: 24 })
+      .references(() => orderItems.id, { onDelete: 'restrict' }),
+    amountIn: t.numeric({ precision: 10, scale: 2 }),
+    amountOut: t.numeric({ precision: 10, scale: 2 }),
+    createdAt,
   }),
-  (t) => [index('payouts_vendor_id_idx').on(t.vendorId)],
+  (t) => [index('vendor_transactions_vendor_id_idx').on(t.vendorId)],
 )

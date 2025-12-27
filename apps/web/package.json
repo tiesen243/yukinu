@@ -7,14 +7,11 @@
     "build": "bun --env-file ../../.env next build",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
     "dev": "bun --env-file ../../.env next dev",
-    "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "bun --env-file ../../.env next typegen && eslint",
     "start": "bun --env-file ../../.env next start",
     "typecheck": "bun --env-file ../../.env next typegen && tsc --noEmit"
   },
-  "prettier": "@yukinu/prettier-config",
   "dependencies": {
-    "@tanstack/react-query": "catalog:",
+    "@tanstack/react-query": "catalog:prod",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
     "@yukinu/api": "workspace:*",
@@ -23,24 +20,21 @@
     "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
+    "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.0.10",
-    "nuqs": "catalog:",
+    "next": "catalog:react",
+    "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
-    "@types/node": "catalog:",
+    "@types/node": "catalog:dev",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
-    "@yukinu/eslint-config": "workspace:*",
-    "@yukinu/prettier-config": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
-    "eslint": "catalog:",
-    "prettier": "catalog:",
     "tailwindcss": "catalog:tailwind",
-    "typescript": "catalog:"
+    "typescript": "catalog:dev"
   }
 }

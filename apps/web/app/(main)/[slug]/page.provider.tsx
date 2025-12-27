@@ -1,10 +1,10 @@
 'use client'
 
-import * as React from 'react'
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-
 import type { ProductValidators } from '@yukinu/validators/product'
+
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from '@yukinu/ui/sonner'
+import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -91,10 +91,11 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
       ),
     )
 
-    const avgRating = product.reviews.length
-      ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
-        product.reviews.length
-      : 0
+    const avgRating =
+      product.reviews.length > 0
+        ? product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+          product.reviews.length
+        : 0
 
     return {
       product,
