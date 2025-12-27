@@ -23,6 +23,7 @@
     "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
+    "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
     "isbot": "^5.1.32",
     "nuqs": "catalog:prod",

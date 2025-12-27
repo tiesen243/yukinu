@@ -6,6 +6,7 @@ export default [
   ...prefix('/api', [
     route('/auth/*', './routes/api/auth.ts'),
     route('/trpc/*', './routes/api/trpc.ts'),
+    route('/uploadthing/*', './routes/api/uploadthing.ts'),
   ]),
 
   route('/login', './routes/login.tsx'),
