@@ -1,5 +1,15 @@
 # @yukinu/tsconfig
 
+## 0.4.0
+
+### Minor Changes
+
+- [#299](https://github.com/tiesen243/yukinu/pull/299) [`4094a66`](https://github.com/tiesen243/yukinu/commit/4094a66e46bf3e724d5ef454ef999b811be89aef) Thanks [@tiesen243](https://github.com/tiesen243)! - completed upload file features
+
+### Patch Changes
+
+- [#299](https://github.com/tiesen243/yukinu/pull/299) [`ed456b2`](https://github.com/tiesen243/yukinu/commit/ed456b2c7d4912dca37db02796602bbb4377b580) Thanks [@tiesen243](https://github.com/tiesen243)! - migrate to oxc
+
 ## 0.3.0
 
 ### Minor Changes
