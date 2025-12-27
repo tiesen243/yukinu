@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.9.1
+
+### Patch Changes
+
+- [#302](https://github.com/tiesen243/yukinu/pull/302) [`4292a73`](https://github.com/tiesen243/yukinu/commit/4292a731c9fbe27b5cefe175f413695ac51cdac6) Thanks [@tiesen243](https://github.com/tiesen243)! - remove feature note
+
 ## 0.9.0
 
 ### Minor Changes
