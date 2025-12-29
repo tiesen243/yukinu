@@ -75,6 +75,7 @@ export function LoginScreen() {
           <TextInput
             placeholder='Password'
             className='text-card-foreground bg-input rounded-md px-2'
+            placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, password: text })}
             aria-disabled={isPending}
             editable={!isPending}
