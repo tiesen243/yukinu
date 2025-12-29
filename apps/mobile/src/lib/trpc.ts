@@ -15,6 +15,8 @@ const trpcClient = createTRPCClient<AppRouter>({
     retryLink({
       retry: ({ error, attempts }) => {
         if (error.data?.code === 'UNAUTHORIZED') {
+          if (attempts > 1) return false // Do not retry more than once for unauthorized errors
+
           fetch(`${getBaseUrl()}/api/auth/refresh-token`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${getSessionToken()}` },
@@ -25,10 +27,12 @@ const trpcClient = createTRPCClient<AppRouter>({
               /* Ignore errors */
             })
 
-          return true
+          return true // Retry once after attempting to refresh the token
         }
 
-        return attempts <= 1
+        if (error.data?.code === 'FORBIDDEN') return false // Do not retry on forbidden errors
+
+        return attempts <= 3 // Retry up to 3 times for other errors
       },
       retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30000),
     }),

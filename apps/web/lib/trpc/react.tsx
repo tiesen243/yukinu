@@ -47,13 +47,18 @@ function TRPCReactProvider({
         retryLink({
           retry: ({ error, attempts }) => {
             if (error.data?.code === 'UNAUTHORIZED') {
-              void fetch(`${getWebUrl()}/api/auth/refresh-token`, {
+              if (attempts > 1) return false // Do not retry more than once for unauthorized errors
+
+              fetch(`${getWebUrl()}/api/auth/refresh-token`, {
                 method: 'POST',
               })
-              return true
+
+              return true // Retry once after attempting to refresh the token
             }
 
-            return attempts <= 1
+            if (error.data?.code === 'FORBIDDEN') return false // Do not retry on forbidden errors
+
+            return attempts <= 3 // Retry up to 3 times for other errors
           },
           retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30000),
         }),
