@@ -1,5 +1,13 @@
 # @yukinu/mobile
 
+## 0.0.2
+
+### Patch Changes
+
+- [#310](https://github.com/tiesen243/yukinu/pull/310) [`661f387`](https://github.com/tiesen243/yukinu/commit/661f387784c868faee546b2a6c1a1c364b3bcf53) Thanks [@tiesen243](https://github.com/tiesen243)! - update retryLink config
+
+- [#310](https://github.com/tiesen243/yukinu/pull/310) [`3e3267a`](https://github.com/tiesen243/yukinu/commit/3e3267a85c62e3f11bf4955524a1df8f32eb2b49) Thanks [@tiesen243](https://github.com/tiesen243)! - added redux
+
 ## 0.0.1
 
 ### Patch Changes
