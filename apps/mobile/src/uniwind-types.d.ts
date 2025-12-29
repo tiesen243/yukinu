@@ -2,10 +2,9 @@
 /// <reference types="uniwind/types" />
 
 declare module 'uniwind' {
-  export interface UniwindConfig {
-    themes: readonly ['light', 'dark']
-  }
+    export interface UniwindConfig {
+        themes: readonly ['light', 'dark']
+    }
 }
 
-// oxlint-disable-next-line require-module-specifiers
 export {}
