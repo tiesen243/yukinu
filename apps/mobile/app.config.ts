@@ -2,8 +2,6 @@ import type { ConfigContext, ExpoConfig } from 'expo/config'
 
 import pkg from './package.json'
 
-// "name": "@yukinu/mobile",
-// name => Yukinu
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name:
