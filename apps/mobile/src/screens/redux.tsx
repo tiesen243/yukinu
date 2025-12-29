@@ -1,4 +1,5 @@
 import { buttonVariants } from '@yukinu/ui/button'
+import { PlusIcon } from 'lucide-react-native'
 import * as React from 'react'
 import { FlatList, Pressable, Text, TextInput, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -72,13 +73,14 @@ const TodoList: React.FC = () => {
         />
 
         <Pressable
-          className={buttonVariants({ size: 'xl' })}
+          className={buttonVariants({ size: 'icon-xl' })}
           onPress={() => {
+            if (!text.trim()) return
             dispatch({ type: 'todo/addTodo', payload: text })
             setText('')
           }}
         >
-          <Text className='text-primary-foreground'>Add Todo</Text>
+          <PlusIcon color='#fafafa' />
         </Pressable>
       </View>
 
@@ -94,7 +96,7 @@ const TodoList: React.FC = () => {
                 dispatch({ type: 'todo/removeTodo', payload: item.id })
               }
             >
-              <Text className='text-primary-foreground'>Remove</Text>
+              <Text className='text-destructive'>Remove</Text>
             </Pressable>
           </View>
         )}
