@@ -1,5 +1,5 @@
 import { Link } from '@react-navigation/native'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { buttonVariants } from '@yukinu/ui/button'
 import { Alert, Image, Pressable, Text, View } from 'react-native'
 
@@ -12,7 +12,6 @@ export function ProfileScreen() {
     trpc.auth.getCurrentUser.queryOptions(),
   )
 
-  const queryClient = useQueryClient()
   const { mutate, isPending } = useMutation({
     mutationKey: ['auth', 'logout'],
     mutationFn: async () => {
@@ -29,7 +28,6 @@ export function ProfileScreen() {
     onSuccess: async () => {
       await deleteAccessToken()
       await deleteSessionToken()
-      queryClient.setQueryData(trpc.auth.getCurrentUser.queryKey(), undefined)
     },
     onError: (error) => Alert.alert('Error', error.message),
     retry: false,

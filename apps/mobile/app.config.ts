@@ -18,6 +18,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   assetBundlePatterns: ['**/*'],
   ios: {
     bundleIdentifier: `com.${pkg.name.replaceAll('@', '').replaceAll('/', '.')}`,
+    associatedDomains: ['webcredentials:yukinu.vercel.app'],
     supportsTablet: true,
     icon: './assets/icon.png',
   },
