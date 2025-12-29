@@ -18,6 +18,9 @@ coverage
 routeTree.gen.ts
 app.config.timestamp_*.js
 
+# expo
+.expo/
+
 # java
 *.class
 *.jar
@@ -47,7 +50,6 @@ out/
 tmp/
 .DS_Store
 Thumbs.db
-*.bak
 *.pem
 
 # debug
