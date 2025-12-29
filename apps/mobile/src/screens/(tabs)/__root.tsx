@@ -12,6 +12,7 @@ import { ProfileScreen } from '@/screens/(tabs)/profile'
 import { SettingsScreen } from '@/screens/(tabs)/settings'
 
 export const Tabs = createBottomTabNavigator({
+  initialRouteName: 'index',
   screenOptions: {
     tabBarActiveTintColor: '#3f5ec2',
   },

@@ -1,19 +1,25 @@
-import { buttonVariants } from '@yukinu/ui/button'
 import { PlusIcon } from 'lucide-react-native'
 import * as React from 'react'
-import { FlatList, Pressable, Text, TextInput, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { FlatList, Text, TextInput, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
+import { Button } from '@/components/ui/button'
 import { useAppDispatch, useAppSelector } from '@/store'
 
 export function ReduxScreen() {
+  const insets = useSafeAreaInsets()
+
   return (
-    <SafeAreaView className='flex-1 bg-background flex flex-col justify-center'>
-      <View className='container h-full flex flex-col justify-center items-center gap-8'>
+    <View
+      className='bg-background flex-1'
+      style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
+    >
+      <View className='container flex-1 gap-8 py-4'>
         <Counter />
+
         <TodoList />
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
@@ -22,34 +28,36 @@ const Counter: React.FC = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <View className='bg-card border border-border p-4 rounded-xl flex flex-col gap-4 items-center w-full'>
-      <Text className='text-2xl text-card-foreground'>Counter: {count}</Text>
+    <View className='bg-card border border-border p-4 rounded-xl gap-4'>
+      <Text
+        className='text-2xl text-card-foreground text-center'
+        style={{ fontFamily: 'Geist_500Medium' }}
+      >
+        Counter: {count}
+      </Text>
 
-      <View className='flex flex-row gap-4'>
-        <Pressable
-          className={buttonVariants()}
+      <View className='flex-row justify-center gap-2'>
+        <Button
           onPress={() =>
             dispatch({ type: 'count/increment', payload: undefined })
           }
         >
-          <Text className='text-primary-foreground'>Increment</Text>
-        </Pressable>
+          Increment
+        </Button>
 
-        <Pressable
-          className={buttonVariants()}
+        <Button
           onPress={() =>
             dispatch({ type: 'count/decrement', payload: undefined })
           }
         >
-          <Text className='text-primary-foreground'>Decrement</Text>
-        </Pressable>
+          Decrement
+        </Button>
 
-        <Pressable
-          className={buttonVariants()}
+        <Button
           onPress={() => dispatch({ type: 'count/reset', payload: undefined })}
         >
-          <Text className='text-primary-foreground'>Reset</Text>
-        </Pressable>
+          Reset
+        </Button>
       </View>
     </View>
   )
@@ -61,9 +69,14 @@ const TodoList: React.FC = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <View className='bg-card border border-border p-4 rounded-xl flex flex-col gap-4 w-full flex-1'>
-      <Text className='text-2xl text-card-foreground'>Todo List</Text>
-      <View className='flex flex-row items-center gap-2'>
+    <View className='flex-1 bg-card border border-border p-4 rounded-xl gap-4'>
+      <Text
+        className='text-2xl text-card-foreground'
+        style={{ fontFamily: 'Geist_500Medium' }}
+      >
+        Todo List
+      </Text>
+      <View className='flex-row items-center gap-2'>
         <TextInput
           className='bg-input text-card-foreground rounded-md px-2 flex-1'
           placeholder='Enter todo item'
@@ -72,8 +85,8 @@ const TodoList: React.FC = () => {
           onChangeText={setText}
         />
 
-        <Pressable
-          className={buttonVariants({ size: 'icon-xl' })}
+        <Button
+          size='icon-xl'
           onPress={() => {
             if (!text.trim()) return
             dispatch({ type: 'todo/addTodo', payload: text })
@@ -81,7 +94,7 @@ const TodoList: React.FC = () => {
           }}
         >
           <PlusIcon color='#fafafa' />
-        </Pressable>
+        </Button>
       </View>
 
       <FlatList
@@ -90,14 +103,14 @@ const TodoList: React.FC = () => {
         renderItem={({ item }) => (
           <View className='flex flex-row justify-between items-center mb-2'>
             <Text className='text-card-foreground'>{item.text}</Text>
-            <Pressable
-              className={buttonVariants({ variant: 'destructive' })}
+            <Button
+              variant='destructive'
               onPress={() =>
                 dispatch({ type: 'todo/removeTodo', payload: item.id })
               }
             >
-              <Text className='text-destructive'>Remove</Text>
-            </Pressable>
+              Remove
+            </Button>
           </View>
         )}
         ListEmptyComponent={

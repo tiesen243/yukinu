@@ -1,13 +1,15 @@
-import { Link } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { buttonVariants } from '@yukinu/ui/button'
-import { Alert, Image, Pressable, Text, View } from 'react-native'
+import { Alert, Image, Text, View } from 'react-native'
 
+import { Button } from '@/components/ui/button'
 import { deleteAccessToken, deleteSessionToken } from '@/lib/store'
 import { trpc } from '@/lib/trpc'
 import { getBaseUrl } from '@/lib/utils'
 
 export function ProfileScreen() {
+  const navigation = useNavigation()
+
   const { data, isLoading, isError } = useQuery(
     trpc.auth.getCurrentUser.queryOptions(),
   )
@@ -28,6 +30,7 @@ export function ProfileScreen() {
     onSuccess: async () => {
       await deleteAccessToken()
       await deleteSessionToken()
+      navigation.navigate('login')
     },
     onError: (error) => Alert.alert('Error', error.message),
     retry: false,
@@ -44,15 +47,15 @@ export function ProfileScreen() {
     return (
       <View className='bg-background flex-1 justify-center items-center'>
         <Text className='text-foreground mb-4'>You are not logged in.</Text>
-        <Link screen='login' className={buttonVariants({ className: 'py-1' })}>
-          <Text className='text-white'>Go to Login</Text>
-        </Link>
+        <Button onPress={() => navigation.navigate('login')}>
+          Go to Login
+        </Button>
       </View>
     )
 
   return (
-    <View className='bg-background flex-1'>
-      <View className='container py-4'>
+    <View className='bg-background flex-1 py-4'>
+      <View className='container'>
         <View className='flex flex-row items-center gap-4'>
           <Image
             source={{ uri: data.user.image ?? '' }}
@@ -69,13 +72,9 @@ export function ProfileScreen() {
           </View>
         </View>
 
-        <Pressable
-          className={buttonVariants({ className: 'mt-8' })}
-          onPress={() => mutate()}
-          disabled={isPending}
-        >
-          <Text className='text-primary-foreground'>Logout</Text>
-        </Pressable>
+        <Button className='mt-8' onPress={() => mutate()} disabled={isPending}>
+          Logout
+        </Button>
       </View>
     </View>
   )

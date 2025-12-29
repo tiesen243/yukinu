@@ -2,11 +2,10 @@ import type { AuthValidators } from '@yukinu/validators/auth'
 
 import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
-import { buttonVariants } from '@yukinu/ui/button'
 import * as React from 'react'
-import { Alert, Pressable, Text, TextInput, View } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import { Alert, Text, TextInput, View } from 'react-native'
 
+import { Button } from '@/components/ui/button'
 import { setAccessToken, setSessionToken } from '@/lib/store'
 import { getBaseUrl } from '@/lib/utils'
 
@@ -35,8 +34,8 @@ export function LoginScreen() {
   })
 
   return (
-    <SafeAreaView className='bg-background flex-1'>
-      <View className='container h-full py-4 flex flex-col gap-4 justify-center items-center'>
+    <View className='bg-background flex-1 items-center justify-center'>
+      <View className='container gap-6'>
         <View className='w-full'>
           <Text
             className='text-2xl scroll-m-20 text-balance text-foreground'
@@ -67,6 +66,7 @@ export function LoginScreen() {
             editable={!isPending}
           />
         </View>
+
         <View className='w-full flex flex-col gap-2'>
           <Text
             className='text-foreground'
@@ -75,7 +75,7 @@ export function LoginScreen() {
             Password
           </Text>
           <TextInput
-            placeholder='Password'
+            placeholder='Enter your password'
             className='text-card-foreground bg-input rounded-md px-2'
             placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, password: text })}
@@ -87,19 +87,10 @@ export function LoginScreen() {
           />
         </View>
 
-        <Pressable
-          className={buttonVariants({ className: 'w-full' })}
-          onPress={() => mutate()}
-          disabled={isPending}
-        >
-          <Text
-            className='text-primary-foreground'
-            style={{ fontFamily: 'Geist_500Medium' }}
-          >
-            Login
-          </Text>
-        </Pressable>
+        <Button onPress={() => mutate()} disabled={isPending}>
+          Login
+        </Button>
       </View>
-    </SafeAreaView>
+    </View>
   )
 }

@@ -9,6 +9,7 @@ import { NotFoundScreen } from '@/screens/not-found'
 import { ReduxScreen } from '@/screens/redux'
 
 const RootStack = createNativeStackNavigator({
+  initialRouteName: 'tabs',
   screenOptions: {
     headerShown: false,
   },

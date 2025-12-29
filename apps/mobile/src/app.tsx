@@ -16,8 +16,8 @@ import * as SplashScreen from 'expo-splash-screen'
 import { Provider as ReduxProvider } from 'react-redux'
 import { useUniwind } from 'uniwind'
 
-import { Navigation } from '@/__root'
 import { queryClient } from '@/lib/trpc'
+import { Navigation } from '@/screens/__root'
 import { store } from '@/store'
 
 SplashScreen.preventAutoHideAsync()

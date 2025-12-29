@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { buttonVariants } from '@yukinu/ui/button'
-import { Pressable, Text, View } from 'react-native'
+import { Text, View } from 'react-native'
 
+import { Button } from '@/components/ui/button'
 import { trpc } from '@/lib/trpc'
 
 export function IndexScreen() {
@@ -35,12 +35,13 @@ export function IndexScreen() {
           </Text>
         )}
 
-        <Pressable
-          className={buttonVariants({ size: 'lg', className: 'mt-8' })}
+        <Button
+          size='lg'
+          className='mt-8'
           onPress={() => navigation.navigate('redux')}
         >
           <Text className='text-primary-foreground'>Go to Redux Screen</Text>
-        </Pressable>
+        </Button>
       </View>
     </View>
   )
