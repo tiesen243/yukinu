@@ -42,7 +42,10 @@ export namespace AuthValidators {
     password: passwordRegex,
   })
   export type LoginInput = z.infer<typeof loginInput>
-  export const loginOutput = z.object({ token: z.string() })
+  export const loginOutput = z.object({
+    token: z.string(),
+    accessToken: z.string(),
+  })
   export type LoginOutput = z.infer<typeof loginOutput>
 
   export const allSessionsInput = z.object({

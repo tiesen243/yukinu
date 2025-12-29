@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": [],
+  "ignorePatterns": ["apps/mobile/src/uniwind-types.d.ts"],
 
   "jsxSingleQuote": true,
   "printWidth": 80,

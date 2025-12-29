@@ -1,3 +1,4 @@
 @import '@yukinu/ui/tailwind.css';
+@import 'uniwind';
 
 @source '../../../packages/ui/src/**/*.tsx';
