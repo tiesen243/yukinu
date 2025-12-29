@@ -13,14 +13,17 @@ import { Asset } from 'expo-asset'
 import { useFonts } from 'expo-font'
 import { createURL } from 'expo-linking'
 import * as SplashScreen from 'expo-splash-screen'
+import { Provider as ReduxProvider } from 'react-redux'
 import { useUniwind } from 'uniwind'
 
 import { Navigation } from '@/__root'
 import { queryClient } from '@/lib/trpc'
+import { store } from '@/store'
 
 SplashScreen.preventAutoHideAsync()
 
 Asset.loadAsync([...NavigationAssets, require('../assets/icon.png')])
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 const prefix = createURL('/')
 
@@ -36,12 +39,16 @@ export function App() {
   })
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Navigation
-        theme={theme}
-        linking={{ enabled: 'auto', prefixes: [prefix] }}
-        onReady={() => SplashScreen.hideAsync()}
-      />
-    </QueryClientProvider>
+    <SafeAreaProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReduxProvider store={store}>
+          <Navigation
+            theme={theme}
+            linking={{ enabled: 'auto', prefixes: [prefix] }}
+            onReady={() => SplashScreen.hideAsync()}
+          />
+        </ReduxProvider>
+      </QueryClientProvider>
+    </SafeAreaProvider>
   )
 }

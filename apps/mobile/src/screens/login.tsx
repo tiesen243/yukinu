@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query'
 import { buttonVariants } from '@yukinu/ui/button'
 import * as React from 'react'
 import { Alert, Pressable, Text, TextInput, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { setAccessToken, setSessionToken } from '@/lib/store'
 import { getBaseUrl } from '@/lib/utils'
@@ -28,13 +29,13 @@ export function LoginScreen() {
     onSuccess: (data) => {
       setSessionToken(data.token)
       setAccessToken(data.accessToken)
-      navigation.navigate('main')
+      navigation.navigate('tabs')
     },
     onError: (error) => Alert.alert('Error', error.message),
   })
 
   return (
-    <View className='bg-background flex-1'>
+    <SafeAreaView className='bg-background flex-1'>
       <View className='container h-full py-4 flex flex-col gap-4 justify-center items-center'>
         <View className='w-full'>
           <Text
@@ -57,7 +58,8 @@ export function LoginScreen() {
           </Text>
           <TextInput
             placeholder='Enter your username or email'
-            className='text-foreground bg-input rounded-md px-2 placeholder:text-muted-foreground'
+            className='text-card-foreground bg-input rounded-md px-2'
+            placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, identifier: text })}
             aria-disabled={isPending}
             editable={!isPending}
@@ -72,7 +74,7 @@ export function LoginScreen() {
           </Text>
           <TextInput
             placeholder='Password'
-            className='text-foreground bg-input rounded-md px-2 placeholder:text-muted-foreground'
+            className='text-card-foreground bg-input rounded-md px-2'
             onChangeText={(text) => setData({ ...data, password: text })}
             aria-disabled={isPending}
             editable={!isPending}
@@ -93,6 +95,6 @@ export function LoginScreen() {
           </Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }

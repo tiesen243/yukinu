@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native'
 import { buttonVariants } from '@yukinu/ui/button'
 import { Pressable, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export function NotFoundScreen() {
   const navigation = useNavigation()
 
   return (
-    <View className='bg-background py-4 flex-1'>
+    <SafeAreaView className='bg-background py-4 flex-1'>
       <View className='container h-full flex flex-col items-center justify-center gap-6'>
         <Text
           className='text-4xl scroll-m-20 text-balance text-foreground'
@@ -17,7 +18,7 @@ export function NotFoundScreen() {
 
         <Pressable
           className={buttonVariants({ size: 'lg' })}
-          onPress={() => navigation.navigate('main', undefined, { pop: true })}
+          onPress={() => navigation.navigate('tabs', undefined, { pop: true })}
         >
           <Text
             className='text-primary-foreground'
@@ -27,6 +28,6 @@ export function NotFoundScreen() {
           </Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   )
 }
