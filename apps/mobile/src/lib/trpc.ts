@@ -5,7 +5,7 @@ import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
 import SuperJSON from 'superjson'
 
-import { getAccessToken, getSessionToken } from '@/lib/store'
+import { getAccessToken, getSessionToken, setAccessToken } from '@/lib/store'
 import { getBaseUrl } from '@/lib/utils'
 
 const queryClient = createQueryClient()
@@ -15,10 +15,16 @@ const trpcClient = createTRPCClient<AppRouter>({
     retryLink({
       retry: ({ error, attempts }) => {
         if (error.data?.code === 'UNAUTHORIZED' && attempts < 1) {
-          void fetch(`${getBaseUrl()}/api/auth/refresh-token`, {
+          fetch(`${getBaseUrl()}/api/auth/refresh-token`, {
             method: 'POST',
             headers: { Authorization: `Bearer ${getSessionToken()}` },
           })
+            .then((res) => res.json() as Promise<{ accessToken: string }>)
+            .then(({ accessToken }) => setAccessToken(accessToken))
+            .catch(() => {
+              /* Ignore errors */
+            })
+
           return true
         }
         return false

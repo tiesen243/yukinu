@@ -60,6 +60,7 @@ export function LoginScreen() {
             className='text-foreground bg-input rounded-md px-2 placeholder:text-muted-foreground'
             onChangeText={(text) => setData({ ...data, identifier: text })}
             aria-disabled={isPending}
+            editable={!isPending}
           />
         </View>
         <View className='w-full flex flex-col gap-2'>
@@ -74,6 +75,7 @@ export function LoginScreen() {
             className='text-foreground bg-input rounded-md px-2 placeholder:text-muted-foreground'
             onChangeText={(text) => setData({ ...data, password: text })}
             aria-disabled={isPending}
+            editable={!isPending}
             secureTextEntry
           />
         </View>
