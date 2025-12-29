@@ -11,7 +11,7 @@ export function ReduxScreen() {
 
   return (
     <View
-      className='bg-background flex-1'
+      className='flex-1 bg-background'
       style={{ paddingTop: insets.top, paddingBottom: insets.bottom }}
     >
       <View className='container flex-1 gap-8 py-4'>
@@ -28,9 +28,9 @@ const Counter: React.FC = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <View className='bg-card border border-border p-4 rounded-xl gap-4'>
+    <View className='gap-4 rounded-xl border border-border bg-card p-4'>
       <Text
-        className='text-2xl text-card-foreground text-center'
+        className='text-center text-2xl text-card-foreground'
         style={{ fontFamily: 'Geist_500Medium' }}
       >
         Counter: {count}
@@ -69,7 +69,7 @@ const TodoList: React.FC = () => {
   const dispatch = useAppDispatch()
 
   return (
-    <View className='flex-1 bg-card border border-border p-4 rounded-xl gap-4'>
+    <View className='flex-1 gap-4 rounded-xl border border-border bg-card p-4'>
       <Text
         className='text-2xl text-card-foreground'
         style={{ fontFamily: 'Geist_500Medium' }}
@@ -78,7 +78,7 @@ const TodoList: React.FC = () => {
       </Text>
       <View className='flex-row items-center gap-2'>
         <TextInput
-          className='bg-input text-card-foreground rounded-md px-2 flex-1'
+          className='flex-1 rounded-md bg-input px-2 text-card-foreground'
           placeholder='Enter todo item'
           placeholderTextColor='#c0c0c0'
           value={text}
@@ -101,7 +101,7 @@ const TodoList: React.FC = () => {
         data={todos}
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => (
-          <View className='flex flex-row justify-between items-center mb-2'>
+          <View className='mb-2 flex flex-row items-center justify-between'>
             <Text className='text-card-foreground'>{item.text}</Text>
             <Button
               variant='destructive'

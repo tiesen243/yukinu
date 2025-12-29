@@ -25,7 +25,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   <Card
     {...props}
     className={cn(
-      'group/product-card flex aspect-square pt-0 transition-colors hover:ring-primary hover:bg-accent/40 hover:text-accent-foreground',
+      'group/product-card flex aspect-square pt-0 transition-colors hover:bg-accent/40 hover:text-accent-foreground hover:ring-primary',
       className,
     )}
     render={<Link href={`/${slugify(product.name)}-${product.id}`} />}

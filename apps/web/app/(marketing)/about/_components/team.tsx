@@ -1,7 +1,7 @@
 import { Typography } from '@yukinu/ui/typography'
 
 export const TeamSection: React.FC = () => (
-  <section className='container py-20 flex flex-col gap-8'>
+  <section className='container flex flex-col gap-8 py-20'>
     <Typography variant='h2' className='text-center'>
       Team Highlights
     </Typography>
@@ -12,7 +12,7 @@ export const TeamSection: React.FC = () => (
           key={highlight.description}
           className='rounded-lg border-accent bg-accent/20 p-8 shadow-sm dark:border'
         >
-          <Typography variant='h3' className='text-accent-foreground my-0'>
+          <Typography variant='h3' className='my-0 text-accent-foreground'>
             {highlight.number}
           </Typography>
           <Typography className='text-accent-foreground/70'>

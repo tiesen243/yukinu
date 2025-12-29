@@ -18,7 +18,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
     <Card
       {...props}
       className={cn(
-        'group/category-card pt-0 aspect-square transition-colors hover:ring-primary hover:bg-accent/40 hover:text-accent-foreground',
+        'group/category-card aspect-square pt-0 transition-colors hover:bg-accent/40 hover:text-accent-foreground hover:ring-primary',
         className,
       )}
       render={<Link href={`/search?c=${category.id}`} />}

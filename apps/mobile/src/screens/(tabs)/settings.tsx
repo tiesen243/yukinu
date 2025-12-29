@@ -2,10 +2,10 @@ import { Text, View } from 'react-native'
 
 export function SettingsScreen() {
   return (
-    <View className='bg-background flex-1 py-4'>
+    <View className='flex-1 bg-background py-4'>
       <View className='container'>
         <Text
-          className='text-4xl scroll-m-20 text-balance text-foreground'
+          className='scroll-m-20 text-4xl text-balance text-foreground'
           style={{ fontFamily: 'Geist_700Bold' }}
         >
           Settings Screen

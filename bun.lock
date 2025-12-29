@@ -14,7 +14,7 @@
     },
     "apps/dashboard": {
       "name": "@yukinu/dashboard",
-      "version": "0.9.0",
+      "version": "0.9.1",
       "dependencies": {
         "@react-router/node": "^7.11.0",
         "@react-router/serve": "^7.11.0",
@@ -50,7 +50,7 @@
     },
     "apps/mobile": {
       "name": "@yukinu/mobile",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "dependencies": {
         "@expo-google-fonts/geist": "^0.4.1",
         "@react-navigation/bottom-tabs": "^7.9.0",
@@ -91,7 +91,7 @@
     },
     "apps/web": {
       "name": "@yukinu/web",
-      "version": "0.9.1",
+      "version": "0.9.2",
       "dependencies": {
         "@tanstack/react-query": "catalog:prod",
         "@trpc/client": "catalog:trpc",

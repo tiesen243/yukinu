@@ -34,11 +34,11 @@ export function LoginScreen() {
   })
 
   return (
-    <View className='bg-background flex-1 items-center justify-center'>
+    <View className='flex-1 items-center justify-center bg-background'>
       <View className='container gap-6'>
         <View className='w-full'>
           <Text
-            className='text-2xl scroll-m-20 text-balance text-foreground'
+            className='scroll-m-20 text-2xl text-balance text-foreground'
             style={{ fontFamily: 'Geist_600SemiBold' }}
           >
             Login
@@ -48,7 +48,7 @@ export function LoginScreen() {
           </Text>
         </View>
 
-        <View className='w-full flex flex-col gap-2'>
+        <View className='flex w-full flex-col gap-2'>
           <Text
             className='text-foreground'
             style={{ fontFamily: 'Geist_500Medium' }}
@@ -57,7 +57,7 @@ export function LoginScreen() {
           </Text>
           <TextInput
             placeholder='Enter your username or email'
-            className='text-card-foreground bg-input rounded-md px-2'
+            className='rounded-md bg-input px-2 text-card-foreground'
             placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, identifier: text })}
             autoComplete='username'
@@ -67,7 +67,7 @@ export function LoginScreen() {
           />
         </View>
 
-        <View className='w-full flex flex-col gap-2'>
+        <View className='flex w-full flex-col gap-2'>
           <Text
             className='text-foreground'
             style={{ fontFamily: 'Geist_500Medium' }}
@@ -76,7 +76,7 @@ export function LoginScreen() {
           </Text>
           <TextInput
             placeholder='Enter your password'
-            className='text-card-foreground bg-input rounded-md px-2'
+            className='rounded-md bg-input px-2 text-card-foreground'
             placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, password: text })}
             autoComplete='current-password'

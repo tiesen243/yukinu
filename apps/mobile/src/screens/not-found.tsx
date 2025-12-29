@@ -7,10 +7,10 @@ export function NotFoundScreen() {
   const navigation = useNavigation()
 
   return (
-    <View className='bg-background flex-1'>
+    <View className='flex-1 bg-background'>
       <View className='container flex-1 items-center justify-center'>
         <Text
-          className='text-4xl scroll-m-20 text-balance text-foreground mb-6'
+          className='mb-6 scroll-m-20 text-4xl text-balance text-foreground'
           style={{ fontFamily: 'Geist_700Bold' }}
         >
           404 - Not Found

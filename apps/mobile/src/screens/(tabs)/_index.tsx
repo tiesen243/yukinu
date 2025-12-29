@@ -18,19 +18,19 @@ export function IndexScreen() {
   )
 
   return (
-    <View className='bg-background py-4 flex-1'>
+    <View className='flex-1 bg-background py-4'>
       <View className='container'>
         <Text
-          className='text-4xl scroll-m-20 text-balance text-foreground'
+          className='scroll-m-20 text-4xl text-balance text-foreground'
           style={{ fontFamily: 'Geist_700Bold' }}
         >
           Welcome to Yukinu Mobile!
         </Text>
 
         {isLoading ? (
-          <Text className='text-foreground mt-4'>Loading...</Text>
+          <Text className='mt-4 text-foreground'>Loading...</Text>
         ) : (
-          <Text className='text-foreground mt-4'>
+          <Text className='mt-4 text-foreground'>
             {JSON.stringify(data, null, 2)}
           </Text>
         )}

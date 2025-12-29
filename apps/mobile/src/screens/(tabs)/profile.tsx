@@ -38,15 +38,15 @@ export function ProfileScreen() {
 
   if (isLoading)
     return (
-      <View className='bg-background flex-1 justify-center items-center'>
+      <View className='flex-1 items-center justify-center bg-background'>
         <Text className='text-foreground'>Loading...</Text>
       </View>
     )
 
   if (isError || !data?.user)
     return (
-      <View className='bg-background flex-1 justify-center items-center'>
-        <Text className='text-foreground mb-4'>You are not logged in.</Text>
+      <View className='flex-1 items-center justify-center bg-background'>
+        <Text className='mb-4 text-foreground'>You are not logged in.</Text>
         <Button onPress={() => navigation.navigate('login')}>
           Go to Login
         </Button>
@@ -54,7 +54,7 @@ export function ProfileScreen() {
     )
 
   return (
-    <View className='bg-background flex-1 py-4'>
+    <View className='flex-1 bg-background py-4'>
       <View className='container'>
         <View className='flex flex-row items-center gap-4'>
           <Image
@@ -63,10 +63,10 @@ export function ProfileScreen() {
           />
 
           <View className='flex flex-col gap-1'>
-            <Text className='text-foreground text-xl'>
+            <Text className='text-xl text-foreground'>
               {data.user.username}
             </Text>
-            <Text className='text-muted-foreground text-lg'>
+            <Text className='text-lg text-muted-foreground'>
               {data.user.email}
             </Text>
           </View>
