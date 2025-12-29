@@ -1,7 +1,18 @@
-import { Link } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
 import { Text, View } from 'react-native'
 
+import { trpc } from '@/lib/trpc'
+
 export function IndexScreen() {
+  const { data, isLoading } = useQuery(
+    trpc.product.all.queryOptions({
+      search: '',
+      categoryId: null,
+      vendorId: null,
+      orderBy: 'createdAt_desc',
+    }),
+  )
+
   return (
     <View className='bg-background py-4 flex-1'>
       <View className='container'>
@@ -12,31 +23,13 @@ export function IndexScreen() {
           Welcome to Yukinu Mobile!
         </Text>
 
-        <Text
-          className='mt-4 text-lg leading-7 text-foreground'
-          style={{ fontFamily: 'Geist_400Regular' }}
-        >
-          Yukinu Mobile is your gateway to a world of seamless mobile
-          experiences. Navigate through the app to explore its features and
-          functionalities.
-        </Text>
-
-        <View className='mt-4 space-y-2'>
-          <Link
-            screen='about'
-            className='text-primary-foreground text-lg'
-            style={{ fontFamily: 'Geist_500Medium' }}
-          >
-            Go to About Page
-          </Link>
-          <Link
-            screen='notFound'
-            className='text-primary-foreground text-lg'
-            style={{ fontFamily: 'Geist_500Medium' }}
-          >
-            Go to Not Found Page
-          </Link>
-        </View>
+        {isLoading ? (
+          <Text className='text-foreground mt-4'>Loading...</Text>
+        ) : (
+          <Text className='text-foreground mt-4'>
+            {JSON.stringify(data, null, 2)}
+          </Text>
+        )}
       </View>
     </View>
   )

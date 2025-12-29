@@ -8,6 +8,7 @@ import {
 } from '@expo-google-fonts/geist'
 import { Assets as NavigationAssets } from '@react-navigation/elements'
 import { DarkTheme, DefaultTheme } from '@react-navigation/native'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { Asset } from 'expo-asset'
 import { useFonts } from 'expo-font'
 import { createURL } from 'expo-linking'
@@ -16,6 +17,7 @@ import { useEffect } from 'react'
 import { useUniwind } from 'uniwind'
 
 import { Navigation } from '@/__root'
+import { queryClient } from '@/lib/trpc'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -39,10 +41,12 @@ export function App() {
   }, [loaded, error])
 
   return (
-    <Navigation
-      theme={theme}
-      linking={{ enabled: 'auto', prefixes: [prefix] }}
-      onReady={() => SplashScreen.hideAsync()}
-    />
+    <QueryClientProvider client={queryClient}>
+      <Navigation
+        theme={theme}
+        linking={{ enabled: 'auto', prefixes: [prefix] }}
+        onReady={() => SplashScreen.hideAsync()}
+      />
+    </QueryClientProvider>
   )
 }
