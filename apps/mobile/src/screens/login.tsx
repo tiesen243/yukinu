@@ -3,9 +3,10 @@ import type { AuthValidators } from '@yukinu/validators/auth'
 import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
 import * as React from 'react'
-import { Alert, Text, TextInput, View } from 'react-native'
+import { Alert, Text, View } from 'react-native'
 
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { setAccessToken, setSessionToken } from '@/lib/store'
 import { getBaseUrl } from '@/lib/utils'
 
@@ -55,13 +56,11 @@ export function LoginScreen() {
           >
             Identifier
           </Text>
-          <TextInput
+          <Input
             placeholder='Enter your username or email'
-            className='rounded-md bg-input px-2 text-card-foreground'
-            placeholderTextColor='#c0c0c0'
-            onChangeText={(text) => setData({ ...data, identifier: text })}
-            autoComplete='username'
             textContentType='username'
+            autoComplete='username'
+            onChangeText={(text) => setData({ ...data, identifier: text })}
             aria-disabled={isPending}
             editable={!isPending}
           />
@@ -74,13 +73,11 @@ export function LoginScreen() {
           >
             Password
           </Text>
-          <TextInput
+          <Input
             placeholder='Enter your password'
-            className='rounded-md bg-input px-2 text-card-foreground'
-            placeholderTextColor='#c0c0c0'
-            onChangeText={(text) => setData({ ...data, password: text })}
             autoComplete='current-password'
             textContentType='password'
+            onChangeText={(text) => setData({ ...data, password: text })}
             aria-disabled={isPending}
             editable={!isPending}
             secureTextEntry

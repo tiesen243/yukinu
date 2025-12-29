@@ -1,9 +1,10 @@
 import { PlusIcon } from 'lucide-react-native'
 import * as React from 'react'
-import { FlatList, Text, TextInput, View } from 'react-native'
+import { FlatList, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { useAppDispatch, useAppSelector } from '@/store'
 
 export function ReduxScreen() {
@@ -77,16 +78,15 @@ const TodoList: React.FC = () => {
         Todo List
       </Text>
       <View className='flex-row items-center gap-2'>
-        <TextInput
-          className='flex-1 rounded-md bg-input px-2 text-card-foreground'
+        <Input
+          className='flex-1'
           placeholder='Enter todo item'
-          placeholderTextColor='#c0c0c0'
           value={text}
           onChangeText={setText}
         />
 
         <Button
-          size='icon-xl'
+          size='icon'
           onPress={() => {
             if (!text.trim()) return
             dispatch({ type: 'todo/addTodo', payload: text })
@@ -99,6 +99,7 @@ const TodoList: React.FC = () => {
 
       <FlatList
         data={todos}
+        className='web:p-2'
         keyExtractor={({ id }) => id}
         renderItem={({ item }) => (
           <View className='mb-2 flex flex-row items-center justify-between'>
