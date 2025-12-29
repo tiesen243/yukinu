@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.9.2
+
+### Patch Changes
+
+- [#310](https://github.com/tiesen243/yukinu/pull/310) [`661f387`](https://github.com/tiesen243/yukinu/commit/661f387784c868faee546b2a6c1a1c364b3bcf53) Thanks [@tiesen243](https://github.com/tiesen243)! - update retryLink config
+
 ## 0.9.1
 
 ### Patch Changes
