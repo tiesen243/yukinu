@@ -61,6 +61,8 @@ export function LoginScreen() {
             className='text-card-foreground bg-input rounded-md px-2'
             placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, identifier: text })}
+            autoComplete='username'
+            textContentType='username'
             aria-disabled={isPending}
             editable={!isPending}
           />
@@ -77,6 +79,8 @@ export function LoginScreen() {
             className='text-card-foreground bg-input rounded-md px-2'
             placeholderTextColor='#c0c0c0'
             onChangeText={(text) => setData({ ...data, password: text })}
+            autoComplete='current-password'
+            textContentType='password'
             aria-disabled={isPending}
             editable={!isPending}
             secureTextEntry
