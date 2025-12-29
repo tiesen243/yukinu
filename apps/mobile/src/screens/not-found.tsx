@@ -17,7 +17,7 @@ export function NotFoundScreen() {
 
         <Pressable
           className={buttonVariants({ size: 'lg' })}
-          onPress={() => navigation.navigate('index', undefined, { pop: true })}
+          onPress={() => navigation.navigate('main', undefined, { pop: true })}
         >
           <Text
             className='text-primary-foreground'

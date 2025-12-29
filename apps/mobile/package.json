@@ -25,6 +25,7 @@
     "@yukinu/validators": "workspace:*",
     "expo": "^54.0.30",
     "expo-asset": "^12.0.12",
+    "expo-constants": "^18.0.12",
     "expo-font": "^14.0.10",
     "expo-linking": "^8.0.11",
     "expo-secure-store": "^15.0.8",

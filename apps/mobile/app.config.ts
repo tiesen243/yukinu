@@ -35,6 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     tsconfigPaths: true,
   },
   plugins: [
+    'expo-constants',
     'expo-font',
     'expo-secure-store',
     [
