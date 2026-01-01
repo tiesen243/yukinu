@@ -2,46 +2,32 @@
   "name": "@yukinu/mobile",
   "version": "0.0.2",
   "private": false,
-  "type": "module",
   "main": "index.ts",
   "scripts": {
     "clean": "git clean -xdf .cache .expo .turbo node_modules",
     "start": "expo start",
+    "start:android": "expo start --android",
+    "start:ios": "expo start --ios",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@expo-google-fonts/geist": "^0.4.1",
-    "@react-navigation/bottom-tabs": "^7.9.0",
+    "@react-navigation/material-top-tabs": "^7.4.11",
     "@react-navigation/native": "^7.1.26",
     "@react-navigation/native-stack": "^7.9.0",
-    "@reduxjs/toolkit": "^2.11.2",
-    "@tanstack/react-query": "catalog:prod",
-    "@trpc/client": "catalog:trpc",
-    "@trpc/tanstack-react-query": "catalog:trpc",
-    "@yukinu/api": "workspace:*",
-    "@yukinu/auth": "workspace:*",
-    "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
-    "@yukinu/validators": "workspace:*",
-    "expo": "^54.0.30",
+    "expo": "~54.0.30",
     "expo-constants": "^18.0.12",
-    "expo-font": "^14.0.10",
-    "expo-linking": "^8.0.11",
-    "expo-secure-store": "^15.0.8",
     "expo-splash-screen": "^31.0.13",
     "lucide-react-native": "^0.562.0",
     "react": "19.1.0",
     "react-native": "0.81.5",
     "react-native-safe-area-context": "^5.6.2",
-    "react-native-screens": "~4.16.0",
-    "react-redux": "^9.2.0",
-    "superjson": "catalog:trpc"
+    "react-native-screens": "~4.16.0"
   },
   "devDependencies": {
     "@types/react": "catalog:react",
-    "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev",
-    "uniwind": "^1.2.2"
+    "uniwind": "catalog:tailwind"
   }
 }

@@ -1,49 +1,58 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {
-  HomeIcon,
-  UsersIcon,
-  UserIcon,
-  SettingsIcon,
-} from 'lucide-react-native'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { EllipsisVerticalIcon } from 'lucide-react-native'
+import { lazy } from 'react'
+import { Image } from 'react-native'
+import { useUniwind } from 'uniwind'
 
-import { IndexScreen } from '@/screens/(tabs)/_index'
-import { AboutScreen } from '@/screens/(tabs)/about'
-import { ProfileScreen } from '@/screens/(tabs)/profile'
-import { SettingsScreen } from '@/screens/(tabs)/settings'
+import { Button } from '@/components/ui/button'
+import { Icon } from '@/components/ui/icon'
+import IndexScreen from '@/screens/(tabs)/_index'
 
-export const Tabs = createBottomTabNavigator({
+const Tabs = createMaterialTopTabNavigator({
   initialRouteName: 'index',
-  screenOptions: {
-    tabBarActiveTintColor: '#3f5ec2',
-  },
+  screenOptions: {},
   screens: {
-    index: {
-      screen: IndexScreen,
-      options: {
-        title: 'Home',
-        tabBarIcon: (props) => <HomeIcon {...props} />,
-      },
-    },
-    about: {
-      screen: AboutScreen,
-      options: {
-        title: 'About',
-        tabBarIcon: (props) => <UsersIcon {...props} />,
-      },
-    },
-    profile: {
-      screen: ProfileScreen,
-      options: {
-        title: 'Profile',
-        tabBarIcon: (props) => <UserIcon {...props} />,
-      },
-    },
-    settings: {
-      screen: SettingsScreen,
-      options: {
-        title: 'Settings',
-        tabBarIcon: (props) => <SettingsIcon {...props} />,
-      },
+    index: { screen: IndexScreen, options: { title: 'For you' } },
+    following: {
+      screen: lazy(() => import('@/screens/(tabs)/following')),
+      options: { title: 'Following' },
     },
   },
 })
+
+function HeaderLeft() {
+  return (
+    <Image
+      className='size-8 rounded-full object-cover'
+      source={{
+        uri: 'https://1.gravatar.com/avatar/48b8ec4ce6c85e06c11bda4381a3ac6cb8161a23e5ea540544c809063090815d?s=512&d=identicon',
+      }}
+    />
+  )
+}
+
+function HeaderTitle() {
+  const { theme } = useUniwind()
+
+  return (
+    <Image
+      className='size-8 object-cover mx-auto'
+      source={
+        theme === 'dark'
+          ? require('../../../assets/logo-dark.png')
+          : require('../../../assets/logo-light.png')
+      }
+    />
+  )
+}
+
+function HeaderRight() {
+  return (
+    <Button variant='ghost' size='icon'>
+      <Icon as={EllipsisVerticalIcon} />
+    </Button>
+  )
+}
+
+export default Tabs
+export { HeaderLeft, HeaderTitle, HeaderRight }

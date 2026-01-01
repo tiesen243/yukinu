@@ -2,40 +2,41 @@ import type { StaticParamList } from '@react-navigation/native'
 
 import { createStaticNavigation } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { lazy } from 'react'
 
-import { Tabs } from '@/screens/(tabs)/__root'
-import { LoginScreen } from '@/screens/login'
-import { NotFoundScreen } from '@/screens/not-found'
-import { ReduxScreen } from '@/screens/redux'
+import Tabs, {
+  HeaderLeft,
+  HeaderRight,
+  HeaderTitle,
+} from '@/screens/(tabs)/__root'
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'tabs',
   screenOptions: {
-    headerShown: false,
+    headerShown: true,
   },
   screens: {
-    tabs: Tabs,
-    login: {
-      screen: LoginScreen,
-      options: { title: 'Login' },
-    },
-    redux: {
-      screen: ReduxScreen,
-      options: { title: 'Redux' },
+    tabs: {
+      screen: Tabs,
+      options: {
+        headerTitle: HeaderTitle,
+        headerLeft: HeaderLeft,
+        headerRight: HeaderRight,
+        headerShadowVisible: false,
+      },
     },
     notFound: {
-      screen: NotFoundScreen,
-      options: { title: 'Not Found' },
-      linking: { path: '' },
+      screen: lazy(() => import('@/screens/not-found')),
+      options: { title: 'Oops!' },
     },
   },
 })
 
 export const Navigation = createStaticNavigation(RootStack)
 
-type RootStackParamList = StaticParamList<typeof RootStack>
-
 declare global {
+  type RootStackParamList = StaticParamList<typeof RootStack>
+
   namespace ReactNavigation {
     interface RootParamList extends RootStackParamList {}
   }

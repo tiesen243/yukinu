@@ -51,6 +51,7 @@ tmp/
 .DS_Store
 Thumbs.db
 *.pem
+*.bak
 
 # debug
 logs/
