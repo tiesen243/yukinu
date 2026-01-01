@@ -238,7 +238,7 @@
 @layer base {
   * {
     border-color: var(--color-border);
-    outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
+    outline-color: --alpha(var(--color-ring) / 50%);
     text-underline-offset: 4px;
 
     scrollbar-color: var(--color-accent-foreground) var(--color-accent);

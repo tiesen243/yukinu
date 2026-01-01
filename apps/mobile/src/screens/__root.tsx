@@ -25,6 +25,10 @@ const RootStack = createNativeStackNavigator({
         headerShadowVisible: false,
       },
     },
+    settings: {
+      screen: lazy(() => import('@/screens/settings')),
+      options: { title: 'Settings' },
+    },
     notFound: {
       screen: lazy(() => import('@/screens/not-found')),
       options: { title: 'Oops!' },

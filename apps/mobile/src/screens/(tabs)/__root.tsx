@@ -1,5 +1,6 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { EllipsisVerticalIcon } from 'lucide-react-native'
+import { useNavigation } from '@react-navigation/native'
+import { HomeIcon, MenuIcon, SettingsIcon, UserIcon } from 'lucide-react-native'
 import { lazy } from 'react'
 import { Image } from 'react-native'
 import { useUniwind } from 'uniwind'
@@ -10,12 +11,30 @@ import IndexScreen from '@/screens/(tabs)/_index'
 
 const Tabs = createMaterialTopTabNavigator({
   initialRouteName: 'index',
-  screenOptions: {},
+  screenOptions: {
+    tabBarIndicatorStyle: { backgroundColor: '#3f5ec2' },
+    tabBarShowLabel: false,
+    tabBarActiveTintColor: '#3f5ec2',
+    tabBarInactiveTintColor: '#525252',
+  },
   screens: {
-    index: { screen: IndexScreen, options: { title: 'For you' } },
-    following: {
-      screen: lazy(() => import('@/screens/(tabs)/following')),
-      options: { title: 'Following' },
+    index: {
+      screen: IndexScreen,
+      options: {
+        tabBarIcon: ({ color }) => <HomeIcon color={color} size={20} />,
+      },
+    },
+    profile: {
+      screen: lazy(() => import('@/screens/(tabs)/profile')),
+      options: {
+        tabBarIcon: ({ color }) => <UserIcon color={color} size={20} />,
+      },
+    },
+    menu: {
+      screen: lazy(() => import('@/screens/(tabs)/menu')),
+      options: {
+        tabBarIcon: ({ color }) => <MenuIcon color={color} size={20} />,
+      },
     },
   },
 })
@@ -47,9 +66,15 @@ function HeaderTitle() {
 }
 
 function HeaderRight() {
+  const navigation = useNavigation()
+
   return (
-    <Button variant='ghost' size='icon'>
-      <Icon as={EllipsisVerticalIcon} />
+    <Button
+      variant='ghost'
+      size='icon'
+      onPress={() => navigation.navigate('settings')}
+    >
+      <Icon as={SettingsIcon} />
     </Button>
   )
 }
