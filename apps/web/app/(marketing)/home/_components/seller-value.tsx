@@ -12,7 +12,7 @@ import { getDashboardUrl } from '@/lib/utils'
 export const SellerValue: React.FC = () => (
   <section
     id='for-sellers'
-    className='bg-card text-card-foreground py-20 md:py-32'
+    className='bg-card py-20 text-card-foreground md:py-32'
   >
     <h2 className='sr-only'>Value for Sellers</h2>
 

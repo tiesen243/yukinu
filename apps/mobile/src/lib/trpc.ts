@@ -1,3 +1,4 @@
+import type { QueryClient } from '@tanstack/react-query'
 import type { AppRouter } from '@yukinu/api'
 
 import { createTRPCClient, httpBatchLink, retryLink } from '@trpc/client'
@@ -5,10 +6,16 @@ import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
 import SuperJSON from 'superjson'
 
-import { getAccessToken, getSessionToken, setAccessToken } from '@/lib/store'
+import { getAccessToken, getSessionToken } from '@/lib/secure-store'
 import { getBaseUrl } from '@/lib/utils'
 
-const queryClient = createQueryClient()
+let clientQueryClientSingleton: QueryClient | undefined
+const getQueryClient = () => {
+  if (typeof window === 'undefined') return createQueryClient()
+  return (clientQueryClientSingleton ??= createQueryClient())
+}
+
+const queryClient = getQueryClient()
 
 const trpcClient = createTRPCClient<AppRouter>({
   links: [
@@ -30,13 +37,11 @@ const trpcClient = createTRPCClient<AppRouter>({
 
           fetch(`${getBaseUrl()}/api/auth/refresh-token`, {
             method: 'POST',
-            headers: { Authorization: `Bearer ${getSessionToken()}` },
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getSessionToken()}`,
+            },
           })
-            .then((res) => res.json() as Promise<{ accessToken: string }>)
-            .then(({ accessToken }) => setAccessToken(accessToken))
-            .catch(() => {
-              /* Ignore errors */
-            })
 
           return true // Retry once after attempting to refresh the token
         }
@@ -51,8 +56,8 @@ const trpcClient = createTRPCClient<AppRouter>({
       headers() {
         const headers = new Map<string, string>([['x-trpc-source', 'mobile']])
 
-        const accessToken = getAccessToken()
-        if (accessToken) headers.set('Authorization', `Bearer ${accessToken}`)
+        if (getAccessToken())
+          headers.set('Authorization', `Bearer ${getAccessToken()}`)
 
         return headers
       },

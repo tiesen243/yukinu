@@ -2,11 +2,11 @@
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "ignorePatterns": ["apps/mobile/src/uniwind-types.d.ts"],
 
-  "jsxSingleQuote": true,
-  "printWidth": 80,
   "semi": false,
-  "singleQuote": true,
   "tabWidth": 2,
+  "printWidth": 80,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
   "trailingComma": "all",
 
   "experimentalSortImports": {

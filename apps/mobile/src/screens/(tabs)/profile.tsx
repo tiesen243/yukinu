@@ -1,82 +1,102 @@
-import { Link } from '@react-navigation/native'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { buttonVariants } from '@yukinu/ui/button'
-import { Alert, Image, Pressable, Text, View } from 'react-native'
+import type { GestureResponderEvent } from 'react-native'
 
-import { deleteAccessToken, deleteSessionToken } from '@/lib/store'
+import { useNavigation } from '@react-navigation/native'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Alert, Image, View } from 'react-native'
+
+import { Button } from '@/components/ui/button'
+import { Text } from '@/components/ui/text'
+import {
+  deleteAccessToken,
+  deleteSessionToken,
+  getSessionToken,
+} from '@/lib/secure-store'
 import { trpc } from '@/lib/trpc'
 import { getBaseUrl } from '@/lib/utils'
 
-export function ProfileScreen() {
-  const { data, isLoading, isError } = useQuery(
-    trpc.auth.getCurrentUser.queryOptions(),
-  )
-
-  const { mutate, isPending } = useMutation({
-    mutationKey: ['auth', 'logout'],
-    mutationFn: async () => {
-      const response = await fetch(`${getBaseUrl()}/api/auth/sign-out`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${data?.token}`,
-        },
-      })
-      if (!response.ok) throw new Error(await response.text())
-    },
-    meta: { filter: trpc.auth.getCurrentUser.queryFilter() },
-    onSuccess: async () => {
-      await deleteAccessToken()
-      await deleteSessionToken()
-    },
-    onError: (error) => Alert.alert('Error', error.message),
-    retry: false,
-  })
+export default function ProfileScreen() {
+  const { data, isLoading } = useQuery(trpc.user.profile.queryOptions({}))
+  const navigation = useNavigation()
 
   if (isLoading)
     return (
-      <View className='bg-background flex-1 justify-center items-center'>
-        <Text className='text-foreground'>Loading...</Text>
+      <View className='flex-1 bg-background'>
+        <View className='flex-1 items-center justify-center'>
+          <Text>Loading...</Text>
+        </View>
       </View>
     )
 
-  if (isError || !data?.user)
+  if (!data)
     return (
-      <View className='bg-background flex-1 justify-center items-center'>
-        <Text className='text-foreground mb-4'>You are not logged in.</Text>
-        <Link screen='login' className={buttonVariants({ className: 'py-1' })}>
-          <Text className='text-white'>Go to Login</Text>
-        </Link>
+      <View className='flex-1 bg-background'>
+        <View className='flex-1 items-center justify-center gap-4'>
+          <Text>You are not logged in.</Text>
+          <Button onPress={() => navigation.navigate('login')}>
+            <Text>Login</Text>
+          </Button>
+        </View>
       </View>
     )
 
   return (
-    <View className='bg-background flex-1'>
-      <View className='container py-4'>
-        <View className='flex flex-row items-center gap-4'>
-          <Image
-            source={{ uri: data.user.image ?? '' }}
-            className='size-16 rounded-full'
-          />
+    <View className='flex-1 bg-background'>
+      <View className='bg-secondary w-full h-48 items-center justify-center' />
+      <View className='flex-1 container -mt-24'>
+        <Image
+          className='size-36 rounded-full ring-4 ring-background'
+          source={
+            data.image
+              ? { uri: data.image }
+              : require('../../../assets/icon.png')
+          }
+        />
+        <View className='mt-4 gap-1'>
+          <Text variant='h3'>{data.profile.fullName}</Text>
+          <Text className='text-sm text-muted-foreground'>{data.email}</Text>
 
-          <View className='flex flex-col gap-1'>
-            <Text className='text-foreground text-xl'>
-              {data.user.username}
-            </Text>
-            <Text className='text-muted-foreground text-lg'>
-              {data.user.email}
-            </Text>
-          </View>
+          <Text className='mt-4'>{data.profile.bio}</Text>
         </View>
 
-        <Pressable
-          className={buttonVariants({ className: 'mt-8' })}
-          onPress={() => mutate()}
-          disabled={isPending}
-        >
-          <Text className='text-primary-foreground'>Logout</Text>
-        </Pressable>
+        <View className='mt-6 gap-4'>
+          <Button>
+            <Text>Edit Profile</Text>
+          </Button>
+
+          <LogOutButton />
+        </View>
       </View>
     </View>
+  )
+}
+
+const LogOutButton: React.FC = () => {
+  const queryClient = useQueryClient()
+  const navigation = useNavigation()
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (_: GestureResponderEvent) => {
+      const response = await fetch(`${getBaseUrl()}/api/auth/sign-out`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getSessionToken()}`,
+        },
+      })
+      if (!response.ok) throw new Error(await response.text())
+    },
+    onSuccess: async () => {
+      navigation.navigate('login')
+      queryClient.setQueriesData(trpc.user.profile.queryFilter(), null)
+      await deleteSessionToken()
+      await deleteAccessToken()
+    },
+    onError: ({ message }) => Alert.alert('Error', message),
+  })
+
+  return (
+    <Button variant='outline' onPress={mutate} disabled={isPending}>
+      <Text>Log Out</Text>
+    </Button>
   )
 }

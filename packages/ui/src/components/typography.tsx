@@ -21,7 +21,7 @@ const typographyVariants = cva('text-base font-normal', {
       ol: 'my-4 ml-6 list-decimal text-base [&>li]:mt-2 [&>li]:first:mt-0',
       blockquote:
         'my-2 border-l-2 pl-6 italic before:content-["“"] after:content-["”"]',
-      code: 'relative w-fit border border-accent rounded-sm bg-accent/40 text-accent-foreground px-[0.3rem] py-[0.2rem] font-mono text-sm font-medium',
+      code: 'relative w-fit rounded-sm border border-accent bg-accent/40 px-[0.3rem] py-[0.2rem] font-mono text-sm font-medium text-accent-foreground',
       caption: 'block text-sm tracking-wide',
     },
   },

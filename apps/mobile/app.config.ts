@@ -1,4 +1,4 @@
-import type { ConfigContext, ExpoConfig } from 'expo/config'
+import { ExpoConfig, ConfigContext } from 'expo/config'
 
 import pkg from './package.json'
 
@@ -34,8 +34,6 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     tsconfigPaths: true,
   },
   plugins: [
-    'expo-font',
-    'expo-secure-store',
     [
       'expo-splash-screen',
       {

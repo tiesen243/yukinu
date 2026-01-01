@@ -27,7 +27,14 @@ export const createQueryClient = () =>
       },
     },
     mutationCache: new MutationCache({
-      onSuccess: (_data, _var, _res, _mutation, context) => {
+      onSettled(
+        _data,
+        _error,
+        _variables,
+        _onMutateResult,
+        _mutation,
+        context,
+      ) {
         const filter = context.meta?.filter
         if (filter) void context.client.invalidateQueries(filter)
       },
