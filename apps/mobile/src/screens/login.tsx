@@ -108,7 +108,7 @@ export default function LoginScreen() {
           </View>
         </View>
 
-        <View className='items-center rouned-b-xl px-4'>
+        <View className='items-center rounded-b-xl px-4'>
           <Button className='w-full' onPress={mutate} disabled={isPending}>
             <Text>Login</Text>
           </Button>

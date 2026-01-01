@@ -2,7 +2,7 @@ import type { GestureResponderEvent } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Image, View } from 'react-native'
+import { Alert, Image, View } from 'react-native'
 
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
@@ -76,13 +76,14 @@ const LogOutButton: React.FC = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: async (_: GestureResponderEvent) => {
-      await fetch(`${getBaseUrl()}/api/auth/sign-out`, {
+      const response = await fetch(`${getBaseUrl()}/api/auth/sign-out`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${getSessionToken()}`,
         },
       })
+      if (!response.ok) throw new Error(await response.text())
     },
     onSuccess: async () => {
       navigation.navigate('login')
@@ -90,6 +91,7 @@ const LogOutButton: React.FC = () => {
       await deleteSessionToken()
       await deleteAccessToken()
     },
+    onError: ({ message }) => Alert.alert('Error', message),
   })
 
   return (
