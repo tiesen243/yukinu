@@ -50,7 +50,7 @@
     },
     "apps/mobile": {
       "name": "@yukinu/mobile",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "@react-navigation/material-top-tabs": "^7.4.11",
         "@react-navigation/native": "^7.1.26",
@@ -70,6 +70,7 @@
         "react": "19.1.0",
         "react-native": "0.81.5",
         "react-native-safe-area-context": "^5.6.2",
+        "react-native-screens": "~4.16.0",
         "superjson": "catalog:trpc",
       },
       "devDependencies": {
@@ -2390,8 +2391,6 @@
     "zod": ["zod@4.2.1", "", {}, "sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw=="],
 
     "@babel/core/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
-
-    "@babel/generator/jsesc": ["jsesc@3.1.0", "", { "bin": { "jsesc": "bin/jsesc" } }, "sha512-/sM3dO2FOzXjKQhJuo0Q173wf2KOo8t4I8vHy6lF9poUp7bKT0/NHE8fPX23PwfhnykfqnC2xRxOnVw5XuGIaA=="],
 
     "@babel/helper-compilation-targets/semver": ["semver@6.3.1", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA=="],
 
