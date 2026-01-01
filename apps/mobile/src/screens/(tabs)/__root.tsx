@@ -1,12 +1,20 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { useNavigation } from '@react-navigation/native'
-import { HomeIcon, MenuIcon, SettingsIcon, UserIcon } from 'lucide-react-native'
+import { useQuery } from '@tanstack/react-query'
+import {
+  HomeIcon,
+  LogInIcon,
+  SettingsIcon,
+  ShoppingCartIcon,
+  UserIcon,
+} from 'lucide-react-native'
 import { lazy } from 'react'
-import { Image } from 'react-native'
+import { Image, View } from 'react-native'
 import { useUniwind } from 'uniwind'
 
 import { Button } from '@/components/ui/button'
 import { Icon } from '@/components/ui/icon'
+import { trpc } from '@/lib/trpc'
 import IndexScreen from '@/screens/(tabs)/_index'
 
 const Tabs = createMaterialTopTabNavigator({
@@ -30,22 +38,38 @@ const Tabs = createMaterialTopTabNavigator({
         tabBarIcon: ({ color }) => <UserIcon color={color} size={20} />,
       },
     },
-    menu: {
-      screen: lazy(() => import('@/screens/(tabs)/menu')),
+    cart: {
+      screen: lazy(() => import('@/screens/(tabs)/cart')),
       options: {
-        tabBarIcon: ({ color }) => <MenuIcon color={color} size={20} />,
+        tabBarIcon: ({ color }) => <ShoppingCartIcon color={color} size={20} />,
       },
     },
   },
 })
 
 function HeaderLeft() {
+  const { data, isLoading } = useQuery(trpc.user.profile.queryOptions({}))
+  const navigation = useNavigation()
+
+  if (isLoading) return <View className='size-8 rounded-full bg-muted' />
+
+  if (!data)
+    return (
+      <Button
+        variant='ghost'
+        size='icon'
+        onPress={() => navigation.navigate('login')}
+      >
+        <Icon as={LogInIcon} />
+      </Button>
+    )
+
   return (
     <Image
       className='size-8 rounded-full object-cover'
-      source={{
-        uri: 'https://1.gravatar.com/avatar/48b8ec4ce6c85e06c11bda4381a3ac6cb8161a23e5ea540544c809063090815d?s=512&d=identicon',
-      }}
+      source={
+        data.image ? { uri: data.image } : require('../../../assets/icon.png')
+      }
     />
   )
 }

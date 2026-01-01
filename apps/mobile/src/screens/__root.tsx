@@ -19,11 +19,15 @@ const RootStack = createNativeStackNavigator({
     tabs: {
       screen: Tabs,
       options: {
-        headerTitle: HeaderTitle,
         headerLeft: HeaderLeft,
+        headerTitle: HeaderTitle,
         headerRight: HeaderRight,
         headerShadowVisible: false,
       },
+    },
+    login: {
+      screen: lazy(() => import('@/screens/login')),
+      options: { title: 'Login', headerShown: false },
     },
     settings: {
       screen: lazy(() => import('@/screens/settings')),

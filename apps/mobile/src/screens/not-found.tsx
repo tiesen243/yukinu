@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
 
         <Button
           onPress={() =>
-            navigation.navigate('tabs', { screen: 'index' }, { pop: true })
+            navigation.navigate('tabs', { screen: 'index', pop: true })
           }
         >
           <Text>Take me Home</Text>
