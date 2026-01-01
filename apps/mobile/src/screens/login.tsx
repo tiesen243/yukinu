@@ -61,7 +61,7 @@ export default function LoginScreen() {
 
   return (
     <View className='flex-1 bg-background items-center justify-center px-4'>
-      <View className='w-full gap-4 overflow-hidden rounded-xl bg-card py-4 ring-1 ring-foreground/10'>
+      <View className='w-full max-w-2xl gap-4 overflow-hidden rounded-xl bg-card py-4 ring-1 ring-foreground/10'>
         <View className='grid auto-rows-min items-start gap-1 rounded-t-xl px-4'>
           <Text className='text-center' variant='h4'>
             Login

@@ -66,7 +66,7 @@ function HeaderLeft() {
 
   return (
     <Image
-      className='size-8 rounded-full object-cover'
+      className='size-8 rounded-full object-cover self-start'
       source={
         data.image ? { uri: data.image } : require('../../../assets/icon.png')
       }
@@ -79,7 +79,7 @@ function HeaderTitle() {
 
   return (
     <Image
-      className='size-8 object-cover mx-auto'
+      className='size-8 object-contain self-center'
       source={
         theme === 'dark'
           ? require('../../../assets/logo-dark.png')
@@ -96,6 +96,7 @@ function HeaderRight() {
     <Button
       variant='ghost'
       size='icon'
+      className='self-end'
       onPress={() => navigation.navigate('settings')}
     >
       <Icon as={SettingsIcon} />
