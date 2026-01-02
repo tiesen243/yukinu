@@ -68,7 +68,9 @@ function HeaderLeft() {
     <Image
       className='size-8 rounded-full object-cover self-start'
       source={
-        data.image ? { uri: data.image } : require('../../../assets/icon.png')
+        data.image
+          ? { uri: data.image }
+          : require('../../../assets/icon-light.png')
       }
     />
   )

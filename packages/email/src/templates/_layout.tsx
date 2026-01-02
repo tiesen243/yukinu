@@ -47,10 +47,15 @@ export function EmailLayout({ preview, children }: Readonly<EmailLayoutProps>) {
         >
           <Img
             src='https://tiesen.id.vn/web-app-manifest-512x512.png'
-            width={80}
-            height={80}
+            width={64}
+            height={64}
             alt='Yukinu Logo'
-            style={{ margin: '0 auto 20px auto' }}
+            style={{
+              margin: '0 auto 20px auto',
+              borderRadius: '8px',
+              objectFit: 'cover',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+            }}
           />
 
           {children}

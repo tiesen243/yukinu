@@ -15,12 +15,8 @@ export const AppSidebar: React.FC<React.ComponentProps<typeof Sidebar>> = (
   return (
     <Sidebar {...props}>
       <SidebarHeader className='flex-row items-center gap-2 border-b'>
-        <div className='flex size-8 items-center justify-center rounded-md bg-accent/50'>
-          <img
-            src='/assets/logo.svg'
-            alt='Yukinu Logo'
-            className='size-6 dark:invert'
-          />
+        <div className='flex size-8 items-center justify-center rounded-md bg-foreground'>
+          <img src='/favicon.svg' alt='Yukinu Logo' className='size-6 invert' />
         </div>
         <span className='text-lg font-bold'>Yukinu</span>
       </SidebarHeader>

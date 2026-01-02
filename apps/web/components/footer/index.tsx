@@ -19,13 +19,13 @@ export function Footer() {
       <div className='container grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <div className='md:col-span-2 lg:col-span-1'>
           <Link href='/' className='flex items-center gap-2'>
-            <div className='flex size-9 items-center justify-center rounded-lg bg-primary'>
+            <div className='flex size-9 items-center justify-center rounded-lg bg-foreground'>
               <Image
-                src='/assets/logo.svg'
+                src='/favicon.svg'
                 alt='Yukinu Logo'
                 width={28}
                 height={28}
-                className='invert'
+                className='object-cover invert'
               />
             </div>
             <Typography variant='h4' render={<span />}>

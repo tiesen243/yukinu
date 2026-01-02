@@ -42,9 +42,9 @@ export const CartItemsList: React.FC = () => {
           className={`flex items-center gap-2 ${item.productId ? '' : 'pointer-events-none opacity-50'}`}
         >
           <Image
-            src={item.productImage ?? '/assets/logo.svg'}
+            src={item.productImage ?? '/favicon.svg'}
             alt={`thumbnail of ${item.productName}`}
-            className={`size-5 rounded-md object-cover ${item.productImage ? '' : 'dark:invert'}`}
+            className='size-5 rounded-md object-cover'
             width={20}
             height={20}
           />

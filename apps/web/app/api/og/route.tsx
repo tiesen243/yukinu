@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const description =
       searchParams.get('description') ?? defaultMeta.description
     const image = searchParams.get('image') ?? ''
-    const logoUrl = `${defaultMeta.metadataBase?.toString()}/assets/logo.svg`
+    const logoUrl = `${defaultMeta.metadataBase?.toString()}/favicon.svg`
     const theme = searchParams.get('theme') ?? 'dark'
 
     const backgroundColor = theme === 'dark' ? '#000000' : '#fafafa'

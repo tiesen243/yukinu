@@ -20,6 +20,22 @@ app.config.timestamp_*.js
 
 # expo
 .expo/
+.metro-health-check*
+expo-env.d.ts
+uniwind-types.d.ts
+
+# native
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# generated native folders
+ios/
+android/
 
 # java
 *.class
