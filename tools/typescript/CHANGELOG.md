@@ -1,5 +1,11 @@
 # @yukinu/tsconfig
 
+## 0.5.0
+
+### Minor Changes
+
+- [#314](https://github.com/tiesen243/yukinu/pull/314) [`7cecd87`](https://github.com/tiesen243/yukinu/commit/7cecd87b3cad0b1f3d585ec3e258ea21dcc48ce9) Thanks [@tiesen243](https://github.com/tiesen243)! - update logo
+
 ## 0.4.0
 
 ### Minor Changes
