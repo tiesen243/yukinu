@@ -121,7 +121,7 @@ const EntityInfoCard: React.FC<{
   data ? (
     <div className='flex items-center gap-4'>
       <Avatar className={`size-16 ${data.image ? '' : 'dark:invert'}`}>
-        <AvatarImage src={data.image ?? '/assets/logo.svg'} alt={data.name} />
+        <AvatarImage src={data.image ?? '/favicon.svg'} alt={data.name} />
         <AvatarFallback>{data.name.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
       <div className='flex flex-col gap-2'>

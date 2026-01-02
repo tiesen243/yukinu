@@ -53,7 +53,7 @@ export const HeroSection: React.FC = () => (
         {trustedBy.map((item) => (
           <Card
             key={item.title}
-            className='gap-2 text-center text-accent-foreground transition-colors hover:ring-accent hover:bg-accent/20 hover:text-primary'
+            className='gap-2 text-center text-accent-foreground transition-colors hover:bg-accent/20 hover:text-primary hover:ring-accent'
           >
             <Typography>{item.title}</Typography>
             <Typography className='text-sm text-accent-foreground/70 lg:text-base'>

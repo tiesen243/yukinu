@@ -5,11 +5,11 @@ const ACCESS_TOKEN = 'access_token'
 
 export const getSessionToken = () => SecureStore.getItem(SESSION_TOKEN)
 export const setSessionToken = (token: string) =>
-  SecureStore.setItem(SESSION_TOKEN, token)
+  SecureStore.setItemAsync(SESSION_TOKEN, token)
 export const deleteSessionToken = () =>
   SecureStore.deleteItemAsync(SESSION_TOKEN)
 
 export const getAccessToken = () => SecureStore.getItem(ACCESS_TOKEN)
 export const setAccessToken = (token: string) =>
-  SecureStore.setItem(ACCESS_TOKEN, token)
+  SecureStore.setItemAsync(ACCESS_TOKEN, token)
 export const deleteAccessToken = () => SecureStore.deleteItemAsync(ACCESS_TOKEN)

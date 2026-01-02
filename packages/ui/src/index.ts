@@ -8,3 +8,4 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export * from 'next-themes'
+export * from 'class-variance-authority'

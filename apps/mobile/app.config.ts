@@ -1,9 +1,7 @@
-import type { ConfigContext, ExpoConfig } from 'expo/config'
+import { ExpoConfig, ConfigContext } from 'expo/config'
 
 import pkg from './package.json'
 
-// "name": "@yukinu/mobile",
-// name => Yukinu
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name:
@@ -13,20 +11,24 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   version: pkg.version,
   orientation: 'portrait',
   scheme: pkg.name.replaceAll('@', '').split('/').at(0),
-  icon: './assets/icon.png',
+  icon: './assets/icon-light.png',
   userInterfaceStyle: 'automatic',
   updates: { fallbackToCacheTimeout: 0 },
   newArchEnabled: true,
   assetBundlePatterns: ['**/*'],
   ios: {
     bundleIdentifier: `com.${pkg.name.replaceAll('@', '').replaceAll('/', '.')}`,
+    associatedDomains: ['webcredentials:yukinu.vercel.app'],
     supportsTablet: true,
-    icon: './assets/icon.png',
+    icon: {
+      light: './assets/icon-light.png',
+      dark: './assets/icon-dark.png',
+    },
   },
   android: {
     package: `com.${pkg.name.replaceAll('@', '').replaceAll('/', '.')}`,
     adaptiveIcon: {
-      foregroundImage: './assets/icon.png',
+      foregroundImage: './assets/icon-light.png',
       backgroundColor: '#14185a',
     },
     edgeToEdgeEnabled: true,
@@ -35,13 +37,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     tsconfigPaths: true,
   },
   plugins: [
-    'expo-font',
-    'expo-secure-store',
     [
       'expo-splash-screen',
       {
-        backgroundColor: '#14185a',
-        image: './assets/icon.png',
+        backgroundColor: '#ffffff',
+        image: './assets/icon-light.png',
+        dark: {
+          backgroundColor: '#000000',
+          image: './assets/icon-dark.png',
+        },
       },
     ],
   ],

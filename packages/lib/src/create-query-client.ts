@@ -14,6 +14,7 @@ export const createQueryClient = () =>
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
+        retry: false,
       },
       dehydrate: {
         serializeData: SuperJSON.serialize,
@@ -26,7 +27,14 @@ export const createQueryClient = () =>
       },
     },
     mutationCache: new MutationCache({
-      onSuccess: (_data, _var, _res, _mutation, context) => {
+      onSettled(
+        _data,
+        _error,
+        _variables,
+        _onMutateResult,
+        _mutation,
+        context,
+      ) {
         const filter = context.meta?.filter
         if (filter) void context.client.invalidateQueries(filter)
       },

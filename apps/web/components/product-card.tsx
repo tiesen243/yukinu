@@ -25,20 +25,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   <Card
     {...props}
     className={cn(
-      'group/product-card flex aspect-square pt-0 transition-colors hover:ring-primary hover:bg-accent/40 hover:text-accent-foreground',
+      'group/product-card flex aspect-square pt-0 transition-colors hover:bg-accent/40 hover:text-accent-foreground hover:ring-primary',
       className,
     )}
     render={<Link href={`/${slugify(product.name)}-${product.id}`} />}
   >
     <div className='relative flex-1 overflow-hidden'>
       <Image
-        src={product.image ?? '/assets/logo.svg'}
+        src={product.image ?? '/favicon.svg'}
         alt={product.name}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-        className={cn(
-          'object-cover transition-transform group-hover/product-card:scale-105',
-          { 'dark:invert': !product.image },
-        )}
+        className='object-cover transition-transform group-hover/product-card:scale-105'
         fill
       />
     </div>
