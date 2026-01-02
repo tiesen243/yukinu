@@ -65,7 +65,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   return (
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <img
-        src='/assets/images/yuki.webp'
+        src='/assets/yuki.webp'
         alt='Mascot'
         className='size-48 object-cover select-none'
         draggable={false}
