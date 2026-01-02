@@ -25,13 +25,10 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
     >
       <div className='relative flex-1 overflow-hidden'>
         <Image
-          src={category.image ?? '/assets/logo.svg'}
+          src={category.image ?? '/favicon.svg'}
           alt={category.name}
           loading='eager'
-          className={cn(
-            'rounded-t-lg object-cover transition-transform group-hover/category-card:scale-105',
-            { 'dark:invert': category.image === null },
-          )}
+          className='rounded-t-lg object-cover transition-transform group-hover/category-card:scale-105'
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           fill
         />

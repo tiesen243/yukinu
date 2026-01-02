@@ -8,7 +8,10 @@
     <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/web/package.json&label=version@web" alt="Version Web">
   </a>
   <a href="https://github.com/tiesen243/yukinu/releases">
-    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Web">
+    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Dashboard">
+  </a>
+  <a href="https://github.com/tiesen243/yukinu/releases">
+    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/mobile/package.json&label=version@mobile" alt="Version Mobile">
   </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/tiesen243/yukinu" alt="License">

@@ -2,7 +2,6 @@
 
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { slugify } from '@yukinu/lib/slugify'
-import { cn } from '@yukinu/ui'
 import {
   Card,
   CardContent,
@@ -30,13 +29,10 @@ export const WishlistItems: React.FC = () => {
     >
       <CardHeader className='relative flex-1 rounded-t-xl'>
         <Image
-          src={item.product.image ?? '/assets/logo.svg'}
+          src={item.product.image ?? '/favicon.svg'}
           alt={item.product.name}
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
-          className={cn(
-            'rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105',
-            { 'dark:invert': item.product.image === null },
-          )}
+          className='rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105'
           fill
         />
       </CardHeader>
