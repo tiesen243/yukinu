@@ -1,5 +1,20 @@
 # @yukinu/api
 
+## 0.8.0
+
+### Minor Changes
+
+- [#314](https://github.com/tiesen243/yukinu/pull/314) [`7cecd87`](https://github.com/tiesen243/yukinu/commit/7cecd87b3cad0b1f3d585ec3e258ea21dcc48ce9) Thanks [@tiesen243](https://github.com/tiesen243)! - update logo
+
+### Patch Changes
+
+- Updated dependencies [[`7cecd87`](https://github.com/tiesen243/yukinu/commit/7cecd87b3cad0b1f3d585ec3e258ea21dcc48ce9)]:
+  - @yukinu/auth@0.8.0
+  - @yukinu/db@0.8.0
+  - @yukinu/email@0.7.0
+  - @yukinu/lib@0.6.0
+  - @yukinu/validators@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes

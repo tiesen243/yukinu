@@ -46,7 +46,7 @@ export function EmailLayout({ preview, children }: Readonly<EmailLayoutProps>) {
           }}
         >
           <Img
-            src='https://tiesen.id.vn/web-app-manifest-512x512.png'
+            src='https://yukinu.vercel.app/web-app-manifest-512x512.png'
             width={64}
             height={64}
             alt='Yukinu Logo'
