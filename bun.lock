@@ -14,7 +14,7 @@
     },
     "apps/dashboard": {
       "name": "@yukinu/dashboard",
-      "version": "0.9.1",
+      "version": "0.10.0",
       "dependencies": {
         "@react-router/node": "^7.11.0",
         "@react-router/serve": "^7.11.0",
@@ -50,7 +50,7 @@
     },
     "apps/mobile": {
       "name": "@yukinu/mobile",
-      "version": "0.0.3",
+      "version": "0.1.0",
       "dependencies": {
         "@react-navigation/material-top-tabs": "^7.4.11",
         "@react-navigation/native": "^7.1.26",
@@ -66,6 +66,7 @@
         "expo-constants": "^18.0.12",
         "expo-secure-store": "^15.0.8",
         "expo-splash-screen": "^31.0.13",
+        "expo-system-ui": "^6.0.9",
         "lucide-react-native": "^0.562.0",
         "react": "19.1.0",
         "react-native": "0.81.5",
@@ -82,7 +83,7 @@
     },
     "apps/web": {
       "name": "@yukinu/web",
-      "version": "0.9.2",
+      "version": "0.10.0",
       "dependencies": {
         "@tanstack/react-query": "catalog:prod",
         "@trpc/client": "catalog:trpc",
@@ -113,7 +114,7 @@
     },
     "packages/api": {
       "name": "@yukinu/api",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "dependencies": {
         "@trpc/server": "catalog:trpc",
         "@types/node": "catalog:dev",
@@ -132,7 +133,7 @@
     },
     "packages/auth": {
       "name": "@yukinu/auth",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "dependencies": {
         "@yukinu/db": "workspace:*",
         "@yukinu/email": "workspace:*",
@@ -153,7 +154,7 @@
     },
     "packages/db": {
       "name": "@yukinu/db",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "dependencies": {
         "@yukinu/lib": "workspace:*",
         "@yukinu/validators": "workspace:*",
@@ -169,7 +170,7 @@
     },
     "packages/email": {
       "name": "@yukinu/email",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "dependencies": {
         "@react-email/components": "^1.0.3",
         "@yukinu/validators": "workspace:*",
@@ -191,7 +192,7 @@
     },
     "packages/lib": {
       "name": "@yukinu/lib",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "dependencies": {
         "@tanstack/react-query": "catalog:prod",
         "superjson": "catalog:trpc",
@@ -206,7 +207,7 @@
     },
     "packages/ui": {
       "name": "@yukinu/ui",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "dependencies": {
         "@base-ui/react": "^1.0.0",
         "class-variance-authority": "^0.7.1",
@@ -230,7 +231,7 @@
     },
     "packages/uploadthing": {
       "name": "@yukinu/uploadthing",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "dependencies": {
         "@uploadthing/react": "^7.3.3",
         "@yukinu/auth": "workspace:*",
@@ -251,7 +252,7 @@
     },
     "packages/validators": {
       "name": "@yukinu/validators",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "dependencies": {
         "@yukinu/lib": "workspace:*",
         "zod": "catalog:prod",
@@ -265,15 +266,15 @@
     },
     "tools/github": {
       "name": "@yukinu/github",
-      "version": "0.3.1",
+      "version": "0.4.0",
     },
     "tools/nginx": {
       "name": "@yukinu/nginx",
-      "version": "0.4.1",
+      "version": "0.5.0",
     },
     "tools/typescript": {
       "name": "@yukinu/tsconfig",
-      "version": "0.4.0",
+      "version": "0.5.0",
     },
   },
   "catalogs": {
@@ -1487,6 +1488,8 @@
     "expo-server": ["expo-server@1.0.5", "", {}, "sha512-IGR++flYH70rhLyeXF0Phle56/k4cee87WeQ4mamS+MkVAVP+dDlOHf2nN06Z9Y2KhU0Gp1k+y61KkghF7HdhA=="],
 
     "expo-splash-screen": ["expo-splash-screen@31.0.13", "", { "dependencies": { "@expo/prebuild-config": "^54.0.8" }, "peerDependencies": { "expo": "*" } }, "sha512-1epJLC1cDlwwj089R2h8cxaU5uk4ONVAC+vzGiTZH4YARQhL4Stlz1MbR6yAS173GMosvkE6CAeihR7oIbCkDA=="],
+
+    "expo-system-ui": ["expo-system-ui@6.0.9", "", { "dependencies": { "@react-native/normalize-colors": "0.81.5", "debug": "^4.3.2" }, "peerDependencies": { "expo": "*", "react-native": "*", "react-native-web": "*" }, "optionalPeers": ["react-native-web"] }, "sha512-eQTYGzw1V4RYiYHL9xDLYID3Wsec2aZS+ypEssmF64D38aDrqbDgz1a2MSlHLQp2jHXSs3FvojhZ9FVela1Zcg=="],
 
     "exponential-backoff": ["exponential-backoff@3.1.3", "", {}, "sha512-ZgEeZXj30q+I0EN+CbSSpIyPaJ5HVQD18Z1m+u1FXbAeT94mr1zw50q4q6jiiC447Nl/YTcIYSAftiGqetwXCA=="],
 
