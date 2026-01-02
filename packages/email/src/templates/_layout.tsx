@@ -8,7 +8,6 @@ import {
   Link,
   Preview,
   Section,
-  Tailwind,
   Text,
 } from '@react-email/components'
 
