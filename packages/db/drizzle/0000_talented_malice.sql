@@ -218,6 +218,11 @@ CREATE TABLE "addresses" (
 	"country" varchar(100) NOT NULL
 );
 --> statement-breakpoint
+CREATE TABLE "banners" (
+	"id" varchar(24) PRIMARY KEY NOT NULL,
+	"url" varchar(500) NOT NULL
+);
+--> statement-breakpoint
 CREATE TABLE "profiles" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"full_name" varchar(255),

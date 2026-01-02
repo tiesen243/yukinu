@@ -9,6 +9,7 @@ import SuperJSON from 'superjson'
 
 import { AuthService } from '@/services/auth.service'
 import { CategoryService } from '@/services/category.service'
+import { GeneralService } from '@/services/general.service'
 import { OrderService } from '@/services/order.service'
 import { ProductService } from '@/services/product.service'
 import { UserService } from '@/services/user.service'
@@ -21,6 +22,7 @@ const createTRPCContext = async (opts: {
 
   const authService = new AuthService(db, orm, schema)
   const categoryService = new CategoryService(db, orm, schema)
+  const generalService = new GeneralService(db, orm, schema)
   const orderService = new OrderService(db, orm, schema)
   const productService = new ProductService(db, orm, schema)
   const userService = new UserService(db, orm, schema)
@@ -32,6 +34,7 @@ const createTRPCContext = async (opts: {
     services: {
       auth: authService,
       category: categoryService,
+      general: generalService,
       order: orderService,
       product: productService,
       user: userService,
