@@ -48,7 +48,7 @@ export default function ProfileScreen() {
           source={
             data.image
               ? { uri: data.image }
-              : require('../../../assets/icon.png')
+              : require('../../../assets/icon-light.png')
           }
         />
         <View className='mt-4 gap-1'>

@@ -1,6 +1,6 @@
 {
-  "name": "Yukinu",
-  "short_name": "Yukinu",
+  "name": "Yukinu Dashboard",
+  "short_name": "Yukinu Dashboard",
   "icons": [
     {
       "src": "/web-app-manifest-192x192.png",

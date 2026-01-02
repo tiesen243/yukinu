@@ -8,7 +8,9 @@
     "start": "expo start",
     "start:android": "expo start --android",
     "start:ios": "expo start --ios",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "dependencies": {
     "@react-navigation/material-top-tabs": "^7.4.11",
