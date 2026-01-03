@@ -3,7 +3,14 @@ import { OrderValidators } from '@yukinu/validators/order'
 import { isNotNull, isNull } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { addresses, products, productVariants, users, vendors } from '@/schema'
+import {
+  addresses,
+  products,
+  productVariants,
+  users,
+  vendors,
+  vouchers,
+} from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
 export const orderStatusEnum = pgEnum(
@@ -64,6 +71,7 @@ export const orderItems = pgTable(
       .references(() => productVariants.id, { onDelete: 'set null' }),
     quantity: t.integer().notNull(),
     unitPrice: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    note: t.text(),
     isCompleted: t.boolean().default(false).notNull(), // vendor marks item as completed
   }),
   (t) => [
@@ -76,18 +84,6 @@ export const orderItems = pgTable(
       .on(t.orderId, t.productVariantId)
       .where(isNotNull(t.productVariantId)),
   ],
-)
-
-export const vouchers = pgTable(
-  'vouchers',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    code: t.varchar({ length: 50 }).notNull().unique(),
-    discountAmount: t.numeric({ precision: 10, scale: 2 }),
-    discountPercentage: t.integer(),
-    expiryDate: t.timestamp().notNull(),
-  }),
-  (t) => [uniqueIndex('vouchers_code_uq_idx').on(t.code)],
 )
 
 export const payments = pgTable(

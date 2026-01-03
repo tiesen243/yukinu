@@ -1,8 +1,7 @@
 import { createId } from '@yukinu/lib/create-id'
-import { UserValidators } from '@yukinu/validators/user'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { index, pgTable } from 'drizzle-orm/pg-core'
 
-import { products, users } from '@/schema'
+import { users } from '@/schema'
 
 export const profiles = pgTable('profiles', (t) => ({
   id: t
@@ -32,23 +31,4 @@ export const addresses = pgTable(
     country: t.varchar({ length: 100 }).notNull(),
   }),
   (t) => [index('addresses_user_id_idx').on(t.userId)],
-)
-
-export const wishlistItems = pgTable(
-  'wishlist_items',
-  (t) => ({
-    userId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    productId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
-    addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
-  }),
-  (t) => [
-    primaryKey({ columns: [t.userId, t.productId] }),
-    index('wishlist_items_user_id_idx').on(t.userId),
-  ],
 )

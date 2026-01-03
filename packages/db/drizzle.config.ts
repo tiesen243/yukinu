@@ -14,7 +14,7 @@ export default defineConfig({
     database: env.POSTGRES_DATABASE,
     ssl: env.POSTGRES_SSL_MODE === 'true' ? 'require' : false,
   },
-  schema: './src/schema',
+  schema: './src/schema/index.ts',
   casing: 'snake_case',
   strict: true,
 })

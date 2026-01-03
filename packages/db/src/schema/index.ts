@@ -1,4 +1,5 @@
 export * from '@/schema/auth'
+export * from '@/schema/category'
 export * from '@/schema/general'
 export * from '@/schema/order'
 export * from '@/schema/product'

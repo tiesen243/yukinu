@@ -1,6 +1,7 @@
 import type { IUserService } from '@/contracts/services/user.service'
 
 import { TRPCError } from '@trpc/server'
+import { utapi } from '@yukinu/uploadthing'
 import { UserValidators } from '@yukinu/validators/user'
 
 import { BaseService } from '@/services/base.service'
@@ -182,7 +183,11 @@ export class UserService extends BaseService implements IUserService {
       })
 
     const [targetUser] = await this._db
-      .select({ role: users.role, deletedAt: users.deletedAt })
+      .select({
+        role: users.role,
+        image: users.image,
+        deletedAt: users.deletedAt,
+      })
       .from(users)
       .where(eq(users.id, id))
       .limit(1)
@@ -207,6 +212,7 @@ export class UserService extends BaseService implements IUserService {
       })
 
     await this._db.delete(users).where(eq(users.id, id))
+    await utapi.deleteFiles(targetUser.image?.split('/').pop() ?? '')
 
     return { id }
   }
@@ -252,12 +258,24 @@ export class UserService extends BaseService implements IUserService {
     const { id, image, ...data } = input
 
     return this._db.transaction(async (tx) => {
+      const [targetUser] = await tx
+        .select({ image: users.image })
+        .from(users)
+        .where(eq(users.id, id))
+        .limit(1)
+
+      if (!targetUser)
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+
       await tx
         .update(profiles)
         .set({ ...data })
         .where(eq(profiles.id, id))
 
-      await tx.update(users).set({ image }).where(eq(users.id, id))
+      if (image && targetUser.image !== image) {
+        await tx.update(users).set({ image }).where(eq(users.id, id))
+        await utapi.deleteFiles(targetUser.image?.split('/').pop() ?? '')
+      }
 
       return { id }
     })

@@ -7,6 +7,7 @@ export namespace GeneralValidators {
   export const banner = z.object({
     id: z.cuid(),
     url: z.url(),
+    createdAt: z.date(),
   })
   export type Banner = z.infer<typeof banner>
 
@@ -25,15 +26,15 @@ export namespace GeneralValidators {
 
   export const allBannersInput = z.object()
   export type AllBannersInput = z.infer<typeof allBannersInput>
-  export const allBannersOutput = z.array(banner)
+  export const allBannersOutput = z.array(banner.omit({ createdAt: true }))
   export type AllBannersOutput = z.infer<typeof allBannersOutput>
 
-  export const createBannerInput = banner.omit({ id: true })
+  export const createBannerInput = banner.pick({ url: true })
   export type CreateBannerInput = z.infer<typeof createBannerInput>
   export const createBannerOutput = banner.pick({ id: true })
   export type CreateBannerOutput = z.infer<typeof createBannerOutput>
 
-  export const deleteBannerInput = z.object({ id: z.cuid() })
+  export const deleteBannerInput = banner.pick({ id: true })
   export type DeleteBannerInput = z.infer<typeof deleteBannerInput>
   export const deleteBannerOutput = banner.pick({ id: true })
   export type DeleteBannerOutput = z.infer<typeof deleteBannerOutput>

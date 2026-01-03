@@ -35,6 +35,7 @@ const sharedFileRouteConfig = f({
 
 export const ourFileRouter = {
   avatarUploader: sharedFileRouteConfig,
+  bannerUploader: sharedFileRouteConfig,
   categoryImageUploader: sharedFileRouteConfig,
   productImageUploader: sharedFileRouteConfig,
 } as const satisfies FileRouter

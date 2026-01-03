@@ -7,6 +7,7 @@ import { createTRPCRouter } from '@/trpc'
 const appRouter = createTRPCRouter({
   auth: lazy(() => import('@/routers/auth.router')),
   category: lazy(() => import('@/routers/category.router')),
+  general: lazy(() => import('@/routers/general.router')),
   order: lazy(() => import('@/routers/order.router')),
   product: lazy(() => import('@/routers/product.router')),
   user: lazy(() => import('@/routers/user.router')),

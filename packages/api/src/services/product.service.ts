@@ -4,6 +4,7 @@ import type { ProductValidators } from '@yukinu/validators/product'
 
 import { TRPCError } from '@trpc/server'
 import { vendors } from '@yukinu/db/schema'
+import { utapi } from '@yukinu/uploadthing'
 
 import { BaseService } from '@/services/base.service'
 import { MINMOD_ACCESS } from '@/trpc'
@@ -382,7 +383,13 @@ export class ProductService extends BaseService implements IProductService {
           message: `Failed to update product with id ${id}`,
         })
 
-      await tx.delete(productImages).where(eq(productImages.productId, id))
+      const deletedImages = await tx
+        .delete(productImages)
+        .where(eq(productImages.productId, id))
+        .returning({ url: productImages.url })
+      await utapi.deleteFiles(
+        deletedImages.map(({ url }) => url.split('/').pop() ?? ''),
+      )
       await tx
         .insert(productImages)
         .values(images.map((url) => ({ productId: id, url })))
@@ -496,7 +503,7 @@ export class ProductService extends BaseService implements IProductService {
     input: ProductValidators.PermanentlyDeleteInput,
   ): Promise<ProductValidators.PermanentlyDeleteOutput> {
     const { and, eq } = this._orm
-    const { products } = this._schema
+    const { productImages, products } = this._schema
     const { id, vendorId } = input
 
     const [product] = await this._db
@@ -523,7 +530,13 @@ export class ProductService extends BaseService implements IProductService {
         message: `Product with id ${id} must be soft-deleted before permanent deletion`,
       })
 
+    const images = await this._db
+      .select({ url: productImages.url })
+      .from(productImages)
+      .where(eq(products.id, id))
+
     await this._db.delete(products).where(this._orm.eq(products.id, id))
+    await utapi.deleteFiles(images.map((img) => img.url.split('/').pop() ?? ''))
 
     return { id }
   }

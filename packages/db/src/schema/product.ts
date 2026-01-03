@@ -1,24 +1,8 @@
-import type { AnyPgColumn } from 'drizzle-orm/pg-core'
-
 import { createId } from '@yukinu/lib/create-id'
 import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { users, vendors } from '@/schema'
+import { categories, users, vendors } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
-
-export const categories = pgTable(
-  'categories',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    parentId: t
-      .varchar({ length: 24 })
-      .references((): AnyPgColumn => categories.id, { onDelete: 'set null' }),
-    name: t.varchar({ length: 100 }).notNull(),
-    description: t.text(),
-    image: t.varchar({ length: 500 }),
-  }),
-  (t) => [uniqueIndex('categories_name_idx').on(t.name)],
-)
 
 export const products = pgTable(
   'products',

@@ -3,6 +3,7 @@ import {
   BarChart2Icon,
   BuildingIcon,
   FileTextIcon,
+  FlagIcon,
   HelpCircleIcon,
   LayoutDashboardIcon,
   ListOrderedIcon,
@@ -68,6 +69,12 @@ const navs = [
     id: 'management',
     title: 'Management',
     items: [
+      {
+        icon: FlagIcon,
+        title: 'Banners',
+        url: '/admin/banners',
+        roles: ['admin', 'moderator'],
+      },
       {
         icon: UsersIcon,
         title: 'Users',
