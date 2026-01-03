@@ -26,12 +26,10 @@ export interface Session {
   expiresAt: Date
   ipAddress: string | null
   userAgent: string | null
+  createdAt: Date
 }
 
-export type SessionWithUser = Pick<
-  Session,
-  'token' | 'expiresAt' | 'ipAddress' | 'userAgent'
-> & {
+export type SessionWithUser = Omit<Session, 'id' | 'userId' | 'createdAt'> & {
   user: Pick<User, 'id' | 'username' | 'email' | 'role' | 'image'> | null
 }
 

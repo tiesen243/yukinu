@@ -6,6 +6,7 @@ CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'vendor_owner', 'vendo
 CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive');--> statement-breakpoint
 CREATE TYPE "public"."vendor_status" AS ENUM('pending', 'approved', 'suspended');--> statement-breakpoint
 CREATE TABLE "accounts" (
+	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"user_id" varchar(24) NOT NULL,
 	"provider" varchar(50) NOT NULL,
 	"account_id" varchar(100) NOT NULL,

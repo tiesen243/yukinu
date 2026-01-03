@@ -25,6 +25,7 @@ export const userStatuses = userSchema.shape.status.options
 export type UserStatus = z.infer<typeof userStatuses>
 
 export const accountSchema = createSelectSchema(accounts, {
+  id: z.cuid(),
   userId: z.cuid(),
   password: (schema) =>
     schema.regex(

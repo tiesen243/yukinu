@@ -42,6 +42,7 @@ export const users = pgTable(
 export const accounts = pgTable(
   'accounts',
   (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
