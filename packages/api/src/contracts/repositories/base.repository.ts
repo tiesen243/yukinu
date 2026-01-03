@@ -1,12 +1,22 @@
 import type { Database, PgTable } from '@yukinu/db'
 
 export interface IBaseRepository<T extends PgTable> {
-  all(tx?: Database): Promise<T['$inferSelect'][]>
+  all(
+    criterias?: Partial<T['$inferSelect']>[],
+    orderBy?: Partial<Record<keyof T['$inferSelect'], 'asc' | 'desc'>>,
+    options?: { limit?: number; offset?: number },
+    tx?: Database,
+  ): Promise<T['$inferSelect'][]>
 
   find(
     id: T['$inferSelect']['id'],
     tx?: Database,
   ): Promise<T['$inferSelect'] | null>
+
+  count(
+    criterias?: Partial<T['$inferSelect']>[],
+    tx?: Database,
+  ): Promise<number>
 
   create(
     data: T['$inferInsert'],

@@ -19,8 +19,8 @@ export class AuthService implements IAuthService {
   constructor(
     private readonly _db: Database,
     private readonly _account: IAccountRepository,
-    private readonly _user: IUserRepository,
     private readonly _profile: IProfileRepository,
+    private readonly _user: IUserRepository,
     private readonly _verification: IVerificationRepository,
   ) {}
 

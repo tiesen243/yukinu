@@ -8,7 +8,6 @@ export class VerificationRepository implements IVerificationRepository {
     protected _db: Database,
     protected _orm: typeof orm,
     protected _schema: typeof schema,
-    protected _table: typeof schema.verifications,
   ) {}
 
   async find(
@@ -17,11 +16,12 @@ export class VerificationRepository implements IVerificationRepository {
     tx = this._db,
   ): Promise<VerificationSchema | null> {
     const { and, eq } = this._orm
+    const { verifications } = this._schema
 
     const [result] = await tx
       .select()
-      .from(this._table)
-      .where(and(eq(this._table.token, token), eq(this._table.type, type)))
+      .from(verifications)
+      .where(and(eq(verifications.token, token), eq(verifications.type, type)))
       .limit(1)
 
     return result ?? null
@@ -31,10 +31,12 @@ export class VerificationRepository implements IVerificationRepository {
     data: VerificationSchema,
     tx = this._db,
   ): Promise<VerificationSchema['token']> {
+    const { verifications } = this._schema
+
     const [result] = await tx
-      .insert(this._table)
+      .insert(verifications)
       .values(data)
-      .returning({ token: this._table.token })
+      .returning({ token: verifications.token })
 
     return result ? result.token : ''
   }
@@ -44,11 +46,12 @@ export class VerificationRepository implements IVerificationRepository {
     tx?: Database,
   ): Promise<VerificationSchema['token']> {
     const { eq } = this._orm
+    const { verifications } = this._schema
 
     const [result] = await (tx ?? this._db)
-      .delete(this._table)
-      .where(eq(this._table.token, token))
-      .returning({ token: this._table.token })
+      .delete(verifications)
+      .where(eq(verifications.token, token))
+      .returning({ token: verifications.token })
 
     return result ? result.token : ''
   }
