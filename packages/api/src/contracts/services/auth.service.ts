@@ -1,32 +1,26 @@
-import type { AuthValidators } from '@yukinu/validators/auth'
+import type * as Validators from '@yukinu/validators/auth'
 
 export interface IAuthService {
-  getCurrentUser(userId: AuthValidators.UsersSchema['id']): Promise<
-    Omit<AuthValidators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
+  getCurrentUser(userId: Validators.UserSchema['id']): Promise<
+    Omit<Validators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
       user: Pick<
-        AuthValidators.UsersSchema,
+        Validators.UserSchema,
         'id' | 'username' | 'email' | 'role' | 'image'
       >
     }
   >
 
-  register(
-    input: AuthValidators.RegisterInput,
-  ): Promise<AuthValidators.RegisterOutput>
+  register(input: Validators.RegisterInput): Promise<Validators.RegisterOutput>
 
   verifyEmail(
-    input: AuthValidators.VerifyEmailInput,
-  ): Promise<AuthValidators.VerifyEmailOutput>
-
-  changePassword(
-    input: AuthValidators.ChangePasswordInput,
-  ): Promise<AuthValidators.ChangePasswordOutput>
+    input: Validators.VerifyEmailInput,
+  ): Promise<Validators.VerifyEmailOutput>
 
   forgotPassword(
-    input: AuthValidators.ForgotPasswordInput,
-  ): Promise<AuthValidators.ForgotPasswordOutput>
+    input: Validators.ForgotPasswordInput,
+  ): Promise<Validators.ForgotPasswordOutput>
 
   resetPassword(
-    input: AuthValidators.ResetPasswordInput,
-  ): Promise<AuthValidators.ResetPasswordOutput>
+    input: Validators.ResetPasswordInput,
+  ): Promise<Validators.ResetPasswordOutput>
 }

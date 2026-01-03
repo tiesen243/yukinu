@@ -1,38 +1,45 @@
-import { OrderValidators } from '@yukinu/validators/order'
+import * as Validators from '@yukinu/validators/order'
 
-import { createTRPCRouter, protectedProcedure } from '@/trpc'
+import { createTRPCRouter, protectedProcedure, vendorProcedure } from '@/trpc'
 
 export const orderRouter = createTRPCRouter({
+  all: protectedProcedure
+    .meta({ message: 'Orders fetched successfully.' })
+    .input(Validators.allInput.omit({ userId: true }))
+    .output(Validators.allOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.order.all({ ...input, userId: ctx.session.userId }),
+    ),
+
+  allByVendor: vendorProcedure
+    .meta({ message: 'Vendor orders fetched successfully.' })
+    .input(Validators.allInput.omit({ vendorId: true }))
+    .output(Validators.allOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.order.all({ ...input, vendorId: ctx.vendorId }),
+    ),
+
   one: protectedProcedure
     .meta({ message: 'Order fetched successfully.' })
-    .input(OrderValidators.oneInput.omit({ userId: true }))
-    .output(OrderValidators.oneOutput)
+    .input(Validators.oneInput.omit({ userId: true }))
+    .output(Validators.oneOutput)
     .query(({ ctx, input }) =>
-      ctx.services.order.one({
-        ...input,
-        userId: ctx.session.userId,
-      }),
+      ctx.services.order.one({ ...input, userId: ctx.session.userId }),
     ),
 
-  addItemToCart: protectedProcedure
-    .meta({ message: 'Item added to cart successfully.' })
-    .input(OrderValidators.addItemToCartInput.omit({ userId: true }))
-    .output(OrderValidators.addItemToCartOutput)
+  checkout: protectedProcedure
+    .meta({ message: 'Order checked out successfully.' })
+    .input(Validators.checkoutInput.omit({ userId: true }))
+    .output(Validators.checkoutOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.order.addItemToCart({
-        ...input,
-        userId: ctx.session.userId,
-      }),
+      ctx.services.order.checkout({ ...input, userId: ctx.session.userId }),
     ),
 
-  removeItemFromCart: protectedProcedure
-    .meta({ message: 'Item removed from cart successfully.' })
-    .input(OrderValidators.removeItemFromCartInput.omit({ userId: true }))
-    .output(OrderValidators.removeItemFromCartOutput)
+  update: protectedProcedure
+    .meta({ message: 'Order updated successfully.' })
+    .input(Validators.updateInput.omit({ userId: true }))
+    .output(Validators.updateOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.order.removeItemFromCart({
-        ...input,
-        userId: ctx.session.userId,
-      }),
+      ctx.services.order.update({ ...input, userId: ctx.session.userId }),
     ),
 })

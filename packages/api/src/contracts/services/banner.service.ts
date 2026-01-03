@@ -1,15 +1,13 @@
-import type { GeneralValidators } from '@yukinu/validators/general'
+import type * as Validators from '@yukinu/validators/general'
 
 export interface IBannerService {
-  allBanners(
-    input: GeneralValidators.AllBannersInput,
-  ): Promise<GeneralValidators.AllBannersOutput>
+  all(input: Validators.AllBannersInput): Promise<Validators.AllBannersOutput>
 
-  createBanner(
-    input: GeneralValidators.CreateBannerInput,
-  ): Promise<GeneralValidators.CreateBannerOutput>
+  create(
+    input: Validators.CreateBannerInput,
+  ): Promise<Validators.CreateBannerOutput>
 
-  deleteBanner(
-    input: GeneralValidators.DeleteBannerInput,
-  ): Promise<GeneralValidators.DeleteBannerOutput>
+  delete(
+    input: Validators.DeleteBannerInput,
+  ): Promise<Validators.DeleteBannerOutput>
 }

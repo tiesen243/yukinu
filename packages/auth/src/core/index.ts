@@ -1,8 +1,7 @@
 import type { AuthConfig, Session, SessionWithUser } from '@/types'
-import type { UserValidators } from '@yukinu/validators/user'
 
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
-import { AuthValidators } from '@yukinu/validators/auth'
+import { loginInput, type LoginInput, type Role } from '@yukinu/validators/auth'
 
 import {
   constantTimeEqual,
@@ -33,7 +32,7 @@ export function Auth(config: AuthConfig) {
   const { adapter, providers = [], session, keys, cookie } = finalConfig
   const jwt = new JWT<{
     sub: string
-    role: UserValidators.Role
+    role: Role
   }>(finalConfig.secret)
 
   async function createAccessToken(userId: string): Promise<string> {
@@ -46,7 +45,7 @@ export function Auth(config: AuthConfig) {
 
   async function validateAccessToken(
     headers: Headers,
-  ): Promise<{ userId: string; role: UserValidators.Role } | null> {
+  ): Promise<{ userId: string; role: Role } | null> {
     const cookies = parseCookies(headers.get('Cookie'))
     const token =
       cookies[keys.accessToken] ??
@@ -136,7 +135,7 @@ export function Auth(config: AuthConfig) {
   }
 
   async function signIn(
-    data: AuthValidators.LoginInput,
+    data: LoginInput,
     // oxlint-disable-next-line no-object-as-default-parameter
     opts: Pick<Session, 'ipAddress' | 'userAgent'> = {
       ipAddress: null,
@@ -283,9 +282,10 @@ export function Auth(config: AuthConfig) {
           const formData = await request.formData()
           data = Object.fromEntries(formData.entries())
         } else throw new Error('Unsupported content type')
-        const userData = AuthValidators.loginInput.parse(data)
+        const userData = loginInput.safeParse(data)
+        if (!userData.success) throw new Error(userData.error.message)
 
-        const result = await signIn(userData, {
+        const result = await signIn(userData.data, {
           ipAddress:
             request.headers.get('X-Forwarded-For') ??
             request.headers.get('x-real-ip'),

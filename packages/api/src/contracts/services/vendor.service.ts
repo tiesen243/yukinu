@@ -1,35 +1,19 @@
-import type { VendorValidators } from '@yukinu/validators/vendor'
+import type * as Validators from '@yukinu/validators/vendor'
 
 export interface IVendorService {
-  all(input: VendorValidators.AllInput): Promise<VendorValidators.AllOutput>
+  all(input: Validators.AllVendorsInput): Promise<Validators.AllVendorsOutput>
 
-  one(input: VendorValidators.OneInput): Promise<VendorValidators.OneOutput>
+  one(input: Validators.OneVendorInput): Promise<Validators.OneVendorOutput>
 
   create(
-    input: VendorValidators.CreateInput,
-  ): Promise<VendorValidators.CreateOutput>
+    input: Validators.CreateVendorInput,
+  ): Promise<Validators.CreateVendorOutput>
 
   updateStatus(
-    input: VendorValidators.UpdateStatusInput,
-  ): Promise<VendorValidators.UpdateStatusOutput>
+    input: Validators.UpdateVendorStatusInput,
+  ): Promise<Validators.UpdateVendorStatusOutput>
 
   update(
-    input: VendorValidators.UpdateInput,
-  ): Promise<VendorValidators.UpdateOutput>
-
-  allStaffs(
-    input: VendorValidators.AllStaffsInput,
-  ): Promise<VendorValidators.AllStaffsOutput>
-
-  inviteStaff(
-    input: VendorValidators.InviteStaffInput,
-  ): Promise<VendorValidators.InviteStaffOutput>
-
-  acceptStaffInvitation(
-    input: VendorValidators.AcceptStaffInvitationInput,
-  ): Promise<VendorValidators.AcceptStaffInvitationOutput>
-
-  removeStaff(
-    input: VendorValidators.RemoveStaffInput,
-  ): Promise<VendorValidators.RemoveStaffOutput>
+    input: Validators.UpdateVendorInput,
+  ): Promise<Validators.UpdateVendorOutput>
 }

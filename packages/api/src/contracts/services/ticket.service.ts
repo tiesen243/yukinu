@@ -1,19 +1,15 @@
-import type { GeneralValidators } from '@yukinu/validators/general'
+import type * as Validators from '@yukinu/validators/general'
 
 export interface ITicketService {
-  allTickets(
-    input: GeneralValidators.AllTicketsInput,
-  ): Promise<GeneralValidators.AllTicketsOutput>
+  all(input: Validators.AllTicketsInput): Promise<Validators.AllTicketsOutput>
 
-  oneTicket(
-    input: GeneralValidators.OneTicketInput,
-  ): Promise<GeneralValidators.OneTicketOutput>
+  one(input: Validators.OneTicketInput): Promise<Validators.OneTicketOutput>
 
-  createTicket(
-    input: GeneralValidators.CreateTicketInput,
-  ): Promise<GeneralValidators.CreateTicketOutput>
+  create(
+    input: Validators.CreateTicketInput,
+  ): Promise<Validators.CreateTicketOutput>
 
-  updateTicketStatus(
-    input: GeneralValidators.UpdateTicketStatusInput,
-  ): Promise<GeneralValidators.UpdateTicketStatusOutput>
+  updateStatus(
+    input: Validators.UpdateTicketStatusInput,
+  ): Promise<Validators.UpdateTicketStatusOutput>
 }

@@ -1,5 +1,5 @@
 import type { SessionWithUser } from '@/types'
-import type { AuthValidators } from '@yukinu/validators/auth'
+import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
@@ -12,9 +12,7 @@ type SessionContextValue = (
       session: SessionWithUser & { user: NonNullable<SessionWithUser['user']> }
     }
 ) & {
-  signIn: (
-    credentials: AuthValidators.LoginInput,
-  ) => Promise<AuthValidators.LoginOutput>
+  signIn: (credentials: LoginInput) => Promise<LoginOutput>
 
   signOut: () => Promise<void>
 }
@@ -59,14 +57,14 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
 
   const { mutateAsync: signIn } = useMutation({
     mutationKey: ['auth', 'sign-in'],
-    mutationFn: async (credentials: AuthValidators.LoginInput) => {
+    mutationFn: async (credentials: LoginInput) => {
       const res = await fetch(`${basePath}/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       })
       if (!res.ok) throw new Error(await res.text())
-      return res.json() as Promise<AuthValidators.LoginOutput>
+      return res.json() as Promise<LoginOutput>
     },
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['auth', 'get-session'] }),

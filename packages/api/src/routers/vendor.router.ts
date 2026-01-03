@@ -1,4 +1,4 @@
-import { VendorValidators } from '@yukinu/validators/vendor'
+import * as Validators from '@yukinu/validators/vendor'
 
 import {
   createTRPCRouter,
@@ -9,21 +9,27 @@ import {
 
 export const VendorRouter = createTRPCRouter({
   all: publicProcedure
-    .meta({ message: 'Vendors fetched successfully' })
-    .input(VendorValidators.allInput)
-    .output(VendorValidators.allOutput)
+    .meta({
+      message: 'Vendors fetched successfully',
+      role: ['admin', 'moderator'],
+    })
+    .input(Validators.allVendorsInput)
+    .output(Validators.allVendorsOutput)
     .query(({ ctx, input }) => ctx.services.vendor.all(input)),
 
   one: publicProcedure
-    .meta({ message: 'Vendor fetched successfully' })
-    .input(VendorValidators.oneInput)
-    .output(VendorValidators.oneOutput)
+    .meta({
+      message: 'Vendor fetched successfully',
+      role: ['admin', 'moderator'],
+    })
+    .input(Validators.oneVendorInput)
+    .output(Validators.oneVendorOutput)
     .query(({ ctx, input }) => ctx.services.vendor.one(input)),
 
   me: vendorProcedure
     .meta({ message: 'Vendor fetched successfully', role: ['vendor_owner'] })
-    .input(VendorValidators.oneInput.omit({ id: true }))
-    .output(VendorValidators.oneOutput)
+    .input(Validators.oneVendorInput.omit({ id: true }))
+    .output(Validators.oneVendorOutput)
     .query(({ ctx }) => ctx.services.vendor.one({ id: ctx.vendorId })),
 
   create: protectedProcedure
@@ -31,8 +37,8 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor created successfully',
       role: ['user'],
     })
-    .input(VendorValidators.createInput.omit({ ownerId: true }))
-    .output(VendorValidators.createOutput)
+    .input(Validators.createVendorInput.omit({ ownerId: true }))
+    .output(Validators.createVendorOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.vendor.create({
         ...input,
@@ -45,8 +51,8 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor status updated successfully',
       role: ['admin', 'moderator'],
     })
-    .input(VendorValidators.updateStatusInput)
-    .output(VendorValidators.updateStatusOutput)
+    .input(Validators.updateVendorStatusInput)
+    .output(Validators.updateVendorStatusOutput)
     .mutation(({ ctx, input }) => ctx.services.vendor.updateStatus(input)),
 
   update: vendorProcedure
@@ -54,53 +60,9 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor updated successfully',
       role: ['vendor_owner'],
     })
-    .input(VendorValidators.updateInput.omit({ id: true }))
-    .output(VendorValidators.updateOutput)
+    .input(Validators.updateVendorInput.omit({ id: true }))
+    .output(Validators.updateVendorOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.vendor.update({ ...input, id: ctx.vendorId }),
-    ),
-
-  allStaffs: vendorProcedure
-    .meta({
-      message: 'Vendor staff fetched successfully',
-      role: ['vendor_owner'],
-    })
-    .input(VendorValidators.allStaffsInput.omit({ id: true }))
-    .output(VendorValidators.allStaffsOutput)
-    .query(({ ctx, input }) =>
-      ctx.services.vendor.allStaffs({ ...input, id: ctx.vendorId }),
-    ),
-
-  inviteStaff: vendorProcedure
-    .meta({
-      message: 'Vendor staff added successfully',
-      role: ['vendor_owner'],
-    })
-    .input(VendorValidators.inviteStaffInput.omit({ vendorId: true }))
-    .output(VendorValidators.inviteStaffOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.vendor.inviteStaff({ ...input, vendorId: ctx.vendorId }),
-    ),
-
-  acceptStaffInvitation: protectedProcedure
-    .meta({ message: 'Vendor invitation accepted successfully' })
-    .input(VendorValidators.acceptStaffInvitationInput.omit({ userId: true }))
-    .output(VendorValidators.acceptStaffInvitationOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.vendor.acceptStaffInvitation({
-        ...input,
-        userId: ctx.session.userId,
-      }),
-    ),
-
-  removeStaff: vendorProcedure
-    .meta({
-      message: 'Vendor staff removed successfully',
-      role: ['vendor_owner'],
-    })
-    .input(VendorValidators.removeStaffInput.omit({ vendorId: true }))
-    .output(VendorValidators.removeStaffOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.vendor.removeStaff({ ...input, vendorId: ctx.vendorId }),
     ),
 })

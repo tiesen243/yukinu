@@ -1,23 +1,21 @@
-import type { GeneralValidators } from '@yukinu/validators/general'
+import type * as Validators from '@yukinu/validators/general'
 
 export interface ICategoryService {
   all(
-    input: GeneralValidators.AllCategoriesInput,
-  ): Promise<GeneralValidators.AllCategoriesOutput>
+    input: Validators.AllCategoriesInput,
+  ): Promise<Validators.AllCategoriesOutput>
 
-  one(
-    input: GeneralValidators.OneCategoryInput,
-  ): Promise<GeneralValidators.OneCategoryOutput>
+  one(input: Validators.OneCategoryInput): Promise<Validators.OneCategoryOutput>
 
   create(
-    input: GeneralValidators.CreateCategoryInput,
-  ): Promise<GeneralValidators.CreateCategoryOutput>
+    input: Validators.CreateCategoryInput,
+  ): Promise<Validators.CreateCategoryOutput>
 
   update(
-    input: GeneralValidators.UpdateCategoryInput,
-  ): Promise<GeneralValidators.UpdateCategoryOutput>
+    input: Validators.UpdateCategoryInput,
+  ): Promise<Validators.UpdateCategoryOutput>
 
   delete(
-    input: GeneralValidators.DeleteCategoryInput,
-  ): Promise<GeneralValidators.DeleteCategoryOutput>
+    input: Validators.DeleteCategoryInput,
+  ): Promise<Validators.DeleteCategoryOutput>
 }
