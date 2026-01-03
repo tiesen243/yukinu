@@ -7,10 +7,12 @@ import * as schema from '@yukinu/db/schema'
 import { AccountRepository } from '@/repositories/account.repository'
 import { CategoryRepository } from '@/repositories/category.repository'
 import { ProfileRepository } from '@/repositories/profile.repository'
+import { SessionRepository } from '@/repositories/session.repository'
 import { UserRepository } from '@/repositories/user.repository'
 import { VerificationRepository } from '@/repositories/verification.repository'
 import { AuthService } from '@/services/auth.service'
 import { CategoryService } from '@/services/category.service'
+import { SecurityService } from '@/services/security.service'
 
 export const createTRPCContext = async (opts: {
   headers: Headers
@@ -20,6 +22,7 @@ export const createTRPCContext = async (opts: {
   const accountRepo = new AccountRepository(db, orm, schema)
   const categoryRepo = new CategoryRepository(db, orm, schema)
   const profileRepo = new ProfileRepository(db, orm, schema)
+  const sessionRepo = new SessionRepository(db, orm, schema)
   const userRepo = new UserRepository(db, orm, schema)
   const verificationRepo = new VerificationRepository(db, orm, schema)
 
@@ -31,6 +34,7 @@ export const createTRPCContext = async (opts: {
     verificationRepo,
   )
   const category = new CategoryService(db, categoryRepo)
+  const security = new SecurityService(db, accountRepo, sessionRepo, userRepo)
 
   return {
     headers: opts.headers,
@@ -43,7 +47,7 @@ export const createTRPCContext = async (opts: {
       category,
       order: undefined,
       product: undefined,
-      security: undefined,
+      security,
       staff: undefined,
       ticket: undefined,
       user: undefined,

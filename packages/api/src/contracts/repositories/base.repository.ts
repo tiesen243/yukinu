@@ -35,7 +35,7 @@ export interface IBaseRepository<T extends PgTable> {
   ): Promise<T['$inferSelect']['id']>
 
   updateMany(
-    ids: T['$inferSelect']['id'][],
+    criterias: Partial<T['$inferSelect']>[],
     data: Partial<T['$inferSelect']>,
     tx?: Database,
   ): Promise<T['$inferSelect']['id'][]>
@@ -46,7 +46,7 @@ export interface IBaseRepository<T extends PgTable> {
   ): Promise<T['$inferSelect']['id']>
 
   deleteMany(
-    ids: T['$inferSelect']['id'][],
+    criterias: Partial<T['$inferSelect']>[],
     tx?: Database,
   ): Promise<T['$inferSelect']['id'][]>
 }

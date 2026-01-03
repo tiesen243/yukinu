@@ -13,6 +13,26 @@ export class AccountRepository
     super(db, orm, schema, schema.accounts)
   }
 
+  override async find(
+    id: AccountSchema['id'],
+    tx = this._db,
+  ): Promise<AccountSchema | null> {
+    const { eq, and } = this._orm
+
+    const [result] = await tx
+      .select()
+      .from(this._table)
+      .where(
+        and(
+          eq(this._table.accountId, id),
+          eq(this._table.provider, 'credentials'),
+        ),
+      )
+      .limit(1)
+
+    return result ?? null
+  }
+
   override async update(
     id: AccountSchema['id'],
     data: Partial<AccountSchema>,

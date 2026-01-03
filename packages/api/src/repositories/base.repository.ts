@@ -98,16 +98,16 @@ export abstract class BaseRepository<
   }
 
   async updateMany(
-    ids: T['$inferSelect']['id'][],
+    criterias: Partial<T['$inferSelect']>[],
     data: Partial<T['$inferSelect']>,
     tx?: Database,
   ): Promise<T['$inferSelect']['id'][]> {
-    const { inArray } = this._orm
+    const whereClause = this._buildCriteria(criterias)
 
     const result = await (tx ?? this._db)
       .update(this._table)
       .set(data as never)
-      .where(inArray(this._table.id, ids as never[]))
+      .where(whereClause)
       .returning({ id: this._table.id })
 
     return result.length <= 0 ? result.map((row) => row.id) : []
@@ -128,14 +128,14 @@ export abstract class BaseRepository<
   }
 
   async deleteMany(
-    ids: T['$inferSelect']['id'][],
+    criterias: Partial<T['$inferSelect']>[],
     tx?: Database,
   ): Promise<T['$inferSelect']['id'][]> {
-    const { inArray } = this._orm
+    const whereClause = this._buildCriteria(criterias)
 
     const result = await (tx ?? this._db)
       .delete(this._table)
-      .where(inArray(this._table.id, ids as never[]))
+      .where(whereClause)
       .returning({ id: this._table.id })
 
     return result.length <= 0 ? result.map((row) => row.id) : []

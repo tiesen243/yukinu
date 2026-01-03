@@ -94,6 +94,7 @@ export const changePasswordInput = accountSchema
   .extend({
     newPassword: accountSchema.shape.password.unwrap(),
     confirmNewPassword: z.string('Please confirm your new password'),
+    isLogout: z.boolean().default(true),
   })
   .refine((data) => data.newPassword === data.confirmNewPassword, {
     message: 'New passwords do not match',
