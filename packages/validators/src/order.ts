@@ -1,159 +1,120 @@
+import {
+  addresses,
+  orderItems,
+  orders,
+  payments,
+  transactions,
+  vouchers,
+} from '@yukinu/db/schema'
+import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 export namespace OrderValidators {
-  const numeric = z.string().regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, {
-    error: 'Invalid price format',
-  })
+  /* --------------------------------------------------------------------------
+   * Convert Drizzle ORM schemas to Zod schemas for validation
+   * --------------------------------------------------------------------------
+   */
 
-  export const orderStatuses = [
-    'pending',
-    'confirmed',
-    'shipped',
-    'completed',
-    'cancelled',
-  ] as const
-  export type OrderStatus = (typeof orderStatuses)[number]
-
-  export const paymentMethods = ['bank_transfer', 'cash_on_delivery'] as const
-  export type PaymentMethod = (typeof paymentMethods)[number]
-
-  export const paymentStatuses = [
-    'pending',
-    'success',
-    'failed',
-    'refunded',
-  ] as const
-  export type PaymentStatus = (typeof paymentStatuses)[number]
-
-  export const order = z.object({
-    id: z.number().min(1000, 'ID must be at least 1000'),
+  export const orderSchema = createSelectSchema(orders, {
     userId: z.cuid().nullable(),
     addressId: z.cuid().nullable(),
     voucherId: z.cuid().nullable(),
-    totalAmount: numeric,
-    status: z.enum(orderStatuses),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+    totalAmount: (schema) =>
+      schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid amount format'),
   })
-  export type Order = z.infer<typeof order>
+  export type OrderSchema = z.infer<typeof orderSchema>
 
-  export const orderItem = z.object({
-    orderId: z.number().min(1000, 'ID must be at least 1000'),
+  export const orderItemSchema = createSelectSchema(orderItems, {
+    id: z.cuid(),
+    vendorId: z.cuid().nullable(),
     productId: z.cuid().nullable(),
     productVariantId: z.cuid().nullable(),
-    quantity: z.number().int().min(1, 'Quantity must be at least 1'),
-    unitPrice: numeric,
+    unitPrice: (schema) =>
+      schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
+    note: (schema) => schema.max(500),
   })
-  export type OrderItem = z.infer<typeof orderItem>
+  export type OrderItemSchema = z.infer<typeof orderItemSchema>
 
-  export const transaction = z.object({
+  export const paymentSchema = createSelectSchema(payments, {
     id: z.cuid(),
-    orderId: z.number().min(1000, 'ID must be at least 1000'),
-    amount: numeric,
-    method: z.enum(paymentMethods),
-    status: z.enum(paymentStatuses),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+    amount: (schema) =>
+      schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid amount format'),
   })
-  export type Transaction = z.infer<typeof transaction>
+  export type PaymentSchema = z.infer<typeof paymentSchema>
 
-  export const voucher = z
-    .object({
-      id: z.cuid(),
-      code: z
-        .string()
-        .min(1, 'Voucher code is required')
-        .max(50, 'Voucher code is too long'),
-      discountAmount: numeric.nullable(),
-      discountPercentage: z
-        .number()
-        .min(0, 'Discount percentage cannot be negative')
-        .max(100, 'Discount percentage cannot exceed 100')
-        .nullable(),
-      expiryDate: z.date(),
-    })
-    .refine(
-      (data) =>
-        data.discountAmount !== null || data.discountPercentage !== null,
-      {
-        error: 'Either discount amount or discount percentage must be provided',
-      },
-    )
-  export type Voucher = z.infer<typeof voucher>
+  export const transactionSchema = createSelectSchema(transactions, {
+    id: z.cuid(),
+    paymentId: z.cuid(),
+    amountIn: (schema) =>
+      schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+    amountOut: (schema) =>
+      schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+  })
+  export type TransactionSchema = z.infer<typeof transactionSchema>
 
-  export const allInput = z.object({
+  const addressSchema = createSelectSchema(addresses, { id: z.cuid() })
+  const voucherSchema = createSelectSchema(vouchers, { id: z.cuid() })
+
+  /* --------------------------------------------------------------------------
+   * Contract schemas for service inputs and outputs
+   * --------------------------------------------------------------------------
+   */
+
+  export const allOrdersInput = z.object({
     userId: z.cuid().optional(),
     vendorId: z.cuid().optional(),
   })
-  export type AllInput = z.infer<typeof allInput>
-  export const allOutput = z.array(order)
-  export type AllOutput = z.infer<typeof allOutput>
+  export type AllInput = z.infer<typeof allOrdersInput>
+  export const allOrdersOutput = z.array(orderSchema)
+  export type AllOutput = z.infer<typeof allOrdersOutput>
 
   export const oneInput = z.object({
-    id: order.shape.id.optional(),
+    id: orderSchema.shape.id.optional(),
     userId: z.cuid().optional(),
-    status: z.enum(orderStatuses).optional(),
+    status: orderSchema.shape.status.optional(),
   })
   export type OneInput = z.infer<typeof oneInput>
-  export const oneOutput = z.object({
-    id: order.shape.id,
-    userId: order.shape.userId,
-    status: order.shape.status,
-    totalAmount: order.shape.totalAmount,
-    address: z
-      .object({
-        recipientName: z.string(),
-        phoneNumber: z.string(),
-        street: z.string(),
-        city: z.string(),
-        state: z.string(),
-        postalCode: z.string(),
-        country: z.string(),
-      })
-      .nullable(),
-    voucher: z
-      .object({
-        code: voucher.shape.code,
-        discountAmount: voucher.shape.discountAmount,
-        discountPercentage: voucher.shape.discountPercentage,
-      })
-      .nullable(),
-    items: z.array(
-      z.object({
-        id: z.cuid().nullable(),
-        vendorId: z.cuid().nullable(),
-        productId: z.cuid().nullable(),
-        productName: z.string().nullable(),
-        productImage: z.string().nullable(),
-        productVariantId: z.cuid().nullable(),
-        unitPrice: numeric,
-        quantity: z.number().int().min(1, 'Quantity must be at least 1'),
-        variant: z.record(z.string(), z.string()),
 
-        stock: z.number().int().min(0).nullable(),
-        variantStock: z.number().int().min(0).nullable(),
-      }),
-    ),
-    createdAt: order.shape.createdAt,
-    updatedAt: order.shape.updatedAt,
-  })
+  export const oneOutput = orderSchema
+    .pick({
+      id: true,
+      userId: true,
+      status: true,
+      totalAmount: true,
+      createdAt: true,
+      updatedAt: true,
+    })
+    .extend({
+      address: addressSchema.omit({ id: true, userId: true }).nullable(),
+      voucher: voucherSchema.omit({ id: true, expiryDate: true }).nullable(),
+      items: z.array(
+        orderItemSchema.omit({ orderId: true, isCompleted: true }).extend({
+          productName: z.string().nullable(),
+          productImage: z.string().nullable(),
+          variant: z.record(z.string(), z.string()),
+
+          stock: z.int().min(0).nullable(),
+          variantStock: z.int().min(0).nullable(),
+        }),
+      ),
+    })
   export type OneOutput = z.infer<typeof oneOutput>
 
   export const checkoutInput = z.object({
-    id: order.shape.id,
-    addressId: order.shape.addressId,
-    voucherCode: voucher.shape.code.optional(),
-    paymentMethod: transaction.shape.method,
+    id: orderSchema.shape.id,
+    addressId: addressSchema.shape.id,
+    voucherCode: voucherSchema.shape.code.optional(),
+    paymentMethod: paymentSchema.shape.method,
   })
   export type CheckoutInput = z.infer<typeof checkoutInput>
   export const checkoutOutput = z.void()
   export type CheckoutOutput = z.infer<typeof checkoutOutput>
 
   export const updateInput = z.object({
-    id: order.shape.id,
-    status: z.enum(orderStatuses).optional(),
-    paymentStatus: z.enum(paymentStatuses).optional(),
-    paymentMethod: z.enum(paymentMethods).optional(),
+    id: orderSchema.shape.id,
+    status: orderSchema.shape.status.optional(),
+    paymentStatus: paymentSchema.shape.status.optional(),
+    paymentMethod: paymentSchema.shape.method.optional(),
   })
   export type UpdateInput = z.infer<typeof updateInput>
   export const updateOutput = z.void()
@@ -164,7 +125,9 @@ export namespace OrderValidators {
     vendorId: z.cuid().nullable(),
     productId: z.cuid(),
     variantId: z.cuid().optional(),
-    unitPrice: numeric,
+    unitPrice: z
+      .string()
+      .regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
     quantity: z.number().int().min(1, 'Quantity must be at least 1'),
   })
   export type AddItemToCartInput = z.infer<typeof addItemToCartInput>

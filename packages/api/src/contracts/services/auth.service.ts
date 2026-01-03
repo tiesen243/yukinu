@@ -1,10 +1,14 @@
-import type { SessionWithUser } from '@yukinu/auth'
 import type { AuthValidators } from '@yukinu/validators/auth'
 
 export interface IAuthService {
-  getCurrentUser(
-    userId: NonNullable<SessionWithUser['user']>['id'],
-  ): Promise<SessionWithUser>
+  getCurrentUser(userId: AuthValidators.UsersSchema['id']): Promise<
+    Omit<AuthValidators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
+      user: Pick<
+        AuthValidators.UsersSchema,
+        'id' | 'username' | 'email' | 'role' | 'image'
+      >
+    }
+  >
 
   register(
     input: AuthValidators.RegisterInput,
@@ -13,22 +17,6 @@ export interface IAuthService {
   verifyEmail(
     input: AuthValidators.VerifyEmailInput,
   ): Promise<AuthValidators.VerifyEmailOutput>
-
-  allSessions(
-    input: AuthValidators.AllSessionsInput,
-  ): Promise<AuthValidators.AllSessionsOutput>
-
-  deleteSession(
-    input: AuthValidators.DeleteSessionInput,
-  ): Promise<AuthValidators.DeleteSessionOutput>
-
-  changeUsername(
-    input: AuthValidators.ChangeUsernameInput,
-  ): Promise<AuthValidators.ChangeUsernameOutput>
-
-  deleteAccount(
-    input: AuthValidators.DeleteAccountInput,
-  ): Promise<AuthValidators.DeleteAccountOutput>
 
   changePassword(
     input: AuthValidators.ChangePasswordInput,

@@ -1,5 +1,5 @@
 {
-  "id": "e79b8adf-36b6-46bc-9ec9-95b076c0b1a1",
+  "id": "4f528c19-ed68-400d-a474-3ccae5817e65",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -2001,8 +2001,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.vendor_transactions": {
-      "name": "vendor_transactions",
+    "public.vendor_transfers": {
+      "name": "vendor_transfers",
       "schema": "",
       "columns": {
         "id": {
@@ -2017,11 +2017,11 @@
           "primaryKey": false,
           "notNull": true
         },
-        "order_item_id": {
-          "name": "order_item_id",
-          "type": "varchar(24)",
+        "reference": {
+          "name": "reference",
+          "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "amount_in": {
           "name": "amount_in",
@@ -2061,25 +2061,12 @@
         }
       },
       "foreignKeys": {
-        "vendor_transactions_vendor_id_vendors_id_fk": {
-          "name": "vendor_transactions_vendor_id_vendors_id_fk",
-          "tableFrom": "vendor_transactions",
+        "vendor_transfers_vendor_id_vendors_id_fk": {
+          "name": "vendor_transfers_vendor_id_vendors_id_fk",
+          "tableFrom": "vendor_transfers",
           "tableTo": "vendors",
           "columnsFrom": [
             "vendor_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "restrict",
-          "onUpdate": "no action"
-        },
-        "vendor_transactions_order_item_id_order_items_id_fk": {
-          "name": "vendor_transactions_order_item_id_order_items_id_fk",
-          "tableFrom": "vendor_transactions",
-          "tableTo": "order_items",
-          "columnsFrom": [
-            "order_item_id"
           ],
           "columnsTo": [
             "id"
@@ -2488,8 +2475,7 @@
       "values": [
         "pending",
         "success",
-        "failed",
-        "refunded"
+        "failed"
       ]
     },
     "public.ticket_status": {

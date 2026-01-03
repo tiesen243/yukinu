@@ -1,5 +1,4 @@
 import { createId } from '@yukinu/lib/create-id'
-import { UserValidators } from '@yukinu/validators/user'
 import {
   index,
   pgEnum,
@@ -10,9 +9,15 @@ import {
 
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const userRoleEnum = pgEnum('user_role', UserValidators.roles)
+export const userRoleEnum = pgEnum('user_role', [
+  'user',
+  'admin',
+  'vendor_owner',
+  'vendor_staff',
+  'moderator',
+])
 
-export const userStatusEnum = pgEnum('user_status', UserValidators.statuses)
+export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
 
 export const users = pgTable(
   'users',

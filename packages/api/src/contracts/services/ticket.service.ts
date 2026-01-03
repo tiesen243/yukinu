@@ -1,18 +1,6 @@
 import type { GeneralValidators } from '@yukinu/validators/general'
 
-export interface IGeneralService {
-  allBanners(
-    input: GeneralValidators.AllBannersInput,
-  ): Promise<GeneralValidators.AllBannersOutput>
-
-  createBanner(
-    input: GeneralValidators.CreateBannerInput,
-  ): Promise<GeneralValidators.CreateBannerOutput>
-
-  deleteBanner(
-    input: GeneralValidators.DeleteBannerInput,
-  ): Promise<GeneralValidators.DeleteBannerOutput>
-
+export interface ITicketService {
   allTickets(
     input: GeneralValidators.AllTicketsInput,
   ): Promise<GeneralValidators.AllTicketsOutput>

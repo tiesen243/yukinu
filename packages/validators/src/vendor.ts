@@ -1,47 +1,63 @@
+import {
+  vendorBalances,
+  vendors,
+  vendorStaffs,
+  vendorTransfers,
+} from '@yukinu/db/schema'
+import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
-export namespace VendorValidators {
-  export const statuses = ['pending', 'approved', 'suspended'] as const
-  export type Status = (typeof statuses)[number]
+import { paginationInput, paginationOutput } from '@/shared'
 
-  export const vendor = z.object({
+export namespace VendorValidators {
+  /* --------------------------------------------------------------------------
+   * Convert Drizzle ORM schemas to Zod schemas for validation
+   * --------------------------------------------------------------------------
+   */
+
+  export const vendorSchema = createSelectSchema(vendors, {
     id: z.cuid(),
     ownerId: z.cuid().nullable(),
-    name: z.string().min(1).max(255),
-    description: z
-      .string()
-      .min(1, 'Description is required')
-      .max(2000, 'Description is too long')
-      .nullable(),
-    image: z.url('Invalid image URL').nullable(),
-    address: z
-      .string()
-      .min(1, 'Address is required')
-      .max(500, 'Address is too long')
-      .nullable(),
-    status: z.enum(statuses),
-    createdAt: z.date(),
-    updatedAt: z.date(),
+    image: z.url('Invalid image url').nullable(),
   })
-  export type Vendor = z.infer<typeof vendor>
+  export type VendorSchema = z.infer<typeof vendorSchema>
 
-  export const vendorStaff = z.object({
+  export const vendorStaffSchema = createSelectSchema(vendorStaffs, {
     vendorId: z.cuid(),
     userId: z.cuid(),
-    assignedAt: z.date(),
   })
-  export type VendorStaff = z.infer<typeof vendorStaff>
+  export type VendorStaffSchema = z.infer<typeof vendorStaffSchema>
 
-  export const allInput = z.object({
-    search: z.string().nullable(),
-    status: z.enum(statuses).nullable(),
-    page: z.number().min(1).default(1),
-    limit: z.number().min(1).max(100).default(10),
+  export const VendorBalanceSchema = createSelectSchema(vendorBalances, {
+    vendorId: z.cuid(),
+    balance: (schema) =>
+      schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid balance format'),
   })
-  export type AllInput = z.infer<typeof allInput>
-  export const allOutput = z.object({
+  export type VendorBalanceSchema = z.infer<typeof VendorBalanceSchema>
+
+  export const vendorTransferSchema = createSelectSchema(vendorTransfers, {
+    id: z.cuid(),
+    vendorId: z.cuid(),
+    amountIn: (schema) =>
+      schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+    amountOut: (schema) =>
+      schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+  })
+
+  /* --------------------------------------------------------------------------
+   * Contract schemas for service inputs and outputs
+   * --------------------------------------------------------------------------
+   */
+
+  //#region Vendors
+  export const allVendorsInput = paginationInput.extend({
+    search: z.string('Search must be a valid string').nullable(),
+    status: vendorSchema.shape.status.nullable(),
+  })
+  export type AllVendorsInput = z.infer<typeof allVendorsInput>
+  export const allVendorsOutput = z.object({
     vendors: z.array(
-      vendor
+      vendorSchema
         .pick({
           id: true,
           name: true,
@@ -54,91 +70,96 @@ export namespace VendorValidators {
           staffCount: z.number(),
         }),
     ),
-    pagination: z.object({
-      total: z.number(),
-      page: z.number(),
-      limit: z.number(),
-      totalPages: z.number(),
-    }),
+    pagination: paginationOutput,
   })
-  export type AllOutput = z.infer<typeof allOutput>
+  export type AllVendorsOutput = z.infer<typeof allVendorsOutput>
 
-  export const oneInput = z.object({ id: z.cuid() })
-  export type OneInput = z.infer<typeof oneInput>
-  export const oneOutput = vendor.omit({ ownerId: true }).extend({
-    owner: z.object({ id: z.cuid(), username: z.string() }),
-    staffs: z.array(z.object({ id: z.cuid(), username: z.string() })),
+  export const oneVendorInput = vendorSchema.pick({ id: true })
+  export type OneVendorInput = z.infer<typeof oneVendorInput>
+  export const oneVendorOutput = vendorSchema.omit({ ownerId: true })
+  export type OneVendorOutput = z.infer<typeof oneVendorOutput>
+
+  export const createVendorInput = vendorSchema.pick({
+    name: true,
+    description: true,
+    address: true,
+    image: true,
+    ownerId: true,
   })
-  export type OneOutput = z.infer<typeof oneOutput>
+  export type CreateVendorInput = z.infer<typeof createVendorInput>
+  export const createVendorOutput = vendorSchema.pick({ id: true })
+  export type CreateVendorOutput = z.infer<typeof createVendorOutput>
 
-  export const createInput = z.object({
-    ownerId: z.cuid(),
-    name: z.string().min(1, 'Name is required').max(255, 'Name is too long'),
-    description: z
-      .string()
-      .min(1, 'Description is required')
-      .max(2000, 'Description is too long')
-      .optional(),
-    image: z.url('Invalid image URL').optional(),
-    address: z
-      .string()
-      .min(1, 'Address is required')
-      .max(500, 'Address is too long')
-      .optional(),
+  export const updateVendorStatusInput = vendorSchema
+    .pick({ id: true, status: true })
+    .extend({ userId: vendorSchema.shape.ownerId })
+  export type UpdateVendorStatusInput = z.infer<typeof updateVendorStatusInput>
+  export const updateVendorStatusOutput = vendorSchema.pick({ id: true })
+  export type UpdateVendorStatusOutput = z.infer<
+    typeof updateVendorStatusOutput
+  >
+
+  export const updateVendorInput = vendorSchema.omit({
+    ownerId: true,
+    status: true,
+    createdAt: true,
+    updatedAt: true,
   })
-  export type CreateInput = NonNullable<z.infer<typeof createInput>>
-  export const createOutput = z.object({ id: z.cuid() })
-  export type CreateOutput = z.infer<typeof createOutput>
+  export type UpdateVendorInput = z.infer<typeof updateVendorInput>
+  export const updateVendorOutput = vendorSchema.pick({ id: true })
+  export type UpdateVendorOutput = z.infer<typeof updateVendorOutput>
 
-  export const updateStatusInput = vendor.pick({ id: true, status: true })
-  export type UpdateStatusInput = z.infer<typeof updateStatusInput>
-  export const updateStatusOutput = z.object({ id: z.cuid() })
-  export type UpdateStatusOutput = z.infer<typeof updateStatusOutput>
+  export const deleteVendorInput = vendorSchema
+    .pick({ id: true })
+    .extend({ userId: vendorSchema.shape.ownerId })
+  export type DeleteVendorInput = z.infer<typeof deleteVendorInput>
+  export const deleteVendorOutput = vendorSchema.pick({ id: true })
+  export type DeleteVendorOutput = z.infer<typeof deleteVendorOutput>
+  //#endregion
 
-  export const updateInput = createInput
-    .omit({ ownerId: true })
-    .extend({ id: z.cuid() })
-  export type UpdateInput = z.infer<typeof updateInput>
-  export const updateOutput = z.object({ id: z.cuid() })
-  export type UpdateOutput = z.infer<typeof updateOutput>
-
-  export const allStaffsInput = vendor.pick({ id: true })
-  export type AllStaffsInput = z.infer<typeof allStaffsInput>
-  export const allStaffsOutput = z.array(
-    z.object({
-      id: z.cuid(),
-      username: z.string(),
-      email: z.email(),
-      assignedAt: z.date(),
-    }),
-  )
-  export type AllStaffsOutput = z.infer<typeof allStaffsOutput>
-
-  export const inviteStaffInput = z.object({
-    vendorId: z.cuid(),
-    email: z.email('Invalid email address'),
+  //#region Vendor Staff
+  export const allVendorStaffInput = vendorSchema.pick({ id: true })
+  export type AllVendorStaffInput = z.infer<typeof allVendorStaffInput>
+  export const allVendorStaffOutput = z.object({
+    staff: z.array(
+      vendorStaffSchema.extend({
+        user: z.object({ id: z.cuid(), username: z.string() }),
+      }),
+    ),
   })
-  export type InviteStaffInput = z.infer<typeof inviteStaffInput>
-  export const inviteStaffOutput = z.void()
-  export type InviteStaffOutput = z.infer<typeof inviteStaffOutput>
+  export type AllVendorStaffOutput = z.infer<typeof allVendorStaffOutput>
 
-  export const acceptStaffInvitationInput = z.object({
+  export const inviteVendorStaffInput = vendorStaffSchema
+    .pick({ vendorId: true })
+    .extend({ email: z.email('Invalid email address') })
+  export type InviteVendorStaffInput = z.infer<typeof inviteVendorStaffInput>
+  export const inviteVendorStaffOutput = vendorStaffSchema.pick({
+    userId: true,
+  })
+  export type InviteVendorStaffOutput = z.infer<typeof inviteVendorStaffOutput>
+
+  export const acceptVendorStaffInvitationInput = vendorStaffSchema.pick({
     token: z.string(),
-    userId: z.cuid(),
+    userId: true,
   })
-  export type AcceptStaffInvitationInput = z.infer<
-    typeof acceptStaffInvitationInput
+  export type AcceptVendorStaffInvitationInput = z.infer<
+    typeof acceptVendorStaffInvitationInput
   >
-  export const acceptStaffInvitationOutput = z.void()
-  export type AcceptStaffInvitationOutput = z.infer<
-    typeof acceptStaffInvitationOutput
+  export const acceptVendorStaffInvitationOutput = vendorStaffSchema.pick({
+    assignedAt: true,
+  })
+  export type AcceptVendorStaffInvitationOutput = z.infer<
+    typeof acceptVendorStaffInvitationOutput
   >
 
-  export const removeStaffInput = z.object({
-    vendorId: z.cuid(),
-    staffId: z.cuid(),
+  export const removeVendorStaffInput = vendorStaffSchema.pick({
+    vendorId: true,
+    userId: true,
   })
-  export type RemoveStaffInput = z.infer<typeof removeStaffInput>
-  export const removeStaffOutput = z.void()
-  export type RemoveStaffOutput = z.infer<typeof removeStaffOutput>
+  export type RemoveVendorStaffInput = z.infer<typeof removeVendorStaffInput>
+  export const removeVendorStaffOutput = vendorStaffSchema.pick({
+    userId: true,
+  })
+  export type RemoveVendorStaffOutput = z.infer<typeof removeVendorStaffOutput>
+  //#endregion Vendor Staff
 }

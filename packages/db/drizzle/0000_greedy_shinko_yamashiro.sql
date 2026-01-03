@@ -1,6 +1,6 @@
 CREATE TYPE "public"."order_status" AS ENUM('pending', 'confirmed', 'shipped', 'completed', 'cancelled');--> statement-breakpoint
 CREATE TYPE "public"."payment_method" AS ENUM('bank_transfer', 'cash_on_delivery');--> statement-breakpoint
-CREATE TYPE "public"."payment_status" AS ENUM('pending', 'success', 'failed', 'refunded');--> statement-breakpoint
+CREATE TYPE "public"."payment_status" AS ENUM('pending', 'success', 'failed');--> statement-breakpoint
 CREATE TYPE "public"."ticket_status" AS ENUM('open', 'resolved', 'closed');--> statement-breakpoint
 CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'vendor_owner', 'vendor_staff', 'moderator');--> statement-breakpoint
 CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive');--> statement-breakpoint
@@ -200,10 +200,10 @@ CREATE TABLE "vendor_staffs" (
 	CONSTRAINT "vendor_staffs_vendor_id_user_id_pk" PRIMARY KEY("vendor_id","user_id")
 );
 --> statement-breakpoint
-CREATE TABLE "vendor_transactions" (
+CREATE TABLE "vendor_transfers" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"vendor_id" varchar(24) NOT NULL,
-	"order_item_id" varchar(24),
+	"reference" varchar(100) NOT NULL,
 	"amount_in" numeric(10, 2),
 	"amount_out" numeric(10, 2),
 	"created_at" timestamp DEFAULT now() NOT NULL
@@ -276,8 +276,7 @@ ALTER TABLE "variant_options" ADD CONSTRAINT "variant_options_variant_id_variant
 ALTER TABLE "vendor_balances" ADD CONSTRAINT "vendor_balances_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "vendor_transactions" ADD CONSTRAINT "vendor_transactions_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "vendor_transactions" ADD CONSTRAINT "vendor_transactions_order_item_id_order_items_id_fk" FOREIGN KEY ("order_item_id") REFERENCES "public"."order_items"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "vendor_transfers" ADD CONSTRAINT "vendor_transfers_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "verifications" ADD CONSTRAINT "verifications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -312,7 +311,7 @@ CREATE UNIQUE INDEX "variant_options_variant_id_value_idx" ON "variant_options" 
 CREATE UNIQUE INDEX "variants_name_idx" ON "variants" USING btree ("name");--> statement-breakpoint
 CREATE INDEX "vendor_balances_vendor_id_idx" ON "vendor_balances" USING btree ("vendor_id");--> statement-breakpoint
 CREATE INDEX "vendor_staffs_vendor_id_idx" ON "vendor_staffs" USING btree ("vendor_id");--> statement-breakpoint
-CREATE INDEX "vendor_transactions_vendor_id_idx" ON "vendor_transactions" USING btree ("vendor_id");--> statement-breakpoint
+CREATE INDEX "vendor_transactions_vendor_id_idx" ON "vendor_transfers" USING btree ("vendor_id");--> statement-breakpoint
 CREATE INDEX "vendors_owner_id_idx" ON "vendors" USING btree ("owner_id");--> statement-breakpoint
 CREATE INDEX "verifications_user_id_idx" ON "verifications" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "vouchers_code_uq_idx" ON "vouchers" USING btree ("code");--> statement-breakpoint
