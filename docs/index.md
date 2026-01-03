@@ -1,6 +1,5 @@
 ---
-title: Yukinu - E-commerce Platform Monorepo
-nav_order: 1
+title: 1. Overview
 ---
 
 # Yukinu Documentation
