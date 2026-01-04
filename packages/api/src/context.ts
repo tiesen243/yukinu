@@ -8,6 +8,7 @@ import { AccountRepository } from '@/repositories/account.repository'
 import { AddressRepository } from '@/repositories/address.repository'
 import { BannerRepository } from '@/repositories/banner.repository'
 import { CategoryRepository } from '@/repositories/category.repository'
+import { OrderRepository } from '@/repositories/order.repository'
 import { ProductImageRepository } from '@/repositories/product-image.repository'
 import { ProductRepository } from '@/repositories/product.repository'
 import { ProfileRepository } from '@/repositories/profile.repository'
@@ -21,7 +22,9 @@ import { WishlistItemRepository } from '@/repositories/wishlist-item.repository'
 import { AddressService } from '@/services/address.service'
 import { AuthService } from '@/services/auth.service'
 import { BannerService } from '@/services/banner.service'
+import { CartService } from '@/services/cart.service'
 import { CategoryService } from '@/services/category.service'
+import { OrderService } from '@/services/order.service'
 import { ProductVariantService } from '@/services/product-variant.service'
 import { ProductService } from '@/services/product.service'
 import { SecurityService } from '@/services/security.service'
@@ -40,6 +43,7 @@ export const createTRPCContext = async (opts: {
   const addressRepo = new AddressRepository(db, orm, schema)
   const bannerRepo = new BannerRepository(db, orm, schema)
   const categoryRepo = new CategoryRepository(db, orm, schema)
+  const orderRepo = new OrderRepository(db, orm, schema)
   const productImageRepo = new ProductImageRepository(db, orm, schema)
   const productRepo = new ProductRepository(db, orm, schema)
   const profileRepo = new ProfileRepository(db, orm, schema)
@@ -60,7 +64,9 @@ export const createTRPCContext = async (opts: {
     verificationRepo,
   )
   const banner = new BannerService(db, bannerRepo)
+  const cart = new CartService(db, orderRepo)
   const category = new CategoryService(db, categoryRepo)
+  const order = new OrderService(db)
   const productVariant = new ProductVariantService(db, productRepo, variantRepo)
   const product = new ProductService(
     db,
@@ -89,9 +95,9 @@ export const createTRPCContext = async (opts: {
       address,
       auth,
       banner,
-      cart: undefined,
+      cart,
       category,
-      order: undefined,
+      order,
       productVariant,
       product,
       security,

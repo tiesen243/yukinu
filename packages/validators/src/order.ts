@@ -130,7 +130,7 @@ export const addItemToCartInput = z.object({
   quantity: z.number().int().min(1, 'Quantity must be at least 1'),
 })
 export type AddItemToCartInput = z.infer<typeof addItemToCartInput>
-export const addItemToCartOutput = z.void()
+export const addItemToCartOutput = orderItemSchema.shape.id
 export type AddItemToCartOutput = z.infer<typeof addItemToCartOutput>
 
 export const removeItemFromCartInput = z.object({
@@ -138,5 +138,5 @@ export const removeItemFromCartInput = z.object({
   itemId: z.cuid(),
 })
 export type RemoveItemFromCartInput = z.infer<typeof removeItemFromCartInput>
-export const removeItemFromCartOutput = z.void()
+export const removeItemFromCartOutput = orderItemSchema.shape.id
 export type RemoveItemFromCartOutput = z.infer<typeof removeItemFromCartOutput>
