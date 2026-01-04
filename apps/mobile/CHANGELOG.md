@@ -1,5 +1,15 @@
 # @yukinu/mobile
 
+## 0.2.1
+
+### Patch Changes
+
+- [#320](https://github.com/tiesen243/yukinu/pull/320) [`2f3a1b0`](https://github.com/tiesen243/yukinu/commit/2f3a1b08f08ee205123c4110b73dd9e9a6df026f) Thanks [@tiesen243](https://github.com/tiesen243)! - add product details screen
+
+- Updated dependencies [[`78ac45e`](https://github.com/tiesen243/yukinu/commit/78ac45e18685ff6c3d8f6b4378b559881709e937)]:
+  - @yukinu/validators@0.9.1
+  - @yukinu/api@0.9.1
+
 ## 0.2.0
 
 ### Minor Changes

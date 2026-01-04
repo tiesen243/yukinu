@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.9.1
+
+### Patch Changes
+
+- [#320](https://github.com/tiesen243/yukinu/pull/320) [`78ac45e`](https://github.com/tiesen243/yukinu/commit/78ac45e18685ff6c3d8f6b4378b559881709e937) Thanks [@tiesen243](https://github.com/tiesen243)! - remove drizzle-zod
+
 ## 0.9.0
 
 ### Minor Changes
