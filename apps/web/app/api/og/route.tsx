@@ -8,7 +8,7 @@ import { createMetadata } from '@/lib/metadata'
 
 export const runtime = 'edge'
 
-export async function GET(request: NextRequest) {
+export function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const defaultMeta = createMetadata()
@@ -18,18 +18,12 @@ export async function GET(request: NextRequest) {
     const description =
       searchParams.get('description') ?? defaultMeta.description
     const image = searchParams.get('image') ?? ''
-    const logoUrl = `${defaultMeta.metadataBase?.toString()}/favicon.svg`
+    const logoUrl = `${defaultMeta.metadataBase?.toString()}/web-app-manifest-512x512.png`
     const theme = searchParams.get('theme') ?? 'dark'
 
     const backgroundColor = theme === 'dark' ? '#000000' : '#fafafa'
     const foregroundColor = theme === 'dark' ? '#ffffff' : '#000000'
     const primaryColor = theme === 'dark' ? '#dbe6f6' : '#14185a'
-
-    const [geistRegular, geistMedium, geistBold] = await Promise.all([
-      getFont('Geist-Regular', 400),
-      getFont('Geist-Medium', 500),
-      getFont('Geist-Bold', 700),
-    ])
 
     return new ImageResponse(
       <div
@@ -48,7 +42,9 @@ export async function GET(request: NextRequest) {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div
+          <img
+            src={logoUrl}
+            alt='Logo'
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -58,26 +54,12 @@ export async function GET(request: NextRequest) {
               height: '48px',
               borderRadius: '8px',
 
-              backgroundColor: primaryColor,
+              objectFit: 'contain',
             }}
-          >
-            <img
-              src={logoUrl}
-              alt='Logo'
-              style={{
-                width: '80%',
-                height: '80%',
-                margin: 0,
-
-                objectFit: 'contain',
-                filter: theme === 'dark' ? 'none' : 'invert(1)',
-              }}
-            />
-          </div>
+          />
 
           <h1
             style={{
-              fontFamily: 'Geist-Medium, sans-serif',
               fontSize: '28px',
               fontWeight: '500',
               color: foregroundColor,
@@ -110,7 +92,6 @@ export async function GET(request: NextRequest) {
           >
             <h2
               style={{
-                fontFamily: 'Geist-Bold, sans-serif',
                 fontSize: '48px',
                 lineHeight: '1.1',
                 fontWeight: '700',
@@ -129,7 +110,6 @@ export async function GET(request: NextRequest) {
             </h2>
             <p
               style={{
-                fontFamily: 'Geist-Regular, sans-serif',
                 fontSize: '24px',
                 lineHeight: '1.2',
                 fontWeight: '400',
@@ -205,7 +185,6 @@ export async function GET(request: NextRequest) {
             />
             <p
               style={{
-                fontFamily: 'Geist-Medium, sans-serif',
                 fontSize: '16px',
                 fontWeight: '500',
                 color: foregroundColor,
@@ -222,25 +201,10 @@ export async function GET(request: NextRequest) {
       {
         width: 1200,
         height: 630,
-        // @ts-expect-error The 'weight' property in the returned font object is a number,
-        // but 'FontOptions' expects a specific type. This is intentional for font loading.
-        fonts: [geistRegular, geistMedium, geistBold],
       },
     )
   } catch (e: unknown) {
     console.error(e)
     return new Response(`Failed to generate the image`, { status: 500 })
-  }
-}
-
-async function getFont(font: string, weight = 400) {
-  const response = await fetch(
-    new URL(`../../../public/assets/fonts/${font}.ttf`, import.meta.url),
-  )
-  return {
-    name: font,
-    data: await response.arrayBuffer(),
-    style: 'normal' as const,
-    weight,
   }
 }
