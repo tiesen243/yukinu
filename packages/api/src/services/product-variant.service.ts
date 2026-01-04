@@ -23,8 +23,8 @@ export class ProductVariantService implements IProductVariantService {
     const [target] = await this._product.all([
       {
         id,
-        vendorId: vendorId === MINMOD_ACCESS ? undefined : vendorId,
         deletedAt: 'not null' as unknown as Date,
+        ...(vendorId === MINMOD_ACCESS ? {} : { vendorId }),
       },
     ])
     if (!target)

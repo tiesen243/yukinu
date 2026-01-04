@@ -26,13 +26,6 @@ export class ProductService implements IProductService {
     const { search, isDeleted, categoryId, vendorId, page, limit } = input
     const offset = (page - 1) * limit
 
-    const categoryQuery = categoryId
-      ? this._category.find(categoryId)
-      : Promise.resolve(null)
-    const vendorQuery = vendorId
-      ? this._vendor.find(vendorId)
-      : Promise.resolve(null)
-
     const whereClauses = [
       {
         name: search ? `%${search}%` : 'not null',
@@ -50,16 +43,18 @@ export class ProductService implements IProductService {
       if (field && direction) orderBy = { [field]: direction as 'asc' | 'desc' }
     }
 
-    const [products, category, vendor, total] = await Promise.all([
+    const vendorQuery = vendorId
+      ? this._vendor.find(vendorId)
+      : Promise.resolve(null)
+
+    const [products, vendor, total] = await Promise.all([
       this._product.allWithRelations(whereClauses, orderBy, { limit, offset }),
-      categoryQuery,
       vendorQuery,
       this._product.count(whereClauses),
     ])
     const totalPages = Math.ceil(total / limit)
 
     return {
-      category: category ?? null,
       vendor: vendor ?? null,
       products: products,
       pagination: { total, page, limit, totalPages },
@@ -105,7 +100,7 @@ export class ProductService implements IProductService {
     const [target] = await this._product.all([
       {
         id: input.id,
-        vendorId: vendorId === MINMOD_ACCESS ? undefined : vendorId,
+        ...(vendorId === MINMOD_ACCESS ? {} : { vendorId }),
       },
     ])
     if (!target)
@@ -145,14 +140,19 @@ export class ProductService implements IProductService {
     const [target] = await this._product.all([
       {
         id,
-        vendorId: vendorId === MINMOD_ACCESS ? undefined : vendorId,
-        deletedAt: 'not null' as unknown as Date,
+        ...(vendorId === MINMOD_ACCESS ? {} : { vendorId }),
       },
     ])
     if (!target)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Product with ID ${id} not found`,
+      })
+
+    if (target.deletedAt)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Product with ID ${id} is already deleted`,
       })
 
     await this._product.update(id, { deletedAt: new Date() })
@@ -168,14 +168,19 @@ export class ProductService implements IProductService {
     const [target] = await this._product.all([
       {
         id,
-        vendorId: vendorId === MINMOD_ACCESS ? undefined : vendorId,
-        deletedAt: 'null' as unknown as Date,
+        ...(vendorId === MINMOD_ACCESS ? {} : { vendorId }),
       },
     ])
     if (!target)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `Product with ID ${id} not found`,
+      })
+
+    if (!target.deletedAt)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: `Product with ID ${id} is not deleted`,
       })
 
     await this._product.update(id, { deletedAt: null })
@@ -191,8 +196,8 @@ export class ProductService implements IProductService {
     const [target] = await this._product.all([
       {
         id,
-        vendorId: vendorId === MINMOD_ACCESS ? undefined : vendorId,
         deletedAt: 'not null' as unknown as Date,
+        ...(vendorId === MINMOD_ACCESS ? {} : { vendorId }),
       },
     ])
     if (!target)
