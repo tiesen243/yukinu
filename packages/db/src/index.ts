@@ -1,15 +1,16 @@
-import { env } from '@yukinu/validators/env'
+// oxlint-disable no-process-env
+
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
 const createDrizzleClient = () => {
   const conn = postgres({
-    host: env.POSTGRES_HOST,
-    port: env.POSTGRES_PORT,
-    user: env.POSTGRES_USER,
-    password: env.POSTGRES_PASSWORD,
-    database: env.POSTGRES_DATABASE,
-    ssl: env.POSTGRES_SSL_MODE === 'true' ? 'require' : false,
+    host: process.env.POSTGRES_HOST ?? '',
+    port: parseInt(process.env.POSTGRES_PORT ?? '5432', 10),
+    user: process.env.POSTGRES_USER ?? '',
+    password: process.env.POSTGRES_PASSWORD ?? '',
+    database: process.env.POSTGRES_DATABASE ?? '',
+    ssl: process.env.POSTGRES_SSL_MODE === 'true' ? 'require' : false,
   })
   return drizzle(conn, { casing: 'snake_case' })
 }
@@ -17,7 +18,7 @@ const globalForDrizzle = globalThis as unknown as {
   db: ReturnType<typeof createDrizzleClient> | undefined
 }
 export const db = globalForDrizzle.db ?? createDrizzleClient()
-if (env.NODE_ENV !== 'production') globalForDrizzle.db = db
+if (process.env.NODE_ENV !== 'production') globalForDrizzle.db = db
 
 export type * from '@/types'
 export * as orm from 'drizzle-orm'

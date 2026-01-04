@@ -25,6 +25,7 @@
     "postgres": "^3.4.7"
   },
   "devDependencies": {
+    "@types/node": "catalog:dev",
     "@yukinu/tsconfig": "workspace:*",
     "drizzle-kit": "^0.31.8",
     "tsdown": "catalog:dev",
