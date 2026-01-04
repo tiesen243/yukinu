@@ -1,6 +1,8 @@
 import type { StaticScreenProps } from '@react-navigation/native'
 
+import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { ScrollView, View } from 'react-native'
 
 import { Text } from '@/components/ui/text'
@@ -9,9 +11,18 @@ import { trpc } from '@/lib/trpc'
 export default function ProductDetailsScreen({
   route,
 }: StaticScreenProps<{ productId: string }>) {
+  const navigation = useNavigation()
+
   const { data, isLoading } = useQuery(
     trpc.product.one.queryOptions({ id: route.params.productId }),
   )
+
+  useEffect(() => {
+    if (data?.name)
+      navigation.setOptions({
+        title: data.name,
+      })
+  }, [data?.name, navigation])
 
   if (isLoading)
     return (

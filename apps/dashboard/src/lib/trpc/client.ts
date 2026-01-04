@@ -17,7 +17,7 @@ const configs = {
   url: getDashboardUrl() + '/api/trpc',
   headers() {
     const headers = new Headers()
-    headers.set('x-trpc-source', 'web')
+    headers.set('x-trpc-source', 'dashboard')
     return headers
   },
 }

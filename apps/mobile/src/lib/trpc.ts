@@ -20,7 +20,9 @@ const queryClient = getQueryClient()
 const trpcClient = createTRPCClient<AppRouter>({
   links: [
     retryLink({
-      retry: ({ error, attempts }) => {
+      retry: ({ op, error, attempts }) => {
+        if (op.type !== 'query') return false // Only retry queries
+
         if (
           [
             'FORBIDDEN',

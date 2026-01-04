@@ -1,5 +1,19 @@
 # @yukinu/mobile
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [[`bf4969a`](https://github.com/tiesen243/yukinu/commit/bf4969a46f95f59e4ae617387518ef45dc30a211)]:
+  - @yukinu/validators@0.9.2
+  - @yukinu/api@0.9.2
+
+## 0.2.2
+
+### Patch Changes
+
+- [#323](https://github.com/tiesen243/yukinu/pull/323) [`76f96a9`](https://github.com/tiesen243/yukinu/commit/76f96a96decedb2c6ddc3e200ff7daeee1ff0e91) Thanks [@tiesen243](https://github.com/tiesen243)! - fix product card list
+
 ## 0.2.1
 
 ### Patch Changes
