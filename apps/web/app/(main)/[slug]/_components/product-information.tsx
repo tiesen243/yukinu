@@ -90,7 +90,6 @@ export const ProductInformation: React.FC = () => {
                       value={value ?? ''}
                       hidden
                     />
-
                     {value}
                   </Label>
                 ))}

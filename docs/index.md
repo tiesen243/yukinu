@@ -1,6 +1,5 @@
 ---
-title: Yukinu - E-commerce Platform Monorepo
-nav_order: 1
+title: 1. Overview
 ---
 
 # Yukinu Documentation
@@ -29,26 +28,27 @@ It is designed to support:
 
 ## Tech Stack Overview
 
-| Layer          | Technology                                  |
-| -------------- | ------------------------------------------- |
-| Web App        | Next.js, React, TailwindCSS                 |
-| Dashboard      | React, React Router, TailwindCSS            |
-| Backend API    | tRPC, TypeScript                            |
-| Database & ORM | PostgreSQL + Drizzle ORM                    |
-| Authentication | Custom auth + Accounts & Sessions system    |
-| Validation     | Zod                                         |
-| Email Services | Resend                                      |
-| Deployment     | Docker, docker-compose, NGINX Reverse Proxy |
+| Layer          | Technology                                            |
+| -------------- | ----------------------------------------------------- |
+| Web App        | Next.js, React, TailwindCSS                           |
+| Dashboard      | React, React Router, TailwindCSS                      |
+| Mobile App     | React Native, Expo, Uniwind                           |
+| Backend API    | tRPC, TypeScript                                      |
+| Database & ORM | PostgreSQL + Drizzle ORM                              |
+| Authentication | Custom auth + Accounts & Sessions system              |
+| Validation     | Zod                                                   |
+| Email Services | Resend                                                |
+| File Storage   | Uploadthing                                           |
+| UI Library     | Base UI, shadcn/ui                                    |
+| Deployment     | Vercel or Docker, docker-compose, NGINX Reverse Proxy |
 
 ## Project Structure
 
 The repository contains three main sections:
 
-- **apps/** — Web App (Marketplace) + Vendor Dashboard
-- **packages/** — Shared modules: API, Auth, Database, UI, Validators
-- **tools/** — Dev infrastructure: TypeScript, NGINX, CI/CD scripts
-
-> More details: [Project Structure](./project-structure.md)
+- **apps/** — Web App (Marketplace) + Vendor Dashboard + Mobile App
+- **packages/** — Shared modules: API, Auth, Database, Email, UI, Validators
+- **tools/** — Dev infrastructure: TypeScript, OXC, NGINX, CI/CD scripts
 
 ## Contributing
 

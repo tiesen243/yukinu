@@ -1,24 +1,25 @@
 'use client'
 
-import type { ProductValidators } from '@yukinu/validators/product'
+import type { OneOutput } from '@yukinu/validators/product'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from '@yukinu/ui/sonner'
+import { parseAsString, useQueryStates } from 'nuqs'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 const PageContext = React.createContext<{
-  product: ProductValidators.OneOutput
+  product: OneOutput
   optionTypes: string[]
 
   avgRating: number
   currentImage: string | undefined
-  selectedOptions: Record<string, string>
-  selectedVariant: ProductValidators.OneOutput['variants'][number] | undefined
+  selectedOptions: Record<string, string | null>
+  selectedVariant: OneOutput['variants'][number] | undefined
 
   handleChangeImage: (url: string) => void
-  handleOptionChange: (type: string, value: string) => void
+  handleOptionChange: (type: string, value: string | null) => void
 
   toggleWishlistItem: () => void
   isTogglingWishlistItem: boolean
@@ -50,24 +51,25 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     new Set(product.variants.flatMap((v) => v.options.map((o) => o.name))),
   )
 
-  const [selectedOptions, setSelectedOptions] = React.useState<
-    Record<string, string>
-  >({})
+  const parsers = Object.fromEntries(
+    Array.from(optionTypes).map((key) => [key, parseAsString]),
+  )
+  const [selectedOptions, setSelectedOptions] = useQueryStates(parsers)
 
   const handleOptionChange = React.useCallback(
-    (type: string, value: string) => {
+    (type: string, value: string | null) => {
       setSelectedOptions((prev) => ({
         ...prev,
         [type]: value,
       }))
     },
-    [],
+    [setSelectedOptions],
   )
 
   const { mutate: toggleWishlistItem, isPending: isTogglingWishlistItem } =
     useMutation({
-      ...trpc.user.toggleWishlistItem.mutationOptions(),
-      meta: { filter: trpc.user.wishlist.queryOptions({}) },
+      ...trpc.wishlist.toggleItem.mutationOptions(),
+      meta: { filter: trpc.wishlist.get.queryOptions({}) },
       onSuccess: ({ added }) =>
         toast.success(added ? 'Added to wishlist' : 'Removed from wishlist'),
       onError: ({ message }) =>
@@ -75,8 +77,8 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     })
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
-    ...trpc.order.addItemToCart.mutationOptions(),
-    meta: { filter: trpc.order.one.queryOptions({ status: 'pending' }) },
+    ...trpc.cart.addItemToCart.mutationOptions(),
+    meta: { filter: trpc.cart.get.queryOptions() },
     onSuccess: () => toast.success('Added to cart'),
     onError: ({ message }) =>
       toast.error('Failed to add item to cart', { description: message }),

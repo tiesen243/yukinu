@@ -43,12 +43,12 @@ import {
 } from '@yukinu/ui/select'
 import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
-import { useUploadThing } from '@yukinu/uploadthing/react'
-import { AuthValidators } from '@yukinu/validators/auth'
-import { UserValidators } from '@yukinu/validators/user'
+import { changeUsernameInput } from '@yukinu/validators/auth'
+import { genders, updateProfileInput } from '@yukinu/validators/user'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
+import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const ProfileSummary: React.FC = () => {
@@ -152,7 +152,7 @@ export function UpdateProfileForm() {
       dateOfBirth: data.profile.dateOfBirth,
       image: data.image,
     },
-    schema: UserValidators.updateProfileInput.omit({ id: true }),
+    schema: updateProfileInput.omit({ id: true }),
     onSubmit: mutateAsync,
   })
 
@@ -183,6 +183,7 @@ export function UpdateProfileForm() {
                     <InputGroupInput {...field} value={value ?? ''} />
                     <InputGroupAddon align='inline-end'>
                       <InputGroupUploadButton
+                        endpoint='avatarUploader'
                         onUploadComplete={(url) => field.onChange(url)}
                       />
                     </InputGroupAddon>
@@ -272,7 +273,7 @@ export function UpdateProfileForm() {
                   {...field}
                   onValueChange={onChange}
                   items={[
-                    ...UserValidators.genders.map((gender) => ({
+                    ...genders.map((gender) => ({
                       label: gender,
                       value: gender,
                     })),
@@ -284,7 +285,7 @@ export function UpdateProfileForm() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {UserValidators.genders.map((gender) => (
+                      {genders.map((gender) => (
                         <SelectItem key={gender} value={gender}>
                           {gender}
                         </SelectItem>
@@ -380,7 +381,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
 
   const trpc = useTRPC()
   const { mutateAsync } = useMutation({
-    ...trpc.auth.changeUsername.mutationOptions(),
+    ...trpc.security.changeUsername.mutationOptions(),
     meta: { filter: trpc.user.profile.queryFilter() },
     onSuccess: () => toast.success('Username changed successfully'),
     onError: ({ message }) =>
@@ -389,7 +390,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
 
   const form = useForm({
     defaultValues: { username, password: '' },
-    schema: AuthValidators.changeUsernameInput.omit({ userId: true }),
+    schema: changeUsernameInput.omit({ id: true }),
     onSubmit: mutateAsync,
     onSuccess: () => {
       setOpen(false)
@@ -462,41 +463,5 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
-
-const InputGroupUploadButton: React.FC<{
-  onUploadComplete: (url: string) => void
-}> = ({ onUploadComplete }) => {
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const ut = useUploadThing('avatarUploader', {
-    onClientUploadComplete: ([res]) => {
-      if (res?.ufsUrl) onUploadComplete(res.ufsUrl)
-      else toast.error('Failed to upload avatar')
-    },
-  })
-
-  return (
-    <>
-      <input
-        ref={inputRef}
-        type='file'
-        accept='image/*'
-        onChange={(e) => {
-          const selectedFile = e.target.files?.[0]
-          if (!selectedFile) return
-
-          ut.startUpload([selectedFile])
-        }}
-        hidden
-      />
-      <InputGroupButton
-        disabled={ut.isUploading}
-        onClick={() => inputRef.current?.click()}
-      >
-        {ut.isUploading ? 'Uploading...' : 'Upload'}
-      </InputGroupButton>
-    </>
   )
 }

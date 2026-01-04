@@ -24,7 +24,7 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
-import { ProductValidators } from '@yukinu/validators/product'
+import * as ProductValidators from '@yukinu/validators/product'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
@@ -39,7 +39,7 @@ export const UpdateProductForm: React.FC<{
     initialData: data,
   })
   const { data: _data } = useQuery(
-    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+    trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
   const { mutateAsync } = useMutation({
     ...trpc.product.update.mutationOptions(),
@@ -93,22 +93,18 @@ export const UpdateProductForm: React.FC<{
 
             <form.Field
               name='description'
-              render={({ meta, field: { value = '', ...field } }) => (
-                <Field
-                  data-invalid={meta.errors.length > 0 || value.length > 2000}
-                >
+              render={({ meta, field: { value, ...field } }) => (
+                <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
-                      value={value}
-                      aria-invalid={
-                        field['aria-invalid'] || value.length > 2000
-                      }
+                      value={value ?? ''}
+                      aria-invalid={field['aria-invalid']}
                       placeholder='Write a brief description about the product'
                     />
                     <InputGroupAddon align='block-end' className='justify-end'>
-                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
+                      <InputGroupText>{value?.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />

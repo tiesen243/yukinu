@@ -14,11 +14,12 @@ import { Input } from '@yukinu/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
-import { VendorValidators } from '@yukinu/validators/vendor'
+import * as VendorValidators from '@yukinu/validators/vendor'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPCClient } from '@/lib/trpc/react'
@@ -29,11 +30,11 @@ export default function AppVendorPage() {
   const form = useForm({
     defaultValues: {
       name: '',
-      description: undefined,
-      image: undefined,
-      address: undefined,
-    } as Omit<VendorValidators.CreateInput, 'ownerId'>,
-    schema: VendorValidators.createInput.omit({ ownerId: true }),
+      description: '',
+      image: '',
+      address: '',
+    } as Omit<VendorValidators.CreateVendorInput, 'ownerId'>,
+    schema: VendorValidators.createVendorInput.omit({ ownerId: true }),
     onSubmit: trpc.vendor.create.mutate,
     onSuccess: () =>
       toast.success('Vendor application submitted successfully!', {
@@ -71,22 +72,18 @@ export default function AppVendorPage() {
 
             <form.Field
               name='description'
-              render={({ meta, field: { value = '', ...field } }) => (
-                <Field
-                  data-invalid={meta.errors.length > 0 || value.length > 2000}
-                >
+              render={({ meta, field: { value, ...field } }) => (
+                <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
-                      value={value}
-                      aria-invalid={
-                        field['aria-invalid'] || value.length > 2000
-                      }
+                      value={value ?? ''}
+                      aria-invalid={field['aria-invalid']}
                       placeholder='Vendor Description'
                     />
                     <InputGroupAddon align='block-end' className='justify-end'>
-                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
+                      <InputGroupText>{value?.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
@@ -96,13 +93,14 @@ export default function AppVendorPage() {
 
             <form.Field
               name='image'
-              render={({ meta, field }) => (
+              render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                   <InputGroup>
-                    <Input
+                    <InputGroupInput
                       {...field}
                       type='url'
+                      value={value ?? ''}
                       placeholder='https://example.com/image.jpg'
                     />
                     <InputGroupAddon align='inline-end'>
@@ -119,10 +117,14 @@ export default function AppVendorPage() {
 
             <form.Field
               name='address'
-              render={({ meta, field }) => (
+              render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                  <Input {...field} placeholder='Vendor Address' />
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Vendor Address'
+                  />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

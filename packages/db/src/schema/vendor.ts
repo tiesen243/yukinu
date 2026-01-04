@@ -1,14 +1,14 @@
 import { createId } from '@yukinu/lib/create-id'
-import { VendorValidators } from '@yukinu/validators/vendor'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { orderItems, users } from '@/schema'
+import { users } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const vendorStatusEnum = pgEnum(
-  'vendor_status',
-  VendorValidators.statuses,
-)
+export const vendorStatusEnum = pgEnum('vendor_status', [
+  'pending',
+  'approved',
+  'suspended',
+])
 
 export const vendors = pgTable(
   'vendors',
@@ -68,17 +68,15 @@ export const vendorBalances = pgTable(
   ],
 )
 
-export const vendorTransactions = pgTable(
-  'vendor_transactions',
+export const vendorTransfers = pgTable(
+  'vendor_transfers',
   (t) => ({
     id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     vendorId: t
       .varchar({ length: 24 })
       .notNull()
       .references(() => vendors.id, { onDelete: 'restrict' }),
-    orderItemId: t
-      .varchar({ length: 24 })
-      .references(() => orderItems.id, { onDelete: 'restrict' }),
+    reference: t.varchar({ length: 100 }).notNull(),
     amountIn: t.numeric({ precision: 10, scale: 2 }),
     amountOut: t.numeric({ precision: 10, scale: 2 }),
     createdAt,

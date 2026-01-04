@@ -5,7 +5,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidators } from '@yukinu/validators/auth'
+import { resetPasswordInput } from '@yukinu/validators/auth'
 import { useRouter } from 'next/navigation'
 
 import { useTRPCClient } from '@/lib/trpc/react'
@@ -16,7 +16,7 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
 
   const form = useForm({
     defaultValues: { token, newPassword: '', confirmNewPassword: '' },
-    schema: AuthValidators.resetPasswordInput,
+    schema: resetPasswordInput,
     onSubmit: trpc.auth.resetPassword.mutate,
     onSuccess: () => {
       toast.success('Password has been reset successfully!')

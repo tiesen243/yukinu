@@ -1,8 +1,11 @@
 'use client'
 
+import type { OrderBy } from '@yukinu/validators/product'
+
 import { useQuery } from '@tanstack/react-query'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
+import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldGroup,
@@ -13,7 +16,7 @@ import {
 import { FilterIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
-import { ProductValidators } from '@yukinu/validators/product'
+import { orderBy } from '@yukinu/validators/product'
 import { useQueryStates } from 'nuqs'
 
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
@@ -25,7 +28,7 @@ export const FilterForm: React.FC = () => {
 
   const trpc = useTRPC()
   const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+    trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -37,8 +40,7 @@ export const FilterForm: React.FC = () => {
     const search = formData.q ?? null
     const categoryId =
       formData.categoryId === '' ? null : (formData.categoryId ?? null)
-    const orderBy =
-      (formData.orderBy as ProductValidators.OrderBy | null) ?? 'createdAt_desc'
+    const orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
 
     await setQuery((prev) => ({
       ...prev,
@@ -88,7 +90,7 @@ export const FilterForm: React.FC = () => {
               name='orderBy'
               defaultValue={query.orderBy}
             >
-              {ProductValidators.orderBy.map((order) => {
+              {orderBy.map((order) => {
                 const [field, direction] = order.split('_')
 
                 return (
@@ -111,46 +113,27 @@ export const FilterForm: React.FC = () => {
   )
 }
 
-const EntityInfoCard: React.FC<{
-  data: {
-    name: string
-    description: string | null
-    image: string | null
-  } | null
-}> = ({ data }) =>
-  data ? (
-    <div className='flex items-center gap-4'>
-      <Avatar className={`size-16 ${data.image ? '' : 'dark:invert'}`}>
-        <AvatarImage src={data.image ?? '/favicon.svg'} alt={data.name} />
-        <AvatarFallback>{data.name.charAt(0).toUpperCase()}</AvatarFallback>
-      </Avatar>
-      <div className='flex flex-col gap-2'>
-        <p className='text-lg font-semibold'>{data.name}</p>
-        <p className='text-sm text-muted-foreground'>
-          {data.description ?? 'No description available.'}
-        </p>
-      </div>
-    </div>
-  ) : null
-
-export const AdditionalInfo: React.FC = () => {
+export const VendorInfomation: React.FC = () => {
   const [query] = useQueryStates(productsParsers, productsOptions)
   const trpc = useTRPC()
 
   const { data } = useQuery(trpc.product.all.queryOptions(query))
-
-  const showCategory = query.categoryId && data?.category
-  const showVendor = query.vendorId && data?.vendor
-
-  if (!showCategory && !showVendor) return null
+  if (!data?.vendor) return null
+  const { vendor } = data
 
   return (
-    <section className='flex items-center gap-6 rounded-xl bg-card p-6 shadow-sm dark:border'>
-      <h3 className='sr-only'>Additional Information section</h3>
-
-      {showVendor && <EntityInfoCard data={data.vendor} />}
-      {showCategory && <EntityInfoCard data={data.category} />}
-    </section>
+    <Card className='px-4 flex-row items-center'>
+      <Avatar className='size-16'>
+        <AvatarImage src={vendor.image ?? '/favicon.svg'} alt={vendor.name} />
+        <AvatarFallback>{vendor.name.charAt(0).toUpperCase()}</AvatarFallback>
+      </Avatar>
+      <div className='flex flex-col gap-2'>
+        <p className='text-lg font-semibold'>{vendor.name}</p>
+        <p className='text-sm text-muted-foreground'>
+          {vendor.description ?? 'No description available.'}
+        </p>
+      </div>
+    </Card>
   )
 }
 
