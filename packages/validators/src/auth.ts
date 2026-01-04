@@ -63,7 +63,7 @@ export const verificationSchema = z.object({
 export type VerificationSchema = z.infer<typeof verificationSchema>
 
 export const sessionSchema = z.object({
-  id: z.cuid(),
+  id: z.string().length(24),
   userId: z.cuid(),
   token: z.string().min(1).max(64),
   expiresAt: z.date(),
