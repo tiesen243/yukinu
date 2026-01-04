@@ -37,7 +37,7 @@ export const wishlistItemSchema = createSelectSchema(wishlistItems, {
   userId: z.cuid(),
   productId: z.cuid(),
 })
-export type WishlistItemSelectSchema = z.infer<typeof wishlistItemSchema>
+export type WishlistItemSchema = z.infer<typeof wishlistItemSchema>
 
 export const ticketSchema = createSelectSchema(tickets, {
   id: z.cuid(),
