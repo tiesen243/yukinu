@@ -1,17 +1,18 @@
 import { Link } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { Image, View } from 'react-native'
+import { Dimensions, FlatList, Image, View } from 'react-native'
 
 import { Text } from '@/components/ui/text'
 import { trpc } from '@/lib/trpc'
+
+const phoneWidth = Dimensions.get('window').width
+const itemWidth = phoneWidth / 2 - 24 // 16px gap + 8px padding
 
 export default function IndexScreen() {
   return (
     <View className='flex-1 bg-background'>
       <View className='container flex-1 py-4'>
-        <View className='flex-1 grid grid-cols-2 gap-4'>
-          <ProductsList />
-        </View>
+        <ProductsList />
       </View>
     </View>
   )
@@ -30,27 +31,36 @@ const ProductsList: React.FC = () => {
 
   if (isLoading) return <Text>Loading...</Text>
 
-  return data?.products.map((product) => (
-    <Link
-      key={product.id}
-      screen='productDetails'
-      params={{ productId: product.id }}
-    >
-      <View className='w-1/2 bg-card border border-border rounded-xl'>
-        <Image
-          source={{ uri: product.image ?? '' }}
-          className='w-full aspect-square rounded-t-xl object-cover'
-        />
-        <View className='p-4'>
-          <Text>{product.name}</Text>
-          <Text className='text-muted-foreground text-sm'>
-            {Intl.NumberFormat('en-US', {
-              style: 'currency',
-              currency: 'USD',
-            }).format(+product.price)}
-          </Text>
-        </View>
-      </View>
-    </Link>
-  ))
+  return (
+    <FlatList
+      data={data?.products ?? []}
+      keyExtractor={(item) => item.id}
+      numColumns={2}
+      columnWrapperStyle={{ gap: 16 }}
+      renderItem={({ item }) => (
+        <Link
+          screen='productDetails'
+          params={{ productId: item.id }}
+          style={{ width: itemWidth }}
+          className='bg-card border border-border rounded-xl gap-4'
+        >
+          <Image
+            source={{ uri: item.image ?? '' }}
+            style={{ width: itemWidth, height: itemWidth }}
+            className='rounded-t-xl object-cover'
+          />
+
+          <View className='p-4 pt-8 w-full'>
+            <Text className='line-clamp-1'>{item.name}</Text>
+            <Text className='text-muted-foreground text-sm'>
+              {Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              }).format(+item.price)}
+            </Text>
+          </View>
+        </Link>
+      )}
+    />
+  )
 }
