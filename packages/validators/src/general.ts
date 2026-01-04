@@ -1,47 +1,58 @@
-import {
-  banners,
-  categories,
-  vouchers,
-  wishlistItems,
-  tickets,
-} from '@yukinu/db/schema'
-import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
-import { paginationInput, paginationOutput } from '@/shared'
+import { currencySchema, paginationInput, paginationOutput } from '@/shared'
 
 /* --------------------------------------------------------------------------
  * Convert Drizzle ORM schemas to Zod schemas for validation
  * --------------------------------------------------------------------------
  */
 
-export const bannerSchema = createSelectSchema(banners, {
+export const ticketStatuses = ['open', 'resolved', 'closed'] as const
+export type TicketStatus = (typeof ticketStatuses)[number]
+
+export const bannerSchema = z.object({
   id: z.cuid(),
+  url: z.url().max(500),
+  createdAt: z.date(),
 })
 export type BannerSchema = z.infer<typeof bannerSchema>
 
-export const categorySchema = createSelectSchema(categories, {
+export const categorySchema = z.object({
   id: z.cuid(),
   parentId: z.cuid().nullable(),
-  image: z.url().nullable(),
+  name: z.string().max(100),
+  description: z
+    .string()
+    .max(1000, 'Description must be at most 1000 characters')
+    .nullable(),
+  image: z.url().max(500).nullable(),
 })
 export type CategorySchema = z.infer<typeof categorySchema>
 
-export const voucherSchema = createSelectSchema(vouchers, {
+export const voucherSchema = z.object({
   id: z.cuid(),
+  code: z.string().max(50),
+  discountAmount: currencySchema,
+  discountPercentage: z.number().int().nullable(),
+  expiryDate: z.date(),
 })
 export type VoucherSchema = z.infer<typeof voucherSchema>
 
-export const wishlistItemSchema = createSelectSchema(wishlistItems, {
+export const wishlistItemSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
   productId: z.cuid(),
+  addedAt: z.date(),
 })
 export type WishlistItemSchema = z.infer<typeof wishlistItemSchema>
 
-export const ticketSchema = createSelectSchema(tickets, {
+export const ticketSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
+  subject: z.string().max(255),
+  description: z.string(),
+  status: z.enum(ticketStatuses).default('open'),
+  createdAt: z.date(),
 })
 export type TicketSchema = z.infer<typeof ticketSchema>
 

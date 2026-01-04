@@ -8,7 +8,7 @@ import {
 
 const parser = {
   search: parseAsString.withDefault(''),
-  role: parseAsStringEnum(roles),
+  role: parseAsStringEnum([...roles]),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),
 }

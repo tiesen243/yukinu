@@ -21,7 +21,12 @@ export class VerificationRepository implements IVerificationRepository {
     const [result] = await tx
       .select()
       .from(verifications)
-      .where(and(eq(verifications.token, token), eq(verifications.type, type)))
+      .where(
+        and(
+          eq(verifications.token, token),
+          type ? eq(verifications.type, type) : undefined,
+        ),
+      )
       .limit(1)
 
     return result ?? null

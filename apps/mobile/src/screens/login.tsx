@@ -1,12 +1,8 @@
+import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
 import type { GestureResponderEvent } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
-import {
-  loginInput,
-  type LoginInput,
-  type LoginOutput,
-} from '@yukinu/validators/auth'
 import { useState } from 'react'
 import { Alert, Linking, View } from 'react-native'
 
@@ -20,7 +16,7 @@ import { getBaseUrl } from '@/lib/utils'
 export default function LoginScreen() {
   const navigation = useNavigation()
 
-  const [data, setData] = useState<LoginInput>({
+  const [data, setData] = useState({
     identifier: '',
     password: '',
   })
@@ -31,20 +27,10 @@ export default function LoginScreen() {
     GestureResponderEvent
   >({
     mutationFn: async (_: GestureResponderEvent) => {
-      const parsed = loginInput.safeParse(data)
-      if (!parsed.success)
-        throw parsed.error.issues.reduce(
-          (acc, issue) => {
-            acc[issue.path[0] as keyof LoginInput] = issue.message
-            return acc
-          },
-          {} as Partial<Record<keyof LoginInput, string>>,
-        )
-
       const response = await fetch(`${getBaseUrl()}/api/auth/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify(data),
       })
 
       if (!response.ok) throw new Error(await response.text())

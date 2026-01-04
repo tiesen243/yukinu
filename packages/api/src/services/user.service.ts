@@ -2,6 +2,7 @@ import type { IProfileRepository } from '@/contracts/repositories/profile.reposi
 import type { IUserRepository } from '@/contracts/repositories/user.repository'
 import type { IUserService } from '@/contracts/services/user.service'
 import type { Database } from '@yukinu/db'
+import type { Role } from '@yukinu/validators/auth'
 import type * as Validators from '@yukinu/validators/user'
 
 import { TRPCError } from '@trpc/server'
@@ -117,7 +118,7 @@ export class UserService implements IUserService {
   ): Promise<Validators.PermanentlyDeleteUserOutput> {
     const { id, userId } = input
 
-    const targetUser = await this._check(id, userId, roles, {
+    const targetUser = await this._check(id, userId, ['moderator', 'user'], {
       forbidden: 'You cannot permanently delete users with critical roles',
       badRequest: 'You cannot permanently delete your own account',
     })
@@ -156,7 +157,7 @@ export class UserService implements IUserService {
           message: `User with ID ${id} not found`,
         })
 
-      await this._profile.update(id, { ...data }, tx)
+      await this._profile.update(id, data, tx)
 
       if (image && targetUser.image !== image) {
         await this._user.update(id, { image }, tx)
@@ -170,7 +171,7 @@ export class UserService implements IUserService {
   private async _check(
     currentUserId: Validators.ProfileSchema['id'],
     targetUserId: Validators.ProfileSchema['id'],
-    roles_: typeof roles,
+    roles_: Role[],
     messages: { forbidden: string; badRequest: string },
   ) {
     if (currentUserId === targetUserId)

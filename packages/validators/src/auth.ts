@@ -1,5 +1,3 @@
-import { accounts, sessions, users, verifications } from '@yukinu/db/schema'
-import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 /* --------------------------------------------------------------------------
@@ -7,7 +5,19 @@ import * as z from 'zod'
  * --------------------------------------------------------------------------
  */
 
-export const userSchema = createSelectSchema(users, {
+export const roles = [
+  'user',
+  'admin',
+  'vendor_owner',
+  'vendor_staff',
+  'moderator',
+] as const
+export type Role = (typeof roles)[number]
+
+export const userStatuses = ['active', 'inactive'] as const
+export type UserStatus = z.infer<typeof userStatuses>
+
+export const userSchema = z.object({
   id: z.cuid(),
   username: z
     .string()
@@ -16,33 +26,50 @@ export const userSchema = createSelectSchema(users, {
       'Username can only contain letters, numbers and periods, and must be between 4 and 20 characters long',
     ),
   email: z.email('Invalid email address'),
+  emailVerified: z.date().nullable(),
+  role: z.enum(roles, 'Invalid user role'),
+  status: z.enum(userStatuses, 'Invalid user status'),
+  image: z
+    .url('Invalid image URL')
+    .max(500, 'Image URL is too long')
+    .nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  deletedAt: z.date().nullable(),
 })
 export type UserSchema = z.infer<typeof userSchema>
 
-export const roles = userSchema.shape.role.options
-export type Role = (typeof roles)[number]
-
-export const userStatuses = userSchema.shape.status.options
-export type UserStatus = z.infer<typeof userStatuses>
-
-export const accountSchema = createSelectSchema(accounts, {
+export const accountSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
-  password: (schema) =>
-    schema.regex(
+  provider: z.string().min(1).max(50),
+  accountId: z.string().min(1).max(100),
+  password: z
+    .string()
+    .regex(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
       'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
-    ),
+    )
+    .nullable(),
 })
 export type AccountSchema = z.infer<typeof accountSchema>
 
-export const verificationSchema = createSelectSchema(verifications, {
+export const verificationSchema = z.object({
+  token: z.string().min(1).max(64),
   userId: z.cuid(),
+  expiresAt: z.date(),
+  type: z.string().min(1).max(50),
 })
 export type VerificationSchema = z.infer<typeof verificationSchema>
 
-export const sessionSchema = createSelectSchema(sessions, {
+export const sessionSchema = z.object({
+  id: z.cuid(),
   userId: z.cuid(),
+  token: z.string().min(1).max(64),
+  expiresAt: z.date(),
+  ipAddress: z.string().max(45).nullable(),
+  userAgent: z.string().nullable(),
+  createdAt: z.date(),
 })
 export type SessionSchema = z.infer<typeof sessionSchema>
 

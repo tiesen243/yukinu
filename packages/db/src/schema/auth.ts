@@ -1,17 +1,12 @@
 import { createId } from '@yukinu/lib/create-id'
+import { roles, userStatuses } from '@yukinu/validators/auth'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const userRoleEnum = pgEnum('user_role', [
-  'user',
-  'admin',
-  'vendor_owner',
-  'vendor_staff',
-  'moderator',
-])
+export const userRoleEnum = pgEnum('user_role', roles)
 
-export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
+export const userStatusEnum = pgEnum('user_status', userStatuses)
 
 export const users = pgTable(
   'users',
@@ -54,6 +49,20 @@ export const accounts = pgTable(
   ],
 )
 
+export const verifications = pgTable(
+  'verifications',
+  (t) => ({
+    token: t.varchar({ length: 64 }).primaryKey(),
+    userId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    expiresAt: t.timestamp({ mode: 'date' }).notNull(),
+    type: t.varchar({ length: 50 }).notNull(),
+  }),
+  (t) => [index('verifications_user_id_idx').on(t.userId)],
+)
+
 export const sessions = pgTable(
   'sessions',
   (t) => ({
@@ -72,18 +81,4 @@ export const sessions = pgTable(
     index('sessions_user_id_idx').on(t.userId),
     uniqueIndex('sessions_id_token_uq_idx').on(t.id, t.token),
   ],
-)
-
-export const verifications = pgTable(
-  'verifications',
-  (t) => ({
-    token: t.varchar({ length: 64 }).primaryKey(),
-    userId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    expiresAt: t.timestamp({ mode: 'date' }).notNull(),
-    type: t.varchar({ length: 50 }).notNull(),
-  }),
-  (t) => [index('verifications_user_id_idx').on(t.userId)],
 )

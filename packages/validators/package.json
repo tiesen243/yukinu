@@ -23,9 +23,7 @@
     "~dev": "tsdown --watch ./src"
   },
   "dependencies": {
-    "@yukinu/db": "workspace:*",
     "@yukinu/lib": "workspace:*",
-    "drizzle-zod": "^0.8.3",
     "zod": "catalog:prod"
   },
   "devDependencies": {

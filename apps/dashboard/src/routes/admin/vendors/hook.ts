@@ -1,4 +1,4 @@
-import { statuses } from '@yukinu/validators/vendor'
+import { vendorStatuses } from '@yukinu/validators/vendor'
 import {
   parseAsInteger,
   parseAsString,
@@ -8,7 +8,7 @@ import {
 
 const parser = {
   search: parseAsString,
-  status: parseAsStringEnum(statuses),
+  status: parseAsStringEnum([...vendorStatuses]),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),
 }

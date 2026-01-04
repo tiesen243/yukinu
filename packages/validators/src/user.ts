@@ -1,5 +1,3 @@
-import { addresses, profiles } from '@yukinu/db/schema'
-import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 import { userSchema } from '@/auth'
@@ -10,30 +8,43 @@ import { paginationInput, paginationOutput } from '@/shared'
  * --------------------------------------------------------------------------
  */
 
-export const profileSchema = createSelectSchema(profiles, {
+export const genders = ['male', 'female', 'other'] as const
+export type Gender = (typeof genders)[number]
+
+export const profileSchema = z.object({
   id: z.cuid(),
-  gender: z.enum(['male', 'female', 'other']).nullable(),
+  fullName: z
+    .string()
+    .max(255, 'Full name must be at most 255 characters long')
+    .nullable(),
+  bio: z.string().nullable(),
+  gender: z.enum(genders).nullable(),
+  dateOfBirth: z.iso.date().nullable(),
 })
 export type ProfileSchema = z.infer<typeof profileSchema>
 
-export const genders = profileSchema.shape.gender.unwrap().options
-export type Gender = (typeof genders)[number]
-
-export const addressSchema = createSelectSchema(addresses, {
+export const addressSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
+  recipientName: z
+    .string()
+    .max(255, 'Recipient name must be at most 255 characters long'),
   phoneNumber: z
     .string()
     .regex(
       /^\(\+\d{1,3}\)\s\d{2,4}(?:\s\d{2,4}){1,3}$/,
       'Invalid phone number',
     ),
+  street: z.string().max(255, 'Street must be at most 255 characters long'),
+  city: z.string().max(100, 'City must be at most 100 characters long'),
+  state: z.string().max(100, 'State must be at most 100 characters long'),
   postalCode: z
     .string()
     .regex(
       /^[A-Za-z0-9][A-Za-z0-9\- ]{1,8}[A-Za-z0-9]$/,
       'Invalid postal code',
     ),
+  country: z.string().max(100, 'Country must be at most 100 characters long'),
 })
 export type AddressSchema = z.infer<typeof addressSchema>
 

@@ -1,4 +1,9 @@
 import { createId } from '@yukinu/lib/create-id'
+import {
+  orderStatuses,
+  paymentMethods,
+  paymentStatuses,
+} from '@yukinu/validators/order'
 import { isNotNull, isNull } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
@@ -12,24 +17,11 @@ import {
 } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const orderStatusEnum = pgEnum('order_status', [
-  'pending',
-  'confirmed',
-  'shipped',
-  'completed',
-  'cancelled',
-])
+export const orderStatusEnum = pgEnum('order_status', orderStatuses)
 
-export const paymentMethodEnum = pgEnum('payment_method', [
-  'bank_transfer',
-  'cash_on_delivery',
-])
+export const paymentMethodEnum = pgEnum('payment_method', paymentMethods)
 
-export const paymentStatusEnum = pgEnum('payment_status', [
-  'pending',
-  'success',
-  'failed',
-])
+export const paymentStatusEnum = pgEnum('payment_status', paymentStatuses)
 
 export const orders = pgTable(
   'orders',
