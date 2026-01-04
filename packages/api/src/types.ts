@@ -7,9 +7,9 @@ import type { IOrderService } from '@/contracts/services/order.service'
 import type { IProductVariantService } from '@/contracts/services/product-variant.service'
 import type { IProductService } from '@/contracts/services/product.service'
 import type { ISecurityService } from '@/contracts/services/security.service'
-import type { IStaffService } from '@/contracts/services/staff.service'
 import type { ITicketService } from '@/contracts/services/ticket.service'
 import type { IUserService } from '@/contracts/services/user.service'
+import type { IVendorStaffService } from '@/contracts/services/vendor-staff.service'
 import type { IVendorService } from '@/contracts/services/vendor.service'
 import type { IWishlistService } from '@/contracts/services/wishlist.service'
 import type { Role } from '@yukinu/validators/auth'
@@ -31,10 +31,10 @@ export interface TRPCContext {
     order: IOrderService
     product: IProductService
     security: ISecurityService
-    staff: IStaffService
     ticket: ITicketService
     user: IUserService
     productVariant: IProductVariantService
+    vendorStaff: IVendorStaffService
     vendor: IVendorService
     wishlist: IWishlistService
   }

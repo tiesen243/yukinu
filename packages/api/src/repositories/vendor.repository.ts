@@ -2,7 +2,7 @@ import type { IVendorRepository } from '@/contracts/repositories/vendor.reposito
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
-import type { VendorSchema } from '@yukinu/validators/vendor'
+import type { VendorSchema, VendorStaffSchema } from '@yukinu/validators/vendor'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -23,7 +23,10 @@ export class VendorRepository
     (Pick<
       VendorSchema,
       'id' | 'name' | 'status' | 'createdAt' | 'updatedAt'
-    > & { owner: Pick<UserSchema, 'id' | 'username'>; staffCount: number })[]
+    > & {
+      owner: Pick<UserSchema, 'id' | 'username' | 'email'>
+      staffCount: number
+    })[]
   > {
     const { count, eq } = this._orm
     const { users, vendorStaffs } = this._schema
@@ -36,7 +39,7 @@ export class VendorRepository
         id: this._table.id,
         name: this._table.name,
         status: this._table.status,
-        owner: { id: users.id, username: users.username },
+        owner: { id: users.id, username: users.username, email: users.email },
         staffCount: count(vendorStaffs.userId),
         createdAt: this._table.createdAt,
         updatedAt: this._table.updatedAt,
@@ -53,5 +56,77 @@ export class VendorRepository
     if (options.offset) query.offset(options.offset)
 
     return query
+  }
+
+  allStaffByVendorId(
+    vendorId: VendorSchema['id'],
+    tx = this._db,
+  ): Promise<
+    (Pick<UserSchema, 'id' | 'username' | 'email'> & { assignedAt: Date })[]
+  > {
+    const { eq } = this._orm
+    const { users, vendorStaffs } = this._schema
+
+    return tx
+      .select({
+        id: users.id,
+        username: users.username,
+        email: users.email,
+        assignedAt: vendorStaffs.assignedAt,
+      })
+      .from(vendorStaffs)
+      .where(eq(vendorStaffs.vendorId, vendorId))
+  }
+
+  async findStaff(
+    vendorId: VendorSchema['id'],
+    userId: UserSchema['id'],
+    tx = this._db,
+  ): Promise<VendorStaffSchema | null> {
+    const { and, eq } = this._orm
+    const { vendorStaffs } = this._schema
+
+    const [staff] = await tx
+      .select()
+      .from(vendorStaffs)
+      .where(
+        and(
+          eq(vendorStaffs.vendorId, vendorId),
+          eq(vendorStaffs.userId, userId),
+        ),
+      )
+      .limit(1)
+
+    return staff ?? null
+  }
+
+  async addStaff(
+    vendorId: VendorSchema['id'],
+    userId: UserSchema['id'],
+    tx = this._db,
+  ): Promise<UserSchema['id']> {
+    const { vendorStaffs } = this._schema
+    await tx.insert(vendorStaffs).values({ vendorId, userId })
+    return userId
+  }
+
+  async removeStaff(
+    vendorId: VendorSchema['id'],
+    userId: UserSchema['id'],
+    tx = this._db,
+  ): Promise<UserSchema['id']> {
+    const { and, eq } = this._orm
+    const { vendorStaffs } = this._schema
+
+    await tx
+      .delete(vendorStaffs)
+      .where(
+        and(
+          eq(vendorStaffs.vendorId, vendorId),
+          eq(vendorStaffs.userId, userId),
+        ),
+      )
+
+    return userId
   }
 }

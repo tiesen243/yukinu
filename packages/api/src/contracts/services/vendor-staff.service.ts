@@ -1,6 +1,6 @@
 import type * as Validators from '@yukinu/validators/vendor'
 
-export interface IStaffService {
+export interface IVendorStaffService {
   all(input: Validators.AllStaffsInput): Promise<Validators.AllStaffsOutput>
 
   invite(

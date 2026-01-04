@@ -117,13 +117,11 @@ export type DeleteVendorOutput = z.infer<typeof deleteVendorOutput>
 //#region Vendor Staff
 export const allStaffsInput = vendorSchema.pick({ id: true })
 export type AllStaffsInput = z.infer<typeof allStaffsInput>
-export const allStaffsOutput = z.object({
-  staff: z.array(
-    vendorStaffSchema.extend({
-      user: z.object({ id: z.cuid(), username: z.string() }),
-    }),
-  ),
-})
+export const allStaffsOutput = z.array(
+  vendorStaffSchema
+    .omit({ userId: true, vendorId: true })
+    .extend({ id: z.cuid(), username: z.string(), email: z.email() }),
+)
 export type AllStaffsOutput = z.infer<typeof allStaffsOutput>
 
 export const inviteStaffInput = vendorStaffSchema
@@ -142,7 +140,7 @@ export type AcceptStaffInvitationInput = z.infer<
   typeof acceptStaffInvitationInput
 >
 export const acceptStaffInvitationOutput = vendorStaffSchema.pick({
-  assignedAt: true,
+  userId: true,
 })
 export type AcceptStaffInvitationOutput = z.infer<
   typeof acceptStaffInvitationOutput
