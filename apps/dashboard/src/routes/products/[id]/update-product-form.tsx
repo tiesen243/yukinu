@@ -39,7 +39,7 @@ export const UpdateProductForm: React.FC<{
     initialData: data,
   })
   const { data: _data } = useQuery(
-    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+    trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
   const { mutateAsync } = useMutation({
     ...trpc.product.update.mutationOptions(),

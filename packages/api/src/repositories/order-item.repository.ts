@@ -68,7 +68,7 @@ export class OrderItemRepository
       .where(
         and(
           isNotNull(productVariants.sku),
-          sql`${variantOptions.id} = ANY(string_to_array(${productVariants.sku}, '-')::int[])`,
+          sql`${variantOptions.id} = ANY((string_to_array(${productVariants.sku}, '-'))[2:]::int[])`,
         ),
       )
       .as('variant_data')

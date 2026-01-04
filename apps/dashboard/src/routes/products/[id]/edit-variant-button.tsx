@@ -84,8 +84,12 @@ export const EditVariantButton: React.FC<{
             />
 
             <DialogFooter>
-              <DialogClose disabled={form.state.isPending}>Cancel</DialogClose>
-              <Button disabled={form.state.isPending}>Save Changes</Button>
+              <DialogClose type='button' disabled={form.state.isPending}>
+                Cancel
+              </DialogClose>
+              <Button type='submit' disabled={form.state.isPending}>
+                Save Changes
+              </Button>
             </DialogFooter>
           </FieldGroup>
         </form>

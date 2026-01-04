@@ -4,7 +4,7 @@ import type { OneOutput } from '@yukinu/validators/product'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from '@yukinu/ui/sonner'
-import { parseAsInteger, useQueryStates } from 'nuqs'
+import { parseAsString, useQueryStates } from 'nuqs'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -15,11 +15,11 @@ const PageContext = React.createContext<{
 
   avgRating: number
   currentImage: string | undefined
-  selectedOptions: Record<string, number | null>
+  selectedOptions: Record<string, string | null>
   selectedVariant: OneOutput['variants'][number] | undefined
 
   handleChangeImage: (url: string) => void
-  handleOptionChange: (type: string, value: number | null) => void
+  handleOptionChange: (type: string, value: string | null) => void
 
   toggleWishlistItem: () => void
   isTogglingWishlistItem: boolean
@@ -52,12 +52,12 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
   )
 
   const parsers = Object.fromEntries(
-    Array.from(optionTypes).map((key) => [key, parseAsInteger]),
+    Array.from(optionTypes).map((key) => [key, parseAsString]),
   )
   const [selectedOptions, setSelectedOptions] = useQueryStates(parsers)
 
   const handleOptionChange = React.useCallback(
-    (type: string, value: number | null) => {
+    (type: string, value: string | null) => {
       setSelectedOptions((prev) => ({
         ...prev,
         [type]: value,
@@ -78,7 +78,7 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
     ...trpc.cart.addItemToCart.mutationOptions(),
-    meta: { filter: trpc.order.one.queryOptions({ status: 'pending' }) },
+    meta: { filter: trpc.cart.get.queryOptions() },
     onSuccess: () => toast.success('Added to cart'),
     onError: ({ message }) =>
       toast.error('Failed to add item to cart', { description: message }),

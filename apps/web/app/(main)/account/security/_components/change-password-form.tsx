@@ -1,7 +1,5 @@
 'use client'
 
-import type { ChangePasswordInput } from '@yukinu/validators/auth'
-
 import { Button } from '@yukinu/ui/button'
 import { Checkbox } from '@yukinu/ui/checkbox'
 import {
@@ -16,7 +14,10 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { changePasswordInput } from '@yukinu/validators/auth'
+import {
+  changePasswordInput,
+  type ChangePasswordInput,
+} from '@yukinu/validators/auth'
 import { useRouter } from 'next/navigation'
 
 import { useTRPCClient } from '@/lib/trpc/react'
@@ -27,12 +28,13 @@ export const ChangePasswordForm: React.FC = () => {
 
   const form = useForm({
     defaultValues: {
-      password: '',
+      userId: null,
+      currentPassword: null,
       newPassword: '',
       confirmNewPassword: '',
       isLogout: true,
-    } as Omit<ChangePasswordInput, 'userId'>,
-    schema: changePasswordInput.omit({ userId: true }),
+    } as ChangePasswordInput,
+    schema: changePasswordInput,
     onSubmit: trpc.security.changePassword.mutate,
     onSuccess: () => {
       toast.success('Password changed successfully')
@@ -53,7 +55,7 @@ export const ChangePasswordForm: React.FC = () => {
 
         <FieldGroup>
           <form.Field
-            name='password'
+            name='currentPassword'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Current Password</FieldLabel>

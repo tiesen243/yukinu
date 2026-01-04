@@ -35,7 +35,7 @@ export default function CategoriesNewPage() {
   const navigate = useNavigate()
 
   const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+    trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
 
   const { mutateAsync } = useMutation({
@@ -51,7 +51,7 @@ export default function CategoriesNewPage() {
       parentId: null,
       name: '',
       description: '',
-      image: '',
+      image: null,
     } as CreateCategoryInput,
     schema: createCategoryInput,
     onSubmit: mutateAsync,

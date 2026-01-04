@@ -7,7 +7,7 @@ import {
 } from 'nuqs/server'
 
 export const productsParsers = {
-  search: parseAsString,
+  search: parseAsString.withDefault(''),
   categoryId: parseAsString,
   vendorId: parseAsString,
   page: parseAsInteger.withDefault(1),

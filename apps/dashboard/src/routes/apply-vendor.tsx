@@ -14,6 +14,7 @@ import { Input } from '@yukinu/ui/input'
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupInput,
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
@@ -96,7 +97,7 @@ export default function AppVendorPage() {
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                   <InputGroup>
-                    <Input
+                    <InputGroupInput
                       {...field}
                       type='url'
                       value={value ?? ''}

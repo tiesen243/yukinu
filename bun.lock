@@ -158,7 +158,6 @@
       "version": "0.8.0",
       "dependencies": {
         "@yukinu/lib": "workspace:*",
-        "@yukinu/validators": "workspace:*",
         "drizzle-orm": "^0.45.1",
         "postgres": "^3.4.7",
       },

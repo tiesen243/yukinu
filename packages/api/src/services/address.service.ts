@@ -15,7 +15,9 @@ export class AddressService implements IAddressService {
     input: Validators.AllAddressesInput,
   ): Promise<Validators.AllAddressesOutput> {
     const { userId } = input
-    const addresses = await this._address.all([{ userId }])
+    const addresses = await this._address.all([{ userId }], {
+      recipientName: 'asc',
+    })
     return { addresses }
   }
 

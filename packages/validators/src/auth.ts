@@ -90,9 +90,10 @@ export type ChangeUsernameInput = z.infer<typeof changeUsernameInput>
 export const changeUsernameOutput = userSchema.pick({ id: true })
 export type ChangeUsernameOutput = z.infer<typeof changeUsernameOutput>
 
-export const changePasswordInput = accountSchema
-  .pick({ userId: true, password: true })
-  .extend({
+export const changePasswordInput = z
+  .object({
+    userId: z.cuid().nullable(),
+    currentPassword: accountSchema.shape.password,
     newPassword: accountSchema.shape.password.unwrap(),
     confirmNewPassword: z.string('Please confirm your new password'),
     isLogout: z.boolean().default(true),
@@ -126,9 +127,7 @@ export type ResetPasswordOutput = z.infer<typeof resetPasswordOutput>
 
 export const allSessionsInput = sessionSchema.pick({ userId: true })
 export type AllSessionsInput = z.infer<typeof allSessionsInput>
-export const allSessionsOutput = z.array(
-  sessionSchema.omit({ userId: true, token: true }),
-)
+export const allSessionsOutput = z.array(sessionSchema)
 export type AllSessionsOutput = z.infer<typeof allSessionsOutput>
 
 export const deleteSessionInput = sessionSchema.pick({

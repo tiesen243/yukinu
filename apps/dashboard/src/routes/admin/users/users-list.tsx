@@ -14,12 +14,7 @@ export const UsersList: React.FC = () => {
   const trpc = useTRPC()
   const [query] = useUserQueryStates()
 
-  const { data, isLoading } = useQuery(
-    trpc.user.all.queryOptions({
-      ...query,
-      role: query.role ?? null,
-    }),
-  )
+  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (

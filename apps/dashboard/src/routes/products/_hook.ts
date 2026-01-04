@@ -8,7 +8,7 @@ import {
 } from 'nuqs'
 
 const parser = {
-  search: parseAsString,
+  search: parseAsString.withDefault(''),
   categoryId: parseAsString,
   vendorId: parseAsString,
   isDeleted: parseAsBoolean.withDefault(false),

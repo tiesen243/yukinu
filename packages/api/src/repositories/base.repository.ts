@@ -180,16 +180,14 @@ export abstract class BaseRepository<
   }
 
   private _parseCondition<V>(field: keyof T, value: V): orm.SQL {
-    const { eq, ne, isNotNull, isNull, ilike, lte, lt, gt, gte } = this._orm
+    const { eq, gte, gt, ilike, isNotNull, isNull, lt, lte, ne } = this._orm
 
     if (typeof value !== 'string') return eq(this._table[field] as never, value)
 
     if (value.startsWith('!'))
       return ne(this._table[field] as never, value.slice(1))
-
     if (value === 'not null') return isNotNull(this._table[field] as never)
     if (value === 'null') return isNull(this._table[field] as never)
-
     if (value.startsWith('>='))
       return gte(this._table[field] as never, value.slice(2))
     if (value.startsWith('>'))

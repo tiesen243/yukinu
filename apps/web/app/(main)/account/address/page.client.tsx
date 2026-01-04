@@ -83,13 +83,9 @@ const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger
-        render={
-          <Button variant='destructive' size='sm'>
-            Delete
-          </Button>
-        }
-      />
+      <AlertDialogTrigger variant='destructive' size='sm'>
+        Delete
+      </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>

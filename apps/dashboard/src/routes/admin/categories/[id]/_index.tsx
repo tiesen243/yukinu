@@ -52,7 +52,7 @@ export default function CategoriesEditPage({
   })
 
   const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: null, limit: 100 }),
+    trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
 
   const { mutateAsync } = useMutation({

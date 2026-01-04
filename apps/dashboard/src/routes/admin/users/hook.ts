@@ -7,7 +7,7 @@ import {
 } from 'nuqs'
 
 const parser = {
-  search: parseAsString,
+  search: parseAsString.withDefault(''),
   role: parseAsStringEnum(roles),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),

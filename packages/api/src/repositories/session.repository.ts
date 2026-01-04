@@ -20,13 +20,7 @@ export class SessionRepository
     const { eq, desc } = this._orm
 
     return tx
-      .select({
-        id: this._table.id,
-        userAgent: this._table.userAgent,
-        expiresAt: this._table.expiresAt,
-        ipAddress: this._table.ipAddress,
-        createdAt: this._table.createdAt,
-      })
+      .select()
       .from(this._table)
       .where(eq(this._table.userId, userId))
       .orderBy(desc(this._table.createdAt))

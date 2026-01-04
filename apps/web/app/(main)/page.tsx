@@ -21,7 +21,7 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
     ),
     getQueryClient().prefetchQuery(
       trpc.category.all.queryOptions({
-        search: null,
+        search: '',
         isTopLevelOnly: true,
         limit: 12,
       }),

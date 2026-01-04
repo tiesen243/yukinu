@@ -69,7 +69,7 @@ export const ProductInformation: React.FC = () => {
                 className='flex flex-wrap'
                 value={selectedOptions[type]}
                 onValueChange={(value) => {
-                  handleOptionChange(type, Number(value))
+                  handleOptionChange(type, String(value))
                 }}
               >
                 {Array.from(
@@ -90,7 +90,6 @@ export const ProductInformation: React.FC = () => {
                       value={value ?? ''}
                       hidden
                     />
-
                     {value}
                   </Label>
                 ))}

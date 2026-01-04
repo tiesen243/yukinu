@@ -21,7 +21,7 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export const SessionsList: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.security.allSessions.queryOptions({}))
+  const { data } = useSuspenseQuery(trpc.security.allSessions.queryOptions())
 
   return data.map((session) => (
     <SessionItem key={session.id} session={session} />

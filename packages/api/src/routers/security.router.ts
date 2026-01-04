@@ -5,13 +5,9 @@ import { createTRPCRouter, protectedProcedure } from '@/trpc'
 export const securityRouter = createTRPCRouter({
   allSessions: protectedProcedure
     .meta({ message: 'All sessions fetched successfully.' })
-    .input(Validators.allSessionsInput.omit({ userId: true }))
     .output(Validators.allSessionsOutput)
-    .query(({ ctx, input }) =>
-      ctx.services.security.allSessions({
-        ...input,
-        userId: ctx.session.userId,
-      }),
+    .query(({ ctx }) =>
+      ctx.services.security.allSessions({ userId: ctx.session.userId }),
     ),
 
   deleteSession: protectedProcedure
@@ -38,7 +34,7 @@ export const securityRouter = createTRPCRouter({
 
   changePassword: protectedProcedure
     .meta({ message: 'Password changed successfully.' })
-    .input(Validators.changePasswordInput.omit({ userId: true }))
+    .input(Validators.changePasswordInput)
     .output(Validators.changePasswordOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.security.changePassword({

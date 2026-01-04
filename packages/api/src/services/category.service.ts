@@ -19,7 +19,7 @@ export class CategoryService implements ICategoryService {
     const offset = (page - 1) * limit
 
     const whereClauses = [
-      { name: search ?? '', parentId: isTopLevelOnly ? 'null' : 'not null' },
+      { name: `%${search}%`, ...(isTopLevelOnly && { parentId: 'null' }) },
     ]
 
     const [categories, total] = await Promise.all([

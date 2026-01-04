@@ -23,7 +23,8 @@ export class ProductService implements IProductService {
   ) {}
 
   async all(input: Validators.AllInput): Promise<Validators.AllOutput> {
-    const { categoryId, vendorId, page, limit } = input
+    const { search, isDeleted, categoryId, vendorId, page, limit } = input
+    const offset = (page - 1) * limit
 
     const categoryQuery = categoryId
       ? this._category.find(categoryId)
@@ -32,11 +33,28 @@ export class ProductService implements IProductService {
       ? this._vendor.find(vendorId)
       : Promise.resolve(null)
 
+    const whereClauses = [
+      {
+        name: search ? `%${search}%` : 'not null',
+        deletedAt: isDeleted
+          ? ('not null' as unknown as Date)
+          : ('null' as unknown as Date),
+        ...(categoryId ? { categoryId } : {}),
+        ...(vendorId ? { vendorId } : {}),
+      },
+    ]
+
+    let orderBy = {}
+    if (input.orderBy) {
+      const [field, direction] = input.orderBy.split('_')
+      if (field && direction) orderBy = { [field]: direction as 'asc' | 'desc' }
+    }
+
     const [products, category, vendor, total] = await Promise.all([
-      this._product.allWithRelations(),
+      this._product.allWithRelations(whereClauses, orderBy, { limit, offset }),
       categoryQuery,
       vendorQuery,
-      this._product.count(),
+      this._product.count(whereClauses),
     ])
     const totalPages = Math.ceil(total / limit)
 

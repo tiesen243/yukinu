@@ -155,7 +155,7 @@ export const oneOutput = productSchema
         options: z.array(
           z.object({
             name: variantSchema.shape.name,
-            value: variantOptionSchema.shape.id,
+            value: variantOptionSchema.shape.value,
           }),
         ),
       }),
@@ -184,14 +184,12 @@ export const createInput = productSchema
     images: z
       .array(productImageSchema.shape.url)
       .nonempty('At least one image is required'),
-    attributes: z
-      .array(
-        z.object({
-          name: attributeSchema.shape.name,
-          value: productAttributeSchema.shape.value,
-        }),
-      )
-      .nonempty('At least one attribute is required'),
+    attributes: z.array(
+      z.object({
+        name: attributeSchema.shape.name,
+        value: productAttributeSchema.shape.value,
+      }),
+    ),
     variants: z.array(
       z.object({
         name: variantSchema.shape.name,

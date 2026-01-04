@@ -1,31 +1,20 @@
 'use client'
 
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { slugify } from '@yukinu/lib/slugify'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@yukinu/ui/dialog'
-import { MinusIcon, PlusIcon } from '@yukinu/ui/icons'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-} from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
-import { TableCell, TableRow } from '@yukinu/ui/table'
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from '@yukinu/ui/item'
 import Image from 'next/image'
-import Link from 'next/link'
 import * as React from 'react'
 
+import { EditButton } from '@/app/(main)/account/cart/_components/edit-button'
+import { RemoveButton } from '@/app/(main)/account/cart/_components/remove-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const CartItemsList: React.FC = () => {
@@ -33,43 +22,35 @@ export const CartItemsList: React.FC = () => {
   const { data } = useSuspenseQuery(trpc.cart.get.queryOptions())
 
   return data.items.map((item) => (
-    <TableRow key={item.id}>
-      <TableCell>
-        <Link
-          href={`/${slugify(item.productName ?? '')}-${item.productId}`}
-          className={`flex items-center gap-2 ${item.productId ? '' : 'pointer-events-none opacity-50'}`}
-        >
-          <Image
-            src={item.productImage ?? '/favicon.svg'}
-            alt={`thumbnail of ${item.productName}`}
-            className='size-5 rounded-md object-cover'
-            width={20}
-            height={20}
-          />
-          <span>{item.productName ?? 'Deleted Product'}</span>
-        </Link>
-      </TableCell>
-      <TableCell>
-        {Object.entries(item.variant).map(([key, value]) => (
-          <div key={key}>
-            {key}: {value}
-          </div>
-        ))}
-      </TableCell>
-      <TableCell className='text-center'>{item.quantity}</TableCell>
-      <TableCell className='text-center'>
-        {new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(parseFloat(item.unitPrice))}
-      </TableCell>
-      <TableCell className='text-center'>
-        {new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(parseFloat(item.unitPrice) * item.quantity)}
-      </TableCell>
-      <TableCell className='space-x-4'>
+    <Item key={item.id} variant='outline' role='listitem'>
+      <ItemMedia variant='image'>
+        <Image
+          src={item.productImage ?? '/favicon.svg'}
+          alt={`thumbnail of ${item.productName}`}
+          width={40}
+          height={40}
+        />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle className='line-clamp-1'>{item.productName}</ItemTitle>
+        <ItemDescription>
+          {new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(parseFloat(item.unitPrice))}{' '}
+          x {item.quantity}
+        </ItemDescription>
+      </ItemContent>
+
+      <ItemContent>
+        {item.variant &&
+          Object.entries(item.variant).map(([key, value]) => (
+            <div key={key}>
+              {key}: {value}
+            </div>
+          ))}
+      </ItemContent>
+      <ItemActions>
         <EditButton
           vendorId={item.vendorId}
           productId={item.productId}
@@ -81,238 +62,63 @@ export const CartItemsList: React.FC = () => {
           stock={item.productVariantId ? item.variantStock : item.stock}
         />
         <RemoveButton itemId={item.id} />
-      </TableCell>
-    </TableRow>
+      </ItemActions>
+    </Item>
   ))
 }
 
 export const CartItemsListSkeleton: React.FC = () =>
   Array.from({ length: 3 }, (_, i) => (
-    <TableRow key={i}>
-      {Array.from({ length: 6 }, (_, j) => (
-        <TableCell key={j}>
-          <div className='h-5 w-full animate-pulse rounded-md bg-muted' />
-        </TableCell>
-      ))}
-    </TableRow>
+    <Item key={i} variant='outline' className='animate-pulse'>
+      <ItemMedia variant='image'>
+        <div className='size-10 bg-muted' />
+      </ItemMedia>
+      <ItemContent>
+        <ItemTitle className='bg-muted w-1/3 rounded-sm'>&nbsp;</ItemTitle>
+        <ItemDescription className='bg-muted w-1/4 rounded-sm'>
+          &nbsp;
+        </ItemDescription>
+      </ItemContent>
+    </Item>
   ))
-
-const EditButton: React.FC<{
-  vendorId: string | null
-  productId: string | null
-  variantId: string | null
-  unitPrice: string
-  name: string | null
-  variant: Record<string, string>
-  quantity: number
-  stock: number | null
-}> = ({
-  vendorId,
-  productId,
-  variantId,
-  unitPrice,
-  name,
-  variant,
-  quantity,
-  stock,
-}) => {
-  const [localQuantity, setLocalQuantity] = React.useState(quantity)
-  const [open, setOpen] = React.useState(false)
-
-  const trpc = useTRPC()
-  const { mutate, isPending } = useMutation({
-    ...trpc.cart.addItemToCart.mutationOptions(),
-    meta: { filter: trpc.order.one.queryFilter({ status: 'pending' }) },
-    onSuccess: () => {
-      setOpen(false)
-      toast.success('Quantity updated successfully')
-    },
-    onError: ({ message }) =>
-      toast.error('Failed to update quantity', { description: message }),
-  })
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        className={`text-primary underline-offset-4 hover:underline ${productId ? '' : 'pointer-events-none opacity-50'}`}
-      >
-        Edit
-      </DialogTrigger>
-
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit quantity of {name}</DialogTitle>
-          <DialogDescription>
-            {Object.entries(variant).map(([key, value]) => (
-              <span key={key} className='block'>
-                {key}: {value}
-              </span>
-            ))}
-            <span>In stock: {stock ?? '∞'}</span>
-          </DialogDescription>
-        </DialogHeader>
-
-        <InputGroup>
-          <InputGroupAddon align='inline-start'>
-            <InputGroupButton
-              disabled={localQuantity <= 1 || isPending}
-              onClick={() => {
-                setLocalQuantity((qty) => (qty > 1 ? qty - 1 : qty))
-              }}
-            >
-              <MinusIcon />
-            </InputGroupButton>
-          </InputGroupAddon>
-          <InputGroupInput
-            type='number'
-            disabled={isPending}
-            value={localQuantity}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10)
-              if (
-                isNaN(value) ||
-                value < 1 ||
-                (stock !== null && value > stock)
-              )
-                return
-              setLocalQuantity(value)
-            }}
-          />
-          <InputGroupAddon align='inline-end'>
-            <InputGroupButton
-              disabled={
-                stock === null ? isPending : localQuantity >= stock || isPending
-              }
-              onClick={() => {
-                setLocalQuantity((qty) =>
-                  stock === null ? qty + 1 : qty < stock ? qty + 1 : qty,
-                )
-              }}
-            >
-              <PlusIcon />
-            </InputGroupButton>
-          </InputGroupAddon>
-        </InputGroup>
-
-        <DialogFooter>
-          <DialogClose
-            render={
-              <Button variant='outline' disabled={isPending}>
-                Cancel
-              </Button>
-            }
-          />
-          <Button
-            disabled={isPending}
-            onClick={() => {
-              if (!productId) return
-
-              mutate({
-                vendorId,
-                productId,
-                unitPrice,
-                quantity: localQuantity,
-                variantId: variantId ?? undefined,
-              })
-            }}
-          >
-            {isPending ? 'Saving...' : 'Save changes'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-const RemoveButton: React.FC<{ itemId: string | null }> = ({ itemId }) => {
-  const [open, setOpen] = React.useState(false)
-
-  const trpc = useTRPC()
-  const { mutate, isPending } = useMutation({
-    ...trpc.cart.removeItemFromCart.mutationOptions(),
-    meta: { filter: trpc.order.one.queryFilter({ status: 'pending' }) },
-    onSuccess: () => {
-      toast.success('Item removed from cart')
-      setOpen(false)
-    },
-    onError: ({ message }) =>
-      toast.error('Failed to remove item', { description: message }),
-  })
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='text-destructive underline-offset-4 hover:underline'>
-        Remove
-      </DialogTrigger>
-
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Remove item from cart</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to remove this item from your cart?
-          </DialogDescription>
-        </DialogHeader>
-
-        <DialogFooter>
-          <DialogClose disabled={isPending}>Cancel</DialogClose>
-          <Button
-            variant='destructive'
-            disabled={isPending}
-            onClick={() => {
-              if (!itemId) return
-              mutate({ itemId })
-            }}
-          >
-            {isPending ? 'Removing...' : 'Remove'}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
-}
 
 export const CartItemsTotal: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(
-    trpc.order.one.queryOptions({ status: 'pending' }),
-  )
+  const { data } = useSuspenseQuery(trpc.cart.get.queryOptions())
 
   const total = data.items.reduce((acc, item) => {
     return acc + parseFloat(item.unitPrice) * item.quantity
   }, 0)
 
   return (
-    <TableRow>
-      <TableCell colSpan={4} className='text-right font-bold'>
-        Total:
-      </TableCell>
-      <TableCell className='font-bold'>
-        {new Intl.NumberFormat('en-US', {
-          style: 'currency',
-          currency: 'USD',
-        }).format(total)}
-      </TableCell>
-      <TableCell className='text-right'>
+    <Item>
+      <ItemContent>
+        <ItemTitle className='font-bold'>
+          Total:{' '}
+          {new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }).format(total)}
+        </ItemTitle>
+      </ItemContent>
+      <ItemActions>
         <Button variant='outline' size='sm'>
           Checkout
         </Button>
-      </TableCell>
-    </TableRow>
+      </ItemActions>
+    </Item>
   )
 }
 
 export const CartItemsTotalSkeleton: React.FC = () => (
-  <TableRow>
-    <TableCell colSpan={4} className='text-right font-bold'>
-      Total:
-    </TableCell>
-    <TableCell className='font-bold'>
-      <div className='h-5 animate-pulse rounded-md bg-muted' />
-    </TableCell>
-    <TableCell className='text-right'>
+  <Item className='animate-pulse'>
+    <ItemContent>
+      <ItemTitle className='bg-muted w-1/4 rounded-sm'>&nbsp;</ItemTitle>
+    </ItemContent>
+    <ItemActions>
       <Button variant='outline' size='sm' disabled>
         Checkout
       </Button>
-    </TableCell>
-  </TableRow>
+    </ItemActions>
+  </Item>
 )

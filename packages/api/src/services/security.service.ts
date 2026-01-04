@@ -75,7 +75,13 @@ export class SecurityService implements ISecurityService {
   async changePassword(
     input: Validators.ChangePasswordInput,
   ): Promise<Validators.ChangePasswordOutput> {
-    const { userId, password: _password, newPassword, isLogout } = input
+    const { userId, currentPassword, newPassword, isLogout } = input
+
+    if (userId === null)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'User ID is required to change password.',
+      })
 
     const [password, user, account] = await Promise.all([
       this._password.hash(newPassword),
@@ -90,19 +96,19 @@ export class SecurityService implements ISecurityService {
       })
 
     if (account.password) {
-      if (!_password)
+      if (!currentPassword)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'Current password is required to change password.',
         })
 
-      if (_password === newPassword)
+      if (currentPassword === newPassword)
         throw new TRPCError({
           code: 'BAD_REQUEST',
           message: 'The new password must be different from the current one.',
         })
 
-      if (!(await this._password.verify(account.password, _password)))
+      if (!(await this._password.verify(account.password, currentPassword)))
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'The current password is incorrect.',

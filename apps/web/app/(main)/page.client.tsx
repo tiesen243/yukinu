@@ -107,7 +107,7 @@ export const CategoriesList: React.FC = () => {
 
   const { data } = useSuspenseQuery(
     trpc.category.all.queryOptions({
-      search: null,
+      search: '',
       isTopLevelOnly: true,
       limit: 12,
     }),
