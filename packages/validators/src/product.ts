@@ -11,6 +11,7 @@ import {
 import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
+import { userSchema } from '@/auth'
 import { categorySchema } from '@/general'
 import { currencySchema, paginationInput, paginationOutput } from '@/shared'
 import { vendorSchema } from '@/vendor'
@@ -158,6 +159,14 @@ export const oneOutput = productSchema
           }),
         ),
       }),
+    ),
+    reviews: z.array(
+      productPreviewSchema
+        .omit({ productId: true, userId: true, createdAt: true })
+        .extend({
+          user: userSchema.pick({ id: true, username: true, image: true }),
+          createdAt: z.coerce.date().transform((d) => new Date(d)),
+        }),
     ),
   })
 export type OneOutput = z.infer<typeof oneOutput>
