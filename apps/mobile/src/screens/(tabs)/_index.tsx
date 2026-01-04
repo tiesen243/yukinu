@@ -1,3 +1,4 @@
+import { Link } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image, View } from 'react-native'
 
@@ -30,17 +31,26 @@ const ProductsList: React.FC = () => {
   if (isLoading) return <Text>Loading...</Text>
 
   return data?.products.map((product) => (
-    <View
+    <Link
       key={product.id}
-      className='w-1/2 bg-card border border-border rounded-xl'
+      screen='productDetails'
+      params={{ productId: product.id }}
     >
-      <Image
-        source={{ uri: product.image ?? '' }}
-        className='w-full aspect-square rounded-t-xl object-cover'
-      />
-      <View className='p-4'>
-        <Text>{product.name}</Text>
+      <View className='w-1/2 bg-card border border-border rounded-xl'>
+        <Image
+          source={{ uri: product.image ?? '' }}
+          className='w-full aspect-square rounded-t-xl object-cover'
+        />
+        <View className='p-4'>
+          <Text>{product.name}</Text>
+          <Text className='text-muted-foreground text-sm'>
+            {Intl.NumberFormat('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            }).format(+product.price)}
+          </Text>
+        </View>
       </View>
-    </View>
+    </Link>
   ))
 }

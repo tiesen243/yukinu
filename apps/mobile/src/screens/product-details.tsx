@@ -1,0 +1,32 @@
+import type { StaticScreenProps } from '@react-navigation/native'
+
+import { useQuery } from '@tanstack/react-query'
+import { ScrollView, View } from 'react-native'
+
+import { Text } from '@/components/ui/text'
+import { trpc } from '@/lib/trpc'
+
+export default function ProductDetailsScreen({
+  route,
+}: StaticScreenProps<{ productId: string }>) {
+  const { data, isLoading } = useQuery(
+    trpc.product.one.queryOptions({ id: route.params.productId }),
+  )
+
+  if (isLoading)
+    return (
+      <View className='flex-1 bg-background'>
+        <View className='flex-1 container py-4'>
+          <Text>Loading...</Text>
+        </View>
+      </View>
+    )
+
+  return (
+    <View className='flex-1 bg-background'>
+      <ScrollView className='flex-1 container'>
+        <Text>{JSON.stringify(data, null, 2)}</Text>
+      </ScrollView>
+    </View>
+  )
+}
