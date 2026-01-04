@@ -134,7 +134,7 @@ export class ProductService implements IProductService {
     if (!target)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `Product with ID ${input.id} not found`,
+        message: `Product with ID ${id} not found`,
       })
 
     await this._product.update(id, { deletedAt: new Date() })
@@ -157,10 +157,10 @@ export class ProductService implements IProductService {
     if (!target)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `Product with ID ${input.id} not found`,
+        message: `Product with ID ${id} not found`,
       })
 
-    await this._product.update(input.id, { deletedAt: null })
+    await this._product.update(id, { deletedAt: null })
 
     return { id }
   }

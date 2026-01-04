@@ -5,7 +5,9 @@ import type {
   ProductSchema,
   AllOutput,
   OneOutput,
+  ProductVariantSchema,
 } from '@yukinu/validators/product'
+import type { VendorSchema } from '@yukinu/validators/vendor'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -215,5 +217,67 @@ export class ProductRepository
     return tx
       .delete(productAttributes)
       .where(eq(productAttributes.productId, productId))
+  }
+
+  async findVariant(
+    productVariantId: ProductVariantSchema['id'],
+    vendorId?: VendorSchema['id'],
+    tx = this._db,
+  ): Promise<Pick<ProductVariantSchema, 'id'> | null> {
+    const { and, eq } = this._orm
+    const { productVariants, products } = this._schema
+
+    const [variant] = await tx
+      .select({ id: productVariants.id })
+      .from(productVariants)
+      .innerJoin(products, eq(products.id, productVariants.productId))
+      .where(
+        and(
+          eq(productVariants.id, productVariantId),
+          vendorId ? eq(products.vendorId, vendorId) : undefined,
+        ),
+      )
+      .limit(1)
+
+    return variant ?? null
+  }
+
+  async updateVariant(
+    id: ProductVariantSchema['id'],
+    data: Partial<ProductVariantSchema>,
+    tx = this._db,
+  ): Promise<ProductVariantSchema['id']> {
+    const { eq } = this._orm
+    const { productVariants } = this._schema
+
+    const [result] = await tx
+      .update(productVariants)
+      .set(data)
+      .where(eq(productVariants.id, id))
+      .returning({ id: productVariants.id })
+
+    return result ? result.id : ''
+  }
+
+  deleteVariant(
+    variantId: ProductVariantSchema['id'],
+    tx = this._db,
+  ): Promise<unknown> {
+    const { eq } = this._orm
+    const { productVariants } = this._schema
+
+    return tx.delete(productVariants).where(eq(productVariants.id, variantId))
+  }
+
+  deleteVariants(
+    productId: ProductSchema['id'],
+    tx = this._db,
+  ): Promise<unknown> {
+    const { eq } = this._orm
+    const { productVariants } = this._schema
+
+    return tx
+      .delete(productVariants)
+      .where(eq(productVariants.productId, productId))
   }
 }

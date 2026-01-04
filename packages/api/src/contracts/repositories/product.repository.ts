@@ -5,7 +5,9 @@ import type {
   AllOutput,
   OneOutput,
   ProductSchema,
+  ProductVariantSchema,
 } from '@yukinu/validators/product'
+import type { VendorSchema } from '@yukinu/validators/vendor'
 
 export interface IProductRepository extends IBaseRepository<typeof products> {
   allWithRelations(
@@ -27,6 +29,28 @@ export interface IProductRepository extends IBaseRepository<typeof products> {
   ): Promise<void[]>
 
   deleteAttributes(
+    productId: ProductSchema['id'],
+    tx?: Database,
+  ): Promise<unknown>
+
+  findVariant(
+    productVariantId: ProductVariantSchema['id'],
+    vendorId?: VendorSchema['id'],
+    tx?: Database,
+  ): Promise<Pick<ProductVariantSchema, 'id'> | null>
+
+  updateVariant(
+    id: ProductVariantSchema['id'],
+    data: Partial<ProductVariantSchema>,
+    tx?: Database,
+  ): Promise<ProductVariantSchema['id']>
+
+  deleteVariant(
+    variantId: ProductVariantSchema['id'],
+    tx?: Database,
+  ): Promise<unknown>
+
+  deleteVariants(
     productId: ProductSchema['id'],
     tx?: Database,
   ): Promise<unknown>
