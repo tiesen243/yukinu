@@ -23,8 +23,8 @@ export const InviteStaffButton: React.FC = () => {
   const [email, setEmail] = useState('')
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendor.inviteStaff.mutationOptions(),
-    meta: { filter: trpc.vendor.allStaffs.queryFilter() },
+    ...trpc.vendorStaff.invite.mutationOptions(),
+    meta: { filter: trpc.vendorStaff.all.queryFilter() },
     onSuccess: () => {
       toast.success('Invitation sent successfully!')
       setOpen(false)

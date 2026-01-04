@@ -1,23 +1,5 @@
 import { useSession } from '@yukinu/auth/react'
-import {
-  BarChart2Icon,
-  BuildingIcon,
-  FileTextIcon,
-  FlagIcon,
-  HelpCircleIcon,
-  LayoutDashboardIcon,
-  ListOrderedIcon,
-  Loader2Icon,
-  PackageIcon,
-  PercentIcon,
-  ShoppingBagIcon,
-  StoreIcon,
-  TagsIcon,
-  TicketsIcon,
-  UserCogIcon,
-  UsersIcon,
-  WalletIcon,
-} from '@yukinu/ui/icons'
+import * as icons from '@yukinu/ui/icons'
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -34,31 +16,31 @@ const navs = [
     title: 'Dashboard',
     items: [
       {
-        icon: LayoutDashboardIcon,
+        icon: icons.LayoutDashboardIcon,
         title: 'Overview',
         url: '/',
         roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
       },
       {
-        icon: BarChart2Icon,
+        icon: icons.BarChart2Icon,
         title: 'Analytics',
         url: '/analytics',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: FileTextIcon,
+        icon: icons.FileTextIcon,
         title: 'Sales Reports',
         url: '/sales-reports',
         roles: ['admin', 'moderator', 'vendor_owner'],
       },
       {
-        icon: ListOrderedIcon,
+        icon: icons.ListOrderedIcon,
         title: 'Activity Log',
         url: '/activity-log',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: StoreIcon,
+        icon: icons.StoreIcon,
         title: 'Become a Vendor',
         url: '/apply-vendor',
         roles: ['user'],
@@ -70,43 +52,43 @@ const navs = [
     title: 'Management',
     items: [
       {
-        icon: FlagIcon,
+        icon: icons.FlagIcon,
         title: 'Banners',
         url: '/admin/banners',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: UsersIcon,
+        icon: icons.UsersIcon,
         title: 'Users',
         url: '/admin/users',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: BuildingIcon,
+        icon: icons.BuildingIcon,
         title: 'Vendors',
         url: '/admin/vendors',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: PackageIcon,
+        icon: icons.PackageIcon,
         title: 'Products',
         url: '/admin/products',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: PackageIcon,
+        icon: icons.PackageIcon,
         title: 'Products',
         url: '/products',
         roles: ['vendor_owner', 'vendor_staff'],
       },
       {
-        icon: TagsIcon,
+        icon: icons.TagsIcon,
         title: 'Categories',
         url: '/admin/categories',
         roles: ['admin', 'moderator'],
       },
       {
-        icon: PercentIcon,
+        icon: icons.PercentIcon,
         title: 'Coupons',
         url: '/admin/coupons',
         roles: ['admin', 'moderator'],
@@ -118,25 +100,25 @@ const navs = [
     title: 'Vendor Panel',
     items: [
       {
-        icon: StoreIcon,
+        icon: icons.StoreIcon,
         title: 'My Store',
         url: '/vendor/my-store',
         roles: ['vendor_owner'],
       },
       {
-        icon: ShoppingBagIcon,
+        icon: icons.ShoppingBagIcon,
         title: 'Orders',
         url: '/vendor/orders',
         roles: ['vendor_owner', 'vendor_staff'],
       },
       {
-        icon: UserCogIcon,
+        icon: icons.UserCogIcon,
         title: 'Staff Management',
         url: '/vendor/staffs',
         roles: ['vendor_owner'],
       },
       {
-        icon: WalletIcon,
+        icon: icons.WalletIcon,
         title: 'Payouts',
         url: '/vendor/payouts',
         roles: ['vendor_owner'],
@@ -148,13 +130,13 @@ const navs = [
     title: 'Support',
     items: [
       {
-        icon: TicketsIcon,
+        icon: icons.TicketsIcon,
         title: 'Tickets',
         url: '/support/tickets',
         roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
       },
       {
-        icon: HelpCircleIcon,
+        icon: icons.HelpCircleIcon,
         title: 'FAQ',
         url: '/support/faq',
         roles: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
@@ -181,7 +163,9 @@ export const AppSidebarContent: React.FC = () => {
                     {({ isActive, isPending }) => (
                       <SidebarMenuButton isActive={isActive}>
                         <item.icon /> {item.title}
-                        {isPending && <Loader2Icon className='animate-spin' />}
+                        {isPending && (
+                          <icons.Loader2Icon className='animate-spin' />
+                        )}
                       </SidebarMenuButton>
                     )}
                   </NavLink>

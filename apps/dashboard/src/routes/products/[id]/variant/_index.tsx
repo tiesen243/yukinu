@@ -22,7 +22,7 @@ import {
   InputGroupInput,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
-import { ProductValidators } from '@yukinu/validators/product'
+import * as ProductValidators from '@yukinu/validators/product'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -34,7 +34,7 @@ export default function CreateProductVariantsPage({
   const navigate = useNavigate()
 
   const { mutateAsync } = useMutation({
-    ...trpc.product.recreateVariant.mutationOptions(),
+    ...trpc.productVariant.recreate.mutationOptions(),
     meta: { filter: trpc.product.one.queryFilter({ id: params.id }) },
     onSuccess: () => toast.success('Successfully recreated variants'),
     onError: ({ message }) =>

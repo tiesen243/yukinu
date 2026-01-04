@@ -17,7 +17,7 @@ export default [
     route('/apply-vendor', './routes/apply-vendor.tsx'),
 
     layout('./routes/admin/__layout.tsx', [
-      route('/admin/banners', './routes/admin/banners/_index.tsx'),
+      route('/admin/banners', './routes/admin/banners.tsx'),
 
       route('/admin/categories', './routes/admin/categories/_index.tsx'),
       route(

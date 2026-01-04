@@ -1,30 +1,34 @@
+import type { AllUsersOutput } from '@yukinu/validators/user'
+
 import { useMutation } from '@tanstack/react-query'
 import {
   AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
+  AlertDialogTrigger,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
 import { toast } from '@yukinu/ui/sonner'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export const DeleteVariantButton: React.FC<{
-  productId: string
-  variantId: string
-}> = ({ productId, variantId }) => {
+export const PermamentlyDeleteUserButton: React.FC<{
+  user: AllUsersOutput['users'][number]
+}> = ({ user }) => {
   const trpc = useTRPC()
+
   const { mutate, isPending } = useMutation({
-    ...trpc.productVariant.delete.mutationOptions(),
-    meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
-    onSuccess: () => toast.success('Variant deleted successfully'),
+    ...trpc.user.permanentlyDelete.mutationOptions(),
+    onSuccess: () => {
+      toast.success('User permanently deleted successfully')
+    },
     onError: ({ message }) =>
-      toast.error('Failed to delete variant', { description: message }),
+      toast.error('Failed to delete user', { description: message }),
+    meta: { filter: trpc.user.all.queryFilter() },
   })
 
   return (
@@ -32,27 +36,22 @@ export const DeleteVariantButton: React.FC<{
       <AlertDialogTrigger variant='link' className='text-destructive'>
         Delete
       </AlertDialogTrigger>
-
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to delete this variant?
-          </AlertDialogTitle>
+          <AlertDialogTitle>Permanently Delete User</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The variant will be permanently
-            removed from the product.
+            Are you sure you want to delete user &quot;{user.username}&quot;?
+            This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
-
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
-
           <AlertDialogAction
             variant='destructive'
-            disabled={isPending}
             onClick={() => {
-              mutate({ id: variantId })
+              mutate({ id: user.id })
             }}
+            disabled={isPending}
           >
             {isPending ? 'Deleting...' : 'Delete'}
           </AlertDialogAction>

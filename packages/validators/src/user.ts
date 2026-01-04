@@ -49,7 +49,7 @@ export const allUsersInput = paginationInput.extend({
 })
 export type AllUsersInput = z.infer<typeof allUsersInput>
 export const allUsersOutput = z.object({
-  users: z.array(userSchema.omit({ emailVerified: true, deletedAt: true })),
+  users: z.array(userSchema),
   pagination: paginationOutput,
 })
 export type AllUsersOutput = z.infer<typeof allUsersOutput>

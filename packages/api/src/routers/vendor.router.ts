@@ -51,9 +51,14 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor status updated successfully',
       role: ['admin', 'moderator'],
     })
-    .input(Validators.updateVendorStatusInput)
+    .input(Validators.updateVendorStatusInput.omit({ userId: true }))
     .output(Validators.updateVendorStatusOutput)
-    .mutation(({ ctx, input }) => ctx.services.vendor.updateStatus(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendor.updateStatus({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 
   update: vendorProcedure
     .meta({

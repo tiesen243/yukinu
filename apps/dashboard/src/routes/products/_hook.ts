@@ -1,4 +1,4 @@
-import { ProductValidators } from '@yukinu/validators/product'
+import { orderBy } from '@yukinu/validators/product'
 import {
   parseAsBoolean,
   parseAsInteger,
@@ -12,9 +12,7 @@ const parser = {
   categoryId: parseAsString,
   vendorId: parseAsString,
   isDeleted: parseAsBoolean.withDefault(false),
-  orderBy: parseAsStringEnum(ProductValidators.orderBy).withDefault(
-    'createdAt_desc',
-  ),
+  orderBy: parseAsStringEnum(orderBy).withDefault('createdAt_desc'),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),
 }

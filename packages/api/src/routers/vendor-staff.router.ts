@@ -30,10 +30,13 @@ export const vendorStaffRouter = createTRPCRouter({
       message: 'Staff invitation accepted successfully.',
       role: ['user'],
     })
-    .input(Validators.acceptStaffInvitationInput)
+    .input(Validators.acceptStaffInvitationInput.omit({ userId: true }))
     .output(Validators.acceptStaffInvitationOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.vendorStaff.acceptInvitation(input),
+      ctx.services.vendorStaff.acceptInvitation({
+        ...input,
+        userId: ctx.session.userId,
+      }),
     ),
 
   remove: vendorProcedure

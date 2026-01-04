@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@yukinu/ui/select'
-import { UserValidators } from '@yukinu/validators/user'
+import { roles } from '@yukinu/validators/auth'
 
 import { useUserQueryStates } from '@/routes/admin/users/hook'
 
@@ -49,7 +49,7 @@ export const SearchForm: React.FC = () => {
         name='role'
         defaultValue={query.role ?? ''}
         items={[
-          ...UserValidators.roles.map((role) => ({
+          ...roles.map((role) => ({
             label: role.split('_').join(' '),
             value: role,
           })),
@@ -62,7 +62,7 @@ export const SearchForm: React.FC = () => {
         <SelectContent>
           <SelectGroup>
             <SelectItem value=''>all</SelectItem>
-            {UserValidators.roles.map((role) => (
+            {roles.map((role) => (
               <SelectItem key={role} value={role}>
                 {role.split('_').join(' ')}
               </SelectItem>

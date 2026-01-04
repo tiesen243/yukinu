@@ -18,7 +18,7 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export const StaffsList: React.FC = () => {
   const trpc = useTRPC()
-  const { data, isLoading } = useQuery(trpc.vendor.allStaffs.queryOptions({}))
+  const { data, isLoading } = useQuery(trpc.vendorStaff.all.queryOptions({}))
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
@@ -52,14 +52,14 @@ const RemoveStaffButton: React.FC<{
   const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendor.removeStaff.mutationOptions(),
+    ...trpc.vendorStaff.remove.mutationOptions(),
     onSuccess: () => {
       toast.success('Staff member removed successfully')
       setOpen(false)
     },
     onError: ({ message }) =>
       toast.error('Failed to update vendor status', { description: message }),
-    meta: { filter: trpc.vendor.allStaffs.queryFilter() },
+    meta: { filter: trpc.vendorStaff.all.queryFilter() },
   })
 
   return (
@@ -81,7 +81,7 @@ const RemoveStaffButton: React.FC<{
           <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
-              mutate({ staffId })
+              mutate({ userId: staffId })
             }}
             disabled={isPending}
           >

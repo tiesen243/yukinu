@@ -26,7 +26,7 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export default function BannersPage() {
   const trpc = useTRPC()
-  const { data, isPending } = useQuery(trpc.general.allBanners.queryOptions({}))
+  const { data, isPending } = useQuery(trpc.banner.all.queryOptions())
 
   return (
     <>
@@ -50,8 +50,8 @@ export default function BannersPage() {
 const Banner: React.FC<{ id: string; url: string }> = ({ id, url }) => {
   const trpc = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.general.deleteBanner.mutationOptions(),
-    meta: { filter: trpc.general.allBanners.queryFilter() },
+    ...trpc.banner.delete.mutationOptions(),
+    meta: { filter: trpc.banner.all.queryFilter() },
   })
 
   return (
@@ -72,8 +72,8 @@ const AddBannerButton: React.FC = () => {
   const trpc = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.general.createBanner.mutationOptions(),
-    meta: { filter: trpc.general.allBanners.queryFilter() },
+    ...trpc.banner.create.mutationOptions(),
+    meta: { filter: trpc.banner.all.queryFilter() },
     onSuccess: () => {
       toast.success('Banner added successfully')
       setOpen(false)

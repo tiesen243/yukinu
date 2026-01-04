@@ -23,7 +23,10 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
-import { CategoryValidators } from '@yukinu/validators/category'
+import {
+  updateCategoryInput,
+  type UpdateCategoryInput,
+} from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
@@ -65,10 +68,10 @@ export default function CategoriesEditPage({
       id: category.id,
       parentId: category.parent?.id,
       name: category.name,
-      description: category.description ?? undefined,
-      image: category.image ?? undefined,
-    } as CategoryValidators.UpdateInput,
-    schema: CategoryValidators.updateInput,
+      description: category.description,
+      image: category.image,
+    } as UpdateCategoryInput,
+    schema: updateCategoryInput,
     onSubmit: mutateAsync,
     onSuccess: () => {
       void refetch()
@@ -121,13 +124,14 @@ export default function CategoriesEditPage({
 
           <form.Field
             name='image'
-            render={({ meta, field }) => (
+            render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                 <InputGroup>
                   <InputGroupInput
                     {...field}
                     type='url'
+                    value={value ?? ''}
                     placeholder='https://example.com/image.jpg'
                   />
                   <InputGroupAddon align='inline-end'>

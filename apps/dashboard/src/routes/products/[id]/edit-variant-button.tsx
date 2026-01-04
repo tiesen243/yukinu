@@ -14,7 +14,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { ProductValidators } from '@yukinu/validators/product'
+import * as ProductValidators from '@yukinu/validators/product'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -26,7 +26,7 @@ export const EditVariantButton: React.FC<{
   const [open, setOpen] = useState(false)
   const trpc = useTRPC()
   const { mutateAsync } = useMutation({
-    ...trpc.product.updateVariant.mutationOptions(),
+    ...trpc.productVariant.update.mutationOptions(),
     meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
     onSuccess: () => toast.success('Variant updated successfully'),
     onError: ({ message }) =>

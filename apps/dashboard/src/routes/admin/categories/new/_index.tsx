@@ -21,7 +21,10 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/sonner'
-import { CategoryValidators } from '@yukinu/validators/category'
+import {
+  createCategoryInput,
+  type CreateCategoryInput,
+} from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
@@ -47,10 +50,10 @@ export default function CategoriesNewPage() {
     defaultValues: {
       parentId: null,
       name: '',
-      description: undefined,
-      image: undefined,
-    } as CategoryValidators.CreateInput,
-    schema: CategoryValidators.createInput,
+      description: '',
+      image: '',
+    } as CreateCategoryInput,
+    schema: createCategoryInput,
     onSubmit: mutateAsync,
     onSuccess: () => void navigate('/admin/categories'),
   })
@@ -77,20 +80,18 @@ export default function CategoriesNewPage() {
 
           <form.Field
             name='description'
-            render={({ meta, field: { value = '', ...field } }) => (
-              <Field
-                data-invalid={meta.errors.length > 0 || value.length > 1000}
-              >
+            render={({ meta, field: { value, ...field } }) => (
+              <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                 <InputGroup>
                   <InputGroupTextarea
                     {...field}
-                    value={value}
-                    aria-invalid={field['aria-invalid'] || value.length > 1000}
+                    value={value ?? ''}
+                    aria-invalid={field['aria-invalid']}
                     placeholder='Category Description'
                   />
                   <InputGroupAddon align='block-end' className='justify-end'>
-                    <InputGroupText>{value.length ?? 0}/1000</InputGroupText>
+                    <InputGroupText>{value?.length ?? 0}/1000</InputGroupText>
                   </InputGroupAddon>
                 </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />
@@ -100,13 +101,14 @@ export default function CategoriesNewPage() {
 
           <form.Field
             name='image'
-            render={({ meta, field }) => (
+            render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                 <InputGroup>
                   <InputGroupInput
                     {...field}
                     type='url'
+                    value={value ?? ''}
                     placeholder='https://example.com/image.jpg'
                   />
                   <InputGroupAddon align='inline-end'>

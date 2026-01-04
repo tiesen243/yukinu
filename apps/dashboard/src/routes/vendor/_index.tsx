@@ -22,7 +22,7 @@ import {
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
-import { VendorValidators } from '@yukinu/validators/vendor'
+import * as VendorValidators from '@yukinu/validators/vendor'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
@@ -43,11 +43,11 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
   const form = useForm({
     defaultValues: {
       name: loaderData.name,
-      description: loaderData.description ?? undefined,
-      image: loaderData.image ?? undefined,
-      address: loaderData.address ?? undefined,
-    } as Omit<VendorValidators.UpdateInput, 'id'>,
-    schema: VendorValidators.updateInput.omit({ id: true }),
+      description: loaderData.description,
+      image: loaderData.image,
+      address: loaderData.address,
+    } as Omit<VendorValidators.UpdateVendorInput, 'id'>,
+    schema: VendorValidators.updateVendorInput.omit({ id: true }),
     onSubmit: mutateAsync,
     onSuccess: () => toast.success('Store updated successfully!'),
     onError: ({ message }) =>
@@ -79,21 +79,17 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
             <form.Field
               name='description'
               render={({ meta, field: { value = '', ...field } }) => (
-                <Field
-                  data-invalid={meta.errors.length > 0 || value.length > 2000}
-                >
+                <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
-                      value={value}
-                      aria-invalid={
-                        field['aria-invalid'] || value.length > 2000
-                      }
+                      value={value ?? ''}
+                      aria-invalid={field['aria-invalid']}
                       placeholder='Vendor Description'
                     />
                     <InputGroupAddon align='block-end' className='justify-end'>
-                      <InputGroupText>{value.length ?? 0}/2000</InputGroupText>
+                      <InputGroupText>{value?.length ?? 0}/2000</InputGroupText>
                     </InputGroupAddon>
                   </InputGroup>
                   <FieldError id={meta.errorId} errors={meta.errors} />
@@ -103,13 +99,14 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
 
             <form.Field
               name='image'
-              render={({ meta, field }) => (
+              render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
                   <InputGroup>
                     <InputGroupInput
                       {...field}
                       type='url'
+                      value={value ?? ''}
                       placeholder='https://example.com/image.jpg'
                     />
                     <InputGroupAddon align='inline-end'>
@@ -126,10 +123,10 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
 
             <form.Field
               name='address'
-              render={({ meta, field }) => (
+              render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
-                  <Input {...field} />
+                  <Input {...field} value={value ?? ''} />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
