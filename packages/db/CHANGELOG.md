@@ -1,5 +1,18 @@
 # @yukinu/db
 
+## 0.9.0
+
+### Minor Changes
+
+- [#317](https://github.com/tiesen243/yukinu/pull/317) [`49326d1`](https://github.com/tiesen243/yukinu/commit/49326d146ac8c3edc7d68187c45f55f725be6b51) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migration
+
+### Patch Changes
+
+- [#317](https://github.com/tiesen243/yukinu/pull/317) [`b5dbb42`](https://github.com/tiesen243/yukinu/commit/b5dbb42dc55eee9874cd9a0a0065016e542e18b8) Thanks [@tiesen243](https://github.com/tiesen243)! - added banner contract
+
+- Updated dependencies [[`49326d1`](https://github.com/tiesen243/yukinu/commit/49326d146ac8c3edc7d68187c45f55f725be6b51)]:
+  - @yukinu/lib@0.7.0
+
 ## 0.8.0
 
 ### Minor Changes

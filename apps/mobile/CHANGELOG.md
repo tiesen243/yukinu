@@ -1,5 +1,21 @@
 # @yukinu/mobile
 
+## 0.2.0
+
+### Minor Changes
+
+- [#317](https://github.com/tiesen243/yukinu/pull/317) [`49326d1`](https://github.com/tiesen243/yukinu/commit/49326d146ac8c3edc7d68187c45f55f725be6b51) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migration
+
+### Patch Changes
+
+- [#317](https://github.com/tiesen243/yukinu/pull/317) [`4f783c0`](https://github.com/tiesen243/yukinu/commit/4f783c0295c09c7801b251b17826f439c4fea185) Thanks [@tiesen243](https://github.com/tiesen243)! - fix api endpoint for mobile app
+
+- Updated dependencies [[`4fc135e`](https://github.com/tiesen243/yukinu/commit/4fc135e5e3fe13caaced33026e5ba12f621c0f53), [`d10af27`](https://github.com/tiesen243/yukinu/commit/d10af27ca138e8de4e218c79668e0ca9ae9e8260), [`36266f8`](https://github.com/tiesen243/yukinu/commit/36266f8c3e199c748a4a59fe0c3e807b70a5fe98), [`e50cfa4`](https://github.com/tiesen243/yukinu/commit/e50cfa46c7e77cd9e25fd05fef70f7f2844466ee), [`49326d1`](https://github.com/tiesen243/yukinu/commit/49326d146ac8c3edc7d68187c45f55f725be6b51), [`3f06e45`](https://github.com/tiesen243/yukinu/commit/3f06e457a7c3924a8478432f4f37435d33d986c0), [`6c7bd4c`](https://github.com/tiesen243/yukinu/commit/6c7bd4cb3181116fce6177554b20539da522b5f4), [`b5dbb42`](https://github.com/tiesen243/yukinu/commit/b5dbb42dc55eee9874cd9a0a0065016e542e18b8), [`22c80c9`](https://github.com/tiesen243/yukinu/commit/22c80c9651814eb0e52d865d0d935904d0e72f1b), [`fc16394`](https://github.com/tiesen243/yukinu/commit/fc163946fe48ab7326f6d90cc0a0f5c161e80c2b), [`3d2e020`](https://github.com/tiesen243/yukinu/commit/3d2e020819d2cd65b08f26bc4049644a97bfa747), [`22018f5`](https://github.com/tiesen243/yukinu/commit/22018f5c008e0ce0646d0eca1b27ca7da81ec0d2), [`5287b36`](https://github.com/tiesen243/yukinu/commit/5287b36274452587414c770366c748c25aff2ea0)]:
+  - @yukinu/validators@0.9.0
+  - @yukinu/api@0.9.0
+  - @yukinu/ui@0.8.0
+  - @yukinu/lib@0.7.0
+
 ## 0.1.0
 
 ### Minor Changes
