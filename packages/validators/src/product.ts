@@ -71,7 +71,7 @@ export const variantSchema = createSelectSchema(variants, { id: z.cuid() })
 export type VariantSchema = z.infer<typeof variantSchema>
 
 export const variantOptionSchema = createSelectSchema(variantOptions, {
-  id: z.number().min(1000),
+  id: z.int().min(1000),
   variantId: z.cuid(),
 })
 export type VariantOptionSchema = z.infer<typeof variantOptionSchema>

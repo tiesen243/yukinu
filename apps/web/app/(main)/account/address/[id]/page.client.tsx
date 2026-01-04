@@ -12,7 +12,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { UserValidators } from '@yukinu/validators/user'
+import { updateAddressInput } from '@yukinu/validators/user'
 import { useRouter } from 'next/navigation'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -22,12 +22,12 @@ export const EditAddressForm: React.FC<{ id: string }> = ({ id }) => {
   const router = useRouter()
 
   const { data, refetch } = useSuspenseQuery(
-    trpc.user.oneAddress.queryOptions({ id }),
+    trpc.address.one.queryOptions({ id }),
   )
 
   const { mutateAsync } = useMutation({
-    ...trpc.user.updateAddress.mutationOptions(),
-    meta: { filter: trpc.user.allAddresses.queryFilter() },
+    ...trpc.address.update.mutationOptions(),
+    meta: { filter: trpc.address.all.queryFilter() },
     onSuccess: () => toast.success('Address updated successfully!'),
     onError: ({ message }) =>
       toast.error('Error updating address', { description: message }),
@@ -35,7 +35,7 @@ export const EditAddressForm: React.FC<{ id: string }> = ({ id }) => {
 
   const form = useForm({
     defaultValues: data,
-    schema: UserValidators.updateAddressInput,
+    schema: updateAddressInput,
     onSubmit: mutateAsync,
     onSuccess: () => {
       router.push('/account/address')

@@ -69,7 +69,7 @@ export const ProductInformation: React.FC = () => {
                 className='flex flex-wrap'
                 value={selectedOptions[type]}
                 onValueChange={(value) => {
-                  handleOptionChange(type, String(value))
+                  handleOptionChange(type, Number(value))
                 }}
               >
                 {Array.from(

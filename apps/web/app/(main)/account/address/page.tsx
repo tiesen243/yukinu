@@ -14,7 +14,7 @@ import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 export const dynamic = 'force-dynamic'
 
 export default function AddressPage() {
-  void getQueryClient().prefetchQuery(trpc.user.allAddresses.queryOptions({}))
+  void getQueryClient().prefetchQuery(trpc.address.all.queryOptions({}))
 
   return (
     <HydrateClient>

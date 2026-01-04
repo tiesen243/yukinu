@@ -1,5 +1,7 @@
 'use client'
 
+import type { AllSessionsOutput } from '@yukinu/validators/auth'
+
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
@@ -12,29 +14,14 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { Button } from '@yukinu/ui/button'
-import { Checkbox } from '@yukinu/ui/checkbox'
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from '@yukinu/ui/field'
-import { useForm } from '@yukinu/ui/hooks/use-form'
 import { XIcon } from '@yukinu/ui/icons'
-import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidators } from '@yukinu/validators/auth'
-import { useRouter } from 'next/navigation'
 
-import { useTRPC, useTRPCClient } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc/react'
 
 export const SessionsList: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.auth.allSessions.queryOptions({}))
+  const { data } = useSuspenseQuery(trpc.security.allSessions.queryOptions({}))
 
   return data.map((session) => (
     <SessionItem key={session.id} session={session} />
@@ -58,12 +45,12 @@ export const SessionsListSkeleton: React.FC = () => {
 }
 
 const SessionItem: React.FC<{
-  session: AuthValidators.AllSessionsOutput[number]
+  session: AllSessionsOutput[number]
 }> = ({ session }) => {
   const trpc = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.auth.deleteSession.mutationOptions(),
-    meta: { filter: trpc.auth.allSessions.queryFilter() },
+    ...trpc.security.deleteSession.mutationOptions(),
+    meta: { filter: trpc.security.allSessions.queryFilter() },
     onSuccess: () => toast.success('Logged out of session successfully'),
     onError: ({ message }) =>
       toast.error('Failed to log out of session', { description: message }),
@@ -106,7 +93,7 @@ const SessionItem: React.FC<{
             <AlertDialogAction
               variant='destructive'
               onClick={() => {
-                mutate({ sessionId: session.id })
+                mutate({ id: session.id })
               }}
               disabled={isPending}
             >
@@ -116,199 +103,5 @@ const SessionItem: React.FC<{
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
-}
-
-export const ChangePasswordForm: React.FC = () => {
-  const trpc = useTRPCClient()
-  const router = useRouter()
-
-  const form = useForm({
-    defaultValues: {
-      currentPassword: '',
-      newPassword: '',
-      confirmNewPassword: '',
-      isLogOut: true,
-    },
-    schema: AuthValidators.changePasswordInput.omit({ userId: true }),
-    onSubmit: trpc.auth.changePassword.mutate,
-    onSuccess: () => {
-      toast.success('Password changed successfully')
-      if (form.state.getValues().isLogOut) router.push('/login')
-    },
-    onError: ({ message }) =>
-      toast.error('Failed to change password', { description: message }),
-  })
-
-  return (
-    <form onSubmit={form.handleSubmit}>
-      <FieldSet>
-        <FieldLegend>Change Password</FieldLegend>
-        <FieldDescription>
-          Change your account password regularly to help keep your account
-          secure.
-        </FieldDescription>
-
-        <FieldGroup>
-          <form.Field
-            name='currentPassword'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Current Password</FieldLabel>
-                <Input
-                  {...field}
-                  type='password'
-                  placeholder='Enter current password'
-                  autoComplete='current-password'
-                />
-                <FieldDescription>
-                  Leave blank if you do not have a password.
-                </FieldDescription>
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
-
-          <form.Field
-            name='newPassword'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>New Password</FieldLabel>
-                <Input
-                  {...field}
-                  type='password'
-                  placeholder='Enter new password'
-                  autoComplete='new-password'
-                />
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
-
-          <form.Field
-            name='confirmNewPassword'
-            render={({ meta, field }) => (
-              <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>
-                  Confirm New Password
-                </FieldLabel>
-                <Input
-                  {...field}
-                  type='password'
-                  placeholder='Confirm new password'
-                  autoComplete='new-password'
-                />
-
-                <FieldError id={meta.errorId} errors={meta.errors} />
-              </Field>
-            )}
-          />
-
-          <form.Field
-            name='isLogOut'
-            render={({
-              meta,
-              field: { value, onChange, onBlur: _, ...field },
-            }) => (
-              <Field
-                orientation='horizontal'
-                data-invalid={meta.errors.length > 0}
-              >
-                <Checkbox
-                  {...field}
-                  checked={value}
-                  onCheckedChange={(value) => {
-                    onChange(value)
-                  }}
-                />
-                <FieldLabel htmlFor={meta.fieldId}>
-                  Log out of all other sessions
-                </FieldLabel>
-              </Field>
-            )}
-          />
-
-          <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Changing...' : 'Change Password'}
-            </Button>
-          </Field>
-        </FieldGroup>
-      </FieldSet>
-    </form>
-  )
-}
-
-export const DeleteAccountButton: React.FC = () => {
-  const trpc = useTRPC()
-  const router = useRouter()
-
-  const { mutateAsync } = useMutation({
-    ...trpc.auth.deleteAccount.mutationOptions(),
-    onSuccess: () => toast.success('Account deleted successfully'),
-    onError: ({ message }) =>
-      toast.error('Failed to delete account', { description: message }),
-  })
-
-  const form = useForm({
-    defaultValues: {
-      password: '',
-    },
-    schema: AuthValidators.deleteAccountInput.omit({ userId: true }),
-    onSubmit: mutateAsync,
-    onSuccess: () => {
-      router.push('/login')
-    },
-  })
-
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger className='w-full' variant='destructive'>
-        Delete Account
-      </AlertDialogTrigger>
-
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to delete your account?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            You can contact support to recover your account within 30 days.
-            After that, your account and all associated data will be permanently
-            deleted.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-
-        <form.Field
-          name='password'
-          render={({ meta, field }) => (
-            <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>
-                Confirm with Password
-              </FieldLabel>
-              <Input
-                {...field}
-                type='password'
-                placeholder='Enter your password'
-              />
-              <FieldError id={meta.errorId} errors={meta.errors} />
-            </Field>
-          )}
-        />
-
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={form.state.isPending}>
-            Cancel
-          </AlertDialogCancel>
-          <AlertDialogAction
-            variant='destructive'
-            disabled={form.state.isPending}
-            onClick={form.handleSubmit}
-          >
-            Delete Account
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
   )
 }

@@ -30,9 +30,7 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export const CartItemsList: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(
-    trpc.order.one.queryOptions({ status: 'pending' }),
-  )
+  const { data } = useSuspenseQuery(trpc.cart.get.queryOptions())
 
   return data.items.map((item) => (
     <TableRow key={item.id}>
@@ -123,7 +121,7 @@ const EditButton: React.FC<{
 
   const trpc = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.order.addItemToCart.mutationOptions(),
+    ...trpc.cart.addItemToCart.mutationOptions(),
     meta: { filter: trpc.order.one.queryFilter({ status: 'pending' }) },
     onSuccess: () => {
       setOpen(false)
@@ -231,7 +229,7 @@ const RemoveButton: React.FC<{ itemId: string | null }> = ({ itemId }) => {
 
   const trpc = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.order.removeItemFromCart.mutationOptions(),
+    ...trpc.cart.removeItemFromCart.mutationOptions(),
     meta: { filter: trpc.order.one.queryFilter({ status: 'pending' }) },
     onSuccess: () => {
       toast.success('Item removed from cart')

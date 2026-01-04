@@ -7,9 +7,9 @@ import { ChevronRightIcon } from '@yukinu/ui/icons'
 import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
+import { ChangePasswordForm } from '@/app/(main)/account/security/_components/change-password-form'
+import { DeleteAccountButton } from '@/app/(main)/account/security/_components/delete-account-button'
 import {
-  ChangePasswordForm,
-  DeleteAccountButton,
   SessionsList,
   SessionsListSkeleton,
 } from '@/app/(main)/account/security/page.client'
@@ -19,7 +19,9 @@ import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 export const dynamic = 'force-dynamic'
 
 export default function AccountSecurityPage() {
-  void getQueryClient().prefetchQuery(trpc.auth.allSessions.queryOptions({}))
+  void getQueryClient().prefetchQuery(
+    trpc.security.allSessions.queryOptions({}),
+  )
 
   return (
     <HydrateClient>

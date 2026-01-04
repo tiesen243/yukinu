@@ -16,7 +16,7 @@ export const BannersList: React.FC = () => {
   const trpc = useTRPC()
   const [imageIdx, setImageIdx] = useState(0)
 
-  const { data } = useSuspenseQuery(trpc.general.allBanners.queryOptions({}))
+  const { data } = useSuspenseQuery(trpc.banner.all.queryOptions())
 
   return (
     <>
@@ -108,7 +108,7 @@ export const CategoriesList: React.FC = () => {
   const { data } = useSuspenseQuery(
     trpc.category.all.queryOptions({
       search: null,
-      istopLevelOnly: true,
+      isTopLevelOnly: true,
       limit: 12,
     }),
   )

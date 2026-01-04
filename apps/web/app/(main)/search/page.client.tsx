@@ -1,5 +1,7 @@
 'use client'
 
+import type { OrderBy } from '@yukinu/validators/product'
+
 import { useQuery } from '@tanstack/react-query'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
@@ -13,7 +15,7 @@ import {
 import { FilterIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
-import { ProductValidators } from '@yukinu/validators/product'
+import { orderBy } from '@yukinu/validators/product'
 import { useQueryStates } from 'nuqs'
 
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
@@ -37,8 +39,7 @@ export const FilterForm: React.FC = () => {
     const search = formData.q ?? null
     const categoryId =
       formData.categoryId === '' ? null : (formData.categoryId ?? null)
-    const orderBy =
-      (formData.orderBy as ProductValidators.OrderBy | null) ?? 'createdAt_desc'
+    const orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
 
     await setQuery((prev) => ({
       ...prev,
@@ -88,7 +89,7 @@ export const FilterForm: React.FC = () => {
               name='orderBy'
               defaultValue={query.orderBy}
             >
-              {ProductValidators.orderBy.map((order) => {
+              {orderBy.map((order) => {
                 const [field, direction] = order.split('_')
 
                 return (

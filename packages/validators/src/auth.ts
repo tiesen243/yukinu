@@ -139,11 +139,9 @@ export type DeleteSessionInput = z.infer<typeof deleteSessionInput>
 export const deleteSessionOutput = sessionSchema.pick({ id: true })
 export type DeleteSessionOutput = z.infer<typeof deleteSessionOutput>
 
-export const deleteAccountInput = accountSchema
-  .pick({ userId: true, password: true })
-  .refine((data) => data.password !== null && data.password.length > 0, {
-    message: 'Password is required',
-  })
+export const deleteAccountInput = accountSchema.pick({ userId: true }).extend({
+  password: accountSchema.shape.password.unwrap(),
+})
 export type DeleteAccountInput = z.infer<typeof deleteAccountInput>
 export const deleteAccountOutput = userSchema.pick({ id: true })
 export type DeleteAccountOutput = z.infer<typeof deleteAccountOutput>

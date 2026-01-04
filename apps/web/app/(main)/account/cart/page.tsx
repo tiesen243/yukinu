@@ -21,9 +21,7 @@ import { getQueryClient, trpc } from '@/lib/trpc/rsc'
 export const dynamic = 'force-dynamic'
 
 export default function AccountCartPage() {
-  void getQueryClient().prefetchQuery(
-    trpc.order.one.queryOptions({ status: 'pending' }),
-  )
+  void getQueryClient().prefetchQuery(trpc.cart.get.queryOptions())
 
   return (
     <>

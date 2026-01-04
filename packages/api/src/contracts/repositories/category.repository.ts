@@ -12,7 +12,7 @@ export interface ICategoryRepository extends IBaseRepository<
     options?: { limit?: number; offset?: number },
     tx?: Database,
   ): Promise<
-    (Pick<CategorySchema, 'id' | 'name'> & {
+    (Pick<CategorySchema, 'id' | 'name' | 'image'> & {
       parent: Pick<CategorySchema, 'id' | 'name'> | null
     })[]
   >

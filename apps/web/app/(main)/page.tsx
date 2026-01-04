@@ -15,14 +15,14 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
   const query = await productsCache.parse(searchParams)
 
   void Promise.all([
-    getQueryClient().prefetchQuery(trpc.general.allBanners.queryOptions({})),
+    getQueryClient().prefetchQuery(trpc.banner.all.queryOptions()),
     getQueryClient().prefetchQuery(
       trpc.product.all.queryOptions({ ...query, limit: 6 }),
     ),
     getQueryClient().prefetchQuery(
       trpc.category.all.queryOptions({
         search: null,
-        istopLevelOnly: true,
+        isTopLevelOnly: true,
         limit: 12,
       }),
     ),

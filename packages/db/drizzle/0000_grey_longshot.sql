@@ -10,8 +10,7 @@ CREATE TABLE "accounts" (
 	"user_id" varchar(24) NOT NULL,
 	"provider" varchar(50) NOT NULL,
 	"account_id" varchar(100) NOT NULL,
-	"password" text,
-	CONSTRAINT "accounts_provider_account_id_pk" PRIMARY KEY("provider","account_id")
+	"password" text
 );
 --> statement-breakpoint
 CREATE TABLE "addresses" (
@@ -282,6 +281,7 @@ ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY 
 ALTER TABLE "verifications" ADD CONSTRAINT "verifications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE UNIQUE INDEX "accounts_provider_account_id_uq_idx" ON "accounts" USING btree ("provider","account_id");--> statement-breakpoint
 CREATE INDEX "accounts_user_id_idx" ON "accounts" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "addresses_user_id_idx" ON "addresses" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "attributes_name_idx" ON "attributes" USING btree ("name");--> statement-breakpoint

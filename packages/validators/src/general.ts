@@ -75,7 +75,7 @@ export const allCategoriesInput = paginationInput.extend({
 export type AllCategoriesInput = z.infer<typeof allCategoriesInput>
 export const allCategoriesOutput = z.object({
   categories: z.array(
-    categorySchema.pick({ id: true, name: true }).extend({
+    categorySchema.pick({ id: true, name: true, image: true }).extend({
       parent: categorySchema.pick({ id: true, name: true }).nullable(),
     }),
   ),

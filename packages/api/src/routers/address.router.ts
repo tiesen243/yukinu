@@ -22,7 +22,7 @@ export const addressRouter = createTRPCRouter({
       }),
     ),
 
-  createAddress: protectedProcedure
+  create: protectedProcedure
     .meta({ message: 'User address created successfully' })
     .input(Validators.createAddressInput.omit({ userId: true }))
     .output(Validators.createAddressOutput)
@@ -38,7 +38,7 @@ export const addressRouter = createTRPCRouter({
       ctx.services.address.update({ ...input, userId: ctx.session.userId }),
     ),
 
-  deleteAddress: protectedProcedure
+  delete: protectedProcedure
     .meta({ message: 'User address deleted successfully' })
     .input(Validators.deleteAddressInput.omit({ userId: true }))
     .output(Validators.deleteAddressOutput)

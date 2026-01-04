@@ -1,4 +1,4 @@
-import { ProductValidators } from '@yukinu/validators/product'
+import { orderBy } from '@yukinu/validators/product'
 import {
   createSearchParamsCache,
   parseAsInteger,
@@ -12,9 +12,7 @@ export const productsParsers = {
   vendorId: parseAsString,
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(8),
-  orderBy: parseAsStringEnum(ProductValidators.orderBy).withDefault(
-    'createdAt_desc',
-  ),
+  orderBy: parseAsStringEnum(orderBy).withDefault('createdAt_desc'),
 }
 
 export const productsOptions = {

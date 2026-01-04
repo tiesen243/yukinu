@@ -20,7 +20,7 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export const AddressesList: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.user.allAddresses.queryOptions({}))
+  const { data } = useSuspenseQuery(trpc.address.all.queryOptions({}))
 
   if (data.addresses.length === 0)
     return (
@@ -74,8 +74,8 @@ const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
   const trpc = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.user.deleteAddress.mutationOptions(),
-    meta: { filter: trpc.user.allAddresses.queryFilter() },
+    ...trpc.address.delete.mutationOptions(),
+    meta: { filter: trpc.address.all.queryFilter() },
     onSuccess: () => toast.success('Address deleted successfully!'),
     onError: ({ message }) =>
       toast.error('Error deleting address', { description: message }),

@@ -1,11 +1,5 @@
 import { createId } from '@yukinu/lib/create-id'
-import {
-  index,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  uniqueIndex,
-} from 'drizzle-orm/pg-core'
+import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createdAt, updatedAt } from '@/schema/shared'
 
@@ -52,7 +46,10 @@ export const accounts = pgTable(
     password: t.text(),
   }),
   (t) => [
-    primaryKey({ columns: [t.provider, t.accountId] }),
+    uniqueIndex('accounts_provider_account_id_uq_idx').on(
+      t.provider,
+      t.accountId,
+    ),
     index('accounts_user_id_idx').on(t.userId),
   ],
 )

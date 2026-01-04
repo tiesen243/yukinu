@@ -21,7 +21,7 @@ export class CategoryRepository
     options: { limit?: number; offset?: number } = {},
     tx = this._db,
   ): Promise<
-    (Pick<CategorySchema, 'id' | 'name'> & {
+    (Pick<CategorySchema, 'id' | 'name' | 'image'> & {
       parent: Pick<CategorySchema, 'id' | 'name'> | null
     })[]
   > {
@@ -33,6 +33,7 @@ export class CategoryRepository
       .select({
         id: this._table.id,
         name: this._table.name,
+        image: this._table.image,
         parent: { id: parent.id, name: parent.name },
       })
       .from(this._table)

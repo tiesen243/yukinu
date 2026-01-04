@@ -17,7 +17,7 @@ import { useTRPC } from '@/lib/trpc/react'
 
 export const WishlistItems: React.FC = () => {
   const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.user.wishlist.queryOptions({}))
+  const { data } = useSuspenseQuery(trpc.wishlist.get.queryOptions({}))
 
   return data.map((item) => (
     <Card
