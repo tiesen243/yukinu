@@ -122,7 +122,7 @@ export class AuthService implements IAuthService {
   ): Promise<Validators.ForgotPasswordOutput> {
     const { email } = input
 
-    const user = await this._user.findByIdentifier({ email, username: null })
+    const user = await this._user.findByIdentifier({ email })
     if (!user?.username) return { id: '' }
 
     const { id, username } = user

@@ -26,7 +26,6 @@ export interface Session {
   expiresAt: Date
   ipAddress: string | null
   userAgent: string | null
-  createdAt: Date
 }
 
 export type SessionWithUser = Omit<Session, 'id' | 'userId' | 'createdAt'> & {

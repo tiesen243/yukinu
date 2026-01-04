@@ -83,7 +83,7 @@ function TRPCReactProvider({
   return (
     <QueryClientProvider client={queryClient}>
       <TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-        <SessionProvider getSessionFn={trpcClient.auth.getCurrentUser.query}>
+        <SessionProvider getSessionFn={trpcClient.auth.currentUser.query}>
           {children}
         </SessionProvider>
       </TRPCProvider>

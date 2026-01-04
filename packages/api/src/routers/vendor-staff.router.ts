@@ -2,7 +2,7 @@ import * as Validators from '@yukinu/validators/vendor'
 
 import { createTRPCRouter, protectedProcedure, vendorProcedure } from '@/trpc'
 
-export const staffRouter = createTRPCRouter({
+export const vendorStaffRouter = createTRPCRouter({
   all: vendorProcedure
     .meta({
       message: 'Vendor staff fetched successfully',
@@ -11,7 +11,7 @@ export const staffRouter = createTRPCRouter({
     .input(Validators.allStaffsInput.omit({ id: true }))
     .output(Validators.allStaffsOutput)
     .query(({ ctx, input }) =>
-      ctx.services.staff.all({ ...input, id: ctx.vendorId }),
+      ctx.services.vendorStaff.all({ ...input, id: ctx.vendorId }),
     ),
 
   invite: vendorProcedure
@@ -19,7 +19,7 @@ export const staffRouter = createTRPCRouter({
     .input(Validators.inviteStaffInput.omit({ vendorId: true }))
     .output(Validators.inviteStaffOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.staff.invite({
+      ctx.services.vendorStaff.invite({
         ...input,
         vendorId: ctx.vendorId,
       }),
@@ -32,14 +32,16 @@ export const staffRouter = createTRPCRouter({
     })
     .input(Validators.acceptStaffInvitationInput)
     .output(Validators.acceptStaffInvitationOutput)
-    .mutation(({ ctx, input }) => ctx.services.staff.acceptInvitation(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.vendorStaff.acceptInvitation(input),
+    ),
 
   remove: vendorProcedure
     .meta({ message: 'Staff removed successfully.', role: ['vendor_owner'] })
     .input(Validators.removeStaffInput.omit({ vendorId: true }))
     .output(Validators.removeStaffOutput)
     .mutation(({ ctx, input }) =>
-      ctx.services.staff.remove({
+      ctx.services.vendorStaff.remove({
         ...input,
         vendorId: ctx.vendorId,
       }),

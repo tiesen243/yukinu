@@ -6,7 +6,7 @@ import type { ProfileSchema } from '@yukinu/validators/user'
 
 export interface IUserRepository extends IBaseRepository<typeof users> {
   findByIdentifier(
-    identifier: Pick<UserSchema, 'email' | 'username'>,
+    identifier: Partial<Pick<UserSchema, 'email' | 'username'>>,
     tx?: Database,
   ): Promise<UserSchema | null>
 
