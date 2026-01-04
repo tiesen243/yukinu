@@ -48,9 +48,14 @@ export const userRouter = createTRPCRouter({
       message: 'User restored successfully',
       role: ['admin'],
     })
-    .input(Validators.restoreUserInput)
+    .input(Validators.restoreUserInput.omit({ userId: true }))
     .output(Validators.restoreUserOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.restore(input)),
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.restore({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 
   permanentlyDelete: protectedProcedure
     .meta({

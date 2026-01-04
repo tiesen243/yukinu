@@ -12,8 +12,12 @@ import { paginationInput, paginationOutput } from '@/shared'
 
 export const profileSchema = createSelectSchema(profiles, {
   id: z.cuid(),
+  gender: z.enum(['male', 'female', 'other']).nullable(),
 })
 export type ProfileSchema = z.infer<typeof profileSchema>
+
+export const genders = profileSchema.shape.gender.options
+export type Gender = (typeof genders)[number]
 
 export const addressSchema = createSelectSchema(addresses, {
   id: z.cuid(),
@@ -67,7 +71,9 @@ export type DeleteUserInput = z.infer<typeof deleteUserInput>
 export const deleteUserOutput = userSchema.pick({ id: true })
 export type DeleteUserOutput = z.infer<typeof deleteUserOutput>
 
-export const restoreUserInput = userSchema.pick({ id: true })
+export const restoreUserInput = userSchema.pick({ id: true }).extend({
+  userId: userSchema.shape.id,
+})
 export type RestoreUserInput = z.infer<typeof restoreUserInput>
 export const restoreUserOutput = userSchema.pick({ id: true })
 export type RestoreUserOutput = z.infer<typeof restoreUserOutput>
