@@ -127,7 +127,9 @@ export type ResetPasswordOutput = z.infer<typeof resetPasswordOutput>
 
 export const allSessionsInput = sessionSchema.pick({ userId: true })
 export type AllSessionsInput = z.infer<typeof allSessionsInput>
-export const allSessionsOutput = z.array(sessionSchema)
+export const allSessionsOutput = z.array(
+  sessionSchema.omit({ userId: true, token: true }),
+)
 export type AllSessionsOutput = z.infer<typeof allSessionsOutput>
 
 export const deleteSessionInput = sessionSchema.pick({

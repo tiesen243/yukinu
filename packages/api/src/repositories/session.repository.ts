@@ -16,11 +16,17 @@ export class SessionRepository
   allByUserId(
     userId: UserSchema['id'],
     tx = this._db,
-  ): Promise<Omit<SessionSchema, 'token' | 'userId'>[]> {
+  ): Promise<Omit<SessionSchema, 'userId' | 'token'>[]> {
     const { eq, desc } = this._orm
 
     return tx
-      .select()
+      .select({
+        id: this._table.id,
+        expiresAt: this._table.expiresAt,
+        ipAddress: this._table.ipAddress,
+        userAgent: this._table.userAgent,
+        createdAt: this._table.createdAt,
+      })
       .from(this._table)
       .where(eq(this._table.userId, userId))
       .orderBy(desc(this._table.createdAt))

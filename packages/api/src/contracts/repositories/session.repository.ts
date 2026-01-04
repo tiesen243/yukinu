@@ -4,5 +4,8 @@ import type { sessions } from '@yukinu/db/schema'
 import type { SessionSchema, UserSchema } from '@yukinu/validators/auth'
 
 export interface ISessionRepository extends IBaseRepository<typeof sessions> {
-  allByUserId(userId: UserSchema['id'], tx?: Database): Promise<SessionSchema[]>
+  allByUserId(
+    userId: UserSchema['id'],
+    tx?: Database,
+  ): Promise<Omit<SessionSchema, 'userId' | 'token'>[]>
 }
