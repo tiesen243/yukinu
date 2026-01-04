@@ -20,7 +20,7 @@ import { getBaseUrl } from '@/lib/utils'
 export default function LoginScreen() {
   const navigation = useNavigation()
 
-  const [data, setData] = useState<LoginInput>({
+  const [data, setData] = useState({
     identifier: '',
     password: '',
   })

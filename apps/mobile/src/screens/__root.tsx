@@ -29,6 +29,10 @@ const RootStack = createNativeStackNavigator({
       screen: lazy(() => import('@/screens/login')),
       options: { title: 'Login', headerShown: false },
     },
+    productDetails: {
+      screen: lazy(() => import('@/screens/product-details')),
+      options: { title: 'Product Details' },
+    },
     settings: {
       screen: lazy(() => import('@/screens/settings')),
       options: { title: 'Settings' },

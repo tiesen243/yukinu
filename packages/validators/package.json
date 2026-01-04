@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/validators",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "private": true,
   "type": "module",
   "exports": {
@@ -23,9 +23,7 @@
     "~dev": "tsdown --watch ./src"
   },
   "dependencies": {
-    "@yukinu/db": "workspace:*",
     "@yukinu/lib": "workspace:*",
-    "drizzle-zod": "^0.8.3",
     "zod": "catalog:prod"
   },
   "devDependencies": {

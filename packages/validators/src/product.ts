@@ -1,14 +1,3 @@
-import {
-  attributes,
-  productAttributes,
-  productImages,
-  productReviews,
-  products,
-  productVariants,
-  variantOptions,
-  variants,
-} from '@yukinu/db/schema'
-import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 import { userSchema } from '@/auth'
@@ -40,54 +29,81 @@ export type OrderBy = `${OrderByField}_${OrderByDirection}`
  * --------------------------------------------------------------------------
  */
 
-export const productSchema = createSelectSchema(products, {
+export const productSchema = z.object({
   id: z.cuid(),
   vendorId: z.cuid().nullable(),
   categoryId: z.cuid().nullable(),
-  description: (shema) => shema.min(1).max(2000),
-  price: z
-    .string()
-    .regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
+  name: z.string().max(255, 'Name must be at most 255 characters long'),
+  description: z.string().nullable(),
+  price: currencySchema,
+  stock: z.number().int().min(0).default(0),
+  sold: z.number().int().min(0).default(0),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  deletedAt: z.date().nullable(),
 })
 export type ProductSchema = z.infer<typeof productSchema>
 
-export const productImageSchema = createSelectSchema(productImages, {
+export const productImageSchema = z.object({
   id: z.cuid(),
   productId: z.cuid(),
-  url: z.url('Invalid image URL'),
+  url: z
+    .url('Invalid image URL')
+    .max(500, 'Image URL must be at most 500 characters long'),
 })
 export type ProductImageSchema = z.infer<typeof productImageSchema>
 
-export const attributeSchema = createSelectSchema(attributes)
+export const attributeSchema = z.object({
+  id: z.cuid(),
+  name: z
+    .string()
+    .max(100, 'Attribute name must be at most 100 characters long'),
+})
 export type AttributeSchema = z.infer<typeof attributeSchema>
 
-export const productAttributeSchema = createSelectSchema(productAttributes, {
+export const productAttributeSchema = z.object({
   productId: z.cuid(),
   attributeId: z.cuid(),
+  value: z
+    .string()
+    .max(255, 'Attribute value must be at most 255 characters long'),
 })
 export type ProductAttributeSchema = z.infer<typeof productAttributeSchema>
 
-export const variantSchema = createSelectSchema(variants, { id: z.cuid() })
+export const variantSchema = z.object({
+  id: z.cuid(),
+  name: z.string().max(100, 'Variant name must be at most 100 characters long'),
+})
 export type VariantSchema = z.infer<typeof variantSchema>
 
-export const variantOptionSchema = createSelectSchema(variantOptions, {
+export const variantOptionSchema = z.object({
   id: z.int().min(1000),
   variantId: z.cuid(),
+  value: z
+    .string()
+    .max(100, 'Variant option must be at most 100 characters long'),
 })
 export type VariantOptionSchema = z.infer<typeof variantOptionSchema>
 
-export const productVariantSchema = createSelectSchema(productVariants, {
+export const productVariantSchema = z.object({
   id: z.cuid(),
   productId: z.cuid(),
+  sku: z.string().max(100, 'SKU must be at most 100 characters long'),
   price: currencySchema,
+  stock: z.number().int().min(0).default(0),
 })
 export type ProductVariantSchema = z.infer<typeof productVariantSchema>
 
-export const productPreviewSchema = createSelectSchema(productReviews, {
+export const productPreviewSchema = z.object({
   id: z.cuid(),
   productId: z.cuid(),
   userId: z.cuid(),
-  rating: (schema) => schema.min(1).max(5).default(5),
+  rating: z
+    .int()
+    .min(1, 'Rating must be at least 1')
+    .max(5, 'Rating must be at most 5'),
+  comment: z.string().max(1000, 'Comment must be at most 1000 characters long'),
+  createdAt: z.date(),
 })
 export type ReviewSchema = z.infer<typeof productPreviewSchema>
 

@@ -1,14 +1,11 @@
 import { createId } from '@yukinu/lib/create-id'
+import { vendorStatuses } from '@yukinu/validators/vendor'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
 import { users } from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const vendorStatusEnum = pgEnum('vendor_status', [
-  'pending',
-  'approved',
-  'suspended',
-])
+export const vendorStatusEnum = pgEnum('vendor_status', vendorStatuses)
 
 export const vendors = pgTable(
   'vendors',
@@ -22,10 +19,9 @@ export const vendors = pgTable(
     image: t.varchar({ length: 500 }),
     address: t.varchar({ length: 500 }),
     contact: t.varchar({ length: 100 }),
+    payoutBankName: t.varchar({ length: 50 }),
     payoutAccountName: t.varchar({ length: 255 }),
     payoutAccountNumber: t.varchar({ length: 100 }),
-    payoutBankCode: t.varchar({ length: 50 }),
-    payoutBankRef: t.varchar({ length: 100 }),
     status: vendorStatusEnum().default('pending').notNull(),
     createdAt,
     updatedAt,

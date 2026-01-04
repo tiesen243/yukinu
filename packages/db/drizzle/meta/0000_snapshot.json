@@ -1,5 +1,5 @@
 {
-  "id": "872be4d1-e79d-4d71-9669-650bf538941b",
+  "id": "0d1e41c7-e1df-4a7b-bb08-004602c942fb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -2026,6 +2026,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "payout_bank_name": {
+          "name": "payout_bank_name",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "payout_account_name": {
           "name": "payout_account_name",
           "type": "varchar(255)",
@@ -2034,18 +2040,6 @@
         },
         "payout_account_number": {
           "name": "payout_account_number",
-          "type": "varchar(100)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "payout_bank_code": {
-          "name": "payout_bank_code",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "payout_bank_ref": {
-          "name": "payout_bank_ref",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": false

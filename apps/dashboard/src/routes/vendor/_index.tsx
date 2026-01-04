@@ -46,6 +46,10 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
       description: loaderData.description,
       image: loaderData.image,
       address: loaderData.address,
+      contact: loaderData.contact,
+      payoutBankName: loaderData.payoutBankName,
+      payoutAccountName: loaderData.payoutAccountName,
+      payoutAccountNumber: loaderData.payoutAccountNumber,
     } as Omit<VendorValidators.UpdateVendorInput, 'id'>,
     schema: VendorValidators.updateVendorInput.omit({ id: true }),
     onSubmit: mutateAsync,
@@ -127,6 +131,66 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
                 <Field data-invalid={meta.errors.length > 0}>
                   <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
                   <Input {...field} value={value ?? ''} />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <form.Field
+              name='contact'
+              render={({ meta, field: { value, ...field } }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Contact</FieldLabel>
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Contact Info'
+                  />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <form.Field
+              name='payoutBankName'
+              render={({ meta, field: { value, ...field } }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Bank Name</FieldLabel>
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Bank Name'
+                  />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <form.Field
+              name='payoutAccountName'
+              render={({ meta, field: { value, ...field } }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Account Name</FieldLabel>
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Account Name'
+                  />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <form.Field
+              name='payoutAccountNumber'
+              render={({ meta, field: { value, ...field } }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={meta.fieldId}>Account Number</FieldLabel>
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    placeholder='Account Number'
+                  />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}

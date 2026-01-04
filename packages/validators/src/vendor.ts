@@ -1,10 +1,3 @@
-import {
-  vendorBalances,
-  vendors,
-  vendorStaffs,
-  vendorTransfers,
-} from '@yukinu/db/schema'
-import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 import { currencySchema, paginationInput, paginationOutput } from '@/shared'
@@ -14,33 +7,65 @@ import { currencySchema, paginationInput, paginationOutput } from '@/shared'
  * --------------------------------------------------------------------------
  */
 
-export const vendorSchema = createSelectSchema(vendors, {
+export const vendorStatuses = ['pending', 'approved', 'suspended'] as const
+export type VendorStatus = (typeof vendorStatuses)[number]
+
+export const vendorSchema = z.object({
   id: z.cuid(),
-  ownerId: z.cuid().nullable(),
-  image: z.url('Invalid image url').nullable(),
+  ownerId: z.cuid(),
+  name: z.string().max(255, 'Name must be at most 255 characters long'),
+  description: z.string().nullable(),
+  address: z
+    .string()
+    .max(500, 'Address must be at most 500 characters long')
+    .nullable(),
+  image: z
+    .url('Invalid image URL')
+    .max(500, 'Image URL must be at most 500 characters long')
+    .nullable(),
+  contact: z
+    .string()
+    .max(100, 'Contact must be at most 100 characters long')
+    .nullable(),
+  payoutBankName: z
+    .string()
+    .max(50, 'Payout bank code must be at most 50 characters long')
+    .nullable(),
+  payoutAccountName: z
+    .string()
+    .max(255, 'Payout account name must be at most 255 characters long')
+    .nullable(),
+  payoutAccountNumber: z
+    .string()
+    .max(100, 'Payout account number must be at most 100 characters long')
+    .nullable(),
+  status: z.enum(vendorStatuses).default('pending'),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 })
 export type VendorSchema = z.infer<typeof vendorSchema>
 
-export const statuses = vendorSchema.shape.status.options
-export type Status = z.infer<typeof vendorSchema.shape.status>
-
-export const vendorStaffSchema = createSelectSchema(vendorStaffs, {
+export const vendorStaffSchema = z.object({
   vendorId: z.cuid(),
   userId: z.cuid(),
+  assignedAt: z.date(),
 })
 export type VendorStaffSchema = z.infer<typeof vendorStaffSchema>
 
-export const VendorBalanceSchema = createSelectSchema(vendorBalances, {
+export const VendorBalanceSchema = z.object({
   vendorId: z.cuid(),
   balance: currencySchema,
+  updatedAt: z.date(),
 })
 export type VendorBalanceSchema = z.infer<typeof VendorBalanceSchema>
 
-export const vendorTransferSchema = createSelectSchema(vendorTransfers, {
+export const vendorTransferSchema = z.object({
   id: z.cuid(),
   vendorId: z.cuid(),
+  reference: z.string().max(100, 'Reference must be at most 100 characters'),
   amountIn: currencySchema,
   amountOut: currencySchema,
+  createdAt: z.date(),
 })
 
 /* --------------------------------------------------------------------------

@@ -1,5 +1,3 @@
-import { orderItems, orders, payments, transactions } from '@yukinu/db/schema'
-import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 import { userSchema } from '@/auth'
@@ -13,44 +11,69 @@ import { vendorSchema } from '@/vendor'
  * --------------------------------------------------------------------------
  */
 
-export const orderSchema = createSelectSchema(orders, {
+export const orderStatuses = [
+  'pending',
+  'confirmed',
+  'shipped',
+  'completed',
+  'cancelled',
+] as const
+export type OrderStatus = z.infer<typeof orderStatuses>
+
+export const paymentMethods = ['bank_transfer', 'cash_on_delivery'] as const
+export type PaymentMethod = z.infer<typeof paymentMethods>
+
+export const paymentStatuses = ['pending', 'success', 'failed'] as const
+export type PaymentStatus = z.infer<typeof paymentStatuses>
+
+export const orderSchema = z.object({
+  id: z.int().min(1000),
   userId: z.cuid().nullable(),
   addressId: z.cuid().nullable(),
   voucherId: z.cuid().nullable(),
   totalAmount: currencySchema,
+  status: z.enum(orderStatuses).default('pending'),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 })
 export type OrderSchema = z.infer<typeof orderSchema>
 
-export const orderStatuses = orderSchema.shape.status.options
-export type OrderStatus = z.infer<typeof orderStatuses>
-
-export const orderItemSchema = createSelectSchema(orderItems, {
+export const orderItemSchema = z.object({
   id: z.cuid(),
+  orderId: z.int().min(1000),
   vendorId: z.cuid().nullable(),
   productId: z.cuid().nullable(),
   productVariantId: z.cuid().nullable(),
+  quantity: z.number().int().min(1),
   unitPrice: currencySchema,
-  note: (schema) => schema.max(500),
+  note: z.string().nullable(),
+  isCompleted: z.boolean().default(false),
 })
 export type OrderItemSchema = z.infer<typeof orderItemSchema>
 
-export const paymentSchema = createSelectSchema(payments, {
+export const paymentSchema = z.object({
   id: z.cuid(),
+  orderId: z.int().min(1000),
+  method: z.enum(paymentMethods),
   amount: currencySchema,
+  methodReference: z.string().max(255).nullable(),
+  status: z.enum(paymentStatuses).default('pending'),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 })
 export type PaymentSchema = z.infer<typeof paymentSchema>
 
-export const paymentMethods = paymentSchema.shape.method.options
-export type PaymentMethod = z.infer<typeof paymentMethods>
-
-export const paymentStatuses = paymentSchema.shape.status.options
-export type PaymentStatus = z.infer<typeof paymentStatuses>
-
-export const transactionSchema = createSelectSchema(transactions, {
+export const transactionSchema = z.object({
   id: z.cuid(),
   paymentId: z.cuid(),
+  gateway: z.string().max(100),
+  transactionDate: z.date(),
   amountIn: currencySchema,
   amountOut: currencySchema,
+  transactionContent: z.string().nullable(),
+  referenceNumber: z.string().max(255).nullable(),
+  body: z.string().nullable(),
+  createdAt: z.date(),
 })
 export type TransactionSchema = z.infer<typeof transactionSchema>
 
