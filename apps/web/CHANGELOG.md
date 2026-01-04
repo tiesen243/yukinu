@@ -1,5 +1,17 @@
 # @yukinu/web
 
+## 0.11.2
+
+### Patch Changes
+
+- Updated dependencies [[`bf4969a`](https://github.com/tiesen243/yukinu/commit/bf4969a46f95f59e4ae617387518ef45dc30a211)]:
+  - @yukinu/validators@0.9.2
+  - @yukinu/api@0.9.2
+  - @yukinu/auth@0.9.2
+  - @yukinu/db@0.9.2
+  - @yukinu/email@0.8.2
+  - @yukinu/uploadthing@0.3.2
+
 ## 0.11.1
 
 ### Patch Changes

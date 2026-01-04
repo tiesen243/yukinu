@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.9.2
+
+### Patch Changes
+
+- [#325](https://github.com/tiesen243/yukinu/pull/325) [`bf4969a`](https://github.com/tiesen243/yukinu/commit/bf4969a46f95f59e4ae617387518ef45dc30a211) Thanks [@tiesen243](https://github.com/tiesen243)! - fix session id type
+
 ## 0.9.1
 
 ### Patch Changes
