@@ -4,6 +4,7 @@ import * as z from 'zod'
 
 import { userSchema } from '@/auth'
 import { voucherSchema } from '@/general'
+import { currencySchema } from '@/shared'
 import { addressSchema } from '@/user'
 import { vendorSchema } from '@/vendor'
 
@@ -16,8 +17,7 @@ export const orderSchema = createSelectSchema(orders, {
   userId: z.cuid().nullable(),
   addressId: z.cuid().nullable(),
   voucherId: z.cuid().nullable(),
-  totalAmount: (schema) =>
-    schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+  totalAmount: currencySchema,
 })
 export type OrderSchema = z.infer<typeof orderSchema>
 
@@ -29,16 +29,14 @@ export const orderItemSchema = createSelectSchema(orderItems, {
   vendorId: z.cuid().nullable(),
   productId: z.cuid().nullable(),
   productVariantId: z.cuid().nullable(),
-  unitPrice: (schema) =>
-    schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
+  unitPrice: currencySchema,
   note: (schema) => schema.max(500),
 })
 export type OrderItemSchema = z.infer<typeof orderItemSchema>
 
 export const paymentSchema = createSelectSchema(payments, {
   id: z.cuid(),
-  amount: (schema) =>
-    schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+  amount: currencySchema,
 })
 export type PaymentSchema = z.infer<typeof paymentSchema>
 
@@ -51,10 +49,8 @@ export type PaymentStatus = z.infer<typeof paymentStatuses>
 export const transactionSchema = createSelectSchema(transactions, {
   id: z.cuid(),
   paymentId: z.cuid(),
-  amountIn: (schema) =>
-    schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
-  amountOut: (schema) =>
-    schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+  amountIn: currencySchema,
+  amountOut: currencySchema,
 })
 export type TransactionSchema = z.infer<typeof transactionSchema>
 
@@ -130,9 +126,7 @@ export const addItemToCartInput = z.object({
   vendorId: z.cuid().nullable(),
   productId: z.cuid(),
   variantId: z.cuid().optional(),
-  unitPrice: z
-    .string()
-    .regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
+  unitPrice: currencySchema,
   quantity: z.number().int().min(1, 'Quantity must be at least 1'),
 })
 export type AddItemToCartInput = z.infer<typeof addItemToCartInput>

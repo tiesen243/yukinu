@@ -9,8 +9,9 @@ import * as z from 'zod'
 
 export const userSchema = createSelectSchema(users, {
   id: z.cuid(),
-  username: (schema) =>
-    schema.regex(
+  username: z
+    .string()
+    .regex(
       /^(?!\.)(?!.*\.$)[a-zA-Z0-9.]{4,20}$/,
       'Username can only contain letters, numbers and periods, and must be between 4 and 20 characters long',
     ),

@@ -12,7 +12,7 @@ import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
 import { categorySchema } from '@/general'
-import { paginationInput, paginationOutput } from '@/shared'
+import { currencySchema, paginationInput, paginationOutput } from '@/shared'
 import { vendorSchema } from '@/vendor'
 
 /* --------------------------------------------------------------------------
@@ -44,17 +44,18 @@ export const productSchema = createSelectSchema(products, {
   vendorId: z.cuid().nullable(),
   categoryId: z.cuid().nullable(),
   description: (shema) => shema.min(1).max(2000),
-  price: (schema) =>
-    schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
+  price: z
+    .string()
+    .regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
 })
-export type Schema = z.infer<typeof productSchema>
+export type ProductSchema = z.infer<typeof productSchema>
 
 export const productImageSchema = createSelectSchema(productImages, {
   id: z.cuid(),
   productId: z.cuid(),
   url: z.url('Invalid image URL'),
 })
-export type ImageSchema = z.infer<typeof productImageSchema>
+export type ProductImageSchema = z.infer<typeof productImageSchema>
 
 export const attributeSchema = createSelectSchema(attributes)
 export type AttributeSchema = z.infer<typeof attributeSchema>
@@ -77,8 +78,7 @@ export type VariantOptionSchema = z.infer<typeof variantOptionSchema>
 export const productVariantSchema = createSelectSchema(productVariants, {
   id: z.cuid(),
   productId: z.cuid(),
-  price: (schema) =>
-    schema.regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid price format'),
+  price: currencySchema,
 })
 export type ProductVariantSchema = z.infer<typeof productVariantSchema>
 
@@ -86,7 +86,7 @@ export const productPreviewSchema = createSelectSchema(productReviews, {
   id: z.cuid(),
   productId: z.cuid(),
   userId: z.cuid(),
-  rating: (schema) => schema.min(1).max(5),
+  rating: (schema) => schema.min(1).max(5).default(5),
 })
 export type ReviewSchema = z.infer<typeof productPreviewSchema>
 

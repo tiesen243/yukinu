@@ -7,7 +7,7 @@ import {
 import { createSelectSchema } from 'drizzle-zod'
 import * as z from 'zod'
 
-import { paginationInput, paginationOutput } from '@/shared'
+import { currencySchema, paginationInput, paginationOutput } from '@/shared'
 
 /* --------------------------------------------------------------------------
  * Convert Drizzle ORM schemas to Zod schemas for validation
@@ -32,18 +32,15 @@ export type VendorStaffSchema = z.infer<typeof vendorStaffSchema>
 
 export const VendorBalanceSchema = createSelectSchema(vendorBalances, {
   vendorId: z.cuid(),
-  balance: (schema) =>
-    schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid balance format'),
+  balance: currencySchema,
 })
 export type VendorBalanceSchema = z.infer<typeof VendorBalanceSchema>
 
 export const vendorTransferSchema = createSelectSchema(vendorTransfers, {
   id: z.cuid(),
   vendorId: z.cuid(),
-  amountIn: (schema) =>
-    schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
-  amountOut: (schema) =>
-    schema.regex(/^(?:\d{1,10})(?:\.\d{1,2})?$/, 'Invalid amount format'),
+  amountIn: currencySchema,
+  amountOut: currencySchema,
 })
 
 /* --------------------------------------------------------------------------

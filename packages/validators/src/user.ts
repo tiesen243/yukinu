@@ -16,19 +16,21 @@ export const profileSchema = createSelectSchema(profiles, {
 })
 export type ProfileSchema = z.infer<typeof profileSchema>
 
-export const genders = profileSchema.shape.gender.options
+export const genders = profileSchema.shape.gender.unwrap().options
 export type Gender = (typeof genders)[number]
 
 export const addressSchema = createSelectSchema(addresses, {
   id: z.cuid(),
   userId: z.cuid(),
-  phoneNumber: (schema) =>
-    schema.regex(
+  phoneNumber: z
+    .string()
+    .regex(
       /^\(\+\d{1,3}\)\s\d{2,4}(?:\s\d{2,4}){1,3}$/,
       'Invalid phone number',
     ),
-  postalCode: (schema) =>
-    schema.regex(
+  postalCode: z
+    .string()
+    .regex(
       /^[A-Za-z0-9][A-Za-z0-9\- ]{1,8}[A-Za-z0-9]$/,
       'Invalid postal code',
     ),

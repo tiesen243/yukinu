@@ -13,3 +13,7 @@ export const paginationOutput = z.object({
   totalPages: z.number(),
 })
 export type PaginationOutput = z.infer<typeof paginationOutput>
+
+export const currencySchema = z
+  .string()
+  .regex(/^(?:\d{1,8})(?:\.\d{1,2})?$/, 'Invalid currency format')

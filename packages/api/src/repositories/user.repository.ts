@@ -40,7 +40,6 @@ export class UserRepository
     tx = this._db,
   ): Promise<
     | (Omit<UserSchema, 'status' | 'deletedAt'> & {
-        username: NonNullable<UserSchema['username']>
         profile: Omit<ProfileSchema, 'id'>
       })
     | null
