@@ -217,10 +217,9 @@ CREATE TABLE "vendors" (
 	"image" varchar(500),
 	"address" varchar(500),
 	"contact" varchar(100),
+	"payout_bank_name" varchar(50),
 	"payout_account_name" varchar(255),
 	"payout_account_number" varchar(100),
-	"payout_bank_code" varchar(50),
-	"payout_bank_ref" varchar(100),
 	"status" "vendor_status" DEFAULT 'pending' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL

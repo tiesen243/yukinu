@@ -1,20 +1,13 @@
+import type { AnyPgColumn } from 'drizzle-orm/pg-core'
+
 import { createId } from '@yukinu/lib/create-id'
-import {
-  index,
-  pgEnum,
-  pgTable,
-  uniqueIndex,
-  type AnyPgColumn,
-} from 'drizzle-orm/pg-core'
+import { ticketStatuses } from '@yukinu/validators/general'
+import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { users } from '@/schema/auth'
 import { products } from '@/schema/product'
 
-export const ticketStatusEnum = pgEnum('ticket_status', [
-  'open',
-  'resolved',
-  'closed',
-])
+export const ticketStatusEnum = pgEnum('ticket_status', ticketStatuses)
 
 export const banners = pgTable('banners', (t) => ({
   id: t.varchar({ length: 24 }).$default(createId).primaryKey(),

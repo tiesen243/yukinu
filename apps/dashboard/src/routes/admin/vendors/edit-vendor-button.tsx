@@ -1,5 +1,3 @@
-import type { AllVendorsOutput } from '@yukinu/validators/vendor'
-
 import { useMutation } from '@tanstack/react-query'
 import { cn } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
@@ -16,7 +14,10 @@ import {
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/sonner'
-import { statuses } from '@yukinu/validators/vendor'
+import {
+  vendorStatuses,
+  type AllVendorsOutput,
+} from '@yukinu/validators/vendor'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -52,7 +53,7 @@ export const EditVendorButton: React.FC<{
         </DialogHeader>
 
         <RadioGroup value={status} onValueChange={setStatus as never}>
-          {statuses.map((status) => (
+          {vendorStatuses.map((status) => (
             <Label
               key={status}
               htmlFor={status}

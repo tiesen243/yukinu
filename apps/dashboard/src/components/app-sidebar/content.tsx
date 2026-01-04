@@ -117,12 +117,6 @@ const navs = [
         url: '/vendor/staffs',
         roles: ['vendor_owner'],
       },
-      {
-        icon: icons.WalletIcon,
-        title: 'Payouts',
-        url: '/vendor/payouts',
-        roles: ['vendor_owner'],
-      },
     ],
   },
   {

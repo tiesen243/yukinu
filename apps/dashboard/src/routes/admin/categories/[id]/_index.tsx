@@ -101,20 +101,18 @@ export default function CategoriesEditPage({
 
           <form.Field
             name='description'
-            render={({ meta, field: { value = '', ...field } }) => (
-              <Field
-                data-invalid={meta.errors.length > 0 || value.length > 1000}
-              >
+            render={({ meta, field: { value, ...field } }) => (
+              <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
                 <InputGroup>
                   <InputGroupTextarea
                     {...field}
-                    value={value}
-                    aria-invalid={field['aria-invalid'] || value.length > 1000}
+                    value={value ?? ''}
+                    aria-invalid={field['aria-invalid']}
                     placeholder='Category Description'
                   />
                   <InputGroupAddon align='block-end' className='justify-end'>
-                    <InputGroupText>{value.length ?? 0}/1000</InputGroupText>
+                    <InputGroupText>{value?.length ?? 0}/1000</InputGroupText>
                   </InputGroupAddon>
                 </InputGroup>
                 <FieldError id={meta.errorId} errors={meta.errors} />

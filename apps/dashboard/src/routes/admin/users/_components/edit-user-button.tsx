@@ -18,7 +18,7 @@ import { Label } from '@yukinu/ui/label'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/sonner'
-import { roles, userStatuses } from '@yukinu/validators/auth'
+import { roles, userStatuses, type Role } from '@yukinu/validators/auth'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -61,7 +61,7 @@ export const EditUserButton: React.FC<{
               id='role'
               value={role}
               onChange={(e) => {
-                setRole(e.target.value)
+                setRole(e.target.value as Role)
               }}
             >
               {roles.map((role) => (

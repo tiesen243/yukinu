@@ -47,7 +47,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {new Intl.NumberFormat('en-US', {
           style: 'currency',
           currency: 'USD',
-        }).format(parseFloat(product.price))}
+        }).format(+product.price)}
       </CardDescription>
 
       <CardDescription className='flex w-full items-center justify-between'>
