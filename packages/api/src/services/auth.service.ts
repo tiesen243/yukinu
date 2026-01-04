@@ -1,404 +1,178 @@
+import type { IAccountRepository } from '@/contracts/repositories/account.repository'
+import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
+import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
 import type { IAuthService } from '@/contracts/services/auth.service'
-import type { SessionWithUser } from '@yukinu/auth'
-import type { AuthValidators } from '@yukinu/validators/auth'
+import type { Database } from '@yukinu/db'
+import type * as Validators from '@yukinu/validators/auth'
 
 import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
 
-import { BaseService } from '@/services/base.service'
-
 import { randomBytes } from 'node:crypto'
 
-export class AuthService extends BaseService implements IAuthService {
+export class AuthService implements IAuthService {
   private readonly _password = new Password()
 
-  async getCurrentUser(
-    userId: NonNullable<SessionWithUser['user']>['id'],
-  ): Promise<SessionWithUser> {
-    const { eq } = this._orm
-    const { sessions, users } = this._schema
+  constructor(
+    private readonly _db: Database,
+    private readonly _account: IAccountRepository,
+    private readonly _profile: IProfileRepository,
+    private readonly _user: IUserRepository,
+    private readonly _verification: IVerificationRepository,
+  ) {}
 
-    const [session] = await this._db
-      .select({
-        token: sessions.token,
-        user: {
-          id: users.id,
-          email: users.email,
-          username: users.username,
-          role: users.role,
-          image: users.image,
-        },
-        ipAddress: sessions.ipAddress,
-        userAgent: sessions.userAgent,
-        expiresAt: sessions.expiresAt,
-      })
-      .from(sessions)
-      .where(eq(sessions.userId, userId))
-      .innerJoin(users, eq(users.id, sessions.userId))
-      .limit(1)
+  async getCurrentUser(userId: Validators.UserSchema['id']): Promise<
+    Omit<Validators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
+      user: Pick<
+        Validators.UserSchema,
+        'id' | 'username' | 'email' | 'role' | 'image'
+      >
+    }
+  > {
+    const user = await this._user.find(userId)
+    if (!user)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
 
-    if (!session) throw new TRPCError({ code: 'UNAUTHORIZED' })
-    return session
+    const { id, username, email, role, image } = user
+    return {
+      token: '',
+      userAgent: null,
+      expiresAt: new Date(),
+      ipAddress: null,
+      user: { id, username, email, role, image },
+    }
   }
 
   async register(
-    input: AuthValidators.RegisterInput,
-  ): Promise<AuthValidators.RegisterOutput> {
-    const { eq, or } = this._orm
-    const { accounts, profiles, users, verifications } = this._schema
-    const { email, username, password } = input
+    input: Validators.RegisterInput,
+  ): Promise<Validators.RegisterOutput> {
+    const { username, email, password: _password } = input
 
-    const [existingUser] = await this._db
-      .select()
-      .from(users)
-      .where(or(eq(users.email, email), eq(users.username, username)))
-      .limit(1)
-    if (existingUser)
+    const user = await this._user.findByIdentifier({ email, username })
+    if (user)
       throw new TRPCError({
         code: 'CONFLICT',
         message: 'A user with the given email or username already exists.',
       })
 
-    return this._db.transaction(async (tx) => {
-      const [newUser] = await tx
-        .insert(users)
-        .values({ email, username })
-        .returning({ id: users.id })
-      if (!newUser)
-        throw new TRPCError({
-          code: 'INTERNAL_SERVER_ERROR',
-          message: 'Failed to create a new user.',
-        })
-
-      const passwordHash = await this._password.hash(password)
-      await tx.insert(accounts).values({
-        userId: newUser.id,
-        provider: 'credentials',
-        accountId: newUser.id,
-        password: passwordHash,
-      })
-
-      await tx.insert(profiles).values({ id: newUser.id, fullName: username })
+    const password = await this._password.hash(_password)
+    const { userId, token } = await this._db.transaction(async (tx) => {
+      const userId = await this._user.create({ email, username }, tx)
+      await this._account.create(
+        { userId, provider: 'credentials', accountId: userId, password },
+        tx,
+      )
+      await this._profile.create({ id: userId, fullName: username }, tx)
 
       const token = randomBytes(32).toString('hex')
-      await tx.insert(verifications).values({
-        token,
-        userId: newUser.id,
-        type: 'email',
-        expiresAt: new Date(Date.now() + 10 * 60 * 1000), // 10 minutes
-      })
+      const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+      await this._verification.create(
+        { token, userId, type: 'email', expiresAt },
+        tx,
+      )
 
-      const verificationLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
-      await sendEmail({
-        to: email,
-        subject: 'Welcome to Yukinu!',
-        template: 'Welcome',
-        data: { username, verificationLink },
-      })
-
-      return newUser
+      return { userId, token }
     })
+
+    const verificationLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/verify-email?token=${token}`
+    await sendEmail({
+      to: email,
+      subject: 'Welcome to Yukinu!',
+      template: 'Welcome',
+      data: { username, verificationLink },
+    })
+
+    return { id: userId }
   }
 
   async verifyEmail(
-    input: AuthValidators.VerifyEmailInput,
-  ): Promise<AuthValidators.VerifyEmailOutput> {
-    const { and, eq } = this._orm
-    const { users, verifications } = this._schema
+    input: Validators.VerifyEmailInput,
+  ): Promise<Validators.VerifyEmailOutput> {
     const { token } = input
 
-    const [verification] = await this._db
-      .select()
-      .from(verifications)
-      .where(
-        and(eq(verifications.token, token), eq(verifications.type, 'email')),
-      )
-      .limit(1)
+    const verification = await this._verification.find(token, 'email')
     if (!verification)
       throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'The verification token is invalid.',
+        code: 'BAD_REQUEST',
+        message: 'Invalid or expired verification token.',
       })
 
+    const { userId, expiresAt } = verification
     return this._db.transaction(async (tx) => {
-      if (verification.expiresAt < new Date()) {
-        await tx.delete(verifications).where(eq(verifications.token, token))
+      if (expiresAt < new Date()) {
+        await this._verification.delete(token, tx)
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'The verification token has expired.',
         })
       }
 
-      await tx
-        .update(users)
-        .set({ emailVerified: new Date() })
-        .where(eq(users.id, verification.userId))
-      await tx.delete(verifications).where(eq(verifications.token, token))
-    })
-  }
+      await this._user.update(userId, { emailVerified: new Date() }, tx)
+      await this._verification.delete(token, tx)
 
-  allSessions(
-    input: AuthValidators.AllSessionsInput,
-  ): Promise<AuthValidators.AllSessionsOutput> {
-    const { eq } = this._orm
-    const { sessions } = this._schema
-    const { userId } = input
-
-    return this._db
-      .select({
-        id: sessions.id,
-        userAgent: sessions.userAgent,
-        ipAddress: sessions.ipAddress,
-        createdAt: sessions.createdAt,
-      })
-      .from(sessions)
-      .where(eq(sessions.userId, userId))
-  }
-
-  async deleteSession(
-    input: AuthValidators.DeleteSessionInput,
-  ): Promise<AuthValidators.DeleteSessionOutput> {
-    const { and, eq } = this._orm
-    const { sessions } = this._schema
-    const { userId, sessionId } = input
-
-    const deleteCount = await this._db
-      .delete(sessions)
-      .where(and(eq(sessions.id, sessionId), eq(sessions.userId, userId)))
-      .returning({ id: sessions.id })
-
-    if (deleteCount.length === 0)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'The session to delete was not found.',
-      })
-  }
-
-  async changeUsername(
-    input: AuthValidators.ChangeUsernameInput,
-  ): Promise<AuthValidators.ChangeUsernameOutput> {
-    const { and, eq } = this._orm
-    const { accounts, users } = this._schema
-    const { userId, username, password } = input
-
-    const [existingUser] = await this._db
-      .select()
-      .from(users)
-      .where(eq(users.username, username))
-      .limit(1)
-    if (existingUser)
-      throw new TRPCError({
-        code: 'CONFLICT',
-        message: 'The username is already taken.',
-      })
-
-    const [account] = await this._db
-      .select({ password: accounts.password })
-      .from(accounts)
-      .where(
-        and(eq(accounts.userId, userId), eq(accounts.provider, 'credentials')),
-      )
-    if (!account?.password)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'You do not have a password set. Cannot change username.',
-      })
-
-    if (!(await this._password.verify(account.password, password)))
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'The provided password is incorrect.',
-      })
-
-    await this._db.update(users).set({ username }).where(eq(users.id, userId))
-  }
-
-  async deleteAccount(
-    input: AuthValidators.DeleteAccountInput,
-  ): Promise<AuthValidators.DeleteAccountOutput> {
-    const { and, eq } = this._orm
-    const { accounts, sessions, users } = this._schema
-    const { userId, password } = input
-
-    const [account] = await this._db
-      .select({ password: accounts.password })
-      .from(accounts)
-      .where(
-        and(eq(accounts.userId, userId), eq(accounts.provider, 'credentials')),
-      )
-    if (!account?.password)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'You do not have a password set. Cannot delete account.',
-      })
-
-    if (!(await this._password.verify(account.password, password)))
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: 'The provided password is incorrect.',
-      })
-
-    return this._db.transaction(async (tx) => {
-      await tx
-        .update(users)
-        .set({ deletedAt: new Date() })
-        .where(eq(users.id, userId))
-      await tx.delete(sessions).where(eq(sessions.userId, userId))
-    })
-  }
-
-  changePassword(
-    input: AuthValidators.ChangePasswordInput,
-  ): Promise<AuthValidators.ChangePasswordOutput> {
-    const { and, eq } = this._orm
-    const { accounts, sessions, users } = this._schema
-    const { userId, currentPassword, newPassword, isLogOut } = input
-
-    return this._db.transaction(async (tx) => {
-      const [account] = await tx
-        .select({
-          password: accounts.password,
-          email: users.email,
-          username: users.username,
-        })
-        .from(users)
-        .where(eq(users.id, userId))
-        .leftJoin(
-          accounts,
-          and(
-            eq(accounts.userId, users.id),
-            eq(accounts.provider, 'credentials'),
-          ),
-        )
-        .limit(1)
-
-      // oxlint-disable-next-line no-negated-condition
-      if (!account?.password) {
-        const newPasswordHash = await this._password.hash(newPassword)
-        await tx.insert(accounts).values({
-          userId,
-          provider: 'credentials',
-          accountId: userId,
-          password: newPasswordHash,
-        })
-      } else {
-        if (!currentPassword)
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Current password is required to change the password.',
-          })
-
-        if (currentPassword === newPassword)
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'The new password must be different from the current one.',
-          })
-
-        if (!(await this._password.verify(account.password, currentPassword)))
-          throw new TRPCError({
-            code: 'FORBIDDEN',
-            message: 'The current password is incorrect.',
-          })
-
-        const newPasswordHash = await this._password.hash(newPassword)
-        await tx
-          .update(accounts)
-          .set({ password: newPasswordHash })
-          .where(
-            and(
-              eq(accounts.userId, userId),
-              eq(accounts.provider, 'credentials'),
-            ),
-          )
-      }
-
-      if (isLogOut) await tx.delete(sessions).where(eq(sessions.userId, userId))
-
-      if (account)
-        await sendEmail({
-          to: account.email,
-          subject: 'Yukinu Password Changed',
-          template: 'ChangePassword',
-          data: { username: account.username },
-        })
+      return { userId }
     })
   }
 
   async forgotPassword(
-    input: AuthValidators.ForgotPasswordInput,
-  ): Promise<AuthValidators.ForgotPasswordOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
+    input: Validators.ForgotPasswordInput,
+  ): Promise<Validators.ForgotPasswordOutput> {
     const { email } = input
 
-    const [user] = await this._db
-      .select()
-      .from(users)
-      .where(eq(users.email, email))
-      .limit(1)
-    if (!user) return
+    const user = await this._user.findByIdentifier({ email })
+    if (!user?.username) return { id: '' }
 
-    return this._db.transaction(async (tx) => {
-      const token = randomBytes(32).toString('hex')
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
-
-      await tx.insert(this._schema.verifications).values({
-        token,
-        userId: user.id,
-        type: 'password_reset',
-        expiresAt,
-      })
-
-      const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
-      await sendEmail({
-        to: email,
-        subject: 'Yukinu Password Reset',
-        template: 'ResetPassword',
-        data: { username: user.username, resetLink },
-      })
+    const { id, username } = user
+    const token = randomBytes(32).toString('hex')
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+    await this._verification.create({
+      token,
+      userId: id,
+      type: 'password_reset',
+      expiresAt,
     })
+
+    const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
+    await sendEmail({
+      to: email,
+      subject: 'Yukinu Password Reset',
+      template: 'ResetPassword',
+      data: { username, resetLink },
+    })
+
+    return { id }
   }
 
   async resetPassword(
-    input: AuthValidators.ResetPasswordInput,
-  ): Promise<AuthValidators.ResetPasswordOutput> {
-    const { and, eq } = this._orm
-    const { verifications } = this._schema
+    input: Validators.ResetPasswordInput,
+  ): Promise<Validators.ResetPasswordOutput> {
     const { token, newPassword } = input
 
-    const [verification] = await this._db
-      .select()
-      .from(verifications)
-      .where(eq(verifications.token, token))
-      .limit(1)
+    const verification = await this._verification.find(token, 'password_reset')
     if (!verification)
       throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: 'The password reset token is invalid.',
+        code: 'BAD_REQUEST',
+        message: 'Invalid or expired password reset token.',
       })
 
+    const { userId, expiresAt } = verification
     return this._db.transaction(async (tx) => {
-      if (verification.expiresAt < new Date()) {
-        await tx.delete(verifications).where(eq(verifications.token, token))
+      if (expiresAt < new Date()) {
+        await this._verification.delete(token, tx)
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'The password reset token has expired.',
         })
       }
 
-      const passwordHash = await this._password.hash(newPassword)
-      await tx
-        .update(this._schema.accounts)
-        .set({ password: passwordHash })
-        .where(
-          and(
-            eq(this._schema.accounts.userId, verification.userId),
-            eq(this._schema.accounts.provider, 'credentials'),
-          ),
-        )
-      await tx.delete(verifications).where(eq(verifications.token, token))
+      const password = await this._password.hash(newPassword)
+      await this._account.update(userId, { password }, tx)
+      await this._verification.delete(token, tx)
+
+      return { userId }
     })
   }
 }

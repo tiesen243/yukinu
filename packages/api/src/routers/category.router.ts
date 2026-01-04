@@ -1,18 +1,18 @@
-import { CategoryValidators } from '@yukinu/validators/category'
+import * as Validators from '@yukinu/validators/general'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc'
 
 export const categoryRouter = createTRPCRouter({
   all: publicProcedure
     .meta({ message: 'Categories fetched successfully' })
-    .input(CategoryValidators.allInput)
-    .output(CategoryValidators.allOutput)
+    .input(Validators.allCategoriesInput)
+    .output(Validators.allCategoriesOutput)
     .query(({ ctx, input }) => ctx.services.category.all(input)),
 
   one: publicProcedure
     .meta({ message: 'Category fetched successfully' })
-    .input(CategoryValidators.oneInput)
-    .output(CategoryValidators.oneOutput)
+    .input(Validators.oneCategoryInput)
+    .output(Validators.oneCategoryOutput)
     .query(({ ctx, input }) => ctx.services.category.one(input)),
 
   create: protectedProcedure
@@ -20,8 +20,8 @@ export const categoryRouter = createTRPCRouter({
       message: 'Category created successfully',
       role: ['admin', 'moderator'],
     })
-    .input(CategoryValidators.createInput)
-    .output(CategoryValidators.createOutput)
+    .input(Validators.createCategoryInput)
+    .output(Validators.createCategoryOutput)
     .mutation(({ ctx, input }) => ctx.services.category.create(input)),
 
   update: protectedProcedure
@@ -29,8 +29,8 @@ export const categoryRouter = createTRPCRouter({
       message: 'Category updated successfully',
       role: ['admin', 'moderator'],
     })
-    .input(CategoryValidators.updateInput)
-    .output(CategoryValidators.updateOutput)
+    .input(Validators.updateCategoryInput)
+    .output(Validators.updateCategoryOutput)
     .mutation(({ ctx, input }) => ctx.services.category.update(input)),
 
   delete: protectedProcedure
@@ -38,7 +38,7 @@ export const categoryRouter = createTRPCRouter({
       message: 'Category deleted successfully',
       role: ['admin', 'moderator'],
     })
-    .input(CategoryValidators.deleteInput)
-    .output(CategoryValidators.deleteOutput)
+    .input(Validators.deleteCategoryInput)
+    .output(Validators.deleteCategoryOutput)
     .mutation(({ ctx, input }) => ctx.services.category.delete(input)),
 })

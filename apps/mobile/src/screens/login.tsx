@@ -2,7 +2,11 @@ import type { GestureResponderEvent } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import { useMutation } from '@tanstack/react-query'
-import { AuthValidators } from '@yukinu/validators/auth'
+import {
+  loginInput,
+  type LoginInput,
+  type LoginOutput,
+} from '@yukinu/validators/auth'
 import { useState } from 'react'
 import { Alert, Linking, View } from 'react-native'
 
@@ -13,30 +17,28 @@ import { setAccessToken, setSessionToken } from '@/lib/secure-store'
 import { trpc } from '@/lib/trpc'
 import { getBaseUrl } from '@/lib/utils'
 
-type LoginInputKeys = keyof AuthValidators.LoginInput
-
 export default function LoginScreen() {
   const navigation = useNavigation()
 
-  const [data, setData] = useState<AuthValidators.LoginInput>({
+  const [data, setData] = useState<LoginInput>({
     identifier: '',
     password: '',
   })
 
   const { mutate, error, isPending } = useMutation<
-    AuthValidators.LoginOutput,
-    Record<LoginInputKeys, string> & { message?: string },
+    LoginOutput,
+    Record<keyof LoginInput, string> & { message?: string },
     GestureResponderEvent
   >({
     mutationFn: async (_: GestureResponderEvent) => {
-      const parsed = AuthValidators.loginInput.safeParse(data)
+      const parsed = loginInput.safeParse(data)
       if (!parsed.success)
         throw parsed.error.issues.reduce(
           (acc, issue) => {
-            acc[issue.path[0] as LoginInputKeys] = issue.message
+            acc[issue.path[0] as keyof LoginInput] = issue.message
             return acc
           },
-          {} as Partial<Record<LoginInputKeys, string>>,
+          {} as Partial<Record<keyof LoginInput, string>>,
         )
 
       const response = await fetch(`${getBaseUrl()}/api/auth/sign-in`, {
@@ -47,7 +49,7 @@ export default function LoginScreen() {
 
       if (!response.ok) throw new Error(await response.text())
 
-      return response.json() as Promise<AuthValidators.LoginOutput>
+      return response.json() as Promise<LoginOutput>
     },
     meta: { filter: trpc.user.profile.queryFilter() },
     onSuccess: async (data) => {

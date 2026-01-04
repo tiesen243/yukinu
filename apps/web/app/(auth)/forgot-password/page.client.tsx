@@ -5,7 +5,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidators } from '@yukinu/validators/auth'
+import { forgotPasswordInput } from '@yukinu/validators/auth'
 
 import { useTRPCClient } from '@/lib/trpc/react'
 
@@ -14,7 +14,7 @@ export const ForgotPasswordForm: React.FC = () => {
 
   const form = useForm({
     defaultValues: { email: '' },
-    schema: AuthValidators.forgotPasswordInput,
+    schema: forgotPasswordInput,
     onSubmit: trpc.auth.forgotPassword.mutate,
     onSuccess: () => toast.success('Password reset email sent!'),
     onError: ({ message }) =>

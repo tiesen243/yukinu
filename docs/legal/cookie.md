@@ -1,5 +1,5 @@
 ---
-nav_order: 11
+title: 3.5. Cookie Policy
 ---
 
 # Cookie Policy

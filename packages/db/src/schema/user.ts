@@ -1,13 +1,7 @@
 import { createId } from '@yukinu/lib/create-id'
-import { UserValidators } from '@yukinu/validators/user'
-import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
+import { index, pgTable } from 'drizzle-orm/pg-core'
 
-import { products, users } from '@/schema'
-
-export const ticketStatusEnum = pgEnum(
-  'ticket_status',
-  UserValidators.ticketStatuses,
-)
+import { users } from '@/schema'
 
 export const profiles = pgTable('profiles', (t) => ({
   id: t
@@ -38,34 +32,3 @@ export const addresses = pgTable(
   }),
   (t) => [index('addresses_user_id_idx').on(t.userId)],
 )
-
-export const wishlistItems = pgTable(
-  'wishlist_items',
-  (t) => ({
-    userId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    productId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
-    addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
-  }),
-  (t) => [
-    primaryKey({ columns: [t.userId, t.productId] }),
-    index('wishlist_items_user_id_idx').on(t.userId),
-  ],
-)
-
-export const tickets = pgTable('tickets', (t) => ({
-  id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-  userId: t
-    .varchar({ length: 24 })
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  subject: t.varchar({ length: 255 }).notNull(),
-  description: t.text().notNull(),
-  status: ticketStatusEnum().default('open').notNull(),
-  createdAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
-}))

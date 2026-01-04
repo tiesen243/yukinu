@@ -1,4 +1,4 @@
-import type { CategoryValidators } from '@yukinu/validators/category'
+import type { AllCategoriesOutput } from '@yukinu/validators/general'
 
 import { cn } from '@yukinu/ui'
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
@@ -6,7 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface CategoryCardProps extends React.ComponentProps<typeof Card> {
-  category: CategoryValidators.AllOutput['categories'][number]
+  category: AllCategoriesOutput['categories'][number]
 }
 
 export const CategoryCard: React.FC<CategoryCardProps> = ({

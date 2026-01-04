@@ -1,4 +1,4 @@
-import type { CategoryValidators } from '@yukinu/validators/category'
+import type { AllCategoriesOutput } from '@yukinu/validators/general'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
@@ -56,7 +56,7 @@ export const CategoriesList: React.FC = () => {
 }
 
 const DeleteCategoryButton: React.FC<{
-  category: CategoryValidators.AllOutput['categories'][number]
+  category: AllCategoriesOutput['categories'][number]
 }> = ({ category }) => {
   const trpc = useTRPC()
   const [open, setOpen] = useState(false)

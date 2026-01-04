@@ -5,7 +5,7 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidators } from '@yukinu/validators/auth'
+import { registerInput } from '@yukinu/validators/auth'
 
 import { useTRPCClient } from '@/lib/trpc/react'
 
@@ -19,7 +19,7 @@ export const RegisterForm: React.FC = () => {
       password: '',
       confirmPassword: '',
     },
-    schema: AuthValidators.registerInput,
+    schema: registerInput,
     onSubmit: trpc.auth.register.mutate,
     onSuccess: () => {
       toast.success('Registration successful!', {

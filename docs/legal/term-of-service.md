@@ -1,5 +1,5 @@
 ---
-nav_order: 13
+title: 3.1. Terms of Service
 ---
 
 # Terms of Service

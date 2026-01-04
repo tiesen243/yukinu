@@ -1,18 +1,17 @@
 import { createId } from '@yukinu/lib/create-id'
-import { UserValidators } from '@yukinu/validators/user'
-import {
-  index,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  uniqueIndex,
-} from 'drizzle-orm/pg-core'
+import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const userRoleEnum = pgEnum('user_role', UserValidators.roles)
+export const userRoleEnum = pgEnum('user_role', [
+  'user',
+  'admin',
+  'vendor_owner',
+  'vendor_staff',
+  'moderator',
+])
 
-export const userStatusEnum = pgEnum('user_status', UserValidators.statuses)
+export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
 
 export const users = pgTable(
   'users',
@@ -37,6 +36,7 @@ export const users = pgTable(
 export const accounts = pgTable(
   'accounts',
   (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
@@ -46,7 +46,10 @@ export const accounts = pgTable(
     password: t.text(),
   }),
   (t) => [
-    primaryKey({ columns: [t.provider, t.accountId] }),
+    uniqueIndex('accounts_provider_account_id_uq_idx').on(
+      t.provider,
+      t.accountId,
+    ),
     index('accounts_user_id_idx').on(t.userId),
   ],
 )

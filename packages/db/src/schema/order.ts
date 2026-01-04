@@ -1,25 +1,35 @@
 import { createId } from '@yukinu/lib/create-id'
-import { OrderValidators } from '@yukinu/validators/order'
 import { isNotNull, isNull } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { addresses, products, productVariants, users, vendors } from '@/schema'
+import {
+  addresses,
+  products,
+  productVariants,
+  users,
+  vendors,
+  vouchers,
+} from '@/schema'
 import { createdAt, updatedAt } from '@/schema/shared'
 
-export const orderStatusEnum = pgEnum(
-  'order_status',
-  OrderValidators.orderStatuses,
-)
+export const orderStatusEnum = pgEnum('order_status', [
+  'pending',
+  'confirmed',
+  'shipped',
+  'completed',
+  'cancelled',
+])
 
-export const paymentMethodEnum = pgEnum(
-  'payment_method',
-  OrderValidators.paymentMethods,
-)
+export const paymentMethodEnum = pgEnum('payment_method', [
+  'bank_transfer',
+  'cash_on_delivery',
+])
 
-export const paymentStatusEnum = pgEnum(
-  'payment_status',
-  OrderValidators.paymentStatuses,
-)
+export const paymentStatusEnum = pgEnum('payment_status', [
+  'pending',
+  'success',
+  'failed',
+])
 
 export const orders = pgTable(
   'orders',
@@ -64,6 +74,7 @@ export const orderItems = pgTable(
       .references(() => productVariants.id, { onDelete: 'set null' }),
     quantity: t.integer().notNull(),
     unitPrice: t.numeric({ precision: 10, scale: 2 }).notNull(),
+    note: t.text(),
     isCompleted: t.boolean().default(false).notNull(), // vendor marks item as completed
   }),
   (t) => [
@@ -76,18 +87,6 @@ export const orderItems = pgTable(
       .on(t.orderId, t.productVariantId)
       .where(isNotNull(t.productVariantId)),
   ],
-)
-
-export const vouchers = pgTable(
-  'vouchers',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    code: t.varchar({ length: 50 }).notNull().unique(),
-    discountAmount: t.numeric({ precision: 10, scale: 2 }),
-    discountPercentage: t.integer(),
-    expiryDate: t.timestamp().notNull(),
-  }),
-  (t) => [uniqueIndex('vouchers_code_uq_idx').on(t.code)],
 )
 
 export const payments = pgTable(

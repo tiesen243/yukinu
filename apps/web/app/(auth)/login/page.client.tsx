@@ -12,7 +12,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidators } from '@yukinu/validators/auth'
+import { loginInput } from '@yukinu/validators/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
@@ -25,7 +25,7 @@ export const LoginForm: React.FC = () => {
       identifier: '',
       password: '',
     },
-    schema: AuthValidators.loginInput,
+    schema: loginInput,
     onSubmit: signIn,
     onSuccess: () => {
       toast.success('Logged in successfully!')

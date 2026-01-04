@@ -1,39 +1,19 @@
-import type { ProductValidators } from '@yukinu/validators/product'
+import type * as Validators from '@yukinu/validators/product'
 
 export interface IProductService {
-  all(input: ProductValidators.AllInput): Promise<ProductValidators.AllOutput>
+  all(input: Validators.AllInput): Promise<Validators.AllOutput>
 
-  one(input: ProductValidators.OneInput): Promise<ProductValidators.OneOutput>
+  one(input: Validators.OneInput): Promise<Validators.OneOutput>
 
-  create(
-    input: ProductValidators.CreateInput,
-  ): Promise<ProductValidators.CreateOutput>
+  create(input: Validators.CreateInput): Promise<Validators.CreateOutput>
 
-  update(
-    input: ProductValidators.UpdateInput,
-  ): Promise<ProductValidators.UpdateOutput>
+  update(input: Validators.UpdateInput): Promise<Validators.UpdateOutput>
 
-  delete(
-    input: ProductValidators.DeleteInput,
-  ): Promise<ProductValidators.DeleteOutput>
+  delete(input: Validators.DeleteInput): Promise<Validators.DeleteOutput>
 
-  restore(
-    input: ProductValidators.RestoreInput,
-  ): Promise<ProductValidators.RestoreOutput>
+  restore(input: Validators.RestoreInput): Promise<Validators.RestoreOutput>
 
   permanentlyDelete(
-    input: ProductValidators.PermanentlyDeleteInput,
-  ): Promise<ProductValidators.PermanentlyDeleteOutput>
-
-  recreateVariant(
-    input: ProductValidators.RecreateVariantInput,
-  ): Promise<ProductValidators.RecreateVariantOutput>
-
-  updateVariant(
-    input: ProductValidators.UpdateVariantInput,
-  ): Promise<ProductValidators.UpdateVariantOutput>
-
-  deleteVariant(
-    input: ProductValidators.DeleteVariantInput,
-  ): Promise<ProductValidators.DeleteVariantOutput>
+    input: Validators.PermanentlyDeleteInput,
+  ): Promise<Validators.PermanentlyDeleteOutput>
 }

@@ -58,7 +58,7 @@ const AcceptInviteForm: React.FC<{ token: string }> = ({ token }) => {
   const navigate = useNavigate()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendor.acceptStaffInvitation.mutationOptions(),
+    ...trpc.vendorStaff.acceptInvitation.mutationOptions(),
     onError: ({ message }) =>
       toast.error('Failed to accept invitation', { description: message }),
     onSuccess: () => {

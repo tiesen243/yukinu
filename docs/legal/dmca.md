@@ -1,5 +1,5 @@
 ---
-nav_order: 16
+title: 3.4. DMCA Notice
 ---
 
 # Digital Millennium Copyright Act ("DMCA") Notice

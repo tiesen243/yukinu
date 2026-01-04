@@ -1,5 +1,5 @@
 ---
-nav_order: 12
+title: 3.2. Privacy Policy
 ---
 
 # Privacy Policy

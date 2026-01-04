@@ -8,7 +8,7 @@ export default function DocsNotFoundError() {
   return (
     <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
       <Image
-        src='/assets/images/yuki.webp'
+        src='/assets/yuki.webp'
         alt='Mascot'
         width={192}
         height={192}

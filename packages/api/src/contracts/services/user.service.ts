@@ -1,59 +1,29 @@
-import type { UserValidators } from '@yukinu/validators/user'
+import type * as Validators from '@yukinu/validators/user'
 
 export interface IUserService {
-  all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput>
+  all(input: Validators.AllUsersInput): Promise<Validators.AllUsersOutput>
 
-  one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput>
+  one(input: Validators.OneUserInput): Promise<Validators.OneUserOutput>
 
   update(
-    input: UserValidators.UpdateInput,
-  ): Promise<UserValidators.UpdateOutput>
+    input: Validators.UpdateUserInput,
+  ): Promise<Validators.UpdateUserOutput>
 
   delete(
-    input: UserValidators.DeleteInput,
-  ): Promise<UserValidators.DeleteOutput>
+    input: Validators.DeleteUserInput,
+  ): Promise<Validators.DeleteUserOutput>
 
   restore(
-    input: UserValidators.RestoreInput,
-  ): Promise<UserValidators.RestoreOutput>
+    input: Validators.RestoreUserInput,
+  ): Promise<Validators.RestoreUserOutput>
 
   permanentlyDelete(
-    input: UserValidators.PermanentlyDeleteInput,
-  ): Promise<UserValidators.PermanentlyDeleteOutput>
+    input: Validators.PermanentlyDeleteUserInput,
+  ): Promise<Validators.PermanentlyDeleteUserOutput>
 
-  profile(
-    input: UserValidators.ProfileInput,
-  ): Promise<UserValidators.ProfileOutput>
+  profile(input: Validators.ProfileInput): Promise<Validators.ProfileOutput>
 
   updateProfile(
-    input: UserValidators.UpdateProfileInput,
-  ): Promise<UserValidators.UpdateProfileOutput>
-
-  allAddresses(
-    input: UserValidators.AllAddressesInput,
-  ): Promise<UserValidators.AllAddressesOutput>
-
-  oneAddress(
-    input: UserValidators.OneAddressInput,
-  ): Promise<UserValidators.OneAddressOutput>
-
-  createAddress(
-    input: UserValidators.CreateAddressInput,
-  ): Promise<UserValidators.CreateAddressOutput>
-
-  updateAddress(
-    input: UserValidators.UpdateAddressInput,
-  ): Promise<UserValidators.UpdateAddressOutput>
-
-  deleteAddress(
-    input: UserValidators.DeleteAddressInput,
-  ): Promise<UserValidators.DeleteAddressOutput>
-
-  wishlist(
-    input: UserValidators.WishlistInput,
-  ): Promise<UserValidators.WishlistOutput>
-
-  toggleWishlistItem(
-    input: UserValidators.ToggleWishlistItemInput,
-  ): Promise<UserValidators.ToggleWishlistItemOutput>
+    input: Validators.UpdateProfileInput,
+  ): Promise<Validators.UpdateProfileOutput>
 }

@@ -1,4 +1,4 @@
-import type { ProductValidators } from '@yukinu/validators/product'
+import type { AllOutput } from '@yukinu/validators/product'
 
 import { slugify } from '@yukinu/lib/slugify'
 import { cn } from '@yukinu/ui'
@@ -14,7 +14,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 interface ProductCardProps extends React.ComponentProps<typeof Card> {
-  product: ProductValidators.AllOutput['products'][number]
+  product: AllOutput['products'][number]
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({

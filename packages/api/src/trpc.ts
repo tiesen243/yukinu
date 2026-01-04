@@ -1,44 +1,10 @@
 import type { TRPCContext, TRPCMeta } from '@/types'
 
 import { initTRPC, TRPCError } from '@trpc/server'
-import { validateAccessToken } from '@yukinu/auth'
 import { db, orm } from '@yukinu/db'
 import * as schema from '@yukinu/db/schema'
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
 import SuperJSON from 'superjson'
-
-import { AuthService } from '@/services/auth.service'
-import { CategoryService } from '@/services/category.service'
-import { OrderService } from '@/services/order.service'
-import { ProductService } from '@/services/product.service'
-import { UserService } from '@/services/user.service'
-import { VendorService } from '@/services/vendor.service'
-
-const createTRPCContext = async (opts: {
-  headers: Headers
-}): Promise<TRPCContext> => {
-  const session = await validateAccessToken(opts.headers)
-
-  const authService = new AuthService(db, orm, schema)
-  const categoryService = new CategoryService(db, orm, schema)
-  const orderService = new OrderService(db, orm, schema)
-  const productService = new ProductService(db, orm, schema)
-  const userService = new UserService(db, orm, schema)
-  const vendorService = new VendorService(db, orm, schema)
-
-  return {
-    headers: opts.headers,
-    session,
-    services: {
-      auth: authService,
-      category: categoryService,
-      order: orderService,
-      product: productService,
-      user: userService,
-      vendor: vendorService,
-    },
-  }
-}
 
 const t = initTRPC
   .meta<TRPCMeta>()
@@ -164,7 +130,6 @@ export type { TRPCMeta, TRPCContext }
 export const MINMOD_ACCESS = 'admin-or-moderator-access'
 export {
   createCallerFactory,
-  createTRPCContext,
   createTRPCRouter,
   publicProcedure,
   protectedProcedure,

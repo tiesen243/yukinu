@@ -11,7 +11,7 @@ export default async function EditAddressPage({
   params,
 }: PageProps<'/account/address/[id]'>) {
   const { id } = await params
-  void getQueryClient().prefetchQuery(trpc.user.oneAddress.queryOptions({ id }))
+  void getQueryClient().prefetchQuery(trpc.address.one.queryOptions({ id }))
 
   return (
     <HydrateClient>
@@ -47,7 +47,7 @@ export const generateMetadata = async ({
 
   try {
     const address = await getQueryClient().ensureQueryData(
-      trpc.user.oneAddress.queryOptions({ id }),
+      trpc.address.one.queryOptions({ id }),
     )
 
     const title = `Edit Address: ${address.recipientName}`

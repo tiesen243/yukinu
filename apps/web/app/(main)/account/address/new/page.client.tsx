@@ -12,7 +12,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { UserValidators } from '@yukinu/validators/user'
+import { createAddressInput } from '@yukinu/validators/user'
 import { useRouter } from 'next/navigation'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -22,8 +22,8 @@ export const NewAddressForm: React.FC = () => {
   const router = useRouter()
 
   const { mutateAsync } = useMutation({
-    ...trpc.user.createAddress.mutationOptions(),
-    meta: { filter: trpc.user.allAddresses.queryFilter() },
+    ...trpc.address.create.mutationOptions(),
+    meta: { filter: trpc.address.all.queryFilter() },
     onSuccess: () => toast.success('Address added successfully!'),
     onError: ({ message }) =>
       toast.error('Error adding address', { description: message }),
@@ -39,7 +39,7 @@ export const NewAddressForm: React.FC = () => {
       country: '',
       postalCode: '',
     },
-    schema: UserValidators.createAddressInput.omit({ userId: true }),
+    schema: createAddressInput.omit({ userId: true }),
     onSubmit: mutateAsync,
     onSuccess: () => {
       router.push('/account/address')

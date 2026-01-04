@@ -1,5 +1,5 @@
 ---
-nav_order: 15
+title: 3.6. Frequently Asked Questions (FAQ)
 ---
 
 # Frequently Asked Questions (FAQ)

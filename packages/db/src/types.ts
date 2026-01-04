@@ -1,4 +1,8 @@
-import type { ExtractTablesWithRelations } from 'drizzle-orm'
+import type {
+  ColumnBaseConfig,
+  ColumnDataType,
+  ExtractTablesWithRelations,
+} from 'drizzle-orm'
 import type {
   PgColumn,
   PgTableWithColumns,
@@ -21,25 +25,7 @@ export type PgTable = PgTableWithColumns<{
   name: string
   schema: undefined
   columns: {
-    id: PgColumn<
-      {
-        name: 'id'
-        tableName: string
-        dataType: 'string'
-        columnType: 'PgVarchar'
-        data: string
-        driverParam: string
-        notNull: boolean
-        hasDefault: boolean
-        isPrimaryKey: boolean
-        isAutoincrement: boolean
-        hasRuntimeDefault: boolean
-        enumValues: [string, ...string[]]
-        generated: undefined
-      },
-      object,
-      object
-    >
+    id: PgColumn<ColumnBaseConfig<ColumnDataType, string>, object, object>
   }
   dialect: 'pg'
 }>

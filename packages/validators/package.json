@@ -1,16 +1,17 @@
 {
   "name": "@yukinu/validators",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
   "exports": {
     "./auth": "./dist/auth.mjs",
-    "./category": "./dist/category.mjs",
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",
     "./env.vite": "./dist/env.vite.mjs",
+    "./general": "./dist/general.mjs",
     "./order": "./dist/order.mjs",
     "./product": "./dist/product.mjs",
+    "./shared": "./dist/shared.mjs",
     "./user": "./dist/user.mjs",
     "./vendor": "./dist/vendor.mjs",
     "./package.json": "./package.json"
@@ -22,7 +23,9 @@
     "~dev": "tsdown --watch ./src"
   },
   "dependencies": {
+    "@yukinu/db": "workspace:*",
     "@yukinu/lib": "workspace:*",
+    "drizzle-zod": "^0.8.3",
     "zod": "catalog:prod"
   },
   "devDependencies": {

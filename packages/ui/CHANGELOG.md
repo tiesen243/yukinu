@@ -1,5 +1,11 @@
 # @yukinu/ui
 
+## 0.8.0
+
+### Minor Changes
+
+- [#317](https://github.com/tiesen243/yukinu/pull/317) [`49326d1`](https://github.com/tiesen243/yukinu/commit/49326d146ac8c3edc7d68187c45f55f725be6b51) Thanks [@tiesen243](https://github.com/tiesen243)! - completed migration
+
 ## 0.7.0
 
 ### Minor Changes

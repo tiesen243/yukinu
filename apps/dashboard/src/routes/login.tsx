@@ -13,7 +13,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
-import { AuthValidators } from '@yukinu/validators/auth'
+import * as AuthValidators from '@yukinu/validators/auth'
 import { Link, useNavigate } from 'react-router'
 
 import { getWebUrl } from '@/lib/utils'

@@ -1,398 +1,198 @@
+import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
 import type { IUserService } from '@/contracts/services/user.service'
+import type { Database } from '@yukinu/db'
+import type * as Validators from '@yukinu/validators/user'
 
 import { TRPCError } from '@trpc/server'
-import { UserValidators } from '@yukinu/validators/user'
+import { utapi } from '@yukinu/uploadthing'
+import { roles } from '@yukinu/validators/auth'
 
-import { BaseService } from '@/services/base.service'
+export class UserService implements IUserService {
+  constructor(
+    private readonly _db: Database,
+    private readonly _profile: IProfileRepository,
+    private readonly _user: IUserRepository,
+  ) {}
 
-export class UserService extends BaseService implements IUserService {
-  async all(input: UserValidators.AllInput): Promise<UserValidators.AllOutput> {
-    const { and, asc, eq, ilike, or } = this._orm
-    const { users } = this._schema
+  async all(
+    input: Validators.AllUsersInput,
+  ): Promise<Validators.AllUsersOutput> {
     const { search, role, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClauses = []
-    if (search)
-      whereClauses.push(
-        or(
-          ilike(users.username, `%${search}%`),
-          ilike(users.email, `%${search}%`),
-        ),
-      )
-    if (role) whereClauses.push(eq(users.role, role))
-    const whereClause =
-      whereClauses.length > 0 ? and(...whereClauses) : undefined
+    const whereClauses = [
+      { username: `%${search}%`, ...(role ? [role] : []) },
+      { email: `%${search}%`, ...(role ? [role] : []) },
+    ]
 
-    const [usersList, total] = await Promise.all([
-      this._db
-        .select()
-        .from(users)
-        .where(whereClause)
-        .orderBy(asc(users.username))
-        .offset(offset)
-        .limit(limit),
-      this._db.$count(users, whereClause),
+    const [users, total] = await Promise.all([
+      this._user.all(whereClauses, { createdAt: 'desc' }, { limit, offset }),
+      this._user.count(whereClauses),
     ])
     const totalPages = Math.ceil(total / limit)
 
     return {
-      users: usersList,
+      users,
       pagination: { total, page, limit, totalPages },
     }
   }
 
-  async one(input: UserValidators.OneInput): Promise<UserValidators.OneOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
-    const { id } = input
-
-    const [user] = await this._db
-      .select()
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1)
-
+  async one(input: Validators.OneUserInput): Promise<Validators.OneUserOutput> {
+    const user = await this._user.find(input.id)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
-
     return user
   }
 
   async update(
-    input: UserValidators.UpdateInput,
-  ): Promise<UserValidators.UpdateOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
+    input: Validators.UpdateUserInput,
+  ): Promise<Validators.UpdateUserOutput> {
     const { id, userId, status, role } = input
 
-    if (id === userId)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'You cannot update your own role or status',
-      })
+    await this._check(id, userId, ['moderator', 'user'], {
+      forbidden: 'You cannot update users with critical roles',
+      badRequest: 'You cannot update your own role or status',
+    })
 
-    const [targetUser] = await this._db
-      .select({ role: users.role })
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1)
+    await this._user.update(id, { status, role })
 
-    if (!targetUser)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
-
-    const crs: string[] = UserValidators.roles.filter(
-      (r) => ['moderator', 'user'].includes(r) === false,
-    )
-    if (crs.includes(targetUser.role))
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: `You cannot update users with critical roles (${crs.join(', ')})`,
-      })
-
-    await this._db.update(users).set({ status, role }).where(eq(users.id, id))
     return { id }
   }
 
   async delete(
-    input: UserValidators.DeleteInput,
-  ): Promise<UserValidators.DeleteOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
+    input: Validators.DeleteUserInput,
+  ): Promise<Validators.DeleteUserOutput> {
     const { id, userId } = input
 
-    if (id === userId)
+    const targetUser = await this._check(
+      id,
+      userId,
+      ['moderator', 'user', 'vendor_staff'],
+      {
+        forbidden: 'You cannot delete users with critical roles',
+        badRequest: 'You cannot delete your own account',
+      },
+    )
+
+    if (targetUser.deletedAt)
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'You cannot delete your own account',
+        message: `User with ID ${id} is already deleted`,
       })
 
-    const [targetUser] = await this._db
-      .select({ role: users.role, deletedAt: users.deletedAt })
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1)
-
-    if (!targetUser)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `User with ID ${id} not found`,
-      })
-
-    const crs: string[] = UserValidators.roles.filter((r) => r !== 'user')
-    if (crs.includes(targetUser.role))
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: `You cannot delete users with critical roles (${crs.join(', ')})`,
-      })
-
-    await this._db
-      .update(users)
-      .set({ deletedAt: new Date() })
-      .where(eq(users.id, id))
-      .returning({ id: users.id })
+    await this._user.update(id, { deletedAt: new Date() })
 
     return { id }
   }
 
   async restore(
-    input: UserValidators.RestoreInput,
-  ): Promise<UserValidators.RestoreOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
-    const { id } = input
+    input: Validators.RestoreUserInput,
+  ): Promise<Validators.RestoreUserOutput> {
+    const { id, userId } = input
 
-    const [targetUser] = await this._db
-      .select({ deletedAt: users.deletedAt })
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1)
+    const targetUser = await this._check(
+      id,
+      userId,
+      ['moderator', 'user', 'vendor_staff'],
+      {
+        forbidden: 'You cannot restore users with critical roles',
+        badRequest: 'You cannot restore your own account',
+      },
+    )
 
-    if (!targetUser)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `User with ID ${id} not found`,
-      })
-
-    if (targetUser.deletedAt === null)
+    if (!targetUser.deletedAt)
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: `User with ID ${id} is not deleted`,
       })
 
-    await this._db
-      .update(users)
-      .set({ deletedAt: null })
-      .where(eq(users.id, id))
+    await this._user.update(id, { deletedAt: null })
 
     return { id }
   }
 
   async permanentlyDelete(
-    input: UserValidators.PermanentlyDeleteInput,
-  ): Promise<UserValidators.PermanentlyDeleteOutput> {
-    const { eq } = this._orm
-    const { users } = this._schema
+    input: Validators.PermanentlyDeleteUserInput,
+  ): Promise<Validators.PermanentlyDeleteUserOutput> {
     const { id, userId } = input
 
-    if (id === userId)
+    const targetUser = await this._check(id, userId, roles, {
+      forbidden: 'You cannot permanently delete users with critical roles',
+      badRequest: 'You cannot permanently delete your own account',
+    })
+
+    if (!targetUser.deletedAt)
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'You cannot permanently delete your own account',
+        message: `User with ID ${id} must be deleted before permanently deleting`,
       })
 
-    const [targetUser] = await this._db
-      .select({ role: users.role, deletedAt: users.deletedAt })
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1)
-
-    if (!targetUser)
-      throw new TRPCError({
-        code: 'NOT_FOUND',
-        message: `User with ID ${id} not found`,
-      })
-
-    if (targetUser.deletedAt === null)
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: `User with ID ${id} must be soft-deleted before permanent deletion`,
-      })
-
-    const crs: string[] = UserValidators.roles.filter((r) => r !== 'user')
-    if (crs.includes(targetUser.role))
-      throw new TRPCError({
-        code: 'FORBIDDEN',
-        message: `You cannot delete users with critical roles (${crs.join(', ')})`,
-      })
-
-    await this._db.delete(users).where(eq(users.id, id))
+    await this._user.delete(id)
+    await utapi.deleteFiles(targetUser.image?.split('/').pop() ?? '')
 
     return { id }
   }
 
   async profile(
-    input: UserValidators.ProfileInput,
-  ): Promise<UserValidators.ProfileOutput> {
-    const { eq, sql } = this._orm
-    const { users, profiles } = this._schema
-    const { userId } = input
-
-    const [profile] = await this._db
-      .select({
-        id: users.id,
-        username: users.username,
-        email: users.email,
-        emailVerified: users.emailVerified,
-        image: users.image,
-        role: users.role,
-        createdAt: users.createdAt,
-        profile: {
-          fullName: profiles.fullName,
-          bio: profiles.bio,
-          gender: sql<UserValidators.Gender | null>`${profiles.gender}`,
-          dateOfBirth: profiles.dateOfBirth,
-        },
-      })
-      .from(users)
-      .where(eq(users.id, userId))
-      .innerJoin(profiles, eq(profiles.id, users.id))
-      .limit(1)
+    input: Validators.ProfileInput,
+  ): Promise<Validators.ProfileOutput> {
+    const profile = await this._user.findWithProfile(input.id)
     if (!profile)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
-
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
     return profile
   }
 
   updateProfile(
-    input: UserValidators.UpdateProfileInput,
-  ): Promise<UserValidators.UpdateProfileOutput> {
-    const { eq } = this._orm
-    const { profiles, users } = this._schema
+    input: Validators.UpdateProfileInput,
+  ): Promise<Validators.UpdateProfileOutput> {
     const { id, image, ...data } = input
 
     return this._db.transaction(async (tx) => {
-      await tx
-        .update(profiles)
-        .set({ ...data })
-        .where(eq(profiles.id, id))
+      const targetUser = await this._user.find(id, tx)
+      if (!targetUser)
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `User with ID ${id} not found`,
+        })
 
-      await tx.update(users).set({ image }).where(eq(users.id, id))
+      await this._profile.update(id, { ...data }, tx)
+
+      if (image && targetUser.image !== image) {
+        await this._user.update(id, { image }, tx)
+        await utapi.deleteFiles(targetUser.image?.split('/').pop() ?? '')
+      }
 
       return { id }
     })
   }
 
-  async allAddresses(
-    input: UserValidators.AllAddressesInput,
-  ): Promise<UserValidators.AllAddressesOutput> {
-    const { eq, desc } = this._orm
-    const { addresses } = this._schema
-    const { userId } = input
-
-    const addressesList = await this._db
-      .select()
-      .from(addresses)
-      .where(eq(addresses.userId, userId))
-      .orderBy(desc(addresses.recipientName))
-
-    return { addresses: addressesList }
-  }
-
-  async oneAddress(
-    input: UserValidators.OneAddressInput,
-  ): Promise<UserValidators.OneAddressOutput> {
-    const { and, eq } = this._orm
-    const { addresses } = this._schema
-    const { id, userId } = input
-
-    const [address] = await this._db
-      .select()
-      .from(addresses)
-      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
-      .limit(1)
-
-    if (!address)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Address not found' })
-
-    return address
-  }
-
-  async createAddress(
-    input: UserValidators.CreateAddressInput,
-  ): Promise<UserValidators.CreateAddressOutput> {
-    const { addresses } = this._schema
-
-    const [address] = await this._db
-      .insert(addresses)
-      .values({ ...input })
-      .returning({ id: addresses.id })
-
-    if (!address)
+  private async _check(
+    currentUserId: Validators.ProfileSchema['id'],
+    targetUserId: Validators.ProfileSchema['id'],
+    roles_: typeof roles,
+    messages: { forbidden: string; badRequest: string },
+  ) {
+    if (currentUserId === targetUserId)
       throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to create address',
+        code: 'BAD_REQUEST',
+        message: messages.badRequest,
       })
 
-    return address
-  }
-
-  async updateAddress(
-    input: UserValidators.UpdateAddressInput,
-  ): Promise<UserValidators.UpdateAddressOutput> {
-    const { and, eq } = this._orm
-    const { addresses } = this._schema
-    const { id, userId, ...data } = input
-
-    await this._db
-      .update(addresses)
-      .set({ ...data })
-      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
-
-    return { id }
-  }
-
-  async deleteAddress(
-    input: UserValidators.DeleteAddressInput,
-  ): Promise<UserValidators.DeleteAddressOutput> {
-    const { and, eq } = this._orm
-    const { addresses } = this._schema
-    const { id, userId } = input
-
-    await this._db
-      .delete(addresses)
-      .where(and(eq(addresses.id, id), eq(addresses.userId, userId)))
-
-    return { id }
-  }
-
-  wishlist(
-    input: UserValidators.WishlistInput,
-  ): Promise<UserValidators.WishlistOutput> {
-    const { eq, min } = this._orm
-    const { wishlistItems, products, productImages } = this._schema
-    const { userId } = input
-
-    return this._db
-      .select({
-        product: {
-          id: products.id,
-          name: products.name,
-          price: products.price,
-          image: min(productImages.url),
-        },
-        addedAt: wishlistItems.addedAt,
+    const targetUser = await this._user.find(targetUserId)
+    if (!targetUser)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with ID ${targetUserId} not found`,
       })
-      .from(wishlistItems)
-      .where(eq(wishlistItems.userId, userId))
-      .innerJoin(products, eq(products.id, wishlistItems.productId))
-      .leftJoin(productImages, eq(productImages.productId, products.id))
-      .groupBy(wishlistItems.addedAt, products.id)
-  }
 
-  async toggleWishlistItem(
-    input: UserValidators.ToggleWishlistItemInput,
-  ): Promise<UserValidators.ToggleWishlistItemOutput> {
-    const { and, eq } = this._orm
-    const { wishlistItems } = this._schema
-    const { userId, productId } = input
+    const crs: string[] = roles.filter((r) => roles_.includes(r) === false)
+    if (crs.includes(targetUser.role))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: `${messages.forbidden} (${crs.join(', ')})`,
+      })
 
-    const whereClause = and(
-      eq(wishlistItems.userId, userId),
-      eq(wishlistItems.productId, productId),
-    )
-
-    const [existingItem] = await this._db
-      .select()
-      .from(wishlistItems)
-      .where(whereClause)
-      .limit(1)
-
-    if (existingItem) {
-      await this._db.delete(wishlistItems).where(whereClause)
-      return { added: false }
-    }
-    await this._db.insert(wishlistItems).values({ userId, productId })
-    return { added: true }
+    return targetUser
   }
 }

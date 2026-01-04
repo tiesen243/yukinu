@@ -4,6 +4,8 @@ import { appRouter, createCaller, createTRPCContext } from '@yukinu/api'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
 import { cache } from 'react'
 
+import { trpcClient } from '@/lib/trpc/client'
+
 const createRscContext = cache((opts: { headers: Headers }) => {
   const heads = new Headers(opts.headers)
   heads.set('x-trpc-source', 'rsc')
@@ -21,6 +23,7 @@ const createTRPC = (opts: { headers: Headers }) =>
     ctx: () => createRscContext(opts),
     queryClient: getQueryClient,
     router: appRouter,
+    client: trpcClient,
   })
 
 function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {

@@ -1,4 +1,4 @@
-import { UserValidators } from '@yukinu/validators/user'
+import * as Validators from '@yukinu/validators/user'
 
 import { createTRPCRouter, protectedProcedure } from '@/trpc'
 
@@ -8,8 +8,8 @@ export const userRouter = createTRPCRouter({
       message: 'Users fetched successfully',
       role: ['admin'],
     })
-    .input(UserValidators.allInput)
-    .output(UserValidators.allOutput)
+    .input(Validators.allUsersInput)
+    .output(Validators.allUsersOutput)
     .query(({ ctx, input }) => ctx.services.user.all(input)),
 
   one: protectedProcedure
@@ -17,8 +17,8 @@ export const userRouter = createTRPCRouter({
       message: 'User fetched successfully',
       role: ['admin'],
     })
-    .input(UserValidators.oneInput)
-    .output(UserValidators.oneOutput)
+    .input(Validators.oneUserInput)
+    .output(Validators.oneUserOutput)
     .query(({ ctx, input }) => ctx.services.user.one(input)),
 
   update: protectedProcedure
@@ -26,8 +26,8 @@ export const userRouter = createTRPCRouter({
       message: 'User updated successfully',
       role: ['admin'],
     })
-    .input(UserValidators.updateInput.omit({ userId: true }))
-    .output(UserValidators.updateOutput)
+    .input(Validators.updateUserInput.omit({ userId: true }))
+    .output(Validators.updateUserOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.user.update({ ...input, userId: ctx.session.userId }),
     ),
@@ -35,10 +35,10 @@ export const userRouter = createTRPCRouter({
   delete: protectedProcedure
     .meta({
       message: 'User deleted successfully',
-      role: ['admin', 'moderator'],
+      role: ['admin'],
     })
-    .input(UserValidators.deleteInput.omit({ userId: true }))
-    .output(UserValidators.deleteOutput)
+    .input(Validators.deleteUserInput.omit({ userId: true }))
+    .output(Validators.deleteUserOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.user.delete({ ...input, userId: ctx.session.userId }),
     ),
@@ -46,19 +46,24 @@ export const userRouter = createTRPCRouter({
   restore: protectedProcedure
     .meta({
       message: 'User restored successfully',
-      role: ['admin', 'moderator'],
+      role: ['admin'],
     })
-    .input(UserValidators.restoreInput)
-    .output(UserValidators.restoreOutput)
-    .mutation(({ ctx, input }) => ctx.services.user.restore(input)),
+    .input(Validators.restoreUserInput.omit({ userId: true }))
+    .output(Validators.restoreUserOutput)
+    .mutation(({ ctx, input }) =>
+      ctx.services.user.restore({
+        ...input,
+        userId: ctx.session.userId,
+      }),
+    ),
 
   permanentlyDelete: protectedProcedure
     .meta({
       message: 'User permanently deleted successfully',
       role: ['admin'],
     })
-    .input(UserValidators.permanentlyDeleteInput.omit({ userId: true }))
-    .output(UserValidators.permanentlyDeleteOutput)
+    .input(Validators.permanentlyDeleteUserInput.omit({ userId: true }))
+    .output(Validators.permanentlyDeleteUserOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.user.permanentlyDelete({
         ...input,
@@ -68,85 +73,18 @@ export const userRouter = createTRPCRouter({
 
   profile: protectedProcedure
     .meta({ message: 'User profile fetched successfully' })
-    .input(UserValidators.profileInput.omit({ userId: true }))
-    .output(UserValidators.profileOutput)
-    .query(({ ctx }) =>
-      ctx.services.user.profile({ userId: ctx.session.userId }),
-    ),
+    .input(Validators.profileInput.omit({ id: true }))
+    .output(Validators.profileOutput)
+    .query(({ ctx }) => ctx.services.user.profile({ id: ctx.session.userId })),
 
   updateProfile: protectedProcedure
     .meta({ message: 'User profile updated successfully' })
-    .input(UserValidators.updateProfileInput.omit({ id: true }))
-    .output(UserValidators.updateProfileOutput)
+    .input(Validators.updateProfileInput.omit({ id: true }))
+    .output(Validators.updateProfileOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.user.updateProfile({
         ...input,
         id: ctx.session.userId,
-      }),
-    ),
-
-  allAddresses: protectedProcedure
-    .meta({ message: 'User addresses fetched successfully' })
-    .input(UserValidators.allAddressesInput.omit({ userId: true }))
-    .output(UserValidators.allAddressesOutput)
-    .query(({ ctx }) =>
-      ctx.services.user.allAddresses({ userId: ctx.session.userId }),
-    ),
-
-  oneAddress: protectedProcedure
-    .meta({ message: 'User address fetched successfully' })
-    .input(UserValidators.oneAddressInput.omit({ userId: true }))
-    .output(UserValidators.oneAddressOutput)
-    .query(({ ctx, input }) =>
-      ctx.services.user.oneAddress({
-        ...input,
-        userId: ctx.session.userId,
-      }),
-    ),
-
-  createAddress: protectedProcedure
-    .meta({ message: 'User address created successfully' })
-    .input(UserValidators.createAddressInput.omit({ userId: true }))
-    .output(UserValidators.createAddressOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.user.createAddress({ ...input, userId: ctx.session.userId }),
-    ),
-
-  updateAddress: protectedProcedure
-    .meta({ message: 'User address updated successfully' })
-    .input(UserValidators.updateAddressInput.omit({ userId: true }))
-    .output(UserValidators.updateAddressOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.user.updateAddress({ ...input, userId: ctx.session.userId }),
-    ),
-
-  deleteAddress: protectedProcedure
-    .meta({ message: 'User address deleted successfully' })
-    .input(UserValidators.deleteAddressInput.omit({ userId: true }))
-    .output(UserValidators.deleteAddressOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.user.deleteAddress({
-        ...input,
-        userId: ctx.session.userId,
-      }),
-    ),
-
-  wishlist: protectedProcedure
-    .meta({ message: 'User wishlist fetched successfully' })
-    .input(UserValidators.wishlistInput.omit({ userId: true }))
-    .output(UserValidators.wishlistOutput)
-    .query(({ ctx }) =>
-      ctx.services.user.wishlist({ userId: ctx.session.userId }),
-    ),
-
-  toggleWishlistItem: protectedProcedure
-    .meta({ message: 'User wishlist item toggled successfully' })
-    .input(UserValidators.toggleWishlistItemInput.omit({ userId: true }))
-    .output(UserValidators.toggleWishlistItemOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.user.toggleWishlistItem({
-        ...input,
-        userId: ctx.session.userId,
       }),
     ),
 })

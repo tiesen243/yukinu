@@ -1,76 +1,50 @@
+import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
 import type { ICategoryService } from '@/contracts/services/category.service'
-import type { CategoryValidators } from '@yukinu/validators/category'
+import type { Database } from '@yukinu/db'
+import type * as Validators from '@yukinu/validators/general'
 
 import { TRPCError } from '@trpc/server'
-import { alias } from '@yukinu/db'
+import { utapi } from '@yukinu/uploadthing'
 
-import { BaseService } from '@/services/base.service'
+export class CategoryService implements ICategoryService {
+  constructor(
+    private readonly _db: Database,
+    private readonly _category: ICategoryRepository,
+  ) {}
 
-export class CategoryService extends BaseService implements ICategoryService {
   async all(
-    input: CategoryValidators.AllInput,
-  ): Promise<CategoryValidators.AllOutput> {
-    const { and, asc, ilike, isNull } = this._orm
-    const { categories } = this._schema
-    const { search, istopLevelOnly, page, limit } = input
+    input: Validators.AllCategoriesInput,
+  ): Promise<Validators.AllCategoriesOutput> {
+    const { search, isTopLevelOnly, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClauses = []
-    if (search) whereClauses.push(ilike(categories.name, `%${search}%`))
-    if (istopLevelOnly) whereClauses.push(isNull(categories.parentId))
-    const whereClause =
-      whereClauses.length > 0 ? and(...whereClauses) : undefined
+    const whereClauses = [
+      { name: `%${search}%`, ...(isTopLevelOnly && { parentId: 'null' }) },
+    ]
 
-    const parent = alias(categories, 'parent')
-    const [categoriesList, total] = await Promise.all([
-      this._db
-        .select({
-          id: categories.id,
-          name: categories.name,
-          description: categories.description,
-          image: categories.image,
-          parent: { id: parent.id, name: parent.name },
-        })
-        .from(categories)
-        .where(whereClause)
-        .leftJoin(parent, this._orm.eq(categories.parentId, parent.id))
-        .offset(offset)
-        .limit(limit)
-        .orderBy(asc(categories.name)),
-      this._db.$count(categories, whereClause),
+    const [categories, total] = await Promise.all([
+      this._category.allWithParent(
+        whereClauses,
+        { name: 'asc' },
+        { limit, offset },
+      ),
+      this._category.count(whereClauses),
     ])
+
     const totalPages = Math.ceil(total / limit)
 
     return {
-      categories: categoriesList,
+      categories,
       pagination: { total, page, limit, totalPages },
     }
   }
 
   async one(
-    input: CategoryValidators.OneInput,
-  ): Promise<CategoryValidators.OneOutput> {
-    const { eq } = this._orm
-    const { categories } = this._schema
+    input: Validators.OneCategoryInput,
+  ): Promise<Validators.OneCategoryOutput> {
     const { id } = input
 
-    const parent = alias(categories, 'parent')
-    const [category] = await this._db
-      .select({
-        id: categories.id,
-        name: categories.name,
-        description: categories.description,
-        image: categories.image,
-        parent: {
-          id: parent.id,
-          name: parent.name,
-        },
-      })
-      .from(categories)
-      .where(eq(categories.id, id))
-      .leftJoin(parent, eq(categories.parentId, parent.id))
-      .limit(1)
-
+    const category = await this._category.findWithParent(id)
     if (!category)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Category not found' })
 
@@ -78,95 +52,64 @@ export class CategoryService extends BaseService implements ICategoryService {
   }
 
   async create(
-    input: CategoryValidators.CreateInput,
-  ): Promise<CategoryValidators.CreateOutput> {
-    const { categories } = this._schema
-    const { parentId, ...data } = input
+    input: Validators.CreateCategoryInput,
+  ): Promise<Validators.CreateCategoryOutput> {
+    const { parentId } = input
 
-    if (parentId && parentId !== 'no-parent') {
-      let currentId = parentId
-      const visited = new Set([parentId])
-      while (currentId) {
-        // oxlint-disable-next-line no-await-in-loop
-        const parent = await this.one({ id: currentId })
-        if (visited.has(parent.parent?.id ?? '')) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Circular parent-child relationship detected',
-          })
-        }
-        if (parent.parent?.id) visited.add(parent.parent.id)
-        currentId = parent.parent?.id ?? ''
-      }
-    }
-    const [result] = await this._db
-      .insert(categories)
-      .values({ ...data, parentId: parentId === 'no-parent' ? null : parentId })
-      .returning({ id: categories.id })
+    if (parentId)
+      await this._checkCircularHierarchy(parentId, new Set([parentId]))
 
-    if (!result?.id)
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Failed to create category',
-      })
-
-    return result
+    const id = await this._category.create(input)
+    return { id }
   }
 
   async update(
-    input: CategoryValidators.UpdateInput,
-  ): Promise<CategoryValidators.UpdateOutput> {
-    const { eq } = this._orm
-    const { categories } = this._schema
-    const { id, name, description, parentId } = input
+    input: Validators.UpdateCategoryInput,
+  ): Promise<Validators.UpdateCategoryOutput> {
+    const { id, parentId, ...data } = input
 
-    const category = await this.one({ id })
-    if (
-      parentId &&
-      parentId !== category.parent?.id &&
-      parentId !== 'no-parent'
-    ) {
-      let currentId = parentId
-      const visited = new Set([parentId])
-      while (currentId) {
-        // oxlint-disable-next-line no-await-in-loop
-        const parent = await this.one({ id: currentId })
-        if (visited.has(parent.parent?.id ?? '') || parent.id === id) {
-          throw new TRPCError({
-            code: 'BAD_REQUEST',
-            message: 'Circular parent-child relationship detected',
-          })
-        }
-        if (parent.parent?.id) visited.add(parent.parent.id)
-        currentId = parent.parent?.id ?? ''
-      }
-    }
+    const target = await this._category.find(id)
+    if (!target)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Category not found' })
 
-    await this._db
-      .update(categories)
-      .set({
-        name,
-        description,
-        ...(parentId !== undefined && {
-          parentId: parentId === 'no-parent' ? null : parentId,
-        }),
-      })
-      .where(eq(categories.id, id))
+    if (parentId && parentId !== target.parentId)
+      await this._checkCircularHierarchy(parentId, new Set([id, parentId]))
+
+    await this._category.update(id, { ...data, parentId })
 
     return { id }
   }
 
   async delete(
-    input: CategoryValidators.DeleteInput,
-  ): Promise<CategoryValidators.DeleteOutput> {
-    const { eq } = this._orm
-    const { categories } = this._schema
-    const { id } = input
+    input: Validators.DeleteCategoryInput,
+  ): Promise<Validators.DeleteCategoryOutput> {
+    const target = await this._category.find(input.id)
+    if (!target)
+      throw new TRPCError({ code: 'NOT_FOUND', message: 'Category not found' })
 
-    await this.one({ id })
+    await this._category.delete(input.id)
+    await utapi.deleteFiles(target.image?.split('/').pop() ?? '')
 
-    await this._db.delete(categories).where(eq(categories.id, id))
+    return input
+  }
 
-    return { id }
+  private async _checkCircularHierarchy(
+    currentId: string,
+    visited: Set<string>,
+  ) {
+    if (!currentId) return
+    const parent = await this._category.findWithParent(currentId)
+    const parentIdToCheck = parent?.parent?.id ?? ''
+
+    if (visited.has(parentIdToCheck))
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Circular category hierarchy detected',
+      })
+
+    if (parentIdToCheck) {
+      visited.add(parentIdToCheck)
+      await this._checkCircularHierarchy(parentIdToCheck, visited)
+    }
   }
 }

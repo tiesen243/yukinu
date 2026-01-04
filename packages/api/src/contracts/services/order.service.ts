@@ -1,23 +1,11 @@
-import type { OrderValidators } from '@yukinu/validators/order'
+import type * as Validators from '@yukinu/validators/order'
 
 export interface IOrderService {
-  all(input: OrderValidators.AllInput): Promise<OrderValidators.AllOutput>
+  all(input: Validators.AllInput): Promise<Validators.AllOutput>
 
-  one(input: OrderValidators.OneInput): Promise<OrderValidators.OneOutput>
+  one(input: Validators.OneInput): Promise<Validators.OneOutput>
 
-  checkout(
-    input: OrderValidators.CheckoutInput,
-  ): Promise<OrderValidators.CheckoutOutput>
+  checkout(input: Validators.CheckoutInput): Promise<Validators.CheckoutOutput>
 
-  update(
-    input: OrderValidators.UpdateInput,
-  ): Promise<OrderValidators.UpdateOutput>
-
-  addItemToCart(
-    input: OrderValidators.AddItemToCartInput,
-  ): Promise<OrderValidators.AddItemToCartOutput>
-
-  removeItemFromCart(
-    input: OrderValidators.RemoveItemFromCartInput,
-  ): Promise<OrderValidators.RemoveItemFromCartOutput>
+  update(input: Validators.UpdateInput): Promise<Validators.UpdateOutput>
 }

@@ -1,12 +1,12 @@
 import type { BaseProvider } from '@/providers/base'
-import type { UserValidators } from '@yukinu/validators/user'
+import type { Role } from '@yukinu/validators/auth'
 
 export interface User {
   id: string
   username: string
   email: string
   emailVerified: Date | null
-  role: UserValidators.Role
+  role: Role
   image: string | null
   createdAt: Date
   updatedAt: Date
@@ -28,10 +28,7 @@ export interface Session {
   userAgent: string | null
 }
 
-export type SessionWithUser = Pick<
-  Session,
-  'token' | 'expiresAt' | 'ipAddress' | 'userAgent'
-> & {
+export type SessionWithUser = Omit<Session, 'id' | 'userId' | 'createdAt'> & {
   user: Pick<User, 'id' | 'username' | 'email' | 'role' | 'image'> | null
 }
 
