@@ -2,7 +2,9 @@ import '@/globals.css'
 
 import { DarkTheme, DefaultTheme } from '@react-navigation/native'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
+import { StatusBar } from 'react-native'
 import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { useUniwind } from 'uniwind'
 
@@ -15,11 +17,25 @@ export default function App() {
   const { theme: colorscheme } = useUniwind()
   const theme = colorscheme === 'dark' ? DarkTheme : DefaultTheme
 
+  useFonts({
+    GeistRegular: require('../assets/fonts/Geist-Regular.ttf'),
+    GeistMedium: require('../assets/fonts/Geist-Medium.ttf'),
+    GeistSemiBold: require('../assets/fonts/Geist-SemiBold.ttf'),
+    GeistBold: require('../assets/fonts/Geist-Bold.ttf'),
+    GeistExtraBold: require('../assets/fonts/Geist-ExtraBold.ttf'),
+
+    GeistMonoMedium: require('../assets/fonts/GeistMono-Medium.ttf'),
+  })
+
   return (
     <SafeAreaProvider>
       <QueryClientProvider client={queryClient}>
         <Navigation theme={theme} onReady={() => SplashScreen.hideAsync()} />
       </QueryClientProvider>
+
+      <StatusBar
+        barStyle={colorscheme === 'dark' ? 'light-content' : 'dark-content'}
+      />
     </SafeAreaProvider>
   )
 }

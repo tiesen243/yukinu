@@ -48,7 +48,7 @@ const Tabs = createMaterialTopTabNavigator({
 })
 
 function HeaderLeft() {
-  const { data, isLoading } = useQuery(trpc.user.profile.queryOptions({}))
+  const { data, isLoading } = useQuery(trpc.auth.currentUser.queryOptions())
   const navigation = useNavigation()
 
   if (isLoading) return <View className='size-8 rounded-full bg-muted' />
@@ -68,8 +68,8 @@ function HeaderLeft() {
     <Image
       className='size-8 rounded-full object-cover self-start'
       source={
-        data.image
-          ? { uri: data.image }
+        data.user.image
+          ? { uri: data.user.image }
           : require('../../../assets/icon-light.png')
       }
     />

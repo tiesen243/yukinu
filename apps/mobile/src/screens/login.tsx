@@ -1,13 +1,7 @@
-import type { GestureResponderEvent } from 'react-native'
-
 import { useNavigation } from '@react-navigation/native'
-import { useMutation } from '@tanstack/react-query'
-import {
-  loginInput,
-  type LoginInput,
-  type LoginOutput,
-} from '@yukinu/validators/auth'
-import { useState } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useForm } from '@yukinu/ui/hooks/use-form'
+import * as Validators from '@yukinu/validators/auth'
 import { Alert, Linking, View } from 'react-native'
 
 import { Button } from '@/components/ui/button'
@@ -19,99 +13,96 @@ import { getBaseUrl } from '@/lib/utils'
 
 export default function LoginScreen() {
   const navigation = useNavigation()
+  const queryClient = useQueryClient()
 
-  const [data, setData] = useState({
-    identifier: '',
-    password: '',
-  })
-
-  const { mutate, error, isPending } = useMutation<
-    LoginOutput,
-    Record<keyof LoginInput, string> & { message?: string },
-    GestureResponderEvent
-  >({
-    mutationFn: async (_: GestureResponderEvent) => {
-      const parsed = loginInput.safeParse(data)
-      if (!parsed.success)
-        throw parsed.error.issues.reduce(
-          (acc, issue) => {
-            acc[issue.path[0] as keyof LoginInput] = issue.message
-            return acc
-          },
-          {} as Partial<Record<keyof LoginInput, string>>,
-        )
-
+  const form = useForm({
+    defaultValues: {
+      identifier: '',
+      password: '',
+    },
+    schema: Validators.loginInput,
+    onSubmit: async (values) => {
       const response = await fetch(`${getBaseUrl()}/api/auth/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(parsed.data),
+        body: JSON.stringify(values),
       })
 
       if (!response.ok) throw new Error(await response.text())
-
-      return response.json() as Promise<LoginOutput>
+      return response.json() as Promise<Validators.LoginOutput>
     },
-    meta: { filter: trpc.user.profile.queryFilter() },
     onSuccess: async (data) => {
       await setSessionToken(data.token)
       await setAccessToken(data.accessToken)
+      await queryClient.invalidateQueries(trpc.auth.currentUser.queryFilter())
+      await queryClient.invalidateQueries(trpc.user.profile.queryFilter())
       navigation.navigate('tabs', { screen: 'index', pop: true })
     },
-    onError: (error) =>
-      error.message && Alert.alert('Login Failed', error.message),
+    onError: ({ message }) =>
+      Alert.alert('Login Failed', message ?? 'An unknown error occurred'),
   })
 
   return (
     <View className='flex-1 bg-background items-center justify-center px-4'>
       <View className='w-full max-w-2xl gap-4 overflow-hidden rounded-xl bg-card py-4 ring-1 ring-foreground/10'>
         <View className='grid auto-rows-min items-start gap-1 rounded-t-xl px-4'>
-          <Text className='text-center' variant='h4'>
-            Login
-          </Text>
+          <Text variant='h4'>Login</Text>
           <Text className='text-muted-foreground text-sm'>
             Welcome back! Please enter your credentials to log in.
           </Text>
         </View>
 
         <View className='px-4 gap-4'>
-          <View className='gap-2'>
-            <Text className='text-sm font-medium'>Email or Username</Text>
-            <Input
-              placeholder='Enter your identifier'
-              textContentType='username'
-              value={data.identifier}
-              onChangeText={(text) =>
-                setData((prev) => ({ ...prev, identifier: text }))
-              }
-              editable={!isPending}
-            />
-            {error?.identifier && (
-              <Text className='text-destructive text-sm'>
-                {error.identifier}
-              </Text>
+          <form.Field
+            name='identifier'
+            render={({ field, meta }) => (
+              <View className='gap-2'>
+                <Text className='text-sm font-[GeistMedium]'>
+                  Email or Username
+                </Text>
+                <Input
+                  placeholder='Enter your identifier'
+                  textContentType='username'
+                  value={field.value}
+                  onChangeText={field.onChange}
+                />
+                {meta.errors[0] && (
+                  <Text className='text-destructive text-sm'>
+                    {meta.errors[0].message}
+                  </Text>
+                )}
+              </View>
             )}
-          </View>
+          />
 
-          <View className='gap-2'>
-            <Text className='text-sm font-medium'>Password</Text>
-            <Input
-              placeholder='Enter your password'
-              textContentType='password'
-              value={data.password}
-              onChangeText={(text) =>
-                setData((prev) => ({ ...prev, password: text }))
-              }
-              editable={!isPending}
-              secureTextEntry
-            />
-            {error?.password && (
-              <Text className='text-destructive text-sm'>{error.password}</Text>
+          <form.Field
+            name='password'
+            render={({ field, meta }) => (
+              <View className='gap-2'>
+                <Text className='text-sm font-[GeistMedium]'>Password</Text>
+                <Input
+                  placeholder='Enter your password'
+                  textContentType='password'
+                  value={field.value}
+                  onChangeText={field.onChange}
+                  secureTextEntry
+                />
+                {meta.errors[0] && (
+                  <Text className='text-destructive text-sm'>
+                    {meta.errors[0].message}
+                  </Text>
+                )}
+              </View>
             )}
-          </View>
+          />
         </View>
 
         <View className='items-center rounded-b-xl px-4'>
-          <Button className='w-full' onPress={mutate} disabled={isPending}>
+          <Button
+            className='w-full'
+            onPress={() => form.handleSubmit()}
+            disabled={form.state.isPending}
+          >
             <Text>Login</Text>
           </Button>
 
@@ -121,7 +112,7 @@ export default function LoginScreen() {
               className='text-sm text-primary'
               onPress={() => Linking.openURL(`${getBaseUrl()}/register`)}
             >
-              Register now
+              Register here
             </Text>
           </Text>
         </View>
