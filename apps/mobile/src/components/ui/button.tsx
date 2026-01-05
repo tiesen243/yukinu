@@ -90,7 +90,7 @@ const buttonVariants = cva(
 
 const buttonTextVariants = cva(
   cn(
-    'text-foreground text-sm font-medium',
+    'text-foreground text-sm font-[GeistMedium]',
     Platform.select({ web: 'pointer-events-none transition-colors' }),
   ),
   {

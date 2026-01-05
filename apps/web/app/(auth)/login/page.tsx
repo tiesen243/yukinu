@@ -14,7 +14,9 @@ import Link from 'next/link'
 import { LoginForm } from '@/app/(auth)/login/page.client'
 import { createMetadata } from '@/lib/metadata'
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
+  const { redirect_to } = await searchParams
+
   return (
     <main className='grid min-h-dvh place-items-center'>
       <Card
@@ -27,7 +29,7 @@ export default function LoginPage() {
             Welcome back! Please enter your credentials to log in.
           </FieldDescription>
 
-          <LoginForm />
+          <LoginForm redirectTo={String(redirect_to ?? '/')} />
 
           <FieldDescription>
             Don&apos;t have an account?{' '}

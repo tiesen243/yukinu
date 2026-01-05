@@ -17,27 +17,43 @@ const textVariants = cva(
       variant: {
         default: '',
         h1: cn(
-          'text-4xl font-extrabold tracking-tight',
+          'text-4xl font-[GeistExtraBold] tracking-tight',
           Platform.select({ web: 'scroll-m-20 text-balance' }),
         ),
         h2: cn(
-          'text-3xl font-semibold tracking-tight',
-          Platform.select({ web: 'scroll-m-20 first:mt-0' }),
+          'text-3xl font-[GeistBold] tracking-tight',
+          Platform.select({ web: 'scroll-m-20 text-balance first:mt-0' }),
         ),
         h3: cn(
-          'text-2xl font-semibold tracking-tight',
-          Platform.select({ web: 'scroll-m-20' }),
+          'text-2xl font-[GeistSemiBold] tracking-tight',
+          Platform.select({ web: 'scroll-m-20 text-balance' }),
         ),
         h4: cn(
-          'text-xl font-semibold tracking-tight',
-          Platform.select({ web: 'scroll-m-20' }),
+          'text-xl font-[GeistSemiBold] tracking-tight',
+          Platform.select({ web: 'scroll-m-20 text-balance' }),
         ),
-        p: 'mt-3 leading-7 sm:mt-6',
-        blockquote:
-          'my-2 border-l-2 pl-6 italic before:content-["“"] after:content-["”"]',
+        h5: cn(
+          'text-lg font-[GeistMedium] tracking-tight',
+          Platform.select({ web: 'scroll-m-20 text-balance' }),
+        ),
+        h6: cn(
+          'text-base font-[GeistMedium] tracking-tight',
+          Platform.select({ web: 'scroll-m-20 text-balance' }),
+        ),
+        p: cn(
+          'font-[GeistRegular] leading-7',
+          Platform.select({ web: ' text-pretty [&:not(:first-child)]:mt-2' }),
+        ),
+        blockquote: cn(
+          'border-l-2 border-border pl-6 font-[GeistRegular] italic',
+          Platform.select({
+            web: 'before:content-["“"] after:content-["”"]',
+          }),
+        ),
         code: cn(
-          'bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
+          'relative w-fit rounded-sm border border-accent bg-accent/40 px-[0.3rem] py-[0.2rem] text-sm font-[GeistMonoMedium] text-accent-foreground',
         ),
+        caption: 'block text-sm tracking-wide',
       },
     },
     defaultVariants: {

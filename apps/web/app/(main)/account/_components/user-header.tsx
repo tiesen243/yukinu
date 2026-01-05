@@ -2,16 +2,9 @@
 
 import { useSession } from '@yukinu/auth/react'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
-import { useRouter } from 'next/navigation'
-import { useLayoutEffect } from 'react'
 
 export const UserHeader: React.FC = () => {
   const { status, session } = useSession()
-  const router = useRouter()
-
-  useLayoutEffect(() => {
-    if (status === 'unauthenticated') router.replace('/login')
-  }, [router, status])
 
   if (status !== 'authenticated') return null
   const { user } = session

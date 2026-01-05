@@ -127,9 +127,9 @@ const useForm = <
   )
 
   const handleSubmit = React.useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault()
-      e.stopPropagation()
+    (e?: React.FormEvent) => {
+      e?.preventDefault()
+      e?.stopPropagation()
 
       startTransition(async () => {
         dataRef.current = null
