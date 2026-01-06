@@ -44,10 +44,10 @@ export const UserButton = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className='size-9 ring-1 ring-transparent ring-offset-1 ring-offset-popover/60 hover:ring-ring focus-visible:ring-ring'>
+        <Avatar className='size-9 hover:after:border-ring'>
           <AvatarImage src={user.image ?? ''} />
           <AvatarFallback>
-            {user.username.charAt(0).toUpperCase()}
+            <UserIcon className='size-4.5 text-muted-foreground' />
           </AvatarFallback>
         </Avatar>
 

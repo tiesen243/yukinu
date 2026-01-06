@@ -13,7 +13,7 @@ export default [
   route('/invite', './routes/invite.tsx'),
 
   layout('./routes/__layout.tsx', [
-    index('./routes/_index.tsx'),
+    index('./routes/(dashboard)/_index.tsx'),
     route('/apply-vendor', './routes/apply-vendor.tsx'),
 
     layout('./routes/admin/__layout.tsx', [
@@ -48,6 +48,12 @@ export default [
     layout('./routes/vendor/__layout.tsx', [
       route('/vendor/my-store', './routes/vendor/_index.tsx'),
       route('/vendor/staffs', './routes/vendor/staffs/_index.tsx'),
+    ]),
+
+    layout('./routes/support/__layout.tsx', [
+      route('/support/tickets', './routes/support/tickets/_index.tsx'),
+      route('/support/tickets/new', './routes/support/tickets/new.tsx'),
+      route('/support/tickets/:id', './routes/support/tickets/[id].tsx'),
     ]),
 
     // Others

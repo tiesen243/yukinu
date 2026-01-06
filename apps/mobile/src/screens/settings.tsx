@@ -1,6 +1,7 @@
 import { TouchableOpacity, View } from 'react-native'
 import { Uniwind, useUniwind } from 'uniwind'
 
+import { RadioCircle } from '@/components/radio-circle'
 import { Text } from '@/components/ui/text'
 
 export default function SettingsScreen() {
@@ -30,18 +31,6 @@ export default function SettingsScreen() {
     </View>
   )
 }
-
-const RadioCircle: React.FC<{ selected: boolean }> = ({ selected }) => (
-  <View
-    className={
-      selected
-        ? 'size-5 rounded-full border-2 border-primary items-center justify-center'
-        : 'size-5 rounded-full border-2 border-muted-foreground'
-    }
-  >
-    {selected && <View className='size-3 rounded-full bg-primary' />}
-  </View>
-)
 
 const availableThemes = [
   { label: 'Light Mode', value: 'light' },

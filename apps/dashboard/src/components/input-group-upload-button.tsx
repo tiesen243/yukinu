@@ -2,8 +2,9 @@ import type { OurFileRouter } from '@yukinu/uploadthing/config'
 
 import { InputGroupButton } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'
-import { useUploadThing } from '@yukinu/uploadthing/react'
 import { useRef } from 'react'
+
+import { useUploadThing } from '@/lib/uploadthing'
 
 export const InputGroupUploadButton: React.FC<{
   endpoint: keyof OurFileRouter

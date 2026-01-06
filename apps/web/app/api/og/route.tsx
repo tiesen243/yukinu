@@ -15,9 +15,16 @@ export function GET(request: NextRequest) {
 
     const appName = defaultMeta.applicationName
     const title = searchParams.get('title') ?? defaultMeta.title
+    const descriptionParam = searchParams.get('description')
     const description =
-      searchParams.get('description') ?? defaultMeta.description
-    const image = searchParams.get('image') ?? ''
+      descriptionParam && descriptionParam.trim() !== ''
+        ? descriptionParam.trim()
+        : defaultMeta.description
+
+    const imageParam = searchParams.get('image')
+    const image =
+      imageParam && imageParam.trim() !== '' ? imageParam.trim() : null
+
     const logoUrl = `${defaultMeta.metadataBase?.toString()}/web-app-manifest-512x512.png`
     const theme = searchParams.get('theme') ?? 'dark'
 

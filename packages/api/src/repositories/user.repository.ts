@@ -60,6 +60,7 @@ export class UserRepository
         profile: {
           fullName: profiles.fullName,
           bio: profiles.bio,
+          banner: profiles.banner,
           gender: sql<Gender | null>`${profiles.gender}`,
           dateOfBirth: profiles.dateOfBirth,
         },
