@@ -4,13 +4,16 @@
   <a href="https://github.com/tiesen243/yukinu/actions/workflows/release.yml">
     <img src="https://github.com/tiesen243/yukinu/actions/workflows/release.yml/badge.svg" alt="Release">
   </a>
-  <a href="https://github.com/tiesen243/yukinu/releases">
+  <a href="https://github.com/tiesen243/yukinu/actions/workflows/ci.yml">
+    <img src="https://github.com/tiesen243/yukinu/actions/workflows/ci.yml/badge.svg" alt="CI">
+  </a>
+  <a href="https://github.com/tiesen243/yukinu/releases?q=web">
     <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/web/package.json&label=version@web" alt="Version Web">
   </a>
-  <a href="https://github.com/tiesen243/yukinu/releases">
+  <a href="https://github.com/tiesen243/yukinu/releases?q=dashboard">
     <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Dashboard">
   </a>
-  <a href="https://github.com/tiesen243/yukinu/releases">
+  <a href="https://github.com/tiesen243/yukinu/releases?q=mobile">
     <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/mobile/package.json&label=version@mobile" alt="Version Mobile">
   </a>
   <a href="LICENSE">
@@ -33,6 +36,9 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 - **Dashboard**
   - React, React Router, TailwindCSS
   - tRPC client integration
+- **Mobile App**
+  - React Native, Expo, TailwindCSS (via Uniwind)
+  - tRPC client integration
 
 ### Backend & Shared Services
 
@@ -40,6 +46,7 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 - **ORM**: Drizzle ORM + PostgreSQL
 - **Validation**: Zod
 - **Email Service**: Resend
+- **File Storage**: UploadThing
 
 ## Monorepo Structure
 
@@ -47,6 +54,7 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 (root)
 ├── apps
 │   ├── dashboard        # Vendor/Admin dashboard
+│   ├── mobile           # Customer-facing mobile app
 │   └── web              # Customer-facing web app
 ├── packages
 │   ├── api              # tRPC API package
@@ -55,6 +63,7 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 │   ├── email            # Email service (Resend)
 │   ├── lib              # Shared utilities/helpers
 │   ├── ui               # Shared UI components (shadcn/ui)
+│   ├── uploadthing      # File upload service
 │   └── validators       # Zod validators
 ├── tools
 │   ├── github           # Github workflows/scripts
@@ -64,28 +73,84 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 └── docker-compose.yml   # Local deployment (NGINX + Postgres + Apps)
 ```
 
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v24 or later)
+- Bun (package manager)
+- Docker & Docker Compose (for local development)
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone git@github.com:tiesen243/yukinu.git
+   cd yukinu
+   ```
+
+2. Install dependencies using Bun:
+
+   ```bash
+   bun install --frozen-lockfile
+   ```
+
+3. Set up environment variables:
+
+   ```bash
+   cp .env.example .env
+   # Edit .env to add your configuration
+   ```
+
+4. Start the database using Docker Compose:
+
+   ```bash
+   docker-compose up -d db
+   # or
+   bun start:db
+   ```
+
+5. Run database migrations:
+
+   ```bash
+   bun run db:migrate
+   ```
+
+6. Start the development server:
+
+   ```bash
+   bun dev
+   ```
+
+   - Web App: http://localhost:3000
+   - Dashboard: http://localhost:5173
+   - Mobile App: use Expo Go or simulator to scan the QR code displayed in the terminal
+
 ## Deployment
 
-### Docker Deployment
+### 1. Web and Dashboard
 
-This system is deployed using Docker Compose & Nginx reverse proxy.
+#### 1.1. Docker Deployment
 
-Config files:
+- Clone the repository to your server or VPS.
+- Build and start the web and dashboard apps with Docker Compose:
+  ```bash
+  docker compose up --build -d web dashboard
+  ```
 
-- docker-compose.yml
-- tools/nginx/default.conf
+#### 1.2. Vercel Deployment
 
-### Vercel Deployment
+- Connect your GitHub repository to Vercel.
+- Configure environment variables in the Vercel dashboard.
 
-The web app and dashboard can also be deployed to Vercel directly from the monorepo.
+### 2. Mobile App
 
-## Documentation
+Follow the official Expo guide for building and deploying the mobile app: [Create a release build locally](https://docs.expo.dev/guides/local-app-production/)
 
-Located in `/docs` folder:
+## Contributing
 
-- Deployment guide
-- Project structure
-- Privacy Policy & Terms of Service
+Contributions are welcome! Please read the [CONTRIBUTING](./.github/CONTRIBUTING.md) guide for details on how to get started.
 
 ## License
 

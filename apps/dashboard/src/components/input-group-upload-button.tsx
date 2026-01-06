@@ -17,6 +17,9 @@ export const InputGroupUploadButton: React.FC<{
       if (res?.ufsUrl) onUploadComplete(res.ufsUrl)
       else toast.error('Failed to upload')
     },
+    onUploadError: ({ message }) => {
+      toast.error('Upload failed', { description: message })
+    },
   })
 
   return (

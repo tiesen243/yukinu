@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["**/*.{css,json,md,webmanifest,yaml,yml}"],
+  "ignorePatterns": ["**/*.{css,json,md,webmanifest,yml}"],
 
   "semi": false,
   "tabWidth": 2,
