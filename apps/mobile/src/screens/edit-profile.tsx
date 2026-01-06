@@ -98,7 +98,7 @@ export default function EditProfile() {
                 />
                 <UploadButton
                   variant='outline'
-                  aspectRatio={[16, 9]}
+                  aspectRatio={[3, 1]}
                   endpoint='bannerUploader'
                   onUploadComplete={(url) => onChange(url)}
                 />

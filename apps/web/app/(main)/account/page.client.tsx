@@ -181,7 +181,11 @@ export function UpdateProfileForm() {
                     Profile Image URL
                   </FieldLabel>
                   <InputGroup>
-                    <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupInput
+                      {...field}
+                      value={value ?? ''}
+                      placeholder='Enter your avatar URL'
+                    />
                     <InputGroupAddon align='inline-end'>
                       <InputGroupUploadButton
                         endpoint='avatarUploader'
@@ -240,7 +244,11 @@ export function UpdateProfileForm() {
                     Banner Image URL
                   </FieldLabel>
                   <InputGroup>
-                    <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupInput
+                      {...field}
+                      value={value ?? ''}
+                      placeholder='Enter your banner URL'
+                    />
                     <InputGroupAddon align='inline-end'>
                       <InputGroupUploadButton
                         endpoint='bannerUploader'
@@ -268,7 +276,11 @@ export function UpdateProfileForm() {
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={meta.fieldId}>Full Name</FieldLabel>
-                <Input {...field} value={value ?? ''} />
+                <Input
+                  {...field}
+                  value={value ?? ''}
+                  placeholder='Enter your full name'
+                />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
