@@ -1,1 +1,0 @@
-ALTER TABLE "profiles" ADD COLUMN "banner" varchar(500);

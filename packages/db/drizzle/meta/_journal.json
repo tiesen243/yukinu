@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1767546529817,
-      "tag": "0000_bitter_calypso",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1767708648847,
-      "tag": "0001_dark_talos",
+      "when": 1767712936355,
+      "tag": "0000_smart_vin_gonzales",
       "breakpoints": true
     }
   ]
