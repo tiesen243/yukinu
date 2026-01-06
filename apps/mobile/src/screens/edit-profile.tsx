@@ -3,7 +3,14 @@ import type { UpdateProfileInput } from '@yukinu/validators/user'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { genders, updateProfileInput } from '@yukinu/validators/user'
-import { Alert, Image, TouchableOpacity, View } from 'react-native'
+import {
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native'
 
 import { RadioCircle } from '@/components/radio-circle'
 import { Spinner } from '@/components/spinner'
@@ -38,16 +45,24 @@ export default function EditProfile() {
   if (isLoading) return <Spinner />
 
   return (
-    <View className='flex-1 bg-background'>
-      <View className='container py-4 gap-4'>
+    <KeyboardAvoidingView
+      behavior='padding'
+      keyboardVerticalOffset={120}
+      className='flex-1 bg-background'
+    >
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className='container py-4'
+      >
         <form.Field
           name='avatar'
           render={({ field: { value: uri, onChange } }) => (
-            <View className='gap-2 items-center'>
+            <View className='gap-2 items-center mb-4'>
               <Text className='self-start'>Avatar</Text>
               <View className='flex-row gap-2'>
                 <Input
-                  placeholder='Image URL'
+                  keyboardType='url'
+                  placeholder='Enter your avatar URL'
                   value={uri ?? ''}
                   onChangeText={onChange}
                   className='flex-1'
@@ -71,11 +86,12 @@ export default function EditProfile() {
         <form.Field
           name='banner'
           render={({ field: { value: uri, onChange } }) => (
-            <View className='gap-2 items-center'>
+            <View className='gap-2 items-center mb-4'>
               <Text className='self-start'>Banner</Text>
               <View className='flex-row gap-2'>
                 <Input
-                  placeholder='Image URL'
+                  keyboardType='url'
+                  placeholder='Enter your banner URL'
                   value={uri ?? ''}
                   onChangeText={onChange}
                   className='flex-1'
@@ -104,10 +120,10 @@ export default function EditProfile() {
         <form.Field
           name='fullName'
           render={({ field: { value, onChange }, meta: { errors } }) => (
-            <View className='gap-2'>
+            <View className='gap-2 mb-4'>
               <Text>Full Name</Text>
               <Input
-                placeholder='Full Name'
+                placeholder='Enter your full name'
                 value={value ?? ''}
                 onChangeText={onChange}
               />
@@ -123,13 +139,14 @@ export default function EditProfile() {
         <form.Field
           name='bio'
           render={({ field: { value, onChange }, meta: { errors } }) => (
-            <View className='gap-2'>
+            <View className='gap-2 mb-4'>
               <Text>Bio</Text>
               <Input
-                placeholder='Bio'
+                placeholder='Tell us about yourself...'
                 value={value ?? ''}
                 onChangeText={onChange}
-                className='h-fit'
+                className='h-auto min-h-20'
+                style={{ textAlignVertical: 'top' }}
                 numberOfLines={4}
                 multiline
               />
@@ -145,7 +162,7 @@ export default function EditProfile() {
         <form.Field
           name='gender'
           render={({ field: { value, onChange } }) => (
-            <View className='gap-2'>
+            <View className='gap-2 mb-4'>
               <Text>Gender</Text>
               <View className='flex-row justify-between'>
                 {genders.map((gender) => (
@@ -169,9 +186,10 @@ export default function EditProfile() {
         <form.Field
           name='dateOfBirth'
           render={({ field: { value, onChange }, meta: { errors } }) => (
-            <View className='gap-2'>
+            <View className='gap-2 mb-4'>
               <Text>Date of Birth</Text>
               <Input
+                keyboardType='numeric'
                 placeholder='YYYY-MM-DD'
                 value={value ?? ''}
                 onChangeText={onChange}
@@ -191,7 +209,7 @@ export default function EditProfile() {
         >
           <Text>{form.state.isPending ? 'Saving...' : 'Save Changes'}</Text>
         </Button>
-      </View>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }

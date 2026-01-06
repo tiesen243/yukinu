@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import * as Validators from '@yukinu/validators/auth'
-import { Alert, Linking, View } from 'react-native'
+import { Alert, KeyboardAvoidingView, Linking, View } from 'react-native'
 
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -43,7 +43,10 @@ export default function LoginScreen() {
   })
 
   return (
-    <View className='flex-1 bg-background items-center justify-center px-4'>
+    <KeyboardAvoidingView
+      behavior='padding'
+      className='flex-1 bg-background items-center justify-center px-4'
+    >
       <View className='w-full max-w-2xl gap-4 overflow-hidden rounded-xl bg-card py-4 ring-1 ring-foreground/10'>
         <View className='grid auto-rows-min items-start gap-1 rounded-t-xl px-4'>
           <Text variant='h4'>Login</Text>
@@ -117,6 +120,6 @@ export default function LoginScreen() {
           </Text>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
