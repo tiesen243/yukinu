@@ -21,13 +21,21 @@ export const UserProfile: React.FC<{ id: string }> = ({ id }) => {
       >
         <h2 className='sr-only'>User Profile Header</h2>
 
-        <Image
-          src={data.profile.banner ?? ''}
-          alt='banner'
-          className='w-full aspect-3/1 object-cover'
-          width={1200}
-          height={630}
-        />
+        {data.profile.banner ? (
+          <Image
+            src={data.profile.banner}
+            alt='banner'
+            className='w-full aspect-video md:aspect-3/1 object-cover'
+            width={1200}
+            height={630}
+          />
+        ) : (
+          <div className='w-full aspect-video md:aspect-3/1 bg-muted grid place-items-center px-4'>
+            <Typography className='text-muted-foreground'>
+              This is supercalifragilisticexpialidocious banner
+            </Typography>
+          </div>
+        )}
 
         <div className='-mt-24 md:-mt-12 mx-8 relative flex-col flex items-center gap-4 md:flex-row'>
           <Image
@@ -48,12 +56,14 @@ export const UserProfile: React.FC<{ id: string }> = ({ id }) => {
           </div>
         </div>
 
-        <Typography
-          variant='blockquote'
-          className='text-center my-0 border-0 px-4'
-        >
-          {data.profile.bio}
-        </Typography>
+        {data.profile.bio && (
+          <Typography
+            variant='blockquote'
+            className='text-center my-0 border-0 px-4'
+          >
+            {data.profile.bio}
+          </Typography>
+        )}
       </Card>
 
       <Card render={<section />} className='px-4 gap-0'>
