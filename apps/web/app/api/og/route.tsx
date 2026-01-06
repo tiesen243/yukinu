@@ -20,7 +20,11 @@ export function GET(request: NextRequest) {
       descriptionParam && descriptionParam.trim() !== ''
         ? descriptionParam.trim()
         : defaultMeta.description
-    const image = searchParams.get('image') ?? ''
+
+    const imageParam = searchParams.get('image')
+    const image =
+      imageParam && imageParam.trim() !== '' ? imageParam.trim() : null
+
     const logoUrl = `${defaultMeta.metadataBase?.toString()}/web-app-manifest-512x512.png`
     const theme = searchParams.get('theme') ?? 'dark'
 
