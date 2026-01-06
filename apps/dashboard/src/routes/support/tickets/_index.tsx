@@ -31,7 +31,7 @@ export default function SupportTicketsPage() {
         </Link>
       </div>
 
-      <Tabs className='mt-4'>
+      <Tabs defaultValue='open' className='mt-4'>
         <TabsList>
           {ticketStatuses.map((status) => (
             <TabsTrigger key={status} value={status}>
@@ -55,9 +55,9 @@ export default function SupportTicketsPage() {
 const Tickets: React.FC<{ status: TicketStatus }> = ({ status }) => {
   const trpc = useTRPC()
   const { data, isLoading } = useQuery(trpc.ticket.all.queryOptions({ status }))
-  const { session, status: sesstionStatus } = useSession()
+  const { session, status: sessionStatus } = useSession()
 
-  if (isLoading || sesstionStatus !== 'authenticated')
+  if (isLoading || sessionStatus !== 'authenticated')
     return Array.from({ length: 3 }, (_, i) => (
       <Item key={i} variant='outline' className='animate-pulse'>
         <ItemContent>

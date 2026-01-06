@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export default function NewSuportTicketPage() {
+export default function NewSupportTicketPage() {
   const trpc = useTRPC()
   const navigate = useNavigate()
 

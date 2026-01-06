@@ -2,10 +2,10 @@ import type { ChartConfig } from '@yukinu/ui/chart'
 
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@yukinu/ui/card'
 import {
   Bar,

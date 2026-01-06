@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export const UserProfile: React.FC<{ id: string }> = ({ id }) => {
+export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
   const trpc = useTRPC()
   const { data } = useSuspenseQuery(
     trpc.user.publicProfile.queryOptions({ id }),

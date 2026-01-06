@@ -40,7 +40,7 @@ export const Breadcrumb = () => {
                   : 'text-muted-foreground transition-colors hover:text-foreground',
               )}
             >
-              {segment.replace('-', ' ')}
+              {segment.replaceAll('-', ' ')}
             </Link>
             {index < array.length - 1 && (
               <ChevronRightIcon className='size-4 opacity-90' />

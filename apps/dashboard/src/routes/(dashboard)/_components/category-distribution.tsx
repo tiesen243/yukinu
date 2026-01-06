@@ -2,20 +2,19 @@ import type { ChartConfig } from '@yukinu/ui/chart'
 
 import {
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from '@yukinu/ui/card'
 import {
-  PieChart,
+  Cell,
   ChartContainer,
-  ResponsiveContainer,
   ChartTooltip,
   ChartTooltipContent,
   Pie,
-  Cell,
-  LabelList,
+  PieChart,
+  ResponsiveContainer,
 } from '@yukinu/ui/chart'
 
 export const CategoryDistributionChart: React.FC<{

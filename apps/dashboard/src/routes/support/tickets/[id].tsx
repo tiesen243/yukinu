@@ -18,7 +18,7 @@ import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/sonner'
 import { Typography } from '@yukinu/ui/typography'
-import { ticketStatuses } from '@yukinu/validators/general'
+import { ticketStatuses, type TicketStatus } from '@yukinu/validators/general'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -36,7 +36,9 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
   })
 
   const [open, setOpen] = React.useState(false)
-  const [status, setStatus] = React.useState(data?.status)
+  const [status, setStatus] = React.useState<TicketStatus>(
+    () => data?.status ?? 'open',
+  )
 
   if (isLoading || !data) return <div>Loading...</div>
 
