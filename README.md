@@ -119,42 +119,44 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 
 6. Start the development server:
 
-- For Web and Dashboard:
+   6.1 For Web and Dashboard:
 
-  ```bash
-  bun dev
-  ```
+   ```bash
+   bun dev
+   ```
 
-  - Web App: http://localhost:3000
-  - Dashboard: http://localhost:5173
+   - Web App: http://localhost:3000
+   - Dashboard: http://localhost:5173
 
-- For Mobile App:
+     6.2. For Mobile App:
 
-  ```bash
-  cd apps/mobile
-  bun start
-  ```
+   ```bash
+   cd apps/mobile
+   bun start
+   ```
 
-  Use Expo Go to run the mobile app on your device or simulator.
+   Use Expo Go to run the mobile app on your device or simulator.
 
 ## Deployment
 
-1. Web and Dashboard
+### 1. Web and Dashboard
 
-   **1.1. Docker Deployment**
-   - Clone the repository to your server or VPS.
-   - Build and start the web and dashboard apps with Docker Compose:
-     ```bash
-     docker compose up --build -d web dashboard
-     ```
+#### 1.1. Docker Deployment
 
-   **1.2. Vercel Deployment**
-   - Connect your GitHub repository to Vercel.
-   - Configure environment variables in the Vercel dashboard.
+- Clone the repository to your server or VPS.
+- Build and start the web and dashboard apps with Docker Compose:
+  ```bash
+  docker compose up --build -d web dashboard
+  ```
 
-2. Mobile App
+#### 1.2. Vercel Deployment
 
-   Follow the official Expo guide for building and deploying the mobile app: [Create a release build locally](https://docs.expo.dev/guides/local-app-production/)
+- Connect your GitHub repository to Vercel.
+- Configure environment variables in the Vercel dashboard.
+
+### 2. Mobile App
+
+Follow the official Expo guide for building and deploying the mobile app: [Create a release build locally](https://docs.expo.dev/guides/local-app-production/)
 
 ## Contributing
 
