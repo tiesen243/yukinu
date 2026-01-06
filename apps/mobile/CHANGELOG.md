@@ -1,5 +1,13 @@
 # @yukinu/mobile
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @yukinu/api@0.9.3
+  - @yukinu/uploadthing@0.3.3
+
 ## 0.2.4
 
 ### Patch Changes
