@@ -35,8 +35,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   experiments: {
     tsconfigPaths: true,
+    autolinkingModuleResolution: true,
   },
   plugins: [
+    'expo-image-picker',
     [
       'expo-splash-screen',
       {
@@ -46,6 +48,20 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
           backgroundColor: '#000000',
           image: './assets/icon-dark.png',
         },
+      },
+    ],
+    [
+      'expo-font',
+      {
+        fonts: [
+          './assets/fonts/Geist-Regular.ttf',
+          './assets/fonts/Geist-Medium.ttf',
+          './assets/fonts/Geist-SemiBold.ttf',
+          './assets/fonts/Geist-Bold.ttf',
+          './assets/fonts/Geist-ExtraBold.ttf',
+
+          './assets/fonts/GeistMono-Medium.ttf',
+        ],
       },
     ],
   ],

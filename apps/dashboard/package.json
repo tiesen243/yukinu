@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/dashboard",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "private": false,
   "type": "module",
   "scripts": {
@@ -16,6 +16,7 @@
     "@tanstack/react-query": "catalog:prod",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
+    "@uploadthing/react": "catalog:uploadthing",
     "@vercel/react-router": "^1.2.4",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
@@ -40,6 +41,9 @@
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev",
-    "vite": "^8.0.0-beta.5"
+    "vite": "npm:rolldown-vite@^7.3.0"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@^7.3.0"
   }
 }

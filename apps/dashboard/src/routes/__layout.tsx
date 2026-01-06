@@ -37,10 +37,12 @@ export default function DashboardLayout() {
           </div>
         </header>
 
-        <main className='flex-1 flex flex-col p-4'>
+        <main className='flex-1 flex flex-col'>
           <h1 className='sr-only'>Dashboard Content</h1>
 
-          <Outlet />
+          <section className='container py-4 [&_h2]:mb-2'>
+            <Outlet />
+          </section>
         </main>
       </SidebarInset>
     </SidebarProvider>

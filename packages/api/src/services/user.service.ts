@@ -144,28 +144,33 @@ export class UserService implements IUserService {
     return profile
   }
 
-  updateProfile(
+  async updateProfile(
     input: Validators.UpdateProfileInput,
   ): Promise<Validators.UpdateProfileOutput> {
-    const { id, image, ...data } = input
+    const { id, avatar, banner, ...data } = input
+    const updateData = { ...data, ...(banner ? { banner } : {}) }
 
-    return this._db.transaction(async (tx) => {
-      const targetUser = await this._user.find(id, tx)
-      if (!targetUser)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: `User with ID ${id} not found`,
-        })
+    const targetUser = await this._user.findWithProfile(id)
+    if (!targetUser)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with ID ${id} not found`,
+      })
 
-      await this._profile.update(id, data, tx)
+    await this._db.transaction(async (tx) => {
+      await this._profile.update(id, updateData, tx)
 
-      if (image && targetUser.image !== image) {
-        await this._user.update(id, { image }, tx)
-        await utapi.deleteFiles(targetUser.image?.split('/').pop() ?? '')
-      }
-
-      return { id }
+      if (avatar && targetUser.image !== avatar)
+        await this._user.update(id, { image: avatar }, tx)
     })
+
+    if (avatar && targetUser.image !== avatar)
+      await utapi.deleteFiles(targetUser.image?.split('/').pop() ?? '')
+
+    if (banner && targetUser.profile.banner !== banner)
+      await utapi.deleteFiles(targetUser.profile.banner?.split('/').pop() ?? '')
+
+    return { id }
   }
 
   private async _check(

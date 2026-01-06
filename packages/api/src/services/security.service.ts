@@ -89,13 +89,13 @@ export class SecurityService implements ISecurityService {
       this._account.find(userId),
     ])
 
-    if (!user || !account)
+    if (!user)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'User account not found.',
+        message: 'User not found.',
       })
 
-    if (account.password) {
+    if (account?.password) {
       if (!currentPassword)
         throw new TRPCError({
           code: 'BAD_REQUEST',

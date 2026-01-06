@@ -16,7 +16,7 @@ import { loginInput } from '@yukinu/validators/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-export const LoginForm: React.FC = () => {
+export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { signIn } = useSession()
   const router = useRouter()
 
@@ -29,7 +29,7 @@ export const LoginForm: React.FC = () => {
     onSubmit: signIn,
     onSuccess: () => {
       toast.success('Logged in successfully!')
-      router.push('/')
+      router.push(redirectTo as never)
     },
     onError: ({ message }) =>
       toast.error('Login failed', { description: message }),

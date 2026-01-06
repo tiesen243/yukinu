@@ -1,5 +1,14 @@
 # @yukinu/db
 
+## 0.9.3
+
+### Patch Changes
+
+- [#330](https://github.com/tiesen243/yukinu/pull/330) [`b896381`](https://github.com/tiesen243/yukinu/commit/b89638155c4cea0acfb03604821990d8cfd39200) Thanks [@tiesen243](https://github.com/tiesen243)! - - added banner column to profile table
+  - update get profile endpoint
+  - added get user profile by id endpoint
+  - added edit profile screen in mobile app
+
 ## 0.9.2
 
 ### Patch Changes

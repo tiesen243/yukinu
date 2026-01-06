@@ -9,6 +9,7 @@ import Tabs, {
   HeaderRight,
   HeaderTitle,
 } from '@/screens/(tabs)/__root'
+import EditProfile from '@/screens/edit-profile'
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'tabs',
@@ -28,6 +29,10 @@ const RootStack = createNativeStackNavigator({
     login: {
       screen: lazy(() => import('@/screens/login')),
       options: { title: 'Login', headerShown: false },
+    },
+    editProfile: {
+      screen: EditProfile,
+      options: { title: 'Edit Profile' },
     },
     productDetails: {
       screen: lazy(() => import('@/screens/product-details')),

@@ -1,5 +1,19 @@
 # @yukinu/mobile
 
+## 0.2.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @yukinu/api@0.9.3
+  - @yukinu/uploadthing@0.3.3
+
+## 0.2.4
+
+### Patch Changes
+
+- [#328](https://github.com/tiesen243/yukinu/pull/328) [`4af088c`](https://github.com/tiesen243/yukinu/commit/4af088c296e2a9496da8e372dbb198190c2d80c3) Thanks [@tiesen243](https://github.com/tiesen243)! - added pull to refresh
+
 ## 0.2.3
 
 ### Patch Changes

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Alert, Image, View } from 'react-native'
 
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import {
@@ -18,14 +19,7 @@ export default function ProfileScreen() {
   const { data, isLoading } = useQuery(trpc.user.profile.queryOptions({}))
   const navigation = useNavigation()
 
-  if (isLoading)
-    return (
-      <View className='flex-1 bg-background'>
-        <View className='flex-1 items-center justify-center'>
-          <Text>Loading...</Text>
-        </View>
-      </View>
-    )
+  if (isLoading) return <Spinner />
 
   if (!data)
     return (
@@ -41,8 +35,16 @@ export default function ProfileScreen() {
 
   return (
     <View className='flex-1 bg-background'>
-      <View className='bg-secondary w-full h-48 items-center justify-center' />
-      <View className='flex-1 container -mt-24'>
+      {data.profile.banner ? (
+        <Image
+          source={{ uri: data.profile.banner }}
+          className='w-full aspect-video'
+          resizeMode='cover'
+        />
+      ) : (
+        <View className='bg-secondary w-full aspect-video' />
+      )}
+      <View className='flex-1 container -mt-28'>
         <Image
           className='size-36 rounded-full ring-4 ring-background'
           source={
@@ -52,17 +54,36 @@ export default function ProfileScreen() {
           }
         />
         <View className='mt-4 gap-1'>
-          <Text variant='h3'>{data.profile.fullName}</Text>
-          <Text className='text-sm text-muted-foreground'>{data.email}</Text>
+          <View className='flex-row items-center gap-2'>
+            <Text variant='h3'>{data.profile.fullName}</Text>
+            <Text className='text-muted-foreground'>@{data.username}</Text>
+          </View>
 
-          <Text className='mt-4'>{data.profile.bio}</Text>
+          <Text className='text-muted-foreground'>{data.email}</Text>
+
+          <Text className='text-lg'>{data.profile.bio?.trim()}</Text>
         </View>
 
-        <View className='mt-6 gap-4'>
-          <Button>
+        <View className='my-4'>
+          <Text>Date of Birth: {data.profile.dateOfBirth}</Text>
+          <Text>Gender: {data.profile.gender}</Text>
+          <Text>
+            Member since{' '}
+            {new Intl.DateTimeFormat('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }).format(new Date(data.createdAt))}
+          </Text>
+        </View>
+
+        <View className='flex-row gap-2'>
+          <Button
+            className='flex-1'
+            onPress={() => navigation.navigate('editProfile')}
+          >
             <Text>Edit Profile</Text>
           </Button>
-
           <LogOutButton />
         </View>
       </View>
@@ -87,15 +108,22 @@ const LogOutButton: React.FC = () => {
     },
     onSuccess: async () => {
       navigation.navigate('login')
-      queryClient.setQueriesData(trpc.user.profile.queryFilter(), null)
-      await deleteSessionToken()
+
       await deleteAccessToken()
+      await deleteSessionToken()
+      queryClient.setQueriesData(trpc.user.profile.queryFilter(), null)
+      queryClient.setQueriesData(trpc.auth.currentUser.queryFilter(), null)
     },
     onError: ({ message }) => Alert.alert('Error', message),
   })
 
   return (
-    <Button variant='outline' onPress={mutate} disabled={isPending}>
+    <Button
+      variant='outline'
+      className='flex-1'
+      onPress={mutate}
+      disabled={isPending}
+    >
       <Text>Log Out</Text>
     </Button>
   )

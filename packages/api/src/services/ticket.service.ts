@@ -17,7 +17,7 @@ export class TicketService implements ITicketService {
     const { userId, status, page, limit } = input
     const offset = (page - 1) * limit
 
-    const whereClauses = [{ userId, status }]
+    const whereClauses = [{ ...(userId ? { userId } : {}), status }]
 
     const [tickets, total] = await Promise.all([
       this._ticket.all(whereClauses, { createdAt: 'desc' }, { limit, offset }),

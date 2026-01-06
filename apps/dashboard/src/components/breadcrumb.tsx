@@ -1,15 +1,15 @@
+import { cn } from '@yukinu/ui'
 import { ChevronRightIcon } from '@yukinu/ui/icons'
 import * as React from 'react'
 import { Link, useLocation } from 'react-router'
 
-const prettySegment = (segment: string) =>
-  segment.replaceAll('-', ' ').replaceAll(/\b\w/g, (char) => char.toUpperCase())
+const CUID_LENGTH = 24
 
 export const Breadcrumb = () => {
   const location = useLocation()
 
   return (
-    <nav className='flex items-center gap-2 text-sm'>
+    <nav className='flex items-center gap-2 text-sm overflow-hidden'>
       <Link
         to='/'
         className={
@@ -33,13 +33,14 @@ export const Breadcrumb = () => {
           <React.Fragment key={path}>
             <Link
               to={path}
-              className={
+              className={cn(
+                segment.length !== CUID_LENGTH && 'capitalize',
                 index === array.length - 1
                   ? 'text-foreground'
-                  : 'text-muted-foreground transition-colors hover:text-foreground'
-              }
+                  : 'text-muted-foreground transition-colors hover:text-foreground',
+              )}
             >
-              {prettySegment(segment)}
+              {segment.replaceAll('-', ' ')}
             </Link>
             {index < array.length - 1 && (
               <ChevronRightIcon className='size-4 opacity-90' />

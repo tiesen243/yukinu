@@ -1,6 +1,6 @@
 import * as Validators from '@yukinu/validators/user'
 
-import { createTRPCRouter, protectedProcedure } from '@/trpc'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '@/trpc'
 
 export const userRouter = createTRPCRouter({
   all: protectedProcedure
@@ -76,6 +76,12 @@ export const userRouter = createTRPCRouter({
     .input(Validators.profileInput.omit({ id: true }))
     .output(Validators.profileOutput)
     .query(({ ctx }) => ctx.services.user.profile({ id: ctx.session.userId })),
+
+  publicProfile: publicProcedure
+    .meta({ message: 'Public user profile fetched successfully' })
+    .input(Validators.profileInput)
+    .output(Validators.profileOutput)
+    .query(({ ctx, input }) => ctx.services.user.profile(input)),
 
   updateProfile: protectedProcedure
     .meta({ message: 'User profile updated successfully' })

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -23,7 +24,7 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
-import { PencilIcon } from '@yukinu/ui/icons'
+import { PencilIcon, UserIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import {
   InputGroup,
@@ -45,7 +46,6 @@ import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { changeUsernameInput } from '@yukinu/validators/auth'
 import { genders, updateProfileInput } from '@yukinu/validators/user'
-import Image from 'next/image'
 import { useState } from 'react'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
@@ -150,7 +150,8 @@ export function UpdateProfileForm() {
       bio: data.profile.bio,
       gender: data.profile.gender,
       dateOfBirth: data.profile.dateOfBirth,
-      image: data.image,
+      avatar: data.image,
+      banner: data.profile.banner,
     },
     schema: updateProfileInput.omit({ id: true }),
     onSubmit: mutateAsync,
@@ -168,10 +169,10 @@ export function UpdateProfileForm() {
 
         <FieldGroup>
           <form.Field
-            name='image'
+            name='avatar'
             render={({ meta, field: { value, ...field } }) => (
               <Field
-                orientation='horizontal'
+                orientation='responsive'
                 data-invalid={meta.errors.length > 0}
                 className='gap-4'
               >
@@ -214,17 +215,50 @@ export function UpdateProfileForm() {
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
-                {value ? (
-                  <Image
-                    src={value}
-                    alt='Profile Image'
-                    width={80}
-                    height={80}
-                    className='size-20 rounded-full object-cover'
+                <div className='flex justify-center'>
+                  <Avatar className='size-20'>
+                    <AvatarImage src={value ?? ''} alt='Profile Image' />
+                    <AvatarFallback>
+                      <UserIcon className='size-10 text-muted-foreground' />
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+              </Field>
+            )}
+          />
+
+          <form.Field
+            name='banner'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field
+                orientation='responsive'
+                data-invalid={meta.errors.length > 0}
+                className='gap-4'
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={meta.fieldId}>
+                    Banner Image URL
+                  </FieldLabel>
+                  <InputGroup>
+                    <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupUploadButton
+                        endpoint='bannerUploader'
+                        onUploadComplete={(url) => field.onChange(url)}
+                      />
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </FieldContent>
+
+                <Avatar className='size-full @md/field-group:size-40 after:border-none'>
+                  <AvatarImage
+                    src={value ?? ''}
+                    alt='Banner Image'
+                    className='rounded-md aspect-video'
                   />
-                ) : (
-                  <div className='size-20 rounded-full bg-muted' />
-                )}
+                  <AvatarFallback className='bg-muted rounded-md aspect-video' />
+                </Avatar>
               </Field>
             )}
           />

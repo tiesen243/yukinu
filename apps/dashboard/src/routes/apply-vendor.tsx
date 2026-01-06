@@ -30,9 +30,9 @@ export default function AppVendorPage() {
   const form = useForm({
     defaultValues: {
       name: '',
-      description: '',
-      image: '',
-      address: '',
+      description: null,
+      image: null,
+      address: null,
     } as Omit<VendorValidators.CreateVendorInput, 'ownerId'>,
     schema: VendorValidators.createVendorInput.omit({ ownerId: true }),
     onSubmit: trpc.vendor.create.mutate,
