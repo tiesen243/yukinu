@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.11.5
+
+### Patch Changes
+
+- [#340](https://github.com/tiesen243/yukinu/pull/340) [`641154d`](https://github.com/tiesen243/yukinu/commit/641154d1ce322095454bf19494a9e3c4d95ac898) Thanks [@tiesen243](https://github.com/tiesen243)! - change aspect ratio of banner to 3/1
+
 ## 0.11.4
 
 ### Patch Changes
