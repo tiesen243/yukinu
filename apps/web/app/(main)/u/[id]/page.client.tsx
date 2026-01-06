@@ -66,7 +66,7 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
       <Card render={<section />} className='px-4 gap-0'>
         <h2 className='sr-only'>User Profile Details</h2>
 
-        <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4 text-sm text-muted-foreground'>
+        <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
           <Typography className='sm:[&:not(:first-child)]:mt-0'>
             <strong>Gender:</strong> {data.profile.gender || '—'}
           </Typography>
