@@ -1,9 +1,10 @@
 'use client'
 
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Card } from '@yukinu/ui/card'
+import { UserIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
-import Image from 'next/image'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -21,32 +22,28 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
       >
         <h2 className='sr-only'>User Profile Header</h2>
 
-        {data.profile.banner ? (
-          <Image
-            src={data.profile.banner}
+        <Avatar className='size-full aspect-video md:aspect-3/1 rounded-none after:border-none'>
+          <AvatarImage
+            src={data.profile.banner ?? ''}
             alt='banner'
-            className='w-full aspect-video md:aspect-3/1 object-cover'
-            width={1200}
-            height={630}
+            className='rounded-none'
           />
-        ) : (
-          <div className='w-full aspect-video md:aspect-3/1 bg-muted grid place-items-center px-4'>
+          <AvatarFallback className='rounded-none'>
             <Typography className='text-muted-foreground'>
               This is supercalifragilisticexpialidocious banner
             </Typography>
-          </div>
-        )}
+          </AvatarFallback>
+        </Avatar>
 
-        <div className='-mt-24 md:-mt-12 mx-8 relative flex-col flex items-center gap-4 md:flex-row'>
-          <Image
-            src={data.image ?? ''}
-            alt='avatar'
-            width={128}
-            height={128}
-            className='rounded-full border-4 border-background'
-          />
+        <div className='-mt-28 md:-mt-14 mx-8 relative flex-col flex items-center gap-4 md:flex-row'>
+          <Avatar className='size-32 border-4 border-background after:border-none'>
+            <AvatarImage src={data.image ?? ''} alt={data.username} />
+            <AvatarFallback>
+              <UserIcon className='size-16 text-muted-foreground' />
+            </AvatarFallback>
+          </Avatar>
 
-          <div className='md:mt-12 flex flex-col sm:flex-row items-center gap-2'>
+          <div className='md:mt-8 flex flex-col sm:flex-row items-center gap-2'>
             <Typography variant='h2' className='my-0'>
               {data.profile.fullName}
             </Typography>

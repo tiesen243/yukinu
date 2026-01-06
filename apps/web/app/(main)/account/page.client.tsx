@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -23,7 +24,7 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
-import { PencilIcon } from '@yukinu/ui/icons'
+import { PencilIcon, UserIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import {
   InputGroup,
@@ -45,7 +46,6 @@ import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
 import { changeUsernameInput } from '@yukinu/validators/auth'
 import { genders, updateProfileInput } from '@yukinu/validators/user'
-import Image from 'next/image'
 import { useState } from 'react'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
@@ -215,18 +215,13 @@ export function UpdateProfileForm() {
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
-                <div className='flex items-center justify-center'>
-                  {value ? (
-                    <Image
-                      src={value}
-                      alt='Profile Image'
-                      width={80}
-                      height={80}
-                      className='size-20 aspect-square rounded-full object-cover'
-                    />
-                  ) : (
-                    <div className='size-20 aspect-square rounded-full bg-muted' />
-                  )}
+                <div className='flex justify-center'>
+                  <Avatar className='size-20'>
+                    <AvatarImage src={value ?? ''} alt='Profile Image' />
+                    <AvatarFallback>
+                      <UserIcon className='size-10 text-muted-foreground' />
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
               </Field>
             )}
@@ -256,19 +251,14 @@ export function UpdateProfileForm() {
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
-                <div>
-                  {value ? (
-                    <Image
-                      src={value}
-                      alt='Banner Image'
-                      width={160}
-                      height={80}
-                      className='w-full @md/field-group:w-40 rounded-md object-cover'
-                    />
-                  ) : (
-                    <div className='w-full @md/field-group:w-40 @md/field-group:h-22.5 aspect-video rounded-md bg-muted' />
-                  )}
-                </div>
+                <Avatar className='size-full @md/field-group:size-40 after:border-none'>
+                  <AvatarImage
+                    src={value ?? ''}
+                    alt='Banner Image'
+                    className='rounded-md aspect-video'
+                  />
+                  <AvatarFallback className='bg-muted rounded-md aspect-video' />
+                </Avatar>
               </Field>
             )}
           />
