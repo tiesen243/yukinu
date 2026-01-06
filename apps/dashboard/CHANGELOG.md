@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.11.4
+
+### Patch Changes
+
+- [#336](https://github.com/tiesen243/yukinu/pull/336) [`c6ec0f0`](https://github.com/tiesen243/yukinu/commit/c6ec0f0783ebce66898d66447565afcf83ad50ce) Thanks [@tiesen243](https://github.com/tiesen243)! - fix keyboard overlap input
+
 ## 0.11.3
 
 ### Patch Changes
