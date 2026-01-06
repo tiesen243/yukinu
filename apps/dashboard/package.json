@@ -16,6 +16,7 @@
     "@tanstack/react-query": "catalog:prod",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
+    "@uploadthing/react": "catalog:uploadthing",
     "@vercel/react-router": "^1.2.4",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",

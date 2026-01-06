@@ -2,8 +2,9 @@ import type { GestureResponderEvent } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Alert, Image, Linking, View } from 'react-native'
+import { Alert, Image, View } from 'react-native'
 
+import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import {
@@ -18,14 +19,7 @@ export default function ProfileScreen() {
   const { data, isLoading } = useQuery(trpc.user.profile.queryOptions({}))
   const navigation = useNavigation()
 
-  if (isLoading)
-    return (
-      <View className='flex-1 bg-background'>
-        <View className='flex-1 items-center justify-center'>
-          <Text>Loading...</Text>
-        </View>
-      </View>
-    )
+  if (isLoading) return <Spinner />
 
   if (!data)
     return (
@@ -41,8 +35,16 @@ export default function ProfileScreen() {
 
   return (
     <View className='flex-1 bg-background'>
-      <View className='bg-secondary w-full h-48 items-center justify-center' />
-      <View className='flex-1 container -mt-24'>
+      {data.profile.banner ? (
+        <Image
+          source={{ uri: data.profile.banner }}
+          className='w-full aspect-video'
+          resizeMode='cover'
+        />
+      ) : (
+        <View className='bg-secondary w-full aspect-video' />
+      )}
+      <View className='flex-1 container -mt-28'>
         <Image
           className='size-36 rounded-full ring-4 ring-background'
           source={
@@ -78,7 +80,7 @@ export default function ProfileScreen() {
         <View className='flex-row gap-2'>
           <Button
             className='flex-1'
-            onPress={() => Linking.openURL(`${getBaseUrl()}/account`)}
+            onPress={() => navigation.navigate('editProfile')}
           >
             <Text>Edit Profile</Text>
           </Button>

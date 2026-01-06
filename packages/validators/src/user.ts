@@ -18,6 +18,7 @@ export const profileSchema = z.object({
     .max(255, 'Full name must be at most 255 characters long')
     .nullable(),
   bio: z.string().nullable(),
+  banner: z.url().max(500).nullable(),
   gender: z.enum(genders).nullable(),
   dateOfBirth: z.iso.date().nullable(),
 })
@@ -112,7 +113,7 @@ export const profileOutput = userSchema
 export type ProfileOutput = z.infer<typeof profileOutput>
 
 export const updateProfileInput = profileSchema.extend({
-  image: userSchema.shape.image,
+  avatar: userSchema.shape.image,
 })
 export type UpdateProfileInput = z.infer<typeof updateProfileInput>
 export const updateProfileOutput = profileSchema.pick({ id: true })

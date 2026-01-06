@@ -38,6 +38,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     autolinkingModuleResolution: true,
   },
   plugins: [
+    'expo-image-picker',
     [
       'expo-splash-screen',
       {

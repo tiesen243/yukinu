@@ -150,7 +150,8 @@ export function UpdateProfileForm() {
       bio: data.profile.bio,
       gender: data.profile.gender,
       dateOfBirth: data.profile.dateOfBirth,
-      image: data.image,
+      avatar: data.image,
+      banner: data.profile.banner,
     },
     schema: updateProfileInput.omit({ id: true }),
     onSubmit: mutateAsync,
@@ -168,10 +169,10 @@ export function UpdateProfileForm() {
 
         <FieldGroup>
           <form.Field
-            name='image'
+            name='avatar'
             render={({ meta, field: { value, ...field } }) => (
               <Field
-                orientation='horizontal'
+                orientation='responsive'
                 data-invalid={meta.errors.length > 0}
                 className='gap-4'
               >
@@ -214,17 +215,60 @@ export function UpdateProfileForm() {
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
-                {value ? (
-                  <Image
-                    src={value}
-                    alt='Profile Image'
-                    width={80}
-                    height={80}
-                    className='size-20 rounded-full object-cover'
-                  />
-                ) : (
-                  <div className='size-20 rounded-full bg-muted' />
-                )}
+                <div className='flex items-center justify-center'>
+                  {value ? (
+                    <Image
+                      src={value}
+                      alt='Profile Image'
+                      width={80}
+                      height={80}
+                      className='size-20 aspect-square rounded-full object-cover'
+                    />
+                  ) : (
+                    <div className='size-20 aspect-square rounded-full bg-muted' />
+                  )}
+                </div>
+              </Field>
+            )}
+          />
+
+          <form.Field
+            name='banner'
+            render={({ meta, field: { value, ...field } }) => (
+              <Field
+                orientation='responsive'
+                data-invalid={meta.errors.length > 0}
+                className='gap-4'
+              >
+                <FieldContent>
+                  <FieldLabel htmlFor={meta.fieldId}>
+                    Banner Image URL
+                  </FieldLabel>
+                  <InputGroup>
+                    <InputGroupInput {...field} value={value ?? ''} />
+                    <InputGroupAddon align='inline-end'>
+                      <InputGroupUploadButton
+                        endpoint='bannerUploader'
+                        onUploadComplete={(url) => field.onChange(url)}
+                      />
+                    </InputGroupAddon>
+                  </InputGroup>
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </FieldContent>
+
+                <div>
+                  {value ? (
+                    <Image
+                      src={value}
+                      alt='Banner Image'
+                      width={160}
+                      height={80}
+                      className='w-full @md/field-group:w-40 rounded-md object-cover'
+                    />
+                  ) : (
+                    <div className='w-full @md/field-group:w-40 @md/field-group:h-22.5 aspect-video rounded-md bg-muted' />
+                  )}
+                </div>
               </Field>
             )}
           />

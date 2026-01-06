@@ -9,6 +9,7 @@ export const profiles = pgTable('profiles', (t) => ({
     .primaryKey()
     .references(() => users.id, { onDelete: 'cascade' }),
   fullName: t.varchar({ length: 255 }),
+  banner: t.varchar({ length: 500 }),
   bio: t.text(),
   gender: t.varchar({ length: 50 }),
   dateOfBirth: t.date(),
