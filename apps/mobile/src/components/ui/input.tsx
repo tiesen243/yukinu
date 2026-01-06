@@ -15,7 +15,6 @@ function Input({
     <TextInput
       className={cn(
         'h-8 w-full min-w-0 rounded-lg border border-input bg-transparent text-foreground px-2.5 py-1 text-base transition-colors outline-none md:text-sm dark:bg-input/30',
-        'file:inline-flex file:h-6 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground',
         props.editable === false &&
           cn(
             'opacity-50',
