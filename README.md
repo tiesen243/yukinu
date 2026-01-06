@@ -119,23 +119,13 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 
 6. Start the development server:
 
-   6.1 For Web and Dashboard:
-
    ```bash
    bun dev
    ```
 
    - Web App: http://localhost:3000
    - Dashboard: http://localhost:5173
-
-     6.2. For Mobile App:
-
-   ```bash
-   cd apps/mobile
-   bun start
-   ```
-
-   Use Expo Go to run the mobile app on your device or simulator.
+   - Mobile App: use Expo Go or simulator to scan the QR code displayed in the terminal
 
 ## Deployment
 
