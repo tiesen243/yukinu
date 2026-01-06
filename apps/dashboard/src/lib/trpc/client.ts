@@ -7,7 +7,7 @@ import {
   retryLink,
   splitLink,
 } from '@trpc/client'
-import { env } from '@yukinu/validators/env.next'
+import { env } from '@yukinu/validators/env.vite'
 import SuperJSON from 'superjson'
 
 import { getDashboardUrl } from '@/lib/utils'
@@ -54,7 +54,7 @@ export const trpcClient = createTRPCClient<AppRouter>({
       retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30000),
     }),
     splitLink({
-      condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
+      condition: () => env.VITE_TRPC_USE_STREAMING === 'true',
       true: httpBatchStreamLink(configs),
       false: httpBatchLink(configs),
     }),

@@ -12,7 +12,7 @@ import { DeleteAccountButton } from '@/app/(main)/account/security/_components/d
 import {
   SessionsList,
   SessionsListSkeleton,
-} from '@/app/(main)/account/security/page.client'
+} from '@/app/(main)/account/security/_components/session-list'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
