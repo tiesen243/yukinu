@@ -8,7 +8,7 @@ export default async function VerifyEmailPage({
 }: PageProps<'/verify-email'>) {
   const { token } = await searchParams
 
-  if (!token)
+  if (!token || typeof token !== 'string')
     return (
       <main className='grid min-h-dvh place-items-center'>
         <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
@@ -33,7 +33,7 @@ export default async function VerifyEmailPage({
           </CardDescription>
         </CardHeader>
 
-        <VerifyEmailForm token={String(token)} />
+        <VerifyEmailForm token={token} />
       </Card>
     </main>
   )

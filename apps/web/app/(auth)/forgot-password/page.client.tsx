@@ -12,7 +12,7 @@ import { useTRPCClient } from '@/lib/trpc/react'
 export const ForgotPasswordForm: React.FC = () => {
   const trpc = useTRPCClient()
 
-  const { FormField, handleSubmit, state } = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: { email: '' },
     schema: forgotPasswordInput,
     onSubmit: trpc.auth.forgotPassword.mutate,
@@ -22,7 +22,7 @@ export const ForgotPasswordForm: React.FC = () => {
   })
 
   return (
-    <form className='px-6' onSubmit={handleSubmit}>
+    <form id={formId} className='px-6' onSubmit={handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Forgot your password?</legend>
 

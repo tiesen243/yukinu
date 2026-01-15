@@ -48,7 +48,7 @@ const ProductsList: React.FC = () => {
         renderItem={() => (
           <View
             style={{ width: itemWidth, height: (itemWidth / 3) * 4 }}
-            className='rounded-xl bg-card ring-1 ring-foreground/10'
+            className='mb-4 rounded-xl bg-card ring-1 ring-foreground/10'
           >
             <View className='aspect-square w-full rounded-t-xl bg-muted' />
 

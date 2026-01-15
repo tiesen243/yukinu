@@ -14,7 +14,7 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
   const trpc = useTRPCClient()
   const router = useRouter()
 
-  const { FormField, handleSubmit, state } = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: { token, newPassword: '', confirmNewPassword: '' },
     schema: resetPasswordInput,
     onSubmit: trpc.auth.resetPassword.mutate,
@@ -27,7 +27,7 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
   })
 
   return (
-    <form className='px-6' onSubmit={handleSubmit}>
+    <form id={formId} className='px-6' onSubmit={handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Reset your password</legend>
 
@@ -56,7 +56,7 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
                 type='password'
                 placeholder='Confirm your new password'
               />
-              <FieldError errors={meta.errors} />
+              <FieldError id={meta.errorId} errors={meta.errors} />
             </Field>
           )}
         />

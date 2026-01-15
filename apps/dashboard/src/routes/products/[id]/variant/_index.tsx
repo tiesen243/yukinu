@@ -53,7 +53,7 @@ export default function CreateProductVariantsPage({
 
   return (
     <Card id={formId} render={<form onSubmit={handleSubmit} />}>
-      <FieldSet className='px-^'>
+      <FieldSet className='px-6'>
         <FieldLegend>Recreate Product Variants</FieldLegend>
         <FieldDescription className='flex items-center gap-2 text-warning'>
           <TriangleAlertIcon size={16} /> This action will delete all existing

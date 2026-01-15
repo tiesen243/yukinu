@@ -93,7 +93,10 @@ export default async function ProductDetailsPage({
 
             <Suspense
               fallback={
-                <div className='flex flex-1 animate-pulse flex-col items-center justify-center gap-4'>
+                <div
+                  className='flex flex-1 animate-pulse flex-col items-center justify-center gap-4'
+                  role='status'
+                >
                   <Loader2Icon className='size-16 animate-spin' />
                   <span className='text-sm'>Loading product details...</span>
                 </div>

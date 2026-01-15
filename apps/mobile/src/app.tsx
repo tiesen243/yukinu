@@ -1,6 +1,6 @@
 import '@/globals.css'
 
-import { DefaultTheme } from '@react-navigation/native'
+import { DarkTheme, DefaultTheme } from '@react-navigation/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import * as SplashScreen from 'expo-splash-screen'
@@ -18,7 +18,7 @@ export default function App() {
   const theme =
     colorscheme === 'dark'
       ? {
-          ...DefaultTheme,
+          ...DarkTheme,
           colors: {
             background: 'rgb(0, 0, 0)',
             text: 'rgb(255, 255, 255)',

@@ -9,7 +9,7 @@ export const UserHeader: React.FC = () => {
 
   if (status !== 'authenticated')
     return (
-      <div className='flex h-16 items-start gap-2 border-b px-6'>
+      <div className='flex h-16 items-start gap-2 border-b px-6' role='status'>
         <div className='aspect-square size-12 animate-pulse rounded-full bg-muted' />
 
         <div className='flex w-full flex-col gap-1 overflow-hidden'>

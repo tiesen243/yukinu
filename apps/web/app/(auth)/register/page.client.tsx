@@ -12,7 +12,7 @@ import { useTRPCClient } from '@/lib/trpc/react'
 export const RegisterForm: React.FC = () => {
   const trpc = useTRPCClient()
 
-  const { FormField, handleSubmit, state } = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       username: '',
       email: '',
@@ -31,7 +31,7 @@ export const RegisterForm: React.FC = () => {
   })
 
   return (
-    <form className='px-6' onSubmit={handleSubmit}>
+    <form id={formId} className='px-6' onSubmit={handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Create a new account</legend>
 
@@ -90,11 +90,7 @@ export const RegisterForm: React.FC = () => {
         />
 
         <Field>
-          <Button
-            type='submit'
-            onClick={handleSubmit}
-            disabled={state.isPending}
-          >
+          <Button type='submit' disabled={state.isPending}>
             {state.isPending ? 'Registering...' : 'Register'}
           </Button>
         </Field>

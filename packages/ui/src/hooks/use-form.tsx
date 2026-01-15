@@ -148,7 +148,7 @@ export function useForm<
 
       const onChange = React.useCallback(
         (param: OnChangeParam<TValues[TName]>) => {
-          if (!param) return
+          if (param === null) return
 
           setErrors([])
 

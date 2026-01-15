@@ -67,7 +67,7 @@ export default function InvitePage() {
           </FieldDescription>
 
           <Field>
-            <Button type='button' disabled={isPending}>
+            <Button type='submit' disabled={isPending}>
               Accept Invitation
             </Button>
           </Field>
