@@ -1,5 +1,5 @@
 ---
-"@yukinu/ui": patch
+'@yukinu/ui': patch
 ---
 
 change shadcn theme to vega
