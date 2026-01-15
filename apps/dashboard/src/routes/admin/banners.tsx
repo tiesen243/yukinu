@@ -37,7 +37,7 @@ export default function BannersPage() {
 
       <AddBannerButton />
 
-      <Card className='px-4' render={<ul />}>
+      <Card className='px-6' render={<ul />}>
         {isPending && <li>Loading banners...</li>}
         {data?.map((banner) => (
           <Banner key={banner.id} id={banner.id} url={banner.url} />
@@ -113,7 +113,7 @@ const AddBannerButton: React.FC = () => {
         <img
           src={url}
           alt='Banner Preview'
-          className='max-h-48 w-full object-cover rounded-md'
+          className='max-h-48 w-full rounded-md object-cover'
         />
 
         <DialogFooter>

@@ -19,37 +19,10 @@ import { Link, useNavigate } from 'react-router'
 import { getWebUrl } from '@/lib/utils'
 
 export default function LoginPage() {
-  return (
-    <main className='grid min-h-dvh place-items-center'>
-      <h1 className='sr-only'>Login page</h1>
-
-      <Card
-        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
-        render={<form method='POST' />}
-      >
-        <FieldSet className='px-4'>
-          <FieldLegend>Login</FieldLegend>
-          <FieldDescription>
-            Welcome back! Please enter your credentials to log in.
-          </FieldDescription>
-
-          <LoginForm />
-
-          <FieldDescription>
-            Don&apos;t have an account?{' '}
-            <Link to={`${getWebUrl()}/register`}>Register here.</Link>
-          </FieldDescription>
-        </FieldSet>
-      </Card>
-    </main>
-  )
-}
-
-const LoginForm: React.FC = () => {
   const { signIn } = useSession()
   const navigate = useNavigate()
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       identifier: '',
       password: '',
@@ -65,42 +38,63 @@ const LoginForm: React.FC = () => {
   })
 
   return (
-    <FieldGroup>
-      <form.Field
-        name='identifier'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Username or Email</FieldLabel>
-            <Input {...field} placeholder='Enter your username or email' />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
+    <main className='grid min-h-dvh place-items-center'>
+      <h1 className='sr-only'>Login page</h1>
 
-      <form.Field
-        name='password'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-            <Input
-              {...field}
-              type='password'
-              placeholder='Enter your password'
+      <Card
+        id={formId}
+        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
+        render={<form onSubmit={handleSubmit} />}
+      >
+        <FieldSet className='px-6'>
+          <FieldLegend>Login</FieldLegend>
+          <FieldDescription>
+            Welcome back! Please enter your credentials to log in.
+          </FieldDescription>
+
+          <FieldGroup>
+            <FormField
+              name='identifier'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={field.id}>Username or Email</FieldLabel>
+                  <Input
+                    {...field}
+                    placeholder='Enter your username or email'
+                  />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
             />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
 
-      <Field>
-        <Button
-          type='submit'
-          onClick={form.handleSubmit}
-          disabled={form.state.isPending}
-        >
-          {form.state.isPending ? 'Logging in...' : 'Log In'}
-        </Button>
-      </Field>
-    </FieldGroup>
+            <FormField
+              name='password'
+              render={({ meta, field }) => (
+                <Field data-invalid={meta.errors.length > 0}>
+                  <FieldLabel htmlFor={field.id}>Password</FieldLabel>
+                  <Input
+                    {...field}
+                    type='password'
+                    placeholder='Enter your password'
+                  />
+                  <FieldError id={meta.errorId} errors={meta.errors} />
+                </Field>
+              )}
+            />
+
+            <Field>
+              <Button type='submit' disabled={state.isPending}>
+                {state.isPending ? 'Logging in...' : 'Log In'}
+              </Button>
+            </Field>
+          </FieldGroup>
+
+          <FieldDescription>
+            Don&apos;t have an account?{' '}
+            <Link to={`${getWebUrl()}/register`}>Register here.</Link>
+          </FieldDescription>
+        </FieldSet>
+      </Card>
+    </main>
   )
 }

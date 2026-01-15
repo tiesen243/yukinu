@@ -74,8 +74,8 @@ export const CartItemsListSkeleton: React.FC = () =>
         <div className='size-10 bg-muted' />
       </ItemMedia>
       <ItemContent>
-        <ItemTitle className='bg-muted w-1/3 rounded-sm'>&nbsp;</ItemTitle>
-        <ItemDescription className='bg-muted w-1/4 rounded-sm'>
+        <ItemTitle className='w-1/3 rounded-sm bg-muted'>&nbsp;</ItemTitle>
+        <ItemDescription className='w-1/4 rounded-sm bg-muted'>
           &nbsp;
         </ItemDescription>
       </ItemContent>
@@ -113,7 +113,7 @@ export const CartItemsTotal: React.FC = () => {
 export const CartItemsTotalSkeleton: React.FC = () => (
   <Item className='animate-pulse'>
     <ItemContent>
-      <ItemTitle className='bg-muted w-1/4 rounded-sm'>&nbsp;</ItemTitle>
+      <ItemTitle className='w-1/4 rounded-sm bg-muted'>&nbsp;</ItemTitle>
     </ItemContent>
     <ItemActions>
       <Button variant='outline' size='sm' disabled>

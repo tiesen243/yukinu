@@ -9,7 +9,7 @@ export const Breadcrumb = () => {
   const location = useLocation()
 
   return (
-    <nav className='flex items-center gap-2 text-sm overflow-hidden'>
+    <nav className='flex items-center gap-2 overflow-hidden text-sm'>
       <Link
         to='/'
         className={

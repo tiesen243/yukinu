@@ -27,7 +27,7 @@ export function StatCard({
       <CardContent>
         <div className='text-2xl font-bold text-card-foreground'>{value}</div>
         <p
-          className={`text-xs flex items-center gap-1 mt-1 ${isPositive ? 'text-green-600' : 'text-red-600'}`}
+          className={`mt-1 flex items-center gap-1 text-xs ${isPositive ? 'text-green-600' : 'text-red-600'}`}
         >
           {isPositive ? (
             <ArrowUpRightIcon className='size-3' />

@@ -1,4 +1,4 @@
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -17,11 +17,11 @@ import { Icon } from '@/components/ui/icon'
 import { trpc } from '@/lib/trpc'
 import IndexScreen from '@/screens/(tabs)/_index'
 
-const Tabs = createMaterialTopTabNavigator({
+const Tabs = createBottomTabNavigator({
   initialRouteName: 'index',
   screenOptions: {
+    headerShown: false,
     tabBarIndicatorStyle: { backgroundColor: '#3f5ec2' },
-    tabBarShowLabel: false,
     tabBarActiveTintColor: '#3f5ec2',
     tabBarInactiveTintColor: '#525252',
   },
@@ -66,7 +66,7 @@ function HeaderLeft() {
 
   return (
     <Image
-      className='size-8 rounded-full object-cover self-start'
+      className='size-8 self-start rounded-full object-cover'
       source={
         data.user.image
           ? { uri: data.user.image }
@@ -81,7 +81,7 @@ function HeaderTitle() {
 
   return (
     <Image
-      className='size-8 object-contain self-center'
+      className='size-8 self-center object-contain'
       source={
         theme === 'dark'
           ? require('../../../assets/logo-dark.png')

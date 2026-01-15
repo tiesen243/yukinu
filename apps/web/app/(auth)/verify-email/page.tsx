@@ -1,5 +1,4 @@
-import { Card } from '@yukinu/ui/card'
-import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
+import { Card, CardDescription, CardHeader, CardTitle } from '@yukinu/ui/card'
 
 import { VerifyEmailForm } from '@/app/(auth)/verify-email/page.client'
 import { createMetadata } from '@/lib/metadata'
@@ -9,34 +8,32 @@ export default async function VerifyEmailPage({
 }: PageProps<'/verify-email'>) {
   const { token } = await searchParams
 
-  if (!token)
+  if (!token || typeof token !== 'string')
     return (
       <main className='grid min-h-dvh place-items-center'>
         <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
-          <FieldSet className='px-4'>
-            <FieldLegend>Error</FieldLegend>
-            <FieldDescription>
+          <CardHeader>
+            <CardTitle>Error</CardTitle>
+            <CardDescription>
               No token provided. Please check the link in your email.
-            </FieldDescription>
-          </FieldSet>
+            </CardDescription>
+          </CardHeader>
         </Card>
       </main>
     )
 
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <Card
-        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
-        render={<form method='POST' />}
-      >
-        <FieldSet className='px-4'>
-          <FieldLegend>Verify Email</FieldLegend>
-          <FieldDescription>
-            Click the button below to verify your email address.
-          </FieldDescription>
+      <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
+        <CardHeader>
+          <CardTitle>Verify Your Email Address</CardTitle>
+          <CardDescription>
+            Complete your email verification to access all features of your
+            account.
+          </CardDescription>
+        </CardHeader>
 
-          <VerifyEmailForm token={String(token)} />
-        </FieldSet>
+        <VerifyEmailForm token={token} />
       </Card>
     </main>
   )

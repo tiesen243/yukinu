@@ -28,7 +28,7 @@ export default function AccountSecurityPage() {
         description='Manage your password, two-factor authentication, and other security settings to keep your account safe.'
       />
 
-      <section className='flex flex-col gap-4 px-4'>
+      <section className='flex flex-col gap-4 px-6'>
         <h2 className='text-lg font-medium'>Where you are logged in</h2>
 
         <Suspense fallback={<SessionsListSkeleton />}>
@@ -38,7 +38,7 @@ export default function AccountSecurityPage() {
 
       <hr />
 
-      <section className='px-4'>
+      <section className='px-6'>
         <h2 className='sr-only'>Change Password section</h2>
 
         <ChangePasswordForm />
@@ -46,12 +46,13 @@ export default function AccountSecurityPage() {
 
       <hr />
 
-      <Collapsible render={<section />} className='px-4'>
+      <Collapsible render={<section />} className='px-6'>
         <h2 className='sr-only'>Delete Account</h2>
 
-        <CollapsibleTrigger className='flex w-full items-center justify-between text-lg font-medium text-destructive aria-expanded:[&>svg]:rotate-90'>
-          <p>Danger Zone</p>
-          <ChevronRightIcon className='transition-transform' />
+        <CollapsibleTrigger className='group inline-flex w-full items-center gap-2 rounded-md px-2 py-1 text-lg font-medium text-destructive [&_svg]:size-4'>
+          Danger Zone
+          <div className='flex-1' />
+          <ChevronRightIcon className='transition-[rotate] duration-200 ease-out group-data-panel-open:rotate-90' />
         </CollapsibleTrigger>
 
         <CollapsibleContent className='h-(--collapsible-panel-height) pt-4 transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0'>

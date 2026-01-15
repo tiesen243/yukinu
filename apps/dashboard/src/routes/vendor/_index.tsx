@@ -40,7 +40,7 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
     meta: { filter: trpc.vendor.me.queryFilter() },
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       name: loaderData.name,
       description: loaderData.description,
@@ -61,30 +61,30 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
   return (
     <>
       <h1 className='sr-only'>My Store page</h1>
-      <Card render={<form onSubmit={form.handleSubmit} />}>
-        <FieldSet className='px-4'>
+      <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+        <FieldSet className='px-6'>
           <FieldLegend>My Store</FieldLegend>
           <FieldDescription>
             Update your store details and preferences below.
           </FieldDescription>
 
           <FieldGroup>
-            <form.Field
+            <FormField
               name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Store Name</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Store Name</FieldLabel>
                   <Input {...field} placeholder='Vendor Name' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
             />
 
-            <form.Field
+            <FormField
               name='description'
               render={({ meta, field: { value = '', ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
@@ -101,11 +101,11 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               )}
             />
 
-            <form.Field
+            <FormField
               name='image'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Image URL</FieldLabel>
                   <InputGroup>
                     <InputGroupInput
                       {...field}
@@ -125,22 +125,22 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               )}
             />
 
-            <form.Field
+            <FormField
               name='address'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Address</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Address</FieldLabel>
                   <Input {...field} value={value ?? ''} />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
             />
 
-            <form.Field
+            <FormField
               name='contact'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Contact</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Contact</FieldLabel>
                   <Input
                     {...field}
                     value={value ?? ''}
@@ -151,11 +151,11 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               )}
             />
 
-            <form.Field
+            <FormField
               name='payoutBankName'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Bank Name</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Bank Name</FieldLabel>
                   <Input
                     {...field}
                     value={value ?? ''}
@@ -166,11 +166,11 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               )}
             />
 
-            <form.Field
+            <FormField
               name='payoutAccountName'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Account Name</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Account Name</FieldLabel>
                   <Input
                     {...field}
                     value={value ?? ''}
@@ -181,11 +181,11 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
               )}
             />
 
-            <form.Field
+            <FormField
               name='payoutAccountNumber'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Account Number</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Account Number</FieldLabel>
                   <Input
                     {...field}
                     value={value ?? ''}
@@ -197,8 +197,8 @@ export default function MyStorePage({ loaderData }: Route.ComponentProps) {
             />
 
             <Field>
-              <Button type='submit' disabled={form.state.isPending}>
-                {form.state.isPending ? 'Saving...' : 'Save Changes'}
+              <Button type='submit' disabled={state.isPending}>
+                {state.isPending ? 'Saving...' : 'Save Changes'}
               </Button>
             </Field>
           </FieldGroup>

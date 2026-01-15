@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@yukinu/ui/button'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
+import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
@@ -12,7 +12,7 @@ import { useTRPCClient } from '@/lib/trpc/react'
 export const ForgotPasswordForm: React.FC = () => {
   const trpc = useTRPCClient()
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: { email: '' },
     schema: forgotPasswordInput,
     onSubmit: trpc.auth.forgotPassword.mutate,
@@ -22,27 +22,27 @@ export const ForgotPasswordForm: React.FC = () => {
   })
 
   return (
-    <FieldGroup>
-      <form.Field
-        name='email'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Username or Email</FieldLabel>
-            <Input {...field} placeholder='Enter your username or email' />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
+    <form id={formId} className='px-6' onSubmit={handleSubmit}>
+      <FieldSet>
+        <legend className='sr-only'>Forgot your password?</legend>
 
-      <Field>
-        <Button
-          type='submit'
-          onClick={form.handleSubmit}
-          disabled={form.state.isPending}
-        >
-          {form.state.isPending ? 'Sending...' : 'Send Reset Link'}
-        </Button>
-      </Field>
-    </FieldGroup>
+        <FormField
+          name='email'
+          render={({ meta, field }) => (
+            <Field data-invalid={meta.errors.length > 0}>
+              <FieldLabel htmlFor={field.id}>Username or Email</FieldLabel>
+              <Input {...field} placeholder='Enter your username or email' />
+              <FieldError id={meta.errorId} errors={meta.errors} />
+            </Field>
+          )}
+        />
+
+        <Field>
+          <Button type='submit' disabled={state.isPending}>
+            {state.isPending ? 'Sending...' : 'Send Reset Link'}
+          </Button>
+        </Field>
+      </FieldSet>
+    </form>
   )
 }

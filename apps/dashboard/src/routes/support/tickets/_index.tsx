@@ -32,7 +32,7 @@ export default function SupportTicketsPage() {
       </div>
 
       <Tabs defaultValue='open' className='mt-4'>
-        <TabsList>
+        <TabsList variant='outline'>
           {ticketStatuses.map((status) => (
             <TabsTrigger key={status} value={status}>
               {status}
@@ -61,8 +61,8 @@ const Tickets: React.FC<{ status: TicketStatus }> = ({ status }) => {
     return Array.from({ length: 3 }, (_, i) => (
       <Item key={i} variant='outline' className='animate-pulse'>
         <ItemContent>
-          <ItemTitle className='bg-muted w-1/3 rounded-sm'>&nbsp;</ItemTitle>
-          <ItemDescription className='bg-muted w-1/2 rounded-sm'>
+          <ItemTitle className='w-1/3 rounded-sm bg-muted'>&nbsp;</ItemTitle>
+          <ItemDescription className='w-1/2 rounded-sm bg-muted'>
             &nbsp;
           </ItemDescription>
         </ItemContent>

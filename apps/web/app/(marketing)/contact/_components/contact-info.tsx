@@ -2,7 +2,7 @@ import { ClockIcon, MailIcon, MapPinIcon, PhoneIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 
 export const ContactInfo: React.FC = () => (
-  <div className='space-y-4 px-4'>
+  <div className='space-y-4 px-6'>
     {contactInfo.map((info) => (
       <div key={info.title} className='flex gap-4'>
         <div className='flex size-10 shrink-0 items-center justify-center rounded-lg border border-accent bg-accent/20'>

@@ -30,7 +30,7 @@ export const ProductPerformance: React.FC<{
       <CardDescription>Product sales and revenue performance</CardDescription>
     </CardHeader>
     <CardContent>
-      <ChartContainer config={config} className='w-full h-72'>
+      <ChartContainer config={config} className='h-72 w-full'>
         <ResponsiveContainer width='100%' height='100%'>
           <BarChart data={data} layout='vertical' margin={{ right: 100 }}>
             <CartesianGrid strokeDasharray='3 3' stroke='var(--color-border)' />

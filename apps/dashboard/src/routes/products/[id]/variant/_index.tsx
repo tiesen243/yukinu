@@ -41,7 +41,7 @@ export default function CreateProductVariantsPage({
       toast.error('Failed to recreate variants', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       id: params.id,
       variants: [{ name: '', options: [''] }],
@@ -52,15 +52,15 @@ export default function CreateProductVariantsPage({
   })
 
   return (
-    <Card render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-4'>
+    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+      <FieldSet className='px-6'>
         <FieldLegend>Recreate Product Variants</FieldLegend>
         <FieldDescription className='flex items-center gap-2 text-warning'>
           <TriangleAlertIcon size={16} /> This action will delete all existing
           variants and create new ones.
         </FieldDescription>
 
-        <form.Field
+        <FormField
           name='variants'
           render={({ meta, field }) => (
             <FieldGroup>
@@ -180,8 +180,8 @@ export default function CreateProductVariantsPage({
         />
 
         <Field>
-          <Button type='submit' disabled={form.state.isPending}>
-            {form.state.isPending ? 'Recreating...' : 'Recreate Variants'}
+          <Button type='submit' disabled={state.isPending}>
+            {state.isPending ? 'Recreating...' : 'Recreate Variants'}
           </Button>
         </Field>
       </FieldSet>

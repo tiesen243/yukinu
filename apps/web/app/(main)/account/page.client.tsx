@@ -143,8 +143,7 @@ export function UpdateProfileForm() {
     onError: ({ message }) =>
       toast.error('Failed to update profile', { description: message }),
   })
-
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       fullName: data.profile.fullName,
       bio: data.profile.bio,
@@ -158,7 +157,7 @@ export function UpdateProfileForm() {
   })
 
   return (
-    <form onSubmit={form.handleSubmit}>
+    <form id={formId} onSubmit={handleSubmit}>
       <h3 className='sr-only'>Update Profile form</h3>
 
       <FieldSet>
@@ -168,18 +167,15 @@ export function UpdateProfileForm() {
         </FieldDescription>
 
         <FieldGroup>
-          <form.Field
+          <FormField
             name='avatar'
             render={({ meta, field: { value, ...field } }) => (
               <Field
                 orientation='responsive'
                 data-invalid={meta.errors.length > 0}
-                className='gap-4'
               >
                 <FieldContent>
-                  <FieldLabel htmlFor={meta.fieldId}>
-                    Profile Image URL
-                  </FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Profile Image URL</FieldLabel>
                   <InputGroup>
                     <InputGroupInput
                       {...field}
@@ -231,18 +227,15 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <form.Field
+          <FormField
             name='banner'
             render={({ meta, field: { value, ...field } }) => (
               <Field
                 orientation='responsive'
                 data-invalid={meta.errors.length > 0}
-                className='gap-4'
               >
                 <FieldContent>
-                  <FieldLabel htmlFor={meta.fieldId}>
-                    Banner Image URL
-                  </FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Banner Image URL</FieldLabel>
                   <InputGroup>
                     <InputGroupInput
                       {...field}
@@ -259,23 +252,23 @@ export function UpdateProfileForm() {
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </FieldContent>
 
-                <Avatar className='size-full @md/field-group:size-40 after:border-none'>
+                <Avatar className='size-full after:border-none @md/field-group:size-40'>
                   <AvatarImage
                     src={value ?? ''}
                     alt='Banner Image'
-                    className='rounded-md aspect-video'
+                    className='aspect-video rounded-md'
                   />
-                  <AvatarFallback className='bg-muted rounded-md aspect-video' />
+                  <AvatarFallback className='aspect-video rounded-md bg-muted' />
                 </Avatar>
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='fullName'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Full Name</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Full Name</FieldLabel>
                 <Input
                   {...field}
                   value={value ?? ''}
@@ -286,11 +279,11 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <form.Field
+          <FormField
             name='bio'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Bio</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Bio</FieldLabel>
                 <InputGroup>
                   <InputGroupTextarea
                     {...field}
@@ -310,11 +303,11 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <form.Field
+          <FormField
             name='gender'
             render={({ meta, field: { onChange, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Gender</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Gender</FieldLabel>
                 <Select
                   {...field}
                   onValueChange={onChange}
@@ -344,11 +337,11 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <form.Field
+          <FormField
             name='dateOfBirth'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Date of Birth</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Date of Birth</FieldLabel>
                 <Input type='date' {...field} value={value ?? ''} />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
@@ -356,8 +349,8 @@ export function UpdateProfileForm() {
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Saving...' : 'Save Changes'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
           </Field>
         </FieldGroup>
@@ -433,8 +426,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
     onError: ({ message }) =>
       toast.error('Failed to change username', { description: message }),
   })
-
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: { username, password: '' },
     schema: changeUsernameInput.omit({ id: true }),
     onSubmit: mutateAsync,
@@ -462,25 +454,25 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <form id='change-username-form' onSubmit={form.handleSubmit}>
+        <form id={formId} onSubmit={handleSubmit}>
           <FieldSet>
             <FieldGroup>
-              <form.Field
+              <FormField
                 name='username'
                 render={({ meta, field }) => (
                   <Field data-invalid={meta.errors.length > 0}>
-                    <FieldLabel htmlFor={meta.fieldId}>New Username</FieldLabel>
+                    <FieldLabel htmlFor={field.id}>New Username</FieldLabel>
                     <Input {...field} />
                     <FieldError id={meta.errorId} errors={meta.errors} />
                   </Field>
                 )}
               />
 
-              <form.Field
+              <FormField
                 name='password'
                 render={({ meta, field }) => (
                   <Field data-invalid={meta.errors.length > 0}>
-                    <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
+                    <FieldLabel htmlFor={field.id}>Password</FieldLabel>
                     <Input type='password' {...field} />
                     <FieldError id={meta.errorId} errors={meta.errors} />
                   </Field>
@@ -493,18 +485,14 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         <DialogFooter>
           <DialogClose
             render={
-              <Button variant='outline' disabled={form.state.isPending}>
+              <Button variant='outline' disabled={state.isPending}>
                 Cancel
               </Button>
             }
           />
 
-          <Button
-            type='submit'
-            form='change-username-form'
-            disabled={form.state.isPending}
-          >
-            {form.state.isPending ? 'Changing...' : 'Change Username'}
+          <Button type='submit' form={formId} disabled={state.isPending}>
+            {state.isPending ? 'Changing...' : 'Change Username'}
           </Button>
         </DialogFooter>
       </DialogContent>

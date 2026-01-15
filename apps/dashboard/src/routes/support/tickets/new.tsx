@@ -4,6 +4,7 @@ import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldSet,
@@ -30,7 +31,7 @@ export default function NewSupportTicketPage() {
       toast.error('Error creating support ticket', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       subject: '',
       description: '',
@@ -41,8 +42,8 @@ export default function NewSupportTicketPage() {
   })
 
   return (
-    <Card render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-4'>
+    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+      <FieldSet className='px-6'>
         <FieldTitle>Create New Support Ticket</FieldTitle>
         <FieldDescription>
           Use the form below to submit a new support ticket. Please provide a
@@ -50,37 +51,34 @@ export default function NewSupportTicketPage() {
         </FieldDescription>
 
         <FieldGroup>
-          <form.Field
+          <FormField
             name='subject'
             render={({ field, meta }) => (
-              <Field>
-                <FieldLabel htmlFor={meta.fieldId}>Subject</FieldLabel>
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.id}>Subject</FieldLabel>
                 <Input {...field} placeholder="What's the issue about?" />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='description'
             render={({ field, meta }) => (
-              <Field>
-                <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.id}>Description</FieldLabel>
                 <Textarea
                   {...field}
                   placeholder='Please provide a detailed description of your issue or request.'
-                  onInput={(e) => {
-                    const target = e.currentTarget
-                    target.style.height = 'auto'
-                    target.style.height = `${target.scrollHeight}px`
-                  }}
                 />
+                <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Submitting...' : 'Submit Ticket'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Submitting...' : 'Submit Ticket'}
             </Button>
           </Field>
         </FieldGroup>

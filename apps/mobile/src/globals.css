@@ -1,2 +1,4 @@
 @import '@yukinu/ui/tailwind.css';
 @import 'uniwind';
+
+@source '../node_modules/@yukinu/ui/dist/components/button.mjs';

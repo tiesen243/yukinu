@@ -1,16 +1,24 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
-  "ignorePatterns": ["**/*.{css,json,md,webmanifest,yml}"],
 
-  "semi": false,
-  "tabWidth": 2,
-  "printWidth": 80,
-  "singleQuote": true,
   "jsxSingleQuote": true,
+  "printWidth": 80,
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
   "trailingComma": "all",
 
   "experimentalSortImports": {
     "groups": ["side-effect", "type", "external", "internal"],
     "partitionByComment": true
+  },
+
+  "experimentalSortPackageJson": {
+    "sortScripts": true
+  },
+
+  "experimentalTailwindcss": {
+    "functions": ["clsx", "cva", "cn"],
+    "stylesheet": "./packages/ui/src/tailwind.css"
   }
 }

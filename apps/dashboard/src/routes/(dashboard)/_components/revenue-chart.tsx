@@ -25,13 +25,13 @@ export const RevenueChart: React.FC<{
   config: ChartConfig
   data: Array<{ month: string; revenue: number; target: number }>
 }> = ({ config, data }) => (
-  <Card className='lg:col-span-2 bg-card border-border'>
+  <Card className='border-border bg-card lg:col-span-2'>
     <CardHeader>
       <CardTitle className='text-foreground'>Revenue Trend</CardTitle>
       <CardDescription>Monthly revenue vs target</CardDescription>
     </CardHeader>
     <CardContent>
-      <ChartContainer config={config} className='w-full h-72'>
+      <ChartContainer config={config} className='h-72 w-full'>
         <ResponsiveContainer width='100%' height='100%'>
           <AreaChart data={data}>
             <defs>

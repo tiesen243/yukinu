@@ -24,7 +24,7 @@ export const BannersList: React.FC = () => {
         <div
           key={banner.id}
           className={cn(
-            'relative w-full h-full rounded-xl animate-in fade-in duration-500 ease-linear',
+            'relative h-full w-full animate-in rounded-xl duration-500 ease-linear fade-in',
             {
               block: idx === imageIdx,
               hidden: idx !== imageIdx,
@@ -34,7 +34,7 @@ export const BannersList: React.FC = () => {
           <Image
             src={banner.url}
             alt={banner.id ?? 'Banner Image'}
-            className='object-top object-cover rounded-xl'
+            className='rounded-xl object-cover object-top'
             fill
           />
         </div>
@@ -42,7 +42,7 @@ export const BannersList: React.FC = () => {
 
       <button
         type='button'
-        className='group/prev absolute w-12 flex flex-col items-center justify-center top-0 left-0 h-full bg-linear-to-r from-background/50 hover:to-background/10 to-background/5 transition-colors'
+        className='group/prev absolute top-0 left-0 flex h-full w-12 flex-col items-center justify-center bg-linear-to-r from-background/50 to-background/5 transition-colors hover:to-background/10'
         onClick={() =>
           setImageIdx((prev) => (prev - 1 + data.length) % data.length)
         }
@@ -51,7 +51,7 @@ export const BannersList: React.FC = () => {
         <span className='sr-only'>Previous Banner</span>
       </button>
 
-      <div className='absolute bottom-2 w-full flex items-center justify-center gap-2'>
+      <div className='absolute bottom-2 flex w-full items-center justify-center gap-2'>
         {Array.from({ length: data.length }, (_, idx) => (
           <button
             key={idx}
@@ -67,7 +67,7 @@ export const BannersList: React.FC = () => {
 
       <button
         type='button'
-        className='group/next absolute w-12 flex flex-col items-center justify-center top-0 right-0 h-full bg-linear-to-l from-background/50 hover:to-background/10 to-background/5 transition-colors'
+        className='group/next absolute top-0 right-0 flex h-full w-12 flex-col items-center justify-center bg-linear-to-l from-background/50 to-background/5 transition-colors hover:to-background/10'
         onClick={() => setImageIdx((prev) => (prev + 1) % data.length)}
       >
         <ChevronRightIcon className='transition-colors group-hover/next:text-primary' />

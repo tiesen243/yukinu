@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@yukinu/ui/button'
-import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
+import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/sonner'
@@ -12,7 +12,7 @@ import { useTRPCClient } from '@/lib/trpc/react'
 export const RegisterForm: React.FC = () => {
   const trpc = useTRPCClient()
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       username: '',
       email: '',
@@ -31,70 +31,70 @@ export const RegisterForm: React.FC = () => {
   })
 
   return (
-    <FieldGroup>
-      <Field orientation='horizontal'>
-        <form.Field
-          name='username'
+    <form id={formId} className='px-6' onSubmit={handleSubmit}>
+      <FieldSet>
+        <legend className='sr-only'>Create a new account</legend>
+
+        <Field orientation='horizontal'>
+          <FormField
+            name='username'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.id}>Username</FieldLabel>
+                <Input {...field} placeholder='Enter your username' />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
+
+          <FormField
+            name='email'
+            render={({ meta, field }) => (
+              <Field data-invalid={meta.errors.length > 0}>
+                <FieldLabel htmlFor={field.id}>Email</FieldLabel>
+                <Input {...field} type='email' placeholder='Enter your email' />
+                <FieldError id={meta.errorId} errors={meta.errors} />
+              </Field>
+            )}
+          />
+        </Field>
+
+        <FormField
+          name='password'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>Username</FieldLabel>
-              <Input {...field} placeholder='Enter your username' />
-              <FieldError errors={meta.errors} />
+              <FieldLabel htmlFor={field.id}>Password</FieldLabel>
+              <Input
+                {...field}
+                type='password'
+                placeholder='Enter your password'
+              />
+              <FieldError id={meta.errorId} errors={meta.errors} />
             </Field>
           )}
         />
 
-        <form.Field
-          name='email'
+        <FormField
+          name='confirmPassword'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>Email</FieldLabel>
-              <Input {...field} type='email' placeholder='Enter your email' />
-              <FieldError errors={meta.errors} />
+              <FieldLabel htmlFor={field.id}>Confirm Password</FieldLabel>
+              <Input
+                {...field}
+                type='password'
+                placeholder='Confirm your password'
+              />
+              <FieldError id={meta.errorId} errors={meta.errors} />
             </Field>
           )}
         />
-      </Field>
 
-      <form.Field
-        name='password'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-            <Input
-              {...field}
-              type='password'
-              placeholder='Enter your password'
-            />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
-
-      <form.Field
-        name='confirmPassword'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Confirm Password</FieldLabel>
-            <Input
-              {...field}
-              type='password'
-              placeholder='Confirm your password'
-            />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
-
-      <Field>
-        <Button
-          type='submit'
-          onClick={form.handleSubmit}
-          disabled={form.state.isPending}
-        >
-          {form.state.isPending ? 'Registering...' : 'Register'}
-        </Button>
-      </Field>
-    </FieldGroup>
+        <Field>
+          <Button type='submit' disabled={state.isPending}>
+            {state.isPending ? 'Registering...' : 'Register'}
+          </Button>
+        </Field>
+      </FieldSet>
+    </form>
   )
 }

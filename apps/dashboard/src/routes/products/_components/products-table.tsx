@@ -49,7 +49,7 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
         </Button>
       </div>
 
-      <Card className='px-4' render={<section />}>
+      <Card className='px-6' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

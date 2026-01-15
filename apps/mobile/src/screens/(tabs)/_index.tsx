@@ -48,13 +48,13 @@ const ProductsList: React.FC = () => {
         renderItem={() => (
           <View
             style={{ width: itemWidth, height: (itemWidth / 3) * 4 }}
-            className='bg-card ring-1 ring-foreground/10 rounded-xl'
+            className='mb-4 rounded-xl bg-card ring-1 ring-foreground/10'
           >
-            <View className='bg-muted w-full rounded-t-xl aspect-square' />
+            <View className='aspect-square w-full rounded-t-xl bg-muted' />
 
-            <View className='p-4 w-full gap-2'>
-              <Text className='bg-muted rounded-md'>&nbsp;</Text>
-              <Text className='w-1/3 text-sm bg-muted rounded-md'>&nbsp;</Text>
+            <View className='w-full gap-2 p-4'>
+              <Text className='rounded-md bg-muted'>&nbsp;</Text>
+              <Text className='w-1/3 rounded-md bg-muted text-sm'>&nbsp;</Text>
             </View>
           </View>
         )}
@@ -78,18 +78,18 @@ const ProductsList: React.FC = () => {
       renderItem={({ item }) => (
         <Pressable
           style={{ width: itemWidth, height: (itemWidth / 3) * 4 }}
-          className='bg-card ring-1 ring-foreground/10 rounded-xl mb-4'
+          className='mb-4 rounded-xl bg-card ring-1 ring-foreground/10'
           onPress={() =>
             navigation.navigate('productDetails', { productId: item.id })
           }
         >
           <Image
             source={{ uri: item.image ?? '' }}
-            className='w-full rounded-t-xl aspect-square'
+            className='aspect-square w-full rounded-t-xl'
             resizeMode='cover'
           />
 
-          <View className='p-4 w-full gap-2'>
+          <View className='w-full gap-2 p-4'>
             <Text className='line-clamp-1'>{item.name}</Text>
             <Text className='text-sm text-muted-foreground'>
               {new Intl.NumberFormat('en-US', {

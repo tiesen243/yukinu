@@ -10,7 +10,7 @@ export default function SettingsScreen() {
 
   return (
     <View className='flex-1 bg-background'>
-      <View className='flex-1 container py-4'>
+      <View className='container flex-1 py-4'>
         <Text variant='h4'>Display</Text>
 
         <View className='mt-4 flex-col gap-4'>
@@ -18,7 +18,7 @@ export default function SettingsScreen() {
             <TouchableOpacity
               key={mode.value}
               activeOpacity={0.8}
-              className='flex-row justify-between items-center'
+              className='flex-row items-center justify-between'
               accessibilityLabel={`Set theme to ${mode.label}`}
               onPress={() => Uniwind.setTheme(mode.value)}
             >

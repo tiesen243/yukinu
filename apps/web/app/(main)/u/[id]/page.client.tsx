@@ -18,11 +18,11 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
     <>
       <Card
         render={<section />}
-        className='mb-4 pt-0 rounded-t-none *:[img:first-child]:rounded-t-none'
+        className='mb-4 rounded-t-none pt-0 *:[img:first-child]:rounded-t-none'
       >
         <h2 className='sr-only'>User Profile Header</h2>
 
-        <Avatar className='size-full aspect-video md:aspect-3/1 rounded-none after:border-none'>
+        <Avatar className='aspect-video size-full rounded-none after:border-none md:aspect-3/1'>
           <AvatarImage
             src={data.profile.banner ?? ''}
             alt='banner'
@@ -35,7 +35,7 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
           </AvatarFallback>
         </Avatar>
 
-        <div className='-mt-28 md:-mt-14 mx-8 relative flex-col flex items-center gap-4 md:flex-row'>
+        <div className='relative mx-8 -mt-28 flex flex-col items-center gap-4 md:-mt-14 md:flex-row'>
           <Avatar className='size-32 border-4 border-background after:border-none'>
             <AvatarImage src={data.image ?? ''} alt={data.username} />
             <AvatarFallback>
@@ -43,7 +43,7 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
             </AvatarFallback>
           </Avatar>
 
-          <div className='md:mt-8 flex flex-col sm:flex-row items-center gap-2'>
+          <div className='flex flex-col items-center gap-2 sm:flex-row md:mt-8'>
             <Typography variant='h2' className='my-0'>
               {data.profile.fullName}
             </Typography>
@@ -56,14 +56,14 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
         {data.profile.bio && (
           <Typography
             variant='blockquote'
-            className='text-center my-0 border-0 px-4'
+            className='my-0 border-0 px-6 text-center'
           >
             {data.profile.bio}
           </Typography>
         )}
       </Card>
 
-      <Card render={<section />} className='px-4 gap-0'>
+      <Card render={<section />} className='gap-0 px-6'>
         <h2 className='sr-only'>User Profile Details</h2>
 
         <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>

@@ -29,7 +29,7 @@ export const NewAddressForm: React.FC = () => {
       toast.error('Error adding address', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       recipientName: '',
       phoneNumber: '',
@@ -47,80 +47,80 @@ export const NewAddressForm: React.FC = () => {
   })
 
   return (
-    <form onSubmit={form.handleSubmit}>
+    <form id={formId} onSubmit={handleSubmit}>
       <FieldSet>
         <FieldGroup>
-          <form.Field
+          <FormField
             name='recipientName'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Recipient Name</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Recipient Name</FieldLabel>
                 <Input {...field} placeholder='John Doe' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='phoneNumber'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Phone Number</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Phone Number</FieldLabel>
                 <Input {...field} placeholder='(+1) 123 456 7890' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='street'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Street Address</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Street Address</FieldLabel>
                 <Input {...field} placeholder='123 Main St' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='city'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>City</FieldLabel>
+                <FieldLabel htmlFor={field.id}>City</FieldLabel>
                 <Input {...field} placeholder='New York' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='state'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>State/Province</FieldLabel>
+                <FieldLabel htmlFor={field.id}>State/Province</FieldLabel>
                 <Input {...field} placeholder='NY' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='country'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Country</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Country</FieldLabel>
                 <Input {...field} placeholder='USA' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='postalCode'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Postal Code</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Postal Code</FieldLabel>
                 <Input {...field} placeholder='10001' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
@@ -128,8 +128,8 @@ export const NewAddressForm: React.FC = () => {
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Adding...' : 'Add Address'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Adding...' : 'Add Address'}
             </Button>
           </Field>
         </FieldGroup>

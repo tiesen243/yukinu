@@ -28,7 +28,7 @@ jobs:
         uses: ./tools/github/setup
 
       - name: Format
-        run: bun format
+        run: npm run format
 
   lint:
     runs-on: ubuntu-latest

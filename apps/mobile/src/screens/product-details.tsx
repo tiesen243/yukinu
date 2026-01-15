@@ -29,7 +29,7 @@ export default function ProductDetailsScreen({
   if (isLoading)
     return (
       <View className='flex-1 bg-background'>
-        <View className='flex-1 container py-4'>
+        <View className='container flex-1 py-4'>
           <Text>Loading...</Text>
         </View>
       </View>
@@ -38,7 +38,7 @@ export default function ProductDetailsScreen({
   return (
     <View className='flex-1 bg-background'>
       <ScrollView
-        className='flex-1 container pt-4'
+        className='container flex-1 pt-4'
         refreshControl={
           <RefreshControl
             onRefresh={() => refetch()}

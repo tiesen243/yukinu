@@ -1,5 +1,13 @@
 # @yukinu/ui
 
+## 0.8.1
+
+### Patch Changes
+
+- [#345](https://github.com/tiesen243/yukinu/pull/345) [`62b8c06`](https://github.com/tiesen243/yukinu/commit/62b8c06fba8cbf700187340f8c5ef15b9819aaeb) Thanks [@tiesen243](https://github.com/tiesen243)! - change shadcn theme to vega
+
+- [#345](https://github.com/tiesen243/yukinu/pull/345) [`15f5bb2`](https://github.com/tiesen243/yukinu/commit/15f5bb2f171c15005b0cc5b8a1c1172ac31e806e) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo error
+
 ## 0.8.0
 
 ### Minor Changes

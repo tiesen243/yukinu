@@ -31,7 +31,7 @@ export default function VendorsPage() {
         </Button>
       </div>
 
-      <Card className='px-4' render={<section />}>
+      <Card className='px-6' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

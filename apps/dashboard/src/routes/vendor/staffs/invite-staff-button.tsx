@@ -38,7 +38,16 @@ export const InviteStaffButton: React.FC = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>Invite New Staff</DialogTrigger>
 
-      <DialogContent>
+      <DialogContent
+        render={
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              mutate({ email })
+            }}
+          />
+        }
+      >
         <DialogHeader>
           <DialogTitle>Invite New Staff</DialogTitle>
           <DialogDescription>
@@ -49,8 +58,8 @@ export const InviteStaffButton: React.FC = () => {
         <Field>
           <FieldLabel htmlFor='email'>Email Address</FieldLabel>
           <Input
-            type='email'
             id='email'
+            type='email'
             placeholder='yukikaze@example.com'
             value={email}
             onChange={(e) => {
@@ -61,12 +70,7 @@ export const InviteStaffButton: React.FC = () => {
 
         <DialogFooter>
           <DialogClose disabled={isPending}>Cancel</DialogClose>
-          <Button
-            onClick={() => {
-              mutate({ email })
-            }}
-            disabled={isPending}
-          >
+          <Button type='submit' disabled={isPending}>
             {isPending ? 'Adding...' : 'Add Staff'}
           </Button>
         </DialogFooter>
