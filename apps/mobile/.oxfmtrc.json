@@ -19,6 +19,6 @@
 
   "experimentalTailwindcss": {
     "functions": ["clsx", "cva", "cn"],
-    "stylesheet": "./packages/ui/src/tailwind.css"
+    "stylesheet": "./kaze/app/globals.css"
   }
 }

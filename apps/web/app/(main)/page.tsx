@@ -33,11 +33,11 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
       <main className='container flex-1 py-4'>
         <h1 className='sr-only'>Home Page</h1>
 
-        <section className='relative w-full aspect-video md:aspect-5/1 rounded-xl shadow-lg flex items-center justify-center overflow-x-hidden'>
+        <section className='relative flex aspect-video w-full items-center justify-center overflow-x-hidden rounded-xl shadow-lg md:aspect-5/1'>
           <h2 className='sr-only'>Banners section</h2>
           <Suspense
             fallback={
-              <div className='w-full h-full rounded-xl bg-muted-foreground animate-pulse' />
+              <div className='h-full w-full animate-pulse rounded-xl bg-muted-foreground' />
             }
           >
             <BannersList />
@@ -45,7 +45,7 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
         </section>
 
         <section className='mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:grid-rows-2'>
-          <Typography variant='h2' className='mb-0 col-span-full row-span-full'>
+          <Typography variant='h2' className='col-span-full row-span-full mb-0'>
             Featured Products
           </Typography>
           <Suspense fallback={<ProductsListSkeleton />}>
@@ -54,7 +54,7 @@ export default async function HomePage({ searchParams }: PageProps<'/'>) {
         </section>
 
         <section className='mt-8 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'>
-          <Typography variant='h2' className='mb-0 col-span-full'>
+          <Typography variant='h2' className='col-span-full mb-0'>
             Categories
           </Typography>
 

@@ -44,7 +44,7 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
 
   return (
     <>
-      <div className='flex my-6 items-center gap-4'>
+      <div className='my-6 flex items-center gap-4'>
         <Typography variant='h2' className='mb-0'>
           {data.subject}
         </Typography>

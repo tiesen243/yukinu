@@ -1,4 +1,4 @@
-import { Card } from '@yukinu/ui/card'
+import { Card, CardDescription, CardHeader, CardTitle } from '@yukinu/ui/card'
 import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 
 import { ResetPasswordForm } from '@/app/(auth)/forgot-password/reset/page.client'
@@ -13,7 +13,7 @@ export default async function ResetPasswordPage({
     return (
       <main className='grid min-h-dvh place-items-center'>
         <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
-          <FieldSet className='px-4'>
+          <FieldSet className='px-6'>
             <FieldLegend>Error</FieldLegend>
             <FieldDescription>
               No token provided. Please check the link in your email.
@@ -25,18 +25,16 @@ export default async function ResetPasswordPage({
 
   return (
     <main className='grid min-h-dvh place-items-center'>
-      <Card
-        className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
-        render={<form method='POST' />}
-      >
-        <FieldSet className='px-4'>
-          <FieldLegend>Reset Password</FieldLegend>
-          <FieldDescription>
-            Enter your new password below. Make sure it&apos;s strong and
+      <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
+        <CardHeader>
+          <CardTitle>Reset Your Password</CardTitle>
+          <CardDescription>
+            Set a new password to regain access to your account and keep it
             secure.
-          </FieldDescription>
-          <ResetPasswordForm token={String(token)} />
-        </FieldSet>
+          </CardDescription>
+        </CardHeader>
+
+        <ResetPasswordForm token={String(token)} />
       </Card>
     </main>
   )

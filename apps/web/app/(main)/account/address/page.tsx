@@ -23,7 +23,7 @@ export default function AddressPage() {
         description='View, add, and manage your saved shipping addresses for faster checkout.'
       />
 
-      <section className='flex flex-col gap-4 px-4'>
+      <section className='flex flex-col gap-4 px-6'>
         <h2 className='sr-only'>Address List section</h2>
 
         <Suspense fallback={<AddressesListSkeleton />}>

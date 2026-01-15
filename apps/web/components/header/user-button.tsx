@@ -43,7 +43,7 @@ export const UserButton = () => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>
+      <DropdownMenuTrigger className='rounded-full'>
         <Avatar className='size-9 hover:after:border-ring'>
           <AvatarImage src={user.image ?? ''} />
           <AvatarFallback>

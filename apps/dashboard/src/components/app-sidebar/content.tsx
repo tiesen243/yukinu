@@ -156,7 +156,7 @@ export const AppSidebarContent: React.FC = () => {
                   <NavLink to={item.url}>
                     {({ isActive, isPending }) => (
                       <SidebarMenuButton isActive={isActive}>
-                        <item.icon /> {item.title}
+                        <item.icon /> {item.title} <div className='flex-1' />
                         {isPending && (
                           <icons.Loader2Icon className='animate-spin' />
                         )}

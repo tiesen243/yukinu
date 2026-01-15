@@ -26,7 +26,7 @@ export const ChangePasswordForm: React.FC = () => {
   const trpc = useTRPCClient()
   const router = useRouter()
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       userId: null,
       currentPassword: null,
@@ -38,14 +38,14 @@ export const ChangePasswordForm: React.FC = () => {
     onSubmit: trpc.security.changePassword.mutate,
     onSuccess: () => {
       toast.success('Password changed successfully')
-      if (form.state.getValues().isLogout) router.push('/login')
+      if (state.values.isLogout) router.push('/login')
     },
     onError: ({ message }) =>
       toast.error('Failed to change password', { description: message }),
   })
 
   return (
-    <form onSubmit={form.handleSubmit}>
+    <form id={formId} onSubmit={handleSubmit}>
       <FieldSet>
         <FieldLegend>Change Password</FieldLegend>
         <FieldDescription>
@@ -54,11 +54,11 @@ export const ChangePasswordForm: React.FC = () => {
         </FieldDescription>
 
         <FieldGroup>
-          <form.Field
+          <FormField
             name='currentPassword'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Current Password</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Current Password</FieldLabel>
                 <Input
                   {...field}
                   type='password'
@@ -74,11 +74,11 @@ export const ChangePasswordForm: React.FC = () => {
             )}
           />
 
-          <form.Field
+          <FormField
             name='newPassword'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>New Password</FieldLabel>
+                <FieldLabel htmlFor={field.id}>New Password</FieldLabel>
                 <Input
                   {...field}
                   type='password'
@@ -90,13 +90,11 @@ export const ChangePasswordForm: React.FC = () => {
             )}
           />
 
-          <form.Field
+          <FormField
             name='confirmNewPassword'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>
-                  Confirm New Password
-                </FieldLabel>
+                <FieldLabel htmlFor={field.id}>Confirm New Password</FieldLabel>
                 <Input
                   {...field}
                   type='password'
@@ -109,12 +107,9 @@ export const ChangePasswordForm: React.FC = () => {
             )}
           />
 
-          <form.Field
+          <FormField
             name='isLogout'
-            render={({
-              meta,
-              field: { value, onChange, onBlur: _, ...field },
-            }) => (
+            render={({ meta, field: { value, onChange, ...field } }) => (
               <Field
                 orientation='horizontal'
                 data-invalid={meta.errors.length > 0}
@@ -122,11 +117,9 @@ export const ChangePasswordForm: React.FC = () => {
                 <Checkbox
                   {...field}
                   checked={value}
-                  onCheckedChange={(value) => {
-                    onChange(value)
-                  }}
+                  onCheckedChange={onChange}
                 />
-                <FieldLabel htmlFor={meta.fieldId}>
+                <FieldLabel htmlFor={field.id}>
                   Log out of all other sessions
                 </FieldLabel>
               </Field>
@@ -134,8 +127,8 @@ export const ChangePasswordForm: React.FC = () => {
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Changing...' : 'Change Password'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Changing...' : 'Change Password'}
             </Button>
           </Field>
         </FieldGroup>

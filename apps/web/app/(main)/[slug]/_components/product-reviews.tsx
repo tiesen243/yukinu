@@ -13,7 +13,7 @@ export const ProductReviews: React.FC = () => {
   } = usePage()
 
   return (
-    <Card className='px-4' render={<section />}>
+    <Card className='px-6' render={<section />}>
       <Typography
         variant='h4'
         render={<h2>Reviews ({avgRating.toFixed(1)}/5)</h2>}

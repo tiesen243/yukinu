@@ -15,7 +15,7 @@ export default function LoginScreen() {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
 
-  const form = useForm({
+  const { FormField, handleSubmit, state } = useForm({
     defaultValues: {
       identifier: '',
       password: '',
@@ -45,22 +45,22 @@ export default function LoginScreen() {
   return (
     <KeyboardAvoidingView
       behavior='padding'
-      className='flex-1 bg-background items-center justify-center px-4'
+      className='flex-1 items-center justify-center bg-background px-4'
     >
       <View className='w-full max-w-2xl gap-4 overflow-hidden rounded-xl bg-card py-4 ring-1 ring-foreground/10'>
         <View className='grid auto-rows-min items-start gap-1 rounded-t-xl px-4'>
           <Text variant='h4'>Login</Text>
-          <Text className='text-muted-foreground text-sm'>
+          <Text className='text-sm text-muted-foreground'>
             Welcome back! Please enter your credentials to log in.
           </Text>
         </View>
 
-        <View className='px-4 gap-4'>
-          <form.Field
+        <View className='gap-4 px-4'>
+          <FormField
             name='identifier'
             render={({ field, meta }) => (
               <View className='gap-2'>
-                <Text className='text-sm font-[GeistMedium]'>
+                <Text className='font-[GeistMedium] text-sm'>
                   Email or Username
                 </Text>
                 <Input
@@ -70,7 +70,7 @@ export default function LoginScreen() {
                   onChangeText={field.onChange}
                 />
                 {meta.errors[0] && (
-                  <Text className='text-destructive text-sm'>
+                  <Text className='text-sm text-destructive'>
                     {meta.errors[0].message}
                   </Text>
                 )}
@@ -78,11 +78,11 @@ export default function LoginScreen() {
             )}
           />
 
-          <form.Field
+          <FormField
             name='password'
             render={({ field, meta }) => (
               <View className='gap-2'>
-                <Text className='text-sm font-[GeistMedium]'>Password</Text>
+                <Text className='font-[GeistMedium] text-sm'>Password</Text>
                 <Input
                   placeholder='Enter your password'
                   textContentType='password'
@@ -91,7 +91,7 @@ export default function LoginScreen() {
                   secureTextEntry
                 />
                 {meta.errors[0] && (
-                  <Text className='text-destructive text-sm'>
+                  <Text className='text-sm text-destructive'>
                     {meta.errors[0].message}
                   </Text>
                 )}
@@ -103,13 +103,13 @@ export default function LoginScreen() {
         <View className='items-center rounded-b-xl px-4'>
           <Button
             className='w-full'
-            onPress={() => form.handleSubmit()}
-            disabled={form.state.isPending}
+            onPress={() => handleSubmit()}
+            disabled={state.isPending}
           >
-            <Text>Login</Text>
+            <Text>{state.isPending ? 'Logging in...' : 'Login'}</Text>
           </Button>
 
-          <Text className='w-full mt-4 text-sm text-muted-foreground'>
+          <Text className='mt-4 w-full text-sm text-muted-foreground'>
             Don&#39;t have an account?{' '}
             <Text
               className='text-sm text-primary'

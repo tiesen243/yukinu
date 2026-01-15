@@ -25,16 +25,18 @@ export const VerifyEmailForm: React.FC<{ token: string }> = ({ token }) => {
   })
 
   return (
-    <Field>
-      <Button
-        type='button'
-        onClick={() => {
-          mutate({ token })
-        }}
-        disabled={isPending}
-      >
-        Verify Email
-      </Button>
-    </Field>
+    <form
+      className='px-6'
+      onSubmit={(e) => {
+        e.preventDefault()
+        mutate({ token })
+      }}
+    >
+      <Field>
+        <Button type='submit' disabled={isPending}>
+          Verify Email
+        </Button>
+      </Field>
+    </form>
   )
 }

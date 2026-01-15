@@ -6,8 +6,8 @@ import {
   Field,
   FieldContent,
   FieldError,
-  FieldGroup,
   FieldLabel,
+  FieldSet,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
@@ -20,7 +20,7 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { signIn } = useSession()
   const router = useRouter()
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       identifier: '',
       password: '',
@@ -36,51 +36,51 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   })
 
   return (
-    <FieldGroup>
-      <form.Field
-        name='identifier'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldLabel htmlFor={meta.fieldId}>Username or Email</FieldLabel>
-            <Input {...field} placeholder='Enter your username or email' />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
+    <form id={formId} className='px-6' onSubmit={handleSubmit}>
+      <FieldSet>
+        <legend className='sr-only'>Login to your account</legend>
 
-      <form.Field
-        name='password'
-        render={({ meta, field }) => (
-          <Field data-invalid={meta.errors.length > 0}>
-            <FieldContent className='flex-row justify-between'>
-              <FieldLabel htmlFor={meta.fieldId}>Password</FieldLabel>
-              <Link
-                href='/forgot-password'
-                className='text-sm underline-offset-4 hover:underline'
-                tabIndex={-1}
-              >
-                Forgot your password?
-              </Link>
-            </FieldContent>
-            <Input
-              {...field}
-              type='password'
-              placeholder='Enter your password'
-            />
-            <FieldError errors={meta.errors} />
-          </Field>
-        )}
-      />
+        <FormField
+          name='identifier'
+          render={({ meta, field }) => (
+            <Field data-invalid={meta.errors.length > 0}>
+              <FieldLabel htmlFor={field.id}>Username or Email</FieldLabel>
+              <Input {...field} placeholder='Enter your username or email' />
+              <FieldError id={meta.errorId} errors={meta.errors} />
+            </Field>
+          )}
+        />
 
-      <Field>
-        <Button
-          type='submit'
-          onClick={form.handleSubmit}
-          disabled={form.state.isPending}
-        >
-          {form.state.isPending ? 'Logging in...' : 'Log In'}
-        </Button>
-      </Field>
-    </FieldGroup>
+        <FormField
+          name='password'
+          render={({ meta, field }) => (
+            <Field data-invalid={meta.errors.length > 0}>
+              <FieldContent className='flex-row justify-between'>
+                <FieldLabel htmlFor={field.id}>Password</FieldLabel>
+                <Link
+                  href='/forgot-password'
+                  className='text-sm underline-offset-4 hover:underline'
+                  tabIndex={-1}
+                >
+                  Forgot your password?
+                </Link>
+              </FieldContent>
+              <Input
+                {...field}
+                type='password'
+                placeholder='Enter your password'
+              />
+              <FieldError id={meta.errorId} errors={meta.errors} />
+            </Field>
+          )}
+        />
+
+        <Field>
+          <Button type='submit' disabled={state.isPending}>
+            {state.isPending ? 'Logging in...' : 'Log In'}
+          </Button>
+        </Field>
+      </FieldSet>
+    </form>
   )
 }

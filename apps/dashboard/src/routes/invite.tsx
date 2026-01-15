@@ -16,13 +16,26 @@ export default function InvitePage() {
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
 
+  const trpc = useTRPC()
+  const navigate = useNavigate()
+
+  const { mutate, isPending } = useMutation({
+    ...trpc.vendorStaff.acceptInvitation.mutationOptions(),
+    onError: ({ message }) =>
+      toast.error('Failed to accept invitation', { description: message }),
+    onSuccess: () => {
+      toast.success('Invitation accepted!')
+      void navigate('/')
+    },
+  })
+
   if (!token)
     return (
       <main className='grid min-h-dvh place-items-center'>
         <h1 className='sr-only'>Accept Staff Invitation page</h1>
 
         <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
-          <FieldSet className='px-4'>
+          <FieldSet className='px-6'>
             <FieldLegend>Error</FieldLegend>
             <FieldDescription>
               No token provided. Please check the link in your email.
@@ -38,46 +51,28 @@ export default function InvitePage() {
 
       <Card
         className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
-        render={<form method='POST' />}
+        render={
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              mutate({ token })
+            }}
+          />
+        }
       >
-        <FieldSet className='px-4'>
+        <FieldSet className='px-6'>
           <FieldLegend>Accept Staff Invitation</FieldLegend>
           <FieldDescription>
             Please click the button below to accept your staff invitation.
           </FieldDescription>
 
-          <AcceptInviteForm token={token} />
+          <Field>
+            <Button type='button' disabled={isPending}>
+              Accept Invitation
+            </Button>
+          </Field>
         </FieldSet>
       </Card>
     </main>
-  )
-}
-
-const AcceptInviteForm: React.FC<{ token: string }> = ({ token }) => {
-  const trpc = useTRPC()
-  const navigate = useNavigate()
-
-  const { mutate, isPending } = useMutation({
-    ...trpc.vendorStaff.acceptInvitation.mutationOptions(),
-    onError: ({ message }) =>
-      toast.error('Failed to accept invitation', { description: message }),
-    onSuccess: () => {
-      toast.success('Invitation accepted!')
-      void navigate('/')
-    },
-  })
-
-  return (
-    <Field>
-      <Button
-        type='button'
-        onClick={() => {
-          mutate({ token })
-        }}
-        disabled={isPending}
-      >
-        Accept Invitation
-      </Button>
-    </Field>
   )
 }

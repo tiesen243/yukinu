@@ -32,7 +32,7 @@ export const DeleteAccountButton: React.FC = () => {
       toast.error('Failed to delete account', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       password: '',
     },
@@ -61,13 +61,13 @@ export const DeleteAccountButton: React.FC = () => {
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <form.Field
+        <form id={formId} onSubmit={handleSubmit} />
+
+        <FormField
           name='password'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={meta.fieldId}>
-                Confirm with Password
-              </FieldLabel>
+              <FieldLabel htmlFor={field.id}>Confirm with Password</FieldLabel>
               <Input
                 {...field}
                 type='password'
@@ -79,15 +79,15 @@ export const DeleteAccountButton: React.FC = () => {
         />
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={form.state.isPending}>
+          <AlertDialogCancel disabled={state.isPending}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
+            form={formId}
             variant='destructive'
-            disabled={form.state.isPending}
-            onClick={form.handleSubmit}
+            disabled={state.isPending}
           >
-            Delete Account
+            {state.isPending ? 'Deleting...' : 'Delete Account'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

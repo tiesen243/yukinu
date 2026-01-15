@@ -38,13 +38,13 @@ export default function ProfileScreen() {
       {data.profile.banner ? (
         <Image
           source={{ uri: data.profile.banner }}
-          className='w-full aspect-video'
+          className='aspect-video w-full'
           resizeMode='cover'
         />
       ) : (
-        <View className='bg-secondary w-full aspect-video' />
+        <View className='aspect-video w-full bg-secondary' />
       )}
-      <View className='flex-1 container -mt-28'>
+      <View className='container -mt-28 flex-1'>
         <Image
           className='size-36 rounded-full ring-4 ring-background'
           source={

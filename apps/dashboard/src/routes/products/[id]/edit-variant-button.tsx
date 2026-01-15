@@ -33,7 +33,7 @@ export const EditVariantButton: React.FC<{
       toast.error('Failed to update variant', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       id: variant.id,
       price: variant.price,
@@ -59,24 +59,24 @@ export const EditVariantButton: React.FC<{
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={form.handleSubmit}>
+        <form id={formId} onSubmit={handleSubmit}>
           <FieldGroup>
-            <form.Field
+            <FormField
               name='price'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Price</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Price</FieldLabel>
                   <Input {...field} placeholder='0.00' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
               )}
             />
 
-            <form.Field
+            <FormField
               name='stock'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Stock</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Stock</FieldLabel>
                   <Input {...field} type='number' placeholder='0' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
@@ -84,10 +84,10 @@ export const EditVariantButton: React.FC<{
             />
 
             <DialogFooter>
-              <DialogClose type='button' disabled={form.state.isPending}>
+              <DialogClose type='button' disabled={state.isPending}>
                 Cancel
               </DialogClose>
-              <Button type='submit' disabled={form.state.isPending}>
+              <Button type='submit' disabled={state.isPending}>
                 Save Changes
               </Button>
             </DialogFooter>

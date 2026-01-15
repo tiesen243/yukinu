@@ -63,7 +63,7 @@ export default function CategoriesEditPage({
       toast.error('Failed to update category', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       id: category.id,
       parentId: category.parent?.id,
@@ -80,30 +80,30 @@ export default function CategoriesEditPage({
   })
 
   return (
-    <Card render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-4'>
+    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+      <FieldSet className='px-6'>
         <FieldLegend>Edit Category</FieldLegend>
         <FieldDescription>
           Use the form below to edit the category in the system.
         </FieldDescription>
 
         <FieldGroup>
-          <form.Field
+          <FormField
             name='name'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Name</FieldLabel>
                 <Input {...field} placeholder='Category Name' />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}
           />
 
-          <form.Field
+          <FormField
             name='description'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Description</FieldLabel>
                 <InputGroup>
                   <InputGroupTextarea
                     {...field}
@@ -120,11 +120,11 @@ export default function CategoriesEditPage({
             )}
           />
 
-          <form.Field
+          <FormField
             name='image'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Image URL</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Image URL</FieldLabel>
                 <InputGroup>
                   <InputGroupInput
                     {...field}
@@ -135,9 +135,7 @@ export default function CategoriesEditPage({
                   <InputGroupAddon align='inline-end'>
                     <InputGroupUploadButton
                       endpoint='categoryImageUploader'
-                      onUploadComplete={(url) => {
-                        form.setValue('image', url)
-                      }}
+                      onUploadComplete={(url) => field.onChange(url)}
                     />
                   </InputGroupAddon>
                 </InputGroup>
@@ -146,11 +144,11 @@ export default function CategoriesEditPage({
             )}
           />
 
-          <form.Field
+          <FormField
             name='parentId'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
-                <FieldLabel htmlFor={meta.fieldId}>Parent Category</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Parent Category</FieldLabel>
                 <NativeSelect {...field} value={value ?? ''}>
                   {data?.categories
                     .filter((cat) => cat.id !== category.id)
@@ -166,8 +164,8 @@ export default function CategoriesEditPage({
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Saving...' : 'Save Changes'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
           </Field>
         </FieldGroup>

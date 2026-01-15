@@ -21,19 +21,6 @@ const trpcClient = createTRPCClient<AppRouter>({
   links: [
     retryLink({
       retry: ({ op, error, attempts }) => {
-        if (op.type !== 'query') return false // Only retry queries
-
-        if (
-          [
-            'FORBIDDEN',
-            'INTERNAL_SERVER_ERROR',
-            'NOT_FOUND',
-            'TOO_MANY_REQUESTS',
-          ].includes(error.data?.code ?? '') ||
-          error.message === 'Network request failed'
-        )
-          return false // Do not retry on specific errors
-
         if (error.data?.code === 'UNAUTHORIZED') {
           if (attempts > 1) return false // Do not retry more than once for unauthorized errors
 
@@ -47,6 +34,18 @@ const trpcClient = createTRPCClient<AppRouter>({
 
           return true // Retry once after attempting to refresh the token
         }
+
+        if (
+          op.type !== 'query' ||
+          [
+            'FORBIDDEN',
+            'INTERNAL_SERVER_ERROR',
+            'NOT_FOUND',
+            'TOO_MANY_REQUESTS',
+          ].includes(error.data?.code ?? '') ||
+          error.message === 'Network request failed'
+        )
+          return false // Do not retry for these cases
 
         return attempts <= 3 // Retry up to 3 times for other errors
       },

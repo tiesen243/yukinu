@@ -68,10 +68,14 @@
   ],
   "globalPassThroughEnv": [
     "CI",
-    "VERCEL",
     "MODE",
     "NODE_ENV",
     "SKIP_ENV_VALIDATION",
+
+    "VERCEL",
+    "VERCEL_ENV",
+    "VERCEL_URL",
+    "VERCEL_PROJECT_PRODUCTION_URL",
 
     "NEON_PROJECT_ID",
     "DATABASE_URL",

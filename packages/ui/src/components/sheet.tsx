@@ -1,29 +1,18 @@
-import type { VariantProps } from 'class-variance-authority'
+'use client'
 
 import { Dialog as SheetPrimitive } from '@base-ui/react/dialog'
 import { XIcon } from 'lucide-react'
 import * as React from 'react'
 
-import { buttonVariants } from '@/components/button'
+import { Button } from '@/components/button'
 import { cn } from '@/utils'
 
 function Sheet({ ...props }: SheetPrimitive.Root.Props) {
   return <SheetPrimitive.Root data-slot='sheet' {...props} />
 }
 
-function SheetTrigger({
-  className,
-  variant = 'default',
-  size = 'default',
-  ...props
-}: SheetPrimitive.Trigger.Props & VariantProps<typeof buttonVariants>) {
-  return (
-    <SheetPrimitive.Trigger
-      data-slot='sheet-trigger'
-      className={cn(buttonVariants({ variant, size, className }))}
-      {...props}
-    />
-  )
+function SheetTrigger({ ...props }: SheetPrimitive.Trigger.Props) {
+  return <SheetPrimitive.Trigger data-slot='sheet-trigger' {...props} />
 }
 
 function SheetClose({ ...props }: SheetPrimitive.Close.Props) {
@@ -73,13 +62,13 @@ function SheetContent({
         {showCloseButton && (
           <SheetPrimitive.Close
             data-slot='sheet-close'
-            className={cn(
-              buttonVariants({
-                variant: 'ghost',
-                size: 'icon-sm',
-                className: 'absolute top-3 right-3',
-              }),
-            )}
+            render={
+              <Button
+                variant='ghost'
+                className='absolute top-4 right-4'
+                size='icon-sm'
+              />
+            }
           >
             <XIcon />
             <span className='sr-only'>Close</span>
@@ -94,7 +83,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot='sheet-header'
-      className={cn('flex flex-col gap-0.5 p-4', className)}
+      className={cn('flex flex-col gap-1.5 p-4', className)}
       {...props}
     />
   )
@@ -114,7 +103,7 @@ function SheetTitle({ className, ...props }: SheetPrimitive.Title.Props) {
   return (
     <SheetPrimitive.Title
       data-slot='sheet-title'
-      className={cn('text-base font-medium text-foreground', className)}
+      className={cn('font-medium text-foreground', className)}
       {...props}
     />
   )
