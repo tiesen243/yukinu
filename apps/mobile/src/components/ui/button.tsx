@@ -10,7 +10,12 @@ type ButtonProps = React.ComponentProps<typeof Pressable> &
   React.RefAttributes<typeof Pressable> &
   ButtonVariants
 
-function Button({ className, variant, size, ...props }: ButtonProps) {
+function Button({
+  variant = 'default',
+  size = 'default',
+  className,
+  ...props
+}: ButtonProps) {
   return (
     <TextClassContext.Provider
       value={cn('font-[GeistMedium] text-sm text-foreground', {
