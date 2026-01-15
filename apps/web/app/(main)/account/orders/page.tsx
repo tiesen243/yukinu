@@ -9,7 +9,7 @@ export default function AccountOrdersPage() {
         description='Review your past orders, track current shipments, and manage returns or exchanges all in one place.'
       />
 
-      <section>
+      <section className='px-6'>
         <h2 className='sr-only'>Orders History List section</h2>
       </section>
     </>

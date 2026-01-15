@@ -22,7 +22,7 @@ export default function HomePage() {
         Welcome back! Here&apos;s your business performance overview.
       </Typography>
 
-      <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 my-4'>
+      <section className='my-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <h3 className='sr-only'>Key Statistics section</h3>
 
         {statisticsData.map((stat) => (
@@ -30,7 +30,7 @@ export default function HomePage() {
         ))}
       </section>
 
-      <section className='grid grid-cols-1 lg:grid-cols-3 gap-4 my-4'>
+      <section className='my-4 grid grid-cols-1 gap-4 lg:grid-cols-3'>
         <h3 className='sr-only'>Revenue and Category Distribution section</h3>
 
         <RevenueChart config={revenueConfig} data={revenueData} />
@@ -40,7 +40,7 @@ export default function HomePage() {
         />
       </section>
 
-      <section className='grid grid-cols-1 lg:grid-cols-2 gap-4 my-4'>
+      <section className='my-4 grid grid-cols-1 gap-4 lg:grid-cols-2'>
         <h3 className='sr-only'>
           Orders, Customers and Product Performance section
         </h3>

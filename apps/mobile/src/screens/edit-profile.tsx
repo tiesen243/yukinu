@@ -29,7 +29,7 @@ export default function EditProfile() {
     onError: ({ message }) => Alert.alert('Error', message),
   })
 
-  const form = useForm({
+  const { FormField, handleSubmit, state } = useForm({
     defaultValues: {
       fullName: data?.profile.fullName,
       bio: data?.profile.bio,
@@ -54,10 +54,10 @@ export default function EditProfile() {
         showsVerticalScrollIndicator={false}
         className='container py-4'
       >
-        <form.Field
+        <FormField
           name='avatar'
           render={({ field: { value: uri, onChange } }) => (
-            <View className='gap-2 items-center mb-4'>
+            <View className='mb-4 items-center gap-2'>
               <Text className='self-start'>Avatar</Text>
               <View className='flex-row gap-2'>
                 <Input
@@ -76,17 +76,17 @@ export default function EditProfile() {
 
               <Image
                 source={uri ? { uri } : require('../../assets/logo-light.png')}
-                className='size-24 rounded-full mx-auto'
+                className='mx-auto size-24 rounded-full'
                 resizeMode='cover'
               />
             </View>
           )}
         />
 
-        <form.Field
+        <FormField
           name='banner'
           render={({ field: { value: uri, onChange } }) => (
-            <View className='gap-2 items-center mb-4'>
+            <View className='mb-4 items-center gap-2'>
               <Text className='self-start'>Banner</Text>
               <View className='flex-row gap-2'>
                 <Input
@@ -107,20 +107,20 @@ export default function EditProfile() {
               {uri ? (
                 <Image
                   source={{ uri }}
-                  className='w-full aspect-video rounded-lg'
+                  className='aspect-video w-full rounded-lg'
                   resizeMode='cover'
                 />
               ) : (
-                <View className='w-full aspect-video rounded-lg bg-secondary' />
+                <View className='aspect-video w-full rounded-lg bg-secondary' />
               )}
             </View>
           )}
         />
 
-        <form.Field
+        <FormField
           name='fullName'
           render={({ field: { value, onChange }, meta: { errors } }) => (
-            <View className='gap-2 mb-4'>
+            <View className='mb-4 gap-2'>
               <Text>Full Name</Text>
               <Input
                 placeholder='Enter your full name'
@@ -128,7 +128,7 @@ export default function EditProfile() {
                 onChangeText={onChange}
               />
               {errors[0] && (
-                <Text className='text-destructive text-sm'>
+                <Text className='text-sm text-destructive'>
                   {errors[0].message}
                 </Text>
               )}
@@ -136,10 +136,10 @@ export default function EditProfile() {
           )}
         />
 
-        <form.Field
+        <FormField
           name='bio'
           render={({ field: { value, onChange }, meta: { errors } }) => (
-            <View className='gap-2 mb-4'>
+            <View className='mb-4 gap-2'>
               <Text>Bio</Text>
               <Input
                 placeholder='Tell us about yourself...'
@@ -151,7 +151,7 @@ export default function EditProfile() {
                 multiline
               />
               {errors[0] && (
-                <Text className='text-destructive text-sm'>
+                <Text className='text-sm text-destructive'>
                   {errors[0].message}
                 </Text>
               )}
@@ -159,10 +159,10 @@ export default function EditProfile() {
           )}
         />
 
-        <form.Field
+        <FormField
           name='gender'
           render={({ field: { value, onChange } }) => (
-            <View className='gap-2 mb-4'>
+            <View className='mb-4 gap-2'>
               <Text>Gender</Text>
               <View className='flex-row justify-between'>
                 {genders.map((gender) => (
@@ -183,10 +183,10 @@ export default function EditProfile() {
           )}
         />
 
-        <form.Field
+        <FormField
           name='dateOfBirth'
           render={({ field: { value, onChange }, meta: { errors } }) => (
-            <View className='gap-2 mb-4'>
+            <View className='mb-4 gap-2'>
               <Text>Date of Birth</Text>
               <Input
                 keyboardType='numeric'
@@ -195,7 +195,7 @@ export default function EditProfile() {
                 onChangeText={onChange}
               />
               {errors[0] && (
-                <Text className='text-destructive text-sm'>
+                <Text className='text-sm text-destructive'>
                   {errors[0].message}
                 </Text>
               )}
@@ -203,11 +203,8 @@ export default function EditProfile() {
           )}
         />
 
-        <Button
-          onPress={() => form.handleSubmit()}
-          disabled={form.state.isPending}
-        >
-          <Text>{form.state.isPending ? 'Saving...' : 'Save Changes'}</Text>
+        <Button onPress={() => handleSubmit()} disabled={state.isPending}>
+          <Text>{state.isPending ? 'Saving...' : 'Save Changes'}</Text>
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

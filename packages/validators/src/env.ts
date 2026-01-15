@@ -2,12 +2,20 @@ import { createEnv } from '@yukinu/lib/create-env'
 import * as z from 'zod/mini'
 
 export const env = createEnv({
-  server: {
+  shared: {
     NODE_ENV: z._default(
       z.enum(['development', 'production', 'test']),
       'development',
     ),
 
+    // Vercel environment
+    VERCEL: z.optional(z.enum(['1'])),
+    VERCEL_ENV: z.optional(z.enum(['development', 'preview', 'production'])),
+    VERCEL_URL: z.optional(z.string()),
+    VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
+  },
+
+  server: {
     // Database configuration
     POSTGRES_HOST: z._default(z.string(), '127.0.0.1'),
     POSTGRES_PORT: z._default(z.coerce.number(), 5432),
@@ -26,10 +34,6 @@ export const env = createEnv({
     // Third-party services
     RESEND_TOKEN: z.string(),
     UPLOADTHING_TOKEN: z.string(),
-
-    // Vercel environment
-    VERCEL: z.optional(z.enum(['1'])),
-    VERCEL_PROJECT_PRODUCTION_URL: z.optional(z.string()),
   },
 
   clientPrefix: 'PUBLIC_',

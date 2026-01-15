@@ -52,7 +52,7 @@ export const UpdateProductForm: React.FC<{
       toast.error('Failed to update product', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       id: product.id,
       name: product.name,
@@ -68,8 +68,8 @@ export const UpdateProductForm: React.FC<{
   })
 
   return (
-    <Card render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-4'>
+    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+      <FieldSet className='px-6'>
         <FieldLegend>Update Product</FieldLegend>
         <FieldDescription>
           Modify the details of your product below.
@@ -77,11 +77,11 @@ export const UpdateProductForm: React.FC<{
 
         <FieldGroup>
           <FieldGroup>
-            <form.Field
+            <FormField
               name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Name</FieldLabel>
                   <Input
                     {...field}
                     placeholder='What is the name of the product?'
@@ -91,16 +91,15 @@ export const UpdateProductForm: React.FC<{
               )}
             />
 
-            <form.Field
+            <FormField
               name='description'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
                       value={value ?? ''}
-                      aria-invalid={field['aria-invalid']}
                       placeholder='Write a brief description about the product'
                     />
                     <InputGroupAddon align='block-end' className='justify-end'>
@@ -112,11 +111,11 @@ export const UpdateProductForm: React.FC<{
               )}
             />
 
-            <form.Field
+            <FormField
               name='categoryId'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Category</FieldLabel>
                   <NativeSelect {...field} value={field.value ?? ''}>
                     <NativeSelectOption value='' disabled>
                       Select a category
@@ -132,11 +131,11 @@ export const UpdateProductForm: React.FC<{
               )}
             />
 
-            <form.Field
+            <FormField
               name='price'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Price</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Price</FieldLabel>
                   <InputGroup>
                     <InputGroupAddon>
                       <InputGroupText>$</InputGroupText>
@@ -148,11 +147,11 @@ export const UpdateProductForm: React.FC<{
               )}
             />
 
-            <form.Field
+            <FormField
               name='stock'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Stock</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Stock</FieldLabel>
                   <Input {...field} type='number' placeholder='0000' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
@@ -162,11 +161,11 @@ export const UpdateProductForm: React.FC<{
 
           <FieldSeparator />
 
-          <form.Field
+          <FormField
             name='images'
             render={({ meta, field }) => (
               <FieldGroup>
-                <FieldLabel htmlFor={meta.fieldId}>Images</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Images</FieldLabel>
                 <FieldDescription id={meta.descriptionId}>
                   Add URLs of images for the product. You can add multiple
                   images.
@@ -229,11 +228,11 @@ export const UpdateProductForm: React.FC<{
 
           <FieldSeparator />
 
-          <form.Field
+          <FormField
             name='attributes'
             render={({ meta, field }) => (
               <FieldGroup>
-                <FieldLabel htmlFor={meta.fieldId}>Attributes</FieldLabel>
+                <FieldLabel htmlFor={field.id}>Attributes</FieldLabel>
                 <FieldDescription id={meta.descriptionId}>
                   Define custom attributes for the product.
                 </FieldDescription>
@@ -297,8 +296,8 @@ export const UpdateProductForm: React.FC<{
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Saving...' : 'Save Changes'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
           </Field>
         </FieldGroup>

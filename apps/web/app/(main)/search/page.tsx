@@ -28,7 +28,7 @@ export default async function SearchPage({
 
       <Card
         render={<aside />}
-        className='hidden shrink-0 px-4 md:block md:w-1/4'
+        className='hidden shrink-0 px-6 md:block md:w-1/4'
       >
         <h2 className='sr-only'>Search Filters section</h2>
         <Suspense>

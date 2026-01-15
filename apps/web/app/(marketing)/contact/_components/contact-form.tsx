@@ -7,7 +7,7 @@ import { Textarea } from '@yukinu/ui/textarea'
 
 export const ContactForm: React.FC = () => (
   <form
-    className='flex-1 px-4'
+    className='flex-1 px-6'
     onSubmit={(e) => {
       e.preventDefault()
       const formData = new FormData(e.currentTarget)

@@ -1,3 +1,5 @@
+'use client'
+
 import type { VariantProps } from 'class-variance-authority'
 
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
@@ -12,9 +14,9 @@ function Dialog({ ...props }: DialogPrimitive.Root.Props) {
 }
 
 function DialogTrigger({
-  className,
   variant = 'default',
   size = 'default',
+  className,
   ...props
 }: DialogPrimitive.Trigger.Props & VariantProps<typeof buttonVariants>) {
   return (
@@ -31,9 +33,9 @@ function DialogPortal({ ...props }: DialogPrimitive.Portal.Props) {
 }
 
 function DialogClose({
-  className,
   variant = 'outline',
   size = 'default',
+  className,
   ...props
 }: DialogPrimitive.Close.Props & VariantProps<typeof buttonVariants>) {
   return (
@@ -75,7 +77,7 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot='dialog-content'
         className={cn(
-          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-background p-4 text-sm ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+          'fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-xl bg-background p-6 text-sm ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-md data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
           className,
         )}
         {...props}
@@ -85,11 +87,8 @@ function DialogContent({
           <DialogPrimitive.Close
             data-slot='dialog-close'
             className={cn(
-              buttonVariants({
-                variant: 'ghost',
-                size: 'icon-sm',
-                className: 'absolute top-2 right-2',
-              }),
+              buttonVariants({ variant: 'ghost', size: 'icon-sm' }),
+              'absolute top-4 right-4',
             )}
           >
             <XIcon />
@@ -113,9 +112,12 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
 
 function DialogFooter({
   className,
+  showCloseButton = false,
   children,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'> & {
+  showCloseButton?: boolean
+}) {
   return (
     <div
       data-slot='dialog-footer'
@@ -126,6 +128,13 @@ function DialogFooter({
       {...props}
     >
       {children}
+      {showCloseButton && (
+        <DialogPrimitive.Close
+          className={cn(buttonVariants({ variant: 'outline' }))}
+        >
+          Close
+        </DialogPrimitive.Close>
+      )}
     </div>
   )
 }
@@ -134,7 +143,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot='dialog-title'
-      className={cn('text-sm leading-none font-medium', className)}
+      className={cn('leading-none font-medium', className)}
       {...props}
     />
   )

@@ -2,12 +2,14 @@ import { createEnv } from '@yukinu/lib/create-env'
 import * as z from 'zod/mini'
 
 export const env = createEnv({
-  server: {
+  shared: {
     NODE_ENV: z._default(
       z.enum(['development', 'production', 'test']),
       'development',
     ),
   },
+
+  server: {},
 
   clientPrefix: 'NEXT_PUBLIC_',
   client: {

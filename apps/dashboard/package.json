@@ -11,8 +11,8 @@
     "typecheck": "bun --env-file ../../.env react-router typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@react-router/node": "^7.11.0",
-    "@react-router/serve": "^7.11.0",
+    "@react-router/node": "^7.12.0",
+    "@react-router/serve": "^7.12.0",
     "@tanstack/react-query": "catalog:prod",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
@@ -30,18 +30,18 @@
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.11.0",
+    "react-router": "^7.12.0",
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.11.0",
+    "@react-router/dev": "^7.12.0",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev",
-    "vite": "npm:rolldown-vite@^7.3.0"
+    "vite": "npm:rolldown-vite@^7.3.1"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@^7.3.0"

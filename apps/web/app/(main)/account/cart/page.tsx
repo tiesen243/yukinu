@@ -23,7 +23,7 @@ export default function AccountCartPage() {
         description='View and manage the items in your shopping cart before proceeding to checkout.'
       />
 
-      <section className='px-4 h-full flex flex-col'>
+      <section className='flex h-full flex-col px-6'>
         <h2 className='sr-only'>Cart Items List section</h2>
 
         <ItemGroup className='flex-1'>

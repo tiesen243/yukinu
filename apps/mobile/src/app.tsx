@@ -15,7 +15,30 @@ SplashScreen.preventAutoHideAsync()
 
 export default function App() {
   const { theme: colorscheme } = useUniwind()
-  const theme = colorscheme === 'dark' ? DarkTheme : DefaultTheme
+  const theme =
+    colorscheme === 'dark'
+      ? {
+          ...DarkTheme,
+          colors: {
+            background: 'rgb(0, 0, 0)',
+            text: 'rgb(255, 255, 255)',
+            card: 'rgb(10, 10, 10)',
+            primary: 'rgb(63, 94, 194)',
+            border: 'rgb(36, 36, 36)',
+            notification: 'rgb(10, 10, 10)',
+          },
+        }
+      : {
+          ...DefaultTheme,
+          colors: {
+            background: 'rgb(250, 250, 250)',
+            text: 'rgb(0, 0, 0)',
+            card: 'rgb(255, 255, 255)',
+            primary: 'rgb(63, 94, 194)',
+            border: ' rgb(228, 228, 228)',
+            notification: 'rgb(255, 255, 255)',
+          },
+        }
 
   useFonts({
     GeistRegular: require('../assets/fonts/Geist-Regular.ttf'),

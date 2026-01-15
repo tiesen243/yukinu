@@ -45,7 +45,7 @@ export default function ProductsNewPage() {
       toast.error('Failed to create product', { description: message }),
   })
 
-  const form = useForm({
+  const { formId, FormField, handleSubmit, state } = useForm({
     defaultValues: {
       name: '',
       description: '',
@@ -62,8 +62,8 @@ export default function ProductsNewPage() {
   })
 
   return (
-    <Card render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-4'>
+    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+      <FieldSet className='px-6'>
         <FieldLegend>New Product</FieldLegend>
         <FieldDescription>
           Fill out the form below to add a new product to the catalog.
@@ -71,11 +71,11 @@ export default function ProductsNewPage() {
 
         <FieldGroup>
           <FieldGroup>
-            <form.Field
+            <FormField
               name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Name</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Name</FieldLabel>
                   <Input
                     {...field}
                     placeholder='What is the name of the product?'
@@ -85,11 +85,11 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <form.Field
+            <FormField
               name='description'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Description</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Description</FieldLabel>
                   <InputGroup>
                     <InputGroupTextarea
                       {...field}
@@ -106,11 +106,11 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <form.Field
+            <FormField
               name='categoryId'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Category</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Category</FieldLabel>
                   <NativeSelect {...field} value={field.value ?? ''}>
                     <NativeSelectOption value='' disabled>
                       Select a category
@@ -126,11 +126,11 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <form.Field
+            <FormField
               name='price'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Price</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Price</FieldLabel>
                   <InputGroup>
                     <InputGroupAddon>
                       <InputGroupText>$</InputGroupText>
@@ -142,11 +142,11 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <form.Field
+            <FormField
               name='stock'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
-                  <FieldLabel htmlFor={meta.fieldId}>Stock</FieldLabel>
+                  <FieldLabel htmlFor={field.id}>Stock</FieldLabel>
                   <Input {...field} type='number' placeholder='0000' />
                   <FieldError id={meta.errorId} errors={meta.errors} />
                 </Field>
@@ -156,12 +156,12 @@ export default function ProductsNewPage() {
 
           <FieldSeparator />
 
-          <form.Field
+          <FormField
             name='images'
             render={({ meta, field }) => (
               <FieldGroup data-invalid={meta.errors.length > 0}>
                 <FieldLabel
-                  htmlFor={meta.fieldId}
+                  htmlFor={field.id}
                   className={meta.errors.length > 0 ? 'text-destructive' : ''}
                 >
                   Images
@@ -231,12 +231,12 @@ export default function ProductsNewPage() {
 
           <FieldSeparator />
 
-          <form.Field
+          <FormField
             name='attributes'
             render={({ meta, field }) => (
               <FieldGroup>
                 <FieldLabel
-                  htmlFor={meta.fieldId}
+                  htmlFor={field.id}
                   className={meta.errors.length > 0 ? 'text-destructive' : ''}
                 >
                   Attributes
@@ -310,12 +310,12 @@ export default function ProductsNewPage() {
 
           <FieldSeparator />
 
-          <form.Field
+          <FormField
             name='variants'
             render={({ meta, field }) => (
               <FieldGroup>
                 <FieldLabel
-                  htmlFor={meta.fieldId}
+                  htmlFor={field.id}
                   className={meta.errors.length > 0 ? 'text-destructive' : ''}
                 >
                   Variants
@@ -440,8 +440,8 @@ export default function ProductsNewPage() {
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
-              {form.state.isPending ? 'Creating...' : 'Create Product'}
+            <Button type='submit' disabled={state.isPending}>
+              {state.isPending ? 'Creating...' : 'Create Product'}
             </Button>
           </Field>
         </FieldGroup>

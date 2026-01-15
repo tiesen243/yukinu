@@ -37,7 +37,7 @@ export default function DashboardLayout() {
           </div>
         </header>
 
-        <main className='flex-1 flex flex-col'>
+        <main className='flex flex-1 flex-col'>
           <h1 className='sr-only'>Dashboard Content</h1>
 
           <section className='container py-4 [&_h2]:mb-2'>

@@ -49,8 +49,8 @@ export type WishlistItemSchema = z.infer<typeof wishlistItemSchema>
 export const ticketSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
-  subject: z.string().max(255),
-  description: z.string(),
+  subject: z.string().min(1).max(255),
+  description: z.string().min(1).max(2000),
   status: z.enum(ticketStatuses).default('open'),
   createdAt: z.date(),
 })
