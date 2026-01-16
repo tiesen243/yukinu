@@ -5,7 +5,6 @@ import { ProductDescription } from '@/app/(main)/[slug]/_components/product-desc
 import { ProductImages } from '@/app/(main)/[slug]/_components/product-images'
 import { ProductInformation } from '@/app/(main)/[slug]/_components/product-information'
 import { ProductReviews } from '@/app/(main)/[slug]/_components/product-reviews'
-import { ProductVendor } from '@/app/(main)/[slug]/_components/product-vendor'
 
 export const ProductDetails: React.FC = () => {
   return (
@@ -17,8 +16,6 @@ export const ProductDetails: React.FC = () => {
 
         <ProductInformation />
       </Card>
-
-      <ProductVendor />
 
       <ProductDescription />
 

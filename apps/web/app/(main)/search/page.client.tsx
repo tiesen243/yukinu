@@ -20,6 +20,7 @@ import { orderBy } from '@yukinu/validators/product'
 import { useQueryStates } from 'nuqs'
 
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
+import { ProductPagination } from '@/components/product-pagination'
 import { productsOptions, productsParsers } from '@/lib/search'
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -170,38 +171,10 @@ export const ProductsSearchPagination: React.FC = () => {
   }
 
   return (
-    <section className='flex items-center justify-center gap-2'>
-      <h3 className='sr-only'>Pagination Navigation section</h3>
-
-      {getPaginationRange(query.page, pagination.totalPages).map(
-        (item, idx) => (
-          <Button
-            key={`pagination-item-${idx}`}
-            variant='outline'
-            size='icon'
-            onClick={() => goToPage(Number(item))}
-            disabled={item === '...' || item === query.page}
-          >
-            {item}
-          </Button>
-        ),
-      )}
-    </section>
+    <ProductPagination
+      pagination={pagination}
+      query={query}
+      goToPage={goToPage}
+    />
   )
-}
-
-function getPaginationRange(cp: number, tp: number): (number | string)[] {
-  if (tp <= 7) {
-    return Array.from({ length: tp }, (_, i) => i + 1)
-  }
-
-  const range: (number | string)[] = []
-  if (cp <= 4) {
-    range.push(1, 2, 3, 4, 5, '...', tp)
-  } else if (cp >= tp - 3) {
-    range.push(1, '...', tp - 4, tp - 3, tp - 2, tp - 1, tp)
-  } else {
-    range.push(1, '...', cp - 1, cp, cp + 1, '...', tp)
-  }
-  return range
 }

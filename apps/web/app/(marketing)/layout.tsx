@@ -19,10 +19,11 @@ export default function MarketingLayout({ children }: LayoutProps<'/'>) {
               <Image
                 src='/favicon.svg'
                 alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
-                width={28}
-                height={28}
+                width={36}
+                height={36}
+                className='size-9 object-cover'
               />
-              <span className='text-lg font-bold'>
+              <span className='text-xl font-bold'>
                 {env.NEXT_PUBLIC_APP_NAME}
               </span>
             </Link>
@@ -41,13 +42,12 @@ export default function MarketingLayout({ children }: LayoutProps<'/'>) {
             <div className='hidden gap-4 md:flex'>
               <Button
                 variant='ghost'
-                size='sm'
                 nativeButton={false}
                 render={<Link href='/login' />}
               >
                 Sign In
               </Button>
-              <Button size='sm' nativeButton={false} render={<Link href='/' />}>
+              <Button nativeButton={false} render={<Link href='/' />}>
                 Get Started
               </Button>
             </div>

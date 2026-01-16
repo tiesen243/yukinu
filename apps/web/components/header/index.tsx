@@ -14,11 +14,11 @@ export function Header() {
           <Image
             src='/favicon.svg'
             alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
-            width={28}
-            height={28}
-            className='object-cover'
+            width={36}
+            height={36}
+            className='size-9 object-cover'
           />
-          <span className='sr-only text-lg font-bold md:not-sr-only'>
+          <span className='sr-only text-xl font-bold md:not-sr-only'>
             {env.NEXT_PUBLIC_APP_NAME}
           </span>
         </Link>
