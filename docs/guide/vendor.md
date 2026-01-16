@@ -1,7 +1,7 @@
 ---
 title: 2.2. Vendor Guide
 description: This guide is for registered vendors of the Yukinu platform. It covers the essential features of the Vendor Dashboard for managing your store, products, and orders.
-title: 2. User Guide
+parent: 2. User Guide
 ---
 
 ## Getting Started

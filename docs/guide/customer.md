@@ -1,7 +1,7 @@
 ---
 title: 2.1. Customer Guide
 description: This guide explains how to use the Yukinu platform as a customer. It covers everything from finding products to managing your orders.
-title: 2. User Guide
+parent: 2. User Guide
 ---
 
 ## Account Management
