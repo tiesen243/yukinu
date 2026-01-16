@@ -1,9 +1,10 @@
 ---
 title: 4.10. Wishlist Management Use Cases
 description: Use cases for retrieving and managing items in a user's wishlist.
+parent: 4. Use Cases
 ---
 
-## 1. Get Wishlist Items
+## Get Wishlist Items
 
 This use case describes how a user retrieves all the products currently in their wishlist.
 
@@ -31,7 +32,7 @@ This use case describes how a user retrieves all the products currently in their
 
 ---
 
-## 2. Add or Remove Item from Wishlist
+## Add or Remove Item from Wishlist
 
 This use case outlines how a user can add a product to their wishlist or remove it if it's already present. The system toggles the item's state in the wishlist.
 

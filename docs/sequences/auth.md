@@ -1,6 +1,7 @@
 ---
-title: 5.1. Authentication Sequence Diagrams
+title: 5.01. Authentication Sequence Diagrams
 description: This document provides sequence diagrams for authentication-related use cases, including user login, registration, and password management.
+parent: 5. Sequence Diagrams
 ---
 
 ## User Login
@@ -27,7 +28,6 @@ sequenceDiagram
     System->>System: 6. Create a new session for the user
     System->>System: 7. Generate session and access tokens
     System-->>User: 8. Return tokens
-end
 ```
 
 ## User Registration
@@ -47,7 +47,6 @@ sequenceDiagram
     System->>System: 5. Generate unique email verification token (10-min expiry)
     System->>System: 6. Send "Welcome" email with verification link
     System-->>Guest: 7. Return success response with new user's ID
-end
 ```
 
 ## Get Current User Information
@@ -64,7 +63,6 @@ sequenceDiagram
         System-->>User: "Not Found" error
     end
     System-->>User: 4. Return user's public information
-end
 ```
 
 ## Email Verification
@@ -88,7 +86,6 @@ sequenceDiagram
     System->>System: 5. Update user's emailVerified field
     System->>System: 6. Delete the verification token
     System-->>User: 7. Confirm successful verification
-end
 ```
 
 ## Forgot Password
@@ -106,7 +103,6 @@ sequenceDiagram
     System->>System: 3. Generate unique password reset token (10-min expiry)
     System->>System: 4. Send password reset email with reset link
     System-->>User: 5. Return success response
-end
 ```
 
 ## Reset Password
@@ -130,5 +126,4 @@ sequenceDiagram
     System->>System: 5. Update user's account with the new password
     System->>System: 6. Delete the used reset token
     System-->>User: 7. Confirm password has been successfully reset
-end
 ```

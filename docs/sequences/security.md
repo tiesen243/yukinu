@@ -1,6 +1,7 @@
 ---
-title: 5.3. Security Sequence Diagrams
+title: 5.03. Security Sequence Diagrams
 description: This document provides sequence diagrams for security-related use cases, such as managing sessions and changing credentials.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Sessions
@@ -13,7 +14,6 @@ sequenceDiagram
     User->>System: 1. Request all active sessions
     System->>System: 2. Fetch all sessions for the user's ID
     System-->>User: 3. Return the list of sessions
-end
 ```
 
 ## Delete Session
@@ -32,7 +32,6 @@ sequenceDiagram
     end
     System->>System: 3. Delete session from the database
     System-->>User: 4. Return success confirmation
-end
 ```
 
 ## Change Username
@@ -57,7 +56,6 @@ sequenceDiagram
     end
     System->>System: 5. Update username in user's record
     System-->>User: 6. Return success confirmation
-end
 ```
 
 ## Change Password
@@ -84,7 +82,6 @@ sequenceDiagram
     end
     System->>System: 8. Send notification email to user
     System-->>User: 9. Return success confirmation
-end
 ```
 
 ## Delete Account
@@ -105,5 +102,4 @@ sequenceDiagram
     System->>System: 4. Delete user's account record
     System->>System: 5. Delete user's main record
     System-->>User: 6. Return success confirmation
-end
 ```

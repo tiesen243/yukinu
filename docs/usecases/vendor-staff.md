@@ -1,6 +1,7 @@
 ---
-title: 4.6. Vendor Staff Management Use Cases
+title: 4.06. Vendor Staff Management Use Cases
 description: This document outlines the use cases for managing staff members associated with a vendor account, including invitations and removals.
+parent: 4. Use Cases
 ---
 
 ## Get All Staff

@@ -1,6 +1,7 @@
 ---
-title: 4.2. User Management Use Cases
+title: 4.02. User Management Use Cases
 description: This document outlines the use cases related to managing user accounts, including retrieving, updating, and deleting users, as well as managing their profiles.
+parent: 4. Use Cases
 ---
 
 ## Get All Users

@@ -1,6 +1,7 @@
 ---
 title: 1.2. System Architecture
 description: A high-level overview of the system's design, components, and the relationships between them.
+parent: 1. Overview
 ---
 
 ## 1. Introduction

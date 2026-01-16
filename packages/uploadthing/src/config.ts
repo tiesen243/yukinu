@@ -40,8 +40,8 @@ export const ourFileRouter = {
   productImageUploader: sharedFileRouteConfig,
 } as const satisfies FileRouter
 
-export type OurFileRouter = typeof ourFileRouter
-
 export const config = {
   token: env.UPLOADTHING_TOKEN,
 } satisfies RouteHandlerConfig
+
+export type OurFileRouter = typeof ourFileRouter

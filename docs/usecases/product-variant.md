@@ -1,9 +1,10 @@
 ---
-title: 4.9. Product Variant Management Use Cases
+title: 4.09. Product Variant Management Use Cases
 description: Use cases for recreating, updating, and deleting product variants.
+parent: 4. Use Cases
 ---
 
-## 1. Recreate Product Variants
+## Recreate Product Variants
 
 This use case describes the process of replacing all existing variants for a specific product with a new set of variants. This is useful when a complete overhaul of the product's variations is required.
 
@@ -40,7 +41,7 @@ This use case describes the process of replacing all existing variants for a spe
 
 ---
 
-## 2. Update a Product Variant
+## Update a Product Variant
 
 This use case outlines how a user can modify the details of a single product variant, such as its price, stock level, or SKU.
 
@@ -75,7 +76,7 @@ This use case outlines how a user can modify the details of a single product var
 
 ---
 
-## 3. Delete a Product Variant
+## Delete a Product Variant
 
 This use case describes how a user can permanently remove a specific product variant from the system.
 

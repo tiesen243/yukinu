@@ -1,6 +1,7 @@
 ---
 title: 3. Legal
 description: An overview of the legal documents governing the use of the Yukinu project.
+has_children: true
 ---
 
 # Legal Information

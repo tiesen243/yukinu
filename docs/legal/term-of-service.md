@@ -1,5 +1,7 @@
 ---
 title: 3.1. Terms of Service
+description: This document outlines the terms of service for using the Yukinu multi-vendor e-commerce demonstration project.
+parent: 3. Legal
 ---
 
 _Last Updated: January 16, 2026_

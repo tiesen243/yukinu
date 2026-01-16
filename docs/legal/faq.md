@@ -1,5 +1,7 @@
 ---
-title: 3.6. Frequently Asked Questions (FAQ)
+title: 3.5. Frequently Asked Questions (FAQ)
+description: This document provides answers to frequently asked questions about the Yukinu project, including its purpose, features, and contribution guidelines.
+parent: 3. Legal
 ---
 
 # Frequently Asked Questions (FAQ)
