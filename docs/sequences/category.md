@@ -1,6 +1,7 @@
 ---
 title: 5.07. Category Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing product categories.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Categories

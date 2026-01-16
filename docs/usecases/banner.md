@@ -1,6 +1,7 @@
 ---
 title: 4.13. Banner Management Use Cases
 description: Use cases for managing promotional banners, including creating, deleting, and viewing all banners.
+parent: 4. Use Cases
 ---
 
 ## View All Banners

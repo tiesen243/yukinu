@@ -1,6 +1,7 @@
 ---
 title: 5.01. Authentication Sequence Diagrams
 description: This document provides sequence diagrams for authentication-related use cases, including user login, registration, and password management.
+parent: 5. Sequence Diagrams
 ---
 
 ## User Login

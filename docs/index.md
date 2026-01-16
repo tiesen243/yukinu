@@ -1,5 +1,7 @@
 ---
 title: 1. Overview
+description: Introduction to the Yukinu multi-vendor e-commerce platform, its features, and project roadmap.
+has_children: true
 ---
 
 ## Yukinu Documentation

@@ -1,6 +1,7 @@
 ---
 title: 4.11. Shopping Cart Management Use Cases
 description: Use cases for managing items in a user's shopping cart, including adding, removing, and viewing items.
+parent: 4. Use Cases
 ---
 
 ## View Shopping Cart

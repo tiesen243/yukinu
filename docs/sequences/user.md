@@ -1,6 +1,7 @@
 ---
 title: 5.02. User Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing users and their profiles.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Users

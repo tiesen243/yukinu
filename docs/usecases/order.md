@@ -1,6 +1,7 @@
 ---
 title: 4.12. Order Management Use Cases
 description: Use cases for managing customer orders, including viewing, creating, and updating orders.
+parent: 4. Use Cases
 ---
 
 ## View All Orders

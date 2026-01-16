@@ -1,6 +1,7 @@
 ---
 title: 5.14. Support Ticket Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing customer support tickets.
+parent: 5. Sequence Diagrams
 ---
 
 ## View All Support Tickets

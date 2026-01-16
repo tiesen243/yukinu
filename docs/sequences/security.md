@@ -1,6 +1,7 @@
 ---
 title: 5.03. Security Sequence Diagrams
 description: This document provides sequence diagrams for security-related use cases, such as managing sessions and changing credentials.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Sessions

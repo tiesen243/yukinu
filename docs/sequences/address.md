@@ -1,7 +1,7 @@
 ---
 title: 5.04. Address Management Sequence Diagrams
-parent: 5. Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing user addresses.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Addresses

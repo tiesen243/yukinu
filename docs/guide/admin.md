@@ -1,6 +1,7 @@
 ---
 title: 2.3. Administrator Guide
 description: This guide is for platform administrators and details the features available in the Admin Dashboard for overseeing the entire Yukinu marketplace.
+parent: 2. Guide
 ---
 
 ## User Management

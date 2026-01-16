@@ -1,6 +1,7 @@
 ---
 title: 5.06. Vendor Staff Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing vendor staff.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Staff

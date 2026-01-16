@@ -1,5 +1,7 @@
 ---
 title: 3.2. Privacy Policy
+description: This document outlines the privacy practices for the Yukinu project, emphasizing that no real personal data is collected.
+parent: 3. Legal
 ---
 
 # Privacy Policy

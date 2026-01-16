@@ -1,6 +1,7 @@
 ---
 title: 5.05. Vendor Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing vendors.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Vendors

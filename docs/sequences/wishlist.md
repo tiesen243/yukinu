@@ -1,6 +1,7 @@
 ---
 title: 5.10. Wishlist Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing a user's wishlist.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get Wishlist Items

@@ -1,6 +1,7 @@
 ---
 title: 5.12. Order Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing customer orders.
+parent: 5. Sequence Diagrams
 ---
 
 **Note:** The functionality for this service is not yet implemented. The diagrams below represent the intended flow.

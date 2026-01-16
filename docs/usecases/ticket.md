@@ -1,6 +1,7 @@
 ---
 title: 4.14. Support Ticket Management Use Cases
 description: Use cases for creating, viewing, and managing customer support tickets.
+parent: 4. Use Cases
 ---
 
 ## View All Support Tickets

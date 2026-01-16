@@ -1,6 +1,7 @@
 ---
 title: 4.09. Product Variant Management Use Cases
 description: Use cases for recreating, updating, and deleting product variants.
+parent: 4. Use Cases
 ---
 
 ## Recreate Product Variants

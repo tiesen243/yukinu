@@ -1,6 +1,7 @@
 ---
 title: 5.11. Shopping Cart Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing a user's shopping cart.
+parent: 5. Sequence Diagrams
 ---
 
 ## View Shopping Cart

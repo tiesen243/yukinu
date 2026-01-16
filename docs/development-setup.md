@@ -1,6 +1,7 @@
 ---
 title: 1.1. Development Setup
 description: A step-by-step guide for setting up the project for local development.
+parent: 1. Overview
 ---
 
 # Development Setup

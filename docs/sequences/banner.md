@@ -1,6 +1,7 @@
 ---
 title: 5.13. Banner Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing promotional banners.
+parent: 5. Sequence Diagrams
 ---
 
 ## View All Banners

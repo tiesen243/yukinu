@@ -1,6 +1,7 @@
 ---
 title: 4. Use Cases
 description: This document outlines the various use cases and services available in the application. These services represent the core business logic and features of the platform.
+has_children: true
 ---
 
 ## 4.01. [Authentication](./auth.md)

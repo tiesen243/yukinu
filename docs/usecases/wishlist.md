@@ -1,6 +1,7 @@
 ---
 title: 4.10. Wishlist Management Use Cases
 description: Use cases for retrieving and managing items in a user's wishlist.
+parent: 4. Use Cases
 ---
 
 ## Get Wishlist Items

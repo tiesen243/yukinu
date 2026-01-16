@@ -1,5 +1,7 @@
 ---
 title: 3.4. DMCA Notice
+description: This document outlines the procedure for filing a DMCA takedown notice for copyrighted material on the Yukinu platform.
+parent: 3. Legal
 ---
 
 # Digital Millennium Copyright Act (DMCA) Notice

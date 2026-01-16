@@ -1,5 +1,7 @@
 ---
 title: 3.5. Cookie Policy
+description: This document outlines the cookie policy for Yukinu, detailing how cookies are used and managed.
+parent: 3. Legal
 ---
 
 # Cookie Policy
