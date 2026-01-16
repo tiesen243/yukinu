@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-import { db } from '@yukinu/db'
+import { db, orm } from '@yukinu/db'
 import { products, users, vendors } from '@yukinu/db/schema'
 import { slugify } from '@yukinu/lib/slugify'
 
@@ -18,8 +18,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .select({ id: products.id, name: products.name })
       .from(products)
       .limit(1000),
-    db.select({ id: users.id }).from(users).limit(1000),
-    db.select({ id: vendors.id }).from(vendors).limit(1000),
+    db
+      .select({ id: users.id })
+      .from(users)
+      .where(
+        orm.and(orm.eq(users.status, 'active'), orm.isNull(users.deletedAt)),
+      )
+      .limit(1000),
+    db
+      .select({ id: vendors.id })
+      .from(vendors)
+      .where(orm.eq(vendors.status, 'approved'))
+      .limit(1000),
   ])
 
   return [

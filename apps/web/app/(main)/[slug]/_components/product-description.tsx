@@ -1,6 +1,7 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
+import { Button } from '@yukinu/ui/button'
 import { Card, CardFooter, CardHeader } from '@yukinu/ui/card'
 import { Typography } from '@yukinu/ui/typography'
 import { useRouter } from 'next/navigation'
@@ -21,8 +22,6 @@ export const ProductDescription: React.FC = () => {
         <CardHeader
           className='flex cursor-pointer items-center gap-4 border-b'
           render={<section />}
-          onClick={() => router.push(`/v/${vendor.id}`)}
-          onMouseEnter={() => router.prefetch(`/v/${vendor.id}`)}
         >
           <Avatar className='size-14'>
             <AvatarImage src={vendor.image ?? ''} alt={vendor.name} />
@@ -30,9 +29,18 @@ export const ProductDescription: React.FC = () => {
               {vendor.name.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <Typography variant='h3' className='my-0'>
+          <Typography variant='h3' className='my-0 flex-1'>
             {vendor.name}
           </Typography>
+
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => router.push(`/v/${vendor.id}`)}
+            onMouseEnter={() => router.prefetch(`/v/${vendor.id}`)}
+          >
+            Visit Store
+          </Button>
         </CardHeader>
       )}
 
