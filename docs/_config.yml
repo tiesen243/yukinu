@@ -11,3 +11,6 @@ aux_links:
     - '//github.com/tiesen243/yukinu'
 
 nav_sort: case_insensitive
+
+mermaid:
+  version: '9.1.3'

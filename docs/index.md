@@ -2,22 +2,22 @@
 title: 1. Overview
 ---
 
-# Yukinu Documentation
+## Yukinu Documentation
 
-Welcome to the official documentation for **Yukinu** — a modern **multi-vendor e-commerce platform** that enables buyers to shop from multiple sellers in a unified marketplace experience.
+Welcome to the official documentation for **Yukinu**—a modern **multi-vendor e-commerce platform** that enables buyers to shop from multiple sellers in a unified marketplace experience.
 
-This documentation provides complete technical and product information for the Yukinu ecosystem, including:
+This documentation provides complete technical and product information for the Yukinu ecosystem. Whether you are a developer, a system administrator, or a product manager, these documents offer a comprehensive guide to understanding, operating, and extending the platform.
 
-- System architecture
-- Frontend applications (Web & Vendor Dashboard)
-- API and service integrations
-- Data schema & database management
-- Deployment & DevOps guides
-- Security, compliance, and operational management
+## Core Documentation Sections
+
+- **[2. System Architecture](./architecture.md)**: A high-level overview of the system's design, components, and the relationships between them.
+- **[3. Data Schema](./schema.md)**: Detailed information about the database schema, tables, and data models that power the application.
+- **[4. Use Cases](./usecases/index.md)**: A functional breakdown of all services, detailing the preconditions, post-conditions, actors, and flows for every feature.
+- **[5. Sequence Diagrams](./sequences/index.md)**: Visual representations of the interaction flows for each use case, illustrating how actors and the system communicate to achieve specific goals.
 
 ## About Yukinu
 
-Yukinu is built as a **monorepo** using **Turborepo** to manage all apps and shared packages efficiently.  
+Yukinu is built as a **monorepo** using **Turborepo** to manage all apps and shared packages efficiently.
 It is designed to support:
 
 - Multi-vendor product management
