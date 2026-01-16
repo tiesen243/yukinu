@@ -27,6 +27,6 @@ gh_edit_repository: 'https://github.com/tiesen243/yukinu'
 gh_edit_branch: 'main'
 
 mermaid:
-  version: '9.1.3'
+  version: '11.12.2'
 
 enable_copy_code_button: true
