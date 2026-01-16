@@ -24,6 +24,7 @@ This documentation provides complete technical and product information for the Y
 - **[3. Legal](./legal/index.md)**: Terms of Service, Privacy Policy, and other legal documentation.
 - **[4. Use Cases](./usecases/index.md)**: A functional breakdown of all services, detailing the preconditions, post-conditions, actors, and flows for every feature.
 - **[5. Sequence Diagrams](./sequences/index.md)**: Visual representations of the interaction flows for each use case, illustrating how actors and the system communicate to achieve specific goals.
+- **[6. Database](./database/index.md)**: An overview of the database schema, tables, and relationships.
 
 ## Key Features
 

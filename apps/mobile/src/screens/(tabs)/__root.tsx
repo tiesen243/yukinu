@@ -21,9 +21,6 @@ const Tabs = createBottomTabNavigator({
   initialRouteName: 'index',
   screenOptions: {
     headerShown: false,
-    tabBarIndicatorStyle: { backgroundColor: '#3f5ec2' },
-    tabBarActiveTintColor: '#3f5ec2',
-    tabBarInactiveTintColor: '#525252',
   },
   screens: {
     index: {
@@ -51,7 +48,7 @@ function HeaderLeft() {
   const { data, isLoading } = useQuery(trpc.auth.currentUser.queryOptions())
   const navigation = useNavigation()
 
-  if (isLoading) return <View className='size-8 rounded-full bg-muted' />
+  if (isLoading) return <View className='size-9 rounded-full bg-muted' />
 
   if (!data)
     return (
@@ -66,7 +63,7 @@ function HeaderLeft() {
 
   return (
     <Image
-      className='size-8 self-start rounded-full object-cover'
+      className='size-9 self-start rounded-full object-cover'
       source={
         data.user.image
           ? { uri: data.user.image }
@@ -81,7 +78,7 @@ function HeaderTitle() {
 
   return (
     <Image
-      className='size-8 self-center object-contain'
+      className='size-9 self-center object-contain'
       source={
         theme === 'dark'
           ? require('../../../assets/logo-dark.png')

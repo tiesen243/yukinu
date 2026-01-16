@@ -8,7 +8,7 @@ import { Typography } from '@yukinu/ui/typography'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
+export const UserDetails: React.FC<{ id: string }> = ({ id }) => {
   const trpc = useTRPC()
   const { data } = useSuspenseQuery(
     trpc.user.publicProfile.queryOptions({ id }),
@@ -43,14 +43,9 @@ export const UserProfileDetails: React.FC<{ id: string }> = ({ id }) => {
             </AvatarFallback>
           </Avatar>
 
-          <div className='flex flex-col items-center gap-2 sm:flex-row md:mt-8'>
-            <Typography variant='h2' className='my-0'>
-              {data.profile.fullName}
-            </Typography>
-            <Typography className='text-muted-foreground'>
-              @{data.username}
-            </Typography>
-          </div>
+          <Typography variant='h2' className='my-0 md:mt-8'>
+            {data.profile.fullName}
+          </Typography>
         </div>
 
         {data.profile.bio && (

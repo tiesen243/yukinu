@@ -1,32 +1,68 @@
 'use client'
 
-import { Card } from '@yukinu/ui/card'
+import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
+import { Button } from '@yukinu/ui/button'
+import { Card, CardFooter, CardHeader } from '@yukinu/ui/card'
 import { Typography } from '@yukinu/ui/typography'
+import { useRouter } from 'next/navigation'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
 
 export const ProductDescription: React.FC = () => {
   const {
-    product: { description, attributes },
+    product: { vendor, description, attributes },
   } = usePage()
+  const router = useRouter()
 
   return (
-    <Card className='gap-0 px-6' render={<section />}>
-      <Typography variant='h4' render={<h2>Overview</h2>} />
-      <Typography className='overflow-x-auto whitespace-pre-wrap'>
-        {description?.split('\\n').join('\n')}
-      </Typography>
+    <Card className='gap-0' render={<section />}>
+      <h2 className='sr-only'>Product Description section</h2>
 
-      <section>
-        <Typography variant='h5' render={<h3>Specifications</h3>} />
-        <Typography variant='ul' className='capitalize'>
-          {attributes.map((attr) => (
-            <li key={attr.name}>
-              <strong>{attr.name}:</strong> {attr.value}
-            </li>
-          ))}
+      {vendor && (
+        <CardHeader
+          className='flex cursor-pointer items-center gap-4 border-b'
+          render={<section />}
+        >
+          <Avatar className='size-14'>
+            <AvatarImage src={vendor.image ?? ''} alt={vendor.name} />
+            <AvatarFallback>
+              {vendor.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <Typography variant='h3' className='my-0 flex-1'>
+            {vendor.name}
+          </Typography>
+
+          <Button
+            variant='outline'
+            size='sm'
+            onClick={() => router.push(`/v/${vendor.id}`)}
+            onMouseEnter={() => router.prefetch(`/v/${vendor.id}`)}
+          >
+            Visit Store
+          </Button>
+        </CardHeader>
+      )}
+
+      <CardFooter className='flex-col items-start' render={<section />}>
+        <Typography variant='h4' render={<h3>Overview</h3>} />
+        <Typography className='overflow-x-auto whitespace-pre-wrap'>
+          {description?.split('\\n').join('\n')}
         </Typography>
-      </section>
+
+        {attributes.length > 0 && (
+          <section>
+            <Typography variant='h5' render={<h4>Specifications</h4>} />
+            <Typography variant='ul' className='capitalize'>
+              {attributes.map((attr) => (
+                <li key={attr.name}>
+                  <strong>{attr.name}:</strong> {attr.value}
+                </li>
+              ))}
+            </Typography>
+          </section>
+        )}
+      </CardFooter>
     </Card>
   )
 }
