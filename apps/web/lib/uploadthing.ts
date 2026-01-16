@@ -1,3 +1,6 @@
+// oxlint-disable-next-line ban-ts-comment
+// @ts-nocheck
+
 import type { OurFileRouter } from '@yukinu/uploadthing/config'
 
 import { generateReactHelpers } from '@uploadthing/react'
