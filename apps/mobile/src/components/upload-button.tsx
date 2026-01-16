@@ -1,4 +1,4 @@
-import type { OurFileRouter } from '@yukinu/uploadthing/config'
+import type { OurFileRouter } from '@yukinu/uploadthing/types'
 
 import { toast } from '@yukinu/ui/sonner'
 import * as ImagePicker from 'expo-image-picker'

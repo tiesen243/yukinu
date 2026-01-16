@@ -1,4 +1,4 @@
-import type { OurFileRouter } from '@yukinu/uploadthing/config'
+import type { OurFileRouter } from '@yukinu/uploadthing/types'
 
 import { generateReactNativeHelpers } from '@uploadthing/expo'
 

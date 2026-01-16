@@ -33,16 +33,13 @@ const sharedFileRouteConfig = f({
     return { uploadedBy: metadata.userId, fileUrl: file.ufsUrl }
   })
 
-const ourFileRouter = {
+export const ourFileRouter = {
   avatarUploader: sharedFileRouteConfig,
   bannerUploader: sharedFileRouteConfig,
   categoryImageUploader: sharedFileRouteConfig,
   productImageUploader: sharedFileRouteConfig,
 } as const satisfies FileRouter
 
-const config = {
+export const config = {
   token: env.UPLOADTHING_TOKEN,
 } satisfies RouteHandlerConfig
-
-export type OurFileRouter = typeof ourFileRouter
-export { ourFileRouter, config }

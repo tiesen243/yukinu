@@ -1,4 +1,6 @@
-import type { OurFileRouter } from '@yukinu/uploadthing/config'
+import '@yukinu/uploadthing/types'
+
+import type { OurFileRouter } from '@yukinu/uploadthing/types'
 
 import { generateReactHelpers } from '@uploadthing/react'
 

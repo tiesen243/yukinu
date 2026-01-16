@@ -1,4 +1,4 @@
-import type { OurFileRouter } from '@yukinu/uploadthing/config'
+import type { OurFileRouter } from '@yukinu/uploadthing/types'
 
 import { InputGroupButton } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/sonner'

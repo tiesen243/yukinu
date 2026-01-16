@@ -4,8 +4,6 @@ description: Introduction to the Yukinu multi-vendor e-commerce platform, its fe
 has_children: true
 ---
 
-## Yukinu Documentation
-
 Welcome to the official documentation for **Yukinu**—a modern **multi-vendor e-commerce platform** that enables buyers to shop from multiple sellers in a unified marketplace experience.
 
 This documentation provides complete technical and product information for the Yukinu ecosystem. Whether you are a developer, a system administrator, or a product manager, these documents offer a comprehensive guide to understanding, operating, and extending the platform.

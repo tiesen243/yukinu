@@ -1,15 +1,11 @@
-import type { OurFileRouter } from '@yukinu/uploadthing/config'
+import '@yukinu/uploadthing/types'
+
+import type { OurFileRouter } from '@yukinu/uploadthing/types'
 
 import { generateReactHelpers } from '@uploadthing/react'
 
 import { getWebUrl } from '@/lib/utils'
 
-export const {
-  useUploadThing,
-}: {
-  useUploadThing: ReturnType<
-    typeof generateReactHelpers<OurFileRouter>
-  >['useUploadThing']
-} = generateReactHelpers<OurFileRouter>({
+export const { useUploadThing } = generateReactHelpers<OurFileRouter>({
   url: getWebUrl() + '/api/uploadthing',
 })
