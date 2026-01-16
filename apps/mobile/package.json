@@ -47,6 +47,9 @@
     "typescript": "catalog:dev",
     "uniwind": "catalog:tailwind"
   },
+  "peerDependencies": {
+    "uploadthing": "catalog:uploadthing"
+  },
   "expo": {
     "install": {
       "exclude": [

@@ -48,6 +48,9 @@
         "typescript": "catalog:dev",
         "vite": "npm:rolldown-vite@^7.3.1",
       },
+      "peerDependencies": {
+        "uploadthing": "catalog:uploadthing",
+      },
     },
     "apps/mobile": {
       "name": "@yukinu/mobile",
@@ -89,6 +92,9 @@
         "typescript": "catalog:dev",
         "uniwind": "catalog:tailwind",
       },
+      "peerDependencies": {
+        "uploadthing": "catalog:uploadthing",
+      },
     },
     "apps/web": {
       "name": "@yukinu/web",
@@ -120,6 +126,9 @@
         "@yukinu/tsconfig": "workspace:*",
         "tailwindcss": "catalog:tailwind",
         "typescript": "catalog:dev",
+      },
+      "peerDependencies": {
+        "uploadthing": "catalog:uploadthing",
       },
     },
     "packages/api": {
