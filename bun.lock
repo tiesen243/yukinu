@@ -243,6 +243,7 @@
       "name": "@yukinu/uploadthing",
       "version": "0.3.3",
       "dependencies": {
+        "@uploadthing/react": "catalog:uploadthing",
         "@yukinu/auth": "workspace:*",
         "@yukinu/validators": "workspace:*",
         "uploadthing": "catalog:uploadthing",
