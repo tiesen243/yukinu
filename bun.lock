@@ -14,7 +14,7 @@
     },
     "apps/dashboard": {
       "name": "@yukinu/dashboard",
-      "version": "0.11.4",
+      "version": "0.11.5",
       "dependencies": {
         "@react-router/node": "^7.12.0",
         "@react-router/serve": "^7.12.0",
@@ -51,7 +51,7 @@
     },
     "apps/mobile": {
       "name": "@yukinu/mobile",
-      "version": "0.2.7",
+      "version": "0.2.8",
       "dependencies": {
         "@react-navigation/bottom-tabs": "^7.9.1",
         "@react-navigation/native": "^7.1.27",
@@ -92,7 +92,7 @@
     },
     "apps/web": {
       "name": "@yukinu/web",
-      "version": "0.11.5",
+      "version": "0.11.6",
       "dependencies": {
         "@tanstack/react-query": "catalog:prod",
         "@trpc/client": "catalog:trpc",
@@ -217,7 +217,7 @@
     },
     "packages/ui": {
       "name": "@yukinu/ui",
-      "version": "0.8.0",
+      "version": "0.8.1",
       "dependencies": {
         "@base-ui/react": "^1.0.0",
         "class-variance-authority": "^0.7.1",
@@ -255,7 +255,7 @@
       },
       "peerDependencies": {
         "@types/react": "catalog:react",
-        "@uploadthing/shared": "^7.1.10",
+        "@uploadthing/shared": "catalog:uploadthing",
         "next": "catalog:react",
         "react": "catalog:react",
       },
@@ -326,6 +326,7 @@
     "uploadthing": {
       "@uploadthing/expo": "^7.2.6",
       "@uploadthing/react": "^7.3.3",
+      "@uploadthing/shared": "^7.1.10",
       "uploadthing": "^7.7.4",
     },
   },

@@ -1,5 +1,5 @@
 ---
-title: 5.4. Address Management Sequence Diagrams
+title: 5.04. Address Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing user addresses.
 ---
 

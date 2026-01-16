@@ -3,7 +3,7 @@ title: 4.13. Banner Management Use Cases
 description: Use cases for managing promotional banners, including creating, deleting, and viewing all banners.
 ---
 
-## 1. View All Banners
+## View All Banners
 
 This use case describes how a user or the system can retrieve a list of all active promotional banners. This is typically used to display banners on the storefront.
 
@@ -30,7 +30,7 @@ This use case describes how a user or the system can retrieve a list of all acti
 
 ---
 
-## 2. Create a New Banner
+## Create a New Banner
 
 This use case outlines how an administrator creates a new promotional banner to be displayed in the application.
 
@@ -58,7 +58,7 @@ This use case outlines how an administrator creates a new promotional banner to 
 
 ---
 
-## 3. Delete a Banner
+## Delete a Banner
 
 This use case describes how an administrator can remove a banner from the system.
 

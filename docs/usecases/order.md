@@ -3,7 +3,7 @@ title: 4.12. Order Management Use Cases
 description: Use cases for managing customer orders, including viewing, creating, and updating orders.
 ---
 
-## 1. View All Orders
+## View All Orders
 
 This use case describes how a user (either a customer or an admin) can retrieve a list of orders. The implementation for this functionality is not yet complete.
 
@@ -35,7 +35,7 @@ This use case describes how a user (either a customer or an admin) can retrieve 
 
 ---
 
-## 2. View a Single Order
+## View a Single Order
 
 This use case outlines how a user can retrieve the details of a specific order. The implementation for this functionality is not yet complete.
 
@@ -68,7 +68,7 @@ This use case outlines how a user can retrieve the details of a specific order. 
 
 ---
 
-## 3. Checkout
+## Checkout
 
 This use case describes the process of a customer finalizing their purchase and converting their shopping cart into a formal order. The implementation for this functionality is not yet complete.
 
@@ -103,7 +103,7 @@ This use case describes the process of a customer finalizing their purchase and 
 
 ---
 
-## 4. Update an Order
+## Update an Order
 
 This use case describes how an admin or a user might update the status or details of an existing order (e.g., changing the shipping status). The implementation for this functionality is not yet complete.
 

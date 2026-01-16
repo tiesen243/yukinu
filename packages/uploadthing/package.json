@@ -27,7 +27,7 @@
   },
   "peerDependencies": {
     "@types/react": "catalog:react",
-    "@uploadthing/shared": "^7.1.10",
+    "@uploadthing/shared": "catalog:uploadthing",
     "next": "catalog:react",
     "react": "catalog:react"
   }

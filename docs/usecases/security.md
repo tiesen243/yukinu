@@ -1,5 +1,5 @@
 ---
-title: 4.3. Security Use Cases
+title: 4.03. Security Use Cases
 description: This document outlines use cases related to user account security, such as managing sessions, changing credentials, and deleting accounts.
 ---
 

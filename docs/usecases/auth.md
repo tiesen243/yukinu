@@ -1,5 +1,5 @@
 ---
-title: 4.1. Authentication Use Cases
+title: 4.01. Authentication Use Cases
 description: This document details the use cases related to user authentication, including registration, email verification, and password management.
 ---
 

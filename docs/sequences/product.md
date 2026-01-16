@@ -1,5 +1,5 @@
 ---
-title: 5.8. Product Management Sequence Diagrams
+title: 5.08. Product Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing products.
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: 4.5. Vendor Management Use Cases
+title: 4.05. Vendor Management Use Cases
 description: This document outlines the use cases for managing vendors, from application to status updates.
 ---
 

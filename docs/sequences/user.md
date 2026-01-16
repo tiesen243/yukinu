@@ -1,5 +1,5 @@
 ---
-title: 5.2. User Management Sequence Diagrams
+title: 5.02. User Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing users and their profiles.
 ---
 
@@ -15,7 +15,6 @@ sequenceDiagram
     System->>System: 3. Fetch users and total count
     System->>System: 4. Calculate total pages
     System-->>Admin: 5. Return user list and pagination info
-end
 ```
 
 ## Get a Single User
@@ -31,7 +30,6 @@ sequenceDiagram
         System-->>User: "Not Found" error
     end
     System-->>User: 3. Return user information
-end
 ```
 
 ## Update User
@@ -52,7 +50,6 @@ sequenceDiagram
     end
     System->>System: 4. Update user's record in the database
     System-->>Admin: 5. Return success confirmation
-end
 ```
 
 ## Delete User (Soft Delete)
@@ -77,7 +74,6 @@ sequenceDiagram
     end
     System->>System: 5. Set the 'deletedAt' timestamp for the user
     System-->>Admin: 6. Return success confirmation
-end
 ```
 
 ## Restore User
@@ -98,7 +94,6 @@ sequenceDiagram
     end
     System->>System: 4. Set user's 'deletedAt' field to null
     System-->>Admin: 5. Return success confirmation
-end
 ```
 
 ## Permanently Delete User
@@ -120,7 +115,6 @@ sequenceDiagram
     System->>System: 4. Delete user record from database
     System->>System: 5. Delete user's avatar and banner from storage
     System-->>Admin: 6. Return success confirmation
-end
 ```
 
 ## Get User Profile
@@ -136,7 +130,6 @@ sequenceDiagram
         System-->>User: "Not Found" error
     end
     System-->>User: 3. Return combined profile information
-end
 ```
 
 ## Update User Profile
@@ -154,5 +147,4 @@ sequenceDiagram
     System->>System: 4. If avatar updated, update user's image URL
     System->>System: 5. If images replaced, delete old ones from storage
     System-->>User: 6. Return success confirmation
-end
 ```

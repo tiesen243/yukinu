@@ -75,6 +75,7 @@
     "uploadthing": {
       "@uploadthing/expo": "^7.2.6",
       "@uploadthing/react": "^7.3.3",
+      "@uploadthing/shared": "^7.1.10",
       "uploadthing": "^7.7.4"
     },
     "trpc": {

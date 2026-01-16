@@ -1,5 +1,5 @@
 ---
-title: 5.9. Product Variant Management Sequence Diagrams
+title: 5.09. Product Variant Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing product variants.
 ---
 

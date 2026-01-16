@@ -3,7 +3,7 @@ title: 4.14. Support Ticket Management Use Cases
 description: Use cases for creating, viewing, and managing customer support tickets.
 ---
 
-## 1. View All Support Tickets
+## View All Support Tickets
 
 This use case describes how a user (a customer or a support admin) can retrieve a paginated list of support tickets. The list can be filtered by user ID and ticket status.
 
@@ -33,7 +33,7 @@ This use case describes how a user (a customer or a support admin) can retrieve 
 
 ---
 
-## 2. View a Single Support Ticket
+## View a Single Support Ticket
 
 This use case outlines how a user can retrieve the complete details of a single support ticket, including its message history.
 
@@ -68,7 +68,7 @@ This use case outlines how a user can retrieve the complete details of a single 
 
 ---
 
-## 3. Create a New Support Ticket
+## Create a New Support Ticket
 
 This use case describes how a customer creates a new support ticket to ask a question or report an issue.
 
@@ -96,7 +96,7 @@ This use case describes how a customer creates a new support ticket to ask a que
 
 ---
 
-## 4. Update Support Ticket Status
+## Update Support Ticket Status
 
 This use case describes how a support admin can change the status of a ticket (e.g., from "open" to "in-progress" or "closed").
 

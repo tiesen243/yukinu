@@ -3,7 +3,7 @@ title: 4.11. Shopping Cart Management Use Cases
 description: Use cases for managing items in a user's shopping cart, including adding, removing, and viewing items.
 ---
 
-## 1. View Shopping Cart
+## View Shopping Cart
 
 This use case describes how a customer can view the contents of their current shopping cart, including all items and the total cost.
 
@@ -33,7 +33,7 @@ This use case describes how a customer can view the contents of their current sh
 
 ---
 
-## 2. Add Item to Shopping Cart
+## Add Item to Shopping Cart
 
 This use case outlines how a customer adds a product or a specific product variant to their shopping cart.
 
@@ -62,7 +62,7 @@ This use case outlines how a customer adds a product or a specific product varia
 
 ---
 
-## 3. Remove Item from Shopping Cart
+## Remove Item from Shopping Cart
 
 This use case describes how a customer can remove a specific item from their shopping cart.
 
