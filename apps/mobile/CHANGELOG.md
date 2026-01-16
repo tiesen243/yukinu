@@ -1,5 +1,11 @@
 # @yukinu/mobile
 
+## 0.2.9
+
+### Patch Changes
+
+- [#354](https://github.com/tiesen243/yukinu/pull/354) [`ebfc0e2`](https://github.com/tiesen243/yukinu/commit/ebfc0e2f73dc6c3d249703c2c7d946708352f13e) Thanks [@tiesen243](https://github.com/tiesen243)! - update layout
+
 ## 0.2.8
 
 ### Patch Changes
