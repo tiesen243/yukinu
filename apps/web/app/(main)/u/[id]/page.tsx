@@ -1,10 +1,10 @@
 import { Suspense } from 'react'
 
-import { UserProfileDetails } from '@/app/(main)/u/[id]/page.client'
+import { UserDetails } from '@/app/(main)/u/[id]/page.client'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
-export default async function ProfilePage({ params }: PageProps<'/u/[id]'>) {
+export default async function UserPage({ params }: PageProps<'/u/[id]'>) {
   const { id } = await params
   void getQueryClient().prefetchQuery(
     trpc.user.publicProfile.queryOptions({ id }),
@@ -13,10 +13,10 @@ export default async function ProfilePage({ params }: PageProps<'/u/[id]'>) {
   return (
     <HydrateClient>
       <main className='container flex-1 pb-4'>
-        <h1 className='sr-only'>User Profile Page</h1>
+        <h1 className='sr-only'>User page</h1>
 
         <Suspense fallback={<div>Loading user profile...</div>}>
-          <UserProfileDetails id={id} />
+          <UserDetails id={id} />
         </Suspense>
       </main>
     </HydrateClient>

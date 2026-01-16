@@ -13,9 +13,7 @@ import EditProfile from '@/screens/edit-profile'
 
 const RootStack = createNativeStackNavigator({
   initialRouteName: 'tabs',
-  screenOptions: {
-    headerShown: true,
-  },
+  screenOptions: {},
   screens: {
     tabs: {
       screen: Tabs,
@@ -23,7 +21,6 @@ const RootStack = createNativeStackNavigator({
         headerLeft: HeaderLeft,
         headerTitle: HeaderTitle,
         headerRight: HeaderRight,
-        headerShadowVisible: false,
       },
     },
     login: {
