@@ -15,7 +15,6 @@ sequenceDiagram
     System->>System: 3. Fetch total count of matching tickets
     System->>System: 4. Fetch paginated list of tickets
     System-->>User: 5. Return tickets and pagination metadata
-end
 ```
 
 ## View a Single Support Ticket
@@ -31,7 +30,6 @@ sequenceDiagram
         System-->>User: "NOT_FOUND" error
     end
     System-->>User: 3. Return the ticket's details
-end
 ```
 
 ## Create a New Support Ticket
@@ -44,7 +42,6 @@ sequenceDiagram
     Customer->>System: 1. Submit details for a new support ticket (subject, message)
     System->>System: 2. Create a new ticket record with "open" status, associated with the user's ID
     System-->>Customer: 3. Confirm creation and return the new ticket's ID
-end
 ```
 
 ## Update Support Ticket Status
@@ -61,5 +58,4 @@ sequenceDiagram
     end
     System->>System: 3. Update the ticket's status in the database
     System-->>User: 4. Confirm update and return the ticket ID
-end
 ```

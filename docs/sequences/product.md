@@ -14,7 +14,6 @@ sequenceDiagram
     System->>System: 2. Construct query from filters
     System->>System: 3. Fetch products and total count
     System-->>User: 4. Return product list and pagination info
-end
 ```
 
 ## Get a Single Product
@@ -30,7 +29,6 @@ sequenceDiagram
         System-->>User: "Not Found" error
     end
     System-->>User: 3. Return complete product information
-end
 ```
 
 ## Create Product
@@ -47,7 +45,6 @@ sequenceDiagram
     end
     System->>System: 3. Create product and related data in a transaction
     System-->>User: 4. Return the ID of the new product
-end
 ```
 
 ## Update Product
@@ -68,7 +65,6 @@ sequenceDiagram
     end
     System->>System: 4. Update product details in a transaction
     System-->>User: 5. Return a success confirmation
-end
 ```
 
 ## Delete Product (Soft Delete)
@@ -87,7 +83,6 @@ sequenceDiagram
     end
     System->>System: 3. Set the 'deletedAt' timestamp for the product
     System-->>User: 4. Return a success confirmation
-end
 ```
 
 ## Restore Product
@@ -106,7 +101,6 @@ sequenceDiagram
     end
     System->>System: 3. Set the product's 'deletedAt' field to null
     System-->>User: 4. Return a success confirmation
-end
 ```
 
 ## Permanently Delete Product
@@ -124,5 +118,4 @@ sequenceDiagram
     System->>System: 3. Delete product's images from storage
     System->>System: 4. Delete product record from the database
     System-->>User: 5. Return a success confirmation
-end
 ```

@@ -14,7 +14,6 @@ sequenceDiagram
 
     User->>System: 1. Request a list of orders
     System-->>User: (Not Implemented) "Method not implemented" error
-end
 ```
 
 ## View a Single Order
@@ -26,7 +25,6 @@ sequenceDiagram
 
     User->>System: 1. Request to view a specific order by its ID
     System-->>User: (Not Implemented) "Method not implemented" error
-end
 ```
 
 ## Checkout
@@ -38,7 +36,6 @@ sequenceDiagram
 
     Customer->>System: 1. Initiate the checkout process
     System-->>User: (Not Implemented) "Method not implemented" error
-end
 ```
 
 ## Update an Order
@@ -50,5 +47,4 @@ sequenceDiagram
 
     User->>System: 1. Submit request to update an order with new information
     System-->>User: (Not Implemented) "Method not implemented" error
-end
 ```

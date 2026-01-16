@@ -13,7 +13,6 @@ sequenceDiagram
     User->>System: 1. Request to view all addresses
     System->>System: 2. Fetch all addresses linked to the user's ID
     System-->>User: 3. Return the list of addresses
-end
 ```
 
 ## Get a Single Address
@@ -33,7 +32,6 @@ sequenceDiagram
         System-->>User: "Forbidden" error
     end
     System-->>User: 4. Return address details
-end
 ```
 
 ## Create Address
@@ -46,7 +44,6 @@ sequenceDiagram
     User->>System: 1. Submit details for the new address
     System->>System: 2. Create a new address record linked to the user's ID
     System-->>User: 3. Return the ID of the newly created address
-end
 ```
 
 ## Update Address
@@ -63,7 +60,6 @@ sequenceDiagram
     end
     System->>System: 3. Update the address record in the database
     System-->>User: 4. Return a success confirmation
-end
 ```
 
 ## Delete Address
@@ -80,5 +76,4 @@ sequenceDiagram
     end
     System->>System: 3. Delete the address record from the database
     System-->>User: 4. Return a success confirmation
-end
 ```

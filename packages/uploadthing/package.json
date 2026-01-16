@@ -28,7 +28,9 @@
   "peerDependencies": {
     "@types/react": "catalog:react",
     "@uploadthing/shared": "catalog:uploadthing",
-    "next": "catalog:react",
     "react": "catalog:react"
+  },
+  "overrides": {
+    "next": "catalog:react"
   }
 }

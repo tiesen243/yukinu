@@ -15,7 +15,6 @@ sequenceDiagram
     System->>System: 3. Fetch all items associated with the cart, including product details
     System->>System: 4. Calculate the total amount
     System-->>Customer: 5. Return cart items and total amount
-end
 ```
 
 ## Add Item to Shopping Cart
@@ -29,7 +28,6 @@ sequenceDiagram
     System->>System: 2. Retrieve user's 'pending' order (cart), create if none exists
     System->>System: 3. Create a new order item and associate it with the cart
     System-->>Customer: 4. Confirm item has been added and return new item ID
-end
 ```
 
 ## Remove Item from Shopping Cart
@@ -44,5 +42,4 @@ sequenceDiagram
     System->>System: 3. Verify the item belongs to the user's cart
     System->>System: 4. Delete the item from the cart
     System-->>Customer: 5. Confirm deletion and return the removed item's ID
-end
 ```
