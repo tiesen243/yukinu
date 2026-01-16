@@ -4,6 +4,8 @@ import { generateReactHelpers } from '@uploadthing/react'
 
 import { getWebUrl } from '@/lib/utils'
 
-export const { useUploadThing } = generateReactHelpers<OurFileRouter>({
+const helpers = generateReactHelpers<OurFileRouter>({
   url: getWebUrl() + '/api/uploadthing',
-}) as ReturnType<typeof generateReactHelpers<OurFileRouter>>
+})
+
+export const useUploadThing = helpers.useUploadThing
