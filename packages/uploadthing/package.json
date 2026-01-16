@@ -26,11 +26,6 @@
     "typescript": "catalog:dev"
   },
   "peerDependencies": {
-    "@types/react": "catalog:react",
-    "@uploadthing/shared": "catalog:uploadthing",
-    "react": "catalog:react"
-  },
-  "overrides": {
-    "next": "catalog:react"
+    "@uploadthing/shared": "catalog:uploadthing"
   }
 }
