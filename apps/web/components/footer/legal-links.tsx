@@ -2,6 +2,10 @@ import { Typography } from '@yukinu/ui/typography'
 
 const links = [
   {
+    href: 'https://tiesen243.github.io/yukinu/guide/index.html',
+    label: 'User Guide',
+  },
+  {
     href: 'https://tiesen243.github.io/yukinu/legal/term-of-service.html',
     label: 'Terms of Service',
   },
@@ -12,10 +16,6 @@ const links = [
   {
     href: 'https://tiesen243.github.io/yukinu/legal/cookie.html',
     label: 'Cookie Policy',
-  },
-  {
-    href: 'https://tiesen243.github.io/yukinu/legal/disclaimer.html',
-    label: 'Disclaimer',
   },
   {
     href: 'https://tiesen243.github.io/yukinu/legal/dmca.html',
