@@ -1,6 +1,7 @@
 ---
 title: 5. Sequence Diagrams
 description: This section provides detailed sequence diagrams for the core use cases of the application, illustrating the interactions between actors and the system.
+has_children: true
 ---
 
 ## 5.01. [Authentication](./auth.md)
