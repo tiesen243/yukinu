@@ -1,5 +1,5 @@
 ---
-title: 6.02. Entity-Relationship Diagram
+title: 6.2. Entity-Relationship Diagram
 description: A visual representation of the database structure.
 parent: 6. Database
 ---
@@ -91,7 +91,7 @@ erDiagram
 
     vendorBalances {
         varchar(24) vendorId PK, FK
-        numeric(10,2) balance "Default: 0.00"
+        numeric(10) balance "Default: 0.00"
         timestamp updatedAt
     }
 
@@ -99,8 +99,8 @@ erDiagram
         varchar(24) id PK
         varchar(24) vendorId FK
         varchar(100) reference
-        numeric(10,2) amountIn
-        numeric(10,2) amountOut
+        numeric(10) amountIn
+        numeric(10) amountOut
         timestamp createdAt
     }
 
@@ -110,7 +110,7 @@ erDiagram
         varchar(24) categoryId FK
         varchar(255) name
         text description
-        numeric(10,2) price "Default: 0.00"
+        numeric(10) price "Default: 0.00"
         integer stock "Default: 0"
         integer sold "Default: 0"
         timestamp createdAt
@@ -150,7 +150,7 @@ erDiagram
         varchar(24) id PK
         varchar(24) productId FK
         varchar(100) sku
-        numeric(10,2) price "Default: 0.00"
+        numeric(10) price "Default: 0.00"
         integer stock "Default: 0"
     }
 
@@ -168,7 +168,7 @@ erDiagram
         varchar(24) userId FK
         varchar(24) addressId FK
         varchar(24) voucherId FK
-        numeric(10,2) totalAmount "Default: 0.00"
+        numeric(10) totalAmount "Default: 0.00"
         order_status status "Default: 'pending'"
         timestamp createdAt
         timestamp updatedAt
@@ -181,7 +181,7 @@ erDiagram
         varchar(24) productId FK
         varchar(24) productVariantId FK
         integer quantity
-        numeric(10,2) unitPrice
+        numeric(10) unitPrice
         text note
         boolean isCompleted "Default: false"
     }
@@ -190,7 +190,7 @@ erDiagram
         varchar(24) id PK
         integer orderId FK
         payment_method method
-        numeric(10,2) amount
+        numeric(10) amount
         varchar(255) methodReference
         payment_status status "Default: 'pending'"
         timestamp createdAt
@@ -202,8 +202,8 @@ erDiagram
         varchar(24) paymentId FK
         varchar(100) gateway
         timestamp transactionDate
-        numeric(20,2) amountIn "Default: 0.00"
-        numeric(20,2) amountOut "Default: 0.00"
+        numeric(10) amountIn "Default: 0.00"
+        numeric(10) amountOut "Default: 0.00"
         text transactionContent
         varchar(255) referenceNumber "Unique"
         text body
@@ -227,7 +227,7 @@ erDiagram
     vouchers {
         varchar(24) id PK
         varchar(50) code "Unique"
-        numeric(10,2) discountAmount
+        numeric(10) discountAmount
         integer discountPercentage
         timestamp expiryDate
     }
