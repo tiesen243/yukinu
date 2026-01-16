@@ -1,0 +1,66 @@
+name: DMCA Takedown Notice
+description: File a DMCA takedown request for copyrighted material.
+title: 'DMCA Takedown Notice: [Infringing Content]'
+labels: ['dmca', 'legal']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please fill out the following form completely to file a DMCA takedown notice. We take intellectual property rights seriously and will review your request promptly.
+
+  - type: textarea
+    id: contact-info
+    attributes:
+      label: Contact Information
+      description: 'Please provide your full name, address, telephone number, and email address.'
+      placeholder: |
+        - Full Name:
+        - Address:
+        - Phone:
+        - Email:
+    validations:
+      required: true
+
+  - type: textarea
+    id: copyrighted-work
+    attributes:
+      label: Identification of the Copyrighted Work
+      description: 'Provide a clear description of the copyrighted work you claim has been infringed. Include links to the original work if possible.'
+    validations:
+      required: true
+
+  - type: textarea
+    id: infringing-material
+    attributes:
+      label: Location of Infringing Material
+      description: 'Provide the specific URL(s) on the Yukinu website where the allegedly infringing material is located.'
+      placeholder: 'e.g., https://yukinu.com/path/to/infringing/content'
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: good-faith-belief
+    attributes:
+      label: Statement of Good Faith Belief
+      description: 'By checking the box below, you are making the following statement:'
+      options:
+        - label: 'I have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law.'
+          required: true
+
+  - type: checkboxes
+    id: accuracy-statement
+    attributes:
+      label: Statement of Accuracy
+      description: 'By checking the box below, you are making the following statement under penalty of perjury:'
+      options:
+        - label: 'The information in this notification is accurate, and I am the owner, or an agent authorized to act on behalf of the owner, of an exclusive right that is allegedly infringed.'
+          required: true
+
+  - type: input
+    id: signature
+    attributes:
+      label: Electronic Signature
+      description: 'Please type your full legal name to sign this notice electronically.'
+      placeholder: 'Your full legal name'
+    validations:
+      required: true

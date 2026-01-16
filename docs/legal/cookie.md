@@ -4,42 +4,35 @@ title: 3.5. Cookie Policy
 
 # Cookie Policy
 
-This Cookie Policy explains how Yukinu uses cookies and similar technologies in this educational project.
+_Last Updated: October 29, 2025_
 
-## What Are Cookies?
+This Cookie Policy explains how Yukinu uses cookies. As this is a non-commercial, educational project, our use of cookies is minimal and focused on functionality, not tracking.
 
-Cookies are small text files stored on your device by your web browser. They help websites function properly, remember preferences, and understand how users interact with the website.
+## 1. What Are Cookies?
 
-## How Yukinu Uses Cookies
+Cookies are small text files stored on your device (computer, tablet, or mobile) when you visit a website. They are widely used to make websites work more efficiently and to provide basic functionality like session management.
 
-Since this is a non-commercial learning project, cookies may be used for:
+## 2. How We Use Cookies
 
-- Basic session functionality (e.g., staying signed in during a test session)
-- Authentication and security during testing
-- Debugging and performance insights while developing the system
+We only use cookies that are essential for the application to function during a demonstration. Our cookies are used for:
 
-No advertising or tracking cookies are intentionally used.
+- **Session Management**: To keep you logged in after you authenticate, so you don’t have to sign in on every page.
+- **Security**: To help secure your account and prevent fraudulent use of login credentials.
 
-## Third-Party Cookies
+We **do not** use cookies for:
 
-If you choose to log in using third-party OAuth providers (e.g., Google, Facebook), those services may set their own cookies. Yukinu does not control how those cookies are used.  
-Please review the respective third-party privacy policies for more information.
+- **Analytics**: We do not track your behavior or collect statistics.
+- **Advertising**: We do not use cookies to serve personalized ads.
+- **Marketing**: We do not use cookies for any marketing purposes.
 
-## No Real Personal Tracking
+## 3. Third-Party Cookies
 
-This project does **not**:
+If you use a third-party authentication provider (like Google or GitHub) to sign in, that service may set its own cookies on your device. We do not control these cookies. Please refer to the cookie policy of the respective third-party service for more information.
 
-- Track real-world user behavior for marketing
-- Sell or share personal data with advertisers
-- Use analytics services for commercial profiling
+## 4. How to Manage Cookies
 
-Any analytics used are solely for development and performance testing.
+You can control and manage cookies in your browser settings. You can delete all cookies that are already on your device and prevent them from being placed. However, if you do this, you may have to manually adjust some preferences every time you visit a site, and some services and functionalities may not work.
 
-## Managing Cookies
+## 5. Changes to This Policy
 
-You can manage or disable cookies in your browser settings at any time.  
-However, disabling essential cookies may affect the basic functionality of the app.
-
-## Updates to This Policy
-
-As Yukinu evolves for research or learning improvements, this Cookie Policy may be updated. Changes will be reflected directly in this document.
+This Cookie Policy may be updated periodically. Any changes will be posted on this page with an updated "Last Updated" date.

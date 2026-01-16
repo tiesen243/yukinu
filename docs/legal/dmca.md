@@ -2,27 +2,37 @@
 title: 3.4. DMCA Notice
 ---
 
-# Digital Millennium Copyright Act ("DMCA") Notice
+# Digital Millennium Copyright Act (DMCA) Notice
 
-Yukinu respects the intellectual property rights of others and expects its users to do the same. It is our policy to respond to any claim that content posted on our website infringes the copyright or other intellectual property rights of any person or entity.
+Yukinu is an open-source, educational project and respects the intellectual property rights of others. All content is intended for demonstration purposes only.
 
-If you believe that your copyrighted work has been copied in a way that constitutes copyright infringement and is accessible on this site, please notify our designated copyright agent with the following information:
+However, if you believe that your copyrighted work has been copied in a way that constitutes copyright infringement and is accessible on this site, we are committed to complying with the Digital Millennium Copyright Act (DMCA).
 
-1. A physical or electronic signature of a person authorized to act on behalf of the owner of the copyright interest.
-2. A description of the copyrighted work that you claim has been infringed.
-3. A description of where the material that you claim is infringing is located on the site, including a URL or other specific location.
-4. Your address, telephone number, and email address.
-5. A statement by you that you have a good faith belief that the disputed use is not authorized by the copyright owner, its agent, or the law.
-6. A statement by you, made under penalty of perjury, that the above information in your notice is accurate and that you are the copyright owner or authorized to act on the copyright owner's behalf.
+## How to File a Takedown Notice
 
-**Contact Information:**
+Please submit a DMCA takedown notice by **opening a new issue** on our GitHub repository. This is the fastest and most efficient way to have your claim reviewed.
 
-Email: copyright@tiesen.id.vn
+**[Click here to file a DMCA Takedown Notice](https://github.com/tiesen243/yukinu/issues/new?template=3.dmca-takedown-notice.yml)**
 
-Address: 67 Skibidi Street, Ligma City, Goon 693618, Earth
+Your notice must include the following information:
 
-Upon receipt of a valid DMCA notice, we will remove or disable access to the allegedly infringing material and take reasonable steps to notify the user who posted the material.
+1.  **Your Contact Information**: Your name, address, telephone number, and email address.
+2.  **Identification of the Copyrighted Work**: A description of the copyrighted work that you claim has been infringed.
+3.  **Location of Infringing Material**: The specific URL(s) on the Yukinu website where the allegedly infringing material is located.
+4.  **A statement of good faith belief**: "I have a good faith belief that the use of the material in the manner complained of is not authorized by the copyright owner, its agent, or the law."
+5.  **A statement of accuracy**: "The information in this notification is accurate, and under penalty of perjury, I am the owner, or an agent authorized to act on behalf of the owner, of an exclusive right that is allegedly infringed."
+6.  **Your electronic signature**.
 
-If you believe that your removed content is not infringing, or that you have authorization from the copyright owner, you may send a counter-notice to our copyright agent.
+## Counter-Notice
 
-Thank you for helping us protect intellectual property rights.
+If you believe that your content was removed by mistake or misidentification, you may file a counter-notice by responding to the GitHub issue where the takedown notice was processed.
+
+Your counter-notice must include:
+
+1.  Your name, address, and telephone number.
+2.  Identification of the material that was removed and the location where it appeared.
+3.  A statement under penalty of perjury that you have a good faith belief that the material was removed as a result of mistake or misidentification.
+4.  Your consent to the jurisdiction of the Federal District Court for the judicial district in which your address is located.
+5.  Your electronic signature.
+
+We will review and respond to all valid notices and counter-notices in a timely manner.
