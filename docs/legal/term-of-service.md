@@ -2,60 +2,43 @@
 title: 3.1. Terms of Service
 ---
 
-# Terms of Service
+_Last Updated: January 16, 2026_
 
-_Last updated: October 29, 2025_
+Welcome to Yukinu! This project is a non-commercial, educational demonstration of a multi-vendor e-commerce platform. By accessing or using this application, you agree to these terms.
 
-This Terms of Service document applies to the **Yukinu Multi‑Vendor E‑Commerce Application**. Please note that this application is currently a **learning and experimental project**. The system does not represent a real business, real transactions, or real commercial operations.
+## 1. Acceptance of Terms
 
-## 1. Purpose of the Application
+This is a demonstration project for portfolio and learning purposes. It is **not a real store**. There are no real products, and no payments are processed. Your use of this site is an acknowledgment of its non-commercial, educational nature.
 
-Yukinu is built for development and educational purposes only, including:
+## 2. User Conduct
 
-- Practicing full‑stack web development
-- Learning monorepo architecture
-- Exploring database modeling for e‑commerce
-- Experimenting with deployment and DevOps
+You agree to use this platform solely for evaluation and testing. You must **not**:
 
-There is **no real product ordering**, **no financial payments**, and **no vendor onboarding** for commercial use.
+- Enter real personal or sensitive information (e.g., real names, addresses, or credit card numbers).
+- Upload illegal, harmful, or offensive content.
+- Attempt to exploit security vulnerabilities.
+- Use the platform for any commercial purpose.
 
-## 2. User Responsibilities
+All data entered is considered temporary and may be deleted at any time.
 
-By using this project, users acknowledge and agree to the following:
+## 3. Disclaimer of Warranty
 
-- Any data input is considered **test data**
-- You must not attempt malicious actions such as hacking, exploiting vulnerabilities, or disrupting system functionality
-- You must not rely on this application for real commercial purposes
+This project is provided **"as is"**, without any warranty of any kind, express or implied. This includes, but is not limited to, warranties of merchantability, fitness for a particular purpose, and non-infringement.
 
-## 3. Intellectual Property
+The author does not guarantee that the service will be uninterrupted, secure, or error-free. You assume all risks associated with using this demonstration project.
 
-The source code belongs to the project developer. Users may reference or contribute to the code depending on the project's open‑source licensing terms.
+## 4. Limitation of Liability
 
-## 4. Disclaimer
+In no event shall the author or contributors be liable for any claim, damages, or other liability arising from, out of, or in connection with the software or the use or other dealings in the software. This includes any loss of data or other damages incurred from your use of this non-commercial, demonstration platform.
 
-This project is provided **as‑is** with **no warranties** of any kind. The developer is **not responsible** for any data loss, errors, or misuse of the system.
+## 5. Intellectual Property
 
-The developer does not guarantee:
+The source code for this project is available under an open-source license. You are free to fork, modify, and contribute to the project in accordance with the terms of that license.
 
-- Uptime or service stability
-- Security against cyber threats
-- Accuracy or completeness of data
+## 6. Governing Law
 
-## 5. Prohibited Use
+Any disputes arising from the use of this project will be handled informally. As this is a non-commercial project, there is no formal legal jurisdiction governing these terms.
 
-Users must not:
+## 7. Changes to Terms
 
-- Conduct real financial transactions
-- Upload harmful or illegal content
-- Pretend that the system is a real marketplace
-- Misrepresent data as real products or business operations
-
-## 6. Privacy & Data Usage
-
-Any stored data is strictly for **testing and educational analysis**. No personal data will be shared or used for commercial purposes.
-
-## 7. Changes to This Terms Document
-
-These terms may be updated while the project evolves. Continued usage indicates your acceptance of updated terms.
-
-If you have questions about this Terms of Service document, please open an issue at [here](https://github.com/tiesen243/yukinu/issues).
+These terms may be updated from time to time. The "Last Updated" date at the top of this document will be revised accordingly. Your continued use of the site after such changes constitutes your acceptance of the new terms.

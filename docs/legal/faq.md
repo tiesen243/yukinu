@@ -4,84 +4,46 @@ title: 3.6. Frequently Asked Questions (FAQ)
 
 # Frequently Asked Questions (FAQ)
 
-## 1. What is Yukinu?
+## About the Project
 
-Yukinu is a learning-oriented multi-vendor e-commerce platform built using a modern web development stack such as Next.js, React, tRPC, PostgreSQL, Docker, and more.
+### 1. What is Yukinu?
 
-Yukinu is **not** a real commercial service.
+Yukinu is a portfolio project demonstrating a multi-vendor e-commerce platform. It is built for educational purposes using a modern tech stack including Next.js, React, tRPC, and PostgreSQL. It is **not a real commercial service**.
 
-## 2. Can I make real purchases or sell products here?
+### 2. Can I make real purchases or sell products here?
 
-No. All interactions are for simulation and education only.
-There is **no real payment processing**, and vendors are not actual businesses.
+No. All products, vendors, and transactions are for demonstration only. **No real payments are processed**, and no real goods can be sold or purchased.
 
-## 3. Why does authentication require Google or Facebook?
+### 3. Why are some features missing or incomplete?
 
-OAuth login is included to demonstrate real-world authentication flows.  
-You can disable OAuth and use basic email login during development if needed.
+As a portfolio project, some features are not fully implemented (e.g., order checkout). You can see the current development status on the main `README.md` of the project repository.
 
-## 4. Why do I see limited features?
+### 4. Who maintains Yukinu?
 
-Because the project is still under development.  
-You can check the current feature list here: [docs/features.md](../features.md)
+This project is created and maintained by [Trần Tiến](https://tiesen.id.vn) for educational and demonstration purposes.
 
-Upcoming improvements are listed in the to-do list: [docs/todo.md](../todo.md)
+## Contributing
 
-## 5. I'm running this project locally — why does the database fail to connect?
+### 5. Can I contribute or fork the project?
 
-Check these common issues:
+Absolutely! This project is open-source and available for learning, experimentation, and contributions. You can find the repository on [GitHub](https://github.com/tiesen243/yukinu). We welcome bug fixes, feature proposals, and documentation improvements.
 
-- `.env` values may be incorrect
-- PostgreSQL is not running
-- Docker hasn’t finished initializing the DB
-- SSL mode should be disabled locally (`POSTGRES_SSL_MODE=false`)
+### 6. How do I get involved?
 
-More info:
+The best way to get involved is to:
 
-- [docs/env.md](../env.md)
-- [docs/docker.md](../docker.md)
+- **Fork the repository** and experiment with the code.
+- **Open an issue** on GitHub to report a bug or suggest a feature.
+- **Submit a pull request** to contribute your own improvements.
 
-## 6. How do I become a vendor?
+## For Developers
 
-Currently, accounts do not automatically become vendors.  
-A manual role assignment is required for testing (admin-side toggle).
+### 7. Why does the app use third-party authentication (e.g., Google)?
 
-Future versions will include:
+OAuth (Open-Source Authorization) is included to demonstrate how real-world social login flows can be integrated into a modern application. You can disable this and use the standard email/password login during local development if you prefer.
 
-- Vendor onboarding workflow
-- Verification process
+### 8. How do I become a vendor for testing?
 
-## 7. Can I contribute or fork the project?
+In the current version, user roles must be assigned manually for testing purposes. There is no public-facing vendor application workflow. An administrator can assign the `vendor_owner` role to a user account directly in the database or through a future admin panel.
 
-Absolutely!  
-This project is open for learning, experimentation, and contributions.
-
-Repository: [yukinu](https://github.com/tiesen243/yukinu.git)
-
-You can submit:
-
-- Bug fixes
-- Feature proposals
-- Documentation improvements
-
-## 8. Why are emails not delivered?
-
-You need to configure Resend API or disable email sending during development.  
-Some actions may be simulated without actual delivery.
-
-## 9. How do I reset everything?
-
-If using Docker:
-
-```bash
-docker compose down --remove-orphans --volumes
-docker compose up --build -d
-```
-
-This resets the database and all persisted data in volumes.
-
-## 10. Who maintains Yukinu?
-
-This project is created and maintained by [Trần Tiến](https://tiesen.id.vn) for educational purposes.
-
-If you have additional questions, feel free to create an issue on GitHub.
+If you have other questions, please feel free to **[open an issue on GitHub](https://github.com/tiesen243/yukinu/issues)**.
