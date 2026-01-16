@@ -44,6 +44,5 @@ const config = {
   token: env.UPLOADTHING_TOKEN,
 } satisfies RouteHandlerConfig
 
-export type * from 'uploadthing/types'
 export type OurFileRouter = typeof ourFileRouter
 export { ourFileRouter, config }

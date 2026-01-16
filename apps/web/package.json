@@ -37,5 +37,8 @@
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev"
+  },
+  "peerDependencies": {
+    "uploadthing": "catalog:uploadthing"
   }
 }
