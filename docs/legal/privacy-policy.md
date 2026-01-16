@@ -4,67 +4,50 @@ title: 3.2. Privacy Policy
 
 # Privacy Policy
 
-_Last updated: October 29, 2025_
+_Last Updated: October 29, 2025_
 
-This Privacy Policy applies only to the Yukinu demonstration project (“the Project”). This Project is created for educational and non-commercial purposes. No real transactions, payments, or personal data collection are intended.
+This Privacy Policy outlines our approach to data in the Yukinu project. This application is a **non-commercial, educational demonstration**, and your privacy is a top priority.
 
-By using this Project, you acknowledge that the system is a study prototype and not a real commercial service.
+## 1. Our Core Privacy Principle: We Don't Collect Your Real Data
 
-## 1. Information Collected
+This project is designed for demonstration purposes only. We do **not** want, need, or knowingly collect any real personal information from you.
 
-This Project does **not** actively collect or store real personal information. Any data input into the system is considered **test data**.
+Any data you enter into forms—such as names, emails, or addresses—is treated as **temporary, fictional data** for testing the application's features. Please do not enter real, sensitive personal information.
 
-Example of test data types:
+## 2. What Happens to the Data You Enter?
 
-- Demo usernames
-- Fake vendor profiles
-- Sample product listings
-- Mock order records
+The demonstration data you provide is used solely for:
 
-If a user voluntarily enters real personal information, they do so at their own discretion.
+- **Functionality Testing**: To show how features like user registration, product creation, and order placement work.
+- **Database Demonstration**: To populate the database for educational purposes.
 
-## 2. Use of Data
+We will **never**:
 
-All test data entered into this Project is used only for:
+- Sell or rent your information.
+- Share your information with third parties for marketing purposes.
+- Use the information for any commercial activity.
 
-- Demonstration of software features
-- Testing database operations
-- Academic learning purposes
+All data in the demonstration database may be periodically erased without notice.
 
-No data will be:
+## 3. Third-Party Services
 
-- Sold
-- Shared with third parties
-- Used for marketing
+For demonstration purposes, this project may integrate with third-party services, such as:
 
-## 3. Cookies and Tracking
+- **Authentication Providers** (e.g., Google, GitHub): If you choose to log in via a third party, that provider will handle your authentication. We only receive a basic identifier (like your email address and name) to create a session. We do not receive your password. The third party's privacy policy governs their data handling.
+- **File Storage** (e.g., Uploadthing): For demonstration of image uploads. Please do not upload sensitive or personal images.
 
-This Project may use minimal technical cookies solely for:
+## 4. Security
 
-- Session handling
-- Login persistence during a browser session
-
-No tracking, analytics, or advertising cookies are used.
-
-## 4. Data Security
-
-While basic security measures may be implemented, this Project is not hardened for production. Users should **not** store sensitive personal data.
+While we implement standard security practices (like password hashing), this project is not hardened for a production environment. You use this demonstration application at your own risk and should not trust it with sensitive data.
 
 ## 5. Children's Privacy
 
-This Project is not intended for real end users, including children. No data about minors is knowingly processed.
+This project is not intended for use by anyone under the age of 13. We do not knowingly collect information from children.
 
-## 6. External Services
+## 6. Changes to This Policy
 
-If external services (e.g., authentication providers, cloud database) are used for educational purposes, applicable policies from those providers will apply independently.
+This Privacy Policy may be updated to reflect changes in the project. We will post any updates on this page with a revised "Last Updated" date.
 
-## 7. Changes to This Policy
+## 7. Contact Us
 
-This Privacy Policy may be updated to reflect improvements during development.
-
-Revisions will maintain the core statement that the Project is **non-commercial**.
-
-## 8. Contact
-
-Since this is an academic project, no formal support channel exists.
-For inquiries related to learning or project usage, please contact the developer directly.
+If you have any questions about this Privacy Policy, please **[open an issue on our GitHub repository](https://github.com/tiesen243/yukinu/issues)**.

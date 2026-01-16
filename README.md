@@ -24,7 +24,23 @@
   </a>
 </p>
 
-An e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience
+An open-source, multi-vendor e-commerce platform built with a modern, type-safe technology stack. It enables buyers to shop from multiple sellers in a unified marketplace.
+
+## Links
+
+- **[Live Web App](https://yukinu.vercel.app)**
+- **[Live Dashboard](https://yukinu-dashboard.vercel.app)**
+- **[Project Documentation](https://tiesen243.github.io/yukinu)**
+- **[Mobile App Releases](https://github.com/tiesen243/yukinu/releases?q=mobile)**
+
+## Key Features
+
+- **For Customers**: Unified shopping cart, advanced search and filtering, wishlists, order tracking, and vendor discovery.
+- **For Vendors**: A dedicated dashboard for product management (including variants), order processing, and staff management.
+- **For Administrators**: A central dashboard to manage users, approve vendors, moderate content, and manage product categories.
+- **Type-safe**: End-to-end type safety with tRPC and Zod, ensuring robust and error-resistant code.
+- **Modern Stack**: Built with Next.js, React, and TailwindCSS, running on a Bun-powered monorepo.
+- **Scalable**: The monorepo architecture, managed by Turborepo, allows for efficient code sharing and independent scaling of services.
 
 ## Tech Stack
 
@@ -75,57 +91,46 @@ An e-commerce platform that enables customers to discover, compare, and purchase
 
 ## Getting Started
 
-### Prerequisites
+Full setup instructions are available in the **[Development Setup Guide](https://tiesen243.github.io/yukinu/development-setup)**.
 
-- Node.js (v24 or later)
-- Bun (package manager)
-- Docker & Docker Compose (for local development)
+### Quick Start
 
-### Installation
+1.  **Clone the repository:**
 
-1. Clone the repository:
+    ```bash
+    git clone https://github.com/tiesen243/yukinu.git
+    cd yukinu
+    ```
 
-   ```bash
-   git clone git@github.com:tiesen243/yukinu.git
-   cd yukinu
-   ```
+2.  **Install dependencies:**
 
-2. Install dependencies using Bun:
+    ```bash
+    bun install
+    ```
 
-   ```bash
-   bun install --frozen-lockfile
-   ```
+3.  **Set up environment variables:**
 
-3. Set up environment variables:
+    ```bash
+    cp .env.example .env
+    # Edit the .env file with your credentials
+    ```
 
-   ```bash
-   cp .env.example .env
-   # Edit .env to add your configuration
-   ```
+4.  **Start the database:**
 
-4. Start the database using Docker Compose:
+    ```bash
+    bun run db:start
+    ```
 
-   ```bash
-   docker-compose up -d db
-   # or
-   bun start:db
-   ```
+5.  **Apply the database schema:**
 
-5. Run database migrations:
+    ```bash
+    bun run db:push
+    ```
 
-   ```bash
-   bun run db:migrate
-   ```
-
-6. Start the development server:
-
-   ```bash
-   bun dev
-   ```
-
-   - Web App: http://localhost:3000
-   - Dashboard: http://localhost:5173
-   - Mobile App: use Expo Go or simulator to scan the QR code displayed in the terminal
+6.  **Start all applications:**
+    ```bash
+    bun run dev
+    ```
 
 ## Deployment
 
