@@ -1,6 +1,7 @@
 ---
-title: 5.5. Vendor Management Sequence Diagrams
+title: 5.05. Vendor Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing vendors.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Vendors
@@ -14,7 +15,6 @@ sequenceDiagram
     System->>System: 2. Fetch vendors and total count
     System->>System: 3. Calculate total pages
     System-->>Admin: 4. Return vendor list and pagination info
-end
 ```
 
 ## Get a Single Vendor
@@ -30,7 +30,6 @@ sequenceDiagram
         System-->>User: "Not Found" error
     end
     System-->>User: 3. Return vendor information
-end
 ```
 
 ## Create Vendor (Apply for a Vendor Account)
@@ -47,7 +46,6 @@ sequenceDiagram
     end
     System->>System: 3. Create new vendor record with 'pending' status
     System-->>User: 4. Return ID of the new vendor application
-end
 ```
 
 ## Update Vendor Status
@@ -71,7 +69,6 @@ sequenceDiagram
     System->>System: 4. Update the vendor's status
     System->>System: 5. Update the vendor owner's role accordingly
     System-->>Admin: 6. Return success confirmation
-end
 ```
 
 ## Update Vendor Information
@@ -88,5 +85,4 @@ sequenceDiagram
     end
     System->>System: 3. Update the vendor record in the database
     System-->>User: 4. Return a success confirmation
-end
 ```

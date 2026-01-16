@@ -1,6 +1,7 @@
 ---
-title: 5.7. Category Management Sequence Diagrams
+title: 5.07. Category Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing product categories.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get All Categories
@@ -15,7 +16,6 @@ sequenceDiagram
     System->>System: 3. Fetch categories and total count
     System->>System: 4. Calculate total pages
     System-->>User: 5. Return category list and pagination details
-end
 ```
 
 ## Get a Single Category
@@ -31,7 +31,6 @@ sequenceDiagram
         System-->>User: "Not Found" error
     end
     System-->>User: 3. Return category information
-end
 ```
 
 ## Create Category
@@ -48,7 +47,6 @@ sequenceDiagram
     end
     System->>System: 3. Create the new category record
     System-->>Admin: 4. Return the ID of the new category
-end
 ```
 
 ## Update Category
@@ -69,7 +67,6 @@ sequenceDiagram
     end
     System->>System: 4. Update the category record
     System-->>Admin: 5. Return a success confirmation
-end
 ```
 
 ## Delete Category
@@ -87,5 +84,4 @@ sequenceDiagram
     System->>System: 3. Delete the category record from the database
     System->>System: 4. Delete the category's image from storage
     System-->>Admin: 5. Return a success confirmation
-end
 ```

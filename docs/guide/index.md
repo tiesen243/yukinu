@@ -1,6 +1,7 @@
 ---
 title: 2. User Guide
 description: A practical guide for users of the Yukinu platform, covering key features and functionalities based on user roles.
+has_children: true
 ---
 
 Welcome to the Yukinu User Guide. This section provides a practical, role-based overview of how to use the platform's features.

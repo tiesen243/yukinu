@@ -1,11 +1,8 @@
 ---
 title: 1.1. Development Setup
-description: A step-by-step guide for setting up the project for local development.
+description: This guide provides instructions for setting up the Yukinu monorepo for local development. Following these steps will allow you to run the web application, dashboard, and all backing services on your local machine.
+parent: 1. Overview
 ---
-
-# Development Setup
-
-This guide provides instructions for setting up the Yukinu monorepo for local development. Following these steps will allow you to run the web application, dashboard, and all backing services on your local machine.
 
 ## Prerequisites
 

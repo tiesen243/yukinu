@@ -1,6 +1,7 @@
 ---
-title: 4.7. Category Management Use Cases
+title: 4.07. Category Management Use Cases
 description: This document outlines the use cases related to managing product categories, including creating, retrieving, updating, and deleting categories.
+parent: 4. Use Cases
 ---
 
 ## Get All Categories

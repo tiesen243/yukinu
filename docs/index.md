@@ -1,8 +1,8 @@
 ---
 title: 1. Overview
+description: Introduction to the Yukinu multi-vendor e-commerce platform, its features, and project roadmap.
+has_children: true
 ---
-
-## Yukinu Documentation
 
 Welcome to the official documentation for **Yukinu**—a modern **multi-vendor e-commerce platform** that enables buyers to shop from multiple sellers in a unified marketplace experience.
 

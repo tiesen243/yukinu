@@ -62,7 +62,6 @@
     "react": {
       "@types/react": "^19.2.8",
       "@types/react-dom": "^19.2.3",
-      "next": "^16.1.2",
       "react": "^19.2.3",
       "react-dom": "^19.2.3"
     },
@@ -75,6 +74,7 @@
     "uploadthing": {
       "@uploadthing/expo": "^7.2.6",
       "@uploadthing/react": "^7.3.3",
+      "@uploadthing/shared": "^7.1.10",
       "uploadthing": "^7.7.4"
     },
     "trpc": {

@@ -1,6 +1,7 @@
 ---
-title: 5.9. Product Variant Management Sequence Diagrams
+title: 5.09. Product Variant Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing product variants.
+parent: 5. Sequence Diagrams
 ---
 
 ## Recreate Product Variants
@@ -18,7 +19,6 @@ sequenceDiagram
     System->>System: 3. Delete all existing variants for the product
     System->>System: 4. Create new variants and options from the provided list
     System-->>User: 5. Confirm recreation and return product ID
-end
 ```
 
 ## Update a Product Variant
@@ -35,7 +35,6 @@ sequenceDiagram
     end
     System->>System: 3. Update the variant's details in the database
     System-->>User: 4. Confirm update and return variant ID
-end
 ```
 
 ## Delete a Product Variant
@@ -52,5 +51,4 @@ sequenceDiagram
     end
     System->>System: 3. Delete the variant from the database
     System-->>User: 4. Confirm deletion and return the deleted variant's ID
-end
 ```

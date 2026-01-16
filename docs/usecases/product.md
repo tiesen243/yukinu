@@ -1,6 +1,7 @@
 ---
-title: 4.8. Product Management Use Cases
+title: 4.08. Product Management Use Cases
 description: This document outlines the use cases for managing products, including creation, updates, and deletion.
+parent: 4. Use Cases
 ---
 
 ## Get All Products

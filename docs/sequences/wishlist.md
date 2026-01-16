@@ -1,6 +1,7 @@
 ---
 title: 5.10. Wishlist Management Sequence Diagrams
 description: This document provides sequence diagrams for use cases related to managing a user's wishlist.
+parent: 5. Sequence Diagrams
 ---
 
 ## Get Wishlist Items
@@ -14,7 +15,6 @@ sequenceDiagram
     System->>System: 2. Fetch all wishlist items for the user's ID
     System->>System: 3. Retrieve corresponding product details for each item
     System-->>Customer: 4. Return list of wishlist items with product info
-end
 ```
 
 ## Add or Remove Item from Wishlist (Toggle)
@@ -33,5 +33,4 @@ sequenceDiagram
         System->>System: 3b. Create a new wishlist entry for the product
         System-->>Customer: 4b. Confirm item has been added
     end
-end
 ```

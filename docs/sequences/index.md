@@ -1,41 +1,42 @@
 ---
 title: 5. Sequence Diagrams
 description: This section provides detailed sequence diagrams for the core use cases of the application, illustrating the interactions between actors and the system.
+has_children: true
 ---
 
-## 5.1. [Authentication](./auth.md)
+## 5.01. [Authentication](./auth.md)
 
 Sequence diagrams for user authentication flows, including registration, login, and session management.
 
-## 5.2. [User Management](./user.md)
+## 5.02. [User Management](./user.md)
 
 Sequence diagrams for managing user accounts, profiles, and settings.
 
-## 5.3. [Security](./security.md)
+## 5.03. [Security](./security.md)
 
 Sequence diagrams illustrating security-related processes like API key management.
 
-## 5.4. [Address Management](./address.md)
+## 5.04. [Address Management](./address.md)
 
 Sequence diagrams for creating, updating, and managing user addresses.
 
-## 5.5. [Vendor Management](./vendor.md)
+## 5.05. [Vendor Management](./vendor.md)
 
 Sequence diagrams detailing the processes for managing vendors.
 
-## 5.6. [Vendor Staff Management](./vendor-staff.md)
+## 5.06. [Vendor Staff Management](./vendor-staff.md)
 
 Sequence diagrams for managing staff members associated with a vendor.
 
-## 5.7. [Category Management](./category.md)
+## 5.07. [Category Management](./category.md)
 
 Sequence diagrams for creating, updating, and deleting product categories.
 
-## 5.8. [Product Management](./product.md)
+## 5.08. [Product Management](./product.md)
 
 Sequence diagrams illustrating how products are managed.
 
-## 5.9. [Product Variant Management](./product-variant.md)
+## 5.09. [Product Variant Management](./product-variant.md)
 
 Sequence diagrams for managing product variants like size and color.
 
