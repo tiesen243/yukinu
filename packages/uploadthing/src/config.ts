@@ -43,3 +43,5 @@ export const ourFileRouter = {
 export const config = {
   token: env.UPLOADTHING_TOKEN,
 } satisfies RouteHandlerConfig
+
+export type OurFileRouter = typeof ourFileRouter
