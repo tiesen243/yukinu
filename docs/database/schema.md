@@ -1,5 +1,5 @@
 ---
-title: 6.01. Database Schema
+title: 6.1. Database Schema
 description: A detailed breakdown of every table, including columns, data types, and constraints.
 parent: 6. Database
 ---
