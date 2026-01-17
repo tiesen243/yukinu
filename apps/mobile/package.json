@@ -11,9 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@react-navigation/bottom-tabs": "^7.9.1",
-    "@react-navigation/native": "^7.1.27",
-    "@react-navigation/native-stack": "^7.9.1",
+    "@react-navigation/bottom-tabs": "^7.10.0",
+    "@react-navigation/native": "^7.1.28",
+    "@react-navigation/native-stack": "^7.10.0",
     "@tanstack/react-query": "catalog:prod",
     "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
