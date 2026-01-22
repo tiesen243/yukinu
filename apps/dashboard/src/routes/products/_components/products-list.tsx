@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 import { TableCell, TableRow } from '@yukinu/ui/table'
-import { Activity } from 'react'
 import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -44,25 +43,27 @@ export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
           : product.updatedAt.toLocaleDateString()}
       </TableCell>
       <TableCell className='space-x-2'>
-        <Activity mode={query.isDeleted ? 'visible' : 'hidden'}>
-          <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
-          <PermanentDeleteProductButton
-            productId={product.id}
-            isAdmin={isAdmin}
-          />
-        </Activity>
-
-        <Activity mode={query.isDeleted ? 'hidden' : 'visible'}>
-          {!isAdmin && (
-            <Link
-              to={`/products/${product.id}`}
-              className='text-primary underline-offset-4 hover:underline'
-            >
-              Edit
-            </Link>
-          )}
-          <DeleteProductButton productId={product.id} isAdmin={isAdmin} />
-        </Activity>
+        {query.isDeleted ? (
+          <>
+            <RestoreProductButton productId={product.id} isAdmin={isAdmin} />
+            <PermanentDeleteProductButton
+              productId={product.id}
+              isAdmin={isAdmin}
+            />
+          </>
+        ) : (
+          <>
+            {!isAdmin && (
+              <Link
+                to={`/products/${product.id}`}
+                className='text-primary underline-offset-4 hover:underline'
+              >
+                Edit
+              </Link>
+            )}
+            <DeleteProductButton productId={product.id} isAdmin={isAdmin} />
+          </>
+        )}
       </TableCell>
     </TableRow>
   ))

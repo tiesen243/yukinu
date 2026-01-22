@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { Badge } from '@yukinu/ui/badge'
 import { TableCell, TableRow } from '@yukinu/ui/table'
-import { Activity } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { DeleteUserButton } from '@/routes/admin/users/_components/delete-user-button'
@@ -43,15 +42,17 @@ export const UsersList: React.FC = () => {
       <TableCell>{user.updatedAt.toLocaleDateString()}</TableCell>
       <TableCell>{user.deletedAt?.toLocaleDateString() ?? 'N/A'}</TableCell>
       <TableCell className='space-x-2'>
-        <Activity mode={user.deletedAt ? 'visible' : 'hidden'}>
-          <RestoreUserButton user={user} />
-          <PermamentlyDeleteUserButton user={user} />
-        </Activity>
-
-        <Activity mode={user.deletedAt ? 'hidden' : 'visible'}>
-          <EditUserButton user={user} />
-          <DeleteUserButton user={user} />
-        </Activity>
+        {user.deletedAt ? (
+          <>
+            <RestoreUserButton user={user} />
+            <PermamentlyDeleteUserButton user={user} />
+          </>
+        ) : (
+          <>
+            <EditUserButton user={user} />
+            <DeleteUserButton user={user} />
+          </>
+        )}
       </TableCell>
     </TableRow>
   ))
