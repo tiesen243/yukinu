@@ -1,5 +1,11 @@
 # @yukinu/lib
 
+## 0.7.1
+
+### Patch Changes
+
+- [#362](https://github.com/tiesen243/yukinu/pull/362) [`2c768fe`](https://github.com/tiesen243/yukinu/commit/2c768fe6532333ea379383182ff28b738c39d60a) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
 ## 0.7.0
 
 ### Minor Changes
