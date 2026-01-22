@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/web",
-  "version": "0.11.7",
+  "version": "0.11.8",
   "private": false,
   "type": "module",
   "scripts": {
@@ -22,7 +22,7 @@
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.1.2",
+    "next": "^16.1.4",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",

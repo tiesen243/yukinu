@@ -1,5 +1,21 @@
 # @yukinu/web
 
+## 0.11.8
+
+### Patch Changes
+
+- [#362](https://github.com/tiesen243/yukinu/pull/362) [`2c768fe`](https://github.com/tiesen243/yukinu/commit/2c768fe6532333ea379383182ff28b738c39d60a) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps
+
+- Updated dependencies [[`2c768fe`](https://github.com/tiesen243/yukinu/commit/2c768fe6532333ea379383182ff28b738c39d60a)]:
+  - @yukinu/api@0.9.4
+  - @yukinu/auth@0.9.4
+  - @yukinu/db@0.9.4
+  - @yukinu/email@0.8.3
+  - @yukinu/lib@0.7.1
+  - @yukinu/ui@0.8.2
+  - @yukinu/uploadthing@0.3.4
+  - @yukinu/validators@0.9.3
+
 ## 0.11.7
 
 ### Patch Changes

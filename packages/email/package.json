@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/email",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "private": true,
   "type": "module",
   "types": "./dist/index.d.mts",
@@ -17,11 +17,11 @@
     "~dev": "tsdown --watch"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.4",
+    "@react-email/components": "^1.0.6",
     "@yukinu/validators": "workspace:*",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "resend": "^6.7.0"
+    "resend": "^6.8.0"
   },
   "devDependencies": {
     "@types/react": "catalog:react",

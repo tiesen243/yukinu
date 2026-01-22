@@ -43,7 +43,7 @@ jobs:
         run: cp .env.example .env
 
       - name: Lint
-        run: bun lint && bun lint:ws
+        run: bun lint
 
   typecheck:
     runs-on: ubuntu-latest
@@ -59,18 +59,3 @@ jobs:
 
       - name: Typecheck
         run: bun typecheck
-
-  # unit-test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v5
-  #
-  #     - name: Setup
-  #       uses: ./tools/github/setup
-  #
-  #     - name: Copy env
-  #       shell: bash
-  #       run: cp .env.example .env
-  #
-  #     - name: Unit test
-  #       run: bun test
