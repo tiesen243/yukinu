@@ -7,8 +7,7 @@ type NextRouteHandler = (
   request: NextRequest,
 ) => void | Response | Promise<void | Response>
 
-export const { GET, POST }: { GET: NextRouteHandler; POST: NextRouteHandler } =
-  createNextRouteHandler({
-    router: ourFileRouter,
-    config,
-  })
+export const { GET, POST } = createNextRouteHandler({
+  router: ourFileRouter,
+  config,
+}) as { GET: NextRouteHandler; POST: NextRouteHandler }
