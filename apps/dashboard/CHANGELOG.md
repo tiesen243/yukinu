@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.11.7
+
+### Patch Changes
+
+- [#365](https://github.com/tiesen243/yukinu/pull/365) [`be3f113`](https://github.com/tiesen243/yukinu/commit/be3f113ba41659320df10d558a4d1a5ba25670c7) Thanks [@tiesen243](https://github.com/tiesen243)! - bump version
+
 ## 0.11.6
 
 ### Patch Changes
