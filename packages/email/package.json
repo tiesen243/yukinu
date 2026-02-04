@@ -21,9 +21,10 @@
     "@yukinu/validators": "workspace:*",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "resend": "^6.8.0"
+    "resend": "^6.9.1"
   },
   "devDependencies": {
+    "@react-email/preview-server": "^5.2.5",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
