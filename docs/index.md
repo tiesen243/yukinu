@@ -57,7 +57,9 @@ The Yukinu platform is designed with a rich set of features to support a complet
 
 ## Project To-Do List
 
-### Guest
+This section tracks the implementation progress of features across different user roles and system components.
+
+### Guest (7/7 completed ✅)
 
 - [x] Register an account
 - [x] Login
@@ -67,7 +69,7 @@ The Yukinu platform is designed with a rich set of features to support a complet
 - [x] View products by vendor
 - [x] Reset password (forgot password)
 
-### User (Customer)
+### User (Customer) (5/11 completed 🚧)
 
 - [x] Update personal profile
 - [x] Manage shipping addresses (CRUD)
@@ -81,33 +83,33 @@ The Yukinu platform is designed with a rich set of features to support a complet
 - [ ] Review products
 - [ ] View order history
 
-### Vendor Owner / Manager
+### Vendor Owner / Manager (6/8 completed 🚧)
 
 - [x] Apply to become a vendor
 - [x] Manage store information
 - [x] Manage products (list/create/update)
 - [x] Manage product images
 - [x] Manage product variants (size, color, etc.)
+- [x] Manage vendor members (add / remove)
 - [ ] Manage vendor-specific orders
 - [ ] Update order status (processing → shipped → delivered)
-- [x] Manage vendor members (add / remove)
 
-### Admin
+### Admin (5/6 completed 🚧)
 
 - [x] Manage users (activate / deactivate)
 - [x] Manage vendors (approve / suspend)
 - [x] Manage product categories (CRUD)
 - [x] Moderate products across the system
-- [ ] System analytics & dashboards
 - [x] Manage roles & permissions _(optional)_
+- [ ] System analytics & dashboards
 
-### Payment System Integration
+### Payment System Integration (0/3 completed 📋)
 
 - [ ] Initialize payment transaction
 - [ ] Confirm successful payment
-      -- [ ] Handle failed or refunded payments
+- [ ] Handle failed or refunded payments
 
-### Optional Enhancements
+### Optional Enhancements (1/3 completed 📋)
 
 - [ ] Vendor payout system
 - [ ] Coupon / voucher management
