@@ -179,6 +179,7 @@ export default function ProductsNewPage() {
                   images.
                 </FieldDescription>
                 {field.value.map((url, index) => (
+                  // oxlint-disable-next-line react/no-array-index-key
                   <Field key={`image-${index}`}>
                     <InputGroup>
                       <InputGroupInput
@@ -254,6 +255,7 @@ export default function ProductsNewPage() {
                   brand).
                 </FieldDescription>
                 {field.value.map((attribute, index) => (
+                  // oxlint-disable-next-line react/no-array-index-key
                   <Field key={`attribute-${index}`}>
                     <div className='flex gap-2'>
                       <Input
@@ -333,6 +335,7 @@ export default function ProductsNewPage() {
                   Medium, Large).
                 </FieldDescription>
                 {field.value.map((variant, vIndex) => (
+                  // oxlint-disable-next-line react/no-array-index-key
                   <FieldGroup key={`variant-${vIndex}`}>
                     <Field>
                       <FieldLabel>Variant Name</FieldLabel>
@@ -369,6 +372,7 @@ export default function ProductsNewPage() {
                     <FieldGroup>
                       <FieldLabel>Options</FieldLabel>
                       {variant.options.map((option, oIndex) => (
+                        // oxlint-disable-next-line react/no-array-index-key
                         <Field key={`variant-${vIndex}-option-${oIndex}`}>
                           <InputGroup>
                             <InputGroupInput

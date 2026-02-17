@@ -23,7 +23,7 @@ export const StaffsList: React.FC = () => {
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 5 }, (_, cellIndex) => (
+        {Array.from({ length: 5 }, (__, cellIndex) => (
           <TableCell key={cellIndex}>
             <div className='animate-pulse rounded bg-muted/50'>&nbsp;</div>
           </TableCell>

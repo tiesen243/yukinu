@@ -160,9 +160,9 @@ export default function CategoriesEditPage({
                 <NativeSelect {...field} value={value ?? ''}>
                   {data?.categories
                     .filter((cat) => cat.id !== category.id)
-                    .map((category) => (
-                      <NativeSelectOption key={category.id} value={category.id}>
-                        {category.name}
+                    .map((cat) => (
+                      <NativeSelectOption key={cat.id} value={cat.id}>
+                        {cat.name}
                       </NativeSelectOption>
                     ))}
                 </NativeSelect>

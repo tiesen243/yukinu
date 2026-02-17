@@ -90,20 +90,20 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
             </DialogHeader>
 
             <RadioGroup value={status} onValueChange={setStatus as never}>
-              {ticketStatuses.map((status) => (
+              {ticketStatuses.map((st) => (
                 <Label
-                  key={status}
-                  htmlFor={status}
+                  key={st}
+                  htmlFor={st}
                   className={cn(
                     'flex cursor-pointer items-center space-x-2 rounded-md border border-current/40 bg-current/5 px-2 py-4 capitalize transition-colors hover:bg-current/10',
                     {
-                      'text-primary': status === 'open',
-                      'text-destructive': status === 'closed',
-                      'text-success': status === 'resolved',
+                      'text-primary': st === 'open',
+                      'text-destructive': st === 'closed',
+                      'text-success': st === 'resolved',
                     },
                   )}
                 >
-                  <RadioGroupItem id={status} value={status} /> {status}
+                  <RadioGroupItem id={st} value={st} /> {st}
                 </Label>
               ))}
             </RadioGroup>

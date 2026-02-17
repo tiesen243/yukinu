@@ -178,6 +178,7 @@ export const UpdateProductForm: React.FC<{
                   images.
                 </FieldDescription>
                 {field.value.map((url, index) => (
+                  // oxlint-disable-next-line react/no-array-index-key
                   <Field key={`image-${index}`}>
                     <InputGroup>
                       <InputGroupInput
@@ -244,6 +245,7 @@ export const UpdateProductForm: React.FC<{
                   Define custom attributes for the product.
                 </FieldDescription>
                 {field.value.map((attribute, index) => (
+                  // oxlint-disable-next-line react/no-array-index-key
                   <Field key={`attribute-${index}`}>
                     <div className='flex gap-2'>
                       <Input

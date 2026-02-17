@@ -2,6 +2,7 @@ import type { ButtonVariants } from '@yukinu/ui/button'
 
 import { cn } from '@yukinu/ui'
 import { buttonVariants } from '@yukinu/ui/button'
+import { useMemo } from 'react'
 import { Pressable } from 'react-native'
 
 import { TextClassContext } from '@/components/ui/text'
@@ -16,9 +17,9 @@ function Button({
   className,
   ...props
 }: ButtonProps) {
-  return (
-    <TextClassContext.Provider
-      value={cn('font-[GeistMedium] text-sm text-foreground', {
+  const value = useMemo(
+    () =>
+      cn('font-[GeistMedium] text-sm text-foreground', {
         'text-primary-foreground': variant === 'default',
         'text-foreground': variant === 'outline' || variant === 'ghost',
         'text-secondary-foreground': variant === 'secondary',
@@ -27,8 +28,12 @@ function Button({
         'text-info': variant === 'info',
         'text-warning': variant === 'warning',
         'text-primary underline': variant === 'link',
-      })}
-    >
+      }),
+    [variant],
+  )
+
+  return (
+    <TextClassContext value={value}>
       <Pressable
         className={cn(
           props.disabled && 'opacity-50',
@@ -38,7 +43,7 @@ function Button({
         role='button'
         {...props}
       />
-    </TextClassContext.Provider>
+    </TextClassContext>
   )
 }
 

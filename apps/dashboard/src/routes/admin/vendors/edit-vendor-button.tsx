@@ -59,21 +59,21 @@ export const EditVendorButton: React.FC<{
         </DialogHeader>
 
         <RadioGroup value={status} onValueChange={setStatus as never}>
-          {vendorStatuses.map((status) => (
+          {vendorStatuses.map((st) => (
             <Label
-              key={status}
-              htmlFor={status}
+              key={st}
+              htmlFor={st}
               className={cn(
                 'flex cursor-pointer items-center space-x-2 rounded-md border border-current/40 bg-current/5 px-2 py-4 capitalize transition-colors hover:bg-current/10',
                 {
-                  'text-success': status === 'approved',
-                  'text-warning': status === 'pending',
-                  'text-destructive': status === 'suspended',
+                  'text-success': st === 'approved',
+                  'text-warning': st === 'pending',
+                  'text-destructive': st === 'suspended',
                 },
               )}
             >
-              <RadioGroupItem id={status} value={status} />
-              {status}
+              <RadioGroupItem id={st} value={st} />
+              {st}
             </Label>
           ))}
         </RadioGroup>

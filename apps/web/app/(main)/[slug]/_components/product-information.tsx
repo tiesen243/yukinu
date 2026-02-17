@@ -81,6 +81,7 @@ export const ProductInformation: React.FC = () => {
                   ),
                 ).map((value, idx) => (
                   <Label
+                    // oxlint-disable-next-line react/no-array-index-key
                     key={`${type}-option-${value}-${idx}`}
                     htmlFor={`${type}-option-${value}`}
                     className='flex items-start gap-3 rounded-lg border p-3 hover:bg-accent/20 has-aria-checked:border-primary has-aria-checked:bg-primary/20'

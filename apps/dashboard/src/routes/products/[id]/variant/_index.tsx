@@ -73,6 +73,7 @@ export default function CreateProductVariantsPage({
           render={({ meta, field }) => (
             <FieldGroup>
               {field.value.map((variant, vIndex) => (
+                // oxlint-disable-next-line react/no-array-index-key
                 <FieldGroup key={`variant-${vIndex}`}>
                   <Field>
                     <FieldLabel>Variant Name</FieldLabel>
@@ -109,6 +110,7 @@ export default function CreateProductVariantsPage({
                   <FieldGroup>
                     <FieldLabel>Options</FieldLabel>
                     {variant.options.map((option, oIndex) => (
+                      // oxlint-disable-next-line react/no-array-index-key
                       <Field key={`variant-${vIndex}-option-${oIndex}`}>
                         <InputGroup>
                           <InputGroupInput

@@ -32,22 +32,23 @@ export const FilterForm: React.FC = () => {
     trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
 
-    const formData = Object.fromEntries(
-      new FormData(e.currentTarget),
-    ) as Record<string, string>
+    const formData = Object.fromEntries(new FormData(e.target)) as Record<
+      string,
+      string
+    >
     const search = formData.q ?? null
     const categoryId =
       formData.categoryId === '' ? null : (formData.categoryId ?? null)
-    const orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
+    const _orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
 
     await setQuery((prev) => ({
       ...prev,
       search,
       categoryId,
-      orderBy,
+      orderBy: _orderBy,
       page: 1,
     }))
   }

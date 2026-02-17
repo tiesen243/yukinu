@@ -60,6 +60,7 @@ export class AuthService implements IAuthService {
 
     const password = await this._password.hash(_password)
     const { userId, token } = await this._db.transaction(async (tx) => {
+      // oxlint-disable-next-line no-shadow
       const userId = await this._user.create({ email, username }, tx)
       await this._account.create(
         { userId, provider: 'credentials', accountId: userId, password },
@@ -67,6 +68,7 @@ export class AuthService implements IAuthService {
       )
       await this._profile.create({ id: userId, fullName: username }, tx)
 
+      // oxlint-disable-next-line no-shadow
       const token = randomBytes(32).toString('hex')
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
       await this._verification.create(

@@ -111,7 +111,7 @@ const AddBannerButton: React.FC = () => {
             <InputGroupAddon align='inline-end'>
               <InputGroupUploadButton
                 endpoint='bannerUploader'
-                onUploadComplete={(url) => setUrl(url)}
+                onUploadComplete={setUrl}
               />
             </InputGroupAddon>
           </InputGroup>

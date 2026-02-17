@@ -71,8 +71,8 @@ export const EditUserButton: React.FC<{
                 setRole(e.target.value as Role)
               }}
             >
-              {roles.map((role) => (
-                <NativeSelectOption key={role} label={role} value={role} />
+              {roles.map((r) => (
+                <NativeSelectOption key={r} label={r} value={r} />
               ))}
             </NativeSelect>
           </Field>
@@ -80,19 +80,19 @@ export const EditUserButton: React.FC<{
           <Field>
             <FieldLabel>Status</FieldLabel>
             <RadioGroup value={status} onValueChange={setStatus as never}>
-              {userStatuses.map((status) => (
+              {userStatuses.map((st) => (
                 <Label
-                  key={status}
-                  htmlFor={status}
+                  key={st}
+                  htmlFor={st}
                   className={cn(
                     'flex cursor-pointer items-center space-x-2 rounded-md border border-current/40 bg-current/5 px-2 py-4 capitalize transition-colors hover:bg-current/10',
                     {
-                      'text-success': status === 'active',
-                      'text-destructive': status === 'inactive',
+                      'text-success': st === 'active',
+                      'text-destructive': st === 'inactive',
                     },
                   )}
                 >
-                  <RadioGroupItem id={status} value={status} /> {status}
+                  <RadioGroupItem id={st} value={st} /> {st}
                 </Label>
               ))}
             </RadioGroup>
