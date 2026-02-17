@@ -109,10 +109,10 @@ This section tracks the implementation progress of features across different use
 - [ ] Confirm successful payment
 - [ ] Handle failed or refunded payments
 
-### Optional Enhancements (1/3 completed 📋)
+### Optional Enhancements (2/3 completed 📋)
 
 - [ ] Vendor payout system
-- [ ] Coupon / voucher management
+- [x] Coupon / voucher management
 - [x] Email notifications & marketing automation
 
 ## Contributing
