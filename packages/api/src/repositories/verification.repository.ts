@@ -1,7 +1,8 @@
-import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
 import type { Database, orm } from '@yukinu/db'
 import type * as schema from '@yukinu/db/schema'
 import type { VerificationSchema } from '@yukinu/validators/auth'
+
+import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
 
 export class VerificationRepository implements IVerificationRepository {
   constructor(

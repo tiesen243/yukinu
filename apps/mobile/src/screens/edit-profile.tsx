@@ -29,7 +29,7 @@ export default function EditProfile() {
     onError: ({ message }) => Alert.alert('Error', message),
   })
 
-  const { FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       fullName: data?.profile.fullName,
       bio: data?.profile.bio,
@@ -54,7 +54,7 @@ export default function EditProfile() {
         showsVerticalScrollIndicator={false}
         className='container py-4'
       >
-        <FormField
+        <form.Field
           name='avatar'
           render={({ field: { value: uri, onChange } }) => (
             <View className='mb-4 items-center gap-2'>
@@ -83,7 +83,7 @@ export default function EditProfile() {
           )}
         />
 
-        <FormField
+        <form.Field
           name='banner'
           render={({ field: { value: uri, onChange } }) => (
             <View className='mb-4 items-center gap-2'>
@@ -117,7 +117,7 @@ export default function EditProfile() {
           )}
         />
 
-        <FormField
+        <form.Field
           name='fullName'
           render={({ field: { value, onChange }, meta: { errors } }) => (
             <View className='mb-4 gap-2'>
@@ -136,7 +136,7 @@ export default function EditProfile() {
           )}
         />
 
-        <FormField
+        <form.Field
           name='bio'
           render={({ field: { value, onChange }, meta: { errors } }) => (
             <View className='mb-4 gap-2'>
@@ -159,7 +159,7 @@ export default function EditProfile() {
           )}
         />
 
-        <FormField
+        <form.Field
           name='gender'
           render={({ field: { value, onChange } }) => (
             <View className='mb-4 gap-2'>
@@ -183,7 +183,7 @@ export default function EditProfile() {
           )}
         />
 
-        <FormField
+        <form.Field
           name='dateOfBirth'
           render={({ field: { value, onChange }, meta: { errors } }) => (
             <View className='mb-4 gap-2'>
@@ -203,8 +203,11 @@ export default function EditProfile() {
           )}
         />
 
-        <Button onPress={() => handleSubmit()} disabled={state.isPending}>
-          <Text>{state.isPending ? 'Saving...' : 'Save Changes'}</Text>
+        <Button
+          onPress={() => form.handleSubmit()}
+          disabled={form.state.isPending}
+        >
+          <Text>{form.state.isPending ? 'Saving...' : 'Save Changes'}</Text>
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

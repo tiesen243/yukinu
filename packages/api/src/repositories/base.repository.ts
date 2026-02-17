@@ -1,6 +1,7 @@
-import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 import type { Database, PgTable, orm } from '@yukinu/db'
 import type * as schema from '@yukinu/db/schema'
+
+import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 
 export abstract class BaseRepository<
   T extends PgTable,

@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -22,9 +22,17 @@ export const PermanentDeleteProductButton: React.FC<{
 
   const { mutate, isPending } = useMutation({
     ...trpc.product.permanentDelete.mutationOptions(),
-    onSuccess: () => toast.success('Product permanently deleted'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Product permanently deleted',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to delete product', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to permanently delete product',
+        description: message,
+      }),
     meta: {
       filter: isAdmin
         ? trpc.product.all.queryFilter()

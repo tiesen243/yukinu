@@ -10,7 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -22,9 +22,17 @@ export const DeleteVariantButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.productVariant.delete.mutationOptions(),
     meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
-    onSuccess: () => toast.success('Variant deleted successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Variant deleted successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to delete variant', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to delete variant',
+        description: message,
+      }),
   })
 
   return (

@@ -10,7 +10,7 @@ import {
   DialogFooter,
   DialogClose,
 } from '@yukinu/ui/dialog'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -25,11 +25,18 @@ export const RemoveButton: React.FC<{ itemId: string | null }> = ({
     ...trpc.cart.removeItemFromCart.mutationOptions(),
     meta: { filter: trpc.cart.get.queryFilter() },
     onSuccess: () => {
-      toast.success('Item removed from cart')
+      toast.add({
+        type: 'success',
+        title: 'Item removed from cart',
+      })
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to remove item', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to remove item',
+        description: message,
+      }),
   })
 
   return (

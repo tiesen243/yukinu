@@ -1,8 +1,3 @@
-import type { IAccountRepository } from '@/contracts/repositories/account.repository'
-import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
-import type { IUserRepository } from '@/contracts/repositories/user.repository'
-import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
-import type { IAuthService } from '@/contracts/services/auth.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/auth'
 
@@ -10,8 +5,13 @@ import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
-
 import { randomBytes } from 'node:crypto'
+
+import type { IAccountRepository } from '@/contracts/repositories/account.repository'
+import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
+import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
+import type { IAuthService } from '@/contracts/services/auth.service'
 
 export class AuthService implements IAuthService {
   private readonly _password = new Password()

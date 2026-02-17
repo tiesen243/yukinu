@@ -1,10 +1,11 @@
-import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
-import type { ICategoryService } from '@/contracts/services/category.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/general'
 
 import { TRPCError } from '@trpc/server'
 import { utapi } from '@yukinu/uploadthing'
+
+import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
+import type { ICategoryService } from '@/contracts/services/category.service'
 
 export class CategoryService implements ICategoryService {
   constructor(

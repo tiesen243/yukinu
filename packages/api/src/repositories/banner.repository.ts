@@ -1,6 +1,7 @@
-import type { IBannerRepository } from '@/contracts/repositories/banner.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
+
+import type { IBannerRepository } from '@/contracts/repositories/banner.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

@@ -1,8 +1,9 @@
-import type { IUserRepository } from '@/contracts/repositories/user.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
 import type { Gender, ProfileSchema } from '@yukinu/validators/user'
+
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

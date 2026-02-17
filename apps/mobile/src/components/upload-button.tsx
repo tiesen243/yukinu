@@ -1,6 +1,5 @@
 import type { OurFileRouter } from '@yukinu/uploadthing/config'
 
-import { toast } from '@yukinu/ui/sonner'
 import * as ImagePicker from 'expo-image-picker'
 import { openSettings } from 'expo-linking'
 import { Alert } from 'react-native'
@@ -19,7 +18,7 @@ export const UploadButton: React.FC<
   const ut = useUploadThing(endpoint, {
     onClientUploadComplete: ([res]) => {
       if (res?.ufsUrl) onUploadComplete(res.ufsUrl)
-      else toast.error('Failed to upload')
+      else Alert.alert('Failed to upload')
     },
     onUploadError: ({ message }) => Alert.alert('Upload Error', message),
   })

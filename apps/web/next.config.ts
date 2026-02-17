@@ -1,5 +1,4 @@
 import '@yukinu/validators/env'
-
 import type { NextConfig } from 'next'
 
 import path from 'node:path'

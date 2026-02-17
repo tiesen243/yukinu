@@ -1,5 +1,4 @@
 import { defineConfig } from 'drizzle-kit'
-
 import { Readable, Writable } from 'node:stream'
 import zlib from 'node:zlib'
 

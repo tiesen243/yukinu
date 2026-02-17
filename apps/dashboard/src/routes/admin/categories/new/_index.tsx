@@ -20,7 +20,7 @@ import {
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import {
   createCategoryInput,
   type CreateCategoryInput,
@@ -41,12 +41,17 @@ export default function CategoriesNewPage() {
   const { mutateAsync } = useMutation({
     ...trpc.category.create.mutationOptions(),
     meta: { filter: trpc.category.all.queryFilter() },
-    onSuccess: () => toast.success('Category created successfully'),
+    onSuccess: () =>
+      toast.add({ type: 'success', title: 'Category created successfully' }),
     onError: ({ message }) =>
-      toast.error('Failed to create category', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to create category',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       parentId: null,
       name: '',
@@ -59,7 +64,7 @@ export default function CategoriesNewPage() {
   })
 
   return (
-    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+    <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
       <FieldSet className='px-6'>
         <FieldLegend>Create New Category</FieldLegend>
         <FieldDescription>
@@ -67,7 +72,7 @@ export default function CategoriesNewPage() {
         </FieldDescription>
 
         <FieldGroup>
-          <FormField
+          <form.Field
             name='name'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -78,7 +83,7 @@ export default function CategoriesNewPage() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='description'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -99,7 +104,7 @@ export default function CategoriesNewPage() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='image'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -123,7 +128,7 @@ export default function CategoriesNewPage() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='parentId'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -144,8 +149,8 @@ export default function CategoriesNewPage() {
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Creating...' : 'Create Category'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Creating...' : 'Create Category'}
             </Button>
           </Field>
         </FieldGroup>

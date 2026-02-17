@@ -10,8 +10,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@yukinu/ui/dialog'
-import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
+import { toast } from '@yukinu/ui/toast'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -54,11 +54,19 @@ const RemoveStaffButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.vendorStaff.remove.mutationOptions(),
     onSuccess: () => {
-      toast.success('Staff member removed successfully')
+      toast.add({
+        type: 'success',
+        title: 'Staff member removed successfully!',
+        description: `The staff member "${username}" has been removed from your vendor.`,
+      })
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to update vendor status', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to remove staff member.',
+        description: message,
+      }),
     meta: { filter: trpc.vendorStaff.all.queryFilter() },
   })
 

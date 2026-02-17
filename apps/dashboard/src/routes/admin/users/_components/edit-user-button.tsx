@@ -17,7 +17,7 @@ import { FieldGroup, Field, FieldLabel } from '@yukinu/ui/field'
 import { Label } from '@yukinu/ui/label'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { roles, userStatuses, type Role } from '@yukinu/validators/auth'
 import { useState } from 'react'
 
@@ -34,11 +34,18 @@ export const EditUserButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.user.update.mutationOptions(),
     onSuccess: () => {
-      toast.success('User updated successfully')
+      toast.add({
+        type: 'success',
+        title: 'User updated successfully',
+      })
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to update user', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update user',
+        description: message,
+      }),
     meta: { filter: trpc.user.all.queryFilter() },
   })
 

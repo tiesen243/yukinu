@@ -12,7 +12,7 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as AuthValidators from '@yukinu/validators/auth'
 import { Link, useNavigate } from 'react-router'
 
@@ -22,7 +22,7 @@ export default function LoginPage() {
   const { signIn } = useSession()
   const navigate = useNavigate()
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       identifier: '',
       password: '',
@@ -30,9 +30,9 @@ export default function LoginPage() {
     schema: AuthValidators.loginInput,
     onSubmit: signIn,
     onError: ({ message }) =>
-      toast.error('Login failed', { description: message }),
+      toast.add({ type: 'error', title: 'Login failed', description: message }),
     onSuccess: () => {
-      toast.success('Logged in successfully!')
+      toast.add({ type: 'success', title: 'Logged in successfully!' })
       void navigate('/')
     },
   })
@@ -42,9 +42,9 @@ export default function LoginPage() {
       <h1 className='sr-only'>Login page</h1>
 
       <Card
-        id={formId}
+        id={form.formId}
         className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'
-        render={<form onSubmit={handleSubmit} />}
+        render={<form onSubmit={form.handleSubmit} />}
       >
         <FieldSet className='px-6'>
           <FieldLegend>Login</FieldLegend>
@@ -53,7 +53,7 @@ export default function LoginPage() {
           </FieldDescription>
 
           <FieldGroup>
-            <FormField
+            <form.Field
               name='identifier'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -67,7 +67,7 @@ export default function LoginPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='password'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -83,8 +83,8 @@ export default function LoginPage() {
             />
 
             <Field>
-              <Button type='submit' disabled={state.isPending}>
-                {state.isPending ? 'Logging in...' : 'Log In'}
+              <Button type='submit' disabled={form.state.isPending}>
+                {form.state.isPending ? 'Logging in...' : 'Log In'}
               </Button>
             </Field>
           </FieldGroup>

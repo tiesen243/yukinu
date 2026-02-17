@@ -1,4 +1,3 @@
-import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 import type { Database } from '@yukinu/db'
 import type { wishlistItems } from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
@@ -7,6 +6,8 @@ import type {
   ProductImageSchema,
   ProductSchema,
 } from '@yukinu/validators/product'
+
+import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 
 export interface IWishlistItemRepository extends IBaseRepository<
   typeof wishlistItems

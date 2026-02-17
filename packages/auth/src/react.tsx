@@ -1,8 +1,9 @@
-import type { SessionWithUser } from '@/types'
 import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
+
+import type { SessionWithUser } from '@/types'
 
 type SessionContextValue = (
   | { status: 'loading'; session: SessionWithUser }

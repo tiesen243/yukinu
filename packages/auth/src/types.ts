@@ -1,5 +1,6 @@
-import type { BaseProvider } from '@/providers/base'
 import type { Role } from '@yukinu/validators/auth'
+
+import type { BaseProvider } from '@/providers/base'
 
 export interface User {
   id: string

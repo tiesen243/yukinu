@@ -23,7 +23,7 @@ import {
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as ProductValidators from '@yukinu/validators/product'
 import { useNavigate } from 'react-router'
 
@@ -40,12 +40,20 @@ export default function ProductsNewPage() {
   const { mutateAsync } = useMutation({
     ...trpc.product.create.mutationOptions(),
     meta: { filter: trpc.product.allByVendor.queryFilter() },
-    onSuccess: () => toast.success('Product created successfully!'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Product created successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to create product', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to create product',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       name: '',
       description: '',
@@ -62,7 +70,7 @@ export default function ProductsNewPage() {
   })
 
   return (
-    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+    <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
       <FieldSet className='px-6'>
         <FieldLegend>New Product</FieldLegend>
         <FieldDescription>
@@ -71,7 +79,7 @@ export default function ProductsNewPage() {
 
         <FieldGroup>
           <FieldGroup>
-            <FormField
+            <form.Field
               name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -85,7 +93,7 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='description'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -106,7 +114,7 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='categoryId'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -126,7 +134,7 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='price'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -142,7 +150,7 @@ export default function ProductsNewPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='stock'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -156,7 +164,7 @@ export default function ProductsNewPage() {
 
           <FieldSeparator />
 
-          <FormField
+          <form.Field
             name='images'
             render={({ meta, field }) => (
               <FieldGroup data-invalid={meta.errors.length > 0}>
@@ -231,7 +239,7 @@ export default function ProductsNewPage() {
 
           <FieldSeparator />
 
-          <FormField
+          <form.Field
             name='attributes'
             render={({ meta, field }) => (
               <FieldGroup>
@@ -310,7 +318,7 @@ export default function ProductsNewPage() {
 
           <FieldSeparator />
 
-          <FormField
+          <form.Field
             name='variants'
             render={({ meta, field }) => (
               <FieldGroup>
@@ -440,8 +448,8 @@ export default function ProductsNewPage() {
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Creating...' : 'Create Product'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Creating...' : 'Create Product'}
             </Button>
           </Field>
         </FieldGroup>

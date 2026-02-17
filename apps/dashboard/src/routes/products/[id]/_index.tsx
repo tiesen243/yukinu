@@ -1,5 +1,3 @@
-import type { Route } from './+types/_index'
-
 import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -19,6 +17,8 @@ import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 import { DeleteVariantButton } from '@/routes/products/[id]/delete-variant-button'
 import { EditVariantButton } from '@/routes/products/[id]/edit-variant-button'
 import { UpdateProductForm } from '@/routes/products/[id]/update-product-form'
+
+import type { Route } from './+types/_index'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)

@@ -1,8 +1,9 @@
-import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
 import type { VendorSchema, VendorStaffSchema } from '@yukinu/validators/vendor'
+
+import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

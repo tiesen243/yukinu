@@ -1,6 +1,7 @@
-import type { IOrderRepository } from '@/contracts/repositories/order.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
+
+import type { IOrderRepository } from '@/contracts/repositories/order.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

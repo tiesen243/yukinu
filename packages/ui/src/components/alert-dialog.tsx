@@ -21,7 +21,7 @@ function AlertDialogTrigger({
   return (
     <AlertDialogPrimitive.Trigger
       data-slot='alert-dialog-trigger'
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     />
   )
@@ -162,7 +162,7 @@ function AlertDialogAction({
     <button
       data-slot='alert-dialog-action'
       type='submit'
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     />
   )
@@ -177,7 +177,7 @@ function AlertDialogCancel({
   return (
     <AlertDialogPrimitive.Close
       data-slot='alert-dialog-cancel'
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     />
   )

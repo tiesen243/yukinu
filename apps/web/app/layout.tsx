@@ -1,7 +1,6 @@
 import '@/app/globals.css'
 
 import { cn } from '@yukinu/ui'
-import { Toaster } from '@yukinu/ui/sonner'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
@@ -34,8 +33,6 @@ export default function RootLayout({
           {children}
 
           <Footer />
-
-          <Toaster richColors />
         </Providers>
       </body>
     </html>

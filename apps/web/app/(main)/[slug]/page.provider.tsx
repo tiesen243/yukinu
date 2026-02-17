@@ -3,7 +3,7 @@
 import type { OneOutput } from '@yukinu/validators/product'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { parseAsString, useQueryStates } from 'nuqs'
 import * as React from 'react'
 
@@ -71,17 +71,32 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
       ...trpc.wishlist.toggleItem.mutationOptions(),
       meta: { filter: trpc.wishlist.get.queryOptions({}) },
       onSuccess: ({ added }) =>
-        toast.success(added ? 'Added to wishlist' : 'Removed from wishlist'),
+        toast.add({
+          type: 'success',
+          title: added ? 'Added to wishlist' : 'Removed from wishlist',
+        }),
       onError: ({ message }) =>
-        toast.error('Failed to toggle wishlist item', { description: message }),
+        toast.add({
+          type: 'error',
+          title: 'Failed to update wishlist',
+          description: message,
+        }),
     })
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
     ...trpc.cart.addItemToCart.mutationOptions(),
     meta: { filter: trpc.cart.get.queryOptions() },
-    onSuccess: () => toast.success('Added to cart'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Item added to cart',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to add item to cart', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to add item to cart',
+        description: message,
+      }),
   })
 
   const value = React.useMemo(() => {
@@ -119,7 +134,11 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
       addItemToCart: (quantity: number) => {
         const unitPrice =
           product.variants.length > 0 ? selectedVariant?.price : product.price
-        if (!unitPrice) return toast.error('Selected variant is not available')
+        if (!unitPrice)
+          return toast.add({
+            type: 'error',
+            title: 'Price not available',
+          })
 
         addItemToCart({
           vendorId: product.vendor?.id ?? null,

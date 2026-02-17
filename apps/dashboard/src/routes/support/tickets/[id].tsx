@@ -1,5 +1,3 @@
-import type { Route } from './+types/[id]'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { cn } from '@yukinu/ui'
 import { Badge } from '@yukinu/ui/badge'
@@ -16,12 +14,14 @@ import {
 } from '@yukinu/ui/dialog'
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { Typography } from '@yukinu/ui/typography'
 import { ticketStatuses, type TicketStatus } from '@yukinu/validators/general'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
+
+import type { Route } from './+types/[id]'
 
 export default function SupportTicketDetails({ params }: Route.ComponentProps) {
   const trpc = useTRPC()
@@ -30,9 +30,17 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
   const { mutate, isPending } = useMutation({
     ...trpc.ticket.updateStatus.mutationOptions(),
     meta: { filter: trpc.ticket.all.queryFilter() },
-    onSuccess: () => toast.success('Ticket status updated successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Ticket status updated successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to update ticket status', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update ticket status',
+        description: message,
+      }),
   })
 
   const [open, setOpen] = React.useState(false)

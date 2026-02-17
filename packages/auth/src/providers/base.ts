@@ -1,6 +1,6 @@
-import type { OAuthAccount } from '@/types'
-
 import { env } from '@yukinu/validators/env'
+
+import type { OAuthAccount } from '@/types'
 
 import { generateCodeChallenge } from '@/core/crypto'
 
