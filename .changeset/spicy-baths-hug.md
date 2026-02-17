@@ -1,5 +1,5 @@
 ---
-"@yukinu/web": patch
+'@yukinu/web': patch
 ---
 
 fix build error

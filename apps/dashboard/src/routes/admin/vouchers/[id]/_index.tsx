@@ -24,10 +24,7 @@ import type { Route } from './+types/_index'
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
   return getQueryClient().ensureQueryData(
-    trpc.voucher.one.queryOptions({
-      id: params.id,
-      isUsage: false,
-    }),
+    trpc.voucher.one.queryOptions({ id: params.id }),
   )
 }
 
