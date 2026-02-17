@@ -1,5 +1,12 @@
 # @yukinu/email
 
+## 0.8.5
+
+### Patch Changes
+
+- Updated dependencies [[`6c785b3`](https://github.com/tiesen243/yukinu/commit/6c785b35c627d46c8591bdf1008fff2a3f793ad5), [`c3a03ed`](https://github.com/tiesen243/yukinu/commit/c3a03edcd596b0a1080eb086cba3abde7001e409)]:
+  - @yukinu/validators@0.9.4
+
 ## 0.8.4
 
 ### Patch Changes
