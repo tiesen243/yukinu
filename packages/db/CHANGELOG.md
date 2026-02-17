@@ -1,5 +1,11 @@
 # @yukinu/db
 
+## 0.9.5
+
+### Patch Changes
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps and update ui packages
+
 ## 0.9.4
 
 ### Patch Changes
