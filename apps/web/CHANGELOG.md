@@ -1,5 +1,21 @@
 # @yukinu/web
 
+## 0.11.11
+
+### Patch Changes
+
+- [#370](https://github.com/tiesen243/yukinu/pull/370) [`6c785b3`](https://github.com/tiesen243/yukinu/commit/6c785b35c627d46c8591bdf1008fff2a3f793ad5) Thanks [@tiesen243](https://github.com/tiesen243)! - change something
+
+- [#370](https://github.com/tiesen243/yukinu/pull/370) [`14363c8`](https://github.com/tiesen243/yukinu/commit/14363c8006591e02bb3c23b84e0c59101e1098f6) Thanks [@tiesen243](https://github.com/tiesen243)! - fix build error
+
+- Updated dependencies [[`6c785b3`](https://github.com/tiesen243/yukinu/commit/6c785b35c627d46c8591bdf1008fff2a3f793ad5), [`c3a03ed`](https://github.com/tiesen243/yukinu/commit/c3a03edcd596b0a1080eb086cba3abde7001e409)]:
+  - @yukinu/validators@0.9.4
+  - @yukinu/api@0.9.6
+  - @yukinu/db@0.9.6
+  - @yukinu/auth@0.9.6
+  - @yukinu/email@0.8.5
+  - @yukinu/uploadthing@0.3.6
+
 ## 0.11.10
 
 ### Patch Changes
