@@ -33,7 +33,7 @@ export const voucherSchema = z.object({
   id: z.cuid(),
   code: z.string().min(4).max(50),
   discountAmount: z.union([currencySchema, z.literal('')]).nullable(),
-  discountPercentage: z.number().int().max(100).nullable(),
+  discountPercentage: z.number().int().min(0).max(100).nullable(),
   expiryDate: z.date(),
   quantity: z.number().int(),
 })
@@ -134,7 +134,7 @@ export type AllVouchersOutput = z.infer<typeof allVouchersOutput>
 export const oneVoucherInput = voucherSchema
   .pick({ id: true, code: true })
   .partial()
-  .extend({ isUsage: z.boolean().default(true) })
+  .extend({ isUsage: z.boolean().default(false) })
 export type OneVoucherInput = z.infer<typeof oneVoucherInput>
 export const oneVoucherOutput = voucherSchema
 export type OneVoucherOutput = z.infer<typeof oneVoucherOutput>

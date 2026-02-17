@@ -109,7 +109,7 @@ export const CartItemsTotal: React.FC = () => {
           nativeButton={false}
           render={<Link href='/account/cart/checkout' />}
         >
-          Process to Checkout
+          Proceed to Checkout
         </Button>
       </ItemActions>
     </Item>
@@ -124,7 +124,7 @@ export const CartItemsTotalSkeleton: React.FC = () => (
 
     <ItemActions>
       <Button variant='outline' size='sm' disabled>
-        Process to Checkout
+        Proceed to Checkout
       </Button>
     </ItemActions>
   </Item>

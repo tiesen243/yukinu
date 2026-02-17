@@ -39,7 +39,7 @@ export default function VouchersEditPage({ loaderData }: Route.ComponentProps) {
     data: { expiryDate, ...voucher },
     refetch,
   } = useQuery({
-    ...trpc.voucher.one.queryOptions({ id: loaderData.id, isUsage: false }),
+    ...trpc.voucher.one.queryOptions({ id: loaderData.id }),
     initialData: loaderData,
   })
 

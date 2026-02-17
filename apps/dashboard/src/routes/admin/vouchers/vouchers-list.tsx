@@ -29,15 +29,13 @@ export const VouchersList: React.FC = () => {
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 4 }, (__, cellIndex) => (
+        {Array.from({ length: 6 }, (__, cellIndex) => (
           <TableCell key={cellIndex}>
             <div className='animate-pulse rounded bg-muted/50'>&nbsp;</div>
           </TableCell>
         ))}
       </TableRow>
     ))
-
-  console.log(data)
 
   return data?.vouchers.map((voucher) => (
     <TableRow key={voucher.id}>
