@@ -19,6 +19,7 @@ import { UserRepository } from '@/repositories/user.repository'
 import { VariantRepository } from '@/repositories/variant.repository'
 import { VendorRepository } from '@/repositories/vendor.repository'
 import { VerificationRepository } from '@/repositories/verification.repository'
+import { VoucherRepository } from '@/repositories/voucher.repository'
 import { WishlistItemRepository } from '@/repositories/wishlist-item.repository'
 import { AddressService } from '@/services/address.service'
 import { AuthService } from '@/services/auth.service'
@@ -33,6 +34,7 @@ import { TicketService } from '@/services/ticket.service'
 import { UserService } from '@/services/user.service'
 import { VendorStaffService } from '@/services/vendor-staff.service'
 import { VendorService } from '@/services/vendor.service'
+import { VoucherService } from '@/services/voucher.service'
 import { WishlistService } from '@/services/wishlist.service'
 
 export const createTRPCContext = async (opts: {
@@ -55,6 +57,7 @@ export const createTRPCContext = async (opts: {
   const variantRepo = new VariantRepository(db, orm, schema)
   const vendorRepo = new VendorRepository(db, orm, schema)
   const verificationRepo = new VerificationRepository(db, orm, schema)
+  const voucherRepo = new VoucherRepository(db, orm, schema)
   const wishlistItemRepo = new WishlistItemRepository(db, orm, schema)
 
   const address = new AddressService(db, addressRepo)
@@ -88,6 +91,7 @@ export const createTRPCContext = async (opts: {
     verificationRepo,
   )
   const vendor = new VendorService(db, vendorRepo, userRepo)
+  const voucher = new VoucherService(db, voucherRepo)
   const wishlist = new WishlistService(db, wishlistItemRepo)
 
   return {
@@ -107,6 +111,7 @@ export const createTRPCContext = async (opts: {
       user,
       vendorStaff,
       vendor,
+      voucher,
       wishlist,
     },
   }

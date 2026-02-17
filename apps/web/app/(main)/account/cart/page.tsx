@@ -9,15 +9,13 @@ import {
   CartItemsTotalSkeleton,
 } from '@/app/(main)/account/cart/page.client'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, trpc } from '@/lib/trpc/rsc'
-
-export const dynamic = 'force-dynamic'
+import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export default function AccountCartPage() {
   void getQueryClient().prefetchQuery(trpc.cart.get.queryOptions())
 
   return (
-    <>
+    <HydrateClient>
       <AccountHeader
         title='My Cart'
         description='View and manage the items in your shopping cart before proceeding to checkout.'
@@ -36,7 +34,7 @@ export default function AccountCartPage() {
           <CartItemsTotal />
         </Suspense>
       </section>
-    </>
+    </HydrateClient>
   )
 }
 

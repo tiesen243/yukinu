@@ -31,10 +31,11 @@ export type CategorySchema = z.infer<typeof categorySchema>
 
 export const voucherSchema = z.object({
   id: z.cuid(),
-  code: z.string().max(50),
-  discountAmount: currencySchema,
-  discountPercentage: z.number().int().nullable(),
+  code: z.string().min(4).max(50),
+  discountAmount: z.union([currencySchema, z.literal('')]).nullable(),
+  discountPercentage: z.number().int().max(100).nullable(),
   expiryDate: z.date(),
+  quantity: z.number().int(),
 })
 export type VoucherSchema = z.infer<typeof voucherSchema>
 
@@ -120,7 +121,42 @@ export type DeleteCategoryOutput = z.infer<typeof deleteCategoryOutput>
 //#endregion
 
 //#region Vouchers
-// (Voucher-related validators can be added here in the future)
+export const allVouchersInput = paginationInput.extend({
+  search: z.string().nullable(),
+})
+export type AllVouchersInput = z.infer<typeof allVouchersInput>
+export const allVouchersOutput = z.object({
+  vouchers: z.array(voucherSchema),
+  pagination: paginationOutput,
+})
+export type AllVouchersOutput = z.infer<typeof allVouchersOutput>
+
+export const oneVoucherInput = voucherSchema
+  .pick({ id: true, code: true })
+  .partial()
+  .extend({ isUsage: z.boolean().default(true) })
+export type OneVoucherInput = z.infer<typeof oneVoucherInput>
+export const oneVoucherOutput = voucherSchema
+export type OneVoucherOutput = z.infer<typeof oneVoucherOutput>
+
+export const createVoucherInput = voucherSchema
+  .omit({ id: true, expiryDate: true })
+  .extend({ expiryDate: z.iso.date() })
+export type CreateVoucherInput = z.infer<typeof createVoucherInput>
+export const createVoucherOutput = voucherSchema.pick({ id: true })
+export type CreateVoucherOutput = z.infer<typeof createVoucherOutput>
+
+export const updateVoucherInput = voucherSchema
+  .omit({ expiryDate: true })
+  .extend({ expiryDate: z.iso.date() })
+export type UpdateVoucherInput = z.infer<typeof updateVoucherInput>
+export const updateVoucherOutput = voucherSchema.pick({ id: true })
+export type UpdateVoucherOutput = z.infer<typeof updateVoucherOutput>
+
+export const deleteVoucherInput = voucherSchema.pick({ id: true })
+export type DeleteVoucherInput = z.infer<typeof deleteVoucherInput>
+export const deleteVoucherOutput = voucherSchema.pick({ id: true })
+export type DeleteVoucherOutput = z.infer<typeof deleteVoucherOutput>
 //#endregion
 
 //#region Wishlist Items
