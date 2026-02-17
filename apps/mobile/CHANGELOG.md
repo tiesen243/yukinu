@@ -1,5 +1,18 @@
 # @yukinu/mobile
 
+## 0.2.12
+
+### Patch Changes
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`5e43a03`](https://github.com/tiesen243/yukinu/commit/5e43a03ac3bb372b76e9bb1b888a980d06a10c92) Thanks [@tiesen243](https://github.com/tiesen243)! - fix no-shadow error
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps and update ui packages
+
+- Updated dependencies [[`5e43a03`](https://github.com/tiesen243/yukinu/commit/5e43a03ac3bb372b76e9bb1b888a980d06a10c92), [`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58)]:
+  - @yukinu/api@0.9.5
+  - @yukinu/ui@0.8.3
+  - @yukinu/uploadthing@0.3.5
+
 ## 0.2.11
 
 ### Patch Changes
