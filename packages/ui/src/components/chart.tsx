@@ -54,8 +54,10 @@ function ChartContainer({
   const uniqueId = React.useId()
   const chartId = `chart-${id ?? uniqueId.replaceAll(':', '')}`
 
+  const value = React.useMemo(() => ({ config }), [config])
+
   return (
-    <ChartContext.Provider value={{ config }}>
+    <ChartContext value={value}>
       <div
         data-slot='chart'
         data-chart={chartId}
@@ -70,13 +72,13 @@ function ChartContainer({
           {children}
         </RechartsPrimitive.ResponsiveContainer>
       </div>
-    </ChartContext.Provider>
+    </ChartContext>
   )
 }
 
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
-    ([, config]) => config.theme ?? config.color,
+    ([, cf]) => cf.theme ?? cf.color,
   )
 
   if (colorConfig.length === 0) return null

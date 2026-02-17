@@ -1,5 +1,3 @@
-import type { Route } from './+types/_index'
-
 import { useMutation } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -21,11 +19,13 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as ProductValidators from '@yukinu/validators/product'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
+
+import type { Route } from './+types/_index'
 
 export default function CreateProductVariantsPage({
   params,
@@ -36,12 +36,20 @@ export default function CreateProductVariantsPage({
   const { mutateAsync } = useMutation({
     ...trpc.productVariant.recreate.mutationOptions(),
     meta: { filter: trpc.product.one.queryFilter({ id: params.id }) },
-    onSuccess: () => toast.success('Successfully recreated variants'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Variants recreated successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to recreate variants', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to recreate variants',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       id: params.id,
       variants: [{ name: '', options: [''] }],
@@ -52,7 +60,7 @@ export default function CreateProductVariantsPage({
   })
 
   return (
-    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+    <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
       <FieldSet className='px-6'>
         <FieldLegend>Recreate Product Variants</FieldLegend>
         <FieldDescription className='flex items-center gap-2 text-warning'>
@@ -60,11 +68,12 @@ export default function CreateProductVariantsPage({
           variants and create new ones.
         </FieldDescription>
 
-        <FormField
+        <form.Field
           name='variants'
           render={({ meta, field }) => (
             <FieldGroup>
               {field.value.map((variant, vIndex) => (
+                // oxlint-disable-next-line react/no-array-index-key
                 <FieldGroup key={`variant-${vIndex}`}>
                   <Field>
                     <FieldLabel>Variant Name</FieldLabel>
@@ -101,6 +110,7 @@ export default function CreateProductVariantsPage({
                   <FieldGroup>
                     <FieldLabel>Options</FieldLabel>
                     {variant.options.map((option, oIndex) => (
+                      // oxlint-disable-next-line react/no-array-index-key
                       <Field key={`variant-${vIndex}-option-${oIndex}`}>
                         <InputGroup>
                           <InputGroupInput
@@ -180,8 +190,8 @@ export default function CreateProductVariantsPage({
         />
 
         <Field>
-          <Button type='submit' disabled={state.isPending}>
-            {state.isPending ? 'Recreating...' : 'Recreate Variants'}
+          <Button type='submit' disabled={form.state.isPending}>
+            {form.state.isPending ? 'Recreating...' : 'Recreate Variants'}
           </Button>
         </Field>
       </FieldSet>

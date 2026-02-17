@@ -7,7 +7,7 @@ import {
   FieldLegend,
   FieldSet,
 } from '@yukinu/ui/field'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { useNavigate, useSearchParams } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -22,9 +22,13 @@ export default function InvitePage() {
   const { mutate, isPending } = useMutation({
     ...trpc.vendorStaff.acceptInvitation.mutationOptions(),
     onError: ({ message }) =>
-      toast.error('Failed to accept invitation', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to accept invitation',
+        description: message,
+      }),
     onSuccess: () => {
-      toast.success('Invitation accepted!')
+      toast.add({ type: 'success', title: 'Invitation accepted!' })
       void navigate('/')
     },
   })

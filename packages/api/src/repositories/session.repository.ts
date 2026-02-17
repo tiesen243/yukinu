@@ -1,7 +1,8 @@
-import type { ISessionRepository } from '@/contracts/repositories/session.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { SessionSchema, UserSchema } from '@yukinu/validators/auth'
+
+import type { ISessionRepository } from '@/contracts/repositories/session.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

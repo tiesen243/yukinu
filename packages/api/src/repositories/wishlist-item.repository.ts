@@ -1,4 +1,3 @@
-import type { IWishlistItemRepository } from '@/contracts/repositories/wishlist-item.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
@@ -7,6 +6,8 @@ import type {
   ProductSchema,
   ProductImageSchema,
 } from '@yukinu/validators/product'
+
+import type { IWishlistItemRepository } from '@/contracts/repositories/wishlist-item.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

@@ -1,7 +1,8 @@
-import type { IVariantRepository } from '@/contracts/repositories/variant.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { ProductSchema, CreateInput } from '@yukinu/validators/product'
+
+import type { IVariantRepository } from '@/contracts/repositories/variant.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

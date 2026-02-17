@@ -12,7 +12,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -23,11 +23,14 @@ export const PermamentlyDeleteUserButton: React.FC<{
 
   const { mutate, isPending } = useMutation({
     ...trpc.user.permanentlyDelete.mutationOptions(),
-    onSuccess: () => {
-      toast.success('User permanently deleted successfully')
-    },
+    onSuccess: () =>
+      toast.add({ type: 'success', title: 'User permanently deleted' }),
     onError: ({ message }) =>
-      toast.error('Failed to delete user', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to permanently delete user',
+        description: message,
+      }),
     meta: { filter: trpc.user.all.queryFilter() },
   })
 

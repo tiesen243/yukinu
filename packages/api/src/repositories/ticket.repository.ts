@@ -1,6 +1,7 @@
-import type { ITicketRepository } from '@/contracts/repositories/ticket.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
+
+import type { ITicketRepository } from '@/contracts/repositories/ticket.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

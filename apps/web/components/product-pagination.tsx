@@ -16,6 +16,7 @@ export const ProductPagination: React.FC<{
       {getPaginationRange(query.page, pagination.totalPages).map(
         (item, idx) => (
           <Button
+            // oxlint-disable-next-line react/no-array-index-key
             key={`pagination-item-${idx}`}
             variant='outline'
             size='icon'

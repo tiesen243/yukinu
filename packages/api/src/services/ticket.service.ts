@@ -1,9 +1,10 @@
-import type { ITicketRepository } from '@/contracts/repositories/ticket.repository'
-import type { ITicketService } from '@/contracts/services/ticket.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/general'
 
 import { TRPCError } from '@trpc/server'
+
+import type { ITicketRepository } from '@/contracts/repositories/ticket.repository'
+import type { ITicketService } from '@/contracts/services/ticket.service'
 
 export class TicketService implements ITicketService {
   constructor(

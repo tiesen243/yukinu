@@ -1,4 +1,3 @@
-import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 import type { Database } from '@yukinu/db'
 import type { products } from '@yukinu/db/schema'
 import type {
@@ -8,6 +7,8 @@ import type {
   ProductVariantSchema,
 } from '@yukinu/validators/product'
 import type { VendorSchema } from '@yukinu/validators/vendor'
+
+import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 
 export interface IProductRepository extends IBaseRepository<typeof products> {
   allWithRelations(

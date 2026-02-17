@@ -15,7 +15,7 @@ import {
 import { Field, FieldLabel, FieldError } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { deleteAccountInput } from '@yukinu/validators/auth'
 import { useRouter } from 'next/navigation'
 
@@ -27,12 +27,20 @@ export const DeleteAccountButton: React.FC = () => {
 
   const { mutateAsync } = useMutation({
     ...trpc.security.deleteAccount.mutationOptions(),
-    onSuccess: () => toast.success('Account deleted successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Account deleted successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to delete account', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to delete account',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       password: '',
     },
@@ -61,9 +69,9 @@ export const DeleteAccountButton: React.FC = () => {
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <form id={formId} onSubmit={handleSubmit} />
+        <form id={form.formId} onSubmit={form.handleSubmit} />
 
-        <FormField
+        <form.Field
           name='password'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
@@ -79,15 +87,15 @@ export const DeleteAccountButton: React.FC = () => {
         />
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={state.isPending}>
+          <AlertDialogCancel disabled={form.state.isPending}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
-            form={formId}
+            form={form.formId}
             variant='destructive'
-            disabled={state.isPending}
+            disabled={form.state.isPending}
           >
-            {state.isPending ? 'Deleting...' : 'Delete Account'}
+            {form.state.isPending ? 'Deleting...' : 'Delete Account'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

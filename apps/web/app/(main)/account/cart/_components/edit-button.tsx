@@ -17,7 +17,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -49,11 +49,18 @@ export const EditButton: React.FC<{
     ...trpc.cart.addItemToCart.mutationOptions(),
     meta: { filter: trpc.cart.get.queryFilter() },
     onSuccess: () => {
+      toast.add({
+        type: 'success',
+        title: 'Quantity updated successfully',
+      })
       setOpen(false)
-      toast.success('Quantity updated successfully')
     },
     onError: ({ message }) =>
-      toast.error('Failed to update quantity', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update quantity',
+        description: message,
+      }),
   })
 
   return (

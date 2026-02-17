@@ -18,7 +18,7 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as VendorValidators from '@yukinu/validators/vendor'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
@@ -27,7 +27,7 @@ import { useTRPCClient } from '@/lib/trpc/react'
 export default function AppVendorPage() {
   const trpc = useTRPCClient()
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       name: '',
       description: null,
@@ -37,12 +37,16 @@ export default function AppVendorPage() {
     schema: VendorValidators.createVendorInput.omit({ ownerId: true }),
     onSubmit: trpc.vendor.create.mutate,
     onSuccess: () =>
-      toast.success('Vendor application submitted successfully!', {
+      toast.add({
+        type: 'success',
+        title: 'Vendor application submitted successfully!',
         description:
           'Thank you for applying. We will review your application and get back to you soon.',
       }),
     onError: ({ message }) =>
-      toast.error('Failed to submit vendor application.', {
+      toast.add({
+        type: 'error',
+        title: 'Failed to submit vendor application.',
         description: message,
       }),
   })
@@ -51,7 +55,7 @@ export default function AppVendorPage() {
     <>
       <h1 className='sr-only'>Apply as Vendor page</h1>
 
-      <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+      <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
         <FieldSet className='px-6'>
           <FieldLegend>Vendor Application</FieldLegend>
           <FieldDescription>
@@ -59,7 +63,7 @@ export default function AppVendorPage() {
           </FieldDescription>
 
           <FieldGroup>
-            <FormField
+            <form.Field
               name='name'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -70,7 +74,7 @@ export default function AppVendorPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='description'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -91,7 +95,7 @@ export default function AppVendorPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='image'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -115,7 +119,7 @@ export default function AppVendorPage() {
               )}
             />
 
-            <FormField
+            <form.Field
               name='address'
               render={({ meta, field: { value, ...field } }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -131,8 +135,8 @@ export default function AppVendorPage() {
             />
 
             <Field>
-              <Button type='submit' disabled={state.isPending}>
-                {state.isPending ? 'Submitting...' : 'Submit Application'}
+              <Button type='submit' disabled={form.state.isPending}>
+                {form.state.isPending ? 'Submitting...' : 'Submit Application'}
               </Button>
             </Field>
           </FieldGroup>

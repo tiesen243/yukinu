@@ -1,6 +1,6 @@
 import { cn } from '@yukinu/ui'
 import { ChevronRightIcon } from '@yukinu/ui/icons'
-import * as React from 'react'
+import { Fragment } from 'react'
 import { Link, useLocation } from 'react-router'
 
 const CUID_LENGTH = 24
@@ -30,7 +30,7 @@ export const Breadcrumb = () => {
         const path = '/' + array.slice(1, index + 1).join('/')
 
         return (
-          <React.Fragment key={path}>
+          <Fragment key={path}>
             <Link
               to={path}
               className={cn(
@@ -45,7 +45,7 @@ export const Breadcrumb = () => {
             {index < array.length - 1 && (
               <ChevronRightIcon className='size-4 opacity-90' />
             )}
-          </React.Fragment>
+          </Fragment>
         )
       })}
     </nav>

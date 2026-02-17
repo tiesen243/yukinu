@@ -13,7 +13,7 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import {
   changePasswordInput,
   type ChangePasswordInput,
@@ -26,7 +26,7 @@ export const ChangePasswordForm: React.FC = () => {
   const trpc = useTRPCClient()
   const router = useRouter()
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       userId: null,
       currentPassword: null,
@@ -37,15 +37,19 @@ export const ChangePasswordForm: React.FC = () => {
     schema: changePasswordInput,
     onSubmit: trpc.security.changePassword.mutate,
     onSuccess: () => {
-      toast.success('Password changed successfully')
-      if (state.values.isLogout) router.push('/login')
+      toast.add({ type: 'success', title: 'Password changed successfully' })
+      if (form.state.values.isLogout) router.push('/login')
     },
     onError: ({ message }) =>
-      toast.error('Failed to change password', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to change password',
+        description: message,
+      }),
   })
 
   return (
-    <form id={formId} onSubmit={handleSubmit}>
+    <form id={form.formId} onSubmit={form.handleSubmit}>
       <FieldSet>
         <FieldLegend>Change Password</FieldLegend>
         <FieldDescription>
@@ -54,7 +58,7 @@ export const ChangePasswordForm: React.FC = () => {
         </FieldDescription>
 
         <FieldGroup>
-          <FormField
+          <form.Field
             name='currentPassword'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -74,7 +78,7 @@ export const ChangePasswordForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='newPassword'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -90,7 +94,7 @@ export const ChangePasswordForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='confirmNewPassword'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -107,7 +111,7 @@ export const ChangePasswordForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='isLogout'
             render={({ meta, field: { value, onChange, ...field } }) => (
               <Field
@@ -127,8 +131,8 @@ export const ChangePasswordForm: React.FC = () => {
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Changing...' : 'Change Password'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Changing...' : 'Change Password'}
             </Button>
           </Field>
         </FieldGroup>

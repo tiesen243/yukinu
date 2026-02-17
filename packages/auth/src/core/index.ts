@@ -1,7 +1,7 @@
-import type { AuthConfig, Session, SessionWithUser } from '@/types'
-
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
 import { loginInput, type LoginInput, type Role } from '@yukinu/validators/auth'
+
+import type { AuthConfig, Session, SessionWithUser } from '@/types'
 
 import {
   constantTimeEqual,
@@ -175,8 +175,8 @@ export function Auth(config: AuthConfig) {
        * - Retrieves the current authenticated user's session.
        */
       if (PATH_REGEXS.getSession.test(pathname)) {
-        const session = await auth({ headers: request.headers })
-        response = Response.json(session)
+        const _session = await auth({ headers: request.headers })
+        response = Response.json(_session)
       }
 
       /*
@@ -332,10 +332,10 @@ export function Auth(config: AuthConfig) {
        * - Refreshes the access token for the current session.
        */
       if (PATH_REGEXS.refreshToken.test(pathname)) {
-        const session = await auth({ headers: request.headers })
-        if (!session.user) throw new Error('Not authenticated')
+        const _session = await auth({ headers: request.headers })
+        if (!_session.user) throw new Error('Not authenticated')
 
-        const newToken = await createAccessToken(session.user.id)
+        const newToken = await createAccessToken(_session.user.id)
         response = Response.json({ accessToken: newToken })
         response.headers.append(
           'Set-Cookie',

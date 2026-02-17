@@ -1,8 +1,9 @@
-import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 import type { Database } from '@yukinu/db'
 import type { vendors } from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
 import type { VendorSchema, VendorStaffSchema } from '@yukinu/validators/vendor'
+
+import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 
 export interface IVendorRepository extends IBaseRepository<typeof vendors> {
   allWithRelations(

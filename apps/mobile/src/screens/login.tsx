@@ -15,7 +15,7 @@ export default function LoginScreen() {
   const navigation = useNavigation()
   const queryClient = useQueryClient()
 
-  const { FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       identifier: '',
       password: '',
@@ -56,7 +56,7 @@ export default function LoginScreen() {
         </View>
 
         <View className='gap-4 px-4'>
-          <FormField
+          <form.Field
             name='identifier'
             render={({ field, meta }) => (
               <View className='gap-2'>
@@ -78,7 +78,7 @@ export default function LoginScreen() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='password'
             render={({ field, meta }) => (
               <View className='gap-2'>
@@ -103,10 +103,10 @@ export default function LoginScreen() {
         <View className='items-center rounded-b-xl px-4'>
           <Button
             className='w-full'
-            onPress={() => handleSubmit()}
-            disabled={state.isPending}
+            onPress={() => form.handleSubmit()}
+            disabled={form.state.isPending}
           >
-            <Text>{state.isPending ? 'Logging in...' : 'Login'}</Text>
+            <Text>{form.state.isPending ? 'Logging in...' : 'Login'}</Text>
           </Button>
 
           <Text className='mt-4 w-full text-sm text-muted-foreground'>

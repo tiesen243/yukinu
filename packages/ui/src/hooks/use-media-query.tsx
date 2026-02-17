@@ -17,9 +17,9 @@ export const useMediaQuery = (
   }: UseMediaQueryOptions = {},
 ): boolean => {
   const getMatches = React.useCallback(
-    (query: string): boolean => {
+    (_query: string): boolean => {
       if (IS_SERVER) return defaultValue
-      return window.matchMedia(query).matches
+      return window.matchMedia(_query).matches
     },
     [defaultValue],
   )

@@ -1,6 +1,7 @@
-import type { IOrderService } from '@/contracts/services/order.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/order'
+
+import type { IOrderService } from '@/contracts/services/order.service'
 
 export class OrderService implements IOrderService {
   constructor(private readonly _db: Database) {}

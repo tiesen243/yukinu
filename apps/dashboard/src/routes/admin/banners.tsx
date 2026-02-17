@@ -17,7 +17,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { Typography } from '@yukinu/ui/typography'
 import * as React from 'react'
 
@@ -75,12 +75,19 @@ const AddBannerButton: React.FC = () => {
     ...trpc.banner.create.mutationOptions(),
     meta: { filter: trpc.banner.all.queryFilter() },
     onSuccess: () => {
-      toast.success('Banner added successfully')
+      toast.add({
+        type: 'success',
+        title: 'Banner added',
+      })
       setOpen(false)
       setUrl('')
     },
     onError: ({ message }) =>
-      toast.error('Error adding banner', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to add banner',
+        description: message,
+      }),
   })
 
   return (
@@ -104,7 +111,7 @@ const AddBannerButton: React.FC = () => {
             <InputGroupAddon align='inline-end'>
               <InputGroupUploadButton
                 endpoint='bannerUploader'
-                onUploadComplete={(url) => setUrl(url)}
+                onUploadComplete={setUrl}
               />
             </InputGroupAddon>
           </InputGroup>

@@ -1,3 +1,5 @@
+import type { AllVendorsOutput } from '@yukinu/validators/vendor'
+
 import { useMutation } from '@tanstack/react-query'
 import { cn } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
@@ -13,11 +15,8 @@ import {
 } from '@yukinu/ui/dialog'
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
-import { toast } from '@yukinu/ui/sonner'
-import {
-  vendorStatuses,
-  type AllVendorsOutput,
-} from '@yukinu/validators/vendor'
+import { toast } from '@yukinu/ui/toast'
+import { vendorStatuses } from '@yukinu/validators/vendor'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -32,11 +31,18 @@ export const EditVendorButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.vendor.updateStatus.mutationOptions(),
     onSuccess: () => {
-      toast.success('Vendor status updated successfully')
+      toast.add({
+        type: 'success',
+        title: 'Vendor status updated successfully',
+      })
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to update vendor status', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update vendor status',
+        description: message,
+      }),
     meta: { filter: trpc.vendor.all.queryFilter() },
   })
 
@@ -53,21 +59,21 @@ export const EditVendorButton: React.FC<{
         </DialogHeader>
 
         <RadioGroup value={status} onValueChange={setStatus as never}>
-          {vendorStatuses.map((status) => (
+          {vendorStatuses.map((st) => (
             <Label
-              key={status}
-              htmlFor={status}
+              key={st}
+              htmlFor={st}
               className={cn(
                 'flex cursor-pointer items-center space-x-2 rounded-md border border-current/40 bg-current/5 px-2 py-4 capitalize transition-colors hover:bg-current/10',
                 {
-                  'text-success': status === 'approved',
-                  'text-warning': status === 'pending',
-                  'text-destructive': status === 'suspended',
+                  'text-success': st === 'approved',
+                  'text-warning': st === 'pending',
+                  'text-destructive': st === 'suspended',
                 },
               )}
             >
-              <RadioGroupItem id={status} value={status} />
-              {status}
+              <RadioGroupItem id={st} value={st} />
+              {st}
             </Label>
           ))}
         </RadioGroup>

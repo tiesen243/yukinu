@@ -1,9 +1,10 @@
-import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { CategorySchema } from '@yukinu/validators/general'
 
 import { alias } from '@yukinu/db'
+
+import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

@@ -43,6 +43,7 @@ export const CategoryDistributionChart: React.FC<{
               dataKey='value'
             >
               {data.map((entry, index) => (
+                // oxlint-disable-next-line react/no-array-index-key
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Pie>

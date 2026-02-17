@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
 import { XIcon } from '@yukinu/ui/icons'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -51,9 +51,17 @@ const SessionItem: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.security.deleteSession.mutationOptions(),
     meta: { filter: trpc.security.allSessions.queryFilter() },
-    onSuccess: () => toast.success('Logged out of session successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Logged out of session successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to log out of session', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to log out of session',
+        description: message,
+      }),
   })
 
   return (

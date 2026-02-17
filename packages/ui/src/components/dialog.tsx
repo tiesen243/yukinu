@@ -22,7 +22,7 @@ function DialogTrigger({
   return (
     <DialogPrimitive.Trigger
       data-slot='dialog-trigger'
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     />
   )
@@ -41,7 +41,7 @@ function DialogClose({
   return (
     <DialogPrimitive.Close
       data-slot='dialog-close'
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size }), className)}
       {...props}
     />
   )

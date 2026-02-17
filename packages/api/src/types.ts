@@ -1,3 +1,5 @@
+import type { Role } from '@yukinu/validators/auth'
+
 import type { IAddressService } from '@/contracts/services/address.service'
 import type { IAuthService } from '@/contracts/services/auth.service'
 import type { IBannerService } from '@/contracts/services/banner.service'
@@ -12,7 +14,6 @@ import type { IUserService } from '@/contracts/services/user.service'
 import type { IVendorStaffService } from '@/contracts/services/vendor-staff.service'
 import type { IVendorService } from '@/contracts/services/vendor.service'
 import type { IWishlistService } from '@/contracts/services/wishlist.service'
-import type { Role } from '@yukinu/validators/auth'
 
 export interface TRPCMeta {
   message?: string

@@ -13,7 +13,7 @@ import {
 import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as ProductValidators from '@yukinu/validators/product'
 import { useState } from 'react'
 
@@ -28,12 +28,20 @@ export const EditVariantButton: React.FC<{
   const { mutateAsync } = useMutation({
     ...trpc.productVariant.update.mutationOptions(),
     meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
-    onSuccess: () => toast.success('Variant updated successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Variant updated successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to update variant', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update variant',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       id: variant.id,
       price: variant.price,
@@ -59,9 +67,9 @@ export const EditVariantButton: React.FC<{
           </DialogDescription>
         </DialogHeader>
 
-        <form id={formId} onSubmit={handleSubmit}>
+        <form id={form.formId} onSubmit={form.handleSubmit}>
           <FieldGroup>
-            <FormField
+            <form.Field
               name='price'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -72,7 +80,7 @@ export const EditVariantButton: React.FC<{
               )}
             />
 
-            <FormField
+            <form.Field
               name='stock'
               render={({ meta, field }) => (
                 <Field data-invalid={meta.errors.length > 0}>
@@ -84,11 +92,11 @@ export const EditVariantButton: React.FC<{
             />
 
             <DialogFooter>
-              <DialogClose type='button' disabled={state.isPending}>
+              <DialogClose type='button' disabled={form.state.isPending}>
                 Cancel
               </DialogClose>
-              <Button type='submit' disabled={state.isPending}>
-                Save Changes
+              <Button type='submit' disabled={form.state.isPending}>
+                {form.state.isPending ? 'Saving...' : 'Save Changes'}
               </Button>
             </DialogFooter>
           </FieldGroup>

@@ -1,7 +1,4 @@
-import type { Route } from './+types/root'
-
 import { Button } from '@yukinu/ui/button'
-import { Toaster } from '@yukinu/ui/sonner'
 import {
   isRouteErrorResponse,
   Link,
@@ -17,6 +14,8 @@ import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
 import { getWebUrl } from '@/lib/utils'
 
+import type { Route } from './+types/root'
+
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang='en' suppressHydrationWarning>
@@ -27,11 +26,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         <Links />
       </head>
       <body className='flex min-h-dvh flex-col font-sans antialiased'>
-        <Providers>
-          {children}
-
-          <Toaster richColors />
-        </Providers>
+        <Providers>{children}</Providers>
 
         <ScrollRestoration />
         <Scripts />

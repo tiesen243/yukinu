@@ -1,7 +1,8 @@
-import type { IBannerRepository } from '@/contracts/repositories/banner.repository'
-import type { IBannerService } from '@/contracts/services/banner.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/general'
+
+import type { IBannerRepository } from '@/contracts/repositories/banner.repository'
+import type { IBannerService } from '@/contracts/services/banner.service'
 
 export class BannerService implements IBannerService {
   constructor(

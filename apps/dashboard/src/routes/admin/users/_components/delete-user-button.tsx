@@ -12,7 +12,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -26,11 +26,18 @@ export const DeleteUserButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.user.delete.mutationOptions(),
     onSuccess: () => {
-      toast.success('User deleted successfully')
+      toast.add({
+        type: 'success',
+        title: 'User deleted successfully',
+      })
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to delete user', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to delete user',
+        description: message,
+      }),
     meta: { filter: trpc.user.all.queryFilter() },
   })
 

@@ -1,7 +1,8 @@
-import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 import type { Database } from '@yukinu/db'
 import type { categories } from '@yukinu/db/schema'
 import type { CategorySchema } from '@yukinu/validators/general'
+
+import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 
 export interface ICategoryRepository extends IBaseRepository<
   typeof categories

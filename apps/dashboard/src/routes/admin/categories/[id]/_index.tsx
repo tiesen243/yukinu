@@ -1,5 +1,3 @@
-import type { Route } from './+types/_index'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -22,7 +20,7 @@ import {
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import {
   updateCategoryInput,
   type UpdateCategoryInput,
@@ -32,6 +30,8 @@ import { useNavigate } from 'react-router'
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
+
+import type { Route } from './+types/_index'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
@@ -58,12 +58,20 @@ export default function CategoriesEditPage({
   const { mutateAsync } = useMutation({
     ...trpc.category.update.mutationOptions(),
     meta: { filter: trpc.category.all.queryFilter() },
-    onSuccess: () => toast.success('Category updated successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Category updated successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to update category', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update category',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       id: category.id,
       parentId: category.parent?.id,
@@ -80,7 +88,7 @@ export default function CategoriesEditPage({
   })
 
   return (
-    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
+    <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
       <FieldSet className='px-6'>
         <FieldLegend>Edit Category</FieldLegend>
         <FieldDescription>
@@ -88,7 +96,7 @@ export default function CategoriesEditPage({
         </FieldDescription>
 
         <FieldGroup>
-          <FormField
+          <form.Field
             name='name'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -99,7 +107,7 @@ export default function CategoriesEditPage({
             )}
           />
 
-          <FormField
+          <form.Field
             name='description'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -120,7 +128,7 @@ export default function CategoriesEditPage({
             )}
           />
 
-          <FormField
+          <form.Field
             name='image'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -144,7 +152,7 @@ export default function CategoriesEditPage({
             )}
           />
 
-          <FormField
+          <form.Field
             name='parentId'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -152,9 +160,9 @@ export default function CategoriesEditPage({
                 <NativeSelect {...field} value={value ?? ''}>
                   {data?.categories
                     .filter((cat) => cat.id !== category.id)
-                    .map((category) => (
-                      <NativeSelectOption key={category.id} value={category.id}>
-                        {category.name}
+                    .map((cat) => (
+                      <NativeSelectOption key={cat.id} value={cat.id}>
+                        {cat.name}
                       </NativeSelectOption>
                     ))}
                 </NativeSelect>
@@ -164,8 +172,8 @@ export default function CategoriesEditPage({
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Saving...' : 'Save Changes'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
           </Field>
         </FieldGroup>

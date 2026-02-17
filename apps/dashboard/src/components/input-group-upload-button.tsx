@@ -1,7 +1,7 @@
 import type { OurFileRouter } from '@yukinu/uploadthing/config'
 
 import { InputGroupButton } from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { useUploadThing } from '@yukinu/uploadthing/react'
 import { useRef } from 'react'
 
@@ -14,10 +14,10 @@ export const InputGroupUploadButton: React.FC<{
   const ut = useUploadThing(endpoint, {
     onClientUploadComplete: ([res]) => {
       if (res?.ufsUrl) onUploadComplete(res.ufsUrl)
-      else toast.error('Failed to upload')
+      else toast.add({ type: 'error', title: 'Failed to upload' })
     },
     onUploadError: ({ message }) => {
-      toast.error('Upload failed', { description: message })
+      toast.add({ type: 'error', title: 'Upload failed', description: message })
     },
   })
 

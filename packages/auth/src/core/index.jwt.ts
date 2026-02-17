@@ -96,8 +96,8 @@ export function Auth(config: AuthConfig) {
        * - Retrieves the current authenticated user's session.
        */
       if (PATH_REGEXS.getSession.test(pathname)) {
-        const session = await auth({ headers: request.headers })
-        response = Response.json(session)
+        const _session = await auth({ headers: request.headers })
+        response = Response.json(_session)
       }
 
       /*

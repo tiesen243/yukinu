@@ -12,8 +12,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@yukinu/ui/dialog'
-import { toast } from '@yukinu/ui/sonner'
 import { TableCell, TableRow } from '@yukinu/ui/table'
+import { toast } from '@yukinu/ui/toast'
 import { useState } from 'react'
 import { Link } from 'react-router'
 
@@ -29,7 +29,7 @@ export const CategoriesList: React.FC = () => {
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
       <TableRow key={index}>
-        {Array.from({ length: 4 }, (_, cellIndex) => (
+        {Array.from({ length: 4 }, (__, cellIndex) => (
           <TableCell key={cellIndex}>
             <div className='animate-pulse rounded bg-muted/50'>&nbsp;</div>
           </TableCell>
@@ -64,11 +64,18 @@ const DeleteCategoryButton: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.category.delete.mutationOptions(),
     onSuccess: () => {
-      toast.success('Category deleted successfully')
+      toast.add({
+        type: 'success',
+        title: 'Category deleted successfully',
+      })
       setOpen(false)
     },
     onError: ({ message }) =>
-      toast.error('Failed to delete category', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to delete category',
+        description: message,
+      }),
     meta: { filter: trpc.category.all.queryFilter() },
   })
 
