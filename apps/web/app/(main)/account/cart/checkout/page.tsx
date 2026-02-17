@@ -2,47 +2,38 @@ import { ItemGroup } from '@yukinu/ui/item'
 import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
-import {
-  CartItemsList,
-  CartItemsListSkeleton,
-  CartItemsTotal,
-  CartItemsTotalSkeleton,
-} from '@/app/(main)/account/cart/page.client'
+import { CartItems } from '@/app/(main)/account/cart/checkout/page.client'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 
 export const dynamic = 'force-dynamic'
 
-export default function AccountCartPage() {
+export default function AccountCartCheckoutPage() {
   void getQueryClient().prefetchQuery(trpc.cart.get.queryOptions())
 
   return (
     <HydrateClient>
       <AccountHeader
-        title='My Cart'
-        description='View and manage the items in your shopping cart before proceeding to checkout.'
+        title='Checkout'
+        description='Review your order and proceed to payment to complete your purchase.'
       />
 
       <section className='flex h-full flex-col px-6'>
-        <h2 className='sr-only'>Cart Items List section</h2>
+        <h2 className='sr-only'>Preview cart section</h2>
 
         <ItemGroup className='flex-1'>
-          <Suspense fallback={<CartItemsListSkeleton />}>
-            <CartItemsList />
+          <Suspense fallback='Loading cart items...'>
+            <CartItems />
           </Suspense>
         </ItemGroup>
-
-        <Suspense fallback={<CartItemsTotalSkeleton />}>
-          <CartItemsTotal />
-        </Suspense>
       </section>
     </HydrateClient>
   )
 }
 
-const title = 'My Cart'
+const title = 'Checkout'
 const description =
-  'View and manage the items in your shopping cart before proceeding to checkout.'
+  'Review your order and proceed to payment to complete your purchase.'
 export const metadata = createMetadata({
   title,
   description,
@@ -52,6 +43,6 @@ export const metadata = createMetadata({
         description,
       )}`,
     ],
-    url: `/account/cart`,
+    url: `/account/cart/checkout`,
   },
 })

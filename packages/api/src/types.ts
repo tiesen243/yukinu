@@ -13,6 +13,7 @@ import type { ITicketService } from '@/contracts/services/ticket.service'
 import type { IUserService } from '@/contracts/services/user.service'
 import type { IVendorStaffService } from '@/contracts/services/vendor-staff.service'
 import type { IVendorService } from '@/contracts/services/vendor.service'
+import type { IVoucherService } from '@/contracts/services/voucher.service'
 import type { IWishlistService } from '@/contracts/services/wishlist.service'
 
 export interface TRPCMeta {
@@ -37,6 +38,7 @@ export interface TRPCContext {
     productVariant: IProductVariantService
     vendorStaff: IVendorStaffService
     vendor: IVendorService
+    voucher: IVoucherService
     wishlist: IWishlistService
   }
 }

@@ -11,6 +11,7 @@ import {
   ItemTitle,
 } from '@yukinu/ui/item'
 import Image from 'next/image'
+import Link from 'next/link'
 import * as React from 'react'
 
 import { EditButton } from '@/app/(main)/account/cart/_components/edit-button'
@@ -102,8 +103,13 @@ export const CartItemsTotal: React.FC = () => {
         </ItemTitle>
       </ItemContent>
       <ItemActions>
-        <Button variant='outline' size='sm'>
-          Checkout
+        <Button
+          variant='outline'
+          size='sm'
+          nativeButton={false}
+          render={<Link href='/account/cart/checkout' />}
+        >
+          Proceed to Checkout
         </Button>
       </ItemActions>
     </Item>
@@ -115,9 +121,10 @@ export const CartItemsTotalSkeleton: React.FC = () => (
     <ItemContent>
       <ItemTitle className='w-1/4 rounded-sm bg-muted'>&nbsp;</ItemTitle>
     </ItemContent>
+
     <ItemActions>
       <Button variant='outline' size='sm' disabled>
-        Checkout
+        Proceed to Checkout
       </Button>
     </ItemActions>
   </Item>

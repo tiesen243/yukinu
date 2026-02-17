@@ -89,8 +89,8 @@ const navs = [
       },
       {
         icon: icons.PercentIcon,
-        title: 'Coupons',
-        url: '/admin/coupons',
+        title: 'Vouchers',
+        url: '/admin/vouchers',
         roles: ['admin', 'moderator'],
       },
     ],

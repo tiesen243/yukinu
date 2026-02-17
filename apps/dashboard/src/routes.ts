@@ -33,6 +33,10 @@ export default [
 
       route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
       route('/admin/products', './routes/admin/products.tsx'),
+
+      route('/admin/vouchers', './routes/admin/vouchers/_index.tsx'),
+      route('/admin/vouchers/new', './routes/admin/vouchers/new/_index.tsx'),
+      route('/admin/vouchers/:id', './routes/admin/vouchers/[id]/_index.tsx'),
     ]),
 
     layout('./routes/products/__layout.tsx', [

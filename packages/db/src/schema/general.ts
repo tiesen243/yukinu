@@ -36,6 +36,7 @@ export const vouchers = pgTable(
     code: t.varchar({ length: 50 }).notNull().unique(),
     discountAmount: t.numeric({ precision: 10, scale: 2 }),
     discountPercentage: t.integer(),
+    quantity: t.integer().default(1).notNull(),
     expiryDate: t.timestamp().notNull(),
   }),
   (t) => [uniqueIndex('vouchers_code_uq_idx').on(t.code)],
