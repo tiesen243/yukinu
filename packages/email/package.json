@@ -17,19 +17,19 @@
     "~dev": "tsdown --watch"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.7",
+    "@react-email/components": "^1.0.8",
     "@yukinu/validators": "workspace:*",
-    "react": "catalog:react",
-    "react-dom": "catalog:react",
     "resend": "^6.9.2"
   },
   "devDependencies": {
     "@react-email/preview-server": "^5.2.8",
     "@types/react": "catalog:react",
-    "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
     "react-email": "^5.2.8",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
+  },
+  "peerDependencies": {
+    "react": "catalog:react"
   }
 }

@@ -29,13 +29,13 @@
   },
   "devDependencies": {
     "@types/node": "catalog:dev",
+    "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },
   "peerDependencies": {
     "@tanstack/react-query": "catalog:prod",
-    "@types/react": "catalog:react",
     "react": "catalog:react"
   }
 }

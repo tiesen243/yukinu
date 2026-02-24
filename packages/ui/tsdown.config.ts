@@ -2,6 +2,7 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   entry: ['./src/index.ts', './src/components/*.tsx', './src/hooks/*.tsx'],
+  external: ['react'],
   dts: true,
   shims: true,
   exports: {

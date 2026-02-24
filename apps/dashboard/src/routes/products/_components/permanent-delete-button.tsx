@@ -60,9 +60,7 @@ export const PermanentDeleteProductButton: React.FC<{
           <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
           <AlertDialogAction
             variant='destructive'
-            onClick={() => {
-              mutate({ id: productId })
-            }}
+            onClick={() => mutate({ id: productId })}
             disabled={isPending}
           >
             {isPending ? 'Deleting...' : 'Delete'}
