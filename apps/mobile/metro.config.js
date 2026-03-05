@@ -1,14 +1,24 @@
-// Learn more https://docs.expo.io/guides/customizing-metro
-const { getDefaultConfig } = require('expo/metro-config')
+const { getDefaultConfig, mergeConfig } = require('@react-native/metro-config')
 const { withUniwindConfig } = require('uniwind/metro')
+const path = require('node:path')
 
-/** @type {import('expo/metro-config').MetroConfig} */
-const config = getDefaultConfig(__dirname)
+/**
+ * Metro configuration
+ * https://reactnative.dev/docs/metro
+ *
+ * @type {import('@react-native/metro-config').MetroConfig}
+ */
+const config = {
+  watchFolders: [
+    path.resolve(__dirname, '../../node_modules'),
+    path.resolve(__dirname, '../../packages'),
+  ],
+}
 
-module.exports = withUniwindConfig(config, {
-  // relative path to your global.css file (from previous step)
-  cssEntryFile: './src/globals.css',
-  // (optional) path where we gonna auto-generate typings
-  // defaults to project's root
-  dtsFile: './uniwind-types.d.ts',
-})
+module.exports = withUniwindConfig(
+  mergeConfig(getDefaultConfig(__dirname), config),
+  {
+    cssEntryFile: './src/globals.css',
+    dtsFile: './src/uniwind-types.d.ts',
+  },
+)

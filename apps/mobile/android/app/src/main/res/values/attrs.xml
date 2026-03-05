@@ -1,0 +1,3 @@
+<resources>
+    <attr name="splash_image" format="reference" />
+</resources>

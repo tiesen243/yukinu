@@ -33,10 +33,6 @@ uniwind-types.d.ts
 *.key
 *.mobileprovision
 
-# generated native folders
-ios/
-android/
-
 # java
 *.class
 *.jar

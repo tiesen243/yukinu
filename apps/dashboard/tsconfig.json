@@ -3,8 +3,6 @@
   "compilerOptions": {
     "types": ["vite/client"],
     "rootDirs": [".", "./.react-router/types"],
-
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     }

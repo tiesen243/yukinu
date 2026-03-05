@@ -1,11 +1,12 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "@yukinu/tsconfig/internal-package.json",
   "compilerOptions": {
-    "strict": true,
-    "baseUrl": ".",
+    "jsx": "react-native",
+    "lib": ["es2024", "dom", "dom.iterable"],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "index.ts", "uniwind-types.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["**/node_modules", "**/Pods"]
 }
