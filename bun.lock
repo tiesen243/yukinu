@@ -256,7 +256,6 @@
       },
       "devDependencies": {
         "@types/node": "catalog:dev",
-        "@yukinu/oxc": "workspace:*",
         "@yukinu/tsconfig": "workspace:*",
         "tsdown": "catalog:dev",
         "typescript": "catalog:dev",
