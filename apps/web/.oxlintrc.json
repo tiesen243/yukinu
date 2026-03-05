@@ -1,12 +1,8 @@
 {
   "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "extends": ["../../.oxlintrc.json"],
-  "plugins": ["nextjs"],
-  "overrides": [
-    {
-      "files": ["**/*.jsx", "**/*.tsx"],
-      "rules": {},
-      "plugins": ["nextjs"]
-    }
+  "extends": [
+    "../../tools/oxc/core.json",
+    "../../tools/oxc/react.json",
+    "../../tools/oxc/next.json"
   ]
 }

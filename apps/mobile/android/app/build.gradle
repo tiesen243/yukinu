@@ -21,7 +21,7 @@ react {
     //   The folder where the react-native NPM package is. Default is ../../node_modules/react-native
     // reactNativeDir = file("../../node_modules/react-native")
     //   The folder where the react-native Codegen package is. Default is ../../node_modules/@react-native/codegen
-    // codegenDir = file("../../node_modules/@react-native/codegen")
+    codegenDir = file("../../../../node_modules/.bun/node_modules/@react-native/codegen")
     //   The cli.js file which is the React Native CLI entrypoint. Default is ../../node_modules/react-native/cli.js
     // cliFile = file("../../node_modules/react-native/cli.js")
 
@@ -85,9 +85,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.qianyu.mobile"
+    namespace "com.yukinu.mobile"
     defaultConfig {
-        applicationId "com.qianyu.mobile"
+        applicationId "com.yukinu.mobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
@@ -101,11 +101,11 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('QIANYU_UPLOAD_STORE_FILE')) {
-                storeFile file(QIANYU_UPLOAD_STORE_FILE)
-                storePassword QIANYU_UPLOAD_STORE_PASSWORD
-                keyAlias QIANYU_UPLOAD_KEY_ALIAS
-                keyPassword QIANYU_UPLOAD_KEY_PASSWORD
+            if (project.hasProperty('YUKINU_UPLOAD_STORE_FILE')) {
+                storeFile file(YUKINU_UPLOAD_STORE_FILE)
+                storePassword YUKINU_UPLOAD_STORE_PASSWORD
+                keyAlias YUKINU_UPLOAD_KEY_ALIAS
+                keyPassword YUKINU_UPLOAD_KEY_PASSWORD
             }
         }
     }

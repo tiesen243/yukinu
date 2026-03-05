@@ -6,11 +6,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Tabs from '@/screens/(tabs)/__root'
 
 const RootStack = createNativeStackNavigator({
+  initialRouteName: 'tabs',
+
+  screenOptions: {
+    headerShown: false,
+  },
+
   screens: {
-    tabs: {
-      screen: Tabs,
-      options: { headerShown: false },
-    },
+    tabs: Tabs,
   },
 })
 
