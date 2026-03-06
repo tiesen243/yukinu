@@ -1,7 +1,7 @@
 {
   "name": "@yukinu/mobile",
   "version": "0.2.16",
-  "private": true,
+  "private": false,
   "scripts": {
     "android": "react-native run-android",
     "clean": "node clean.js",
