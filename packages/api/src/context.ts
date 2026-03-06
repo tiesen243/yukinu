@@ -40,8 +40,7 @@ import { WishlistService } from '@/services/wishlist.service'
 export const createTRPCContext = async (opts: {
   headers: Headers
 }): Promise<TRPCContext> => {
-  const token = opts.headers.get('Authorization')?.replace('Bearer ', '')
-  const session = await verifyAccessToken(token ?? '')
+  const session = await verifyAccessToken(opts)
 
   const accountRepo = new AccountRepository(db, orm, schema)
   const addressRepo = new AddressRepository(db, orm, schema)

@@ -52,9 +52,14 @@ export function Auth(config: AuthConfig) {
     })
   }
 
-  async function verifyAccessToken(
-    token: string,
-  ): Promise<{ userId: string; role: Role }> {
+  async function verifyAccessToken(opts: {
+    headers: Headers
+  }): Promise<{ userId: string; role: Role }> {
+    const token =
+      parseCookie(opts.headers.get('Cookie'))[cookies.keys.accessToken] ??
+      opts.headers.get('Authorization')?.replace(/^Bearer\s+/, '')
+    if (!token) throw new AuthError('No access token provided')
+
     try {
       const { sub: userId, role } = await jwt.verify(token)
       return { userId, role }
@@ -134,12 +139,7 @@ export function Auth(config: AuthConfig) {
   }
 
   async function currentUser(opts: { headers: Headers }): Promise<User | null> {
-    const token =
-      parseCookie(opts.headers.get('Cookie'))[cookies.keys.accessToken] ??
-      opts.headers.get('Authorization')?.replace(/^Bearer\s+/, '')
-    if (!token) throw new AuthError('No access token provided')
-
-    const { userId } = await verifyAccessToken(token)
+    const { userId } = await verifyAccessToken(opts)
     const user = await adapter.getUser(userId)
     if (!user) return null
 
