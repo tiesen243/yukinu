@@ -14,10 +14,13 @@ async function main() {
 
   await Promise.allSettled([
     exec('./gradlew clean', { cwd: androidPath }),
-    fs.rm(path.join(androidPath, '.gradle'), opts),
     fs.rm(path.join(androidPath, '.kotlin'), opts),
     fs.rm(path.join(androidPath, 'app/.cxx'), opts),
     fs.rm(path.join(androidPath, 'app/build'), opts),
+  ])
+  await Promise.allSettled([
+    fs.rm(path.join(androidPath, '.gradle'), opts),
+    fs.rm(path.join(androidPath, 'build'), opts),
   ])
 
   await Promise.allSettled([

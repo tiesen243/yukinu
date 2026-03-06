@@ -26,6 +26,8 @@ uniwind-types.d.ts
 
 # react native
 .cxx/
+*.keystore
+!debug.keystore
 
 # native
 .kotlin/
