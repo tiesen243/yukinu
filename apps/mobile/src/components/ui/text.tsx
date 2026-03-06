@@ -44,14 +44,14 @@ interface TextProps
   extends React.ComponentProps<typeof RNText>, TextVariantProps {}
 
 function Text({ className = '', variant = 'p', ...props }: TextProps) {
-  const context = React.use(TextContext)
+  const classNameCtx = React.use(TextContext)
 
   return (
     <RNText
       data-slot='text'
       role={variant ? ROLE[variant] : undefined}
       aria-level={variant ? ARIA_LEVEL[variant] : undefined}
-      className={cn(typographyVariants({ variant }), className, context)}
+      className={cn(typographyVariants({ variant }), classNameCtx, className)}
       {...props}
     />
   )

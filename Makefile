@@ -37,6 +37,12 @@ build-android:
 	@cd apps/mobile/android && ./gradlew assembleRelease
 	@cp apps/mobile/android/app/build/outputs/apk/release/app-release.apk yukinu.apk
 
+build-ios:
+	@echo "Building IOS app..."
+	@cd apps/mobile/ios && xcodebuild -scheme "Yukinu" -configuration Release -archivePath build/Yukinu.xcarchive archive
+	@xcodebuild -exportArchive -archivePath apps/mobile/ios/build/Yukinu.xcarchive -exportPath apps/mobile/ios/build -exportOptionsPlist exportOptions.plist
+	@cp apps/mobile/ios/build/Yukinu.ipa yukinu.ipa
+
 dev-web:
 	@echo "Starting development server..."
 	@$(pkm) turbo --filter @yukinu/web dev

@@ -14,6 +14,7 @@ const Tabs = createBottomTabNavigator({
     index: {
       screen: TabsIndexScreen,
       options: {
+        title: 'Home',
         tabBarIcon: ({ color, size }) => <HomeIcon color={color} size={size} />,
       },
     },
