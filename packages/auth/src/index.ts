@@ -1,7 +1,15 @@
 import { authOptions } from '@/config'
 import { Auth } from '@/core'
 
-export type { SessionWithUser, User } from '@/types'
+export type { SessionWithUser, User } from '@/core/types'
 export { Password } from '@/core/password'
-export const { auth, signIn, signOut, validateAccessToken, handler } =
-  Auth(authOptions)
+export const {
+  auth,
+  currentUser,
+  verifyAccessToken,
+
+  signIn,
+  signOut,
+
+  handlers,
+} = Auth(authOptions)

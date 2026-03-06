@@ -1,6 +1,6 @@
 import { env } from '@yukinu/validators/env'
 
-import type { OAuthAccount } from '@/types'
+import type { OAuthAccount } from '@/core/types'
 
 import { generateCodeChallenge } from '@/core/crypto'
 
@@ -9,7 +9,7 @@ export abstract class BaseProvider {
     public readonly providerName: string,
     protected readonly clientId: string,
     protected readonly clientSecret: string,
-    protected readonly redirectUri = '',
+    protected readonly redirectUri: string,
   ) {
     if (!this.redirectUri) this.redirectUri = this.createCallbackUrl()
   }
@@ -25,18 +25,20 @@ export abstract class BaseProvider {
   ): Promise<OAuthAccount>
 
   protected createCallbackUrl() {
-    // oxlint-disable-next-line no-process-env
+    // oxlint-disable-next-line node/no-process-env
     let baseUrl = `http://localhost:${process.env.PORT ?? 3000}`
     if (env.VERCEL_PROJECT_PRODUCTION_URL)
       baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-    return `${baseUrl}/api/auth/${this.providerName}`
+    else if (env.VERCEL_URL) baseUrl = `https://${env.VERCEL_URL}`
+
+    return `${baseUrl}/api/auth/${this.providerName}/callback`
   }
 
   protected createAuthorizationUrlWithoutPkce(
     endpoint: string,
     state: string,
     scopes: string[],
-  ): URL {
+  ): Promise<URL> {
     const url = new URL(endpoint)
     url.searchParams.set('response_type', 'code')
     url.searchParams.set('client_id', this.clientId)
@@ -45,7 +47,7 @@ export abstract class BaseProvider {
     if (scopes.length > 0) url.searchParams.set('scope', scopes.join(' '))
     url.searchParams.set('redirect_uri', this.redirectUri)
 
-    return url
+    return Promise.resolve(url)
   }
 
   protected async createAuthorizationUrlWithPKCE(
@@ -55,7 +57,11 @@ export abstract class BaseProvider {
     codeVerifier: string,
     codeChallengeMethod: 'S256' | 'plain' = 'S256',
   ): Promise<URL> {
-    const url = this.createAuthorizationUrlWithoutPkce(endpoint, state, scopes)
+    const url = await this.createAuthorizationUrlWithoutPkce(
+      endpoint,
+      state,
+      scopes,
+    )
 
     if (codeChallengeMethod === 'S256') {
       const codeChallenge = await generateCodeChallenge(codeVerifier)
@@ -109,6 +115,6 @@ export abstract class BaseProvider {
     return btoa(String.fromCodePoint(...bytes))
       .replaceAll('+', '-')
       .replaceAll('/', '_')
-      .replaceAll('=', '')
+      .replaceAll(/[=]/g, '')
   }
 }

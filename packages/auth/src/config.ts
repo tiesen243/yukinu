@@ -1,134 +1,41 @@
-import { db, orm } from '@yukinu/db'
-import { accounts, profiles, sessions, users } from '@yukinu/db/schema'
-import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
 
-import type { AuthConfig } from '@/types'
+import type { AuthConfig } from '@/core/types'
 
-import { Facebook } from '@/providers/facebook'
-import { Google } from '@/providers/google'
+import { adapter } from '@/adapter'
+import { Github } from '@/core/providers/github'
+import { Google } from '@/core/providers/google'
 
 export const authOptions = {
-  secret: env.AUTH_SECRET,
+  secret: env.AUTH_SECRET ?? 'secret',
+
+  adapter,
 
   providers: [
-    new Facebook(env.AUTH_FACEBOOK_ID, env.AUTH_FACEBOOK_SECRET),
+    new Github(env.AUTH_GITHUB_ID, env.AUTH_GITHUB_SECRET),
     new Google(env.AUTH_GOOGLE_ID, env.AUTH_GOOGLE_SECRET),
   ],
 
-  adapter: {
-    user: {
-      async find(identifier) {
-        const [record] = await db
-          .select()
-          .from(users)
-          .where(
-            orm.or(
-              orm.eq(users.id, identifier),
-              orm.eq(users.email, identifier),
-              orm.eq(users.username, identifier),
-            ),
-          )
-          .limit(1)
+  session: {
+    expiresIn: 60 * 60 * 24 * 7, // 7 days
+    expiresThreshold: 60 * 60 * 24, // 1 day
+    accessTokenExpiresIn: 60 * 15, // 15 minutes
+  },
 
-        if (!record) return null
-
-        if (record.deletedAt)
-          throw new Error(
-            'This account has been deleted. If you believe this is a mistake, please contact support.',
-          )
-
-        if (record.status === 'inactive')
-          throw new Error(
-            'Your account is banned from our platform. Please contact support for more information.',
-          )
-
-        return record
-      },
-      async create(data) {
-        const username =
-          'user' + Math.floor(1000 + Math.random() * 9000).toString()
-
-        const [result] = await db
-          .insert(users)
-          .values({ ...data, username })
-          .returning({ id: users.id })
-        if (!result) throw new Error('Failed to create user')
-
-        await db
-          .insert(profiles)
-          .values({ id: result.id, fullName: data.username })
-
-        await sendEmail({
-          to: data.email,
-          subject: 'Welcome to Yukinu!',
-          template: 'Welcome',
-          data: { username: data.username },
-        })
-
-        return result
-      },
+  cookies: {
+    keys: {
+      accessToken: 'auth.access_token',
+      refreshToken: 'auth.refresh_token',
+      state: 'auth.state',
+      codeVerifier: 'auth.code',
+      redirectUri: 'auth.redirect_uri',
     },
 
-    account: {
-      async find(provider, accountId) {
-        const [record] = await db
-          .select()
-          .from(accounts)
-          .where(
-            orm.and(
-              orm.eq(accounts.provider, provider),
-              orm.eq(accounts.accountId, accountId),
-            ),
-          )
-          .limit(1)
-
-        return record ?? null
-      },
-      async create(data) {
-        await db.insert(accounts).values(data)
-      },
-    },
-
-    /**
-     * If you use JWT authentication, session management may not be necessary.
-     * To disable sessions when using JWT, you can throw an error in the session methods:
-     * ```ts
-     * throw new Error("Sessions are not supported with JWT auth.");
-     * ```
-     */
-    session: {
-      async find(id) {
-        const [record] = await db
-          .select({
-            user: {
-              id: users.id,
-              username: users.username,
-              email: users.email,
-              role: users.role,
-              image: users.image,
-            },
-            token: sessions.token,
-            expiresAt: sessions.expiresAt,
-            ipAddress: sessions.ipAddress,
-            userAgent: sessions.userAgent,
-          })
-          .from(sessions)
-          .where(orm.eq(sessions.id, id))
-          .innerJoin(users, orm.eq(sessions.userId, users.id))
-          .limit(1)
-
-        return record ?? null
-      },
-      async create(data) {
-        await db.insert(sessions).values(data)
-      },
-      async update(id, data) {
-        await db.update(sessions).set(data).where(orm.eq(sessions.id, id))
-      },
-      async delete(id) {
-        await db.delete(sessions).where(orm.eq(sessions.id, id))
-      },
+    options: {
+      Path: '/',
+      HttpOnly: true,
+      Secure: env.NODE_ENV === 'production',
+      SameSite: 'Lax',
     },
   },
 } as const satisfies AuthConfig

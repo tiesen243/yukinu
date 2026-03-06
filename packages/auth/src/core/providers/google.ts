@@ -1,6 +1,6 @@
-import type { OAuth2Token, OAuthAccount } from '@/types'
+import type { OAuth2Token, OAuthAccount } from '@/core/types'
 
-import { BaseProvider } from '@/providers/base'
+import { BaseProvider } from '@/core/providers/base'
 
 export class Google extends BaseProvider {
   constructor(clientId: string, clientSecret: string, redirectUri = '') {

@@ -5,10 +5,13 @@ import { Auth } from '@/core'
 
 const {
   auth: uncachedAuth,
+  currentUser: uncachedCurrentUser,
+  verifyAccessToken,
+
   signIn,
   signOut,
-  validateAccessToken,
-  handler,
+
+  handlers,
 } = Auth(authOptions)
 
 /**
@@ -16,7 +19,8 @@ const {
  * This will de-duplicate all calls to auth's default `auth()` function and only call it once per request
  */
 const auth = cache(uncachedAuth)
+const currentUser = cache(uncachedCurrentUser)
 
-export type { SessionWithUser, User } from '@/types'
+export type { SessionWithUser, User } from '@/core/types'
 export { Password } from '@/core/password'
-export { auth, signIn, signOut, validateAccessToken, handler }
+export { auth, currentUser, verifyAccessToken, signIn, signOut, handlers }

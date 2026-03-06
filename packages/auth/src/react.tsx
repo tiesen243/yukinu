@@ -3,7 +3,7 @@ import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 
-import type { SessionWithUser } from '@/types'
+import type { SessionWithUser } from '@/core/types'
 
 type SessionContextValue = (
   | { status: 'loading'; session: SessionWithUser }
@@ -14,8 +14,8 @@ type SessionContextValue = (
     }
 ) & {
   signIn: (credentials: LoginInput) => Promise<LoginOutput>
-
   signOut: () => Promise<void>
+  refreshToken: () => Promise<void>
 }
 
 interface SessionProviderProps {
@@ -81,15 +81,23 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
       queryClient.setQueryData(['auth', 'get-session'], { user: null }),
   })
 
-  const value = React.useMemo(() => {
-    const status = isLoading
-      ? 'loading'
-      : data?.user
-        ? 'authenticated'
-        : 'unauthenticated'
+  const { mutateAsync: refreshToken } = useMutation({
+    mutationKey: ['auth', 'refresh-token'],
+    mutationFn: async () => {
+      const res = await fetch(`${basePath}/refresh-token`, { method: 'POST' })
+      if (!res.ok) throw new Error('Failed to refresh token')
+    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['auth', 'get-session'] }),
+  })
 
-    return { status, session: data, signIn, signOut } as SessionContextValue
-  }, [data, isLoading, signIn, signOut])
+  const value = React.useMemo(() => {
+    let status = 'unauthenticated'
+    if (isLoading) status = 'loading'
+    else if (data?.user) status = 'authenticated'
+
+    return { status, session: data, signIn, signOut, refreshToken }
+  }, [data, isLoading, signIn, signOut]) as SessionContextValue
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

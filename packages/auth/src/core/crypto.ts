@@ -1,3 +1,13 @@
+// oxlint-disable no-bitwise, no-plusplus
+
+export function constantTimeEqual(a: Uint8Array, b: Uint8Array): boolean {
+  if (a.byteLength !== b.byteLength) return false
+
+  let c = 0
+  for (let i = 0; i < a.byteLength; i++) c |= (a[i] ?? 0) ^ (b[i] ?? 0)
+  return c === 0
+}
+
 export function generateSecureString(): string {
   const alphabet = 'abcdefghijklmnpqrstuvwxyz23456789'
 
@@ -16,7 +26,7 @@ export function generateStateOrCode(): string {
   return btoa(String.fromCodePoint(...randomValues))
     .replaceAll('+', '-')
     .replaceAll('/', '_')
-    .replaceAll('=', '')
+    .replaceAll(/[=]/g, '')
 }
 
 export async function generateCodeChallenge(
@@ -29,7 +39,7 @@ export async function generateCodeChallenge(
   return base64String
     .replaceAll('+', '-')
     .replaceAll('/', '_')
-    .replaceAll('=', '')
+    .replaceAll(/[=]/g, '')
 }
 
 export async function hashSecret(secret: string): Promise<Uint8Array> {
@@ -49,7 +59,7 @@ export function decodeHex(hex: string): Uint8Array {
 
   const bytes = new Uint8Array(hex.length / 2)
   for (let i = 0; i < hex.length; i += 2)
-    bytes[i / 2] = parseInt(hex.slice(i, i + 2), 16)
+    bytes[i / 2] = Number.parseInt(hex.slice(i, i + 2), 16)
 
   return bytes
 }
@@ -72,12 +82,4 @@ export function decodeBase64Url(base64url: string): Uint8Array {
   const bytes = new Uint8Array(binary.length)
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.codePointAt(i) ?? 0
   return bytes
-}
-
-export function constantTimeEqual(a: Uint8Array, b: Uint8Array): boolean {
-  if (a.byteLength !== b.byteLength) return false
-
-  let c = 0
-  for (let i = 0; i < a.byteLength; i++) c |= (a[i] ?? 0) ^ (b[i] ?? 0)
-  return c === 0
 }
