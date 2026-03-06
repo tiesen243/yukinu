@@ -1,21 +1,12 @@
-import Constants from 'expo-constants'
+import { NativeModules } from 'react-native'
 
-/**
- * Extend this function when going to production by
- * setting the baseUrl to your production API URL.
- */
-export function getBaseUrl(): string {
-  /**
-   * Gets the IP address of your host-machine. If it cannot automatically find it,
-   * you'll have to manually set it. NOTE: Port 3000 should work for most but confirm
-   * you don't have anything else running on it, or you'd have to change it.
-   *
-   * **NOTE**: This is only for development. In production, you'll want to set the
-   * baseUrl to your production API URL.
-   */
-  const debuggerHost = Constants.expoConfig?.hostUri
-  const localhost = debuggerHost?.split(':')[0]
+export function getBaseUrl() {
+  const { scriptURL } = NativeModules.SourceCode.getConstants()
 
-  if (!localhost) return 'https://yukinu.vercel.app'
-  return `http://${localhost}:3000`
+  if (__DEV__ && scriptURL) {
+    const { hostname } = new URL(scriptURL)
+    return `http://${hostname}:3000`
+  }
+
+  return 'https://api.example.com'
 }

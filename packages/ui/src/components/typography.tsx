@@ -1,12 +1,12 @@
 import type { VariantProps } from 'class-variance-authority'
 
-import { mergeProps } from '@base-ui/react'
+import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 import { cva } from 'class-variance-authority'
 
 import { cn } from '@/utils'
 
-const typographyVariants = cva('text-base font-normal', {
+const typographyVariants = cva('text-base font-normal text-foreground', {
   variants: {
     variant: {
       h1: 'my-8 scroll-m-20 text-4xl font-extrabold tracking-tight text-balance',

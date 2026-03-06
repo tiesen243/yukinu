@@ -38,7 +38,7 @@ export const CartItemsList: React.FC = () => {
           {new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-          }).format(parseFloat(item.unitPrice))}{' '}
+          }).format(Number.parseFloat(item.unitPrice))}{' '}
           x {item.quantity}
         </ItemDescription>
       </ItemContent>
@@ -87,9 +87,10 @@ export const CartItemsTotal: React.FC = () => {
   const trpc = useTRPC()
   const { data } = useSuspenseQuery(trpc.cart.get.queryOptions())
 
-  const total = data.items.reduce((acc, item) => {
-    return acc + parseFloat(item.unitPrice) * item.quantity
-  }, 0)
+  const total = data.items.reduce(
+    (acc, item) => acc + Number.parseFloat(item.unitPrice) * item.quantity,
+    0,
+  )
 
   return (
     <Item>

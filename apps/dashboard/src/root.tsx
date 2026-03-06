@@ -54,7 +54,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     error instanceof Error
   ) {
     details = error.message
-    stack = error.stack
+    ;({ stack } = error)
   }
 
   return (

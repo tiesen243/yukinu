@@ -32,7 +32,7 @@ export function CartItems() {
           {new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency: 'USD',
-          }).format(parseFloat(item.unitPrice))}{' '}
+          }).format(Number.parseFloat(item.unitPrice))}{' '}
           x {item.quantity}
         </ItemDescription>
       </ItemContent>

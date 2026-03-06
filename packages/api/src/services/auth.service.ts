@@ -26,23 +26,20 @@ export class AuthService implements IAuthService {
 
   async getCurrentUser(userId: Validators.UserSchema['id']): Promise<
     Omit<Validators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
-      user: Pick<
-        Validators.UserSchema,
-        'id' | 'username' | 'email' | 'role' | 'image'
-      >
+      user: Omit<Validators.UserSchema, 'status' | 'deletedAt'>
     }
   > {
     const user = await this._user.find(userId)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
 
-    const { id, username, email, role, image } = user
+    const { status: _, deletedAt: __, ...userData } = user
     return {
       token: '',
       userAgent: null,
       expiresAt: new Date(),
       ipAddress: null,
-      user: { id, username, email, role, image },
+      user: userData,
     }
   }
 
@@ -63,7 +60,12 @@ export class AuthService implements IAuthService {
       // oxlint-disable-next-line no-shadow
       const userId = await this._user.create({ email, username }, tx)
       await this._account.create(
-        { userId, provider: 'credentials', accountId: userId, password },
+        {
+          userId,
+          provider: 'credentials',
+          providerAccountId: userId,
+          password,
+        },
         tx,
       )
       await this._profile.create({ id: userId, fullName: username }, tx)

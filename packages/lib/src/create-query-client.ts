@@ -5,7 +5,7 @@ import {
   MutationCache,
   QueryClient,
 } from '@tanstack/react-query'
-import SuperJSON from 'superjson'
+import { SuperJSON } from 'superjson'
 
 export const createQueryClient = () =>
   new QueryClient({

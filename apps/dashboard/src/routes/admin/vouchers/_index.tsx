@@ -11,9 +11,9 @@ import {
 import { Typography } from '@yukinu/ui/typography'
 import { Link } from 'react-router'
 
-import { SearchForm } from '@/routes/admin/vouchers/search-form'
-import { VouchersList } from '@/routes/admin/vouchers/vouchers-list'
-import { VouchersPagination } from '@/routes/admin/vouchers/vouchers-pagination'
+import { SearchForm } from '@/routes/admin/vouchers/_components/search-form'
+import { VouchersList } from '@/routes/admin/vouchers/_components/vouchers-list'
+import { VouchersPagination } from '@/routes/admin/vouchers/_components/vouchers-pagination'
 
 export default function VouchersPage() {
   return (

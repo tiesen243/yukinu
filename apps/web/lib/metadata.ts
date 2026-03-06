@@ -1,3 +1,5 @@
+// oxlint-disable no-nested-ternary
+
 import type { Metadata as NextMetadata } from 'next'
 
 import { env } from '@yukinu/validators/env.next'

@@ -1,3 +1,5 @@
+import crypto from 'node:crypto'
+
 import { decodeBase64Url, encodeBase64Url } from '@/core/crypto'
 
 export type JWTAlgorithm = 'HS256' | 'HS384' | 'HS512'
@@ -40,11 +42,10 @@ export class JWT<TValue extends Record<string, unknown>> {
       ...options.headers,
     }
 
-    const payload = {
-      ...payloadClaims,
-      exp: Math.floor(Date.now() / 1000) + (options.expiresIn ?? 3600),
-    } as Record<string, unknown>
+    const payload = { ...payloadClaims } as Record<string, unknown>
 
+    if (!payload.exp)
+      payload.exp = Math.floor(Date.now() / 1000) + (options.expiresIn ?? 3600)
     if (options.audiences) payload.aud = options.audiences
     if (options.subject) payload.sub = options.subject
     if (options.issuer) payload.iss = options.issuer

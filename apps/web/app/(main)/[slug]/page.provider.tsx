@@ -47,12 +47,15 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     setCurrentImage(url)
   }, [])
 
-  const optionTypes = Array.from(
-    new Set(product.variants.flatMap((v) => v.options.map((o) => o.name))),
+  const optionTypes = React.useMemo(
+    () => [
+      ...new Set(product.variants.flatMap((v) => v.options.map((o) => o.name))),
+    ],
+    [product.variants],
   )
 
   const parsers = Object.fromEntries(
-    Array.from(optionTypes).map((key) => [key, parseAsString]),
+    [...optionTypes].map((key) => [key, parseAsString]),
   )
   const [selectedOptions, setSelectedOptions] = useQueryStates(parsers)
 

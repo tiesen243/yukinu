@@ -117,11 +117,17 @@ export class SecurityService implements ISecurityService {
     }
 
     await this._db.transaction(async (tx) => {
+      // oxlint-disable-next-line unicorn/prefer-ternary
       if (account?.password)
         await this._account.update(userId, { password }, tx)
       else
         await this._account.create(
-          { userId, provider: 'credentials', accountId: userId, password },
+          {
+            userId,
+            provider: 'credentials',
+            providerAccountId: userId,
+            password,
+          },
           tx,
         )
 

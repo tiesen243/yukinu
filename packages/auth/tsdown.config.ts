@@ -2,7 +2,7 @@ import { defineConfig } from 'tsdown'
 
 export default defineConfig({
   entry: ['./src/index.ts', './src/index.rsc.ts', './src/react.tsx'],
-  external: ['@tanstack/react-query', 'react'],
+  deps: { neverBundle: ['@tanstack/react-query', 'react'] },
   dts: true,
   shims: true,
   exports: {

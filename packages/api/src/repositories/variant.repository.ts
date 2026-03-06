@@ -66,9 +66,9 @@ export class VariantRepository
   }
 
   private _cartesianProduct(arrays: string[][]): string[][] {
-    return arrays.reduce<string[][]>(
-      (acc, curr) => acc.flatMap((a) => curr.map((b) => [...a, b])),
-      [[]],
-    )
+    let result: string[][] = [[]]
+    for (const curr of arrays)
+      result = result.flatMap((a) => curr.map((b) => [...a, b]))
+    return result
   }
 }

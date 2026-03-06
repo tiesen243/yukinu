@@ -43,7 +43,7 @@ export const accountSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
   provider: z.string().min(1).max(50),
-  accountId: z.string().min(1).max(100),
+  providerAccountId: z.string().min(1).max(100),
   password: z
     .string()
     .regex(

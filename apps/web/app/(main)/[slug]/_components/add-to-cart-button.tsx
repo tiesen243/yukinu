@@ -46,16 +46,13 @@ export const AddToCartButton: React.FC = () => {
             value={quantity}
             disabled={variants.length > 0 ? !selectedVariant : stock === 0}
             onChange={(e) => {
-              const qty = parseInt(e.target.value, 10)
-              const maxStock =
-                variants.length > 0
-                  ? selectedVariant
-                    ? selectedVariant.stock
-                    : 0
-                  : stock
+              const qty = Number.parseInt(e.target.value, 10)
+              let maxStock: number = stock
+              if (variants.length > 0)
+                maxStock = selectedVariant ? selectedVariant.stock : 0
               if (!maxStock) return
 
-              if (isNaN(qty) || qty < 1) setQuantity(1)
+              if (Number.isNaN(qty) || qty < 1) setQuantity(1)
               else if (qty > maxStock) setQuantity(maxStock)
               else setQuantity(qty)
             }}
@@ -64,12 +61,9 @@ export const AddToCartButton: React.FC = () => {
           <InputGroupAddon align='inline-end'>
             <InputGroupButton
               onClick={() => {
-                const maxStock =
-                  variants.length > 0
-                    ? selectedVariant
-                      ? selectedVariant.stock
-                      : 0
-                    : stock
+                let maxStock: number = stock
+                if (variants.length > 0)
+                  maxStock = selectedVariant ? selectedVariant.stock : 0
                 if (!maxStock) return
                 if (quantity < maxStock) setQuantity((prev) => prev + 1)
               }}
@@ -81,11 +75,11 @@ export const AddToCartButton: React.FC = () => {
         </InputGroup>
 
         <p className='text-sm whitespace-nowrap text-muted-foreground'>
-          {variants.length > 0
-            ? selectedVariant
+          {variants.length &&
+            (selectedVariant
               ? `${selectedVariant.stock} items available`
-              : 'This option is unavailable'
-            : `${stock} items available`}
+              : 'This option is unavailable')}
+          {!variants.length && `${stock} items available`}
         </p>
       </div>
 

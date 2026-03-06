@@ -14,9 +14,9 @@ import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
-import { DeleteVariantButton } from '@/routes/products/[id]/delete-variant-button'
-import { EditVariantButton } from '@/routes/products/[id]/edit-variant-button'
-import { UpdateProductForm } from '@/routes/products/[id]/update-product-form'
+import { DeleteVariantButton } from '@/routes/products/[id]/_components/delete-variant-button'
+import { EditVariantButton } from '@/routes/products/[id]/_components/edit-variant-button'
+import { UpdateProductForm } from '@/routes/products/[id]/_components/update-product-form'
 
 import type { Route } from './+types/_index'
 

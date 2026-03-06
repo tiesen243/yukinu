@@ -95,19 +95,17 @@ const UserAvatar: React.FC<{
   username: string
   email: string
   image: string | null
-}> = ({ username, email, image }) => {
-  return (
-    <>
-      <Avatar className='size-8 rounded-lg'>
-        <AvatarImage src={image ?? ''} alt={username} />
-        <AvatarFallback className='rounded-lg'>
-          {username.charAt(0).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-      <div className='grid flex-1 text-left text-sm leading-tight'>
-        <span className='truncate font-medium'>{username}</span>
-        <span className='truncate text-xs text-muted-foreground'>{email}</span>
-      </div>
-    </>
-  )
-}
+}> = ({ username, email, image }) => (
+  <>
+    <Avatar className='size-8 rounded-lg'>
+      <AvatarImage src={image ?? ''} alt={username} />
+      <AvatarFallback className='rounded-lg'>
+        {username.charAt(0).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+    <div className='grid flex-1 text-left text-sm leading-tight'>
+      <span className='truncate font-medium'>{username}</span>
+      <span className='truncate text-xs text-muted-foreground'>{email}</span>
+    </div>
+  </>
+)

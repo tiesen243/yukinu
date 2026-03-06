@@ -37,13 +37,13 @@ export const accounts = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: 'cascade' }),
     provider: t.varchar({ length: 50 }).notNull(),
-    accountId: t.varchar({ length: 100 }).notNull(),
+    providerAccountId: t.varchar({ length: 100 }).notNull(),
     password: t.text(),
   }),
   (t) => [
     uniqueIndex('accounts_provider_account_id_uq_idx').on(
       t.provider,
-      t.accountId,
+      t.providerAccountId,
     ),
     index('accounts_user_id_idx').on(t.userId),
   ],

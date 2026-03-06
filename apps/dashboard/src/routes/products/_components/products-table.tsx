@@ -10,13 +10,13 @@ import {
 } from '@yukinu/ui/table'
 import { Link } from 'react-router'
 
+import { useProductQueryStates } from '@/routes/products/_components/hook'
 import { ProductsList } from '@/routes/products/_components/products-list'
 import { ProductsPagination } from '@/routes/products/_components/products-pagination'
 import {
   SearchForm,
   ToggleProductStatusButton,
 } from '@/routes/products/_components/search-form'
-import { useProductQueryStates } from '@/routes/products/_hook'
 
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
   const [query] = useProductQueryStates()

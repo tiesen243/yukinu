@@ -19,13 +19,13 @@
   "dependencies": {
     "@react-email/components": "^1.0.8",
     "@yukinu/validators": "workspace:*",
-    "resend": "^6.9.2"
+    "resend": "^6.9.3"
   },
   "devDependencies": {
-    "@react-email/preview-server": "^5.2.8",
+    "@react-email/preview-server": "^5.2.9",
     "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
-    "react-email": "^5.2.8",
+    "react-email": "^5.2.9",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },

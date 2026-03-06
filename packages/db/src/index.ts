@@ -1,12 +1,10 @@
-// oxlint-disable no-process-env
-
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
 const createDrizzleClient = () => {
   const conn = postgres({
     host: process.env.POSTGRES_HOST ?? '',
-    port: parseInt(process.env.POSTGRES_PORT ?? '5432', 10),
+    port: Number.parseInt(process.env.POSTGRES_PORT ?? '5432', 10),
     user: process.env.POSTGRES_USER ?? '',
     password: process.env.POSTGRES_PASSWORD ?? '',
     database: process.env.POSTGRES_DATABASE ?? '',

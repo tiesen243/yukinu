@@ -1,24 +1,21 @@
-import type { TextInputProps } from 'react-native'
-
 import { cn } from '@yukinu/ui'
 import { TextInput } from 'react-native'
-import { useUniwind } from 'uniwind'
 
 function Input({
   className,
   placeholderTextColorClassName: _,
-  placeholderTextColor: __,
   ...props
-}: TextInputProps & React.RefAttributes<TextInput>) {
-  const { theme } = useUniwind()
+}: React.ComponentProps<typeof TextInput>) {
   return (
     <TextInput
+      data-slot='input'
       className={cn(
-        'h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-2.5 py-1 text-base text-foreground outline-none md:text-sm dark:bg-input/30',
-        props.editable === false && 'opacity-50',
+        'h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-2.5 py-1 text-base text-foreground shadow-xs transition-[color,box-shadow] outline-none md:text-sm dark:bg-input/30',
+        props.editable === false &&
+          'web:pointer-events-none web:cursor-not-allowed opacity-50',
+        'web:focus-visible:border-ring web:focus-visible:ring-3 web:focus-visible:ring-ring/50 native:placeholder:text-muted-foreground',
         className,
       )}
-      placeholderTextColor={theme === 'dark' ? '#a4a4a4' : '#525252'}
       {...props}
     />
   )

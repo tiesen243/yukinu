@@ -8,21 +8,23 @@ import {
   CardTitle,
 } from '@yukinu/ui/card'
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
+} from '@yukinu/ui/chart'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
   Legend,
   ResponsiveContainer,
   XAxis,
   YAxis,
-} from '@yukinu/ui/chart'
+} from 'recharts'
 
 export const ProductPerformance: React.FC<{
   config: ChartConfig
-  data: Array<{ product: string; sales: number; revenue: number }>
+  data: { product: string; sales: number; revenue: number }[]
 }> = ({ config, data }) => (
   <Card>
     <CardHeader>

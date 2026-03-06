@@ -7,6 +7,7 @@ import { createCallerFactory } from '@/trpc'
 const handler = async (request: Request): Promise<Response> => {
   let response: Response
 
+  // oxlint-disable-next-line unicorn/prefer-ternary
   if (request.method === 'OPTIONS')
     response = new Response(null, { status: 204 })
   else

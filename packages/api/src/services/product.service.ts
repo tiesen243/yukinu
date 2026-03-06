@@ -46,7 +46,8 @@ export class ProductService implements IProductService {
 
     const vendorQuery = vendorId
       ? this._vendor.find(vendorId)
-      : Promise.resolve(null)
+      : // oxlint-disable-next-line promise/prefer-await-to-then
+        Promise.resolve(null)
 
     const [products, vendor, total] = await Promise.all([
       this._product.allWithRelations(whereClauses, orderBy, { limit, offset }),

@@ -1,51 +1,60 @@
-import type { ButtonVariants } from '@yukinu/ui/button'
+import type { VariantProps } from '@yukinu/ui'
 
-import { cn } from '@yukinu/ui'
+import { cn, cva } from '@yukinu/ui'
 import { buttonVariants } from '@yukinu/ui/button'
-import { useMemo } from 'react'
-import { Pressable } from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
-import { TextClassContext } from '@/components/ui/text'
+import { TextProvider } from '@/components/ui/text'
 
-type ButtonProps = React.ComponentProps<typeof Pressable> &
-  React.RefAttributes<typeof Pressable> &
-  ButtonVariants
+const buttonTextVariants = cva(
+  'web:select-none my-0 text-sm font-medium whitespace-nowrap',
+  {
+    variants: {
+      variant: {
+        default: 'text-primary-foreground',
+        outline: 'text-foreground',
+        secondary: 'text-secondary-foreground',
+        ghost: 'text-foreground',
+        success: 'text-success',
+        destructive: 'text-destructive',
+        info: 'text-info',
+        warning: 'text-warning',
+        link: 'text-primary',
+      },
+    },
+
+    defaultVariants: {
+      variant: 'default',
+    },
+  },
+)
+
+interface ButtonProps
+  extends
+    React.ComponentProps<typeof TouchableOpacity>,
+    VariantProps<typeof buttonVariants> {}
 
 function Button({
+  className = '',
   variant = 'default',
   size = 'default',
-  className,
+  activeOpacity = 0.8,
   ...props
 }: ButtonProps) {
-  const value = useMemo(
-    () =>
-      cn('font-[GeistMedium] text-sm text-foreground', {
-        'text-primary-foreground': variant === 'default',
-        'text-foreground': variant === 'outline' || variant === 'ghost',
-        'text-secondary-foreground': variant === 'secondary',
-        'text-success': variant === 'success',
-        'text-destructive': variant === 'destructive',
-        'text-info': variant === 'info',
-        'text-warning': variant === 'warning',
-        'text-primary underline': variant === 'link',
-      }),
-    [variant],
-  )
-
   return (
-    <TextClassContext value={value}>
-      <Pressable
-        className={cn(
-          props.disabled && 'opacity-50',
-          buttonVariants({ variant, size }),
-          className,
-        )}
-        role='button'
+    <TextProvider
+      className={cn(buttonTextVariants({ variant }), {
+        'text-xs': size === 'xs',
+      })}
+    >
+      <TouchableOpacity
+        data-slot='button'
+        className={cn(buttonVariants({ variant, size }), className)}
+        activeOpacity={activeOpacity}
         {...props}
       />
-    </TextClassContext>
+    </TextProvider>
   )
 }
 
 export { Button }
-export type { ButtonProps }

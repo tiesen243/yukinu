@@ -70,7 +70,7 @@ function Toaster({
 }: Pick<ToastProviderProps, 'position'>) {
   const { toasts } = ToastPrimitive.useToastManager()
 
-  let swipeDirection: ToastPrimitive.Root.Props['swipeDirection'] = []
+  const swipeDirection: ToastPrimitive.Root.Props['swipeDirection'] = []
   if (position.includes('top')) swipeDirection.push('up')
   if (position.includes('bottom')) swipeDirection.push('down')
   if (position.includes('left')) swipeDirection.push('left')

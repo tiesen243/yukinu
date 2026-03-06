@@ -14,6 +14,7 @@ import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
 export default async function HomePage({ searchParams }: PageProps<'/'>) {
   const query = await productsCache.parse(searchParams)
 
+  // oxlint-disable-next-line promise/prefer-await-to-then
   void Promise.all([
     getQueryClient().prefetchQuery(trpc.banner.all.queryOptions()),
     getQueryClient().prefetchQuery(

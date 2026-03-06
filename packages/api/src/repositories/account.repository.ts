@@ -25,8 +25,8 @@ export class AccountRepository
       .from(this._table)
       .where(
         and(
-          eq(this._table.accountId, id),
           eq(this._table.provider, 'credentials'),
+          eq(this._table.providerAccountId, id),
         ),
       )
       .limit(1)

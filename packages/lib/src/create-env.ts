@@ -104,11 +104,12 @@ export function createEnv<
 }): TResult & TDeriveEnv {
   if (opts.emptyStringAsUndefined)
     for (const [key, value] of Object.entries(opts.runtimeEnv))
+      // oxlint-disable-next-line typescript/no-dynamic-delete
       if (value === '') delete opts.runtimeEnv[key]
 
-  const isServer = opts.isServer
-    ? opts.isServer
-    : (globalThis as unknown as { window: unknown }).window === undefined
+  const isServer =
+    opts.isServer ??
+    (globalThis as unknown as { window: unknown }).window === undefined
 
   const envs = isServer
     ? { ...opts.shared, ...opts.client, ...opts.server }
@@ -176,6 +177,7 @@ interface StandardSchemaV1<Input = unknown, Output = Input> {
   readonly '~standard': StandardSchemaV1.Props<Input, Output>
 }
 
+// oxlint-disable-next-line typescript/no-namespace
 declare namespace StandardSchemaV1 {
   /** The Standard Schema properties interface. */
   export interface Props<Input = unknown, Output = Input> {
@@ -211,7 +213,7 @@ declare namespace StandardSchemaV1 {
   /** The result interface if validation fails. */
   export interface FailureResult {
     /** The issues of failed validation. */
-    readonly issues: ReadonlyArray<Issue>
+    readonly issues: readonly Issue[]
   }
 
   /** The issue interface of the failure output. */

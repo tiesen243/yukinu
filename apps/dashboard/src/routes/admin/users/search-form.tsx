@@ -27,12 +27,9 @@ export const SearchForm: React.FC = () => {
         const q = typeof rawQ === 'string' ? rawQ.trim() : ''
 
         const rawRole = formData.get('role')
-        const role =
-          typeof rawRole === 'string'
-            ? rawRole === ''
-              ? null
-              : (rawRole as typeof query.role)
-            : query.role
+        let { role } = query
+        if (typeof rawRole === 'string')
+          role = rawRole === '' ? null : (rawRole as typeof query.role)
         if (q === query.search && role === query.role) return
 
         await setQuery((prev) => ({ ...prev, search: q, role, page: 1 }))

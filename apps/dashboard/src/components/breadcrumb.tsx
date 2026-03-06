@@ -27,7 +27,7 @@ export const Breadcrumb = () => {
       {location.pathname.split('/').map((segment, index, array) => {
         if (segment === '') return null
 
-        const path = '/' + array.slice(1, index + 1).join('/')
+        const path = `/${array.slice(1, index + 1).join('/')}`
 
         return (
           <Fragment key={path}>

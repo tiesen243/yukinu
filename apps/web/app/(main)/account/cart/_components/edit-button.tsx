@@ -97,9 +97,9 @@ export const EditButton: React.FC<{
             className='[appearance:textfield]'
             value={localQuantity}
             onChange={(e) => {
-              const value = parseInt(e.target.value, 10)
+              const value = Number.parseInt(e.target.value, 10)
               if (
-                isNaN(value) ||
+                Number.isNaN(value) ||
                 value < 1 ||
                 (stock !== null && value > stock)
               )
@@ -113,9 +113,11 @@ export const EditButton: React.FC<{
                 stock === null ? isPending : localQuantity >= stock || isPending
               }
               onClick={() => {
-                setLocalQuantity((qty) =>
-                  stock === null ? qty + 1 : qty < stock ? qty + 1 : qty,
-                )
+                setLocalQuantity((qty) => {
+                  if (stock === null) return qty + 1
+                  if (qty < stock) return qty + 1
+                  return qty
+                })
               }}
             >
               <PlusIcon />

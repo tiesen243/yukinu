@@ -22,7 +22,7 @@ export class CartService implements ICartService {
 
     const totalAmount = items
       .reduce(
-        (acc, item) => acc + parseFloat(item.unitPrice) * item.quantity,
+        (acc, item) => acc + Number.parseFloat(item.unitPrice) * item.quantity,
         0,
       )
       .toFixed(2)

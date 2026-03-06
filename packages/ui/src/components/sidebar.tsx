@@ -1,8 +1,10 @@
 'use client'
 
+import type { VariantProps } from 'class-variance-authority'
+
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
-import { cva, type VariantProps } from 'class-variance-authority'
+import { cva } from 'class-variance-authority'
 import { PanelLeftIcon } from 'lucide-react'
 import * as React from 'react'
 
@@ -28,7 +30,7 @@ const SIDEBAR_WIDTH_MOBILE = '18rem'
 const SIDEBAR_WIDTH_ICON = '3rem'
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b'
 
-type SidebarContextProps = {
+interface SidebarContextProps {
   state: 'expanded' | 'collapsed'
   open: boolean
   setOpen: (open: boolean) => void
@@ -79,15 +81,22 @@ function SidebarProvider({
       }
 
       // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      cookieStore.set({
+        name: SIDEBAR_COOKIE_NAME,
+        value: openState.toString(),
+        path: '/',
+        expires: Date.now() + SIDEBAR_COOKIE_MAX_AGE * 1000,
+      })
     },
     [setOpenProp, open],
   )
 
   // Helper to toggle the sidebar.
-  const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((prev) => !prev) : setOpen((prev) => !prev)
-  }, [isMobile, setOpen, setOpenMobile])
+  const toggleSidebar = React.useCallback(
+    () =>
+      isMobile ? setOpenMobile((prev) => !prev) : setOpen((prev) => !prev),
+    [isMobile, setOpen, setOpenMobile],
+  )
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {
@@ -524,15 +533,10 @@ function SidebarMenuButton({
     },
   })
 
-  if (!tooltip) {
-    return comp
-  }
+  if (!tooltip) return comp
 
-  if (typeof tooltip === 'string') {
-    tooltip = {
-      children: tooltip,
-    }
-  }
+  // oxlint-disable-next-line no-param-reassign
+  if (typeof tooltip === 'string') tooltip = { children: tooltip }
 
   return (
     <Tooltip>
@@ -602,9 +606,9 @@ function SidebarMenuSkeleton({
   showIcon?: boolean
 }) {
   // Random width between 50 to 90%.
-  const [width] = React.useState(() => {
-    return `${Math.floor(Math.random() * 40) + 50}%`
-  })
+  const [width] = React.useState(
+    () => `${Math.floor(Math.random() * 40) + 50}%`,
+  )
 
   return (
     <div

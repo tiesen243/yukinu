@@ -46,7 +46,7 @@ export default function NewSupportTicketPage() {
     },
     schema: createTicketInput.omit({ userId: true }),
     onSubmit: mutateAsync,
-    onSuccess: () => navigate('/support/tickets'),
+    onSuccess: () => void navigate('/support/tickets'),
   })
 
   return (

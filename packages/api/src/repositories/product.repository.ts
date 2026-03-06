@@ -186,7 +186,7 @@ export class ProductRepository
     productId: ProductSchema['id'],
     attrs: { name: string; value: string }[],
     tx = this._db,
-  ): Promise<void[]> {
+  ): Promise<unknown> {
     const { productAttributes, attributes } = this._schema
 
     return Promise.all(

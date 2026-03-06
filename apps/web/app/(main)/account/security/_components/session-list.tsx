@@ -28,8 +28,8 @@ export const SessionsList: React.FC = () => {
   ))
 }
 
-export const SessionsListSkeleton: React.FC = () => {
-  return Array.from({ length: 3 }, (_, index) => (
+export const SessionsListSkeleton: React.FC = () =>
+  Array.from({ length: 3 }, (_, index) => (
     <div
       key={index}
       className='relative flex animate-pulse flex-col gap-2 border-b pb-4 last:border-0'
@@ -42,7 +42,6 @@ export const SessionsListSkeleton: React.FC = () => {
       <div className='w-1/3 rounded-md bg-muted'>&nbsp;</div>
     </div>
   ))
-}
 
 const SessionItem: React.FC<{
   session: AllSessionsOutput[number]
