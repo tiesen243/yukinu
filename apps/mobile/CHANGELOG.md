@@ -1,5 +1,11 @@
 # @yukinu/mobile
 
+## 0.2.16
+
+### Patch Changes
+
+- [#377](https://github.com/tiesen243/yukinu/pull/377) [`bcd68f4`](https://github.com/tiesen243/yukinu/commit/bcd68f496a91ef8b67d7ffb5242ca9146b8e5630) Thanks [@tiesen243](https://github.com/tiesen243)! - update clean script
+
 ## 0.2.15
 
 ### Patch Changes
