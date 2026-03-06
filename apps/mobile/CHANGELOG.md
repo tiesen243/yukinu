@@ -1,5 +1,11 @@
 # @yukinu/mobile
 
+## 0.2.17
+
+### Patch Changes
+
+- [#379](https://github.com/tiesen243/yukinu/pull/379) [`2d61102`](https://github.com/tiesen243/yukinu/commit/2d61102f6a6ae8a9e10936beb9a8156df6f953d4) Thanks [@tiesen243](https://github.com/tiesen243)! - fix private package
+
 ## 0.2.16
 
 ### Patch Changes
