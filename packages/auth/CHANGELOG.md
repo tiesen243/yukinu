@@ -1,5 +1,19 @@
 # @yukinu/auth
 
+## 0.9.7
+
+### Patch Changes
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425) Thanks [@tiesen243](https://github.com/tiesen243)! - update auth package
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`2229819`](https://github.com/tiesen243/yukinu/commit/2229819960e949a6c160d096c68009b0e994c6b0) Thanks [@tiesen243](https://github.com/tiesen243)! - change parameter of verifyAccessToken function
+
+- Updated dependencies [[`f8909af`](https://github.com/tiesen243/yukinu/commit/f8909af29c72c4bbd94a112b8a34102effb631ad), [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425), [`f8909af`](https://github.com/tiesen243/yukinu/commit/f8909af29c72c4bbd94a112b8a34102effb631ad)]:
+  - @yukinu/db@0.9.7
+  - @yukinu/validators@0.9.5
+  - @yukinu/email@0.8.6
+  - @yukinu/lib@0.7.2
+
 ## 0.9.6
 
 ### Patch Changes
