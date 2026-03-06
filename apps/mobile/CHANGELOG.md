@@ -1,5 +1,11 @@
 # @yukinu/mobile
 
+## 0.2.15
+
+### Patch Changes
+
+- [#375](https://github.com/tiesen243/yukinu/pull/375) [`b750e5c`](https://github.com/tiesen243/yukinu/commit/b750e5c239d966257f19745af27175c453a96060) Thanks [@tiesen243](https://github.com/tiesen243)! - update UI components
+
 ## 0.2.14
 
 ### Patch Changes
