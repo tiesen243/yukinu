@@ -1,5 +1,14 @@
 # @yukinu/validators
 
+## 0.9.5
+
+### Patch Changes
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425) Thanks [@tiesen243](https://github.com/tiesen243)! - fix oxlint error
+
+- Updated dependencies [[`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425)]:
+  - @yukinu/lib@0.7.2
+
 ## 0.9.4
 
 ### Patch Changes

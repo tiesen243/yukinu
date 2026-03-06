@@ -1,5 +1,14 @@
 # @yukinu/mobile
 
+## 0.2.14
+
+### Patch Changes
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`2a4a157`](https://github.com/tiesen243/yukinu/commit/2a4a157be7206bee96e1a26d6d92cabf60257f00) Thanks [@tiesen243](https://github.com/tiesen243)! - migrate to react native cli
+
+- Updated dependencies [[`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425)]:
+  - @yukinu/ui@0.8.4
+
 ## 0.2.13
 
 ### Patch Changes
