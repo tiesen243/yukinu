@@ -85,6 +85,7 @@ const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
 
   return (
     <style
+      // oxlint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{
         __html: Object.entries(THEMES)
           .map(
@@ -180,6 +181,7 @@ function ChartTooltipContent({
     >
       {nestLabel ? null : tooltipLabel}
       <div className='grid gap-1.5'>
+        {/* oxlint-disable-next-line complexity */}
         {payload.map((item, index) => {
           const key = `${nameKey ?? item.name ?? item.dataKey ?? 'value'}`
           const itemConfig = getPayloadConfigFromPayload(config, item, key)
@@ -339,7 +341,6 @@ function getPayloadConfigFromPayload(
   return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
-export * from 'recharts'
 export {
   ChartContainer,
   ChartTooltip,

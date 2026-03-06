@@ -27,7 +27,7 @@ export interface IProductRepository extends IBaseRepository<typeof products> {
     productId: ProductSchema['id'],
     attributes: { name: string; value: string }[],
     tx?: Database,
-  ): Promise<void[]>
+  ): Promise<unknown>
 
   deleteAttributes(
     productId: ProductSchema['id'],

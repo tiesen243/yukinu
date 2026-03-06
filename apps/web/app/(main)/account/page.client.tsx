@@ -207,9 +207,7 @@ export function UpdateProfileForm() {
                             'SHA-256',
                             buffer,
                           )
-                          const hashedEmail = Array.from(
-                            new Uint8Array(hashBuffer),
-                          )
+                          const hashedEmail = [...new Uint8Array(hashBuffer)]
                             .map((b) => b.toString(16).padStart(2, '0'))
                             .join('')
                           return field.onChange(

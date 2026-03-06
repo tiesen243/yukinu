@@ -1,3 +1,5 @@
+import type { TicketStatus } from '@yukinu/validators/general'
+
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from '@yukinu/auth/react'
 import { Badge } from '@yukinu/ui/badge'
@@ -11,7 +13,7 @@ import {
 } from '@yukinu/ui/item'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@yukinu/ui/tabs'
 import { Typography } from '@yukinu/ui/typography'
-import { ticketStatuses, type TicketStatus } from '@yukinu/validators/general'
+import { ticketStatuses } from '@yukinu/validators/general'
 import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -91,18 +93,14 @@ const Tickets: React.FC<{ status: TicketStatus }> = ({ status }) => {
       </ItemContent>
 
       <ItemContent>
-        <Badge
-          variant={
-            ticket.status === 'open'
-              ? 'info'
-              : ticket.status === 'closed'
-                ? 'destructive'
-                : 'success'
-          }
-        >
-          {ticket.status}
-        </Badge>
+        <Badge variant={badgeVariants[ticket.status]}>{ticket.status}</Badge>
       </ItemContent>
     </Item>
   ))
 }
+
+export const badgeVariants = {
+  open: 'info',
+  closed: 'destructive',
+  resolved: 'success',
+} as const

@@ -2,7 +2,7 @@ import { Button } from '@yukinu/ui/button'
 import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 
-import { useVoucherQueryStates } from '@/routes/admin/vouchers/hook'
+import { useVoucherQueryStates } from '@/routes/admin/vouchers/_components/hook'
 
 export const SearchForm: React.FC = () => {
   const [query, setQuery] = useVoucherQueryStates()

@@ -2,7 +2,7 @@ import { Button } from '@yukinu/ui/button'
 import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 
-import { useCategoryQueryStates } from '@/routes/admin/categories/hook'
+import { useCategoryQueryStates } from '@/routes/admin/categories/_components/hook'
 
 export const SearchForm: React.FC = () => {
   const [query, setQuery] = useCategoryQueryStates()

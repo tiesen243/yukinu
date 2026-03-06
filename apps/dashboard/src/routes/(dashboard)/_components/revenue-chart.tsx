@@ -8,22 +8,24 @@ import {
   CardTitle,
 } from '@yukinu/ui/card'
 import {
-  AreaChart,
   ChartContainer,
-  ResponsiveContainer,
-  CartesianGrid,
-  XAxis,
-  YAxis,
   ChartTooltip,
   ChartTooltipContent,
-  Legend,
-  Area,
-  Line,
 } from '@yukinu/ui/chart'
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from 'recharts'
 
 export const RevenueChart: React.FC<{
   config: ChartConfig
-  data: Array<{ month: string; revenue: number; target: number }>
+  data: { month: string; revenue: number; target: number }[]
 }> = ({ config, data }) => (
   <Card className='border-border bg-card lg:col-span-2'>
     <CardHeader>

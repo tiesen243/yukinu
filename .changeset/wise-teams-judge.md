@@ -1,5 +1,5 @@
 ---
-"@yukinu/mobile": patch
+'@yukinu/mobile': patch
 ---
 
 migrate to react native cli

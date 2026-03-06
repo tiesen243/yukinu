@@ -1,3 +1,4 @@
+import type { Role } from '@yukinu/validators/auth'
 import type { AllUsersOutput } from '@yukinu/validators/user'
 
 import { useMutation } from '@tanstack/react-query'
@@ -18,7 +19,7 @@ import { Label } from '@yukinu/ui/label'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/toast'
-import { roles, userStatuses, type Role } from '@yukinu/validators/auth'
+import { roles, userStatuses } from '@yukinu/validators/auth'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'

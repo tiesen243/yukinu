@@ -13,8 +13,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   category,
   className,
   ...props
-}) => {
-  return (
+}) => (
     <Card
       {...props}
       className={cn(
@@ -39,12 +38,10 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
       </CardHeader>
     </Card>
   )
-}
 
 export const CategoryCardSkeleton: React.FC<
   React.ComponentProps<typeof Card>
-> = ({ className, ...props }) => {
-  return (
+> = ({ className, ...props }) => (
     <Card {...props} className={cn('rounded-lg pt-0', className)}>
       <CardHeader className='relative aspect-square animate-pulse rounded-t-lg bg-muted' />
 
@@ -55,4 +52,3 @@ export const CategoryCardSkeleton: React.FC<
       </CardContent>
     </Card>
   )
-}

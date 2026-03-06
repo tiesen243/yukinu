@@ -1,3 +1,5 @@
+import type { TicketStatus } from '@yukinu/validators/general'
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { cn } from '@yukinu/ui'
 import { Badge } from '@yukinu/ui/badge'
@@ -16,10 +18,11 @@ import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/toast'
 import { Typography } from '@yukinu/ui/typography'
-import { ticketStatuses, type TicketStatus } from '@yukinu/validators/general'
+import { ticketStatuses } from '@yukinu/validators/general'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
+import { badgeVariants } from '@/routes/support/tickets/_index'
 
 import type { Route } from './+types/[id]'
 
@@ -56,17 +59,7 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
         <Typography variant='h2' className='mb-0'>
           {data.subject}
         </Typography>
-        <Badge
-          variant={
-            data.status === 'open'
-              ? 'info'
-              : data.status === 'closed'
-                ? 'destructive'
-                : 'success'
-          }
-        >
-          {data.status}
-        </Badge>
+        <Badge variant={badgeVariants[data.status]}>{data.status}</Badge>
       </div>
       <div className='flex items-center justify-between'>
         <div>

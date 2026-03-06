@@ -18,7 +18,7 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useVoucherQueryStates } from '@/routes/admin/vouchers/hook'
+import { useVoucherQueryStates } from '@/routes/admin/vouchers/_components/hook'
 
 export const VouchersList: React.FC = () => {
   const trpc = useTRPC()

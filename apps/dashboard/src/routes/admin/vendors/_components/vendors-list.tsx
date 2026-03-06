@@ -3,8 +3,8 @@ import { Badge } from '@yukinu/ui/badge'
 import { TableCell, TableRow } from '@yukinu/ui/table'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { EditVendorButton } from '@/routes/admin/vendors/edit-vendor-button'
-import { useVendorQueryStates } from '@/routes/admin/vendors/hook'
+import { EditVendorButton } from '@/routes/admin/vendors/_components/edit-vendor-button'
+import { useVendorQueryStates } from '@/routes/admin/vendors/_components/hook'
 
 export const VendorsList: React.FC = () => {
   const trpc = useTRPC()

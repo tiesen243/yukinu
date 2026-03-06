@@ -3,13 +3,13 @@ import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon } from '@yukinu/ui/icons'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useCategoryQueryStates } from '@/routes/admin/categories/hook'
+import { useVoucherQueryStates } from '@/routes/admin/vouchers/_components/hook'
 
-export const CategoriesPagination: React.FC = () => {
+export const VouchersPagination: React.FC = () => {
   const trpc = useTRPC()
-  const [query, setQuery] = useCategoryQueryStates()
+  const [query, setQuery] = useVoucherQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.category.all.queryOptions(query))
+  const { data, isLoading } = useQuery(trpc.voucher.all.queryOptions(query))
 
   if (isLoading || !data?.pagination) return
 

@@ -8,13 +8,13 @@ import {
   splitLink,
 } from '@trpc/client'
 import { env } from '@yukinu/validators/env.next'
-import SuperJSON from 'superjson'
+import { SuperJSON } from 'superjson'
 
 import { getWebUrl } from '@/lib/utils'
 
 const configs = {
   transformer: SuperJSON,
-  url: getWebUrl() + '/api/trpc',
+  url: `${getWebUrl()}/api/trpc`,
   headers() {
     const headers = new Headers()
     headers.set('x-trpc-source', 'web')
@@ -50,7 +50,7 @@ export const trpcClient = createTRPCClient<AppRouter>({
 
         return attempts <= 3 // Retry up to 3 times for other errors
       },
-      retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30000),
+      retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30_000),
     }),
     splitLink({
       condition: () => env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',

@@ -1,4 +1,4 @@
-import { validateAccessToken } from '@yukinu/auth'
+import { verifyAccessToken } from '@yukinu/auth'
 import { db, orm } from '@yukinu/db'
 import * as schema from '@yukinu/db/schema'
 
@@ -40,7 +40,8 @@ import { WishlistService } from '@/services/wishlist.service'
 export const createTRPCContext = async (opts: {
   headers: Headers
 }): Promise<TRPCContext> => {
-  const session = await validateAccessToken(opts.headers)
+  const token = opts.headers.get('Authorization')?.replace('Bearer ', '')
+  const session = await verifyAccessToken(token ?? '')
 
   const accountRepo = new AccountRepository(db, orm, schema)
   const addressRepo = new AddressRepository(db, orm, schema)

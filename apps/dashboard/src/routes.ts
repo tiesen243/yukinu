@@ -20,14 +20,8 @@ export default [
       route('/admin/banners', './routes/admin/banners.tsx'),
 
       route('/admin/categories', './routes/admin/categories/_index.tsx'),
-      route(
-        '/admin/categories/new',
-        './routes/admin/categories/new/_index.tsx',
-      ),
-      route(
-        '/admin/categories/:id',
-        './routes/admin/categories/[id]/_index.tsx',
-      ),
+      route('/admin/categories/new', './routes/admin/categories/new.tsx'),
+      route('/admin/categories/:id', './routes/admin/categories/[id].tsx'),
 
       route('/admin/users', './routes/admin/users/_index.tsx'),
 
@@ -35,18 +29,15 @@ export default [
       route('/admin/products', './routes/admin/products.tsx'),
 
       route('/admin/vouchers', './routes/admin/vouchers/_index.tsx'),
-      route('/admin/vouchers/new', './routes/admin/vouchers/new/_index.tsx'),
-      route('/admin/vouchers/:id', './routes/admin/vouchers/[id]/_index.tsx'),
+      route('/admin/vouchers/new', './routes/admin/vouchers/new.tsx'),
+      route('/admin/vouchers/:id', './routes/admin/vouchers/[id].tsx'),
     ]),
 
     layout('./routes/products/__layout.tsx', [
       route('/products', './routes/products/_index.tsx'),
       route('/products/new', './routes/products/new/_index.tsx'),
       route('/products/:id', './routes/products/[id]/_index.tsx'),
-      route(
-        '/products/:id/variant',
-        './routes/products/[id]/variant/_index.tsx',
-      ),
+      route('/products/:id/variant', './routes/products/[id]/variant.tsx'),
     ]),
 
     layout('./routes/vendor/__layout.tsx', [

@@ -1,3 +1,5 @@
+import type { CreateCategoryInput } from '@yukinu/validators/general'
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -21,10 +23,7 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/toast'
-import {
-  createCategoryInput,
-  type CreateCategoryInput,
-} from '@yukinu/validators/general'
+import { createCategoryInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'

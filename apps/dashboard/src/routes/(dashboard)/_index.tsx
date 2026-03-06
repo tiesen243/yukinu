@@ -98,12 +98,12 @@ const revenueConfig = {
 } satisfies ChartConfig
 
 const revenueData = [
-  { month: 'Jan', revenue: 12000, target: 15000 },
-  { month: 'Feb', revenue: 19000, target: 15000 },
-  { month: 'Mar', revenue: 15000, target: 15000 },
-  { month: 'Apr', revenue: 22000, target: 15000 },
-  { month: 'May', revenue: 28000, target: 15000 },
-  { month: 'Jun', revenue: 35000, target: 15000 },
+  { month: 'Jan', revenue: 12_000, target: 15_000 },
+  { month: 'Feb', revenue: 19_000, target: 15_000 },
+  { month: 'Mar', revenue: 15_000, target: 15_000 },
+  { month: 'Apr', revenue: 22_000, target: 15_000 },
+  { month: 'May', revenue: 28_000, target: 15_000 },
+  { month: 'Jun', revenue: 35_000, target: 15_000 },
 ]
 
 const categoryConfig = {
@@ -170,9 +170,9 @@ const productPerformanceConfig = {
 } satisfies ChartConfig
 
 const productPerformanceData = [
-  { product: 'Product A', sales: 4200, revenue: 24000 },
-  { product: 'Product B', sales: 3800, revenue: 21200 },
-  { product: 'Product C', sales: 2500, revenue: 15000 },
-  { product: 'Product D', sales: 2800, revenue: 16800 },
-  { product: 'Product E', sales: 2100, revenue: 12600 },
+  { product: 'Product A', sales: 4200, revenue: 24_000 },
+  { product: 'Product B', sales: 3800, revenue: 21_200 },
+  { product: 'Product C', sales: 2500, revenue: 15_000 },
+  { product: 'Product D', sales: 2800, revenue: 16_800 },
+  { product: 'Product E', sales: 2100, revenue: 12_600 },
 ]

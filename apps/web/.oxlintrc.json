@@ -4,5 +4,13 @@
     "../../tools/oxc/core.json",
     "../../tools/oxc/react.json",
     "../../tools/oxc/next.json"
+  ],
+  "overrides": [
+    {
+      "files": ["*.tsx"],
+      "rules": {
+        "jsx-a11y/heading-has-content": "off"
+      }
+    }
   ]
 }

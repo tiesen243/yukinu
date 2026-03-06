@@ -106,12 +106,10 @@ export const VendorProducts: React.FC<{ id: string }> = ({ id }) => {
   )
 }
 
-export const VendorProductsSkeleton: React.FC = () => {
-  return (
+export const VendorProductsSkeleton: React.FC = () => (
     <>
       {Array.from({ length: 8 }, (_, index) => (
         <ProductCardSkeleton key={index} />
       ))}
     </>
   )
-}

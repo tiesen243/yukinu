@@ -1,3 +1,5 @@
+import type { UpdateCategoryInput } from '@yukinu/validators/general'
+
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -21,17 +23,14 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/toast'
-import {
-  updateCategoryInput,
-  type UpdateCategoryInput,
-} from '@yukinu/validators/general'
+import { updateCategoryInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
-import type { Route } from './+types/_index'
+import type { Route } from './+types/[id]'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
@@ -82,8 +81,8 @@ export default function CategoriesEditPage({
     schema: updateCategoryInput,
     onSubmit: mutateAsync,
     onSuccess: () => {
-      void refetch()
       void navigate('/admin/categories')
+      void refetch()
     },
   })
 

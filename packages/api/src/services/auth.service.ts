@@ -63,7 +63,12 @@ export class AuthService implements IAuthService {
       // oxlint-disable-next-line no-shadow
       const userId = await this._user.create({ email, username }, tx)
       await this._account.create(
-        { userId, provider: 'credentials', accountId: userId, password },
+        {
+          userId,
+          provider: 'credentials',
+          providerAccountId: userId,
+          password,
+        },
         tx,
       )
       await this._profile.create({ id: userId, fullName: username }, tx)

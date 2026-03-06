@@ -24,6 +24,7 @@ const nextConfig = {
   // oxlint-disable-next-line no-process-env
   ...(process.env.NEXT_BUILD_OUTPUT === 'standalone' && {
     output: 'standalone',
+    // oxlint-disable-next-line unicorn/prefer-module
     outputFileTracingRoot: path.join(__dirname, '../../'),
   }),
 } satisfies NextConfig

@@ -25,7 +25,7 @@ import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 
-import type { Route } from './+types/_index'
+import type { Route } from './+types/variant'
 
 export default function CreateProductVariantsPage({
   params,

@@ -3,8 +3,7 @@ import { ArrowRightIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 import Link from 'next/link'
 
-export const CTASection: React.FC = () => {
-  return (
+export const CTASection: React.FC = () => (
     <section className='bg-accent/20 px-4 py-20 sm:px-6 md:py-32 lg:px-8 dark:bg-accent/10'>
       <div className='container space-y-6 text-center'>
         <Typography variant='h2' className='text-primary'>
@@ -28,4 +27,3 @@ export const CTASection: React.FC = () => {
       </div>
     </section>
   )
-}

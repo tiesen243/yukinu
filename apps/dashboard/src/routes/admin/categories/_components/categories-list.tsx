@@ -18,7 +18,7 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useCategoryQueryStates } from '@/routes/admin/categories/hook'
+import { useCategoryQueryStates } from '@/routes/admin/categories/_components/hook'
 
 export const CategoriesList: React.FC = () => {
   const trpc = useTRPC()

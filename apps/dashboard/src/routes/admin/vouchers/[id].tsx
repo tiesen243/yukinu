@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router'
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
-import type { Route } from './+types/_index'
+import type { Route } from './+types/[id]'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
@@ -64,8 +64,8 @@ export default function VouchersEditPage({ loaderData }: Route.ComponentProps) {
     schema: updateVoucherInput,
     onSubmit: mutateAsync,
     onSuccess: () => {
-      void refetch()
       void navigate('/admin/vouchers')
+      void refetch()
     },
   })
 

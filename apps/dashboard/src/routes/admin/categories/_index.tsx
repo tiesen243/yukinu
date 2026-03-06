@@ -11,9 +11,9 @@ import {
 import { Typography } from '@yukinu/ui/typography'
 import { Link } from 'react-router'
 
-import { CategoriesList } from '@/routes/admin/categories/categories-list'
-import { CategoriesPagination } from '@/routes/admin/categories/categories-pagination'
-import { SearchForm } from '@/routes/admin/categories/search-form'
+import { CategoriesList } from '@/routes/admin/categories/_components/categories-list'
+import { CategoriesPagination } from '@/routes/admin/categories/_components/categories-pagination'
+import { SearchForm } from '@/routes/admin/categories/_components/search-form'
 
 export default function CategoriesPage() {
   return (

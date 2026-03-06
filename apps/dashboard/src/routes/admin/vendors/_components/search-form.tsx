@@ -2,7 +2,7 @@ import { Button } from '@yukinu/ui/button'
 import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 
-import { useVendorQueryStates } from '@/routes/admin/vendors/hook'
+import { useVendorQueryStates } from '@/routes/admin/vendors/_components/hook'
 
 export const SearchForm: React.FC = () => {
   const [query, setQuery] = useVendorQueryStates()

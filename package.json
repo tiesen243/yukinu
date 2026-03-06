@@ -29,17 +29,18 @@
     "@changesets/cli": "^2.30.0",
     "oxfmt": "^0.36.0",
     "oxlint": "^1.51.0",
-    "turbo": "^2.8.13"
+    "turbo": "^2.8.14"
   },
   "packageManager": "bun@1.3.0",
   "catalogs": {
     "prod": {
       "@tanstack/react-query": "^5.90.21",
       "nuqs": "^2.8.9",
+      "recharts": "^3.7.0",
       "zod": "4.3.6"
     },
     "dev": {
-      "@types/node": "^25.3.3",
+      "@types/node": "^25.3.5",
       "tsdown": "^0.21.0",
       "typescript": "^5.9.3"
     },
@@ -62,9 +63,9 @@
       "uploadthing": "^7.7.4"
     },
     "trpc": {
-      "@trpc/server": "^11.11.0",
-      "@trpc/client": "^11.11.0",
-      "@trpc/tanstack-react-query": "^11.11.0",
+      "@trpc/server": "^11.12.0",
+      "@trpc/client": "^11.12.0",
+      "@trpc/tanstack-react-query": "^11.12.0",
       "superjson": "^2.2.6"
     }
   }

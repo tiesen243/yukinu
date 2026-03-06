@@ -45,6 +45,7 @@
     "no-ternary": "off",
     "no-undefined": "off",
     "no-use-before-define": "off",
+    "no-void": ["error", { "allowAsStatement": true }],
     // Rely on oxfmt `experimentalSortImports` instead
     "sort-imports": "off",
     "sort-keys": "off",

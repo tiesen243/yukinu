@@ -26,7 +26,7 @@ export function createMetadata(override: Metadata = {}): MetaDescriptor[] {
     : baseUrl
 
   return [
-    { charSet: 'utf-8' },
+    { charSet: 'utf8' },
     {
       name: 'viewport',
       content: 'width=device-width, initial-scale=1, color-scheme=light dark',

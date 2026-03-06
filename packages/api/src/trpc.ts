@@ -2,7 +2,7 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import { db, orm } from '@yukinu/db'
 import * as schema from '@yukinu/db/schema'
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
-import SuperJSON from 'superjson'
+import { SuperJSON } from 'superjson'
 
 import type { TRPCContext, TRPCMeta } from '@/types'
 
@@ -24,7 +24,7 @@ const t = initTRPC
     },
   })
 
-const createCallerFactory = t.createCallerFactory
+const { createCallerFactory } = t
 
 const createTRPCRouter = t.router
 
@@ -108,20 +108,19 @@ const vendorProcedure = protectedProcedure.use(async ({ ctx, next }) => {
       .from(schema.vendorStaffs)
       .where(orm.eq(schema.vendorStaffs.userId, ctx.session.userId))
       .limit(1)
-    if (!staff)
+    if (staff) ({ vendorId } = staff)
+    else
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: 'Vendor not found for the staff.',
       })
-    vendorId = staff.vendorId
-  } else if (['admin', 'moderator'].includes(ctx.session.role)) {
+  } else if (['admin', 'moderator'].includes(ctx.session.role))
     vendorId = 'admin-or-moderator-access'
-  } else {
+  else
     throw new TRPCError({
       code: 'FORBIDDEN',
       message: 'Only vendor owners and staff can access this resource.',
     })
-  }
 
   return next({ ctx: { session: ctx.session, vendorId } })
 })

@@ -6,8 +6,7 @@ export const ProductPagination: React.FC<{
   query: { page: number }
   goToPage: (page: number) => Promise<void>
   className?: string
-}> = ({ pagination, query, goToPage, className = '' }) => {
-  return (
+}> = ({ pagination, query, goToPage, className = '' }) => (
     <section
       className={cn('flex items-center justify-center gap-2', className)}
     >
@@ -29,7 +28,6 @@ export const ProductPagination: React.FC<{
       )}
     </section>
   )
-}
 
 function getPaginationRange(cp: number, tp: number): (number | string)[] {
   if (tp <= 7) {

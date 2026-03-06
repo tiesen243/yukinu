@@ -1,3 +1,4 @@
+// oxlint-disable max-statements
 import * as React from 'react'
 
 interface FormError {
@@ -38,7 +39,7 @@ interface FormFieldProps<TName extends keyof TValues, TValues> {
 function extractError(errors: StandardSchemaV1.Issue[], name: string) {
   return errors.filter((issue) => {
     if (!issue.path || issue.path.length === 0) return false
-    const firstPath = issue.path[0]
+    const [firstPath] = issue.path
     if (typeof firstPath === 'object' && 'key' in firstPath)
       return firstPath.key === name
     return firstPath === name
@@ -92,9 +93,10 @@ export function useForm<
     async (values: TValues): Promise<TValues> => {
       if (!schema) return values
 
-      let result
-      if (typeof schema === 'function') result = await schema(values)
-      else result = await schema['~standard'].validate(values)
+      const result =
+        typeof schema === 'function'
+          ? await schema(values)
+          : await schema['~standard'].validate(values)
 
       if ('issues' in result) throw result.issues
       return (result.value ?? result) as TValues
@@ -125,7 +127,7 @@ export function useForm<
           if (Array.isArray(error)) issues = error
 
           let message = 'Validate failed'
-          if (error instanceof Error) message = error.message
+          if (error instanceof Error) ({ message } = error)
 
           formErrorRef.current = { message, issues } as TError
           await onError?.(formErrorRef.current)
@@ -163,7 +165,9 @@ export function useForm<
 
             if (target.type === 'checkbox') newValue = target.checked
             else if (target.type === 'number')
-              newValue = isNaN(target.valueAsNumber) ? 0 : target.valueAsNumber
+              newValue = Number.isNaN(target.valueAsNumber)
+                ? 0
+                : target.valueAsNumber
             else newValue = target.value
           } else newValue = param as TValues[TName]
 
@@ -261,6 +265,7 @@ interface StandardSchemaV1<Input = unknown, Output = Input> {
   readonly '~standard': StandardSchemaV1.Props<Input, Output>
 }
 
+// oxlint-disable-next-line typescript/no-namespace
 declare namespace StandardSchemaV1 {
   /** The Standard Schema properties interface. */
   export interface Props<Input = unknown, Output = Input> {
@@ -296,7 +301,7 @@ declare namespace StandardSchemaV1 {
   /** The result interface if validation fails. */
   export interface FailureResult {
     /** The issues of failed validation. */
-    readonly issues: ReadonlyArray<Issue>
+    readonly issues: readonly Issue[]
   }
 
   /** The issue interface of the failure output. */

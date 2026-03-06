@@ -3,7 +3,7 @@ import { Button } from '@yukinu/ui/button'
 import { ChevronLeftIcon } from '@yukinu/ui/icons'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useProductQueryStates } from '@/routes/products/_hook'
+import { useProductQueryStates } from '@/routes/products/_components/hook'
 
 export const ProductsPagination: React.FC<{ isAdmin?: boolean }> = ({
   isAdmin,

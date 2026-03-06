@@ -4,9 +4,9 @@ import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { DeleteProductButton } from '@/routes/products/_components/delete-product-button'
+import { useProductQueryStates } from '@/routes/products/_components/hook'
 import { PermanentDeleteProductButton } from '@/routes/products/_components/permanent-delete-button'
 import { RestoreProductButton } from '@/routes/products/_components/restore-product-button'
-import { useProductQueryStates } from '@/routes/products/_hook'
 
 export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const trpc = useTRPC()

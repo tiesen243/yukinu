@@ -1,5 +1,5 @@
 ---
-"@yukinu/oxc": patch
+'@yukinu/oxc': patch
 ---
 
 separate oxc config

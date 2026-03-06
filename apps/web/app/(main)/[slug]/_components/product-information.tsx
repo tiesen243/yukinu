@@ -72,14 +72,7 @@ export const ProductInformation: React.FC = () => {
                   handleOptionChange(type, String(value))
                 }}
               >
-                {Array.from(
-                  new Set(
-                    variants
-                      .map((v) => v.options.find((o) => o.name === type)?.value)
-                      .filter(Boolean)
-                      .toSorted(),
-                  ),
-                ).map((value, idx) => (
+                {[...new Set(variants.map((v) => v.options.find((o) => o.name === type)?.value).filter(Boolean).toSorted())].map((value, idx) => (
                   <Label
                     // oxlint-disable-next-line react/no-array-index-key
                     key={`${type}-option-${value}-${idx}`}

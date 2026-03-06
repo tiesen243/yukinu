@@ -5,8 +5,7 @@ import { MapPinIcon, ShoppingBagIcon, StarIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 import Link from 'next/link'
 
-export const BuyerValue: React.FC = () => {
-  return (
+export const BuyerValue: React.FC = () => (
     <section
       id='for-buyers'
       className='container grid grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 md:py-32 lg:grid-cols-2 lg:px-8'
@@ -59,7 +58,6 @@ export const BuyerValue: React.FC = () => {
       </section>
     </section>
   )
-}
 
 const benefits = [
   {

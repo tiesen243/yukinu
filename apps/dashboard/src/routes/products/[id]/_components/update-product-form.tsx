@@ -49,7 +49,7 @@ export const UpdateProductForm: React.FC<{
         type: 'success',
         title: 'Product updated successfully!',
       })
-      void refetch()
+      refetch()
     },
     onError: ({ message }) =>
       toast.add({
