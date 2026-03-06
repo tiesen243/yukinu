@@ -1,5 +1,5 @@
 ---
-"@yukinu/auth": patch
+'@yukinu/auth': patch
 ---
 
 update auth package

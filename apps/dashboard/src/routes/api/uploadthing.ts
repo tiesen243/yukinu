@@ -5,5 +5,5 @@ export const handlers = createRemixRouteHandler({
   router: ourFileRouter,
   config,
 })
-export const {loader} = handlers
-export const {action} = handlers
+export const { loader } = handlers
+export const { action } = handlers

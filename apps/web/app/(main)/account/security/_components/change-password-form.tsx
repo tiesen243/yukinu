@@ -1,5 +1,7 @@
 'use client'
 
+import type { ChangePasswordInput } from '@yukinu/validators/auth'
+
 import { Button } from '@yukinu/ui/button'
 import { Checkbox } from '@yukinu/ui/checkbox'
 import {
@@ -14,8 +16,7 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { changePasswordInput } from '@yukinu/validators/auth';
-import type { ChangePasswordInput } from '@yukinu/validators/auth';
+import { changePasswordInput } from '@yukinu/validators/auth'
 import { useRouter } from 'next/navigation'
 
 import { useTRPCClient } from '@/lib/trpc/react'

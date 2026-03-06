@@ -9,7 +9,7 @@ CREATE TABLE "accounts" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"user_id" varchar(24) NOT NULL,
 	"provider" varchar(50) NOT NULL,
-	"account_id" varchar(100) NOT NULL,
+	"provider_account_id" varchar(100) NOT NULL,
 	"password" text
 );
 --> statement-breakpoint
@@ -71,6 +71,7 @@ CREATE TABLE "vouchers" (
 	"code" varchar(50) NOT NULL,
 	"discount_amount" numeric(10, 2),
 	"discount_percentage" integer,
+	"quantity" integer DEFAULT 1 NOT NULL,
 	"expiry_date" timestamp NOT NULL,
 	CONSTRAINT "vouchers_code_unique" UNIQUE("code")
 );
@@ -281,7 +282,7 @@ ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_vendor_id_vendors_id_f
 ALTER TABLE "vendor_staffs" ADD CONSTRAINT "vendor_staffs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendor_transfers" ADD CONSTRAINT "vendor_transfers_vendor_id_vendors_id_fk" FOREIGN KEY ("vendor_id") REFERENCES "public"."vendors"("id") ON DELETE restrict ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY ("owner_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-CREATE UNIQUE INDEX "accounts_provider_account_id_uq_idx" ON "accounts" USING btree ("provider","account_id");--> statement-breakpoint
+CREATE UNIQUE INDEX "accounts_provider_account_id_uq_idx" ON "accounts" USING btree ("provider","provider_account_id");--> statement-breakpoint
 CREATE INDEX "accounts_user_id_idx" ON "accounts" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "sessions_user_id_idx" ON "sessions" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "sessions_id_token_uq_idx" ON "sessions" USING btree ("id","token");--> statement-breakpoint

@@ -7,27 +7,23 @@ export const ProductPagination: React.FC<{
   goToPage: (page: number) => Promise<void>
   className?: string
 }> = ({ pagination, query, goToPage, className = '' }) => (
-    <section
-      className={cn('flex items-center justify-center gap-2', className)}
-    >
-      <h3 className='sr-only'>Products Pagination section</h3>
+  <section className={cn('flex items-center justify-center gap-2', className)}>
+    <h3 className='sr-only'>Products Pagination section</h3>
 
-      {getPaginationRange(query.page, pagination.totalPages).map(
-        (item, idx) => (
-          <Button
-            // oxlint-disable-next-line react/no-array-index-key
-            key={`pagination-item-${idx}`}
-            variant='outline'
-            size='icon'
-            onClick={() => goToPage(Number(item))}
-            disabled={item === '...' || item === query.page}
-          >
-            {item}
-          </Button>
-        ),
-      )}
-    </section>
-  )
+    {getPaginationRange(query.page, pagination.totalPages).map((item, idx) => (
+      <Button
+        // oxlint-disable-next-line react/no-array-index-key
+        key={`pagination-item-${idx}`}
+        variant='outline'
+        size='icon'
+        onClick={() => goToPage(Number(item))}
+        disabled={item === '...' || item === query.page}
+      >
+        {item}
+      </Button>
+    ))}
+  </section>
+)
 
 function getPaginationRange(cp: number, tp: number): (number | string)[] {
   if (tp <= 7) {

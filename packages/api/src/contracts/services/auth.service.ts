@@ -3,10 +3,7 @@ import type * as Validators from '@yukinu/validators/auth'
 export interface IAuthService {
   getCurrentUser(userId: Validators.UserSchema['id']): Promise<
     Omit<Validators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
-      user: Pick<
-        Validators.UserSchema,
-        'id' | 'username' | 'email' | 'role' | 'image'
-      >
+      user: Omit<Validators.UserSchema, 'status' | 'deletedAt'>
     }
   >
 

@@ -28,7 +28,8 @@ export const SessionsList: React.FC = () => {
   ))
 }
 
-export const SessionsListSkeleton: React.FC = () => Array.from({ length: 3 }, (_, index) => (
+export const SessionsListSkeleton: React.FC = () =>
+  Array.from({ length: 3 }, (_, index) => (
     <div
       key={index}
       className='relative flex animate-pulse flex-col gap-2 border-b pb-4 last:border-0'

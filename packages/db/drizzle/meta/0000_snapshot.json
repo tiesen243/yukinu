@@ -1,5 +1,5 @@
 {
-  "id": "8538468a-43a6-4c1e-a6a3-3a716468621e",
+  "id": "ffdfc6ef-fc8d-4670-bce9-bb4a9bdd2f02",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -26,8 +26,8 @@
           "primaryKey": false,
           "notNull": true
         },
-        "account_id": {
-          "name": "account_id",
+        "provider_account_id": {
+          "name": "provider_account_id",
           "type": "varchar(100)",
           "primaryKey": false,
           "notNull": true
@@ -50,7 +50,7 @@
               "nulls": "last"
             },
             {
-              "expression": "account_id",
+              "expression": "provider_account_id",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -576,6 +576,13 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 1
         },
         "expiry_date": {
           "name": "expiry_date",
