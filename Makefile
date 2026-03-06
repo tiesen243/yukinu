@@ -35,7 +35,7 @@ build-dashboard:
 build-android:
 	@echo "Building Android app..."
 	@cd apps/mobile/android && ./gradlew assembleRelease
-
+	@cp apps/mobile/android/app/build/outputs/apk/release/app-release.apk yukinu.apk
 
 dev-web:
 	@echo "Starting development server..."
