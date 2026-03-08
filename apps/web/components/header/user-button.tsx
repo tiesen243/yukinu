@@ -25,7 +25,7 @@ import { ThemeSwitcher } from '@/components/header/theme-switcher'
 import { getDashboardUrl } from '@/lib/utils'
 
 export const UserButton = () => {
-  const { status, session, signOut } = useSession()
+  const { status, user, signOut } = useSession()
 
   if (status === 'loading')
     return <div className='size-9 animate-pulse rounded-full bg-muted' />
@@ -38,8 +38,6 @@ export const UserButton = () => {
         render={<Link href='/login'>Sign In</Link>}
       />
     )
-
-  const { user } = session
 
   return (
     <DropdownMenu>

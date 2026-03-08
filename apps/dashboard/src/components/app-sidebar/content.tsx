@@ -140,7 +140,7 @@ const navs = [
 ]
 
 export const AppSidebarContent: React.FC = () => {
-  const { status, session } = useSession()
+  const { status, user } = useSession()
 
   if (status !== 'authenticated') return null
 
@@ -151,7 +151,7 @@ export const AppSidebarContent: React.FC = () => {
         <SidebarMenu>
           {nav.items.map(
             (item) =>
-              item.roles.includes(session.user.role) && (
+              item.roles.includes(user.role) && (
                 <SidebarMenuItem key={item.url}>
                   <NavLink to={item.url}>
                     {({ isActive, isPending }) => (

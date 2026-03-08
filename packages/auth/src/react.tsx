@@ -3,15 +3,12 @@ import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 
-import type { SessionWithUser } from '@/core/types'
+import type { User } from '@/core/types'
 
 type SessionContextValue = (
-  | { status: 'loading'; session: SessionWithUser }
-  | { status: 'unauthenticated'; session: null }
-  | {
-      status: 'authenticated'
-      session: SessionWithUser & { user: NonNullable<SessionWithUser['user']> }
-    }
+  | { status: 'loading'; user: User | null }
+  | { status: 'unauthenticated'; user: null }
+  | { status: 'authenticated'; user: User }
 ) & {
   signIn: (credentials: LoginInput) => Promise<LoginOutput>
   signOut: () => Promise<void>
@@ -20,8 +17,8 @@ type SessionContextValue = (
 
 interface SessionProviderProps {
   children: React.ReactNode
-  session?: SessionWithUser
-  getSessionFn?: () => Promise<SessionWithUser>
+  user?: User | null
+  getUserFn?: () => Promise<User | null>
   basePath?: string
 }
 
@@ -35,24 +32,24 @@ const useSession = () => {
 }
 
 function SessionProvider(props: Readonly<SessionProviderProps>) {
-  const { session, getSessionFn, basePath = '/api/auth', children } = props
+  const { user, getUserFn, basePath = '/api/auth', children } = props
 
   const queryClient = useQueryClient()
 
-  const defaultGetSessionFn = async () => {
-    const res = await fetch(`${basePath}/get-session`)
+  const defaultGetUserFn = async () => {
+    const res = await fetch(`${basePath}/current-user`)
     if (!res.ok) throw new Error('Failed to fetch session')
-    return res.json() as Promise<SessionWithUser>
+    return res.json() as Promise<User | null>
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['auth', 'get-session'],
-    queryFn: getSessionFn ?? defaultGetSessionFn,
-    initialData: session,
-    enabled: !session,
+    queryKey: ['auth', 'get-user'],
+    queryFn: getUserFn ?? defaultGetUserFn,
+    initialData: user,
+    enabled: !user,
     staleTime: 10 * 60 * 1000, // 10 minutes
     refetchOnWindowFocus: false,
-    refetchOnMount: !session,
+    refetchOnMount: !user,
     retry: false,
   })
 
@@ -94,9 +91,9 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
   const value = React.useMemo(() => {
     let status = 'unauthenticated'
     if (isLoading) status = 'loading'
-    else if (data?.user) status = 'authenticated'
+    else if (data) status = 'authenticated'
 
-    return { status, session: data, signIn, signOut, refreshToken }
+    return { status, user: data, signIn, signOut, refreshToken }
   }, [data, isLoading, signIn, signOut]) as SessionContextValue
 
   return <SessionContext value={value}>{children}</SessionContext>

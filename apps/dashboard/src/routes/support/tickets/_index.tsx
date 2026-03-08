@@ -57,7 +57,7 @@ export default function SupportTicketsPage() {
 const Tickets: React.FC<{ status: TicketStatus }> = ({ status }) => {
   const trpc = useTRPC()
   const { data, isLoading } = useQuery(trpc.ticket.all.queryOptions({ status }))
-  const { session, status: sessionStatus } = useSession()
+  const { status: sessionStatus, user } = useSession()
 
   if (isLoading || sessionStatus !== 'authenticated')
     return Array.from({ length: 3 }, (_, i) => (
@@ -80,7 +80,7 @@ const Tickets: React.FC<{ status: TicketStatus }> = ({ status }) => {
       key={ticket.id}
       variant='outline'
       render={
-        ['admin', 'moderator'].includes(session.user.role) ? (
+        ['admin', 'moderator'].includes(user.role) ? (
           <Link to={`/support/tickets/${ticket.id}`} />
         ) : (
           <div />

@@ -1,3 +1,4 @@
+import type { User } from '@yukinu/auth'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/auth'
 
@@ -24,23 +25,11 @@ export class AuthService implements IAuthService {
     private readonly _verification: IVerificationRepository,
   ) {}
 
-  async getCurrentUser(userId: Validators.UserSchema['id']): Promise<
-    Omit<Validators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
-      user: Omit<Validators.UserSchema, 'status' | 'deletedAt'>
-    }
-  > {
+  async getCurrentUser(userId: Validators.UserSchema['id']): Promise<User> {
     const user = await this._user.find(userId)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
-
-    const { status: _, deletedAt: __, ...userData } = user
-    return {
-      token: '',
-      userAgent: null,
-      expiresAt: new Date(),
-      ipAddress: null,
-      user: userData,
-    }
+    return user
   }
 
   async register(
