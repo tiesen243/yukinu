@@ -29,7 +29,7 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
 
         <LoginForm redirectTo={String(redirect_to ?? '/')} />
 
-        <CardFooter className='flex-col gap-4' render={<form method='POST' />}>
+        <CardFooter className='flex-col gap-4' render={<form />}>
           <CardDescription className='self-start [&>a]:hover:text-primary [&>a]:hover:underline'>
             Don&apos;t have an account?{' '}
             <Link href='/register'>Register here</Link>.

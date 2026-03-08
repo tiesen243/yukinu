@@ -54,19 +54,19 @@ export function Auth(config: AuthConfig) {
 
   async function verifyAccessToken(opts: {
     headers: Headers
-  }): Promise<{ userId: string; role: Role }> {
+  }): Promise<{ userId: string; role: Role } | null> {
     const token =
       parseCookie(opts.headers.get('Cookie'))[cookies.keys.accessToken] ??
       opts.headers.get('Authorization')?.replace(/^Bearer\s+/, '')
-    if (!token) throw new AuthError('No access token provided')
+    if (!token) return null
 
     try {
       const { sub: userId, role } = await jwt.verify(token)
       return { userId, role }
     } catch (error) {
-      throw new AuthError(
-        error instanceof Error ? error.message : 'Invalid token',
-      )
+      // oxlint-disable-next-line node/no-process-env
+      if (process.env.NODE_ENV === 'development') console.log(error)
+      return null
     }
   }
 
@@ -139,8 +139,10 @@ export function Auth(config: AuthConfig) {
   }
 
   async function currentUser(opts: { headers: Headers }): Promise<User | null> {
-    const { userId } = await verifyAccessToken(opts)
-    const user = await adapter.getUser(userId)
+    const payload = await verifyAccessToken(opts)
+    if (!payload) return null
+
+    const user = await adapter.getUser(payload.userId)
     if (!user) return null
 
     return user
@@ -274,9 +276,15 @@ export function Auth(config: AuthConfig) {
 
     if (PATH_REGEXS.getSession.test(url.pathname)) {
       const session = await auth({ headers: req.headers })
+      if (!session.user)
+        return Response.json({ error: 'Not authenticated' }, { status: 401 })
+
       return Response.json(session, { status: 200 })
     } else if (PATH_REGEXS.getCurrentUser.test(url.pathname)) {
       const user = await currentUser({ headers: req.headers })
+      if (!user)
+        return Response.json({ error: 'Not authenticated' }, { status: 401 })
+
       return Response.json({ user }, { status: 200 })
     } else if (PATH_REGEXS.oauth.test(url.pathname)) return startOAuthFlow(url)
     else if (PATH_REGEXS.oauthCallback.test(url.pathname))

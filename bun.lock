@@ -51,7 +51,7 @@
     },
     "apps/mobile": {
       "name": "@yukinu/mobile",
-      "version": "0.2.15",
+      "version": "0.2.17",
       "dependencies": {
         "@react-navigation/bottom-tabs": "^7.15.5",
         "@react-navigation/native": "^7.1.33",
@@ -295,7 +295,7 @@
       "@types/react": "^19.2.14",
       "@types/react-dom": "^19.2.3",
       "react": "19.2.3",
-      "react-dom": "^19.2.4",
+      "react-dom": "^19.2.3",
     },
     "tailwind": {
       "@tailwindcss/postcss": "^4.2.1",
