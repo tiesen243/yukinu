@@ -109,17 +109,19 @@ export function Auth(config: AuthConfig) {
       const { session, user } = result
 
       const hashedSecret = await hashSecret(secret)
-      const isValid = constantTimeEqual(hashedSecret, decodeHex(session.token))
 
       const now = Date.now()
       const expiresTime = new Date(session.expiresAt).getTime()
 
-      if (
-        !isValid ||
-        now >= expiresTime ||
-        // session.ipAddress !== opts.headers.get('X-Forwarded-For') ||
+      const isValid = constantTimeEqual(hashedSecret, decodeHex(session.token))
+      const isIpMismatch =
+        session.ipAddress !== null &&
+        session.ipAddress !== opts.headers.get('X-Forwarded-For')
+      const isUaMismatch =
+        session.userAgent !== null &&
         session.userAgent !== opts.headers.get('User-Agent')
-      ) {
+
+      if (!isValid || now >= expiresTime || isIpMismatch || isUaMismatch) {
         await adapter.deleteSession(id)
         return DEFAULT_SESSION_USER
       }
@@ -246,7 +248,10 @@ export function Auth(config: AuthConfig) {
       })
     }
 
-    const session = await createSession(userId)
+    const session = await createSession(userId, {
+      userAgent: headers.get('User-Agent'),
+      ipAddress: headers.get('X-Forwarded-For'),
+    })
     let redirectUri = cookieStore[cookies.keys.redirectUri] ?? '/'
 
     const response = new Response(null, { status: 302 })
@@ -305,7 +310,10 @@ export function Auth(config: AuthConfig) {
           { status: 400 },
         )
 
-      const session = await signIn(parsed.data)
+      const session = await signIn(parsed.data, {
+        userAgent: req.headers.get('User-Agent'),
+        ipAddress: req.headers.get('X-Forwarded-For'),
+      })
       const response = Response.json(session, { status: 200 })
 
       response.headers.append(
@@ -439,10 +447,10 @@ function serializeCookie(
 const DEFAULT_SESSION_OPTS = {
   ipAddress: null,
   userAgent: null,
-} satisfies Pick<Session, 'ipAddress' | 'userAgent'>
+} as Pick<Session, 'ipAddress' | 'userAgent'>
 
 const DEFAULT_SESSION_USER = {
   token: '',
   user: null,
   expiresAt: new Date(),
-} satisfies SessionWithUser
+} as SessionWithUser
