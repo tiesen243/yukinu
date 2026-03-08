@@ -1,5 +1,13 @@
 # @yukinu/api
 
+## 0.9.9
+
+### Patch Changes
+
+- Updated dependencies [[`87c1cb0`](https://github.com/tiesen243/yukinu/commit/87c1cb066b5b0603080c300902b559e0d9860a1b)]:
+  - @yukinu/auth@0.9.9
+  - @yukinu/uploadthing@0.3.9
+
 ## 0.9.8
 
 ### Patch Changes
