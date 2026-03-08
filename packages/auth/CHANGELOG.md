@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.9.8
+
+### Patch Changes
+
+- [#381](https://github.com/tiesen243/yukinu/pull/381) [`ba164a8`](https://github.com/tiesen243/yukinu/commit/ba164a8f0b3ffbd89d900f718300134f34600cdb) Thanks [@tiesen243](https://github.com/tiesen243)! - update auth package
+
 ## 0.9.7
 
 ### Patch Changes
