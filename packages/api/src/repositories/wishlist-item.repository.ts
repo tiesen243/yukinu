@@ -1,11 +1,6 @@
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
-import type { WishlistItemSchema } from '@yukinu/validators/general'
-import type {
-  ProductSchema,
-  ProductImageSchema,
-} from '@yukinu/validators/product'
 
 import type { IWishlistItemRepository } from '@/contracts/repositories/wishlist-item.repository'
 
@@ -22,13 +17,7 @@ export class WishlistItemRepository
   allWithProduct(
     userId: UserSchema['id'],
     tx = this._db,
-  ): Promise<
-    (Pick<WishlistItemSchema, 'addedAt'> & {
-      product: Pick<ProductSchema, 'id' | 'name' | 'price'> & {
-        image: ProductImageSchema['url'] | null
-      }
-    })[]
-  > {
+  ): Promise<IWishlistItemRepository.WishlistItemWithProduct[]> {
     const { eq, min } = this._orm
     const { products, productImages } = this._schema
 

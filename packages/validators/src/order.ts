@@ -18,13 +18,13 @@ export const orderStatuses = [
   'completed',
   'cancelled',
 ] as const
-export type OrderStatus = z.infer<typeof orderStatuses>
+export type OrderStatus = (typeof orderStatuses)[number]
 
 export const paymentMethods = ['bank_transfer', 'cash_on_delivery'] as const
-export type PaymentMethod = z.infer<typeof paymentMethods>
+export type PaymentMethod = (typeof paymentMethods)[number]
 
 export const paymentStatuses = ['pending', 'success', 'failed'] as const
-export type PaymentStatus = z.infer<typeof paymentStatuses>
+export type PaymentStatus = (typeof paymentStatuses)[number]
 
 export const orderSchema = z.object({
   id: z.int().min(1000),
@@ -143,23 +143,3 @@ export const updateInput = z.object({
 export type UpdateInput = z.infer<typeof updateInput>
 export const updateOutput = z.void()
 export type UpdateOutput = z.infer<typeof updateOutput>
-
-export const addItemToCartInput = z.object({
-  userId: z.cuid(),
-  vendorId: z.cuid().nullable(),
-  productId: z.cuid(),
-  variantId: z.cuid().optional(),
-  unitPrice: currencySchema,
-  quantity: z.number().int().min(1, 'Quantity must be at least 1'),
-})
-export type AddItemToCartInput = z.infer<typeof addItemToCartInput>
-export const addItemToCartOutput = orderItemSchema.shape.id
-export type AddItemToCartOutput = z.infer<typeof addItemToCartOutput>
-
-export const removeItemFromCartInput = z.object({
-  userId: z.cuid(),
-  itemId: z.cuid(),
-})
-export type RemoveItemFromCartInput = z.infer<typeof removeItemFromCartInput>
-export const removeItemFromCartOutput = orderItemSchema.shape.id
-export type RemoveItemFromCartOutput = z.infer<typeof removeItemFromCartOutput>

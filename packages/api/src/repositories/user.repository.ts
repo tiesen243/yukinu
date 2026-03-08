@@ -1,7 +1,7 @@
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
-import type { Gender, ProfileSchema } from '@yukinu/validators/user'
+import type { Gender } from '@yukinu/validators/user'
 
 import type { IUserRepository } from '@/contracts/repositories/user.repository'
 
@@ -39,12 +39,7 @@ export class UserRepository
   async findWithProfile(
     id: UserSchema['id'],
     tx = this._db,
-  ): Promise<
-    | (Omit<UserSchema, 'status' | 'deletedAt'> & {
-        profile: Omit<ProfileSchema, 'id'>
-      })
-    | null
-  > {
+  ): Promise<IUserRepository.UserWithProfile | null> {
     const { eq, sql } = this._orm
     const { profiles } = this._schema
 

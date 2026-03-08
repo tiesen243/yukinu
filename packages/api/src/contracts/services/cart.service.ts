@@ -1,9 +1,7 @@
-import type * as Validators from '@yukinu/validators/order'
+import type * as Validators from '@yukinu/validators/cart'
 
 export interface ICartService {
-  get(
-    input: Validators.OneInput,
-  ): Promise<Pick<Validators.OneOutput, 'items' | 'totalAmount'>>
+  get(input: Validators.GetInput): Promise<Validators.GetOutput>
 
   addItemToCart(
     input: Validators.AddItemToCartInput,

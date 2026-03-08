@@ -41,6 +41,9 @@ build-ios:
 	@cd apps/mobile/ios && xcodebuild -scheme "Yukinu" -configuration Release -archivePath build/Yukinu.xcarchive archive
 	@xcodebuild -exportArchive -archivePath apps/mobile/ios/build/Yukinu.xcarchive -exportPath apps/mobile/ios/build -exportOptionsPlist exportOptions.plist
 
+db-generate:
+	@echo "Generating migration files..."
+	@$(pkm) --env-file=.env --filter @yukinu/db db:generate
 
 db-migrate:
 	@echo "Running database migrations..."
@@ -49,19 +52,6 @@ db-migrate:
 db-studio:
 	@echo "Starting database studio..."
 	@$(pkm) --env-file=.env --filter @yukinu/db db:studio
-
-dev-web:
-	@echo "Starting development server..."
-	@$(pkm) turbo --filter @yukinu/web dev --continue
-
-dev-dashboard:
-	@echo "Starting dashboard development server..."
-	@$(pkm) turbo --filter @yukinu/dashboard dev --continue
-
-dev-android:
-	@echo "Starting Android development server..."
-	@$(pkm) turbo --filter @yukinu/mobile start --continue
-
 
 lint:
 	@echo "Linting code..."

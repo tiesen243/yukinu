@@ -14,10 +14,11 @@ export interface IUserRepository extends IBaseRepository<typeof users> {
   findWithProfile(
     id: UserSchema['id'],
     tx?: Database,
-  ): Promise<
-    | (Omit<UserSchema, 'status' | 'deletedAt'> & {
-        profile: Omit<ProfileSchema, 'id'>
-      })
-    | null
-  >
+  ): Promise<IUserRepository.UserWithProfile | null>
+}
+
+export namespace IUserRepository {
+  export type UserWithProfile = Omit<UserSchema, 'status' | 'deletedAt'> & {
+    profile: Omit<ProfileSchema, 'id'>
+  }
 }

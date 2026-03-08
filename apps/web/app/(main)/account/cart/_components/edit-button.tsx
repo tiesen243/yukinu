@@ -23,24 +23,13 @@ import * as React from 'react'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const EditButton: React.FC<{
-  vendorId: string | null
-  productId: string | null
-  variantId: string | null
-  unitPrice: string
-  name: string | null
+  productId: string
+  productVariantId: string | null
+  name: string
   variant: Record<string, string>
+  stock: number
   quantity: number
-  stock: number | null
-}> = ({
-  vendorId,
-  productId,
-  variantId,
-  unitPrice,
-  name,
-  variant,
-  quantity,
-  stock,
-}) => {
+}> = ({ productId, productVariantId, name, variant, stock, quantity }) => {
   const [localQuantity, setLocalQuantity] = React.useState(quantity)
   const [open, setOpen] = React.useState(false)
 
@@ -135,17 +124,13 @@ export const EditButton: React.FC<{
           />
           <Button
             disabled={isPending}
-            onClick={() => {
-              if (!productId) return
-
+            onClick={() =>
               mutate({
-                vendorId,
                 productId,
-                unitPrice,
+                productVariantId,
                 quantity: localQuantity,
-                variantId: variantId ?? undefined,
               })
-            }}
+            }
           >
             {isPending ? 'Saving...' : 'Save changes'}
           </Button>

@@ -1,5 +1,5 @@
 import { db, orm } from '@yukinu/db'
-import { accounts, sessions, users } from '@yukinu/db/schema'
+import { accounts, profiles, sessions, users } from '@yukinu/db/schema'
 import { sendEmail } from '@yukinu/email'
 
 import type { AuthAdapter } from '@/core/types'
@@ -8,10 +8,18 @@ export const adapter = {
   async createUser(user) {
     const [createdUser] = await db
       .insert(users)
-      .values(user)
+      .values({
+        ...user,
+        username: `u${Math.random().toString(36).slice(2, 8)}`,
+        emailVerified: new Date(),
+      })
       .returning({ id: users.id })
 
     if (!createdUser) throw new Error('Failed to create user')
+    await db.insert(profiles).values({
+      id: createdUser.id,
+      fullName: user.username,
+    })
 
     await sendEmail({
       to: user.email,

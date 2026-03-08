@@ -7,9 +7,8 @@ import type { TRPCContext } from '@/types'
 import { AccountRepository } from '@/repositories/account.repository'
 import { AddressRepository } from '@/repositories/address.repository'
 import { BannerRepository } from '@/repositories/banner.repository'
+import { CartItemRepository } from '@/repositories/cart-item.repository'
 import { CategoryRepository } from '@/repositories/category.repository'
-import { OrderItemRepository } from '@/repositories/order-item.repository'
-import { OrderRepository } from '@/repositories/order.repository'
 import { ProductImageRepository } from '@/repositories/product-image.repository'
 import { ProductRepository } from '@/repositories/product.repository'
 import { ProfileRepository } from '@/repositories/profile.repository'
@@ -45,9 +44,8 @@ export const createTRPCContext = async (opts: {
   const accountRepo = new AccountRepository(db, orm, schema)
   const addressRepo = new AddressRepository(db, orm, schema)
   const bannerRepo = new BannerRepository(db, orm, schema)
+  const cartItemRepo = new CartItemRepository(db, orm, schema)
   const categoryRepo = new CategoryRepository(db, orm, schema)
-  const orderItemRepo = new OrderItemRepository(db, orm, schema)
-  const orderRepo = new OrderRepository(db, orm, schema)
   const productImageRepo = new ProductImageRepository(db, orm, schema)
   const productRepo = new ProductRepository(db, orm, schema)
   const profileRepo = new ProfileRepository(db, orm, schema)
@@ -69,7 +67,7 @@ export const createTRPCContext = async (opts: {
     verificationRepo,
   )
   const banner = new BannerService(db, bannerRepo)
-  const cart = new CartService(db, orderItemRepo, orderRepo)
+  const cart = new CartService(db, cartItemRepo)
   const category = new CategoryService(db, categoryRepo)
   const order = new OrderService(db)
   const productVariant = new ProductVariantService(db, productRepo, variantRepo)

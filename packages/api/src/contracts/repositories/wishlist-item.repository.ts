@@ -15,11 +15,13 @@ export interface IWishlistItemRepository extends IBaseRepository<
   allWithProduct(
     userId: UserSchema['id'],
     tx?: Database,
-  ): Promise<
-    (Pick<WishlistItemSchema, 'addedAt'> & {
-      product: Pick<ProductSchema, 'id' | 'name' | 'price'> & {
-        image: ProductImageSchema['url'] | null
-      }
-    })[]
-  >
+  ): Promise<IWishlistItemRepository.WishlistItemWithProduct[]>
+}
+
+export namespace IWishlistItemRepository {
+  export type WishlistItemWithProduct = Pick<WishlistItemSchema, 'addedAt'> & {
+    product: Pick<ProductSchema, 'id' | 'name' | 'price'> & {
+      image: ProductImageSchema['url'] | null
+    }
+  }
 }

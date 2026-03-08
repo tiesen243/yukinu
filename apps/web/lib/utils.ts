@@ -11,3 +11,10 @@ export function getDashboardUrl(): string {
     return `https://${env.NEXT_PUBLIC_DASHBOARD_URL}`
   return `http://localhost:5173`
 }
+
+export function formatPrice(price: string | number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(typeof price === 'string' ? Number.parseFloat(price) : price)
+}

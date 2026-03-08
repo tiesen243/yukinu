@@ -20,15 +20,7 @@ export class VendorRepository
     orderBy: Partial<Record<keyof VendorSchema, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx = this._db,
-  ): Promise<
-    (Pick<
-      VendorSchema,
-      'id' | 'name' | 'status' | 'createdAt' | 'updatedAt'
-    > & {
-      owner: Pick<UserSchema, 'id' | 'username' | 'email'>
-      staffCount: number
-    })[]
-  > {
+  ): Promise<IVendorRepository.VendorWithRelations[]> {
     const { count, eq } = this._orm
     const { users, vendorStaffs } = this._schema
 
@@ -62,9 +54,7 @@ export class VendorRepository
   allStaffByVendorId(
     vendorId: VendorSchema['id'],
     tx = this._db,
-  ): Promise<
-    (Pick<UserSchema, 'id' | 'username' | 'email'> & { assignedAt: Date })[]
-  > {
+  ): Promise<IVendorRepository.VendorStaff[]> {
     const { eq } = this._orm
     const { users, vendorStaffs } = this._schema
 

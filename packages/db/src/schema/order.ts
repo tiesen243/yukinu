@@ -30,6 +30,9 @@ export const orders = pgTable(
     userId: t
       .varchar({ length: 24 })
       .references(() => users.id, { onDelete: 'set null' }),
+    vendorId: t
+      .varchar({ length: 24 })
+      .references(() => vendors.id, { onDelete: 'set null' }),
     addressId: t
       .varchar({ length: 24 })
       .references(() => addresses.id, { onDelete: 'set null' }),
@@ -44,7 +47,10 @@ export const orders = pgTable(
     createdAt,
     updatedAt,
   }),
-  (t) => [index('orders_user_id_idx').on(t.userId)],
+  (t) => [
+    index('orders_user_id_idx').on(t.userId),
+    index('orders_vendor_id_idx').on(t.vendorId),
+  ],
 )
 
 export const orderItems = pgTable(
@@ -55,9 +61,6 @@ export const orderItems = pgTable(
       .integer()
       .notNull()
       .references(() => orders.id, { onDelete: 'cascade' }),
-    vendorId: t
-      .varchar({ length: 24 })
-      .references(() => vendors.id, { onDelete: 'set null' }),
     productId: t
       .varchar({ length: 24 })
       .references(() => products.id, { onDelete: 'set null' }),
@@ -71,7 +74,6 @@ export const orderItems = pgTable(
   }),
   (t) => [
     index('order_items_order_id_idx').on(t.orderId),
-    index('order_items_vendor_id_idx').on(t.vendorId),
     uniqueIndex('order_items_order_product_uq_idx')
       .on(t.orderId, t.productId)
       .where(isNull(t.productVariantId)),
