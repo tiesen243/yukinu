@@ -176,7 +176,10 @@ export function DiscountCodeInput() {
           <TagIcon />
         </InputGroupAddon>
       </InputGroup>
-      <Button onClick={() => mutate({ code })} disabled={isPending}>
+      <Button
+        onClick={() => mutate({ code })}
+        disabled={code.trim().length <= 3 || isPending}
+      >
         {isPending ? 'Applying...' : 'Apply'}
       </Button>
     </div>
