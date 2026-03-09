@@ -1,5 +1,11 @@
 # @yukinu/validators
 
+## 0.9.6
+
+### Patch Changes
+
+- [#385](https://github.com/tiesen243/yukinu/pull/385) [`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
 ## 0.9.5
 
 ### Patch Changes

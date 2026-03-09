@@ -1,5 +1,19 @@
 # @yukinu/dashboard
 
+## 0.11.13
+
+### Patch Changes
+
+- [#385](https://github.com/tiesen243/yukinu/pull/385) [`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016) Thanks [@tiesen243](https://github.com/tiesen243)! - fix typo
+
+- Updated dependencies [[`6266deb`](https://github.com/tiesen243/yukinu/commit/6266deb97725caed12881115f87aa5846bce0edc), [`b0d2625`](https://github.com/tiesen243/yukinu/commit/b0d2625b37a9ba9b3906199be41c75d0fd6ab719), [`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016), [`96c3c5c`](https://github.com/tiesen243/yukinu/commit/96c3c5c4289b1a54bd898c39fa6f9b09115e3bde), [`bf299aa`](https://github.com/tiesen243/yukinu/commit/bf299aad2586388a304ac52c3ccad29629031a28)]:
+  - @yukinu/api@0.9.10
+  - @yukinu/validators@0.9.6
+  - @yukinu/db@0.9.8
+  - @yukinu/auth@0.9.10
+  - @yukinu/email@0.8.7
+  - @yukinu/uploadthing@0.3.10
+
 ## 0.11.12
 
 ### Patch Changes

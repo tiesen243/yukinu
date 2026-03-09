@@ -1,5 +1,13 @@
 # @yukinu/uploadthing
 
+## 0.3.10
+
+### Patch Changes
+
+- Updated dependencies [[`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016), [`96c3c5c`](https://github.com/tiesen243/yukinu/commit/96c3c5c4289b1a54bd898c39fa6f9b09115e3bde)]:
+  - @yukinu/validators@0.9.6
+  - @yukinu/auth@0.9.10
+
 ## 0.3.9
 
 ### Patch Changes

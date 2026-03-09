@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/db",
-  "version": "0.9.7",
+  "version": "0.9.8",
   "private": true,
   "type": "module",
   "types": "./dist/index.d.mts",
