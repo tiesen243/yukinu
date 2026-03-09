@@ -1,5 +1,16 @@
 # @yukinu/auth
 
+## 0.9.10
+
+### Patch Changes
+
+- [#385](https://github.com/tiesen243/yukinu/pull/385) [`96c3c5c`](https://github.com/tiesen243/yukinu/commit/96c3c5c4289b1a54bd898c39fa6f9b09115e3bde) Thanks [@tiesen243](https://github.com/tiesen243)! - implement CSRF check and add middleware for checking auth in protected route
+
+- Updated dependencies [[`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016)]:
+  - @yukinu/validators@0.9.6
+  - @yukinu/db@0.9.8
+  - @yukinu/email@0.8.7
+
 ## 0.9.9
 
 ### Patch Changes
