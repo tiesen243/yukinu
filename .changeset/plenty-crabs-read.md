@@ -3,4 +3,4 @@
 '@yukinu/web': patch
 ---
 
-impletement CSRF check and add middleware for check auth in protected route
+implement CSRF check and add middleware for checking auth in protected route

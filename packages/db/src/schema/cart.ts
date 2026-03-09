@@ -15,7 +15,7 @@ export const cartItems = pgTable(
     productId: t
       .varchar({ length: 24 })
       .notNull()
-      .references(() => products.id, { onDelete: 'set null' }),
+      .references(() => products.id, { onDelete: 'cascade' }),
     productVariantId: t
       .varchar({ length: 24 })
       .references(() => productVariants.id, { onDelete: 'set null' }),

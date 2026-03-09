@@ -69,8 +69,6 @@ export const orderItems = pgTable(
       .references(() => productVariants.id, { onDelete: 'set null' }),
     quantity: t.integer().notNull(),
     unitPrice: t.numeric({ precision: 10, scale: 2 }).notNull(),
-    note: t.text(),
-    isCompleted: t.boolean().default(false).notNull(), // vendor marks item as completed
   }),
   (t) => [
     index('order_items_order_id_idx').on(t.orderId),

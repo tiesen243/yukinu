@@ -31,12 +31,11 @@ export const trpcClient = createTRPCClient<AppRouter>({
           fetch(`${getDashboardUrl()}/api/auth/refresh-token`, {
             method: 'POST',
           })
-          return true
+          return true // Retry after refreshing the token
         }
 
         if (
           op.type !== 'query' ||
-          error.message === 'Network request failed' ||
           ['FORBIDDEN', 'INTERNAL_SERVER_ERROR', 'TOO_MANY_REQUESTS'].includes(
             error.data?.code ?? '',
           )

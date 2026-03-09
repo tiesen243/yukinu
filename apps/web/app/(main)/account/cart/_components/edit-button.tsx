@@ -65,7 +65,7 @@ export const EditButton: React.FC<{
                 {key}: {value}
               </span>
             ))}
-            <span>In stock: {stock ?? '∞'}</span>
+            <span>In stock: {stock}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -87,20 +87,13 @@ export const EditButton: React.FC<{
             value={localQuantity}
             onChange={(e) => {
               const value = Number.parseInt(e.target.value, 10)
-              if (
-                Number.isNaN(value) ||
-                value < 1 ||
-                (stock !== null && value > stock)
-              )
-                return
+              if (Number.isNaN(value) || value < 1 || value > stock) return
               setLocalQuantity(value)
             }}
           />
           <InputGroupAddon align='inline-end'>
             <InputGroupButton
-              disabled={
-                stock === null ? isPending : localQuantity >= stock || isPending
-              }
+              disabled={localQuantity >= stock || isPending}
               onClick={() => {
                 setLocalQuantity((qty) => {
                   if (stock === null) return qty + 1

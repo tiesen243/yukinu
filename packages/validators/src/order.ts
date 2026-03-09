@@ -29,6 +29,7 @@ export type PaymentStatus = (typeof paymentStatuses)[number]
 export const orderSchema = z.object({
   id: z.int().min(1000),
   userId: z.cuid().nullable(),
+  vendorId: z.cuid().nullable(),
   addressId: z.cuid().nullable(),
   voucherId: z.cuid().nullable(),
   totalAmount: currencySchema,
@@ -41,13 +42,10 @@ export type OrderSchema = z.infer<typeof orderSchema>
 export const orderItemSchema = z.object({
   id: z.cuid(),
   orderId: z.int().min(1000),
-  vendorId: z.cuid().nullable(),
   productId: z.cuid().nullable(),
   productVariantId: z.cuid().nullable(),
   quantity: z.number().int().min(1),
   unitPrice: currencySchema,
-  note: z.string().nullable(),
-  isCompleted: z.boolean().default(false),
 })
 export type OrderItemSchema = z.infer<typeof orderItemSchema>
 
@@ -109,7 +107,7 @@ export const oneOutput = orderSchema
     address: addressSchema.omit({ id: true, userId: true }).nullable(),
     voucher: voucherSchema.omit({ id: true, expiryDate: true }).nullable(),
     items: z.array(
-      orderItemSchema.omit({ orderId: true, isCompleted: true }).extend({
+      orderItemSchema.omit({ orderId: true }).extend({
         productName: z.string().nullable(),
         productImage: z.string().nullable(),
         variant: z.record(z.string(), z.string()),

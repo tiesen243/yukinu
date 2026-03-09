@@ -3,12 +3,18 @@ import type { NextRequest, ProxyConfig } from 'next/server'
 import { verifyAccessToken } from '@yukinu/auth'
 import { NextResponse } from 'next/server'
 
-const protectedPaths = ['/account']
+const protectedPaths = ['/account', '/account/:path']
 
 export async function proxy(request: NextRequest) {
-  const isProtected = protectedPaths.some((path) =>
-    request.nextUrl.pathname.startsWith(path),
-  )
+  const { pathname } = request.nextUrl
+
+  const isProtected = protectedPaths.some((path) => {
+    if (path.endsWith('/:path')) {
+      const basePath = path.replace('/:path', '')
+      return pathname.startsWith(`${basePath}/`)
+    }
+    return pathname === path
+  })
 
   const session = await verifyAccessToken(request)
   if (isProtected && !session?.userId) {
@@ -19,7 +25,7 @@ export async function proxy(request: NextRequest) {
 
   // CRSF protection: only allow same-origin requests to mutate data
   if (
-    request.method !== 'GET' &&
+    !['GET', 'HEAD', 'OPTIONS'].includes(request.method) &&
     request.headers.get('origin') !== request.nextUrl.origin
   ) {
     return new NextResponse('Forbidden', { status: 403 })

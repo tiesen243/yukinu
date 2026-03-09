@@ -21,7 +21,7 @@ import Image from 'next/image'
 import { useMemo, useState } from 'react'
 
 import { usePage } from '@/app/(main)/account/cart/checkout/page.provider'
-import { SHIPPING_COST, TAX_RATE } from '@/lib/contants'
+import { SHIPPING_COST, TAX_RATE } from '@/lib/constants'
 import { useTRPC } from '@/lib/trpc/react'
 import { formatPrice } from '@/lib/utils'
 
