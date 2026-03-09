@@ -105,8 +105,8 @@ export const loginInput = z.object({
 })
 export type LoginInput = z.infer<typeof loginInput>
 export const loginOutput = z.object({
-  token: z.string(),
-  accessToken: z.string(),
+  accessToken: z.string().min(1, 'Access token is required'),
+  refreshToken: z.string().min(1, 'Refresh token is required'),
 })
 export type LoginOutput = z.infer<typeof loginOutput>
 

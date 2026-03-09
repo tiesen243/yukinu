@@ -21,10 +21,7 @@ export interface ICategoryRepository extends IBaseRepository<
 }
 
 export namespace ICategoryRepository {
-  export type CategoryWithParent = Pick<
-    CategorySchema,
-    'id' | 'name' | 'image'
-  > & {
+  export type CategoryWithParent = Omit<CategorySchema, 'parentId'> & {
     parent: Pick<CategorySchema, 'id' | 'name'> | null
   }
 }

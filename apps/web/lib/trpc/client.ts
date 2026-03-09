@@ -26,20 +26,18 @@ export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     retryLink({
       retry: ({ op, error, attempts }) => {
-        if (error.data?.code === 'UNAUTHORIZED' && attempts <= 1) {
+        if (error.data?.code === 'UNAUTHORIZED') {
+          if (attempts > 1) return false // Only attempt to refresh the token once
           fetch(`${getWebUrl()}/api/auth/refresh-token`, { method: 'POST' })
-          return true // Retry once after attempting to refresh the token
+          return true // Retry after refreshing the token
         }
 
         if (
           op.type !== 'query' ||
-          [
-            'FORBIDDEN',
-            'INTERNAL_SERVER_ERROR',
-            'NOT_FOUND',
-            'TOO_MANY_REQUESTS',
-          ].includes(error.data?.code ?? '') ||
-          error.message === 'Network request failed'
+          error.message === 'Network request failed' ||
+          ['FORBIDDEN', 'INTERNAL_SERVER_ERROR', 'TOO_MANY_REQUESTS'].includes(
+            error.data?.code ?? '',
+          )
         )
           return false // Do not retry on specific errors
 

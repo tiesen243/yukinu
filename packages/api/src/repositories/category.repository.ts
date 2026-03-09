@@ -30,6 +30,7 @@ export class CategoryRepository
       .select({
         id: this._table.id,
         name: this._table.name,
+        description: this._table.description,
         image: this._table.image,
         parent: { id: parent.id, name: parent.name },
       })
