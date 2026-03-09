@@ -18,5 +18,6 @@ export namespace ICartItemRepository {
     productPrice: string
     productStock: number
     variant: Record<string, string>
+    vendorId: string | null
   }
 }

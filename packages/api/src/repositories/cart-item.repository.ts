@@ -63,6 +63,7 @@ export class CartItemRepository
         variant: sql<
           Record<string, string>
         >`COALESCE(${variantData.variant}, '{}'::jsonb)`.as('variant'),
+        vendorId: products.vendorId,
       })
       .from(this._table)
       .innerJoin(products, eq(products.id, this._table.productId))

@@ -1,6 +1,7 @@
 'use client'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
 import { Button } from '@yukinu/ui/button'
 import { CheckCircle2Icon, TagIcon } from '@yukinu/ui/icons'
 import {
@@ -18,10 +19,10 @@ import {
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/toast'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
 import { usePage } from '@/app/(main)/account/cart/checkout/page.provider'
-import { SHIPPING_COST, TAX_RATE } from '@/lib/constants'
 import { useTRPC } from '@/lib/trpc/react'
 import { formatPrice } from '@/lib/utils'
 
@@ -148,8 +149,8 @@ export function DiscountCodeInput() {
 
   const { mutate, isPending } = useMutation({
     ...trpc.voucher.use.mutationOptions(),
-    onSuccess: ({ discountAmount, discountPercentage }) => {
-      setVoucher({ discountAmount, discountPercentage })
+    onSuccess: ({ id, discountAmount, discountPercentage }) => {
+      setVoucher({ id, discountAmount, discountPercentage })
       toast.add({
         type: 'success',
         title: 'Voucher applied!',
@@ -192,6 +193,13 @@ export function Checkout() {
     data: { totalAmount },
   } = useSuspenseQuery(trpc.cart.get.queryOptions({}))
   const { voucher, addressId, paymentMethod } = usePage()
+
+  const router = useRouter()
+  const { mutateAsync } = useMutation({
+    ...trpc.order.checkout.mutationOptions(),
+    onSuccess: () => router.push('/account/orders'),
+    meta: { filter: trpc.cart.get.queryFilter() },
+  })
 
   const appliedDiscount = useMemo(() => {
     if (voucher.discountAmount) return Number.parseFloat(voucher.discountAmount)
@@ -257,16 +265,17 @@ export function Checkout() {
         size='lg'
         className='w-full'
         onClick={() =>
+          addressId &&
+          paymentMethod &&
           toast.promise(
-            // oxlint-disable-next-line promise/avoid-new
-            new Promise((resolve, reject) =>
-              // oxlint-disable-next-line no-promise-executor-return
-              setTimeout(Math.random() > 0.5 ? resolve : reject, 2000),
-            ),
+            mutateAsync({ voucherId: voucher.id, addressId, paymentMethod }),
             {
               loading: 'Processing your order...',
               success: 'Order completed successfully!',
-              error: 'Failed to complete the order. Please try again.',
+              error: ({ message }) => ({
+                title: 'Checkout failed',
+                description: message,
+              }),
             },
           )
         }

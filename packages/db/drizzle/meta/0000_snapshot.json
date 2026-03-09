@@ -1,5 +1,5 @@
 {
-  "id": "94a7d9ec-a9e6-483c-b8ca-467212ed2476",
+  "id": "be8ce608-9cf3-4756-b83e-849a58ae514e",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -482,7 +482,7 @@
           "tableTo": "products",
           "columnsFrom": ["product_id"],
           "columnsTo": ["id"],
-          "onDelete": "set null",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "cart_items_product_variant_id_product_variants_id_fk": {
@@ -885,19 +885,6 @@
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
-        },
-        "note": {
-          "name": "note",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_completed": {
-          "name": "is_completed",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": true,
-          "default": false
         }
       },
       "indexes": {
@@ -1029,6 +1016,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "payment_id": {
+          "name": "payment_id",
+          "type": "varchar(24)",
+          "primaryKey": false,
+          "notNull": true
+        },
         "address_id": {
           "name": "address_id",
           "type": "varchar(24)",
@@ -1122,6 +1115,15 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
+        "orders_payment_id_payments_id_fk": {
+          "name": "orders_payment_id_payments_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "payments",
+          "columnsFrom": ["payment_id"],
+          "columnsTo": ["id"],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
         "orders_address_id_addresses_id_fk": {
           "name": "orders_address_id_addresses_id_fk",
           "tableFrom": "orders",
@@ -1155,12 +1157,6 @@
           "name": "id",
           "type": "varchar(24)",
           "primaryKey": true,
-          "notNull": true
-        },
-        "order_id": {
-          "name": "order_id",
-          "type": "integer",
-          "primaryKey": false,
           "notNull": true
         },
         "method": {
@@ -1205,34 +1201,8 @@
           "default": "now()"
         }
       },
-      "indexes": {
-        "payments_order_id_idx": {
-          "name": "payments_order_id_idx",
-          "columns": [
-            {
-              "expression": "order_id",
-              "isExpression": false,
-              "asc": true,
-              "nulls": "last"
-            }
-          ],
-          "isUnique": false,
-          "concurrently": false,
-          "method": "btree",
-          "with": {}
-        }
-      },
-      "foreignKeys": {
-        "payments_order_id_orders_id_fk": {
-          "name": "payments_order_id_orders_id_fk",
-          "tableFrom": "payments",
-          "tableTo": "orders",
-          "columnsFrom": ["order_id"],
-          "columnsTo": ["id"],
-          "onDelete": "restrict",
-          "onUpdate": "no action"
-        }
-      },
+      "indexes": {},
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

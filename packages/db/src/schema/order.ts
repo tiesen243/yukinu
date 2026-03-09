@@ -33,6 +33,10 @@ export const orders = pgTable(
     vendorId: t
       .varchar({ length: 24 })
       .references(() => vendors.id, { onDelete: 'set null' }),
+    paymentId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => payments.id, { onDelete: 'restrict' }),
     addressId: t
       .varchar({ length: 24 })
       .references(() => addresses.id, { onDelete: 'set null' }),
@@ -81,23 +85,15 @@ export const orderItems = pgTable(
   ],
 )
 
-export const payments = pgTable(
-  'payments',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    orderId: t
-      .integer()
-      .notNull()
-      .references(() => orders.id, { onDelete: 'restrict' }),
-    method: paymentMethodEnum().notNull(),
-    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
-    methodReference: t.varchar({ length: 255 }),
-    status: paymentStatusEnum().default('pending').notNull(),
-    createdAt,
-    updatedAt,
-  }),
-  (t) => [index('payments_order_id_idx').on(t.orderId)],
-)
+export const payments = pgTable('payments', (t) => ({
+  id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+  method: paymentMethodEnum().notNull(),
+  amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  methodReference: t.varchar({ length: 255 }),
+  status: paymentStatusEnum().default('pending').notNull(),
+  createdAt,
+  updatedAt,
+}))
 
 export const transactions = pgTable(
   'transactions',

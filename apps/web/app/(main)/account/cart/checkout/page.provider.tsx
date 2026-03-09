@@ -5,17 +5,18 @@ import type { PaymentMethod } from '@yukinu/validators/order'
 import * as React from 'react'
 
 interface PageContextValue {
-  addressId: string
+  addressId: string | null
   setAddressId: React.Dispatch<
     React.SetStateAction<PageContextValue['addressId']>
   >
 
-  paymentMethod: PaymentMethod
+  paymentMethod: PaymentMethod | null
   setPaymentMethod: React.Dispatch<
     React.SetStateAction<PageContextValue['paymentMethod']>
   >
 
   voucher: {
+    id: string | null
     discountAmount: string | null
     discountPercentage: number | null
   }
@@ -25,11 +26,13 @@ interface PageContextValue {
 const PageContext = React.createContext<PageContextValue | null>(null)
 
 function PageProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [addressId, setAddressId] =
-    React.useState<PageContextValue['addressId']>('')
+  const [addressId, setAddressId] = React.useState<
+    PageContextValue['addressId'] | null
+  >(null)
   const [paymentMethod, setPaymentMethod] =
-    React.useState<PaymentMethod>('cash_on_delivery')
+    React.useState<PaymentMethod | null>(null)
   const [voucher, setVoucher] = React.useState<PageContextValue['voucher']>({
+    id: null,
     discountAmount: null,
     discountPercentage: null,
   })

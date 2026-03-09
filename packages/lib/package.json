@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./constants": "./dist/constants.mjs",
     "./create-env": "./dist/create-env.mjs",
     "./create-id": "./dist/create-id.mjs",
     "./create-query-client": "./dist/create-query-client.mjs",

@@ -46,7 +46,7 @@ export class VoucherService implements IVoucherService {
   }
 
   async one(input: OneVoucherInput): Promise<OneVoucherOutput> {
-    const { id, code, isUsage } = input
+    const { id, code } = input
     if (!id && !code)
       throw new TRPCError({
         code: 'BAD_REQUEST',
@@ -58,23 +58,6 @@ export class VoucherService implements IVoucherService {
     const [voucher] = await this._vourcher.all(whereClauses, {}, { limit: 1 })
     if (!voucher)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Voucher not found' })
-
-    if (isUsage) {
-      if (voucher.expiryDate < new Date())
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Voucher has expired',
-        })
-      else if (voucher.quantity <= 0)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Voucher has no remaining quantity',
-        })
-
-      await this._vourcher.update(voucher.id, {
-        quantity: voucher.quantity - 1,
-      })
-    }
 
     return voucher
   }

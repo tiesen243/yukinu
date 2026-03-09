@@ -14,25 +14,15 @@ export const voucherRouter = createTRPCRouter({
 
   one: protectedProcedure
     .meta({ message: 'Get voucher successfully' })
-    .input(Validators.oneVoucherInput.omit({ isUsage: true }))
+    .input(Validators.oneVoucherInput)
     .output(Validators.oneVoucherOutput)
-    .query(({ ctx, input }) =>
-      ctx.services.voucher.one({
-        ...input,
-        isUsage: false,
-      }),
-    ),
+    .query(({ ctx, input }) => ctx.services.voucher.one(input)),
 
   use: protectedProcedure
     .meta({ message: 'Voucher applied successfully' })
-    .input(Validators.oneVoucherInput.omit({ isUsage: true }))
+    .input(Validators.oneVoucherInput)
     .output(Validators.oneVoucherOutput)
-    .mutation(({ ctx, input }) =>
-      ctx.services.voucher.one({
-        ...input,
-        isUsage: true,
-      }),
-    ),
+    .mutation(({ ctx, input }) => ctx.services.voucher.one(input)),
 
   create: protectedProcedure
     .meta({
