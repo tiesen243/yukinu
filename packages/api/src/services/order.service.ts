@@ -89,7 +89,7 @@ export class OrderService implements IOrderService {
 
       if (typeof discount === 'string') amount -= Number.parseFloat(discount)
       else if (typeof discount === 'number') amount -= (amount * discount) / 100
-      amount += TAX_RATE * amount + SHIPPING_COST
+      amount += TAX_RATE * Math.max(amount, 0) + SHIPPING_COST
 
       const paymentId = await this._payment.create(
         { amount: amount.toFixed(2), method: paymentMethod },

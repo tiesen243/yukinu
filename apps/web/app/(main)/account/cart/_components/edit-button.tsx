@@ -116,13 +116,9 @@ export const EditButton: React.FC<{
             }
           />
           <Button
-            disabled={isPending}
+            disabled={isPending || localQuantity > stock || localQuantity < 1}
             onClick={() =>
-              mutate({
-                productId,
-                productVariantId,
-                quantity: localQuantity,
-              })
+              mutate({ productId, productVariantId, quantity: localQuantity })
             }
           >
             {isPending ? 'Saving...' : 'Save changes'}

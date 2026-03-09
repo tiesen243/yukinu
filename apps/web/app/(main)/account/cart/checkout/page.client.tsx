@@ -178,7 +178,7 @@ export function DiscountCodeInput() {
         </InputGroupAddon>
       </InputGroup>
       <Button
-        onClick={() => mutate({ code })}
+        onClick={() => mutate({ code: code.trim() })}
         disabled={code.trim().length <= 3 || isPending}
       >
         {isPending ? 'Applying...' : 'Apply'}
@@ -209,7 +209,7 @@ export function Checkout() {
   }, [voucher, totalAmount])
 
   const finalAmount = useMemo(() => {
-    let amount = Number.parseFloat(totalAmount) - appliedDiscount
+    let amount = Math.max(Number.parseFloat(totalAmount) - appliedDiscount, 0)
     amount += TAX_RATE * amount + SHIPPING_COST
     return Math.max(amount, 0)
   }, [totalAmount, appliedDiscount])
@@ -237,7 +237,8 @@ export function Checkout() {
           <span className='text-muted-foreground'>Taxes</span>
           <span className='font-medium text-foreground'>
             {formatPrice(
-              TAX_RATE * (Number.parseFloat(totalAmount) - appliedDiscount),
+              TAX_RATE *
+                (Math.max(Number.parseFloat(totalAmount) - appliedDiscount), 0),
             )}
           </span>
         </div>
