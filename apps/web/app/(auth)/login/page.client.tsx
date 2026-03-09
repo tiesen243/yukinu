@@ -21,10 +21,7 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const router = useRouter()
 
   const form = useForm({
-    defaultValues: {
-      identifier: '',
-      password: '',
-    },
+    defaultValues: { identifier: '', password: '' },
     schema: loginInput,
     onSubmit: signIn,
     onSuccess: () => {

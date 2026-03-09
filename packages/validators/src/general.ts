@@ -134,7 +134,6 @@ export type AllVouchersOutput = z.infer<typeof allVouchersOutput>
 export const oneVoucherInput = voucherSchema
   .pick({ id: true, code: true })
   .partial()
-  .extend({ isUsage: z.boolean().default(false) })
 export type OneVoucherInput = z.infer<typeof oneVoucherInput>
 export const oneVoucherOutput = voucherSchema
 export type OneVoucherOutput = z.infer<typeof oneVoucherOutput>

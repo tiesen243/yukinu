@@ -88,7 +88,7 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
     ...trpc.cart.addItemToCart.mutationOptions(),
-    meta: { filter: trpc.cart.get.queryOptions() },
+    meta: { filter: trpc.cart.get.queryOptions({}) },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -134,23 +134,12 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
       },
       isTogglingWishlistItem,
 
-      addItemToCart: (quantity: number) => {
-        const unitPrice =
-          product.variants.length > 0 ? selectedVariant?.price : product.price
-        if (!unitPrice)
-          return toast.add({
-            type: 'error',
-            title: 'Price not available',
-          })
-
+      addItemToCart: (quantity: number) =>
         addItemToCart({
-          vendorId: product.vendor?.id ?? null,
           productId: product.id,
-          unitPrice: unitPrice,
-          variantId: selectedVariant?.id,
+          productVariantId: selectedVariant?.id ?? null,
           quantity,
-        })
-      },
+        }),
       isAddingItemToCart,
     }
   }, [

@@ -12,19 +12,16 @@ export interface ICategoryRepository extends IBaseRepository<
     orderBy?: Partial<Record<keyof CategorySchema, 'asc' | 'desc'>>,
     options?: { limit?: number; offset?: number },
     tx?: Database,
-  ): Promise<
-    (Pick<CategorySchema, 'id' | 'name' | 'image'> & {
-      parent: Pick<CategorySchema, 'id' | 'name'> | null
-    })[]
-  >
+  ): Promise<ICategoryRepository.CategoryWithParent[]>
 
   findWithParent(
     id: CategorySchema['id'],
     tx?: Database,
-  ): Promise<
-    | (Omit<CategorySchema, 'parentId'> & {
-        parent: Pick<CategorySchema, 'id' | 'name'> | null
-      })
-    | null
-  >
+  ): Promise<ICategoryRepository.CategoryWithParent | null>
+}
+
+export namespace ICategoryRepository {
+  export type CategoryWithParent = Omit<CategorySchema, 'parentId'> & {
+    parent: Pick<CategorySchema, 'id' | 'name'> | null
+  }
 }

@@ -5,6 +5,8 @@ import * as React from 'react'
 
 import type { User } from '@/core/types'
 
+const QUERY_KEY = [['auth', 'currentUser'], { type: 'query' }]
+
 type SessionContextValue = (
   | { status: 'loading'; user: User | null }
   | { status: 'unauthenticated'; user: null }
@@ -43,49 +45,43 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['auth', 'get-user'],
+    queryKey: QUERY_KEY,
     queryFn: getUserFn ?? defaultGetUserFn,
     initialData: user,
     enabled: !user,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    refetchOnWindowFocus: false,
-    refetchOnMount: !user,
-    retry: false,
   })
 
   const { mutateAsync: signIn } = useMutation({
-    mutationKey: ['auth', 'sign-in'],
+    mutationKey: [['auth', 'sign-in'], { type: 'mutation' }],
     mutationFn: async (credentials: LoginInput) => {
       const res = await fetch(`${basePath}/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       })
+
       if (!res.ok) throw new Error(await res.text())
       return res.json() as Promise<LoginOutput>
     },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['auth', 'get-session'] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   })
 
   const { mutateAsync: signOut } = useMutation({
-    mutationKey: ['auth', 'sign-out'],
+    mutationKey: [['auth', 'sign-out'], { type: 'mutation' }],
     mutationFn: async () => {
       const res = await fetch(`${basePath}/sign-out`, { method: 'POST' })
-      if (!res.ok) throw new Error('Failed to sign out')
+      if (!res.ok) throw new Error(await res.text())
     },
-    onSuccess: () =>
-      queryClient.setQueryData(['auth', 'get-session'], { user: null }),
+    onSuccess: () => queryClient.setQueriesData({ queryKey: QUERY_KEY }, null),
   })
 
   const { mutateAsync: refreshToken } = useMutation({
-    mutationKey: ['auth', 'refresh-token'],
+    mutationKey: [['auth', 'refresh-token'], { type: 'mutation' }],
     mutationFn: async () => {
       const res = await fetch(`${basePath}/refresh-token`, { method: 'POST' })
-      if (!res.ok) throw new Error('Failed to refresh token')
+      if (!res.ok) throw new Error(await res.text())
     },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['auth', 'get-session'] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   })
 
   const value = React.useMemo(() => {

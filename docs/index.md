@@ -69,19 +69,19 @@ This section tracks the implementation progress of features across different use
 - [x] View products by vendor
 - [x] Reset password (forgot password)
 
-### User (Customer) (5/11 completed 🚧)
+### User (Customer) (7/11 completed 🚧)
 
 - [x] Update personal profile
 - [x] Manage shipping addresses (CRUD)
 - [x] Add product to wishlist
 - [x] Remove product from wishlist
 - [x] Add product to cart
-- [ ] Place an order (checkout)
+- [x] Place an order (checkout)
 - [ ] Make payment
 - [ ] Track order status
 - [ ] Cancel order (if not processed yet)
 - [ ] Review products
-- [ ] View order history
+- [x] View order history
 
 ### Vendor Owner / Manager (6/8 completed 🚧)
 

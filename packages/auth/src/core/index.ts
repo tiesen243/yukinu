@@ -282,20 +282,19 @@ export function Auth(config: AuthConfig) {
     if (PATH_REGEXS.getSession.test(url.pathname)) {
       const session = await auth({ headers: req.headers })
       if (!session.user)
-        return Response.json({ error: 'Not authenticated' }, { status: 401 })
+        return new Response('Not authenticated', { status: 401 })
 
       return Response.json(session, { status: 200 })
     } else if (PATH_REGEXS.getCurrentUser.test(url.pathname)) {
       const user = await currentUser({ headers: req.headers })
-      if (!user)
-        return Response.json({ error: 'Not authenticated' }, { status: 401 })
+      if (!user) return new Response('Not authenticated', { status: 401 })
 
       return Response.json({ user }, { status: 200 })
     } else if (PATH_REGEXS.oauth.test(url.pathname)) return startOAuthFlow(url)
     else if (PATH_REGEXS.oauthCallback.test(url.pathname))
       return handleOAuthCallback(url, req.headers)
 
-    return Response.json({ error: 'Not Found' }, { status: 404 })
+    return new Response('Not Found', { status: 404 })
   }
 
   async function handlePost(req: Request): Promise<Response> {
@@ -305,10 +304,7 @@ export function Auth(config: AuthConfig) {
       const { identifier, password } = await req.json()
       const parsed = loginInput.safeParse({ identifier, password })
       if (!parsed.success)
-        return Response.json(
-          { error: 'Invalid input', details: parsed.error },
-          { status: 400 },
-        )
+        return new Response('Validation error', { status: 400 })
 
       const session = await signIn(parsed.data, {
         userAgent: req.headers.get('User-Agent'),
@@ -338,11 +334,17 @@ export function Auth(config: AuthConfig) {
 
       response.headers.append(
         'Set-Cookie',
-        serializeCookie(cookies.keys.accessToken, '', { 'Max-Age': 0 }),
+        serializeCookie(cookies.keys.accessToken, '', {
+          ...cookies.options,
+          'Max-Age': 0,
+        }),
       )
       response.headers.append(
         'Set-Cookie',
-        serializeCookie(cookies.keys.refreshToken, '', { 'Max-Age': 0 }),
+        serializeCookie(cookies.keys.refreshToken, '', {
+          ...cookies.options,
+          'Max-Age': 0,
+        }),
       )
 
       return response
@@ -360,7 +362,7 @@ export function Auth(config: AuthConfig) {
       return response
     }
 
-    return Response.json({ error: 'Not Found' }, { status: 404 })
+    return new Response('Not Found', { status: 404 })
   }
 
   const bucket = new TokenBucketRateLimit<string>(10, 60)
@@ -372,25 +374,21 @@ export function Auth(config: AuthConfig) {
       req.headers.get('x-real-ip') ??
       'unknown'
     if (!bucket.consume(ip, req.method === 'POST' ? 2 : 1))
-      return Response.json({ error: 'Too many requests' }, { status: 429 })
+      return new Response('Too many requests', { status: 429 })
 
     try {
       if (req.method === 'GET') response = await handleGet(req)
       else if (req.method === 'POST') response = await handlePost(req)
       else if (req.method === 'OPTIONS')
         response = new Response(null, { status: 204 })
-      else
-        response = Response.json(
-          { error: 'Method not allowed' },
-          { status: 405 },
-        )
+      else response = new Response('Method not allowed', { status: 405 })
     } catch (error) {
       // oxlint-disable-next-line node/no-process-env
       if (process.env.NODE_ENV === 'development') console.log(error)
 
       const _error = error instanceof Error ? error.message : 'Unknown error'
       const status = error instanceof AuthError ? 401 : 500
-      response = Response.json({ error: _error }, { status })
+      response = new Response(_error, { status })
     }
 
     response.headers.set('Access-Control-Allow-Origin', '*')

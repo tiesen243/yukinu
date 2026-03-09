@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     "./auth": "./dist/auth.mjs",
+    "./cart": "./dist/cart.mjs",
     "./env": "./dist/env.mjs",
     "./env.next": "./dist/env.next.mjs",
     "./env.vite": "./dist/env.vite.mjs",

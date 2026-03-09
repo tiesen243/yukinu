@@ -21,11 +21,7 @@ export class CategoryRepository
     orderBy: Partial<Record<keyof CategorySchema, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx = this._db,
-  ): Promise<
-    (Pick<CategorySchema, 'id' | 'name' | 'image'> & {
-      parent: Pick<CategorySchema, 'id' | 'name'> | null
-    })[]
-  > {
+  ): Promise<ICategoryRepository.CategoryWithParent[]> {
     const whereClause = this._buildCriteria(criterias)
     const orderByClause = this._buildOrderBy(orderBy)
 
@@ -34,6 +30,7 @@ export class CategoryRepository
       .select({
         id: this._table.id,
         name: this._table.name,
+        description: this._table.description,
         image: this._table.image,
         parent: { id: parent.id, name: parent.name },
       })

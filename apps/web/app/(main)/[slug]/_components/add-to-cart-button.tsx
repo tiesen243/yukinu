@@ -86,9 +86,7 @@ export const AddToCartButton: React.FC = () => {
       <div className='flex w-full items-center gap-2'>
         <Button
           className='flex-1'
-          onClick={() => {
-            addItemToCart(quantity)
-          }}
+          onClick={() => addItemToCart(quantity)}
           disabled={
             isAddingItemToCart ||
             (variants.length > 0

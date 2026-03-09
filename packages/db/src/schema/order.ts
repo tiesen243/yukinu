@@ -30,6 +30,13 @@ export const orders = pgTable(
     userId: t
       .varchar({ length: 24 })
       .references(() => users.id, { onDelete: 'set null' }),
+    vendorId: t
+      .varchar({ length: 24 })
+      .references(() => vendors.id, { onDelete: 'set null' }),
+    paymentId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => payments.id, { onDelete: 'restrict' }),
     addressId: t
       .varchar({ length: 24 })
       .references(() => addresses.id, { onDelete: 'set null' }),
@@ -44,7 +51,10 @@ export const orders = pgTable(
     createdAt,
     updatedAt,
   }),
-  (t) => [index('orders_user_id_idx').on(t.userId)],
+  (t) => [
+    index('orders_user_id_idx').on(t.userId),
+    index('orders_vendor_id_idx').on(t.vendorId),
+  ],
 )
 
 export const orderItems = pgTable(
@@ -55,9 +65,6 @@ export const orderItems = pgTable(
       .integer()
       .notNull()
       .references(() => orders.id, { onDelete: 'cascade' }),
-    vendorId: t
-      .varchar({ length: 24 })
-      .references(() => vendors.id, { onDelete: 'set null' }),
     productId: t
       .varchar({ length: 24 })
       .references(() => products.id, { onDelete: 'set null' }),
@@ -66,12 +73,9 @@ export const orderItems = pgTable(
       .references(() => productVariants.id, { onDelete: 'set null' }),
     quantity: t.integer().notNull(),
     unitPrice: t.numeric({ precision: 10, scale: 2 }).notNull(),
-    note: t.text(),
-    isCompleted: t.boolean().default(false).notNull(), // vendor marks item as completed
   }),
   (t) => [
     index('order_items_order_id_idx').on(t.orderId),
-    index('order_items_vendor_id_idx').on(t.vendorId),
     uniqueIndex('order_items_order_product_uq_idx')
       .on(t.orderId, t.productId)
       .where(isNull(t.productVariantId)),
@@ -81,23 +85,15 @@ export const orderItems = pgTable(
   ],
 )
 
-export const payments = pgTable(
-  'payments',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    orderId: t
-      .integer()
-      .notNull()
-      .references(() => orders.id, { onDelete: 'restrict' }),
-    method: paymentMethodEnum().notNull(),
-    amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
-    methodReference: t.varchar({ length: 255 }),
-    status: paymentStatusEnum().default('pending').notNull(),
-    createdAt,
-    updatedAt,
-  }),
-  (t) => [index('payments_order_id_idx').on(t.orderId)],
-)
+export const payments = pgTable('payments', (t) => ({
+  id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+  method: paymentMethodEnum().notNull(),
+  amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  methodReference: t.varchar({ length: 255 }),
+  status: paymentStatusEnum().default('pending').notNull(),
+  createdAt,
+  updatedAt,
+}))
 
 export const transactions = pgTable(
   'transactions',

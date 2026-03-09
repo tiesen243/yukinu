@@ -1,11 +1,12 @@
-import * as Validators from '@yukinu/validators/order'
+import * as Validators from '@yukinu/validators/cart'
 
 import { createTRPCRouter, protectedProcedure } from '@/trpc'
 
 export const cartRouter = createTRPCRouter({
   get: protectedProcedure
     .meta({ message: 'Cart retrieved successfully.' })
-    .output(Validators.oneOutput.pick({ items: true, totalAmount: true }))
+    .input(Validators.getInput.omit({ userId: true }))
+    .output(Validators.getOutput)
     .query(({ ctx }) => ctx.services.cart.get({ userId: ctx.session.userId })),
 
   addItemToCart: protectedProcedure
