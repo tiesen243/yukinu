@@ -17,7 +17,7 @@
     "~dev": "tsdown --watch"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.8",
+    "@react-email/components": "^1.0.9",
     "@yukinu/validators": "workspace:*",
     "resend": "^6.9.3"
   },

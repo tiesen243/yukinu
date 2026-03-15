@@ -309,7 +309,7 @@ declare namespace StandardSchemaV1 {
     /** The error message of the issue. */
     readonly message: string
     /** The path of the issue, if any. */
-    readonly path?: ReadonlyArray<PropertyKey | PathSegment> | undefined
+    readonly path?: readonly (PropertyKey | PathSegment)[] | undefined
   }
 
   /** The path segment interface of the issue. */
