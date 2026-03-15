@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "changeset": "changeset",
     "clean": "turbo run clean && git clean -xdf node_modules",
     "dev": "turbo dev --continue",
     "format": "oxfmt --check",

@@ -49,7 +49,7 @@ CREATE TABLE "cart_items" (
 	"product_id" varchar(24) NOT NULL,
 	"product_variant_id" varchar(24),
 	"quantity" integer NOT NULL,
-	CONSTRAINT "cart_items_quantity_check" CHECK ("cart_items"."quantity" >= $1)
+	CONSTRAINT "cart_items_quantity_check" CHECK ("cart_items"."quantity" > 0)
 );
 --> statement-breakpoint
 CREATE TABLE "banners" (

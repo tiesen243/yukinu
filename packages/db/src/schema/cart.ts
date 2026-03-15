@@ -1,5 +1,5 @@
 import { createId } from '@yukinu/lib/create-id'
-import { gte, isNotNull, isNull } from 'drizzle-orm'
+import { isNotNull, isNull, sql } from 'drizzle-orm'
 import { check, index, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { products, productVariants, users } from '@/schema'
@@ -29,6 +29,6 @@ export const cartItems = pgTable(
     uniqueIndex('cart_items_user_product_variant_idx')
       .on(t.userId, t.productVariantId)
       .where(isNotNull(t.productVariantId)),
-    check('cart_items_quantity_check', gte(t.quantity, 1)),
+    check('cart_items_quantity_check', sql`${t.quantity} > 0`),
   ],
 )
