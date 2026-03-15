@@ -1,5 +1,11 @@
 # @yukinu/db
 
+## 0.9.9
+
+### Patch Changes
+
+- [#387](https://github.com/tiesen243/yukinu/pull/387) [`9ddd05e`](https://github.com/tiesen243/yukinu/commit/9ddd05e5d94977af235569610dabd23daf208a34) Thanks [@tiesen243](https://github.com/tiesen243)! - fix check constraints
+
 ## 0.9.8
 
 ### Patch Changes

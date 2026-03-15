@@ -1,5 +1,12 @@
 # @yukinu/auth
 
+## 0.9.11
+
+### Patch Changes
+
+- Updated dependencies [[`9ddd05e`](https://github.com/tiesen243/yukinu/commit/9ddd05e5d94977af235569610dabd23daf208a34)]:
+  - @yukinu/db@0.9.9
+
 ## 0.9.10
 
 ### Patch Changes
