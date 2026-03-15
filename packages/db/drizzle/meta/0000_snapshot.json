@@ -1,5 +1,5 @@
 {
-  "id": "14ca1f87-4f4d-489a-94a5-86a839e09c16",
+  "id": "3c898efa-d502-4e23-b810-e1e375bdc4d0",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -501,7 +501,7 @@
       "checkConstraints": {
         "cart_items_quantity_check": {
           "name": "cart_items_quantity_check",
-          "value": "\"cart_items\".\"quantity\" >= $1"
+          "value": "\"cart_items\".\"quantity\" > 0"
         }
       },
       "isRLSEnabled": false
