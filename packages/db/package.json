@@ -3,7 +3,6 @@
   "version": "0.9.10",
   "private": true,
   "type": "module",
-  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
