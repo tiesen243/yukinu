@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/lib",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "private": true,
   "type": "module",
   "exports": {
@@ -31,10 +31,6 @@
     "./standard-schema": {
       "types": "./dist/standard-schema.d.mts",
       "default": "./dist/standard-schema.mjs"
-    },
-    "./standard-schema.d.ts": {
-      "types": "./dist/standard-schema.d.ts.d.mts",
-      "default": "./dist/standard-schema.d.ts.mjs"
     },
     "./package.json": "./package.json"
   },

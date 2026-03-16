@@ -1,9 +1,8 @@
 {
   "name": "@yukinu/auth",
-  "version": "0.9.11",
+  "version": "0.9.12",
   "private": true,
   "type": "module",
-  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
