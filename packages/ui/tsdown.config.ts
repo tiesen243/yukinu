@@ -6,20 +6,21 @@ export default defineConfig({
   dts: true,
   shims: true,
   exports: {
-    customExports() {
-      return {
-        '.': './dist/index.mjs',
-        './*': {
-          types: './dist/components/*.d.mts',
-          default: './dist/components/*.mjs',
-        },
-        './hooks/*': {
-          types: './dist/hooks/*.d.mts',
-          default: './dist/hooks/*.mjs',
-        },
-        './tailwind.css': './src/tailwind.css',
-        './package.json': './package.json',
-      }
-    },
+    customExports: () => ({
+      '.': {
+        types: './dist/index.d.mts',
+        default: './dist/index.mjs',
+      },
+      './*': {
+        types: './dist/components/*.d.mts',
+        default: './dist/components/*.mjs',
+      },
+      './hooks/*': {
+        types: './dist/hooks/*.d.mts',
+        default: './dist/hooks/*.mjs',
+      },
+      './tailwind.css': './src/tailwind.css',
+      './package.json': './package.json',
+    }),
   },
 })

@@ -6,18 +6,21 @@ export default defineConfig({
   dts: true,
   shims: true,
   exports: {
-    customExports(exports) {
+    customExports(opts) {
+      const exports: Record<string, unknown> = {}
+      for (const entry of Object.keys(opts))
+        exports[entry] = opts[entry].endsWith('.mjs')
+          ? {
+              types: opts[entry].replace('.mjs', '.d.mts'),
+              default: opts[entry],
+            }
+          : (exports[entry] = opts[entry])
+
       exports['.'] = {
-        'react-server': './dist/index.rsc.mjs',
-        default: './dist/index.mjs',
+        ...(exports['.'] as Record<string, unknown>),
+        'react-server': opts['./index.rsc'],
       }
       delete exports['./index.rsc']
-
-      exports['./react'] = {
-        types: './dist/react.d.mts',
-        default: './dist/react.mjs',
-      }
-
       return exports
     },
   },

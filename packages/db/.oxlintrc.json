@@ -1,12 +1,4 @@
 {
   "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "extends": ["../../tools/oxc/core.json"],
-  "overrides": [
-    {
-      "files": ["**/*.ts"],
-      "rules": {
-        "node/no-process-env": "off"
-      }
-    }
-  ]
+  "extends": ["../../tools/oxc/core.json"]
 }

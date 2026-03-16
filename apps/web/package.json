@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:prod",
-    "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
@@ -25,8 +24,7 @@
     "next": "^16.1.6",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
-    "react-dom": "catalog:react",
-    "superjson": "catalog:trpc"
+    "react-dom": "catalog:react"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
