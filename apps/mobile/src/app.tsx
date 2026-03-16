@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import SplashScreen from 'react-native-splash-screen'
 
 import { DarkTheme, LightTheme } from '@/lib/theme'
+import { TRPCReactProvider } from '@/lib/trpc'
 import Navigation from '@/screens/__root'
 
 function App() {
@@ -17,14 +18,13 @@ function App() {
         barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'}
       />
 
-      <Navigation
-        theme={theme}
-        linking={{
-          enabled: 'auto',
-          prefixes: [],
-        }}
-        onReady={() => SplashScreen.hide()}
-      />
+      <TRPCReactProvider>
+        <Navigation
+          theme={theme}
+          linking={{ enabled: 'auto', prefixes: [] }}
+          onReady={() => SplashScreen.hide()}
+        />
+      </TRPCReactProvider>
     </SafeAreaProvider>
   )
 }

@@ -1,5 +1,3 @@
-'use client'
-
 import type { QueryClient } from '@tanstack/react-query'
 import type { AppRouter } from '@yukinu/api'
 
@@ -8,15 +6,14 @@ import { createTRPCContext } from '@trpc/tanstack-react-query'
 import { createClient } from '@yukinu/api/client'
 import { SessionProvider } from '@yukinu/auth/react'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
-import { env } from '@yukinu/validators/env.next'
 import { useState } from 'react'
 
-import { getWebUrl } from '@/lib/utils'
+import { getBaseUrl } from '@/lib/utils'
 
 const { TRPCProvider, useTRPC, useTRPCClient } = createTRPCContext<AppRouter>()
 
 let clientQueryClientSingleton: QueryClient | undefined
-export const getQueryClient = () => {
+const getQueryClient = () => {
   if (typeof window === 'undefined') return createQueryClient()
   return (clientQueryClientSingleton ??= createQueryClient())
 }
@@ -28,8 +25,8 @@ function TRPCReactProvider({
 
   const [trpcClient] = useState(() =>
     createClient({
-      baseUrl: getWebUrl(),
-      useStreaming: env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
+      baseUrl: getBaseUrl(),
+      useStreaming: true,
     }),
   )
 

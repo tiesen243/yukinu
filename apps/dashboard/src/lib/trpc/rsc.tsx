@@ -1,10 +1,12 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { appRouter, createCaller, createTRPCContext } from '@yukinu/api'
+import { createClient } from '@yukinu/api/client'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
+import { env } from '@yukinu/validators/env.vite'
 import { cache } from 'react'
 
-import { trpcClient } from '@/lib/trpc/client'
+import { getDashboardUrl } from '@/lib/utils'
 
 const createRscContext = cache((opts: { headers: Headers }) => {
   const heads = new Headers(opts.headers)
@@ -23,7 +25,10 @@ const createTRPC = (opts: { headers: Headers }) =>
     ctx: () => createRscContext(opts),
     queryClient: getQueryClient,
     router: appRouter,
-    client: trpcClient,
+    client: createClient({
+      baseUrl: getDashboardUrl(),
+      useStreaming: env.VITE_TRPC_USE_STREAMING === 'true',
+    }),
   })
 
 function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {
