@@ -9,7 +9,7 @@
   "tabWidth": 2,
   "trailingComma": "all",
 
-  "experimentalSortImports": {
+  "sortImports": {
     "groups": [
       "side_effect_style",
       "type-import",
@@ -21,12 +21,12 @@
     ]
   },
 
-  "experimentalSortPackageJson": {
+  "sortPackageJson": {
     "sortScripts": true
   },
 
-  "experimentalTailwindcss": {
-    "functions": ["clsx", "cva", "cn"],
+  "sortTailwindcss": {
+    "functions": ["clsx", "cn", "cva"],
     "stylesheet": "./packages/ui/src/tailwind.css"
   }
 }

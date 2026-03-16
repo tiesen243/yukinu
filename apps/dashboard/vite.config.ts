@@ -6,7 +6,7 @@ export default defineConfig({
   // base: mode === 'development' ? '/dashboard' : '/',
   plugins: [reactRouter(), tailwindcss()],
   resolve: { tsconfigPaths: true },
-  // build: {
-  // assetsDir: 'dashboard/assets',
-  // },
+  build: {
+    // assetsDir: 'dashboard/assets',
+  },
 })
