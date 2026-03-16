@@ -1,5 +1,15 @@
 # @yukinu/mobile
 
+## 0.2.18
+
+### Patch Changes
+
+- Updated dependencies [[`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307)]:
+  - @yukinu/auth@0.9.12
+  - @yukinu/api@0.9.12
+  - @yukinu/lib@0.7.3
+  - @yukinu/ui@0.8.5
+
 ## 0.2.17
 
 ### Patch Changes

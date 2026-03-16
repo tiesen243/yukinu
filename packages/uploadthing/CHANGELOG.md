@@ -1,5 +1,15 @@
 # @yukinu/uploadthing
 
+## 0.3.12
+
+### Patch Changes
+
+- [#389](https://github.com/tiesen243/yukinu/pull/389) [`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307) Thanks [@tiesen243](https://github.com/tiesen243)! - organize exports
+
+- Updated dependencies [[`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307)]:
+  - @yukinu/validators@0.9.7
+  - @yukinu/auth@0.9.12
+
 ## 0.3.11
 
 ### Patch Changes
