@@ -19,15 +19,15 @@
     "~dev": "tsdown --watch"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.9",
+    "@react-email/components": "^1.0.10",
     "@yukinu/validators": "workspace:*",
-    "resend": "^6.9.3"
+    "resend": "^6.9.4"
   },
   "devDependencies": {
-    "@react-email/preview-server": "^5.2.9",
+    "@react-email/preview-server": "^5.2.10",
     "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
-    "react-email": "^5.2.9",
+    "react-email": "^5.2.10",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },
