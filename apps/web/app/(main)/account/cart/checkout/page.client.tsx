@@ -238,7 +238,7 @@ export function Checkout() {
           <span className='font-medium text-foreground'>
             {formatPrice(
               TAX_RATE *
-                (Math.max(Number.parseFloat(totalAmount) - appliedDiscount), 0),
+                Math.max(Number.parseFloat(totalAmount) - appliedDiscount, 0),
             )}
           </span>
         </div>

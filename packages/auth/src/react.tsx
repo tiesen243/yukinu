@@ -49,6 +49,8 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
     queryFn: getUserFn ?? defaultGetUserFn,
     initialData: user,
     enabled: !user,
+    refetchOnMount: !user,
+    refetchOnReconnect: !user,
   })
 
   const { mutateAsync: signIn } = useMutation({

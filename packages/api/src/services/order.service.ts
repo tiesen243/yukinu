@@ -3,7 +3,6 @@ import type * as Validators from '@yukinu/validators/order'
 
 import { TRPCError } from '@trpc/server'
 import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
-import fs from 'node:fs/promises'
 
 import type { ICartItemRepository } from '@/contracts/repositories/cart-item.repository'
 import type { IOrderItemRepository } from '@/contracts/repositories/order-item.repository'
@@ -40,13 +39,6 @@ export class OrderService implements IOrderService {
       this._order.count(whereClause),
     ])
     const totalPages = Math.ceil(total / limit)
-
-    const json = JSON.stringify(
-      { orders, pagination: { total, page, limit, totalPages } },
-      null,
-      2,
-    )
-    await fs.writeFile('orders.json', json)
 
     return { orders, pagination: { total, page, limit, totalPages } }
   }

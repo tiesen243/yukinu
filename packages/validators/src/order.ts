@@ -32,7 +32,6 @@ export const orderSchema = z.object({
   vendorId: z.cuid().nullable(),
   paymentId: z.cuid(),
   addressId: z.cuid().nullable(),
-  voucherId: z.cuid().nullable(),
   totalAmount: currencySchema,
   status: z.enum(orderStatuses).default('pending'),
   createdAt: z.date(),
@@ -103,6 +102,16 @@ export const allOutput = z.object({
   pagination: paginationOutput,
 })
 export type AllOutput = z.infer<typeof allOutput>
+
+export const oneInput = z.object({
+  id: orderSchema.shape.id,
+})
+export type OneInput = z.infer<typeof oneInput>
+export const oneOutput = orderSchema.extend({
+  user: userSchema.pick({ id: true, username: true, email: true }).nullable(),
+  address: addressSchema.nullable(),
+})
+export type OneOutput = z.infer<typeof oneOutput>
 
 export const checkoutInput = z.object({
   userId: userSchema.shape.id,

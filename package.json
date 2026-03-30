@@ -28,34 +28,34 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.6.0",
     "@changesets/cli": "^2.30.0",
-    "oxfmt": "^0.41.0",
-    "oxlint": "^1.56.0",
-    "turbo": "^2.8.19"
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.57.0",
+    "turbo": "^2.8.21"
   },
   "packageManager": "bun@1.3.0",
   "catalogs": {
     "prod": {
-      "@tanstack/react-query": "^5.91.0",
+      "@tanstack/react-query": "^5.95.2",
       "nuqs": "^2.8.9",
-      "recharts": "^3.7.0",
+      "recharts": "^3.8.1",
       "zod": "4.3.6"
     },
     "dev": {
       "@types/node": "^25.5.0",
-      "tsdown": "^0.21.4",
-      "typescript": "^5.9.3"
+      "tsdown": "^0.21.7",
+      "typescript": "^6.0.2"
     },
     "react": {
       "@types/react": "^19.2.14",
       "@types/react-dom": "^19.2.3",
-      "react": "19.2.4",
-      "react-dom": "19.2.4"
+      "react": "19.2.3",
+      "react-dom": "19.2.3"
     },
     "tailwind": {
       "@tailwindcss/postcss": "^4.2.2",
       "@tailwindcss/vite": "^4.2.2",
       "tailwindcss": "^4.2.2",
-      "uniwind": "^1.5.0"
+      "uniwind": "^1.6.1"
     },
     "uploadthing": {
       "@uploadthing/expo": "^7.2.6",
@@ -64,9 +64,9 @@
       "uploadthing": "^7.7.4"
     },
     "trpc": {
-      "@trpc/server": "^11.13.4",
-      "@trpc/client": "^11.13.4",
-      "@trpc/tanstack-react-query": "^11.13.4",
+      "@trpc/server": "^11.16.0",
+      "@trpc/client": "^11.16.0",
+      "@trpc/tanstack-react-query": "^11.16.0",
       "superjson": "^2.2.6"
     }
   }

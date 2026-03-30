@@ -21,7 +21,7 @@
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.2.0",
+    "next": "^16.2.1",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react"
