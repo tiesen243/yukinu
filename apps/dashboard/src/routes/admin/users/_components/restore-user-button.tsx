@@ -12,6 +12,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/toast'
 import { useState } from 'react'
 
@@ -43,7 +44,9 @@ export const RestoreUserButton: React.FC<{
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger variant='link'>Restore</AlertDialogTrigger>
+      <AlertDialogTrigger render={<Button variant='link' />}>
+        Restore
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Restore User</AlertDialogTitle>

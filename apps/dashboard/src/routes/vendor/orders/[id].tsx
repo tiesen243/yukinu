@@ -7,7 +7,7 @@ import type { Route } from './+types/[id]'
 export default function VendorOrderDetailPage({
   params,
 }: Route.ComponentProps) {
-  const trpc = useTRPC()
+  const _trpc = useTRPC()
 
   return (
     <>

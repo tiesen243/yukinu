@@ -48,7 +48,9 @@ export const EditVendorButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger variant='link'>Edit Status</DialogTrigger>
+      <DialogTrigger render={<Button variant='link' />}>
+        Edit Status
+      </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>

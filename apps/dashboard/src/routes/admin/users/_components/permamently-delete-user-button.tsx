@@ -12,6 +12,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -36,7 +37,9 @@ export const PermamentlyDeleteUserButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger variant='link' className='text-destructive'>
+      <AlertDialogTrigger
+        render={<Button variant='link' className='text-destructive' />}
+      >
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>

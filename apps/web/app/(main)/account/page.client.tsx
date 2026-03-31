@@ -453,14 +453,9 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        variant='ghost'
-        render={
-          <InputGroupButton>
-            <PencilIcon />
-          </InputGroupButton>
-        }
-      />
+      <DialogTrigger render={<InputGroupButton />}>
+        <PencilIcon />
+      </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>

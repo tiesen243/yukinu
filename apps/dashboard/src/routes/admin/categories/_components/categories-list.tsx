@@ -81,7 +81,9 @@ const DeleteCategoryButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger variant='link' className='text-destructive'>
+      <DialogTrigger
+        render={<Button variant='link' className='text-destructive' />}
+      >
         Delete
       </DialogTrigger>
 

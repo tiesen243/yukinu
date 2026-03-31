@@ -56,7 +56,7 @@ export const EditVariantButton: React.FC<{
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger variant='link'>Edit</DialogTrigger>
+      <DialogTrigger render={<Button variant='link' />}>Edit</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
