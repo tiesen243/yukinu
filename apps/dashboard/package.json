@@ -24,7 +24,7 @@
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "isbot": "^5.1.36",
+    "isbot": "^5.1.37",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",

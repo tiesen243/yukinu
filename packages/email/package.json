@@ -21,7 +21,7 @@
   "dependencies": {
     "@react-email/components": "^1.0.10",
     "@yukinu/validators": "workspace:*",
-    "resend": "^6.9.4"
+    "resend": "^6.10.0"
   },
   "devDependencies": {
     "@react-email/preview-server": "^5.2.10",
