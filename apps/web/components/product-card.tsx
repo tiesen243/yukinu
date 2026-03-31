@@ -32,7 +32,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   >
     <div className='relative flex-1 overflow-hidden'>
       <Image
-        src={product.image ?? '/favicon.svg'}
+        src={product.image ?? '/assets/favicon.svg'}
         alt={product.name}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         className='object-cover transition-transform group-hover/product-card:scale-105'

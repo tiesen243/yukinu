@@ -2,7 +2,7 @@ import { createId } from '@yukinu/lib/create-id'
 import { vendorStatuses } from '@yukinu/validators/vendor'
 import { index, pgEnum, pgTable, primaryKey } from 'drizzle-orm/pg-core'
 
-import { users } from '@/schema'
+import { users } from '@/schema/auth'
 import { createdAt, updatedAt } from '@/schema/shared'
 
 export const vendorStatusEnum = pgEnum('vendor_status', vendorStatuses)

@@ -1,7 +1,7 @@
 import { createId } from '@yukinu/lib/create-id'
 import { index, pgTable } from 'drizzle-orm/pg-core'
 
-import { users } from '@/schema'
+import { users } from '@/schema/auth'
 
 export const profiles = pgTable('profiles', (t) => ({
   id: t

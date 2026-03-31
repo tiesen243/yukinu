@@ -17,7 +17,7 @@ export default function MarketingLayout({ children }: LayoutProps<'/'>) {
           <div className='container flex items-center justify-between gap-6'>
             <Link href='/' className='flex items-center gap-2'>
               <Image
-                src='/favicon.svg'
+                src='/assets/favicon.svg'
                 alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
                 width={36}
                 height={36}

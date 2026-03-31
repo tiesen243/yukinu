@@ -2,7 +2,8 @@ import { createId } from '@yukinu/lib/create-id'
 import { isNotNull, isNull, sql } from 'drizzle-orm'
 import { check, index, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { products, productVariants, users } from '@/schema'
+import { users } from '@/schema/auth'
+import { products, productVariants } from '@/schema/product'
 
 export const cartItems = pgTable(
   'cart_items',

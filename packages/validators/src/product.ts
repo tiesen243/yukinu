@@ -107,6 +107,14 @@ export const productPreviewSchema = z.object({
 })
 export type ReviewSchema = z.infer<typeof productPreviewSchema>
 
+export const wishlistItemSchema = z.object({
+  id: z.cuid(),
+  userId: z.cuid(),
+  productId: z.cuid(),
+  addedAt: z.date(),
+})
+export type WishlistItemSchema = z.infer<typeof wishlistItemSchema>
+
 /* --------------------------------------------------------------------------
  * Contract schemas for service inputs and outputs
  * --------------------------------------------------------------------------
@@ -266,3 +274,26 @@ export const deleteVariantOutput = productVariantSchema.pick({
   id: true,
 })
 export type DeleteVariantOutput = z.infer<typeof deleteVariantOutput>
+
+export const allWishlistItemsInput = wishlistItemSchema.pick({ userId: true })
+export type AllWishlistItemsInput = z.infer<typeof allWishlistItemsInput>
+export const allWishlistItemsOutput = z.array(
+  z.object({
+    product: z.object({
+      id: z.cuid(),
+      name: z.string(),
+      price: z.string().regex(/^\d+(\.\d+)?$/),
+      image: z.url().nullable(),
+    }),
+    addedAt: z.date(),
+  }),
+)
+export type AllWishlistItemsOutput = z.infer<typeof allWishlistItemsOutput>
+
+export const toggleWishlistItemInput = wishlistItemSchema.pick({
+  userId: true,
+  productId: true,
+})
+export type ToggleWishlistItemInput = z.infer<typeof toggleWishlistItemInput>
+export const toggleWishlistItemOutput = z.object({ added: z.boolean() })
+export type ToggleWishlistItemOutput = z.infer<typeof toggleWishlistItemOutput>

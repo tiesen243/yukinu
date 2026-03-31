@@ -44,7 +44,7 @@ export const OrderHistories: React.FC = () => {
             >
               <ItemMedia variant='image'>
                 <Image
-                  src={item.productImage ?? '/favicon.svg'}
+                  src={item.productImage ?? '/assets/favicon.svg'}
                   alt={item.productName ?? 'Product Image'}
                   width={80}
                   height={80}

@@ -4,51 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./auth": {
-      "types": "./dist/auth.d.mts",
-      "default": "./dist/auth.mjs"
-    },
-    "./cart": {
-      "types": "./dist/cart.d.mts",
-      "default": "./dist/cart.mjs"
-    },
-    "./env": {
-      "types": "./dist/env.d.mts",
-      "default": "./dist/env.mjs"
-    },
-    "./env.next": {
-      "types": "./dist/env.next.d.mts",
-      "default": "./dist/env.next.mjs"
-    },
-    "./env.vite": {
-      "types": "./dist/env.vite.d.mts",
-      "default": "./dist/env.vite.mjs"
-    },
-    "./general": {
-      "types": "./dist/general.d.mts",
-      "default": "./dist/general.mjs"
-    },
-    "./order": {
-      "types": "./dist/order.d.mts",
-      "default": "./dist/order.mjs"
-    },
-    "./product": {
-      "types": "./dist/product.d.mts",
-      "default": "./dist/product.mjs"
-    },
-    "./shared": {
-      "types": "./dist/shared.d.mts",
-      "default": "./dist/shared.mjs"
-    },
-    "./user": {
-      "types": "./dist/user.d.mts",
-      "default": "./dist/user.mjs"
-    },
-    "./vendor": {
-      "types": "./dist/vendor.d.mts",
-      "default": "./dist/vendor.mjs"
-    },
-    "./package.json": "./package.json"
+    "./*": {
+      "types": "./dist/*.d.mts",
+      "default": "./dist/*.mjs"
+    }
   },
   "scripts": {
     "build": "tsdown",

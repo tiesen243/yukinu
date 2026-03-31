@@ -126,7 +126,10 @@ export const VendorInfomation: React.FC = () => {
   return (
     <Card className='flex-row items-center px-6'>
       <Avatar className='size-16'>
-        <AvatarImage src={vendor.image ?? '/favicon.svg'} alt={vendor.name} />
+        <AvatarImage
+          src={vendor.image ?? '/assets/favicon.svg'}
+          alt={vendor.name}
+        />
         <AvatarFallback>{vendor.name.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
       <div className='flex flex-col gap-2'>

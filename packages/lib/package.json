@@ -4,35 +4,10 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./constants": {
-      "types": "./dist/constants.d.mts",
-      "default": "./dist/constants.mjs"
-    },
-    "./create-env": {
-      "types": "./dist/create-env.d.mts",
-      "default": "./dist/create-env.mjs"
-    },
-    "./create-id": {
-      "types": "./dist/create-id.d.mts",
-      "default": "./dist/create-id.mjs"
-    },
-    "./create-query-client": {
-      "types": "./dist/create-query-client.d.mts",
-      "default": "./dist/create-query-client.mjs"
-    },
-    "./rate-limit": {
-      "types": "./dist/rate-limit.d.mts",
-      "default": "./dist/rate-limit.mjs"
-    },
-    "./slugify": {
-      "types": "./dist/slugify.d.mts",
-      "default": "./dist/slugify.mjs"
-    },
-    "./standard-schema": {
-      "types": "./dist/standard-schema.d.mts",
-      "default": "./dist/standard-schema.mjs"
-    },
-    "./package.json": "./package.json"
+    "./*": {
+      "types": "./dist/*.d.mts",
+      "default": "./dist/*.mjs"
+    }
   },
   "scripts": {
     "build": "tsdown",

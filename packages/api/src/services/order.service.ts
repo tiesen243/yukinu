@@ -96,7 +96,6 @@ export class OrderService implements IOrderService {
               vendorId,
               paymentId,
               addressId,
-              voucherId,
               totalAmount: totalAmount.toFixed(2),
             },
             tx,

@@ -31,7 +31,7 @@ export const CartItemsList: React.FC = () => {
     >
       <ItemMedia variant='image'>
         <Image
-          src={item.productImage ?? '/favicon.svg'}
+          src={item.productImage ?? '/assets/favicon.svg'}
           alt={item.productName}
           className='h-20 w-20 rounded-md object-cover'
           width={80}
@@ -79,7 +79,7 @@ export const CartItemsListSkeleton: React.FC = () =>
     >
       <ItemMedia variant='image'>
         <Image
-          src='/favicon.svg'
+          src='/assets/favicon.svg'
           alt={`thumbnail of product ${i + 1}`}
           className='h-20 w-20 rounded-md object-cover'
           width={80}

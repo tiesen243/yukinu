@@ -38,7 +38,7 @@ export const OrderItems: React.FC = () => {
     >
       <ItemMedia variant='image'>
         <Image
-          src={item.productImage ?? '/favicon.svg'}
+          src={item.productImage ?? '/assets/favicon.svg'}
           alt={item.productName}
           className='h-20 w-20 rounded-md object-cover'
           width={80}

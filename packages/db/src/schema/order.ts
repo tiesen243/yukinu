@@ -7,15 +7,12 @@ import {
 import { isNotNull, isNull } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import {
-  addresses,
-  products,
-  productVariants,
-  users,
-  vendors,
-  vouchers,
-} from '@/schema'
+import { users } from '@/schema/auth'
+import { vouchers } from '@/schema/general'
+import { products, productVariants } from '@/schema/product'
 import { createdAt, updatedAt } from '@/schema/shared'
+import { addresses } from '@/schema/user'
+import { vendors } from '@/schema/vendor'
 
 export const orderStatusEnum = pgEnum('order_status', orderStatuses)
 

@@ -1,8 +1,10 @@
 import { createId } from '@yukinu/lib/create-id'
 import { index, pgTable, primaryKey, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import { categories, users, vendors } from '@/schema'
+import { users } from '@/schema/auth'
+import { categories } from '@/schema/general'
 import { createdAt, updatedAt } from '@/schema/shared'
+import { vendors } from '@/schema/vendor'
 
 export const products = pgTable(
   'products',
@@ -135,4 +137,24 @@ export const productReviews = pgTable(
     createdAt,
   }),
   (t) => [index('product_reviews_product_id_idx').on(t.productId)],
+)
+
+export const wishlistItems = pgTable(
+  'wishlist_items',
+  (t) => ({
+    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
+    userId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    productId: t
+      .varchar({ length: 24 })
+      .notNull()
+      .references(() => products.id, { onDelete: 'cascade' }),
+    addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
+  }),
+  (t) => [
+    uniqueIndex('wishlist_items_user_product_uq_idx').on(t.userId, t.productId),
+    index('wishlist_items_user_id_idx').on(t.userId),
+  ],
 )
