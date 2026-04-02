@@ -68,12 +68,14 @@ export class OrderRepository
   }
 
   async oneWithDetails(
-    id: (typeof this._table.$inferSelect)['id'],
+    criteria: Partial<(typeof Schema.orders)['$inferSelect']>,
     tx = this._db,
   ): Promise<OneOutput | null> {
     const { addresses, users, orderItems, productImages, products } =
       this._schema
     const { eq, sql } = this._orm
+
+    const whereClause = this._buildCriteria([criteria])
 
     const [order] = await tx
       .select({
@@ -113,7 +115,7 @@ export class OrderRepository
           )), '$[0 to 2]')`,
       })
       .from(this._table)
-      .where(eq(this._table.id, id))
+      .where(whereClause)
       .leftJoin(users, eq(users.id, this._table.userId))
       .leftJoin(addresses, eq(addresses.id, this._table.addressId))
       .leftJoin(orderItems, eq(orderItems.orderId, this._table.id))

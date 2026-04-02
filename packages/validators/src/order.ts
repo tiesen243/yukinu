@@ -105,6 +105,8 @@ export type AllOutput = z.infer<typeof allOutput>
 
 export const oneInput = z.object({
   id: orderSchema.shape.id,
+  userId: userSchema.shape.id.nullable(),
+  vendorId: userSchema.shape.id.nullable(),
 })
 export type OneInput = z.infer<typeof oneInput>
 export const oneOutput = orderSchema

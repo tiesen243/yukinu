@@ -1,10 +1,9 @@
 import type { OneOutput } from '@yukinu/validators/order'
 
+import { STATUS_COLORS } from '@yukinu/lib/constants'
 import { formatDate } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
-
-import { statusColors } from '@/routes/vendor/orders/_components/stauts-map'
 
 export const OrderStatus: React.FC<{ order: OneOutput }> = ({ order }) => (
   <Card>
@@ -16,7 +15,7 @@ export const OrderStatus: React.FC<{ order: OneOutput }> = ({ order }) => (
         <div>
           <p className='text-sm text-muted-foreground'>Current Status</p>
           <Badge
-            variant={statusColors[order.status]}
+            variant={STATUS_COLORS[order.status]}
             className='mt-2 capitalize'
           >
             {order.status}

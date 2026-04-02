@@ -33,7 +33,7 @@ export const OrderItems: React.FC<{ items: OneOutput['items'] }> = ({
               <img
                 src={item.productImage ?? '/assets/favicon.svg'}
                 alt={item.productName ?? 'Product Image'}
-                className='object-cover'
+                className='size-20 object-cover'
               />
             </ItemMedia>
             <ItemContent>

@@ -15,7 +15,7 @@ export interface IOrderRepository extends IBaseRepository<typeof orders> {
   ): Promise<AllOutput['orders']>
 
   oneWithDetails(
-    id: (typeof orders.$inferSelect)['id'],
+    criteria: Partial<(typeof orders)['$inferSelect']>,
     tx?: Database,
   ): Promise<OneOutput | null>
 }

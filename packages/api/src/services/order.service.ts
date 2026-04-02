@@ -44,9 +44,13 @@ export class OrderService implements IOrderService {
   }
 
   async one(input: Validators.OneInput): Promise<Validators.OneOutput> {
-    const { id } = input
+    const { id, userId, vendorId } = input
 
-    const order = await this._order.oneWithDetails(id)
+    const order = await this._order.oneWithDetails({
+      id,
+      ...(userId ? { userId } : {}),
+      ...(vendorId ? { vendorId } : {}),
+    })
 
     if (!order)
       throw new TRPCError({

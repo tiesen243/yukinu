@@ -98,7 +98,13 @@ export const VendorRouter = createTRPCRouter({
       message: 'Vendor order fetched successfully',
       role: ['vendor_owner', 'vendor_staff'],
     })
-    .input(oneInput)
+    .input(oneInput.pick({ id: true }))
     .output(oneOutput)
-    .query(({ ctx, input }) => ctx.services.order.one(input)),
+    .query(({ ctx, input }) =>
+      ctx.services.order.one({
+        ...input,
+        userId: null,
+        vendorId: ctx.vendorId,
+      }),
+    ),
 })

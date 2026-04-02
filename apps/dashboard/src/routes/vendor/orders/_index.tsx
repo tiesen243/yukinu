@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { STATUS_COLORS } from '@yukinu/lib/constants'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -18,7 +19,6 @@ import { useNavigate } from 'react-router'
 
 import { exportCsv } from '@/lib/export-csv'
 import { useTRPCClient } from '@/lib/trpc/react'
-import { statusColors } from '@/routes/vendor/orders/_components/stauts-map'
 
 export default function VendorOrdersPage() {
   const trpcClient = useTRPCClient()
@@ -90,7 +90,7 @@ export default function VendorOrdersPage() {
                     {order.items} item{order.items > 1 ? 's' : ''}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={statusColors[order.status]}>
+                    <Badge variant={STATUS_COLORS[order.status]}>
                       {order.status}
                     </Badge>
                   </TableCell>
