@@ -1,5 +1,13 @@
 # @yukinu/ui
 
+## 0.8.6
+
+### Patch Changes
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`d279b68`](https://github.com/tiesen243/yukinu/commit/d279b680a84d0bd0e4a4fdd2a91b8dca931decc6) Thanks [@tiesen243](https://github.com/tiesen243)! - update ui components
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`3183597`](https://github.com/tiesen243/yukinu/commit/3183597d246b521c8e7728ce2e872334132adf5f) Thanks [@tiesen243](https://github.com/tiesen243)! - update apps
+
 ## 0.8.5
 
 ### Patch Changes

@@ -1,5 +1,17 @@
 # @yukinu/web
 
+## 0.11.18
+
+### Patch Changes
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`3183597`](https://github.com/tiesen243/yukinu/commit/3183597d246b521c8e7728ce2e872334132adf5f) Thanks [@tiesen243](https://github.com/tiesen243)! - update apps
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`a999eb5`](https://github.com/tiesen243/yukinu/commit/a999eb5ab08bdcd79c55136ea07a05510c589875) Thanks [@tiesen243](https://github.com/tiesen243)! - added order detals for user
+
+- Updated dependencies [[`bd95448`](https://github.com/tiesen243/yukinu/commit/bd954487fbba480a1ff6f3c3f92a4d42f99a4ccc), [`d279b68`](https://github.com/tiesen243/yukinu/commit/d279b680a84d0bd0e4a4fdd2a91b8dca931decc6), [`3183597`](https://github.com/tiesen243/yukinu/commit/3183597d246b521c8e7728ce2e872334132adf5f)]:
+  - @yukinu/api@0.9.13
+  - @yukinu/ui@0.8.6
+
 ## 0.11.17
 
 ### Patch Changes
