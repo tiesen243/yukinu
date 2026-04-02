@@ -5,8 +5,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.mts",
-      "default": "./dist/index.mjs"
+      "types": "./dist/utils.d.mts",
+      "default": "./dist/utils.mjs"
     },
     "./*": {
       "types": "./dist/components/*.d.mts",
@@ -16,8 +16,7 @@
       "types": "./dist/hooks/*.d.mts",
       "default": "./dist/hooks/*.mjs"
     },
-    "./tailwind.css": "./src/tailwind.css",
-    "./package.json": "./package.json"
+    "./tailwind.css": "./dist/tailwind.css"
   },
   "scripts": {
     "build": "tsdown",
@@ -30,9 +29,9 @@
     "@yukinu/lib": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.577.0",
+    "lucide-react": "^1.7.0",
     "next-themes": "^0.4.6",
-    "recharts": "catalog:prod",
+    "recharts": "3.8.1",
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {

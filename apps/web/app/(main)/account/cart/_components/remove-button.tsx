@@ -41,7 +41,9 @@ export const RemoveButton: React.FC<{ itemId: string | null }> = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger variant='link' className='text-destructive'>
+      <DialogTrigger
+        render={<Button variant='link' className='text-destructive' />}
+      >
         Remove
       </DialogTrigger>
 

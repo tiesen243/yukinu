@@ -1,6 +1,7 @@
 'use client'
 
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import {
   Item,
@@ -17,7 +18,6 @@ import * as React from 'react'
 import { EditButton } from '@/app/(main)/account/cart/_components/edit-button'
 import { RemoveButton } from '@/app/(main)/account/cart/_components/remove-button'
 import { useTRPC } from '@/lib/trpc/react'
-import { formatPrice } from '@/lib/utils'
 
 export const CartItemsList: React.FC = () => {
   const trpc = useTRPC()
@@ -31,7 +31,7 @@ export const CartItemsList: React.FC = () => {
     >
       <ItemMedia variant='image'>
         <Image
-          src={item.productImage ?? '/favicon.svg'}
+          src={item.productImage ?? '/assets/favicon.svg'}
           alt={item.productName}
           className='h-20 w-20 rounded-md object-cover'
           width={80}
@@ -79,7 +79,7 @@ export const CartItemsListSkeleton: React.FC = () =>
     >
       <ItemMedia variant='image'>
         <Image
-          src='/favicon.svg'
+          src='/assets/favicon.svg'
           alt={`thumbnail of product ${i + 1}`}
           className='h-20 w-20 rounded-md object-cover'
           width={80}

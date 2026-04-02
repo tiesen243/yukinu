@@ -19,7 +19,7 @@ export const OrderItemsSkeleton: React.FC = () =>
     >
       <ItemMedia variant='image'>
         <Image
-          src='/favicon.svg'
+          src='/assets/favicon.svg'
           alt={`thumbnail of product ${i + 1}`}
           className='h-20 w-20 rounded-md object-cover'
           width={80}

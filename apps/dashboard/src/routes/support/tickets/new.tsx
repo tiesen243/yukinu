@@ -51,7 +51,7 @@ export default function NewSupportTicketPage() {
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldTitle>Create New Support Ticket</FieldTitle>
         <FieldDescription>
           Use the form below to submit a new support ticket. Please provide a

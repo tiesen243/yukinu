@@ -56,7 +56,7 @@ export default function AppVendorPage() {
       <h1 className='sr-only'>Apply as Vendor page</h1>
 
       <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-        <FieldSet className='px-6'>
+        <FieldSet className='px-4'>
           <FieldLegend>Vendor Application</FieldLegend>
           <FieldDescription>
             Please fill out the form below to apply as a vendor on our platform.

@@ -21,7 +21,7 @@ export function Footer() {
           <Link href='/' className='flex items-center gap-2'>
             <div className='flex size-9 items-center justify-center rounded-lg bg-foreground'>
               <Image
-                src='/favicon.svg'
+                src='/assets/favicon.svg'
                 alt='Yukinu Logo'
                 width={28}
                 height={28}

@@ -7,15 +7,12 @@ import {
 import { isNotNull, isNull } from 'drizzle-orm'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
-import {
-  addresses,
-  products,
-  productVariants,
-  users,
-  vendors,
-  vouchers,
-} from '@/schema'
+import { users } from '@/schema/auth'
+import { vouchers } from '@/schema/general'
+import { products, productVariants } from '@/schema/product'
 import { createdAt, updatedAt } from '@/schema/shared'
+import { addresses } from '@/schema/user'
+import { vendors } from '@/schema/vendor'
 
 export const orderStatusEnum = pgEnum('order_status', orderStatuses)
 
@@ -40,9 +37,6 @@ export const orders = pgTable(
     addressId: t
       .varchar({ length: 24 })
       .references(() => addresses.id, { onDelete: 'set null' }),
-    voucherId: t
-      .varchar({ length: 24 })
-      .references(() => vouchers.id, { onDelete: 'set null' }),
     totalAmount: t
       .numeric({ precision: 10, scale: 2 })
       .notNull()
@@ -88,8 +82,11 @@ export const orderItems = pgTable(
 export const payments = pgTable('payments', (t) => ({
   id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
   method: paymentMethodEnum().notNull(),
-  amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
   methodReference: t.varchar({ length: 255 }),
+  amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  voucherId: t
+    .varchar({ length: 24 })
+    .references(() => vouchers.id, { onDelete: 'set null' }),
   status: paymentStatusEnum().default('pending').notNull(),
   createdAt,
   updatedAt,

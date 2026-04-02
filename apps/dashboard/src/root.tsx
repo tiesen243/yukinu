@@ -93,6 +93,7 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Yuji+Syuku&family=Geist+Mono:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
+  { rel: 'manifest', href: '/manifest.json' },
 ]
 
 export const meta: Route.MetaFunction = () =>

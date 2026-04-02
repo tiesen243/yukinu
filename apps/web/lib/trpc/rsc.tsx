@@ -25,6 +25,7 @@ const trpc = createTRPCOptionsProxy({
   queryClient: getQueryClient,
   router: appRouter,
   client: createClient({
+    source: 'web-rsc',
     baseUrl: getWebUrl(),
     useStreaming: env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
   }),

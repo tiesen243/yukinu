@@ -1,5 +1,5 @@
 {
-  "extends": "@yukinu/tsconfig/react.json",
+  "extends": "@yukinu/tsconfig/react-package.json",
   "compilerOptions": {
     "types": ["vite/client"],
     "rootDirs": [".", "./.react-router/types"],

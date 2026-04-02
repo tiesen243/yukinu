@@ -11,8 +11,7 @@
     "./schema": {
       "types": "./dist/schema/index.d.mts",
       "default": "./dist/schema/index.mjs"
-    },
-    "./package.json": "./package.json"
+    }
   },
   "scripts": {
     "build": "tsdown",
@@ -27,13 +26,13 @@
   "dependencies": {
     "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "drizzle-orm": "^0.45.1",
+    "drizzle-orm": "^0.45.2",
     "postgres": "^3.4.7"
   },
   "devDependencies": {
     "@types/node": "catalog:dev",
     "@yukinu/tsconfig": "workspace:*",
-    "drizzle-kit": "^0.31.9",
+    "drizzle-kit": "^0.31.10",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   }

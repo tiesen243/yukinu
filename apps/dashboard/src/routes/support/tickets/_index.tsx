@@ -34,7 +34,7 @@ export default function SupportTicketsPage() {
       </div>
 
       <Tabs defaultValue='open' className='mt-4'>
-        <TabsList variant='outline'>
+        <TabsList variant='line'>
           {ticketStatuses.map((status) => (
             <TabsTrigger key={status} value={status}>
               {status}

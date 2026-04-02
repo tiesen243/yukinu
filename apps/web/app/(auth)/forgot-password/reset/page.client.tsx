@@ -35,7 +35,7 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
   })
 
   return (
-    <form id={form.formId} className='px-6' onSubmit={form.handleSubmit}>
+    <form id={form.formId} className='px-4' onSubmit={form.handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Reset your password</legend>
 

@@ -14,6 +14,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { XIcon } from '@yukinu/ui/icons'
 import { toast } from '@yukinu/ui/toast'
 
@@ -76,9 +77,13 @@ const SessionItem: React.FC<{
 
       <AlertDialog>
         <AlertDialogTrigger
-          className='absolute top-0 right-0'
-          variant='outline'
-          size='icon-sm'
+          render={
+            <Button
+              size='icon-sm'
+              variant='outline'
+              className='absolute top-0 right-0'
+            />
+          }
         >
           <XIcon />
         </AlertDialogTrigger>

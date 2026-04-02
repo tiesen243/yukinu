@@ -1,5 +1,5 @@
 {
-  "id": "3c898efa-d502-4e23-b810-e1e375bdc4d0",
+  "id": "e8a0dce1-88b3-46ed-988e-2e74caaed0ce",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1033,12 +1033,6 @@
           "primaryKey": false,
           "notNull": false
         },
-        "voucher_id": {
-          "name": "voucher_id",
-          "type": "varchar(24)",
-          "primaryKey": false,
-          "notNull": false
-        },
         "total_amount": {
           "name": "total_amount",
           "type": "numeric(10, 2)",
@@ -1137,15 +1131,6 @@
           "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
-        },
-        "orders_voucher_id_vouchers_id_fk": {
-          "name": "orders_voucher_id_vouchers_id_fk",
-          "tableFrom": "orders",
-          "tableTo": "vouchers",
-          "columnsFrom": ["voucher_id"],
-          "columnsTo": ["id"],
-          "onDelete": "set null",
-          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -1171,15 +1156,21 @@
           "primaryKey": false,
           "notNull": true
         },
+        "method_reference": {
+          "name": "method_reference",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "amount": {
           "name": "amount",
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
-        "method_reference": {
-          "name": "method_reference",
-          "type": "varchar(255)",
+        "voucher_id": {
+          "name": "voucher_id",
+          "type": "varchar(24)",
           "primaryKey": false,
           "notNull": false
         },
@@ -1207,7 +1198,17 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "payments_voucher_id_vouchers_id_fk": {
+          "name": "payments_voucher_id_vouchers_id_fk",
+          "tableFrom": "payments",
+          "tableTo": "vouchers",
+          "columnsFrom": ["voucher_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

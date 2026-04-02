@@ -43,6 +43,8 @@ export default [
     layout('./routes/vendor/__layout.tsx', [
       route('/vendor/my-store', './routes/vendor/_index.tsx'),
       route('/vendor/staffs', './routes/vendor/staffs/_index.tsx'),
+      route('/vendor/orders', './routes/vendor/orders/_index.tsx'),
+      route('/vendor/orders/:id', './routes/vendor/orders/[id].tsx'),
     ]),
 
     layout('./routes/support/__layout.tsx', [

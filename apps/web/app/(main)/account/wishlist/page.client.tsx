@@ -29,7 +29,7 @@ export const WishlistItems: React.FC = () => {
     >
       <CardHeader className='relative flex-1 rounded-t-xl'>
         <Image
-          src={item.product.image ?? '/favicon.svg'}
+          src={item.product.image ?? '/assets/favicon.svg'}
           alt={item.product.name}
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className='rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105'

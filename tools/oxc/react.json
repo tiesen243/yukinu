@@ -17,17 +17,5 @@
     "react_perf/jsx-no-new-object-as-prop": "off",
 
     "jsx-a11y/no-autofocus": "off"
-  },
-  "settings": {
-    "jsx-a11y": {
-      "polymorphicPropName": null,
-      "components": {
-        "Link": "a",
-        "Button": "button"
-      },
-      "attributes": {
-        "href": ["href", "to"]
-      }
-    }
   }
 }

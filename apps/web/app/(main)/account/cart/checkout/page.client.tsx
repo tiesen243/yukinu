@@ -2,6 +2,7 @@
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
+import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { CheckCircle2Icon, TagIcon } from '@yukinu/ui/icons'
 import {
@@ -24,7 +25,6 @@ import { useMemo, useState } from 'react'
 
 import { usePage } from '@/app/(main)/account/cart/checkout/page.provider'
 import { useTRPC } from '@/lib/trpc/react'
-import { formatPrice } from '@/lib/utils'
 
 export const OrderItems: React.FC = () => {
   const trpc = useTRPC()
@@ -38,7 +38,7 @@ export const OrderItems: React.FC = () => {
     >
       <ItemMedia variant='image'>
         <Image
-          src={item.productImage ?? '/favicon.svg'}
+          src={item.productImage ?? '/assets/favicon.svg'}
           alt={item.productName}
           className='h-20 w-20 rounded-md object-cover'
           width={80}
@@ -238,7 +238,7 @@ export function Checkout() {
           <span className='font-medium text-foreground'>
             {formatPrice(
               TAX_RATE *
-                (Math.max(Number.parseFloat(totalAmount) - appliedDiscount), 0),
+                Math.max(Number.parseFloat(totalAmount) - appliedDiscount, 0),
             )}
           </span>
         </div>

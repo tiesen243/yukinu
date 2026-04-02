@@ -1,6 +1,7 @@
 {
-  "extends": "@yukinu/tsconfig/next.json",
+  "extends": "@yukinu/tsconfig/react-package.json",
   "compilerOptions": {
+    "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./*"]
     }

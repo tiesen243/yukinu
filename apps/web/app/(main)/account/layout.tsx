@@ -17,7 +17,7 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
       <Card render={<aside />} className='shrink-0 md:w-1/4'>
         <UserHeader />
 
-        <nav className='px-5'>
+        <nav className='px-4'>
           <ul className='flex flex-row gap-4 overflow-x-auto px-1 py-2 md:flex-col md:gap-2'>
             {sidebarLinks.map((link) => (
               <li key={link.href}>

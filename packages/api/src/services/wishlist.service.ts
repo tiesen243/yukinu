@@ -1,5 +1,5 @@
 import type { Database } from '@yukinu/db'
-import type * as Validators from '@yukinu/validators/general'
+import type * as Validators from '@yukinu/validators/product'
 
 import type { IWishlistItemRepository } from '@/contracts/repositories/wishlist-item.repository'
 import type { IWishlistService } from '@/contracts/services/wishlist.service'

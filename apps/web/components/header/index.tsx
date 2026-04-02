@@ -12,7 +12,7 @@ export function Header() {
       <nav className='container flex items-center justify-between gap-4'>
         <Link href='/' className='flex items-center gap-2'>
           <Image
-            src='/favicon.svg'
+            src='/assets/favicon.svg'
             alt={`${env.NEXT_PUBLIC_APP_NAME} Logo`}
             width={36}
             height={36}

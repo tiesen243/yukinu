@@ -64,7 +64,7 @@ export default function CategoriesNewPage() {
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldLegend>Create New Category</FieldLegend>
         <FieldDescription>
           Use the form below to create a new category in the system.

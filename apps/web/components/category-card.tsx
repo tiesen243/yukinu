@@ -24,7 +24,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   >
     <div className='relative flex-1 overflow-hidden'>
       <Image
-        src={category.image ?? '/favicon.svg'}
+        src={category.image ?? '/assets/favicon.svg'}
         alt={category.name}
         loading='eager'
         className='rounded-t-lg object-cover transition-transform group-hover/category-card:scale-105'

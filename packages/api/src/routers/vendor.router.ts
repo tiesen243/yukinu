@@ -1,3 +1,9 @@
+import {
+  allInput,
+  allOutput,
+  oneInput,
+  oneOutput,
+} from '@yukinu/validators/order'
 import * as Validators from '@yukinu/validators/vendor'
 
 import {
@@ -69,5 +75,36 @@ export const VendorRouter = createTRPCRouter({
     .output(Validators.updateVendorOutput)
     .mutation(({ ctx, input }) =>
       ctx.services.vendor.update({ ...input, id: ctx.vendorId }),
+    ),
+
+  orders: vendorProcedure
+    .meta({
+      message: 'Vendor orders fetched successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(allInput.pick({ page: true, limit: true }))
+    .output(allOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.order.all({
+        ...input,
+        userId: null,
+        vendorId: ctx.vendorId,
+        paymentId: null,
+      }),
+    ),
+
+  order: vendorProcedure
+    .meta({
+      message: 'Vendor order fetched successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(oneInput.pick({ id: true }))
+    .output(oneOutput)
+    .query(({ ctx, input }) =>
+      ctx.services.order.one({
+        ...input,
+        userId: null,
+        vendorId: ctx.vendorId,
+      }),
     ),
 })

@@ -12,6 +12,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/toast'
 import { useState } from 'react'
 
@@ -43,7 +44,9 @@ export const DeleteUserButton: React.FC<{
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger variant='link' className='text-destructive'>
+      <AlertDialogTrigger
+        render={<Button variant='link' className='text-destructive' />}
+      >
         Delete
       </AlertDialogTrigger>
       <AlertDialogContent>

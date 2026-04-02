@@ -11,11 +11,14 @@ const t = initTRPC
   .context<TRPCContext>()
   .create({
     transformer: SuperJSON,
-    errorFormatter({ type, path, shape }) {
+    errorFormatter({ type, path, shape, error }) {
       if (shape.message !== `No procedure found on path "${path}"`)
         console.error(
           `[tRPC] <<< [${type}] ${path} ${shape.data.httpStatus}: ${shape.message}`,
         )
+
+      // oxlint-disable-next-line node/no-process-env
+      if (process.env.NODE_ENV === 'development') console.log(error.cause)
 
       if (shape.message.startsWith('Failed query: '))
         shape.message =

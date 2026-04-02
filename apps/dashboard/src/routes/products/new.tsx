@@ -71,7 +71,7 @@ export default function ProductsNewPage() {
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldLegend>New Product</FieldLegend>
         <FieldDescription>
           Fill out the form below to add a new product to the catalog.

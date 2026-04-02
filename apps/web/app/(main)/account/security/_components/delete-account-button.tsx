@@ -12,6 +12,7 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { Field, FieldLabel, FieldError } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
@@ -53,7 +54,9 @@ export const DeleteAccountButton: React.FC = () => {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className='w-full' variant='destructive'>
+      <AlertDialogTrigger
+        render={<Button className='w-full' variant='destructive' />}
+      >
         Delete Account
       </AlertDialogTrigger>
 

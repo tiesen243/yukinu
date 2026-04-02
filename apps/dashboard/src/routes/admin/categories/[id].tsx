@@ -88,7 +88,7 @@ export default function CategoriesEditPage({
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldLegend>Edit Category</FieldLegend>
         <FieldDescription>
           Use the form below to edit the category in the system.

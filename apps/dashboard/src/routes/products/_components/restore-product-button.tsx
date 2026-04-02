@@ -10,6 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -42,7 +43,9 @@ export const RestoreProductButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger variant='link'>Restore</AlertDialogTrigger>
+      <AlertDialogTrigger render={<Button variant='link' />}>
+        Restore
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

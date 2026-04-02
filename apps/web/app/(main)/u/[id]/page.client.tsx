@@ -51,14 +51,14 @@ export const UserDetails: React.FC<{ id: string }> = ({ id }) => {
         {data.profile.bio && (
           <Typography
             variant='blockquote'
-            className='my-0 border-0 px-6 text-center'
+            className='my-0 border-0 px-4 text-center'
           >
             {data.profile.bio}
           </Typography>
         )}
       </Card>
 
-      <Card render={<section />} className='gap-0 px-6'>
+      <Card render={<section />} className='gap-0 px-4'>
         <h2 className='sr-only'>User Profile Details</h2>
 
         <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>

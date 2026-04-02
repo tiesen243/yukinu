@@ -37,7 +37,7 @@ export default function BannersPage() {
 
       <AddBannerButton />
 
-      <Card className='px-6' render={<ul />}>
+      <Card className='px-4' render={<ul />}>
         {isPending && <li>Loading banners...</li>}
         {data?.map((banner) => (
           <Banner key={banner.id} id={banner.id} url={banner.url} />
