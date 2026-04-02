@@ -1,6 +1,6 @@
 import type { Database } from '@yukinu/db'
 import type { orders } from '@yukinu/db/schema'
-import type { AllOutput } from '@yukinu/validators/order'
+import type { AllOutput, OneOutput } from '@yukinu/validators/order'
 
 import type { IBaseRepository } from '@/contracts/repositories/base.repository'
 
@@ -13,4 +13,9 @@ export interface IOrderRepository extends IBaseRepository<typeof orders> {
     options?: { limit?: number; offset?: number },
     tx?: Database,
   ): Promise<AllOutput['orders']>
+
+  oneWithDetails(
+    id: (typeof orders.$inferSelect)['id'],
+    tx?: Database,
+  ): Promise<OneOutput | null>
 }

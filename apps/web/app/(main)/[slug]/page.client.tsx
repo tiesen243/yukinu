@@ -8,7 +8,7 @@ import { ProductReviews } from '@/app/(main)/[slug]/_components/product-reviews'
 
 export const ProductDetails: React.FC = () => (
   <>
-    <Card className='grid px-6 md:grid-cols-3' render={<section />}>
+    <Card className='grid px-4 md:grid-cols-3' render={<section />}>
       <h2 className='sr-only'>Product Details section</h2>
 
       <ProductImages />

@@ -26,6 +26,7 @@ function TRPCReactProvider({
 
   const [trpcClient] = useState(() =>
     createClient({
+      source: 'dashboard',
       baseUrl: getDashboardUrl(),
       useStreaming: env.VITE_TRPC_USE_STREAMING === 'true',
     }),

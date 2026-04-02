@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import { DownloadIcon } from '@yukinu/ui/icons'
@@ -17,6 +18,7 @@ import { useNavigate } from 'react-router'
 
 import { exportCsv } from '@/lib/export-csv'
 import { useTRPCClient } from '@/lib/trpc/react'
+import { statusColors } from '@/routes/vendor/orders/_components/stauts-map'
 
 export default function VendorOrdersPage() {
   const trpcClient = useTRPCClient()
@@ -63,7 +65,7 @@ export default function VendorOrdersPage() {
         </Button>
       </div>
 
-      <Card className='px-6' render={<section />}>
+      <Card className='px-4' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>
@@ -87,7 +89,11 @@ export default function VendorOrdersPage() {
                   <TableCell>
                     {order.items} item{order.items > 1 ? 's' : ''}
                   </TableCell>
-                  <TableCell className='capitalize'>{order.status}</TableCell>
+                  <TableCell>
+                    <Badge variant={statusColors[order.status]}>
+                      {order.status}
+                    </Badge>
+                  </TableCell>
                   <TableCell>${order.totalAmount}</TableCell>
                   <TableCell className='text-right'>
                     <Button

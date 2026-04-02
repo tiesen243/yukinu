@@ -8,7 +8,7 @@ import Link from 'next/link'
 export const BuyerValue: React.FC = () => (
   <section
     id='for-buyers'
-    className='container grid grid-cols-1 items-center gap-12 px-4 py-20 sm:px-6 md:py-32 lg:grid-cols-2 lg:px-8'
+    className='container grid grid-cols-1 items-center gap-12 px-4 py-20 sm:px-4 md:py-32 lg:grid-cols-2 lg:px-8'
   >
     <h2 className='sr-only'>Value for Shoppers</h2>
 

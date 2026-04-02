@@ -71,7 +71,7 @@ export default function VouchersEditPage({ loaderData }: Route.ComponentProps) {
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldLegend>Edit Voucher</FieldLegend>
         <FieldDescription>
           Use the form below to edit the Voucher in the system.

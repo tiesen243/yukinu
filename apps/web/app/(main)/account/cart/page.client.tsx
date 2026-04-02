@@ -1,6 +1,7 @@
 'use client'
 
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import {
   Item,
@@ -17,7 +18,6 @@ import * as React from 'react'
 import { EditButton } from '@/app/(main)/account/cart/_components/edit-button'
 import { RemoveButton } from '@/app/(main)/account/cart/_components/remove-button'
 import { useTRPC } from '@/lib/trpc/react'
-import { formatPrice } from '@/lib/utils'
 
 export const CartItemsList: React.FC = () => {
   const trpc = useTRPC()

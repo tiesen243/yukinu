@@ -91,7 +91,7 @@ This section tracks the implementation progress of features across different use
 - [x] Manage product images
 - [x] Manage product variants (size, color, etc.)
 - [x] Manage vendor members (add / remove)
-- [ ] Manage vendor-specific orders
+- [x] Manage vendor-specific orders
 - [ ] Update order status (processing → shipped → delivered)
 
 ### Admin (5/6 completed 🚧)

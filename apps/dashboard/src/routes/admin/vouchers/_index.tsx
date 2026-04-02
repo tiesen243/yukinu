@@ -44,7 +44,7 @@ export default function VouchersPage() {
         </Button>
       </div>
 
-      <Card className='px-6' render={<section />}>
+      <Card className='px-4' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

@@ -1,4 +1,9 @@
-import { allInput, allOutput } from '@yukinu/validators/order'
+import {
+  allInput,
+  allOutput,
+  oneInput,
+  oneOutput,
+} from '@yukinu/validators/order'
 import * as Validators from '@yukinu/validators/vendor'
 
 import {
@@ -87,4 +92,13 @@ export const VendorRouter = createTRPCRouter({
         paymentId: null,
       }),
     ),
+
+  order: vendorProcedure
+    .meta({
+      message: 'Vendor order fetched successfully',
+      role: ['vendor_owner', 'vendor_staff'],
+    })
+    .input(oneInput)
+    .output(oneOutput)
+    .query(({ ctx, input }) => ctx.services.order.one(input)),
 })

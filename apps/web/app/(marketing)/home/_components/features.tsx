@@ -12,7 +12,7 @@ import { Typography } from '@yukinu/ui/typography'
 export const FeaturesSection: React.FC = () => (
   <section
     id='features'
-    className='bg-card px-4 py-20 text-card-foreground sm:px-6 md:py-32 lg:px-8'
+    className='bg-card px-4 py-20 text-card-foreground sm:px-4 md:py-32 lg:px-8'
   >
     <div className='container mb-16 text-center'>
       <Typography variant='h2'>Why choose Yukinu?</Typography>

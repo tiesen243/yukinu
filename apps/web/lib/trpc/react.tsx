@@ -28,6 +28,7 @@ function TRPCReactProvider({
 
   const [trpcClient] = useState(() =>
     createClient({
+      source: 'web',
       baseUrl: getWebUrl(),
       useStreaming: env.NEXT_PUBLIC_TRPC_USE_STREAMING === 'true',
     }),

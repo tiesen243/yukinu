@@ -39,14 +39,14 @@ export default function AccountCartCheckoutPage() {
         <section>
           <h2 className='sr-only'>Order Items section</h2>
 
-          <ItemGroup className='border-b px-6 pb-6'>
+          <ItemGroup className='border-b px-4 pb-6'>
             <Suspense fallback={<OrderItemsSkeleton />}>
               <OrderItems />
             </Suspense>
           </ItemGroup>
         </section>
 
-        <section className='border-b px-6 pb-6 [&>h2]:mt-0'>
+        <section className='border-b px-4 pb-6 [&>h2]:mt-0'>
           <Typography variant='h5' render={<h2 />}>
             <span className='mr-2 inline-flex size-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary'>
               1
@@ -61,7 +61,7 @@ export default function AccountCartCheckoutPage() {
           </div>
         </section>
 
-        <section className='border-b px-6 pb-6 [&>h2]:mt-0'>
+        <section className='border-b px-4 pb-6 [&>h2]:mt-0'>
           <Typography variant='h5' render={<h2 />}>
             <span className='mr-2 inline-flex size-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary'>
               2
@@ -73,7 +73,7 @@ export default function AccountCartCheckoutPage() {
           </div>
         </section>
 
-        <section className='border-b px-6 pb-6 [&>h2]:mt-0'>
+        <section className='border-b px-4 pb-6 [&>h2]:mt-0'>
           <Typography variant='h5' render={<h2 />}>
             <span className='mr-2 inline-flex size-8 items-center justify-center rounded-lg bg-primary/10 text-sm font-semibold text-primary'>
               3
@@ -83,7 +83,7 @@ export default function AccountCartCheckoutPage() {
           <DiscountCodeInput />
         </section>
 
-        <section className='px-6 [&>h2]:mt-0'>
+        <section className='px-4 [&>h2]:mt-0'>
           <Typography variant='h5' render={<h2 />}>
             Order Summary
           </Typography>

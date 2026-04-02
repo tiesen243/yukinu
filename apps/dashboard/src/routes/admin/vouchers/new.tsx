@@ -50,7 +50,7 @@ export default function VouchersNewPage() {
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldLegend>Create New Voucher</FieldLegend>
         <FieldDescription>
           Use the form below to create a new voucher in the system.

@@ -39,7 +39,7 @@ export default function InvitePage() {
         <h1 className='sr-only'>Accept Staff Invitation page</h1>
 
         <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
-          <FieldSet className='px-6'>
+          <FieldSet className='px-4'>
             <FieldLegend>Error</FieldLegend>
             <FieldDescription>
               No token provided. Please check the link in your email.
@@ -64,7 +64,7 @@ export default function InvitePage() {
           />
         }
       >
-        <FieldSet className='px-6'>
+        <FieldSet className='px-4'>
           <FieldLegend>Accept Staff Invitation</FieldLegend>
           <FieldDescription>
             Please click the button below to accept your staff invitation.

@@ -107,10 +107,20 @@ export const oneInput = z.object({
   id: orderSchema.shape.id,
 })
 export type OneInput = z.infer<typeof oneInput>
-export const oneOutput = orderSchema.extend({
-  user: userSchema.pick({ id: true, username: true, email: true }).nullable(),
-  address: addressSchema.nullable(),
-})
+export const oneOutput = orderSchema
+  .omit({ userId: true, vendorId: true, addressId: true, paymentId: true })
+  .extend({
+    user: userSchema.pick({ id: true, username: true, email: true }).nullable(),
+    address: addressSchema.omit({ userId: true }).nullable(),
+    items: z.array(
+      orderItemSchema
+        .pick({ productId: true, quantity: true, unitPrice: true })
+        .extend({
+          productImage: z.url().nullable(),
+          productName: productSchema.shape.name.nullable(),
+        }),
+    ),
+  })
 export type OneOutput = z.infer<typeof oneOutput>
 
 export const checkoutInput = z.object({

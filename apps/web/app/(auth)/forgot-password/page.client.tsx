@@ -31,7 +31,7 @@ export const ForgotPasswordForm: React.FC = () => {
   })
 
   return (
-    <form id={form.formId} className='px-6' onSubmit={form.handleSubmit}>
+    <form id={form.formId} className='px-4' onSubmit={form.handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Forgot your password?</legend>
 

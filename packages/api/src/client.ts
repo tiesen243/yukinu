@@ -1,3 +1,5 @@
+import type { HTTPHeaders } from '@trpc/client'
+
 import {
   createTRPCClient,
   httpBatchLink,
@@ -10,21 +12,23 @@ import { SuperJSON } from 'superjson'
 import type { AppRouter } from '@/routers/_app'
 
 export interface CreateClientOptions {
+  source: string
   baseUrl: string
   useStreaming: boolean
 }
 
 export const createClient = ({
+  source,
   baseUrl,
   useStreaming,
 }: CreateClientOptions) => {
   const configs = {
     transformer: SuperJSON,
     url: `${baseUrl}/api/trpc`,
-    headers() {
-      const headers = new Headers()
-      headers.set('x-trpc-source', 'web')
-      return headers
+    headers(): HTTPHeaders {
+      return {
+        'x-trpc-source': source,
+      }
     },
   }
 

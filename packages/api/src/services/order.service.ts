@@ -43,6 +43,20 @@ export class OrderService implements IOrderService {
     return { orders, pagination: { total, page, limit, totalPages } }
   }
 
+  async one(input: Validators.OneInput): Promise<Validators.OneOutput> {
+    const { id } = input
+
+    const order = await this._order.oneWithDetails(id)
+
+    if (!order)
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Order not found.',
+      })
+
+    return order
+  }
+
   async checkout(
     input: Validators.CheckoutInput,
   ): Promise<Validators.CheckoutOutput> {

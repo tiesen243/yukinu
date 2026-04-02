@@ -1,6 +1,7 @@
 'use client'
 
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { formatPrice } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import {
   Item,
@@ -14,7 +15,6 @@ import {
 import Image from 'next/image'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { formatPrice } from '@/lib/utils'
 
 export const OrderHistories: React.FC = () => {
   const trpc = useTRPC()

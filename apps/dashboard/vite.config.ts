@@ -6,6 +6,9 @@ export default defineConfig({
   // base: mode === 'development' ? '/dashboard' : '/',
   plugins: [reactRouter(), tailwindcss()],
   resolve: { tsconfigPaths: true },
+  server: {
+    watch: { usePolling: process.env.NODE_ENV === 'development' },
+  },
   build: {
     // assetsDir: 'dashboard/assets',
   },

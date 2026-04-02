@@ -2,6 +2,7 @@
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
+import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { CheckCircle2Icon, TagIcon } from '@yukinu/ui/icons'
 import {
@@ -24,7 +25,6 @@ import { useMemo, useState } from 'react'
 
 import { usePage } from '@/app/(main)/account/cart/checkout/page.provider'
 import { useTRPC } from '@/lib/trpc/react'
-import { formatPrice } from '@/lib/utils'
 
 export const OrderItems: React.FC = () => {
   const trpc = useTRPC()

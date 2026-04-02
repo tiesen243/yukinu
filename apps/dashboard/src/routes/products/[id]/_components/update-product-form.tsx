@@ -76,7 +76,7 @@ export const UpdateProductForm: React.FC<{
 
   return (
     <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
-      <FieldSet className='px-6'>
+      <FieldSet className='px-4'>
         <FieldLegend>Update Product</FieldLegend>
         <FieldDescription>
           Modify the details of your product below.

@@ -32,7 +32,7 @@ export const VerifyEmailForm: React.FC<{ token: string }> = ({ token }) => {
 
   return (
     <form
-      className='px-6'
+      className='px-4'
       onSubmit={(e) => {
         e.preventDefault()
         mutate({ token })
