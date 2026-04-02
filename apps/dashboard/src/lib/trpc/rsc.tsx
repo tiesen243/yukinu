@@ -26,6 +26,7 @@ const createTRPC = (opts: { headers: Headers }) =>
     queryClient: getQueryClient,
     router: appRouter,
     client: createClient({
+      source: 'dashboard-rsc',
       baseUrl: getDashboardUrl(),
       useStreaming: env.VITE_TRPC_USE_STREAMING === 'true',
     }),
