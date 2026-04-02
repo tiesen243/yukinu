@@ -1,9 +1,10 @@
-import type { IAddressRepository } from '@/contracts/repositories/address.repository'
-import type { IAddressService } from '@/contracts/services/address.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/user'
 
 import { TRPCError } from '@trpc/server'
+
+import type { IAddressRepository } from '@/contracts/repositories/address.repository'
+import type { IAddressService } from '@/contracts/services/address.service'
 
 export class AddressService implements IAddressService {
   constructor(

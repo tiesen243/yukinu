@@ -1,26 +1,26 @@
-import type { SessionWithUser } from '@/types'
 import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 
+import type { User } from '@/core/types'
+
+const QUERY_KEY = [['auth', 'currentUser'], { type: 'query' }]
+
 type SessionContextValue = (
-  | { status: 'loading'; session: SessionWithUser }
-  | { status: 'unauthenticated'; session: null }
-  | {
-      status: 'authenticated'
-      session: SessionWithUser & { user: NonNullable<SessionWithUser['user']> }
-    }
+  | { status: 'loading'; user: User | null }
+  | { status: 'unauthenticated'; user: null }
+  | { status: 'authenticated'; user: User }
 ) & {
   signIn: (credentials: LoginInput) => Promise<LoginOutput>
-
   signOut: () => Promise<void>
+  refreshToken: () => Promise<void>
 }
 
 interface SessionProviderProps {
   children: React.ReactNode
-  session?: SessionWithUser
-  getSessionFn?: () => Promise<SessionWithUser>
+  user?: User | null
+  getUserFn?: () => Promise<User | null>
   basePath?: string
 }
 
@@ -34,61 +34,65 @@ const useSession = () => {
 }
 
 function SessionProvider(props: Readonly<SessionProviderProps>) {
-  const { session, getSessionFn, basePath = '/api/auth', children } = props
+  const { user, getUserFn, basePath = '/api/auth', children } = props
 
   const queryClient = useQueryClient()
 
-  const defaultGetSessionFn = async () => {
-    const res = await fetch(`${basePath}/get-session`)
+  const defaultGetUserFn = async () => {
+    const res = await fetch(`${basePath}/current-user`)
     if (!res.ok) throw new Error('Failed to fetch session')
-    return res.json() as Promise<SessionWithUser>
+    return res.json() as Promise<User | null>
   }
 
   const { data, isLoading } = useQuery({
-    queryKey: ['auth', 'get-session'],
-    queryFn: getSessionFn ?? defaultGetSessionFn,
-    initialData: session,
-    enabled: !session,
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    refetchOnWindowFocus: false,
-    refetchOnMount: !session,
-    retry: false,
+    queryKey: QUERY_KEY,
+    queryFn: getUserFn ?? defaultGetUserFn,
+    initialData: user,
+    enabled: !user,
+    refetchOnMount: !user,
+    refetchOnReconnect: !user,
   })
 
   const { mutateAsync: signIn } = useMutation({
-    mutationKey: ['auth', 'sign-in'],
+    mutationKey: [['auth', 'sign-in'], { type: 'mutation' }],
     mutationFn: async (credentials: LoginInput) => {
       const res = await fetch(`${basePath}/sign-in`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
       })
+
       if (!res.ok) throw new Error(await res.text())
       return res.json() as Promise<LoginOutput>
     },
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['auth', 'get-session'] }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   })
 
   const { mutateAsync: signOut } = useMutation({
-    mutationKey: ['auth', 'sign-out'],
+    mutationKey: [['auth', 'sign-out'], { type: 'mutation' }],
     mutationFn: async () => {
       const res = await fetch(`${basePath}/sign-out`, { method: 'POST' })
-      if (!res.ok) throw new Error('Failed to sign out')
+      if (!res.ok) throw new Error(await res.text())
     },
-    onSuccess: () =>
-      queryClient.setQueryData(['auth', 'get-session'], { user: null }),
+    onSuccess: () => queryClient.setQueriesData({ queryKey: QUERY_KEY }, null),
+  })
+
+  const { mutateAsync: refreshToken } = useMutation({
+    mutationKey: [['auth', 'refresh-token'], { type: 'mutation' }],
+    mutationFn: async () => {
+      const res = await fetch(`${basePath}/refresh-token`, { method: 'POST' })
+      if (!res.ok) throw new Error(await res.text())
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   })
 
   const value = React.useMemo(() => {
-    const status = isLoading
-      ? 'loading'
-      : data?.user
-        ? 'authenticated'
-        : 'unauthenticated'
+    let status = 'unauthenticated'
+    if (isLoading) status = 'loading'
+    else if (data) status = 'authenticated'
 
-    return { status, session: data, signIn, signOut } as SessionContextValue
-  }, [data, isLoading, signIn, signOut])
+    return { status, user: data, signIn, signOut, refreshToken }
+  }, [data, isLoading, signIn, signOut]) as SessionContextValue
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

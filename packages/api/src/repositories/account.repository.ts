@@ -1,7 +1,8 @@
-import type { IAccountRepository } from '@/contracts/repositories/account.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { AccountSchema } from '@yukinu/validators/auth'
+
+import type { IAccountRepository } from '@/contracts/repositories/account.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -24,8 +25,8 @@ export class AccountRepository
       .from(this._table)
       .where(
         and(
-          eq(this._table.accountId, id),
           eq(this._table.provider, 'credentials'),
+          eq(this._table.providerAccountId, id),
         ),
       )
       .limit(1)

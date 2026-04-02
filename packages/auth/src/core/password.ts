@@ -1,6 +1,7 @@
-import { constantTimeEqual, decodeHex, encodeHex } from '@/core/crypto'
-
 import { scrypt } from 'node:crypto'
+import { promisify } from 'node:util'
+
+import { constantTimeEqual, decodeHex, encodeHex } from '@/core/crypto'
 
 export class Password {
   constructor(private readonly dkLen = 64) {}
@@ -20,18 +21,13 @@ export class Password {
     return constantTimeEqual(targetKey, decodeHex(key ?? ''))
   }
 
-  private generateKey(data: string, salt?: string): Promise<Uint8Array> {
+  private async generateKey(data: string, salt?: string): Promise<Uint8Array> {
     const textEncoder = new TextEncoder()
-    return new Promise((resolve, reject) => {
-      scrypt(
-        textEncoder.encode(data),
-        textEncoder.encode(salt),
-        this.dkLen,
-        (error, derivedKey) => {
-          if (error) reject(error)
-          else resolve(new Uint8Array(derivedKey))
-        },
-      )
-    })
+    const key = (await promisify(scrypt)(
+      textEncoder.encode(data),
+      textEncoder.encode(salt),
+      this.dkLen,
+    )) as Buffer
+    return new Uint8Array(key)
   }
 }

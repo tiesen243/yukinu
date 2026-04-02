@@ -11,7 +11,7 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { loginInput } from '@yukinu/validators/auth'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -20,27 +20,31 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { signIn } = useSession()
   const router = useRouter()
 
-  const { formId, FormField, handleSubmit, state } = useForm({
-    defaultValues: {
-      identifier: '',
-      password: '',
-    },
+  const form = useForm({
+    defaultValues: { identifier: '', password: '' },
     schema: loginInput,
     onSubmit: signIn,
     onSuccess: () => {
-      toast.success('Logged in successfully!')
+      toast.add({
+        type: 'success',
+        title: 'Logged in successfully!',
+      })
       router.push(redirectTo as never)
     },
     onError: ({ message }) =>
-      toast.error('Login failed', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Login failed',
+        description: message,
+      }),
   })
 
   return (
-    <form id={formId} className='px-6' onSubmit={handleSubmit}>
+    <form id={form.formId} className='px-4' onSubmit={form.handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Login to your account</legend>
 
-        <FormField
+        <form.Field
           name='identifier'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
@@ -51,7 +55,7 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
           )}
         />
 
-        <FormField
+        <form.Field
           name='password'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
@@ -76,8 +80,8 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
         />
 
         <Field>
-          <Button type='submit' disabled={state.isPending}>
-            {state.isPending ? 'Logging in...' : 'Log In'}
+          <Button type='submit' disabled={form.state.isPending}>
+            {form.state.isPending ? 'Logging in...' : 'Log In'}
           </Button>
         </Field>
       </FieldSet>

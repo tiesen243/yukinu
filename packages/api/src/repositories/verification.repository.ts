@@ -1,13 +1,14 @@
-import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
-import type { Database, orm } from '@yukinu/db'
-import type * as schema from '@yukinu/db/schema'
+import type { Database, orm as ORM } from '@yukinu/db'
+import type * as Schema from '@yukinu/db/schema'
 import type { VerificationSchema } from '@yukinu/validators/auth'
+
+import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
 
 export class VerificationRepository implements IVerificationRepository {
   constructor(
     protected _db: Database,
-    protected _orm: typeof orm,
-    protected _schema: typeof schema,
+    protected _orm: typeof ORM,
+    protected _schema: typeof Schema,
   ) {}
 
   async find(

@@ -10,7 +10,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
-import { toast } from '@yukinu/ui/sonner'
+import { Button } from '@yukinu/ui/button'
+import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -22,9 +23,17 @@ export const RestoreProductButton: React.FC<{
 
   const { mutate, isPending } = useMutation({
     ...trpc.product.restore.mutationOptions(),
-    onSuccess: () => toast.success('Product restored successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Product restored successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to restore product', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to restore product',
+        description: message,
+      }),
     meta: {
       filter: isAdmin
         ? trpc.product.all.queryFilter()
@@ -34,7 +43,9 @@ export const RestoreProductButton: React.FC<{
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger variant='link'>Restore</AlertDialogTrigger>
+      <AlertDialogTrigger render={<Button variant='link' />}>
+        Restore
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>

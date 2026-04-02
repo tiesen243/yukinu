@@ -1,12 +1,13 @@
 {
   "name": "@yukinu/email",
-  "version": "0.8.3",
+  "version": "0.8.8",
   "private": true,
   "type": "module",
-  "types": "./dist/index.d.mts",
   "exports": {
-    ".": "./dist/index.mjs",
-    "./package.json": "./package.json"
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    }
   },
   "scripts": {
     "build": "tsdown",
@@ -17,18 +18,19 @@
     "~dev": "tsdown --watch"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.6",
+    "@react-email/components": "^1.0.11",
     "@yukinu/validators": "workspace:*",
-    "react": "catalog:react",
-    "react-dom": "catalog:react",
-    "resend": "^6.8.0"
+    "resend": "^6.10.0"
   },
   "devDependencies": {
+    "@react-email/preview-server": "^5.2.10",
     "@types/react": "catalog:react",
-    "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
-    "react-email": "^5.2.5",
+    "react-email": "^5.2.10",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
+  },
+  "peerDependencies": {
+    "react": "catalog:react"
   }
 }

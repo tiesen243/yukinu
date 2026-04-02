@@ -1,4 +1,4 @@
-import * as Validators from '@yukinu/validators/general'
+import * as Validators from '@yukinu/validators/product'
 
 import { createTRPCRouter, protectedProcedure } from '@/trpc'
 

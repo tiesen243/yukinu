@@ -1,5 +1,3 @@
-import type { Route } from './+types/_index'
-
 import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
@@ -16,9 +14,11 @@ import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
-import { DeleteVariantButton } from '@/routes/products/[id]/delete-variant-button'
-import { EditVariantButton } from '@/routes/products/[id]/edit-variant-button'
-import { UpdateProductForm } from '@/routes/products/[id]/update-product-form'
+import { DeleteVariantButton } from '@/routes/products/[id]/_components/delete-variant-button'
+import { EditVariantButton } from '@/routes/products/[id]/_components/edit-variant-button'
+import { UpdateProductForm } from '@/routes/products/[id]/_components/update-product-form'
+
+import type { Route } from './+types/_index'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
@@ -40,7 +40,7 @@ export default function ProductsUpdatePage({
 
       <UpdateProductForm data={data} />
 
-      <Card className='mt-4 px-6' render={<section />}>
+      <Card className='mt-4 px-4' render={<section />}>
         <div className='flex items-center justify-between gap-4'>
           <Typography variant='h3'>Product Variants</Typography>
           <Button render={<Link to={`/products/${data.id}/variant`} />}>

@@ -27,7 +27,7 @@ import {
 import { getWebUrl } from '@/lib/utils'
 
 export const UserButton: React.FC = () => {
-  const { status, session, signOut } = useSession()
+  const { status, user, signOut } = useSession()
   const { isMobile } = useSidebar()
   const { theme, setTheme } = useTheme()
 
@@ -40,7 +40,7 @@ export const UserButton: React.FC = () => {
           <DropdownMenuTrigger
             render={
               <SidebarMenuButton size='lg'>
-                <UserAvatar {...session.user} />
+                <UserAvatar {...user} />
                 <EllipsisVerticalIcon className='ml-auto size-4' />
               </SidebarMenuButton>
             }
@@ -54,7 +54,7 @@ export const UserButton: React.FC = () => {
           >
             <DropdownMenuGroup>
               <DropdownMenuLabel className='flex items-center gap-2 p-0 px-1 py-1.5 text-left text-sm font-normal'>
-                <UserAvatar {...session.user} />
+                <UserAvatar {...user} />
               </DropdownMenuLabel>
             </DropdownMenuGroup>
 
@@ -95,19 +95,17 @@ const UserAvatar: React.FC<{
   username: string
   email: string
   image: string | null
-}> = ({ username, email, image }) => {
-  return (
-    <>
-      <Avatar className='size-8 rounded-lg'>
-        <AvatarImage src={image ?? ''} alt={username} />
-        <AvatarFallback className='rounded-lg'>
-          {username.charAt(0).toUpperCase()}
-        </AvatarFallback>
-      </Avatar>
-      <div className='grid flex-1 text-left text-sm leading-tight'>
-        <span className='truncate font-medium'>{username}</span>
-        <span className='truncate text-xs text-muted-foreground'>{email}</span>
-      </div>
-    </>
-  )
-}
+}> = ({ username, email, image }) => (
+  <>
+    <Avatar className='size-8 rounded-lg'>
+      <AvatarImage src={image ?? ''} alt={username} />
+      <AvatarFallback className='rounded-lg'>
+        {username.charAt(0).toUpperCase()}
+      </AvatarFallback>
+    </Avatar>
+    <div className='grid flex-1 text-left text-sm leading-tight'>
+      <span className='truncate font-medium'>{username}</span>
+      <span className='truncate text-xs text-muted-foreground'>{email}</span>
+    </div>
+  </>
+)

@@ -1,4 +1,4 @@
-import type * as Validators from '@yukinu/validators/general'
+import type * as Validators from '@yukinu/validators/product'
 
 export interface IWishlistService {
   get(

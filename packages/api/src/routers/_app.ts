@@ -19,6 +19,7 @@ const appRouter = createTRPCRouter({
   vendorStaff: lazy(() => import('@/routers/vendor-staff.router')),
   vendor: lazy(() => import('@/routers/vendor.router')),
   webhook: lazy(() => import('@/routers/webhook.router')),
+  voucher: lazy(() => import('@/routers/voucher.router')),
   wishlist: lazy(() => import('@/routers/wishlist.router')),
 })
 

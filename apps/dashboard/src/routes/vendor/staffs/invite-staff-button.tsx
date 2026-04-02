@@ -12,7 +12,7 @@ import {
 } from '@yukinu/ui/dialog'
 import { Field, FieldLabel } from '@yukinu/ui/field'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -26,12 +26,20 @@ export const InviteStaffButton: React.FC = () => {
     ...trpc.vendorStaff.invite.mutationOptions(),
     meta: { filter: trpc.vendorStaff.all.queryFilter() },
     onSuccess: () => {
-      toast.success('Invitation sent successfully!')
+      toast.add({
+        type: 'success',
+        title: 'Invitation sent successfully!',
+        description: `An invitation email has been sent to ${email}.`,
+      })
       setOpen(false)
       setEmail('')
     },
     onError: ({ message }) =>
-      toast.error('Failed to invite staff', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to invite staff.',
+        description: message,
+      }),
   })
 
   return (

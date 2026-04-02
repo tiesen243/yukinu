@@ -1,8 +1,9 @@
-import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { UserSchema } from '@yukinu/validators/auth'
 import type { VendorSchema, VendorStaffSchema } from '@yukinu/validators/vendor'
+
+import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -19,15 +20,7 @@ export class VendorRepository
     orderBy: Partial<Record<keyof VendorSchema, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx = this._db,
-  ): Promise<
-    (Pick<
-      VendorSchema,
-      'id' | 'name' | 'status' | 'createdAt' | 'updatedAt'
-    > & {
-      owner: Pick<UserSchema, 'id' | 'username' | 'email'>
-      staffCount: number
-    })[]
-  > {
+  ): Promise<IVendorRepository.VendorWithRelations[]> {
     const { count, eq } = this._orm
     const { users, vendorStaffs } = this._schema
 
@@ -61,9 +54,7 @@ export class VendorRepository
   allStaffByVendorId(
     vendorId: VendorSchema['id'],
     tx = this._db,
-  ): Promise<
-    (Pick<UserSchema, 'id' | 'username' | 'email'> & { assignedAt: Date })[]
-  > {
+  ): Promise<IVendorRepository.VendorStaff[]> {
     const { eq } = this._orm
     const { users, vendorStaffs } = this._schema
 

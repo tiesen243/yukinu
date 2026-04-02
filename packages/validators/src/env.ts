@@ -26,8 +26,8 @@ export const env = createEnv({
 
     // Auth configuration
     AUTH_SECRET: z.optional(z.string()),
-    AUTH_FACEBOOK_ID: z.string(),
-    AUTH_FACEBOOK_SECRET: z.string(),
+    AUTH_GITHUB_ID: z.string(),
+    AUTH_GITHUB_SECRET: z.string(),
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
 

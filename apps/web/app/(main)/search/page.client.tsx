@@ -32,22 +32,23 @@ export const FilterForm: React.FC = () => {
     trpc.category.all.queryOptions({ search: '', limit: 100 }),
   )
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
 
-    const formData = Object.fromEntries(
-      new FormData(e.currentTarget),
-    ) as Record<string, string>
+    const formData = Object.fromEntries(new FormData(e.target)) as Record<
+      string,
+      string
+    >
     const search = formData.q ?? null
     const categoryId =
       formData.categoryId === '' ? null : (formData.categoryId ?? null)
-    const orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
+    const _orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
 
     await setQuery((prev) => ({
       ...prev,
       search,
       categoryId,
-      orderBy,
+      orderBy: _orderBy,
       page: 1,
     }))
   }
@@ -123,9 +124,12 @@ export const VendorInfomation: React.FC = () => {
   const { vendor } = data
 
   return (
-    <Card className='flex-row items-center px-6'>
+    <Card className='flex-row items-center px-4'>
       <Avatar className='size-16'>
-        <AvatarImage src={vendor.image ?? '/favicon.svg'} alt={vendor.name} />
+        <AvatarImage
+          src={vendor.image ?? '/assets/favicon.svg'}
+          alt={vendor.name}
+        />
         <AvatarFallback>{vendor.name.charAt(0).toUpperCase()}</AvatarFallback>
       </Avatar>
       <div className='flex flex-col gap-2'>

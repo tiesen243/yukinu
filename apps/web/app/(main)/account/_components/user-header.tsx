@@ -5,11 +5,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { UserIcon } from '@yukinu/ui/icons'
 
 export const UserHeader: React.FC = () => {
-  const { status, session } = useSession()
+  const { status, user } = useSession()
 
   if (status !== 'authenticated')
     return (
-      <div className='flex h-16 items-start gap-2 border-b px-6' role='status'>
+      <div className='flex h-16 items-start gap-2 border-b px-4' role='status'>
         <div className='aspect-square size-12 animate-pulse rounded-full bg-muted' />
 
         <div className='flex w-full flex-col gap-1 overflow-hidden'>
@@ -21,10 +21,8 @@ export const UserHeader: React.FC = () => {
       </div>
     )
 
-  const { user } = session
-
   return (
-    <div className='flex h-16 items-start gap-2 border-b px-6'>
+    <div className='flex h-16 items-start gap-2 border-b px-4'>
       <Avatar className='size-12'>
         <AvatarImage src={user.image ?? ''} alt={user.username} />
         <AvatarFallback>

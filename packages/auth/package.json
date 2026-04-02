@@ -1,19 +1,18 @@
 {
   "name": "@yukinu/auth",
-  "version": "0.9.4",
+  "version": "0.9.12",
   "private": true,
   "type": "module",
-  "types": "./dist/index.d.mts",
   "exports": {
     ".": {
-      "react-server": "./dist/index.rsc.mjs",
-      "default": "./dist/index.mjs"
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs",
+      "react-server": "./dist/index.rsc.mjs"
     },
     "./react": {
       "types": "./dist/react.d.mts",
       "default": "./dist/react.mjs"
-    },
-    "./package.json": "./package.json"
+    }
   },
   "scripts": {
     "build": "tsdown",
@@ -29,13 +28,13 @@
   },
   "devDependencies": {
     "@types/node": "catalog:dev",
+    "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },
   "peerDependencies": {
     "@tanstack/react-query": "catalog:prod",
-    "@types/react": "catalog:react",
     "react": "catalog:react"
   }
 }

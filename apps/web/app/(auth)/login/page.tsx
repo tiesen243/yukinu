@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@yukinu/ui/card'
-import { FacebookIcon, GoogleIcon } from '@yukinu/ui/icons'
+import { GithubIcon, GoogleIcon } from '@yukinu/ui/icons'
 import { Separator } from '@yukinu/ui/separator'
 import Link from 'next/link'
 
@@ -29,7 +29,7 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
 
         <LoginForm redirectTo={String(redirect_to ?? '/')} />
 
-        <CardFooter className='flex-col gap-4' render={<form method='POST' />}>
+        <CardFooter className='flex-col gap-4' render={<form />}>
           <CardDescription className='self-start [&>a]:hover:text-primary [&>a]:hover:underline'>
             Don&apos;t have an account?{' '}
             <Link href='/register'>Register here</Link>.
@@ -46,9 +46,9 @@ export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
             <Button
               type='submit'
               variant='outline'
-              formAction='/api/auth/facebook'
+              formAction='/api/auth/github'
             >
-              <FacebookIcon /> Continue with Facebook
+              <GithubIcon /> Continue with Github
             </Button>
             <Button
               type='submit'

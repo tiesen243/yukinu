@@ -1,0 +1,74 @@
+import { useMutation } from '@tanstack/react-query'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
+import { toast } from '@yukinu/ui/toast'
+
+import { useTRPC } from '@/lib/trpc/react'
+
+export const DeleteVariantButton: React.FC<{
+  productId: string
+  variantId: string
+}> = ({ productId, variantId }) => {
+  const trpc = useTRPC()
+  const { mutate, isPending } = useMutation({
+    ...trpc.productVariant.delete.mutationOptions(),
+    meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Variant deleted successfully!',
+      }),
+    onError: ({ message }) =>
+      toast.add({
+        type: 'error',
+        title: 'Failed to delete variant',
+        description: message,
+      }),
+  })
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger
+        render={<Button variant='link' className='text-destructive' />}
+      >
+        Delete
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>
+            Are you sure you want to delete this variant?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. The variant will be permanently
+            removed from the product.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+
+          <AlertDialogAction
+            variant='destructive'
+            disabled={isPending}
+            onClick={() => {
+              mutate({ id: variantId })
+            }}
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}

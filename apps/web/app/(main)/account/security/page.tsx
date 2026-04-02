@@ -28,7 +28,7 @@ export default function AccountSecurityPage() {
         description='Manage your password, two-factor authentication, and other security settings to keep your account safe.'
       />
 
-      <section className='flex flex-col gap-4 px-6'>
+      <section className='flex flex-col gap-4 px-4'>
         <h2 className='text-lg font-medium'>Where you are logged in</h2>
 
         <Suspense fallback={<SessionsListSkeleton />}>
@@ -38,7 +38,7 @@ export default function AccountSecurityPage() {
 
       <hr />
 
-      <section className='px-6'>
+      <section className='px-4'>
         <h2 className='sr-only'>Change Password section</h2>
 
         <ChangePasswordForm />
@@ -46,7 +46,7 @@ export default function AccountSecurityPage() {
 
       <hr />
 
-      <Collapsible render={<section />} className='px-6'>
+      <Collapsible render={<section />} className='px-4'>
         <h2 className='sr-only'>Delete Account</h2>
 
         <CollapsibleTrigger className='group inline-flex w-full items-center gap-2 rounded-md px-2 py-1 text-lg font-medium text-destructive [&_svg]:size-4'>

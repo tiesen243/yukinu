@@ -1,6 +1,3 @@
-import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
-import type { IUserRepository } from '@/contracts/repositories/user.repository'
-import type { IUserService } from '@/contracts/services/user.service'
 import type { Database } from '@yukinu/db'
 import type { Role } from '@yukinu/validators/auth'
 import type * as Validators from '@yukinu/validators/user'
@@ -8,6 +5,10 @@ import type * as Validators from '@yukinu/validators/user'
 import { TRPCError } from '@trpc/server'
 import { utapi } from '@yukinu/uploadthing'
 import { roles } from '@yukinu/validators/auth'
+
+import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
+import type { IUserService } from '@/contracts/services/user.service'
 
 export class UserService implements IUserService {
   constructor(

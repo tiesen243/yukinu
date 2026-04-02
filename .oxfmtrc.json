@@ -1,5 +1,6 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [".changeset/*.md"],
 
   "jsxSingleQuote": true,
   "printWidth": 80,
@@ -8,17 +9,24 @@
   "tabWidth": 2,
   "trailingComma": "all",
 
-  "experimentalSortImports": {
-    "groups": ["side-effect", "type", "external", "internal"],
-    "partitionByComment": true
+  "sortImports": {
+    "groups": [
+      "side_effect_style",
+      "type-import",
+      ["value-builtin", "value-external"],
+      "type-internal",
+      "value-internal",
+      ["type-parent", "type-sibling", "type-index"],
+      ["value-parent", "value-sibling", "value-index"]
+    ]
   },
 
-  "experimentalSortPackageJson": {
+  "sortPackageJson": {
     "sortScripts": true
   },
 
-  "experimentalTailwindcss": {
-    "functions": ["clsx", "cva", "cn"],
+  "sortTailwindcss": {
+    "functions": ["clsx", "cn", "cva"],
     "stylesheet": "./packages/ui/src/tailwind.css"
   }
 }

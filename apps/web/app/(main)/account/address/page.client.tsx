@@ -13,7 +13,7 @@ import {
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
 import { Button } from '@yukinu/ui/button'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import Link from 'next/link'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -76,14 +76,22 @@ const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
   const { mutate, isPending } = useMutation({
     ...trpc.address.delete.mutationOptions(),
     meta: { filter: trpc.address.all.queryFilter() },
-    onSuccess: () => toast.success('Address deleted successfully!'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Address deleted successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Error deleting address', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Error deleting address',
+        description: message,
+      }),
   })
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger variant='destructive' size='sm'>
+      <AlertDialogTrigger render={<Button variant='destructive' size='sm' />}>
         Delete
       </AlertDialogTrigger>
 

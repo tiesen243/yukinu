@@ -1,20 +1,13 @@
 {
   "name": "@yukinu/validators",
-  "version": "0.9.3",
+  "version": "0.9.7",
   "private": true,
   "type": "module",
   "exports": {
-    "./auth": "./dist/auth.mjs",
-    "./env": "./dist/env.mjs",
-    "./env.next": "./dist/env.next.mjs",
-    "./env.vite": "./dist/env.vite.mjs",
-    "./general": "./dist/general.mjs",
-    "./order": "./dist/order.mjs",
-    "./product": "./dist/product.mjs",
-    "./shared": "./dist/shared.mjs",
-    "./user": "./dist/user.mjs",
-    "./vendor": "./dist/vendor.mjs",
-    "./package.json": "./package.json"
+    "./*": {
+      "types": "./dist/*.d.mts",
+      "default": "./dist/*.mjs"
+    }
   },
   "scripts": {
     "build": "tsdown",

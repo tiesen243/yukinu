@@ -1,14 +1,15 @@
+import type { Database } from '@yukinu/db'
+import type * as Validators from '@yukinu/validators/product'
+
+import { TRPCError } from '@trpc/server'
+import { utapi } from '@yukinu/uploadthing'
+
 import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
 import type { IProductImageRepository } from '@/contracts/repositories/product-image.repository'
 import type { IProductRepository } from '@/contracts/repositories/product.repository'
 import type { IVariantRepository } from '@/contracts/repositories/variant.repository'
 import type { IVendorRepository } from '@/contracts/repositories/vendor.repository'
 import type { IProductService } from '@/contracts/services/product.service'
-import type { Database } from '@yukinu/db'
-import type * as Validators from '@yukinu/validators/product'
-
-import { TRPCError } from '@trpc/server'
-import { utapi } from '@yukinu/uploadthing'
 
 import { MINMOD_ACCESS } from '@/trpc'
 
@@ -45,7 +46,8 @@ export class ProductService implements IProductService {
 
     const vendorQuery = vendorId
       ? this._vendor.find(vendorId)
-      : Promise.resolve(null)
+      : // oxlint-disable-next-line promise/prefer-await-to-then
+        Promise.resolve(null)
 
     const [products, vendor, total] = await Promise.all([
       this._product.allWithRelations(whereClauses, orderBy, { limit, offset }),

@@ -1,9 +1,8 @@
 {
-  "extends": "@yukinu/tsconfig/react.json",
+  "extends": "@yukinu/tsconfig/react-package.json",
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/*"],
-      "@/utils": ["./src/index.ts"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"],

@@ -33,7 +33,7 @@ export const addressSchema = z.object({
   phoneNumber: z
     .string()
     .regex(
-      /^\(\+\d{1,3}\)\s\d{2,4}(?:\s\d{2,4}){1,3}$/,
+      /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
       'Invalid phone number',
     ),
   street: z.string().max(255, 'Street must be at most 255 characters long'),

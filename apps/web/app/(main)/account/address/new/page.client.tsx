@@ -11,7 +11,7 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { createAddressInput } from '@yukinu/validators/user'
 import { useRouter } from 'next/navigation'
 
@@ -24,12 +24,20 @@ export const NewAddressForm: React.FC = () => {
   const { mutateAsync } = useMutation({
     ...trpc.address.create.mutationOptions(),
     meta: { filter: trpc.address.all.queryFilter() },
-    onSuccess: () => toast.success('Address added successfully!'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Address added successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Error adding address', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Error adding address',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       recipientName: '',
       phoneNumber: '',
@@ -47,10 +55,10 @@ export const NewAddressForm: React.FC = () => {
   })
 
   return (
-    <form id={formId} onSubmit={handleSubmit}>
+    <form id={form.formId} onSubmit={form.handleSubmit}>
       <FieldSet>
         <FieldGroup>
-          <FormField
+          <form.Field
             name='recipientName'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -61,7 +69,7 @@ export const NewAddressForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='phoneNumber'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -72,7 +80,7 @@ export const NewAddressForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='street'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -83,7 +91,7 @@ export const NewAddressForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='city'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -94,7 +102,7 @@ export const NewAddressForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='state'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -105,7 +113,7 @@ export const NewAddressForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='country'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -116,7 +124,7 @@ export const NewAddressForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='postalCode'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -128,8 +136,8 @@ export const NewAddressForm: React.FC = () => {
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Adding...' : 'Add Address'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Adding...' : 'Add Address'}
             </Button>
           </Field>
         </FieldGroup>

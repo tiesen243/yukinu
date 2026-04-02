@@ -24,6 +24,11 @@ app.config.timestamp_*.js
 expo-env.d.ts
 uniwind-types.d.ts
 
+# react native
+.cxx/
+*.keystore
+!debug.keystore
+
 # native
 .kotlin/
 *.orig.*
@@ -32,10 +37,6 @@ uniwind-types.d.ts
 *.p12
 *.key
 *.mobileprovision
-
-# generated native folders
-ios/
-android/
 
 # java
 *.class

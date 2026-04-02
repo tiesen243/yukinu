@@ -14,8 +14,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@yukinu/ui/alert-dialog'
+import { Button } from '@yukinu/ui/button'
 import { XIcon } from '@yukinu/ui/icons'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 
 import { useTRPC } from '@/lib/trpc/react'
 
@@ -28,8 +29,8 @@ export const SessionsList: React.FC = () => {
   ))
 }
 
-export const SessionsListSkeleton: React.FC = () => {
-  return Array.from({ length: 3 }, (_, index) => (
+export const SessionsListSkeleton: React.FC = () =>
+  Array.from({ length: 3 }, (_, index) => (
     <div
       key={index}
       className='relative flex animate-pulse flex-col gap-2 border-b pb-4 last:border-0'
@@ -42,7 +43,6 @@ export const SessionsListSkeleton: React.FC = () => {
       <div className='w-1/3 rounded-md bg-muted'>&nbsp;</div>
     </div>
   ))
-}
 
 const SessionItem: React.FC<{
   session: AllSessionsOutput[number]
@@ -51,9 +51,17 @@ const SessionItem: React.FC<{
   const { mutate, isPending } = useMutation({
     ...trpc.security.deleteSession.mutationOptions(),
     meta: { filter: trpc.security.allSessions.queryFilter() },
-    onSuccess: () => toast.success('Logged out of session successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Logged out of session successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to log out of session', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to log out of session',
+        description: message,
+      }),
   })
 
   return (
@@ -69,9 +77,13 @@ const SessionItem: React.FC<{
 
       <AlertDialog>
         <AlertDialogTrigger
-          className='absolute top-0 right-0'
-          variant='outline'
-          size='icon-sm'
+          render={
+            <Button
+              size='icon-sm'
+              variant='outline'
+              className='absolute top-0 right-0'
+            />
+          }
         >
           <XIcon />
         </AlertDialogTrigger>

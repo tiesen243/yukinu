@@ -1,5 +1,82 @@
 # @yukinu/auth
 
+## 0.9.12
+
+### Patch Changes
+
+- [#389](https://github.com/tiesen243/yukinu/pull/389) [`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307) Thanks [@tiesen243](https://github.com/tiesen243)! - organize exports
+
+- Updated dependencies [[`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307)]:
+  - @yukinu/validators@0.9.7
+  - @yukinu/email@0.8.8
+  - @yukinu/lib@0.7.3
+  - @yukinu/db@0.9.10
+
+## 0.9.11
+
+### Patch Changes
+
+- Updated dependencies [[`9ddd05e`](https://github.com/tiesen243/yukinu/commit/9ddd05e5d94977af235569610dabd23daf208a34)]:
+  - @yukinu/db@0.9.9
+
+## 0.9.10
+
+### Patch Changes
+
+- [#385](https://github.com/tiesen243/yukinu/pull/385) [`96c3c5c`](https://github.com/tiesen243/yukinu/commit/96c3c5c4289b1a54bd898c39fa6f9b09115e3bde) Thanks [@tiesen243](https://github.com/tiesen243)! - implement CSRF check and add middleware for checking auth in protected route
+
+- Updated dependencies [[`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016)]:
+  - @yukinu/validators@0.9.6
+  - @yukinu/db@0.9.8
+  - @yukinu/email@0.8.7
+
+## 0.9.9
+
+### Patch Changes
+
+- [#383](https://github.com/tiesen243/yukinu/pull/383) [`87c1cb0`](https://github.com/tiesen243/yukinu/commit/87c1cb066b5b0603080c300902b559e0d9860a1b) Thanks [@tiesen243](https://github.com/tiesen243)! - fix ua and ip check
+
+## 0.9.8
+
+### Patch Changes
+
+- [#381](https://github.com/tiesen243/yukinu/pull/381) [`ba164a8`](https://github.com/tiesen243/yukinu/commit/ba164a8f0b3ffbd89d900f718300134f34600cdb) Thanks [@tiesen243](https://github.com/tiesen243)! - update auth package
+
+## 0.9.7
+
+### Patch Changes
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425) Thanks [@tiesen243](https://github.com/tiesen243)! - update auth package
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`2229819`](https://github.com/tiesen243/yukinu/commit/2229819960e949a6c160d096c68009b0e994c6b0) Thanks [@tiesen243](https://github.com/tiesen243)! - change parameter of verifyAccessToken function
+
+- Updated dependencies [[`f8909af`](https://github.com/tiesen243/yukinu/commit/f8909af29c72c4bbd94a112b8a34102effb631ad), [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425), [`f8909af`](https://github.com/tiesen243/yukinu/commit/f8909af29c72c4bbd94a112b8a34102effb631ad)]:
+  - @yukinu/db@0.9.7
+  - @yukinu/validators@0.9.5
+  - @yukinu/email@0.8.6
+  - @yukinu/lib@0.7.2
+
+## 0.9.6
+
+### Patch Changes
+
+- Updated dependencies [[`6c785b3`](https://github.com/tiesen243/yukinu/commit/6c785b35c627d46c8591bdf1008fff2a3f793ad5), [`c3a03ed`](https://github.com/tiesen243/yukinu/commit/c3a03edcd596b0a1080eb086cba3abde7001e409)]:
+  - @yukinu/validators@0.9.4
+  - @yukinu/db@0.9.6
+  - @yukinu/email@0.8.5
+
+## 0.9.5
+
+### Patch Changes
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`5e43a03`](https://github.com/tiesen243/yukinu/commit/5e43a03ac3bb372b76e9bb1b888a980d06a10c92) Thanks [@tiesen243](https://github.com/tiesen243)! - fix no-shadow error
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps and update ui packages
+
+- Updated dependencies [[`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58)]:
+  - @yukinu/email@0.8.4
+  - @yukinu/db@0.9.5
+
 ## 0.9.4
 
 ### Patch Changes

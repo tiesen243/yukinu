@@ -42,8 +42,8 @@ import {
   SelectItem,
   SelectValue,
 } from '@yukinu/ui/select'
-import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
+import { toast } from '@yukinu/ui/toast'
 import { changeUsernameInput } from '@yukinu/validators/auth'
 import { genders, updateProfileInput } from '@yukinu/validators/user'
 import { useState } from 'react'
@@ -139,11 +139,20 @@ export function UpdateProfileForm() {
   const { mutateAsync } = useMutation({
     ...trpc.user.updateProfile.mutationOptions(),
     meta: { filter: trpc.user.profile.queryFilter() },
-    onSuccess: () => toast.success('Profile updated successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Profile updated successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to update profile', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update profile',
+        description: message,
+      }),
   })
-  const { formId, FormField, handleSubmit, state } = useForm({
+
+  const form = useForm({
     defaultValues: {
       fullName: data.profile.fullName,
       bio: data.profile.bio,
@@ -157,7 +166,7 @@ export function UpdateProfileForm() {
   })
 
   return (
-    <form id={formId} onSubmit={handleSubmit}>
+    <form id={form.formId} onSubmit={form.handleSubmit}>
       <h3 className='sr-only'>Update Profile form</h3>
 
       <FieldSet>
@@ -167,7 +176,7 @@ export function UpdateProfileForm() {
         </FieldDescription>
 
         <FieldGroup>
-          <FormField
+          <form.Field
             name='avatar'
             render={({ meta, field: { value, ...field } }) => (
               <Field
@@ -198,9 +207,7 @@ export function UpdateProfileForm() {
                             'SHA-256',
                             buffer,
                           )
-                          const hashedEmail = Array.from(
-                            new Uint8Array(hashBuffer),
-                          )
+                          const hashedEmail = [...new Uint8Array(hashBuffer)]
                             .map((b) => b.toString(16).padStart(2, '0'))
                             .join('')
                           return field.onChange(
@@ -227,7 +234,7 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='banner'
             render={({ meta, field: { value, ...field } }) => (
               <Field
@@ -264,7 +271,7 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='fullName'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -279,7 +286,7 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='bio'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -303,7 +310,7 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='gender'
             render={({ meta, field: { onChange, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -337,7 +344,7 @@ export function UpdateProfileForm() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='dateOfBirth'
             render={({ meta, field: { value, ...field } }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -349,8 +356,8 @@ export function UpdateProfileForm() {
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Saving...' : 'Save Changes'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Saving...' : 'Save Changes'}
             </Button>
           </Field>
         </FieldGroup>
@@ -422,11 +429,20 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
   const { mutateAsync } = useMutation({
     ...trpc.security.changeUsername.mutationOptions(),
     meta: { filter: trpc.user.profile.queryFilter() },
-    onSuccess: () => toast.success('Username changed successfully'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Username changed successfully',
+      }),
     onError: ({ message }) =>
-      toast.error('Failed to change username', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to change username',
+        description: message,
+      }),
   })
-  const { formId, FormField, handleSubmit, state } = useForm({
+
+  const form = useForm({
     defaultValues: { username, password: '' },
     schema: changeUsernameInput.omit({ id: true }),
     onSubmit: mutateAsync,
@@ -437,14 +453,9 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        variant='ghost'
-        render={
-          <InputGroupButton>
-            <PencilIcon />
-          </InputGroupButton>
-        }
-      />
+      <DialogTrigger render={<InputGroupButton />}>
+        <PencilIcon />
+      </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -454,10 +465,10 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
           </DialogDescription>
         </DialogHeader>
 
-        <form id={formId} onSubmit={handleSubmit}>
+        <form id={form.formId} onSubmit={form.handleSubmit}>
           <FieldSet>
             <FieldGroup>
-              <FormField
+              <form.Field
                 name='username'
                 render={({ meta, field }) => (
                   <Field data-invalid={meta.errors.length > 0}>
@@ -468,7 +479,7 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
                 )}
               />
 
-              <FormField
+              <form.Field
                 name='password'
                 render={({ meta, field }) => (
                   <Field data-invalid={meta.errors.length > 0}>
@@ -485,14 +496,18 @@ const ChangeUsernameForm: React.FC<{ username: string }> = ({ username }) => {
         <DialogFooter>
           <DialogClose
             render={
-              <Button variant='outline' disabled={state.isPending}>
+              <Button variant='outline' disabled={form.state.isPending}>
                 Cancel
               </Button>
             }
           />
 
-          <Button type='submit' form={formId} disabled={state.isPending}>
-            {state.isPending ? 'Changing...' : 'Change Username'}
+          <Button
+            type='submit'
+            form={form.formId}
+            disabled={form.state.isPending}
+          >
+            {form.state.isPending ? 'Changing...' : 'Change Username'}
           </Button>
         </DialogFooter>
       </DialogContent>

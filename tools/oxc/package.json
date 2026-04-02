@@ -1,0 +1,8 @@
+{
+  "name": "@yukinu/oxc",
+  "version": "0.0.2",
+  "private": true,
+  "files": [
+    "*.json"
+  ]
+}

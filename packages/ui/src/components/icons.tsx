@@ -1,3 +1,4 @@
+// oxlint-disable-next-line oxc/no-barrel-file
 export * from 'lucide-react'
 
 export function FacebookIcon(props: React.SVGProps<SVGSVGElement>) {

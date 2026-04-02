@@ -8,18 +8,15 @@ import {
   CardTitle,
 } from '@yukinu/ui/card'
 import {
-  Cell,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
 } from '@yukinu/ui/chart'
+import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
 
 export const CategoryDistributionChart: React.FC<{
   config: ChartConfig
-  data: Array<{ name: string; value: number; fill: string }>
+  data: { name: string; value: number; fill: string }[]
 }> = ({ config, data }) => (
   <Card>
     <CardHeader>
@@ -43,6 +40,7 @@ export const CategoryDistributionChart: React.FC<{
               dataKey='value'
             >
               {data.map((entry, index) => (
+                // oxlint-disable-next-line react/no-array-index-key
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
             </Pie>

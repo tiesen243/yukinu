@@ -1,7 +1,8 @@
+import type { Database } from '@yukinu/db'
+import type * as Validators from '@yukinu/validators/product'
+
 import type { IWishlistItemRepository } from '@/contracts/repositories/wishlist-item.repository'
 import type { IWishlistService } from '@/contracts/services/wishlist.service'
-import type { Database } from '@yukinu/db'
-import type * as Validators from '@yukinu/validators/general'
 
 export class WishlistService implements IWishlistService {
   constructor(

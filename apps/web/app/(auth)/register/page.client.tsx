@@ -4,7 +4,7 @@ import { Button } from '@yukinu/ui/button'
 import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import { registerInput } from '@yukinu/validators/auth'
 
 import { useTRPCClient } from '@/lib/trpc/react'
@@ -12,7 +12,7 @@ import { useTRPCClient } from '@/lib/trpc/react'
 export const RegisterForm: React.FC = () => {
   const trpc = useTRPCClient()
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       username: '',
       email: '',
@@ -22,21 +22,27 @@ export const RegisterForm: React.FC = () => {
     schema: registerInput,
     onSubmit: trpc.auth.register.mutate,
     onSuccess: () => {
-      toast.success('Registration successful!', {
+      toast.add({
+        type: 'success',
+        title: 'Registration successful!',
         description: 'Please check your email to verify your account.',
       })
     },
     onError: ({ message }) =>
-      toast.error('Registration failed', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Registration failed',
+        description: message,
+      }),
   })
 
   return (
-    <form id={formId} className='px-6' onSubmit={handleSubmit}>
+    <form id={form.formId} className='px-4' onSubmit={form.handleSubmit}>
       <FieldSet>
         <legend className='sr-only'>Create a new account</legend>
 
         <Field orientation='horizontal'>
-          <FormField
+          <form.Field
             name='username'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -47,7 +53,7 @@ export const RegisterForm: React.FC = () => {
             )}
           />
 
-          <FormField
+          <form.Field
             name='email'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -59,7 +65,7 @@ export const RegisterForm: React.FC = () => {
           />
         </Field>
 
-        <FormField
+        <form.Field
           name='password'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
@@ -74,7 +80,7 @@ export const RegisterForm: React.FC = () => {
           )}
         />
 
-        <FormField
+        <form.Field
           name='confirmPassword'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
@@ -90,8 +96,8 @@ export const RegisterForm: React.FC = () => {
         />
 
         <Field>
-          <Button type='submit' disabled={state.isPending}>
-            {state.isPending ? 'Registering...' : 'Register'}
+          <Button type='submit' disabled={form.state.isPending}>
+            {form.state.isPending ? 'Registering...' : 'Register'}
           </Button>
         </Field>
       </FieldSet>

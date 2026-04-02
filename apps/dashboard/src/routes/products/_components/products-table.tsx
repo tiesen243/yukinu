@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import { DownloadIcon, PlusIcon } from '@yukinu/ui/icons'
@@ -10,16 +11,24 @@ import {
 } from '@yukinu/ui/table'
 import { Link } from 'react-router'
 
+import { exportCsv } from '@/lib/export-csv'
+import { useTRPC } from '@/lib/trpc/react'
+import { useProductQueryStates } from '@/routes/products/_components/hook'
 import { ProductsList } from '@/routes/products/_components/products-list'
 import { ProductsPagination } from '@/routes/products/_components/products-pagination'
 import {
   SearchForm,
   ToggleProductStatusButton,
 } from '@/routes/products/_components/search-form'
-import { useProductQueryStates } from '@/routes/products/_hook'
 
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
+  const trpc = useTRPC()
+
   const [query] = useProductQueryStates()
+  const queryOptions = isAdmin
+    ? trpc.product.all.queryOptions
+    : trpc.product.allByVendor.queryOptions
+  const { data, isLoading } = useQuery(queryOptions(query))
 
   return (
     <>
@@ -43,13 +52,17 @@ export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
 
         <ToggleProductStatusButton />
 
-        <Button variant='outline' disabled>
+        <Button
+          variant='outline'
+          onClick={() => exportCsv('products', data?.products ?? [])}
+          disabled={isLoading || !data?.products.length}
+        >
           <DownloadIcon />
           <span className='sr-only md:not-sr-only'>Export</span>
         </Button>
       </div>
 
-      <Card className='px-6' render={<section />}>
+      <Card className='px-4' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

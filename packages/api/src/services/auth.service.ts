@@ -1,8 +1,4 @@
-import type { IAccountRepository } from '@/contracts/repositories/account.repository'
-import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
-import type { IUserRepository } from '@/contracts/repositories/user.repository'
-import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
-import type { IAuthService } from '@/contracts/services/auth.service'
+import type { User } from '@yukinu/auth'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/auth'
 
@@ -10,8 +6,13 @@ import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
 import { env } from '@yukinu/validators/env'
-
 import { randomBytes } from 'node:crypto'
+
+import type { IAccountRepository } from '@/contracts/repositories/account.repository'
+import type { IProfileRepository } from '@/contracts/repositories/profile.repository'
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
+import type { IVerificationRepository } from '@/contracts/repositories/verification.repository'
+import type { IAuthService } from '@/contracts/services/auth.service'
 
 export class AuthService implements IAuthService {
   private readonly _password = new Password()
@@ -24,26 +25,11 @@ export class AuthService implements IAuthService {
     private readonly _verification: IVerificationRepository,
   ) {}
 
-  async getCurrentUser(userId: Validators.UserSchema['id']): Promise<
-    Omit<Validators.SessionSchema, 'id' | 'userId' | 'createdAt'> & {
-      user: Pick<
-        Validators.UserSchema,
-        'id' | 'username' | 'email' | 'role' | 'image'
-      >
-    }
-  > {
+  async getCurrentUser(userId: Validators.UserSchema['id']): Promise<User> {
     const user = await this._user.find(userId)
     if (!user)
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found.' })
-
-    const { id, username, email, role, image } = user
-    return {
-      token: '',
-      userAgent: null,
-      expiresAt: new Date(),
-      ipAddress: null,
-      user: { id, username, email, role, image },
-    }
+    return user
   }
 
   async register(
@@ -60,13 +46,20 @@ export class AuthService implements IAuthService {
 
     const password = await this._password.hash(_password)
     const { userId, token } = await this._db.transaction(async (tx) => {
+      // oxlint-disable-next-line no-shadow
       const userId = await this._user.create({ email, username }, tx)
       await this._account.create(
-        { userId, provider: 'credentials', accountId: userId, password },
+        {
+          userId,
+          provider: 'credentials',
+          providerAccountId: userId,
+          password,
+        },
         tx,
       )
       await this._profile.create({ id: userId, fullName: username }, tx)
 
+      // oxlint-disable-next-line no-shadow
       const token = randomBytes(32).toString('hex')
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
       await this._verification.create(

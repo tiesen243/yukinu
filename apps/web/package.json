@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/web",
-  "version": "0.11.8",
+  "version": "0.11.18",
   "private": false,
   "type": "module",
   "scripts": {
@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:prod",
-    "@trpc/client": "catalog:trpc",
     "@trpc/tanstack-react-query": "catalog:trpc",
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
@@ -22,11 +21,10 @@
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.1.4",
+    "next": "^16.2.2",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
-    "react-dom": "catalog:react",
-    "superjson": "catalog:trpc"
+    "react-dom": "catalog:react"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",

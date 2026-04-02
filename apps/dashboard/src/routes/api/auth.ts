@@ -1,6 +1,6 @@
+import { handlers } from '@yukinu/auth'
+
 import type { Route } from './+types/auth'
 
-import { handler } from '@yukinu/auth'
-
-export const loader = ({ request }: Route.LoaderArgs) => handler(request)
-export const action = ({ request }: Route.ActionArgs) => handler(request)
+export const loader = ({ request }: Route.LoaderArgs) => handlers(request)
+export const action = ({ request }: Route.ActionArgs) => handlers(request)

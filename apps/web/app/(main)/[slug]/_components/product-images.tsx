@@ -18,7 +18,7 @@ export const ProductImages: React.FC = () => {
 
       <div className='relative aspect-square w-full rounded-md border'>
         <Image
-          src={currentImage ?? '/favicon.svg'}
+          src={currentImage ?? '/assets/favicon.svg'}
           alt={`${id}-main-image`}
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className='rounded-md object-contain p-0.5'
@@ -27,9 +27,9 @@ export const ProductImages: React.FC = () => {
       </div>
 
       <div className='flex items-center gap-4 overflow-x-auto overflow-y-hidden pb-2'>
-        {images.map(({ id, url }) => (
+        {images.map(({ id: imageId, url }) => (
           <button
-            key={id}
+            key={imageId}
             type='button'
             className={cn(
               'relative aspect-square size-20 shrink-0 rounded-md border transition-colors',
@@ -41,7 +41,7 @@ export const ProductImages: React.FC = () => {
           >
             <Image
               src={url}
-              alt={`thumbnail-${id}`}
+              alt={`thumbnail-${imageId}`}
               className='rounded-md object-contain p-0.5'
               fill
             />

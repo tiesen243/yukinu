@@ -31,20 +31,13 @@ export type CategorySchema = z.infer<typeof categorySchema>
 
 export const voucherSchema = z.object({
   id: z.cuid(),
-  code: z.string().max(50),
-  discountAmount: currencySchema,
-  discountPercentage: z.number().int().nullable(),
+  code: z.string().min(4).max(50),
+  discountAmount: z.union([currencySchema, z.literal('')]).nullable(),
+  discountPercentage: z.number().int().min(0).max(100).nullable(),
   expiryDate: z.date(),
+  quantity: z.number().int(),
 })
 export type VoucherSchema = z.infer<typeof voucherSchema>
-
-export const wishlistItemSchema = z.object({
-  id: z.cuid(),
-  userId: z.cuid(),
-  productId: z.cuid(),
-  addedAt: z.date(),
-})
-export type WishlistItemSchema = z.infer<typeof wishlistItemSchema>
 
 export const ticketSchema = z.object({
   id: z.cuid(),
@@ -120,32 +113,41 @@ export type DeleteCategoryOutput = z.infer<typeof deleteCategoryOutput>
 //#endregion
 
 //#region Vouchers
-// (Voucher-related validators can be added here in the future)
-//#endregion
-
-//#region Wishlist Items
-export const allWishlistItemsInput = wishlistItemSchema.pick({ userId: true })
-export type AllWishlistItemsInput = z.infer<typeof allWishlistItemsInput>
-export const allWishlistItemsOutput = z.array(
-  z.object({
-    product: z.object({
-      id: z.cuid(),
-      name: z.string(),
-      price: z.string().regex(/^\d+(\.\d+)?$/),
-      image: z.url().nullable(),
-    }),
-    addedAt: z.date(),
-  }),
-)
-export type AllWishlistItemsOutput = z.infer<typeof allWishlistItemsOutput>
-
-export const toggleWishlistItemInput = wishlistItemSchema.pick({
-  userId: true,
-  productId: true,
+export const allVouchersInput = paginationInput.extend({
+  search: z.string().nullable(),
 })
-export type ToggleWishlistItemInput = z.infer<typeof toggleWishlistItemInput>
-export const toggleWishlistItemOutput = z.object({ added: z.boolean() })
-export type ToggleWishlistItemOutput = z.infer<typeof toggleWishlistItemOutput>
+export type AllVouchersInput = z.infer<typeof allVouchersInput>
+export const allVouchersOutput = z.object({
+  vouchers: z.array(voucherSchema),
+  pagination: paginationOutput,
+})
+export type AllVouchersOutput = z.infer<typeof allVouchersOutput>
+
+export const oneVoucherInput = voucherSchema
+  .pick({ id: true, code: true })
+  .partial()
+export type OneVoucherInput = z.infer<typeof oneVoucherInput>
+export const oneVoucherOutput = voucherSchema
+export type OneVoucherOutput = z.infer<typeof oneVoucherOutput>
+
+export const createVoucherInput = voucherSchema
+  .omit({ id: true, expiryDate: true })
+  .extend({ expiryDate: z.iso.date() })
+export type CreateVoucherInput = z.infer<typeof createVoucherInput>
+export const createVoucherOutput = voucherSchema.pick({ id: true })
+export type CreateVoucherOutput = z.infer<typeof createVoucherOutput>
+
+export const updateVoucherInput = voucherSchema
+  .omit({ expiryDate: true })
+  .extend({ expiryDate: z.iso.date() })
+export type UpdateVoucherInput = z.infer<typeof updateVoucherInput>
+export const updateVoucherOutput = voucherSchema.pick({ id: true })
+export type UpdateVoucherOutput = z.infer<typeof updateVoucherOutput>
+
+export const deleteVoucherInput = voucherSchema.pick({ id: true })
+export type DeleteVoucherInput = z.infer<typeof deleteVoucherInput>
+export const deleteVoucherOutput = voucherSchema.pick({ id: true })
+export type DeleteVoucherOutput = z.infer<typeof deleteVoucherOutput>
 //#endregion
 
 //#region Tickets

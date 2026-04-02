@@ -1,7 +1,4 @@
-import type { Route } from './+types/root'
-
 import { Button } from '@yukinu/ui/button'
-import { Toaster } from '@yukinu/ui/sonner'
 import {
   isRouteErrorResponse,
   Link,
@@ -17,6 +14,8 @@ import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
 import { getWebUrl } from '@/lib/utils'
 
+import type { Route } from './+types/root'
+
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang='en' suppressHydrationWarning>
@@ -27,11 +26,7 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         <Links />
       </head>
       <body className='flex min-h-dvh flex-col font-sans antialiased'>
-        <Providers>
-          {children}
-
-          <Toaster richColors />
-        </Providers>
+        <Providers>{children}</Providers>
 
         <ScrollRestoration />
         <Scripts />
@@ -59,7 +54,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     error instanceof Error
   ) {
     details = error.message
-    stack = error.stack
+    ;({ stack } = error)
   }
 
   return (
@@ -98,6 +93,7 @@ export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
   { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Yuji+Syuku&family=Geist+Mono:wght@100..900&display=swap' },
   { rel: 'stylesheet', href: globalsCss },
+  { rel: 'manifest', href: '/manifest.json' },
 ]
 
 export const meta: Route.MetaFunction = () =>

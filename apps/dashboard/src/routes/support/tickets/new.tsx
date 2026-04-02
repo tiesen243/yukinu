@@ -12,8 +12,8 @@ import {
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
-import { toast } from '@yukinu/ui/sonner'
 import { Textarea } from '@yukinu/ui/textarea'
+import { toast } from '@yukinu/ui/toast'
 import { createTicketInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
@@ -26,24 +26,32 @@ export default function NewSupportTicketPage() {
   const { mutateAsync } = useMutation({
     ...trpc.ticket.create.mutationOptions(),
     meta: { filter: trpc.ticket.all.queryFilter() },
-    onSuccess: () => toast.success('Support ticket created successfully!'),
+    onSuccess: () =>
+      toast.add({
+        type: 'success',
+        title: 'Support ticket created successfully!',
+      }),
     onError: ({ message }) =>
-      toast.error('Error creating support ticket', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Error creating support ticket',
+        description: message,
+      }),
   })
 
-  const { formId, FormField, handleSubmit, state } = useForm({
+  const form = useForm({
     defaultValues: {
       subject: '',
       description: '',
     },
     schema: createTicketInput.omit({ userId: true }),
     onSubmit: mutateAsync,
-    onSuccess: () => navigate('/support/tickets'),
+    onSuccess: () => void navigate('/support/tickets'),
   })
 
   return (
-    <Card id={formId} render={<form onSubmit={handleSubmit} />}>
-      <FieldSet className='px-6'>
+    <Card id={form.formId} render={<form onSubmit={form.handleSubmit} />}>
+      <FieldSet className='px-4'>
         <FieldTitle>Create New Support Ticket</FieldTitle>
         <FieldDescription>
           Use the form below to submit a new support ticket. Please provide a
@@ -51,7 +59,7 @@ export default function NewSupportTicketPage() {
         </FieldDescription>
 
         <FieldGroup>
-          <FormField
+          <form.Field
             name='subject'
             render={({ field, meta }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -62,7 +70,7 @@ export default function NewSupportTicketPage() {
             )}
           />
 
-          <FormField
+          <form.Field
             name='description'
             render={({ field, meta }) => (
               <Field data-invalid={meta.errors.length > 0}>
@@ -77,8 +85,8 @@ export default function NewSupportTicketPage() {
           />
 
           <Field>
-            <Button type='submit' disabled={state.isPending}>
-              {state.isPending ? 'Submitting...' : 'Submit Ticket'}
+            <Button type='submit' disabled={form.state.isPending}>
+              {form.state.isPending ? 'Submitting...' : 'Submit Ticket'}
             </Button>
           </Field>
         </FieldGroup>

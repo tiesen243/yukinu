@@ -1,5 +1,36 @@
 # @yukinu/ui
 
+## 0.8.6
+
+### Patch Changes
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`d279b68`](https://github.com/tiesen243/yukinu/commit/d279b680a84d0bd0e4a4fdd2a91b8dca931decc6) Thanks [@tiesen243](https://github.com/tiesen243)! - update ui components
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`3183597`](https://github.com/tiesen243/yukinu/commit/3183597d246b521c8e7728ce2e872334132adf5f) Thanks [@tiesen243](https://github.com/tiesen243)! - update apps
+
+## 0.8.5
+
+### Patch Changes
+
+- [#389](https://github.com/tiesen243/yukinu/pull/389) [`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307) Thanks [@tiesen243](https://github.com/tiesen243)! - organize exports
+
+- Updated dependencies [[`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307)]:
+  - @yukinu/lib@0.7.3
+
+## 0.8.4
+
+### Patch Changes
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425) Thanks [@tiesen243](https://github.com/tiesen243)! - fix oxlint error
+
+## 0.8.3
+
+### Patch Changes
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`5e43a03`](https://github.com/tiesen243/yukinu/commit/5e43a03ac3bb372b76e9bb1b888a980d06a10c92) Thanks [@tiesen243](https://github.com/tiesen243)! - fix no-shadow error
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps and update ui packages
+
 ## 0.8.2
 
 ### Patch Changes

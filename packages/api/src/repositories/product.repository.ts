@@ -1,4 +1,3 @@
-import type { IProductRepository } from '@/contracts/repositories/product.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type {
@@ -8,6 +7,8 @@ import type {
   ProductVariantSchema,
 } from '@yukinu/validators/product'
 import type { VendorSchema } from '@yukinu/validators/vendor'
+
+import type { IProductRepository } from '@/contracts/repositories/product.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -185,7 +186,7 @@ export class ProductRepository
     productId: ProductSchema['id'],
     attrs: { name: string; value: string }[],
     tx = this._db,
-  ): Promise<void[]> {
+  ): Promise<unknown> {
     const { productAttributes, attributes } = this._schema
 
     return Promise.all(

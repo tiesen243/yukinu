@@ -1,15 +1,13 @@
 {
   "name": "@yukinu/lib",
-  "version": "0.7.1",
+  "version": "0.7.3",
   "private": true,
   "type": "module",
   "exports": {
-    "./create-env": "./dist/create-env.mjs",
-    "./create-id": "./dist/create-id.mjs",
-    "./create-query-client": "./dist/create-query-client.mjs",
-    "./rate-limit": "./dist/rate-limit.mjs",
-    "./slugify": "./dist/slugify.mjs",
-    "./package.json": "./package.json"
+    "./*": {
+      "types": "./dist/*.d.mts",
+      "default": "./dist/*.mjs"
+    }
   },
   "scripts": {
     "build": "tsdown",

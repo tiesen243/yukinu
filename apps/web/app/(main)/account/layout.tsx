@@ -8,11 +8,8 @@ import {
   UserIcon,
 } from '@yukinu/ui/icons'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 
 import { UserHeader } from '@/app/(main)/account/_components/user-header'
-import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, trpc } from '@/lib/trpc/rsc'
 
 export default function AccountLayout({ children }: LayoutProps<'/account'>) {
   return (
@@ -20,7 +17,7 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
       <Card render={<aside />} className='shrink-0 md:w-1/4'>
         <UserHeader />
 
-        <nav className='px-5'>
+        <nav className='px-4'>
           <ul className='flex flex-row gap-4 overflow-x-auto px-1 py-2 md:flex-col md:gap-2'>
             {sidebarLinks.map((link) => (
               <li key={link.href}>
@@ -41,21 +38,6 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
       </Card>
     </div>
   )
-}
-
-export const generateMetadata = async () => {
-  try {
-    const user = await getQueryClient().ensureQueryData(
-      trpc.user.profile.queryOptions({}),
-    )
-
-    return createMetadata({
-      title: user.profile.fullName ?? user.username,
-      description: user.profile.bio ?? 'User account page',
-    })
-  } catch {
-    redirect('/login?redirect_to=/account')
-  }
 }
 
 const sidebarLinks = [

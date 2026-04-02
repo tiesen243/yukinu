@@ -10,9 +10,9 @@ import {
 } from '@yukinu/ui/table'
 import { Typography } from '@yukinu/ui/typography'
 
-import { SearchForm } from '@/routes/admin/vendors/search-form'
-import { VendorsList } from '@/routes/admin/vendors/vendors-list'
-import { VendorsPagination } from '@/routes/admin/vendors/vendors-pagination'
+import { SearchForm } from '@/routes/admin/vendors/_components/search-form'
+import { VendorsList } from '@/routes/admin/vendors/_components/vendors-list'
+import { VendorsPagination } from '@/routes/admin/vendors/_components/vendors-pagination'
 
 export default function VendorsPage() {
   return (
@@ -31,7 +31,7 @@ export default function VendorsPage() {
         </Button>
       </div>
 
-      <Card className='px-6' render={<section />}>
+      <Card className='px-4' render={<section />}>
         <Table>
           <TableHeader>
             <TableRow>

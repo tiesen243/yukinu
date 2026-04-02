@@ -1,7 +1,8 @@
-import type { IVariantRepository } from '@/contracts/repositories/variant.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { ProductSchema, CreateInput } from '@yukinu/validators/product'
+
+import type { IVariantRepository } from '@/contracts/repositories/variant.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -65,9 +66,9 @@ export class VariantRepository
   }
 
   private _cartesianProduct(arrays: string[][]): string[][] {
-    return arrays.reduce<string[][]>(
-      (acc, curr) => acc.flatMap((a) => curr.map((b) => [...a, b])),
-      [[]],
-    )
+    let result: string[][] = [[]]
+    for (const curr of arrays)
+      result = result.flatMap((a) => curr.map((b) => [...a, b]))
+    return result
   }
 }

@@ -1,9 +1,10 @@
-import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { CategorySchema } from '@yukinu/validators/general'
 
 import { alias } from '@yukinu/db'
+
+import type { ICategoryRepository } from '@/contracts/repositories/category.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 
@@ -20,11 +21,7 @@ export class CategoryRepository
     orderBy: Partial<Record<keyof CategorySchema, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx = this._db,
-  ): Promise<
-    (Pick<CategorySchema, 'id' | 'name' | 'image'> & {
-      parent: Pick<CategorySchema, 'id' | 'name'> | null
-    })[]
-  > {
+  ): Promise<ICategoryRepository.CategoryWithParent[]> {
     const whereClause = this._buildCriteria(criterias)
     const orderByClause = this._buildOrderBy(orderBy)
 
@@ -33,6 +30,7 @@ export class CategoryRepository
       .select({
         id: this._table.id,
         name: this._table.name,
+        description: this._table.description,
         image: this._table.image,
         parent: { id: parent.id, name: parent.name },
       })

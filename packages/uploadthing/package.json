@@ -1,14 +1,21 @@
 {
   "name": "@yukinu/uploadthing",
-  "version": "0.3.4",
+  "version": "0.3.12",
   "private": true,
   "type": "module",
-  "types": "./dist/index.d.mts",
   "exports": {
-    ".": "./dist/index.mjs",
-    "./config": "./dist/config.mjs",
-    "./react": "./dist/react.mjs",
-    "./package.json": "./package.json"
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./config": {
+      "types": "./dist/config.d.mts",
+      "default": "./dist/config.mjs"
+    },
+    "./react": {
+      "types": "./dist/react.d.mts",
+      "default": "./dist/react.mjs"
+    }
   },
   "scripts": {
     "build": "tsdown",

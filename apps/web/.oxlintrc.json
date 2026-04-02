@@ -1,12 +1,16 @@
 {
   "$schema": "../../node_modules/oxlint/configuration_schema.json",
-  "extends": ["../../.oxlintrc.json"],
-  "plugins": ["nextjs"],
+  "extends": [
+    "../../tools/oxc/core.json",
+    "../../tools/oxc/react.json",
+    "../../tools/oxc/next.json"
+  ],
   "overrides": [
     {
-      "files": ["**/*.jsx", "**/*.tsx"],
-      "rules": {},
-      "plugins": ["nextjs"]
+      "files": ["*.tsx"],
+      "rules": {
+        "jsx-a11y/heading-has-content": "off"
+      }
     }
   ]
 }

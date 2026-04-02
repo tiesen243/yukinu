@@ -43,7 +43,7 @@ export const accountSchema = z.object({
   id: z.cuid(),
   userId: z.cuid(),
   provider: z.string().min(1).max(50),
-  accountId: z.string().min(1).max(100),
+  providerAccountId: z.string().min(1).max(100),
   password: z
     .string()
     .regex(
@@ -105,8 +105,8 @@ export const loginInput = z.object({
 })
 export type LoginInput = z.infer<typeof loginInput>
 export const loginOutput = z.object({
-  token: z.string(),
-  accessToken: z.string(),
+  accessToken: z.string().min(1, 'Access token is required'),
+  refreshToken: z.string().min(1, 'Refresh token is required'),
 })
 export type LoginOutput = z.infer<typeof loginOutput>
 

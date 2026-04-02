@@ -1,3 +1,5 @@
+// oxlint-disable no-nested-ternary
+
 import type { Metadata as NextMetadata } from 'next'
 
 import { env } from '@yukinu/validators/env.next'
@@ -43,7 +45,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
     referrer: 'origin-when-cross-origin',
     robots: 'index, follow',
     assets: `${baseUrl}/assets`,
-    manifest: `${baseUrl}/site.webmanifest`,
+    manifest: `${baseUrl}/manifest.json`,
     pinterest: { richPin: true },
     openGraph: {
       ...override.openGraph,
@@ -62,11 +64,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
       site: '@tiesen243',
       creator: '@tiesen243',
     },
-    icons: {
-      icon: '/favicon.ico',
-      apple: '/favicon.ico',
-      shortcut: '/favicon-32x32.png',
-    },
+    icons: { icon: '/favicon.ico', apple: '/favicon.ico' },
     alternates: { ...override.alternates, canonical: url },
     keywords: [
       ...(Array.isArray(override.keywords)

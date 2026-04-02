@@ -1,13 +1,14 @@
-import type { IAccountRepository } from '@/contracts/repositories/account.repository'
-import type { ISessionRepository } from '@/contracts/repositories/session.repository'
-import type { IUserRepository } from '@/contracts/repositories/user.repository'
-import type { ISecurityService } from '@/contracts/services/security.service'
 import type { Database } from '@yukinu/db'
 import type * as Validators from '@yukinu/validators/auth'
 
 import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
+
+import type { IAccountRepository } from '@/contracts/repositories/account.repository'
+import type { ISessionRepository } from '@/contracts/repositories/session.repository'
+import type { IUserRepository } from '@/contracts/repositories/user.repository'
+import type { ISecurityService } from '@/contracts/services/security.service'
 
 export class SecurityService implements ISecurityService {
   private readonly _password = new Password()
@@ -116,11 +117,17 @@ export class SecurityService implements ISecurityService {
     }
 
     await this._db.transaction(async (tx) => {
+      // oxlint-disable-next-line unicorn/prefer-ternary
       if (account?.password)
         await this._account.update(userId, { password }, tx)
       else
         await this._account.create(
-          { userId, provider: 'credentials', accountId: userId, password },
+          {
+            userId,
+            provider: 'credentials',
+            providerAccountId: userId,
+            password,
+          },
           tx,
         )
 

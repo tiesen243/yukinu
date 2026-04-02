@@ -8,7 +8,7 @@ const createRandom = () => {
     return () => {
       const buffer = new Uint32Array(1)
       globalThis.crypto.getRandomValues(buffer)
-      return (buffer[0] ?? 0) / 0x100000000
+      return (buffer[0] ?? 0) / 0x1_00_00_00_00
     }
   }
 
@@ -21,13 +21,14 @@ const createEntropy = (length = 4, rand = random) => {
   let entropy = ''
 
   while (entropy.length < length)
-    entropy = entropy + Math.floor(rand() * 36).toString(36)
+    entropy += Math.floor(rand() * 36).toString(36)
 
   return entropy
 }
 
 const bufToBigInt = (buf: Buffer) => {
   let v = 0n
+  // oxlint-disable-next-line no-bitwise
   for (const i of buf) v = (v << 8n) + BigInt(i)
   return v
 }
@@ -50,13 +51,12 @@ const createFingerprint = ({
   return hash(sourceString).slice(0, 32)
 }
 
-const createCounter = (count: number) => () => {
-  return count++
-}
+// oxlint-disable-next-line no-param-reassign, no-plusplus
+const createCounter = (count: number) => () => count++
 
 export function createId(rand = random): string {
   const time = Date.now().toString(36)
-  const count = createCounter(Math.floor(rand() * 476782367))().toString(36)
+  const count = createCounter(Math.floor(rand() * 476_782_367))().toString(36)
   const fingerprint = createFingerprint({ random: rand })
 
   const salt = createEntropy(24, rand)

@@ -1,5 +1,43 @@
 # @yukinu/email
 
+## 0.8.8
+
+### Patch Changes
+
+- [#389](https://github.com/tiesen243/yukinu/pull/389) [`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307) Thanks [@tiesen243](https://github.com/tiesen243)! - organize exports
+
+- Updated dependencies [[`7385497`](https://github.com/tiesen243/yukinu/commit/7385497ecbcab6d31f6049b1a4331c05fcfd2307)]:
+  - @yukinu/validators@0.9.7
+
+## 0.8.7
+
+### Patch Changes
+
+- Updated dependencies [[`0569944`](https://github.com/tiesen243/yukinu/commit/05699448a545e7a4a2f1cd29a62d83319236d016)]:
+  - @yukinu/validators@0.9.6
+
+## 0.8.6
+
+### Patch Changes
+
+- [#373](https://github.com/tiesen243/yukinu/pull/373) [`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425) Thanks [@tiesen243](https://github.com/tiesen243)! - fix oxlint error
+
+- Updated dependencies [[`f8b465a`](https://github.com/tiesen243/yukinu/commit/f8b465a3077c5d030d5ce8744d3e96157a101425)]:
+  - @yukinu/validators@0.9.5
+
+## 0.8.5
+
+### Patch Changes
+
+- Updated dependencies [[`6c785b3`](https://github.com/tiesen243/yukinu/commit/6c785b35c627d46c8591bdf1008fff2a3f793ad5), [`c3a03ed`](https://github.com/tiesen243/yukinu/commit/c3a03edcd596b0a1080eb086cba3abde7001e409)]:
+  - @yukinu/validators@0.9.4
+
+## 0.8.4
+
+### Patch Changes
+
+- [#368](https://github.com/tiesen243/yukinu/pull/368) [`29f0e5a`](https://github.com/tiesen243/yukinu/commit/29f0e5a34ad87ee7d7021ca1ace9d0f30f9bda58) Thanks [@tiesen243](https://github.com/tiesen243)! - bump deps and update ui packages
+
 ## 0.8.3
 
 ### Patch Changes

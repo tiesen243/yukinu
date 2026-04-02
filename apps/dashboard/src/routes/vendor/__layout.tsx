@@ -2,10 +2,10 @@ import { useSession } from '@yukinu/auth/react'
 import { Navigate, Outlet } from 'react-router'
 
 export default function VendorLayout() {
-  const { session, status } = useSession()
+  const { status, user } = useSession()
 
   if (status === 'loading') return null
-  if (!['vendor_owner', 'vendor_staff'].includes(session?.user.role ?? ''))
+  if (!['vendor_owner', 'vendor_staff'].includes(user?.role ?? ''))
     return <Navigate to='/' />
 
   return <Outlet />

@@ -17,30 +17,19 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from '@yukinu/ui/input-group'
-import { toast } from '@yukinu/ui/sonner'
+import { toast } from '@yukinu/ui/toast'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 export const EditButton: React.FC<{
-  vendorId: string | null
-  productId: string | null
-  variantId: string | null
-  unitPrice: string
-  name: string | null
+  productId: string
+  productVariantId: string | null
+  name: string
   variant: Record<string, string>
+  stock: number
   quantity: number
-  stock: number | null
-}> = ({
-  vendorId,
-  productId,
-  variantId,
-  unitPrice,
-  name,
-  variant,
-  quantity,
-  stock,
-}) => {
+}> = ({ productId, productVariantId, name, variant, stock, quantity }) => {
   const [localQuantity, setLocalQuantity] = React.useState(quantity)
   const [open, setOpen] = React.useState(false)
 
@@ -49,16 +38,23 @@ export const EditButton: React.FC<{
     ...trpc.cart.addItemToCart.mutationOptions(),
     meta: { filter: trpc.cart.get.queryFilter() },
     onSuccess: () => {
+      toast.add({
+        type: 'success',
+        title: 'Quantity updated successfully',
+      })
       setOpen(false)
-      toast.success('Quantity updated successfully')
     },
     onError: ({ message }) =>
-      toast.error('Failed to update quantity', { description: message }),
+      toast.add({
+        type: 'error',
+        title: 'Failed to update quantity',
+        description: message,
+      }),
   })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger variant='link'>Edit</DialogTrigger>
+      <DialogTrigger render={<Button variant='link' />}>Edit</DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
@@ -69,7 +65,7 @@ export const EditButton: React.FC<{
                 {key}: {value}
               </span>
             ))}
-            <span>In stock: {stock ?? '∞'}</span>
+            <span>In stock: {stock}</span>
           </DialogDescription>
         </DialogHeader>
 
@@ -90,25 +86,20 @@ export const EditButton: React.FC<{
             className='[appearance:textfield]'
             value={localQuantity}
             onChange={(e) => {
-              const value = parseInt(e.target.value, 10)
-              if (
-                isNaN(value) ||
-                value < 1 ||
-                (stock !== null && value > stock)
-              )
-                return
+              const value = Number.parseInt(e.target.value, 10)
+              if (Number.isNaN(value) || value < 1 || value > stock) return
               setLocalQuantity(value)
             }}
           />
           <InputGroupAddon align='inline-end'>
             <InputGroupButton
-              disabled={
-                stock === null ? isPending : localQuantity >= stock || isPending
-              }
+              disabled={localQuantity >= stock || isPending}
               onClick={() => {
-                setLocalQuantity((qty) =>
-                  stock === null ? qty + 1 : qty < stock ? qty + 1 : qty,
-                )
+                setLocalQuantity((qty) => {
+                  if (stock === null) return qty + 1
+                  if (qty < stock) return qty + 1
+                  return qty
+                })
               }}
             >
               <PlusIcon />
@@ -125,18 +116,10 @@ export const EditButton: React.FC<{
             }
           />
           <Button
-            disabled={isPending}
-            onClick={() => {
-              if (!productId) return
-
-              mutate({
-                vendorId,
-                productId,
-                unitPrice,
-                quantity: localQuantity,
-                variantId: variantId ?? undefined,
-              })
-            }}
+            disabled={isPending || localQuantity > stock || localQuantity < 1}
+            onClick={() =>
+              mutate({ productId, productVariantId, quantity: localQuantity })
+            }
           >
             {isPending ? 'Saving...' : 'Save changes'}
           </Button>

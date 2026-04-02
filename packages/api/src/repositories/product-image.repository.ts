@@ -1,7 +1,8 @@
-import type { IProductImageRepository } from '@/contracts/repositories/product-image.repository'
 import type { Database, orm as ORM } from '@yukinu/db'
 import type * as Schema from '@yukinu/db/schema'
 import type { ProductImageSchema } from '@yukinu/validators/product'
+
+import type { IProductImageRepository } from '@/contracts/repositories/product-image.repository'
 
 import { BaseRepository } from '@/repositories/base.repository'
 

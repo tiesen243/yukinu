@@ -5,7 +5,6 @@ import { ticketStatuses } from '@yukinu/validators/general'
 import { index, pgEnum, pgTable, uniqueIndex } from 'drizzle-orm/pg-core'
 
 import { users } from '@/schema/auth'
-import { products } from '@/schema/product'
 
 export const ticketStatusEnum = pgEnum('ticket_status', ticketStatuses)
 
@@ -36,29 +35,10 @@ export const vouchers = pgTable(
     code: t.varchar({ length: 50 }).notNull().unique(),
     discountAmount: t.numeric({ precision: 10, scale: 2 }),
     discountPercentage: t.integer(),
+    quantity: t.integer().default(1).notNull(),
     expiryDate: t.timestamp().notNull(),
   }),
   (t) => [uniqueIndex('vouchers_code_uq_idx').on(t.code)],
-)
-
-export const wishlistItems = pgTable(
-  'wishlist_items',
-  (t) => ({
-    id: t.varchar({ length: 24 }).$default(createId).primaryKey(),
-    userId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => users.id, { onDelete: 'cascade' }),
-    productId: t
-      .varchar({ length: 24 })
-      .notNull()
-      .references(() => products.id, { onDelete: 'cascade' }),
-    addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
-  }),
-  (t) => [
-    uniqueIndex('wishlist_items_user_product_uq_idx').on(t.userId, t.productId),
-    index('wishlist_items_user_id_idx').on(t.userId),
-  ],
 )
 
 export const tickets = pgTable(
