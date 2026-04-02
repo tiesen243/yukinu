@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.9.13
+
+### Patch Changes
+
+- [#391](https://github.com/tiesen243/yukinu/pull/391) [`bd95448`](https://github.com/tiesen243/yukinu/commit/bd954487fbba480a1ff6f3c3f92a4d42f99a4ccc) Thanks [@tiesen243](https://github.com/tiesen243)! - vendor management specific order
+
 ## 0.9.12
 
 ### Patch Changes
