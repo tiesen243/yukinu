@@ -15,47 +15,19 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import * as AuthValidators from '@yukinu/validators/auth'
 import { env } from '@yukinu/validators/env.vite'
-import { useEffect } from 'react'
 import { Link, useNavigate, useSubmit } from 'react-router'
 
 import { getWebUrl } from '@/lib/utils'
-import { verifyTurnstileToken } from '@/lib/verify-turnstile'
+import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 import type { Route } from './+types/login'
 
-export async function action({
-  request,
-}: Route.ActionArgs): Promise<
-  { success: true } | { success: false; message: string }
-> {
-  const formData = await request.formData()
-
-  const token = formData.get('cf-turnstile-response')
-  if (typeof token !== 'string')
-    return { success: false, message: 'Turnstile token is missing or invalid' }
-
-  try {
-    return verifyTurnstileToken(token) as Promise<{ success: true }>
-  } catch {
-    return { success: false, message: 'Failed to verify Turnstile token' }
-  }
-}
+export const action = ({ request }: Route.ActionArgs) =>
+  verifyTurnstile(request)
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
   const { signIn } = useSession()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-    script.async = true
-    document.body.append(script)
-
-    return () => {
-      script.remove()
-    }
-  }, [])
-
   const submit = useSubmit()
 
   const form = useForm({
