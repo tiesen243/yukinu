@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.11.19
+
+### Patch Changes
+
+- [#394](https://github.com/tiesen243/yukinu/pull/394) [`c9658f2`](https://github.com/tiesen243/yukinu/commit/c9658f25d524e2306deef23be225f3d4c0247af9) Thanks [@tiesen243](https://github.com/tiesen243)! - added cloudflare turnstile challenge in auth pages
+
 ## 0.11.18
 
 ### Patch Changes
