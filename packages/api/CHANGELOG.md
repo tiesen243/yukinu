@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.9.14
+
+### Patch Changes
+
+- [#397](https://github.com/tiesen243/yukinu/pull/397) [`4cc4f35`](https://github.com/tiesen243/yukinu/commit/4cc4f359a69d1124278510ec2fb1f84f708ae22b) Thanks [@tiesen243](https://github.com/tiesen243)! - fix get all staffs query
+
 ## 0.9.13
 
 ### Patch Changes
