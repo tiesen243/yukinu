@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.11.19
+
+### Patch Changes
+
+- [#400](https://github.com/tiesen243/yukinu/pull/400) [`3be54ac`](https://github.com/tiesen243/yukinu/commit/3be54ac190cf5035a77ec9fc2b6c6efd14d525a2) Thanks [@tiesen243](https://github.com/tiesen243)! - added missing turnstile
+
 ## 0.11.18
 
 ### Patch Changes

@@ -25,3 +25,19 @@ export async function verifyTurnstileToken(
   if (!response.ok) throw new Error('Failed to verify Turnstile token')
   return response.json() as Promise<TurnstileResponse>
 }
+
+export async function verifyTurnstile(
+  request: Request,
+): Promise<{ success: true } | { success: false; message: string }> {
+  const formData = await request.formData()
+
+  const token = formData.get('cf-turnstile-response')
+  if (typeof token !== 'string')
+    return { success: false, message: 'Turnstile token is missing or invalid' }
+
+  try {
+    return verifyTurnstileToken(token) as Promise<{ success: true }>
+  } catch {
+    return { success: false, message: 'Failed to verify Turnstile token' }
+  }
+}
