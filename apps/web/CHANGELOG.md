@@ -1,5 +1,12 @@
 # @yukinu/web
 
+## 0.11.20
+
+### Patch Changes
+
+- Updated dependencies [[`4cc4f35`](https://github.com/tiesen243/yukinu/commit/4cc4f359a69d1124278510ec2fb1f84f708ae22b)]:
+  - @yukinu/api@0.9.14
+
 ## 0.11.19
 
 ### Patch Changes

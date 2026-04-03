@@ -75,10 +75,7 @@ const AddBannerButton: React.FC = () => {
     ...trpc.banner.create.mutationOptions(),
     meta: { filter: trpc.banner.all.queryFilter() },
     onSuccess: () => {
-      toast.add({
-        type: 'success',
-        title: 'Banner added',
-      })
+      toast.add({ type: 'success', title: 'Banner added' })
       setOpen(false)
       setUrl('')
     },
@@ -92,7 +89,9 @@ const AddBannerButton: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger className='my-4 self-end'>
+      <DialogTrigger
+        render={<Button variant='outline' className='my-4 self-end' />}
+      >
         <PlusIcon data-icon='inline-start' /> Add New Banner
       </DialogTrigger>
 

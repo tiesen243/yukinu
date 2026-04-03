@@ -67,6 +67,7 @@ export class VendorRepository
       })
       .from(vendorStaffs)
       .where(eq(vendorStaffs.vendorId, vendorId))
+      .innerJoin(users, eq(users.id, vendorStaffs.userId))
   }
 
   async findStaff(
