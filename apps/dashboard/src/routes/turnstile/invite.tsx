@@ -8,16 +8,24 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 import { toast } from '@yukinu/ui/toast'
-import { useNavigate, useSearchParams } from 'react-router'
+import { env } from '@yukinu/validators/env.vite'
+import { useNavigate, useSearchParams, useSubmit } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
+import { verifyTurnstile } from '@/lib/verify-turnstile'
 
-export default function InvitePage() {
+import type { Route } from './+types/invite'
+
+export const action = ({ request }: Route.ActionArgs) =>
+  verifyTurnstile(request)
+
+export default function InvitePage({ actionData }: Route.ComponentProps) {
   const [searchParams] = useSearchParams()
   const token = searchParams.get('token')
 
-  const trpc = useTRPC()
   const navigate = useNavigate()
+  const submit = useSubmit()
+  const trpc = useTRPC()
 
   const { mutate, isPending } = useMutation({
     ...trpc.vendorStaff.acceptInvitation.mutationOptions(),
@@ -59,6 +67,16 @@ export default function InvitePage() {
           <form
             onSubmit={(e) => {
               e.preventDefault()
+
+              submit(e.target, { method: 'post' })
+
+              if (actionData?.success === false)
+                return toast.add({
+                  type: 'error',
+                  title: 'Failed to verify Turnstile',
+                  description: actionData.message,
+                })
+
               mutate({ token })
             }}
           />
@@ -71,6 +89,11 @@ export default function InvitePage() {
           </FieldDescription>
 
           <Field>
+            <div
+              className='cf-turnstile'
+              data-sitekey={env.VITE_TURNSTILE_SITE_KEY}
+            />
+
             <Button type='submit' disabled={isPending}>
               Accept Invitation
             </Button>

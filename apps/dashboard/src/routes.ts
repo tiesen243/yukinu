@@ -9,8 +9,10 @@ export default [
     route('/uploadthing/*', './routes/api/uploadthing.ts'),
   ]),
 
-  route('/login', './routes/login.tsx'),
-  route('/invite', './routes/invite.tsx'),
+  layout('./routes/turnstile/__root.tsx', [
+    route('/login', './routes/turnstile/login.tsx'),
+    route('/invite', './routes/turnstile/invite.tsx'),
+  ]),
 
   layout('./routes/__layout.tsx', [
     index('./routes/(dashboard)/_index.tsx'),
