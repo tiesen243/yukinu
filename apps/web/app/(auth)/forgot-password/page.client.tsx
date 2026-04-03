@@ -6,8 +6,10 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import { forgotPasswordInput } from '@yukinu/validators/auth'
+import { env } from '@yukinu/validators/env.next'
 
 import { useTRPCClient } from '@/lib/trpc/react'
+import { verifyTurnstile } from '@/lib/verify-turnstile.client'
 
 export const ForgotPasswordForm: React.FC = () => {
   const trpc = useTRPCClient()
@@ -15,7 +17,10 @@ export const ForgotPasswordForm: React.FC = () => {
   const form = useForm({
     defaultValues: { email: '' },
     schema: forgotPasswordInput,
-    onSubmit: trpc.auth.forgotPassword.mutate,
+    onSubmit: async (data, event) => {
+      await verifyTurnstile(event)
+      return trpc.auth.forgotPassword.mutate(data)
+    },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -39,14 +44,19 @@ export const ForgotPasswordForm: React.FC = () => {
           name='email'
           render={({ meta, field }) => (
             <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={field.id}>Username or Email</FieldLabel>
-              <Input {...field} placeholder='Enter your username or email' />
+              <FieldLabel htmlFor={field.id}>Email</FieldLabel>
+              <Input {...field} placeholder='Enter your email' />
               <FieldError id={meta.errorId} errors={meta.errors} />
             </Field>
           )}
         />
 
         <Field>
+          <div
+            className='cf-turnstile'
+            data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          />
+
           <Button type='submit' disabled={form.state.isPending}>
             {form.state.isPending ? 'Sending...' : 'Send Reset Link'}
           </Button>

@@ -13,8 +13,11 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import { loginInput } from '@yukinu/validators/auth'
+import { env } from '@yukinu/validators/env.next'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+
+import { verifyTurnstile } from '@/lib/verify-turnstile.client'
 
 export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { signIn } = useSession()
@@ -23,7 +26,10 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
     schema: loginInput,
-    onSubmit: signIn,
+    onSubmit: async (data, event) => {
+      await verifyTurnstile(event)
+      return signIn(data)
+    },
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -80,6 +86,11 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
         />
 
         <Field>
+          <div
+            className='cf-turnstile'
+            data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          />
+
           <Button type='submit' disabled={form.state.isPending}>
             {form.state.isPending ? 'Logging in...' : 'Log In'}
           </Button>

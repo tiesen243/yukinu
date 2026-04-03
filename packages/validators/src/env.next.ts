@@ -17,10 +17,12 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_NAME: z._default(z.string(), 'My App'),
     NEXT_PUBLIC_WEB_URL: z.optional(z.string()),
     NEXT_PUBLIC_DASHBOARD_URL: z.optional(z.string()),
+
     NEXT_PUBLIC_TRPC_USE_STREAMING: z._default(
       z.enum(['true', 'false']),
       'true',
     ),
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
   },
 
   runtimeEnv: {
@@ -29,7 +31,9 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME,
     NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
     NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
+
     NEXT_PUBLIC_TRPC_USE_STREAMING: process.env.NEXT_PUBLIC_TRPC_USE_STREAMING,
+    NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   },
 
   skipValidation: true,
