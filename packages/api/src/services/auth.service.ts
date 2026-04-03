@@ -128,7 +128,7 @@ export class AuthService implements IAuthService {
       expiresAt,
     })
 
-    const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forogt-password/reset?token=${token}`
+    const resetLink = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}/forgot-password/reset?token=${token}`
     await sendEmail({
       to: email,
       subject: 'Yukinu Password Reset',

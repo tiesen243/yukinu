@@ -11,3 +11,9 @@ export function getDashboardUrl(): string {
     return `https://${env.NEXT_PUBLIC_DASHBOARD_URL}`
   return `http://localhost:5173`
 }
+
+export function isForm(
+  event?: Record<string, unknown>,
+): event is { target: HTMLFormElement } {
+  return event instanceof SubmitEvent && event.target instanceof HTMLFormElement
+}
