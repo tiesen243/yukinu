@@ -44,7 +44,9 @@ export const InviteStaffButton: React.FC = () => {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger>Invite New Staff</DialogTrigger>
+      <DialogTrigger render={<Button variant='outline' />}>
+        Invite New Staff
+      </DialogTrigger>
 
       <DialogContent
         render={
