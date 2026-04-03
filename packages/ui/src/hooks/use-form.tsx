@@ -58,7 +58,10 @@ export function useForm<
 >(props: {
   defaultValues: TValues
   schema?: TSchema
-  onSubmit: (data: TValues) => TData | Promise<TData>
+  onSubmit: (
+    data: TValues,
+    event?: Record<string, unknown>,
+  ) => TData | Promise<TData>
   onSuccess?: (data: TData) => unknown | Promise<unknown>
   onError?: (error: TError) => unknown | Promise<unknown>
 }): {
@@ -120,7 +123,10 @@ export function useForm<
           const validValues = await validate(formValuesRef.current)
           formValuesRef.current = validValues
 
-          const result = await onSubmit(validValues)
+          const result = await onSubmit(
+            validValues,
+            event as Record<string, unknown> | undefined,
+          )
           formDataRef.current = result ?? null
           await onSuccess?.(result)
         } catch (error) {

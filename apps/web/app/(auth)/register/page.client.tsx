@@ -6,8 +6,10 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import { registerInput } from '@yukinu/validators/auth'
+import { env } from '@yukinu/validators/env.next'
 
 import { useTRPCClient } from '@/lib/trpc/react'
+import { verifyTurnstile } from '@/lib/verify-turnstile.client'
 
 export const RegisterForm: React.FC = () => {
   const trpc = useTRPCClient()
@@ -20,7 +22,11 @@ export const RegisterForm: React.FC = () => {
       confirmPassword: '',
     },
     schema: registerInput,
-    onSubmit: trpc.auth.register.mutate,
+    onSubmit: async (data, event) => {
+      await verifyTurnstile(event)
+
+      return trpc.auth.register.mutate(data)
+    },
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -96,6 +102,11 @@ export const RegisterForm: React.FC = () => {
         />
 
         <Field>
+          <div
+            className='cf-turnstile'
+            data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+          />
+
           <Button type='submit' disabled={form.state.isPending}>
             {form.state.isPending ? 'Registering...' : 'Register'}
           </Button>

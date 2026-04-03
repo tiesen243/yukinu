@@ -11,8 +11,8 @@
     "typecheck": "bun --env-file ../../.env react-router typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@react-router/node": "^7.13.2",
-    "@react-router/serve": "^7.13.2",
+    "@react-router/node": "^7.14.0",
+    "@react-router/serve": "^7.14.0",
     "@tanstack/react-query": "catalog:prod",
     "@trpc/tanstack-react-query": "catalog:trpc",
     "@vercel/react-router": "^1.2.6",
@@ -28,11 +28,11 @@
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.13.2",
+    "react-router": "^7.14.0",
     "recharts": "catalog:prod"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.13.2",
+    "@react-router/dev": "^7.14.0",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",

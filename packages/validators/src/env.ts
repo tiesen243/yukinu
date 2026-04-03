@@ -31,6 +31,9 @@ export const env = createEnv({
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
 
+    // Cloudflare Turnstile
+    TURNSTILE_SECRET_KEY: z.string(),
+
     // Third-party services
     RESEND_TOKEN: z.string(),
     UPLOADTHING_TOKEN: z.string(),
