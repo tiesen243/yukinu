@@ -21,14 +21,14 @@
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
     "@yukinu/validators": "workspace:*",
-    "next": "^16.2.2",
+    "next": "^16.2.4",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
-    "@types/node": "catalog:dev",
+    "@types/bun": "catalog:dev",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",

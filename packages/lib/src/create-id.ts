@@ -54,6 +54,9 @@ const createFingerprint = ({
 // oxlint-disable-next-line no-param-reassign, no-plusplus
 const createCounter = (count: number) => () => count++
 
+const createRandomLetter = (rand = random) =>
+  String.fromCodePoint(97 + Math.floor(rand() * 26))
+
 export function createId(rand = random): string {
   const time = Date.now().toString(36)
   const count = createCounter(Math.floor(rand() * 476_782_367))().toString(36)
@@ -62,5 +65,6 @@ export function createId(rand = random): string {
   const salt = createEntropy(24, rand)
   const hashInput = `${time}${salt}${count}${fingerprint}`
 
-  return `c${hash(hashInput).slice(1, 24)}`
+  const letter = createRandomLetter(rand)
+  return `${letter}${hash(hashInput).slice(1, 24)}`
 }

@@ -21,7 +21,7 @@
     "zod": "catalog:prod"
   },
   "devDependencies": {
-    "@types/node": "catalog:dev",
+    "@types/bun": "catalog:dev",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"

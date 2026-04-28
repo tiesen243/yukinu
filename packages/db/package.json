@@ -27,10 +27,10 @@
     "@yukinu/lib": "workspace:*",
     "@yukinu/validators": "workspace:*",
     "drizzle-orm": "^0.45.2",
-    "postgres": "^3.4.7"
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
-    "@types/node": "catalog:dev",
+    "@types/bun": "catalog:dev",
     "@yukinu/tsconfig": "workspace:*",
     "drizzle-kit": "^0.31.10",
     "tsdown": "catalog:dev",

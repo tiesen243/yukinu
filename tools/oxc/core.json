@@ -24,8 +24,6 @@
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
     "capitalized-comments": "off",
-    "class-methods-use-this": "off",
-    "complexity": "off",
     "curly": "off",
     "func-style": "off",
     "id-length": "off",
@@ -43,6 +41,7 @@
     "no-implicit-coercion": "off",
     "no-inline-comments": "off",
     "no-magic-numbers": "off",
+    "no-underscore-dangle": "off",
     "no-use-before-define": "off",
     "no-ternary": "off",
     "no-undefined": "off",
@@ -86,7 +85,6 @@
     "typescript/explicit-module-boundary-types": "off",
     "typescript/no-require-imports": "off",
     "typescript/no-var-requires": "off",
-    "typescript/parameter-properties": "off",
     "typescript/require-await": "off",
 
     "node/no-process-env": "off",

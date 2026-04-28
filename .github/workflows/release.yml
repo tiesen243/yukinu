@@ -25,13 +25,8 @@ jobs:
     name: Create a PR for release workflow
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v5
-        with:
-          fetch-depth: 0
-
-      - name: Setup
-        uses: ./tools/github/setup
+      - uses: actions/checkout@v6
+      - uses: ./tools/github/setup
 
       - name: Create Version PR
         id: changesets

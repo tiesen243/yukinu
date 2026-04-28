@@ -23,7 +23,6 @@
   "dependencies": {
     "@trpc/client": "catalog:trpc",
     "@trpc/server": "catalog:trpc",
-    "@types/node": "catalog:dev",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
     "@yukinu/email": "workspace:*",
@@ -33,6 +32,7 @@
     "superjson": "catalog:trpc"
   },
   "devDependencies": {
+    "@types/bun": "catalog:dev",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"

@@ -18,15 +18,16 @@
     "~dev": "tsdown --watch"
   },
   "dependencies": {
-    "@react-email/components": "^1.0.11",
+    "@react-email/components": "^1.0.12",
     "@yukinu/validators": "workspace:*",
-    "resend": "^6.10.0"
+    "resend": "^6.12.2"
   },
   "devDependencies": {
     "@react-email/preview-server": "^5.2.10",
+    "@types/bun": "catalog:dev",
     "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
-    "react-email": "^5.2.10",
+    "react-email": "^6.0.2",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },
