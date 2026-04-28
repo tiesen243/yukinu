@@ -8,6 +8,7 @@
         "@changesets/changelog-github": "^0.6.0",
         "@changesets/cli": "^2.31.0",
         "oxfmt": "^0.47.0",
+        "oxlint": "^1.62.0",
         "turbo": "^2.9.6",
       },
     },
@@ -168,7 +169,6 @@
         "@types/bun": "catalog:dev",
         "@yukinu/oxc": "workspace:*",
         "@yukinu/tsconfig": "workspace:*",
-        "oxlint": "^1.62.0",
         "tsdown": "catalog:dev",
         "typescript": "catalog:dev",
       },
@@ -183,12 +183,13 @@
         "clsx": "^2.1.1",
         "lucide-react": "^1.11.0",
         "next-themes": "^0.4.6",
-        "recharts": "3.8.1",
+        "recharts": "3.8.0",
         "tailwind-merge": "^3.5.0",
       },
       "devDependencies": {
         "@types/bun": "catalog:dev",
         "@types/react": "catalog:react",
+        "@yukinu/oxc": "workspace:*",
         "@yukinu/tsconfig": "workspace:*",
         "tailwindcss": "catalog:tailwind",
         "tsdown": "catalog:dev",
@@ -238,9 +239,6 @@
     "tools/oxc": {
       "name": "@yukinu/oxc",
       "version": "0.0.2",
-      "dependencies": {
-        "oxlint": "catalog:dev",
-      },
     },
     "tools/typescript": {
       "name": "@yukinu/tsconfig",
@@ -250,7 +248,6 @@
   "catalogs": {
     "dev": {
       "@types/bun": "^1.3.13",
-      "oxlint": "^1.62.0",
       "tsdown": "^0.21.10",
       "typescript": "^6.0.3",
     },
@@ -1774,6 +1771,8 @@
     "@types/cors/@types/node": ["@types/node@25.5.0", "", { "dependencies": { "undici-types": "~7.18.0" } }, "sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw=="],
 
     "@types/ws/@types/node": ["@types/node@25.5.0", "", { "dependencies": { "undici-types": "~7.18.0" } }, "sha512-jp2P3tQMSxWugkCUKLRPVUpGaL5MVFwF8RDuSRztfwgN1wmqJeMSbKlnEtQqU8UrhTmzEmZdu2I6v2dpp7XIxw=="],
+
+    "@yukinu/ui/recharts": ["recharts@3.8.0", "", { "dependencies": { "@reduxjs/toolkit": "^1.9.0 || 2.x.x", "clsx": "^2.1.1", "decimal.js-light": "^2.5.1", "es-toolkit": "^1.39.3", "eventemitter3": "^5.0.1", "immer": "^10.1.1", "react-redux": "8.x.x || 9.x.x", "reselect": "5.1.1", "tiny-invariant": "^1.3.3", "use-sync-external-store": "^1.2.2", "victory-vendor": "^37.0.2" }, "peerDependencies": { "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-is": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-Z/m38DX3L73ExO4Tpc9/iZWHmHnlzWG4njQbxsF5aSjwqmHNDDIm0rdEBArkwsBvR8U6EirlEHiQNYWCVh9sGQ=="],
 
     "accepts/mime-types": ["mime-types@2.1.35", "", { "dependencies": { "mime-db": "1.52.0" } }, "sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw=="],
 

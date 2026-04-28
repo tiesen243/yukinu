@@ -8,8 +8,5 @@
       "types": "./types.d.ts",
       "default": "./*.js"
     }
-  },
-  "dependencies": {
-    "oxlint": "catalog:dev"
   }
 }

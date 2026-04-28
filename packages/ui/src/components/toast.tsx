@@ -1,6 +1,6 @@
 'use client'
 
-import { Toast as ToastPrimitive } from '@base-ui/react'
+import { Toast as ToastPrimitive } from '@base-ui/react/toast'
 import {
   CircleCheckIcon,
   InfoIcon,
@@ -77,16 +77,16 @@ function Toaster({
   if (position.includes('right')) swipeDirection.push('right')
   if (position.includes('center')) swipeDirection.push('right', 'left')
 
-  return toasts.map((t) => {
-    const Icon = t.type ? icons[t.type as keyof typeof icons] : null
+  return toasts.map((_toast) => {
+    const Icon = _toast.type ? icons[_toast.type as keyof typeof icons] : null
 
     return (
       <ToastPrimitive.Root
-        key={t.id}
+        key={_toast.id}
         data-slot='toast-root'
         data-position={position}
-        data-type={t.type}
-        toast={t}
+        data-type={_toast.type}
+        toast={_toast}
         className={cn(
           'group/toast absolute z-[calc(1000-var(--toast-index))] h-(--toast-calc-height) w-full rounded-lg bg-clip-padding shadow-lg/5 select-none [transition:transform_0.5s_cubic-bezier(0.22,1,0.36,1),opacity_0.5s,height_0.15s]',
           // Variables for calculating position and animation
@@ -106,18 +106,18 @@ function Toaster({
           'data-[position*=top]:top-0 data-[position*=top]:bottom-auto data-[position*=top]:origin-top',
           'data-[position*=bottom]:top-auto data-[position*=bottom]:bottom-0 data-[position*=bottom]:origin-bottom',
           // Swipe animations
-          'data-[position*=bottom]:data-[starting-style]:[transform:translateY(150%)] data-[position*=top]:data-[starting-style]:[transform:translateY(-150%)]',
+          'data-[position*=bottom]:data-starting-style:transform-[translateY(150%)] data-[position*=top]:data-starting-style:transform-[translateY(-150%)]',
           'transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)-(var(--toast-index)*var(--peek))-(var(--shrink)*var(--height))))_scale(var(--scale))]',
           'data-[position*=top]:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--toast-swipe-movement-y)+(var(--toast-index)*var(--peek))+(var(--shrink)*var(--height))))_scale(var(--scale))]',
           // After swipe animations
           'after:absolute after:top-full after:left-0 after:h-[calc(var(--gap)+1px)] after:w-full after:content-[""]',
           // Ending styles
-          'data-[ending-style]:opacity-0 data-[ending-style]:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))] data-[ending-style]:data-[swipe-direction=left]:[transform:translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))]',
-          'data-[ending-style]:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))] data-[ending-style]:data-[swipe-direction=up]:[transform:translateY(calc(var(--toast-swipe-movement-y)-150%))]',
-          '[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:[transform:translateY(150%)]',
+          'data-ending-style:opacity-0 data-ending-style:data-[swipe-direction=down]:transform-[translateY(calc(var(--toast-swipe-movement-y)+150%))] data-ending-style:data-[swipe-direction=left]:transform-[translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))]',
+          'data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))] data-ending-style:data-[swipe-direction=up]:transform-[translateY(calc(var(--toast-swipe-movement-y)-150%))]',
+          '[&[data-ending-style]:not([data-limited]):not([data-swipe-direction])]:transform-[translateY(150%)]',
           // Expanded styles
-          'data-[expanded]:h-[var(--toast-height)] data-[expanded]:[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--offset-y)))] data-[limited]:opacity-0 data-[position*=top]:data-[expanded]:[transform:translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--offset-y)*-1))]',
-          'data-[expanded]:data-[ending-style]:data-[swipe-direction=down]:[transform:translateY(calc(var(--toast-swipe-movement-y)+150%))] data-[expanded]:data-[ending-style]:data-[swipe-direction=left]:[transform:translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))] data-[expanded]:data-[ending-style]:data-[swipe-direction=right]:[transform:translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))] data-[expanded]:data-[ending-style]:data-[swipe-direction=up]:[transform:translateY(calc(var(--toast-swipe-movement-y)-150%))]',
+          'data-expanded:h-(--toast-height) data-expanded:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--offset-y)))] data-limited:opacity-0 data-[position*=top]:data-expanded:transform-[translateX(var(--toast-swipe-movement-x))_translateY(calc(var(--offset-y)*-1))]',
+          'data-expanded:data-ending-style:data-[swipe-direction=down]:transform-[translateY(calc(var(--toast-swipe-movement-y)+150%))] data-expanded:data-ending-style:data-[swipe-direction=left]:transform-[translateX(calc(var(--toast-swipe-movement-x)-150%))_translateY(var(--offset-y))] data-expanded:data-ending-style:data-[swipe-direction=right]:transform-[translateX(calc(var(--toast-swipe-movement-x)+150%))_translateY(var(--offset-y))] data-expanded:data-ending-style:data-[swipe-direction=up]:transform-[translateY(calc(var(--toast-swipe-movement-y)-150%))]',
         )}
         swipeDirection={swipeDirection}
       >
@@ -152,14 +152,14 @@ function Toaster({
             />
           </div>
 
-          {t.actionProps && (
+          {_toast.actionProps && (
             <ToastPrimitive.Action
               data-slot='toast-action'
               className={cn(
                 buttonVariants({ variant: 'ghost', size: 'xs' }),
                 'hover:bg-current/20 hover:text-current dark:hover:bg-current/20',
               )}
-              {...t.actionProps}
+              {..._toast.actionProps}
             />
           )}
         </ToastPrimitive.Content>
