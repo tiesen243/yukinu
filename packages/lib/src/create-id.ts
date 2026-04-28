@@ -1,4 +1,4 @@
-// import { createHash } from 'node:crypto'
+// oxlint-disable no-bitwise
 
 const createRandom = () => {
   if (
@@ -26,33 +26,25 @@ const createEntropy = (length = 4, rand = random) => {
   return entropy
 }
 
-const bufToBigInt = (buf: Buffer) => {
-  let v = 0n
-  // oxlint-disable-next-line no-bitwise
-  for (const i of buf) v = (v << 8n) + BigInt(i)
-  return v
-}
-
-// const hash = (input: string) => {
-//   const hashBuf = createHash('sha3-512').update(input).digest()
-//   return bufToBigInt(hashBuf).toString(36).slice(1)
-// }
-
 function hash(input: string, length = 24): string {
-  let hash = ''
-  let seed = 2166136261
+  let _hash = ''
+  const seed = 2_166_136_261
 
-  for (let i = 0; hash.length < length; i++) {
+  for (let i = 0; _hash.length < length; i += 1) {
     let h = seed
-    for (let j = 0; j < input.length; j++) {
-      h ^= input.charCodeAt(j) + i
+
+    for (let j = 0; j < input.length; j += 1) {
+      h ^= (input.codePointAt(j) ?? 0) + i
       h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24)
     }
-    hash += (h >>> 0).toString(36)
-    input = hash
+
+    // oxlint-disable-next-line unicorn/prefer-math-trunc
+    _hash += (h >>> 0).toString(36) ?? ''
+    // oxlint-disable-next-line no-param-reassign
+    input = _hash
   }
 
-  return hash.slice(0, length)
+  return _hash.slice(0, length)
 }
 
 const createFingerprint = ({
