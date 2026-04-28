@@ -1,7 +1,7 @@
-export class TokenBucketRateLimit<_KEY> {
-  private storage = new Map<_KEY, Bucket>()
+export class TokenBucketRateLimit<TKEY> {
+  private storage = new Map<TKEY, Bucket>()
 
-  constructor(
+  public constructor(
     private max: number,
     private refillIntervalSeconds: number,
   ) {
@@ -10,7 +10,7 @@ export class TokenBucketRateLimit<_KEY> {
       throw new Error('Refill interval must be greater than 0')
   }
 
-  public consume(key: _KEY, cost: number): boolean {
+  public consume(key: TKEY, cost: number): boolean {
     if (cost <= 0) throw new Error('Cost must be greater than 0')
 
     let bucket = this.storage.get(key) ?? null
@@ -53,7 +53,7 @@ export class TokenBucketRateLimit<_KEY> {
   }
 }
 
-interface Bucket {
+export interface Bucket {
   count: number
   refilledAtMilliseconds: number
 }

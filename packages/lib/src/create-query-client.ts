@@ -5,7 +5,8 @@ import {
   MutationCache,
   QueryClient,
 } from '@tanstack/react-query'
-import { SuperJSON } from 'superjson'
+
+import { transformer } from '@/transformer'
 
 export const createQueryClient = () =>
   new QueryClient({
@@ -17,13 +18,13 @@ export const createQueryClient = () =>
         retry: false,
       },
       dehydrate: {
-        serializeData: SuperJSON.serialize,
+        serializeData: transformer.serialize,
         shouldDehydrateQuery: (query) =>
           defaultShouldDehydrateQuery(query) ||
           query.state.status === 'pending',
       },
       hydrate: {
-        deserializeData: SuperJSON.deserialize,
+        deserializeData: transformer.deserialize,
       },
     },
     mutationCache: new MutationCache({

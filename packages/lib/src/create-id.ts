@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto'
+// import { createHash } from 'node:crypto'
 
 const createRandom = () => {
   if (
@@ -33,9 +33,26 @@ const bufToBigInt = (buf: Buffer) => {
   return v
 }
 
-const hash = (input: string) => {
-  const hashBuf = createHash('sha3-512').update(input).digest()
-  return bufToBigInt(hashBuf).toString(36).slice(1)
+// const hash = (input: string) => {
+//   const hashBuf = createHash('sha3-512').update(input).digest()
+//   return bufToBigInt(hashBuf).toString(36).slice(1)
+// }
+
+function hash(input: string, length = 24): string {
+  let hash = ''
+  let seed = 2166136261
+
+  for (let i = 0; hash.length < length; i++) {
+    let h = seed
+    for (let j = 0; j < input.length; j++) {
+      h ^= input.charCodeAt(j) + i
+      h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24)
+    }
+    hash += (h >>> 0).toString(36)
+    input = hash
+  }
+
+  return hash.slice(0, length)
 }
 
 const createFingerprint = ({
