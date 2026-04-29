@@ -5,7 +5,7 @@ export class ProfileEntity extends AbstractEntity<ProfileEntity> {
   declare public banner: string | null
   declare public bio: string | null
   declare public gender: string | null
-  declare public dateOfBirth: Date | null
+  declare public dateOfBirth: string | null
 
   public constructor(props: AbstractEntity.EntityProps<ProfileEntity>) {
     if (props.gender && !['male', 'female', 'other'].includes(props.gender))

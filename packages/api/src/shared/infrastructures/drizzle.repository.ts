@@ -24,13 +24,16 @@ import type { AbstractEntity } from '@/shared/abstracts/abstract.entity'
 import { AbstractRepository } from '@/shared/abstracts/abstract.repository'
 
 export abstract class DrizzleRepository<
-  TEntity extends AbstractEntity<unknown>,
+  TEntity extends AbstractEntity<unknown, TPrimaryKey>,
   TTable extends PgTable,
-> extends AbstractRepository<TEntity> {
+  TPrimaryKey extends string | number = string,
+> extends AbstractRepository<TEntity, TPrimaryKey> {
   public constructor(
     protected readonly _db: Database,
     protected readonly _table: TTable,
-    protected readonly _primaryKey = 'id' as keyof TTable,
+    protected readonly _primaryKey:
+      | keyof TTable
+      | (keyof TTable)[] = 'id' as keyof TTable,
   ) {
     super()
   }
@@ -92,7 +95,9 @@ export abstract class DrizzleRepository<
       .insert(this._table)
       .values(row)
       .onConflictDoUpdate({
-        target: this._table[this._primaryKey] as never,
+        target: Array.isArray(this._primaryKey)
+          ? this._primaryKey.map((key) => this._table[key] as never)
+          : (this._table[this._primaryKey] as never),
         set: row,
       })
   }
@@ -169,6 +174,6 @@ export abstract class DrizzleRepository<
 
 export namespace DrizzleRepository {
   export type ExtractType<TTable extends PgTable> = {
-    [K in keyof TTable['$inferInsert']]: TTable['$inferInsert'][K]
+    [K in keyof TTable['$inferSelect']]: TTable['$inferSelect'][K]
   }
 }

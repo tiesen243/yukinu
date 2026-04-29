@@ -1,7 +1,7 @@
 import { AbstractEntity } from '@/shared/abstracts/abstract.entity'
 
 export class OrderEntity extends AbstractEntity<OrderEntity, number> {
-  declare public totalAmount: number
+  declare public totalAmount: string
   declare public status: OrderEntity.Status
 
   declare public userId: string | null

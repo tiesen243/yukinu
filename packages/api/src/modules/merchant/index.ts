@@ -1,6 +1,5 @@
-import type { Database } from '@yukinu/db/drizzle'
-
 import type { TRPCRouterRecord } from '@trpc/server'
+import type { Database } from '@yukinu/db/drizzle'
 
 import type { UseCases } from '@/modules/merchant/types'
 

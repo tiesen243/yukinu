@@ -2,9 +2,9 @@ import { createId } from '@yukinu/lib/create-id'
 
 export abstract class AbstractEntity<
   TEntity,
-  TId extends string | number = string,
+  TPrimaryKey extends string | number = string,
 > {
-  public id: TId = createId() as TId
+  public id: TPrimaryKey = createId() as TPrimaryKey
   public createdAt: Date = new Date()
   public updatedAt: Date = new Date()
 
@@ -25,29 +25,36 @@ export abstract class AbstractEntity<
 
 export namespace AbstractEntity {
   type DefaultSystemProps = 'id' | 'createdAt' | 'updatedAt'
-  type DefaultSystemMethods = 'clone' | 'toJSON'
+
+  type DataKeys<T> = {
+    // oxlint-disable-next-line typescript/no-explicit-any
+    [K in keyof T]: T[K] extends (...args: any[]) => any
+      ? never
+      : (<U>() => U extends { [P in K]: T[P] } ? 1 : 2) extends <
+            U,
+          >() => U extends { readonly [P in K]: T[P] } ? 1 : 2
+        ? never
+        : K
+  }[keyof T]
 
   type NullableKeys<T> = {
     [K in keyof T]: null extends T[K] ? K : never
   }[keyof T]
 
-  export type EntityProps<T, TOptional extends keyof T = never> = Omit<
-    Pick<
-      T,
-      Exclude<
-        keyof T,
-        NullableKeys<T> | (DefaultSystemProps & keyof T) | TOptional
-      >
-    > &
-      Partial<
-        Pick<
-          T,
-          Extract<
-            keyof T,
-            NullableKeys<T> | (DefaultSystemProps & keyof T) | TOptional
-          >
+  export type EntityProps<T, TOptional extends keyof T = never> = Pick<
+    T,
+    Exclude<
+      DataKeys<T>,
+      NullableKeys<T> | (DefaultSystemProps & keyof T) | TOptional
+    >
+  > &
+    Partial<
+      Pick<
+        T,
+        Extract<
+          DataKeys<T>,
+          NullableKeys<T> | (DefaultSystemProps & keyof T) | TOptional
         >
-      >,
-    DefaultSystemMethods
-  >
+      >
+    >
 }

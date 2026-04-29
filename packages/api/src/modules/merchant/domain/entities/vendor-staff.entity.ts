@@ -4,5 +4,5 @@ export class VendorStaffEntity extends AbstractEntity<VendorStaffEntity> {
   declare public assignedAt: Date
 
   declare public vendorId: string
-  declare public staffId: string
+  declare public userId: string
 }

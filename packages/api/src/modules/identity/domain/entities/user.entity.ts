@@ -9,11 +9,14 @@ export class UserEntity extends AbstractEntity<UserEntity> {
   declare public status: UserEntity.Status
   declare public deletedAt: Date | null
 
-  public constructor(props: AbstractEntity.EntityProps<UserEntity, 'role'>) {
+  public constructor(
+    props: AbstractEntity.EntityProps<UserEntity, 'role' | 'status'>,
+  ) {
     super({
       emailVerified: null,
       image: null,
       role: 'user',
+      status: 'active',
       deletedAt: null,
       ...props,
     })

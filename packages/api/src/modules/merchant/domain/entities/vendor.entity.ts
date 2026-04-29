@@ -11,7 +11,7 @@ export class VendorEntity extends AbstractEntity<VendorEntity> {
   declare public payoutAccountName: string | null
   declare public payoutAccountNumber: string | null
 
-  declare public ownerId: string
+  declare public ownerId: string | null
 
   public constructor(props: AbstractEntity.EntityProps<VendorEntity>) {
     super({
@@ -22,6 +22,7 @@ export class VendorEntity extends AbstractEntity<VendorEntity> {
       payoutBankName: null,
       payoutAccountName: null,
       payoutAccountNumber: null,
+      ownerId: null,
       ...props,
     })
   }

@@ -1,7 +1,8 @@
 import type { AbstractEntity } from '@/shared/abstracts/abstract.entity'
 
 export abstract class AbstractRepository<
-  TEntity extends AbstractEntity<unknown>,
+  TEntity extends AbstractEntity<unknown, TPrimaryKey>,
+  TPrimaryKey extends string | number = string,
 > {
   public abstract all(
     criterias?: Partial<TEntity>[],

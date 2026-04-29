@@ -1,5 +1,4 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
-
 import type { Database } from '@yukinu/db/drizzle'
 
 import { createCatalogModule } from '@/modules/catalog'

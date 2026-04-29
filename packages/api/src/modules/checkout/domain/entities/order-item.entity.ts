@@ -2,14 +2,15 @@ import { AbstractEntity } from '@/shared/abstracts/abstract.entity'
 
 export class OrderItemEntity extends AbstractEntity<OrderItemEntity> {
   declare public quantity: number
-  declare public unitPrice: number
+  declare public unitPrice: string
 
   declare public orderId: number
-  declare public productId: string
+  declare public productId: string | null
   declare public productVariantId: string | null
 
   public constructor(props: AbstractEntity.EntityProps<OrderItemEntity>) {
     super({
+      productId: null,
       productVariantId: null,
       ...props,
     })
@@ -20,6 +21,6 @@ export class OrderItemEntity extends AbstractEntity<OrderItemEntity> {
   }
 
   get totalPrice(): number {
-    return this.quantity * this.unitPrice
+    return this.quantity * Number.parseFloat(this.unitPrice)
   }
 }

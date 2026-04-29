@@ -1,4 +1,5 @@
 import type { Database } from '@yukinu/db/drizzle'
+
 import { users } from '@yukinu/db/schema'
 
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
