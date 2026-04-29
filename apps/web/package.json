@@ -28,7 +28,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
-    "@types/bun": "catalog:dev",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",

@@ -21,7 +21,6 @@
     "zod": "catalog:prod"
   },
   "devDependencies": {
-    "@types/bun": "catalog:dev",
     "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",

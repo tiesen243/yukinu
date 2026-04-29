@@ -27,7 +27,6 @@
     "@yukinu/validators": "workspace:*"
   },
   "devDependencies": {
-    "@types/bun": "catalog:dev",
     "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",

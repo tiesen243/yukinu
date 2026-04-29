@@ -34,7 +34,6 @@
   "devDependencies": {
     "@react-router/dev": "^7.14.2",
     "@tailwindcss/vite": "catalog:tailwind",
-    "@types/bun": "catalog:dev",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",

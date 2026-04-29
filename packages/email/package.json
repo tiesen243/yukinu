@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@react-email/preview-server": "^5.2.10",
-    "@types/bun": "catalog:dev",
     "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
     "react-email": "^6.0.2",
