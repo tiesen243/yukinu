@@ -1,9 +1,13 @@
-import type { LoginInput, Role } from '@yukinu/validators/auth'
-
 import { TokenBucketRateLimit } from '@yukinu/lib/rate-limit'
-import { loginInput } from '@yukinu/validators/auth'
 
-import type { AuthConfig, Session, SessionWithUser, User } from '@/core/types'
+import type {
+  AuthConfig,
+  LoginInput,
+  Role,
+  Session,
+  SessionWithUser,
+  User,
+} from '@/core/types'
 
 import {
   constantTimeEqual,
@@ -84,7 +88,7 @@ export function Auth(config: AuthConfig) {
     await adapter.createSession({
       ...opts,
       id,
-      userId: userId,
+      userId,
       token: encodeHex(hashedSecret),
       expiresAt,
     })
@@ -301,12 +305,9 @@ export function Auth(config: AuthConfig) {
     const url = new URL(req.url)
 
     if (PATH_REGEXS.signIn.test(url.pathname)) {
-      const { identifier, password } = await req.json()
-      const parsed = loginInput.safeParse({ identifier, password })
-      if (!parsed.success)
-        return new Response('Validation error', { status: 400 })
+      const body = await req.json()
 
-      const session = await signIn(parsed.data, {
+      const session = await signIn(body, {
         userAgent: req.headers.get('User-Agent'),
         ipAddress: req.headers.get('X-Forwarded-For'),
       })

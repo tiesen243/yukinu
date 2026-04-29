@@ -1,9 +1,7 @@
-import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 
-import type { User } from '@/core/types'
+import type { LoginInput, LoginOutput, User } from '@/core/types'
 
 const QUERY_KEY = [['auth', 'currentUser'], { type: 'query' }]
 
@@ -92,7 +90,7 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
     else if (data) status = 'authenticated'
 
     return { status, user: data, signIn, signOut, refreshToken }
-  }, [data, isLoading, signIn, signOut]) as SessionContextValue
+  }, [data, isLoading, signIn, signOut, refreshToken]) as SessionContextValue
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

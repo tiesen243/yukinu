@@ -5,4 +5,5 @@ export default defineConfig({
   deps: { neverBundle: ['@tanstack/react-query', 'react'] },
   dts: true,
   shims: true,
+  minify: true,
 })

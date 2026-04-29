@@ -113,7 +113,7 @@ export default defineConfig({
     'no-global-assign': 'error',
     'no-implicit-coercion': 'off',
     'no-import-assign': 'error',
-    'no-inline-comments': 'error',
+    'no-inline-comments': 'off',
     'no-inner-declarations': 'error',
     'no-invalid-regexp': 'error',
     'no-irregular-whitespace': 'error',

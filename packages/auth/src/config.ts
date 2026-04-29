@@ -1,5 +1,3 @@
-import { env } from '@yukinu/validators/env'
-
 import type { AuthConfig } from '@/core/types'
 
 import { adapter } from '@/adapter'
@@ -7,13 +5,19 @@ import { Github } from '@/core/providers/github'
 import { Google } from '@/core/providers/google'
 
 export const authOptions = {
-  secret: env.AUTH_SECRET ?? 'secret',
+  secret: process.env.AUTH_SECRET ?? 'secret',
 
   adapter,
 
   providers: [
-    new Github(env.AUTH_GITHUB_ID, env.AUTH_GITHUB_SECRET),
-    new Google(env.AUTH_GOOGLE_ID, env.AUTH_GOOGLE_SECRET),
+    new Github(
+      process.env.AUTH_GITHUB_ID ?? '',
+      process.env.AUTH_GITHUB_SECRET ?? '',
+    ),
+    new Google(
+      process.env.AUTH_GOOGLE_ID ?? '',
+      process.env.AUTH_GOOGLE_SECRET ?? '',
+    ),
   ],
 
   session: {
@@ -34,7 +38,7 @@ export const authOptions = {
     options: {
       Path: '/',
       HttpOnly: true,
-      Secure: env.NODE_ENV === 'production',
+      Secure: process.env.NODE_ENV === 'production',
       SameSite: 'Lax',
     },
   },

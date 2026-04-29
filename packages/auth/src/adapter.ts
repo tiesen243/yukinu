@@ -1,6 +1,8 @@
-import { db, orm } from '@yukinu/db'
+import { db } from '@yukinu/db'
+import { and, eq, or } from '@yukinu/db/drizzle'
 import { accounts, profiles, sessions, users } from '@yukinu/db/schema'
 import { sendEmail } from '@yukinu/email'
+import { createId } from '@yukinu/lib/create-id'
 
 import type { AuthAdapter } from '@/core/types'
 
@@ -11,6 +13,7 @@ export const adapter = {
         .insert(users)
         .values({
           ...user,
+          id: createId(),
           username: `u${Math.random().toString(36).slice(2, 8)}`,
           emailVerified: new Date(),
         })
@@ -38,7 +41,7 @@ export const adapter = {
     const [user] = await db
       .select()
       .from(users)
-      .where(orm.eq(users.id, id))
+      .where(eq(users.id, id))
       .limit(1)
 
     if (!user) return null
@@ -48,7 +51,7 @@ export const adapter = {
     const [user] = await db
       .select()
       .from(users)
-      .where(orm.eq(users.email, email))
+      .where(eq(users.email, email))
       .limit(1)
 
     if (!user) return null
@@ -61,14 +64,14 @@ export const adapter = {
         password: accounts.password,
       })
       .from(accounts)
+      .innerJoin(users, eq(accounts.userId, users.id))
       .where(
-        orm.and(
-          orm.eq(accounts.provider, provider),
-          orm.eq(accounts.providerAccountId, providerAccountId),
+        and(
+          eq(accounts.provider, provider),
+          eq(accounts.providerAccountId, providerAccountId),
         ),
       )
       .limit(1)
-      .innerJoin(users, orm.eq(accounts.userId, users.id))
 
     if (!account) return null
     return account
@@ -81,17 +84,15 @@ export const adapter = {
         emailVerified: users.emailVerified,
       })
       .from(users)
-      .where(
-        orm.or(orm.eq(users.username, username), orm.eq(users.email, email)),
-      )
-      .limit(1)
+      .where(or(eq(users.username, username), eq(users.email, email)))
       .innerJoin(
         accounts,
-        orm.and(
-          orm.eq(accounts.userId, users.id),
-          orm.eq(accounts.provider, 'credentials'),
+        and(
+          eq(accounts.userId, users.id),
+          eq(accounts.provider, 'credentials'),
         ),
       )
+      .limit(1)
 
     if (!user) return null
     return user
@@ -100,14 +101,14 @@ export const adapter = {
     const [updatedUser] = await db
       .update(users)
       .set(user)
-      .where(orm.eq(users.id, id))
+      .where(eq(users.id, id))
       .returning({ id: users.id })
 
     if (!updatedUser) return null
     return updatedUser
   },
   async deleteUser(id) {
-    await db.delete(users).where(orm.eq(users.id, id))
+    await db.delete(users).where(eq(users.id, id))
   },
 
   async createSession(session) {
@@ -141,9 +142,9 @@ export const adapter = {
         },
       })
       .from(sessions)
-      .where(orm.eq(sessions.id, id))
+      .innerJoin(users, eq(sessions.userId, users.id))
+      .where(eq(sessions.id, id))
       .limit(1)
-      .innerJoin(users, orm.eq(sessions.userId, users.id))
 
     if (!result) return null
     return result
@@ -152,14 +153,14 @@ export const adapter = {
     const [updatedSession] = await db
       .update(sessions)
       .set(session)
-      .where(orm.eq(sessions.id, id))
+      .where(eq(sessions.id, id))
       .returning({ id: sessions.id })
 
     if (!updatedSession) return null
     return updatedSession
   },
   async deleteSession(id) {
-    await db.delete(sessions).where(orm.eq(sessions.id, id))
+    await db.delete(sessions).where(eq(sessions.id, id))
   },
 
   async getAccount(provider, providerAccountId) {
@@ -167,9 +168,9 @@ export const adapter = {
       .select()
       .from(accounts)
       .where(
-        orm.and(
-          orm.eq(accounts.provider, provider),
-          orm.eq(accounts.providerAccountId, providerAccountId),
+        and(
+          eq(accounts.provider, provider),
+          eq(accounts.providerAccountId, providerAccountId),
         ),
       )
       .limit(1)
@@ -178,6 +179,9 @@ export const adapter = {
     return account
   },
   async createAccount(account) {
-    await db.insert(accounts).values(account)
+    await db.insert(accounts).values({
+      ...account,
+      id: createId(),
+    })
   },
 } satisfies AuthAdapter

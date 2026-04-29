@@ -23,11 +23,11 @@
   "dependencies": {
     "@yukinu/db": "workspace:*",
     "@yukinu/email": "workspace:*",
-    "@yukinu/lib": "workspace:*",
-    "@yukinu/validators": "workspace:*"
+    "@yukinu/lib": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "catalog:react",
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
