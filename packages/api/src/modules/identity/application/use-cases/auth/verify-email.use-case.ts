@@ -2,7 +2,7 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
 
-import type { VerifyEmailDto } from '@/modules/identity/application/dtos/verify-email.dto'
+import type { VerifyEmailDto } from '@/modules/identity/application/dtos/auth/verify-email.dto'
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
 import type { VerificationRepository } from '@/modules/identity/domain/repositories/verification.repository'
 

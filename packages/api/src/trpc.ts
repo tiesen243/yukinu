@@ -39,9 +39,16 @@ const publicProcedure = t.procedure.use(
 )
 
 const protectedProcedure = publicProcedure.use(
-  t.middleware(async ({ ctx, next }) => {
+  t.middleware(async ({ ctx, meta, next }) => {
     const session = await verifyAccessToken(ctx.req)
     if (!session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
+
+    if (meta?.role && !meta.role.includes(session.role))
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'Insufficient permissions',
+      })
+
     return next({ ctx: { ...ctx, session } })
   }),
 )

@@ -1,7 +1,8 @@
-import { signIn } from '@yukinu/auth'
 import type { Database } from '@yukinu/db/drizzle'
 
-import type { SignInDto } from '@/modules/identity/application/dtos/sign-in.dto'
+import { signIn } from '@yukinu/auth'
+
+import type { SignInDto } from '@/modules/identity/application/dtos/auth/sign-in.dto'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 

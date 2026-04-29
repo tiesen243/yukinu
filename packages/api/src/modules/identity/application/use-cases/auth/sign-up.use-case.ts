@@ -4,7 +4,7 @@ import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 import { sendEmail } from '@yukinu/email'
 
-import type { SignUpDto } from '@/modules/identity/application/dtos/sign-up.dto'
+import type { SignUpDto } from '@/modules/identity/application/dtos/auth/sign-up.dto'
 import type { AccountRepository } from '@/modules/identity/domain/repositories/account.repository'
 import type { ProfileRepository } from '@/modules/identity/domain/repositories/profile.repository'
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'

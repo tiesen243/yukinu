@@ -24,11 +24,15 @@ export class UserEntity extends AbstractEntity<UserEntity> {
 }
 
 export namespace UserEntity {
-  export type Role =
-    | 'user'
-    | 'admin'
-    | 'moderator'
-    | 'vendor_owner'
-    | 'vendor_staff'
-  export type Status = 'active' | 'inactive' | 'banned'
+  export const roles = [
+    'user',
+    'admin',
+    'moderator',
+    'vendor_owner',
+    'vendor_staff',
+  ] as const
+  export type Role = (typeof roles)[number]
+
+  const statuses = ['active', 'inactive', 'banned'] as const
+  export type Status = (typeof statuses)[number]
 }

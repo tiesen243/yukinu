@@ -3,7 +3,7 @@ import type { Database } from '@yukinu/db/drizzle'
 import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
 
-import type { ResetPasswordDto } from '@/modules/identity/application/dtos/reset-password.dto'
+import type { ResetPasswordDto } from '@/modules/identity/application/dtos/auth/reset-password.dto'
 import type { AccountRepository } from '@/modules/identity/domain/repositories/account.repository'
 import type { VerificationRepository } from '@/modules/identity/domain/repositories/verification.repository'
 

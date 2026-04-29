@@ -3,9 +3,9 @@ import type { Database } from '@yukinu/db/drizzle'
 import { sendEmail } from '@yukinu/email'
 import { randomBytes } from 'node:crypto'
 
-import type { ForgotPasswordDto } from '@/modules/identity/application/dtos/forgot-password.dto'
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
 import type { VerificationRepository } from '@/modules/identity/domain/repositories/verification.repository'
+import type { ForgotPasswordDto } from '@/modules/identity/types'
 
 import { VerificationEntity } from '@/modules/identity/domain/entities/verification.entity'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
