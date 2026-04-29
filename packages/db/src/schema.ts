@@ -329,7 +329,7 @@ export const vouchers = pgTable(
     discountAmount: t.numeric({ precision: 10, scale: 2 }),
     discountPercentage: t.integer(),
     quantity: t.integer().default(1).notNull(),
-    expiryDate: t.timestamp().notNull(),
+    expiredAt: t.timestamp().notNull(),
   }),
   (t) => [uniqueIndex('vouchers_code_uq_idx').on(t.code)],
 )
@@ -484,7 +484,6 @@ export const productReviews = pgTable(
   }),
   (t) => [index('product_reviews_product_id_idx').on(t.productId)],
 )
-
 //#endregion
 
 //#region order related tables
@@ -570,13 +569,13 @@ export const transactions = pgTable(
       .varchar({ length: 24 })
       .notNull()
       .references(() => payments.id, { onDelete: 'restrict' }),
+    body: t.text(),
     gateway: t.varchar({ length: 100 }).notNull(),
-    transactionDate: t.timestamp().notNull().defaultNow(),
     amountIn: t.numeric({ precision: 20, scale: 2 }).notNull().default('0.00'),
     amountOut: t.numeric({ precision: 20, scale: 2 }).notNull().default('0.00'),
-    transactionContent: t.text(),
     referenceNumber: t.varchar({ length: 255 }),
-    body: t.text(),
+    transactionContent: t.text(),
+    transactionDate: t.timestamp().notNull().defaultNow(),
     createdAt: t.timestamp().notNull().defaultNow(),
   }),
   (t) => [

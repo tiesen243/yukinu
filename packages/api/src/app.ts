@@ -1,15 +1,30 @@
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 
-import { db } from '@yukinu/db'
+import type { Database } from '@yukinu/db/drizzle'
 
-import { createAuthModule } from '@/modules/auth'
+import { createCatalogModule } from '@/modules/catalog'
+import { createCheckoutModule } from '@/modules/checkout'
+import { createFinanceModule } from '@/modules/finance'
+import { createIdentityModule } from '@/modules/identity'
+import { createMerchantModule } from '@/modules/merchant'
+import { createSalesModule } from '@/modules/sales'
 import { createTRPCRouter } from '@/trpc'
 
-const createApp = () => {
-  const authModule = createAuthModule(db)
+const createApp = (db: Database) => {
+  const catalogModule = createCatalogModule(db)
+  const checkoutModule = createCheckoutModule(db)
+  const financeModule = createFinanceModule(db)
+  const identityModule = createIdentityModule(db)
+  const merchantModule = createMerchantModule(db)
+  const salesModule = createSalesModule(db)
 
   return createTRPCRouter({
-    auth: authModule.router,
+    catalog: catalogModule.router,
+    checkout: checkoutModule.router,
+    finance: financeModule.router,
+    identity: identityModule.router,
+    merchant: merchantModule.router,
+    sales: salesModule.router,
   })
 }
 

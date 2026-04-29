@@ -1,5 +1,6 @@
 import { createTRPCProxyClient, httpBatchStreamLink } from '@trpc/client'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
+import { db } from '@yukinu/db'
 import { transformer } from '@yukinu/lib/transformer'
 
 import type { AppRouter } from '@/app'
@@ -8,7 +9,7 @@ import { createApp } from '@/app'
 import { createCallerFactory } from '@/trpc'
 
 const handler = async (request: Request): Promise<Response> => {
-  const appRouter = createApp()
+  const appRouter = createApp(db)
 
   const response =
     request.method === 'OPTIONS'
@@ -28,7 +29,7 @@ const handler = async (request: Request): Promise<Response> => {
   return response
 }
 
-const createTRPCCaller = createCallerFactory(createApp())
+const createTRPCCaller = createCallerFactory(createApp(db))
 const createTRPCClient = (baseUrl: string) =>
   createTRPCProxyClient<AppRouter>({
     links: [

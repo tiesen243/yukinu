@@ -1,7 +1,10 @@
 import { createId } from '@yukinu/lib/create-id'
 
-export abstract class AbstractEntity<TEntity> {
-  public id: string = createId()
+export abstract class AbstractEntity<
+  TEntity,
+  TId extends string | number = string,
+> {
+  public id: TId = createId() as TId
   public createdAt: Date = new Date()
   public updatedAt: Date = new Date()
 
