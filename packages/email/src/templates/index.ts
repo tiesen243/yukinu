@@ -1,4 +1,4 @@
-export { default as ChangePassword } from './change-password'
-export { default as Invite } from './invite'
-export { default as ResetPassword } from './reset-password'
-export { default as Welcome } from './welcome'
+export { default as ChangePassword } from '@/templates/change-password'
+export { default as Invite } from '@/templates/invite'
+export { default as ResetPassword } from '@/templates/reset-password'
+export { default as Welcome } from '@/templates/welcome'

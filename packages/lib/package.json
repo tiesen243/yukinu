@@ -15,15 +15,13 @@
     "typecheck": "tsc --noEmit",
     "~dev": "tsdown --watch"
   },
-  "dependencies": {
-    "@tanstack/react-query": "catalog:prod",
-    "superjson": "catalog:trpc",
-    "zod": "catalog:prod"
-  },
   "devDependencies": {
     "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
+  },
+  "peerDependencies": {
+    "@tanstack/react-query": "catalog:prod"
   }
 }

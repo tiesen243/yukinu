@@ -12,21 +12,16 @@
   "scripts": {
     "build": "tsdown",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "email:dev": "email dev --dir ./src/templates",
-    "email:export": "email export",
     "typecheck": "tsc --noEmit",
     "~dev": "tsdown --watch"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
-    "@yukinu/validators": "workspace:*",
     "resend": "^6.12.2"
   },
   "devDependencies": {
-    "@react-email/preview-server": "^5.2.10",
     "@types/react": "catalog:react",
     "@yukinu/tsconfig": "workspace:*",
-    "react-email": "^6.0.2",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },
