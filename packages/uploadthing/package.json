@@ -29,6 +29,7 @@
     "uploadthing": "catalog:uploadthing"
   },
   "devDependencies": {
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"

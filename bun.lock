@@ -139,6 +139,7 @@
       },
       "devDependencies": {
         "@types/react": "catalog:react",
+        "@yukinu/oxc": "workspace:*",
         "@yukinu/tsconfig": "workspace:*",
         "tsdown": "catalog:dev",
         "typescript": "catalog:dev",
@@ -195,6 +196,7 @@
         "uploadthing": "catalog:uploadthing",
       },
       "devDependencies": {
+        "@yukinu/oxc": "workspace:*",
         "@yukinu/tsconfig": "workspace:*",
         "tsdown": "catalog:dev",
         "typescript": "catalog:dev",
