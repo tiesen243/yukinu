@@ -33,6 +33,6 @@ export namespace UserEntity {
   ] as const
   export type Role = (typeof roles)[number]
 
-  const statuses = ['active', 'inactive', 'banned'] as const
+  export const statuses = ['active', 'inactive', 'banned'] as const
   export type Status = (typeof statuses)[number]
 }

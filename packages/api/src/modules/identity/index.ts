@@ -9,6 +9,13 @@ import { SignInUseCase } from '@/modules/identity/application/use-cases/auth/sig
 import { SignUpUseCase } from '@/modules/identity/application/use-cases/auth/sign-up.use-case'
 import { VerifyEmailUseCase } from '@/modules/identity/application/use-cases/auth/verify-email.use-case'
 import { AllUsersUseCase } from '@/modules/identity/application/use-cases/user/all-users.use-case'
+import { DeleteUserUseCase } from '@/modules/identity/application/use-cases/user/delete-user.use-case'
+import { OneUserUseCase } from '@/modules/identity/application/use-cases/user/one-user.use-case'
+import { PermanentlyDeleteUserUseCase } from '@/modules/identity/application/use-cases/user/permanently-delete-user.use-case'
+import { ProfileUseCase } from '@/modules/identity/application/use-cases/user/profile.use-case'
+import { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
+import { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
+import { UpdateUserUseCase } from '@/modules/identity/application/use-cases/user/update-user.use-case'
 import { DrizzleAccountRepository } from '@/modules/identity/infrastructures/drizzle/account.repository'
 import { DrizzleProfileRepository } from '@/modules/identity/infrastructures/drizzle/profile.repository'
 import { DrizzleUserRepository } from '@/modules/identity/infrastructures/drizzle/user.repository'
@@ -42,6 +49,13 @@ export const createIdentityModule = (db: Database) => {
     },
     user: {
       allUsers: new AllUsersUseCase(db, userRepo),
+      deleteUser: new DeleteUserUseCase(db, userRepo),
+      oneUser: new OneUserUseCase(db, userRepo),
+      permanentlyDeleteUser: new PermanentlyDeleteUserUseCase(db, userRepo),
+      profile: new ProfileUseCase(db, userRepo, profileRepo),
+      restoreUser: new RestoreUserUseCase(db, userRepo),
+      updateProfile: new UpdateProfileUseCase(db, profileRepo, userRepo),
+      updateUser: new UpdateUserUseCase(db, userRepo),
     },
   } satisfies UseCases
 
