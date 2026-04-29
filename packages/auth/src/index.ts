@@ -6,7 +6,10 @@ export { Password } from '@/core/password'
 export const {
   auth,
   currentUser,
+
+  createSession,
   verifyAccessToken,
+  serializeTokenCookie,
 
   signIn,
   signOut,

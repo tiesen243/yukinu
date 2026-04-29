@@ -6,7 +6,10 @@ import { Auth } from '@/core'
 const {
   auth: uncachedAuth,
   currentUser: uncachedCurrentUser,
+
+  createSession,
   verifyAccessToken,
+  serializeTokenCookie,
 
   signIn,
   signOut,
@@ -24,4 +27,13 @@ const currentUser = cache(uncachedCurrentUser)
 
 export type { SessionWithUser, User } from '@/core/types'
 export { Password } from '@/core/password'
-export { auth, currentUser, verifyAccessToken, signIn, signOut, handlers }
+export {
+  auth,
+  currentUser,
+  createSession,
+  verifyAccessToken,
+  serializeTokenCookie,
+  signIn,
+  signOut,
+  handlers,
+}

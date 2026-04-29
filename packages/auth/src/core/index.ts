@@ -209,6 +209,29 @@ export function Auth(config: AuthConfig) {
     return response
   }
 
+  function serializeTokenCookie(
+    type: 'refreshToken',
+    token: string,
+    expiresAt: Date,
+  ): string
+  function serializeTokenCookie(
+    type: 'accessToken',
+    token: string,
+    expiresAt?: undefined,
+  ): string
+  function serializeTokenCookie(
+    type: 'accessToken' | 'refreshToken',
+    token: string,
+    expiresAt?: Date,
+  ): string {
+    return serializeCookie(cookies.keys[type], token, {
+      ...cookies.options,
+      ...(type === 'refreshToken'
+        ? { expires: expiresAt?.toUTCString() }
+        : { 'Max-Age': config.session.accessTokenExpiresIn }),
+    })
+  }
+
   async function handleOAuthCallback(
     url: URL,
     headers: Headers,
@@ -234,9 +257,8 @@ export function Auth(config: AuthConfig) {
     })
 
     let userId: string
-    if (user) {
-      userId = user.id
-    } else {
+    if (user) userId = user.id
+    else {
       const userByEmail = await adapter.getUserByEmail(userData.email)
       if (userByEmail) userId = userByEmail.id
       else {
@@ -262,19 +284,15 @@ export function Auth(config: AuthConfig) {
     if (['http:', 'https:', 'exp:'].some((p) => redirectUri.startsWith(p)))
       redirectUri = `${redirectUri}?access_token=${session.accessToken}&refresh_token=${session.refreshToken}`
     response.headers.set('Location', redirectUri)
+
+    const { refreshToken, accessToken, expiresAt } = session
     response.headers.append(
       'Set-Cookie',
-      serializeCookie(cookies.keys.refreshToken, session.refreshToken, {
-        ...cookies.options,
-        expires: session.expiresAt.toUTCString(),
-      }),
+      serializeTokenCookie('refreshToken', refreshToken, expiresAt),
     )
     response.headers.append(
       'Set-Cookie',
-      serializeCookie(cookies.keys.accessToken, session.accessToken, {
-        ...cookies.options,
-        'Max-Age': config.session.accessTokenExpiresIn,
-      }),
+      serializeTokenCookie('accessToken', accessToken),
     )
 
     return response
@@ -313,19 +331,14 @@ export function Auth(config: AuthConfig) {
       })
       const response = Response.json(session, { status: 200 })
 
+      const { refreshToken, accessToken, expiresAt } = session
       response.headers.append(
         'Set-Cookie',
-        serializeCookie(cookies.keys.refreshToken, session.refreshToken, {
-          ...cookies.options,
-          expires: session.expiresAt.toUTCString(),
-        }),
+        serializeTokenCookie('refreshToken', refreshToken, expiresAt),
       )
       response.headers.append(
         'Set-Cookie',
-        serializeCookie(cookies.keys.accessToken, session.accessToken, {
-          ...cookies.options,
-          'Max-Age': config.session.accessTokenExpiresIn,
-        }),
+        serializeTokenCookie('accessToken', accessToken),
       )
 
       return response
@@ -335,17 +348,11 @@ export function Auth(config: AuthConfig) {
 
       response.headers.append(
         'Set-Cookie',
-        serializeCookie(cookies.keys.accessToken, '', {
-          ...cookies.options,
-          'Max-Age': 0,
-        }),
+        serializeTokenCookie('refreshToken', '', new Date(0)),
       )
       response.headers.append(
         'Set-Cookie',
-        serializeCookie(cookies.keys.refreshToken, '', {
-          ...cookies.options,
-          'Max-Age': 0,
-        }),
+        serializeTokenCookie('accessToken', ''),
       )
 
       return response
@@ -405,7 +412,10 @@ export function Auth(config: AuthConfig) {
   return {
     auth,
     currentUser,
+
+    createSession,
     verifyAccessToken,
+    serializeTokenCookie,
 
     signIn,
     signOut,

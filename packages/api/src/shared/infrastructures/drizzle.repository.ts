@@ -27,7 +27,7 @@ export abstract class DrizzleRepository<
   TEntity extends AbstractEntity<unknown, TPrimaryKey>,
   TTable extends PgTable,
   TPrimaryKey extends string | number = string,
-> extends AbstractRepository<TEntity, TPrimaryKey> {
+> extends AbstractRepository<TEntity, TPrimaryKey, Database> {
   public constructor(
     protected readonly _db: Database,
     protected readonly _table: TTable,
