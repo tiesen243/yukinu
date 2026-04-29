@@ -1,23 +1,26 @@
+import { createTRPCProxyClient, httpBatchStreamLink } from '@trpc/client'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
+import { transformer } from '@yukinu/lib/transformer'
 
-import { createTRPCContext } from '@/context'
-import { appRouter } from '@/routers/_app'
+import type { AppRouter } from '@/app'
+
+import { createApp } from '@/app'
 import { createCallerFactory } from '@/trpc'
 
 const handler = async (request: Request): Promise<Response> => {
-  let response: Response
+  const appRouter = createApp()
 
-  // oxlint-disable-next-line unicorn/prefer-ternary
-  if (request.method === 'OPTIONS')
-    response = new Response(null, { status: 204 })
-  else
-    response = await fetchRequestHandler({
-      endpoint: '/api/trpc',
-      req: request,
-      router: appRouter,
-      createContext: () => createTRPCContext(request),
-    })
+  const response =
+    request.method === 'OPTIONS'
+      ? new Response(null, { status: 204 })
+      : await fetchRequestHandler<AppRouter>({
+          endpoint: '/api/trpc',
+          req: request,
+          router: appRouter,
+          createContext: ({ resHeaders }) => ({ req: request, resHeaders }),
+        })
 
+  // Set CORS headers
   response.headers.set('Access-Control-Allow-Origin', '*')
   response.headers.set('Access-Control-Request-Method', '*')
   response.headers.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
@@ -25,8 +28,20 @@ const handler = async (request: Request): Promise<Response> => {
   return response
 }
 
-const createCaller = createCallerFactory(appRouter)
+const createTRPCCaller = createCallerFactory(createApp())
+const createTRPCClient = (baseUrl: string) =>
+  createTRPCProxyClient<AppRouter>({
+    links: [
+      httpBatchStreamLink({
+        transformer,
+        url: `${baseUrl}/api/trpc`,
+      }),
+    ],
+  })
 
-export type { AppRouter, RouterInputs, RouterOutputs } from '@/routers/_app'
-export type { TRPCMeta, TRPCContext } from '@/trpc'
-export { appRouter, createCaller, createTRPCContext, handler }
+export type { AppRouter, RouterInputs, RouterOutputs } from '@/app'
+export { createTRPCCaller, createTRPCClient, handler }
+
+export default {
+  fetch: handler,
+}

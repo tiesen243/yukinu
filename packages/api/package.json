@@ -28,10 +28,10 @@
     "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
-    "@yukinu/validators": "workspace:*",
-    "superjson": "catalog:trpc"
+    "zod": "catalog:prod"
   },
   "devDependencies": {
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"

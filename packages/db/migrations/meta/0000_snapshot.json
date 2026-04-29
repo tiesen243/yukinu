@@ -1,5 +1,5 @@
 {
-  "id": "ff213621-39a1-4b71-880d-e5cbd4ac6a8a",
+  "id": "658f4d58-0758-46f5-84b3-fa1731360f10",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -1776,6 +1776,12 @@
           "primaryKey": false,
           "notNull": false
         },
+        "image": {
+          "name": "image",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "role": {
           "name": "role",
           "type": "user_role",
@@ -1791,12 +1797,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": "'active'"
-        },
-        "image": {
-          "name": "image",
-          "type": "varchar(500)",
-          "primaryKey": false,
-          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -2638,9 +2638,9 @@
       "values": [
         "user",
         "admin",
+        "moderator",
         "vendor_owner",
-        "vendor_staff",
-        "moderator"
+        "vendor_staff"
       ]
     },
     "public.user_status": {
@@ -2648,7 +2648,8 @@
       "schema": "public",
       "values": [
         "active",
-        "inactive"
+        "inactive",
+        "banned"
       ]
     },
     "public.vendor_status": {

@@ -24,12 +24,16 @@ const deletedAt = timestamp({ mode: 'date' })
 export const userRoleEnum = pgEnum('user_role', [
   'user',
   'admin',
+  'moderator',
   'vendor_owner',
   'vendor_staff',
-  'moderator',
 ])
 
-export const userStatusEnum = pgEnum('user_status', ['active', 'inactive'])
+export const userStatusEnum = pgEnum('user_status', [
+  'active',
+  'inactive',
+  'banned',
+])
 
 export const vendorStatusEnum = pgEnum('vendor_status', [
   'pending',
@@ -72,9 +76,9 @@ export const users = pgTable(
     username: t.varchar({ length: 20 }).notNull(),
     email: t.varchar({ length: 255 }).notNull(),
     emailVerified: t.timestamp({ mode: 'date' }),
+    image: t.varchar({ length: 500 }),
     role: userRoleEnum().default('user').notNull(),
     status: userStatusEnum().default('active').notNull(),
-    image: t.varchar({ length: 500 }),
     createdAt,
     updatedAt,
     deletedAt,

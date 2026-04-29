@@ -4,7 +4,7 @@ import postgres from 'postgres'
 const createDrizzleClient = () => {
   const conn = postgres(
     process.env.DATABASE_URL ??
-      'postgresql://yukinu:supersecret@127.0.0.1:5432/db?schema=public',
+      'postgresql://yukinu:supersecret@127.0.0.1:5432/db',
   )
   return drizzle(conn, { casing: 'snake_case' })
 }
