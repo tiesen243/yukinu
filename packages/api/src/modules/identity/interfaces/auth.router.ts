@@ -13,12 +13,9 @@ import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const authRouter = (useCases: UseCases) =>
   ({
-    currentUser: protectedProcedure
-      .meta({ message: 'Get the currently authenticated user' })
-      .query(({ ctx }) => currentUser(ctx.req)),
+    currentUser: protectedProcedure.query(({ ctx }) => currentUser(ctx.req)),
 
     signIn: publicProcedure
-      .meta({ message: 'Sign in to your account' })
       .input(SignInDto.input)
       .output(SignInDto.output)
       .mutation(({ ctx, input }) =>
@@ -39,25 +36,21 @@ export const authRouter = (useCases: UseCases) =>
       ),
 
     signUp: publicProcedure
-      .meta({ message: 'Create a new account' })
       .input(SignUpDto.input)
       .output(SignUpDto.output)
       .mutation(({ input }) => useCases.auth.signUp.execute(input)),
 
     forgotPassword: publicProcedure
-      .meta({ message: 'Request a password reset' })
       .input(ForgotPasswordDto.input)
       .output(ForgotPasswordDto.output)
       .mutation(({ input }) => useCases.auth.forgotPassword.execute(input)),
 
     resetPassword: publicProcedure
-      .meta({ message: 'Reset your password' })
       .input(ResetPasswordDto.input)
       .output(ResetPasswordDto.output)
       .mutation(({ input }) => useCases.auth.resetPassword.execute(input)),
 
     verifyEmail: publicProcedure
-      .meta({ message: 'Verify your email address' })
       .input(VerifyEmailDto.input)
       .output(VerifyEmailDto.output)
       .mutation(({ input }) => useCases.auth.verifyEmail.execute(input)),

@@ -13,7 +13,9 @@ export class VendorEntity extends AbstractEntity<VendorEntity> {
 
   declare public ownerId: string | null
 
-  public constructor(props: AbstractEntity.EntityProps<VendorEntity>) {
+  public constructor(
+    props: AbstractEntity.EntityProps<VendorEntity, 'status'>,
+  ) {
     super({
       description: null,
       image: null,
@@ -23,11 +25,18 @@ export class VendorEntity extends AbstractEntity<VendorEntity> {
       payoutAccountName: null,
       payoutAccountNumber: null,
       ownerId: null,
+      status: 'pending',
       ...props,
     })
   }
 }
 
 export namespace VendorEntity {
-  export type Status = 'pending' | 'approved' | 'rejected' | 'suspended'
+  export const statuses = [
+    'pending',
+    'approved',
+    'rejected',
+    'suspended',
+  ] as const
+  export type Status = (typeof statuses)[number]
 }

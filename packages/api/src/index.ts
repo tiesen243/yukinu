@@ -6,7 +6,7 @@ import { transformer } from '@yukinu/lib/transformer'
 import type { AppRouter } from '@/app'
 
 import { createApp } from '@/app'
-import { createCallerFactory } from '@/trpc'
+import { createCallerFactory, createTRPCContext } from '@/trpc'
 
 const handler = async (request: Request): Promise<Response> => {
   const appRouter = createApp(db)
@@ -18,7 +18,8 @@ const handler = async (request: Request): Promise<Response> => {
           endpoint: '/api/trpc',
           req: request,
           router: appRouter,
-          createContext: ({ resHeaders }) => ({ req: request, resHeaders }),
+          createContext: ({ resHeaders }) =>
+            createTRPCContext({ req: request, resHeaders }),
         })
 
   // Set CORS headers

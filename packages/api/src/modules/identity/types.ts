@@ -1,4 +1,5 @@
 import type { AllAddressesUseCase } from '@/modules/identity/application/use-cases/address/all-addresses.use-case'
+import type { DeleteAddressUseCase } from '@/modules/identity/application/use-cases/address/delete-address.use-case'
 import type { OneAddressUseCase } from '@/modules/identity/application/use-cases/address/one-address.use-case'
 import type { SaveAddressUseCase } from '@/modules/identity/application/use-cases/address/save-address.use-case'
 import type { ForgotPasswordUseCase } from '@/modules/identity/application/use-cases/auth/forgot-password.use-case'
@@ -14,8 +15,6 @@ import type { ProfileUseCase } from '@/modules/identity/application/use-cases/us
 import type { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
 import type { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
 import type { UpdateUserUseCase } from '@/modules/identity/application/use-cases/user/update-user.use-case'
-
-import type { DeleteAddressUseCase } from '@/modules/identity/application/use-cases/address/delete-address.use-case'
 
 export interface UseCases {
   adddress: {

@@ -14,7 +14,9 @@ const createApp = (db: Database) => {
   const checkoutModule = createCheckoutModule(db)
   const financeModule = createFinanceModule(db)
   const identityModule = createIdentityModule(db)
-  const merchantModule = createMerchantModule(db)
+  const merchantModule = createMerchantModule(db, {
+    userRepo: identityModule.repos.userRepo,
+  })
   const salesModule = createSalesModule(db)
 
   return createTRPCRouter({

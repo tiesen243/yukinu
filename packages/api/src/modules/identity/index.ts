@@ -74,6 +74,10 @@ export const createIdentityModule = (db: Database) => {
 
   return {
     useCases,
+    repos: {
+      userRepo,
+    },
+
     router: {
       address: addressRouter(useCases),
       auth: authRouter(useCases),
