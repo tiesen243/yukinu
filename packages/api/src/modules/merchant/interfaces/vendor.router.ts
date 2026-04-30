@@ -9,36 +9,33 @@ import {
   SaveVendorDto,
   UpdateVendorStatusDto,
 } from '@/modules/merchant/types'
-import { staffRouter } from '@/modules/merchant/interfaces/staff.router'
-import { protectedProcedure, publicProcedure } from '@/trpc'
+import { protectedProcedure } from '@/trpc'
 
-export const vendorRouter = (useCases: UseCases) =>
+export const vendorRouter = ({ vendor }: UseCases) =>
   ({
     all: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
       .input(AllVendorsDto.input)
       .output(AllVendorsDto.output)
-      .query(({ input }) => useCases.vendor.all.execute(input)),
+      .query(({ input }) => vendor.all.execute(input)),
 
     one: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
       .input(OneVendorDto.input)
       .output(OneVendorDto.output)
-      .query(({ input }) => useCases.vendor.one.execute(input)),
+      .query(({ input }) => vendor.one.execute(input)),
 
     me: protectedProcedure
       .use(vendorMiddleware)
       .output(OneVendorDto.output)
-      .query(({ ctx }) =>
-        useCases.vendor.one.execute({ id: ctx.session.vendorId }),
-      ),
+      .query(({ ctx }) => vendor.one.execute({ id: ctx.session.vendorId })),
 
     create: protectedProcedure
       .meta({ role: ['user'] })
       .input(SaveVendorDto.input.omit({ id: true, ownerId: true }))
       .output(SaveVendorDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.vendor.save.execute({
+        vendor.save.execute({
           ownerId: ctx.session.userId,
           ...input,
         }),
@@ -49,18 +46,16 @@ export const vendorRouter = (useCases: UseCases) =>
       .input(SaveVendorDto.input.omit({ id: true, ownerId: true }))
       .output(SaveVendorDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.vendor.save.execute({
+        vendor.save.execute({
           id: ctx.session.vendorId,
           ownerId: ctx.session.userId,
           ...input,
         }),
       ),
 
-
     updateStatus: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
       .input(UpdateVendorStatusDto.input)
       .output(UpdateVendorStatusDto.output)
-      .mutation(({ input }) => useCases.vendor.updateStatus.execute(input)),
-
+      .mutation(({ input }) => vendor.updateStatus.execute(input)),
   }) satisfies TRPCRouterRecord

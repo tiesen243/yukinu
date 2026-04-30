@@ -11,7 +11,7 @@ import { SignUpDto } from '@/modules/identity/application/dtos/auth/sign-up.dto'
 import { VerifyEmailDto } from '@/modules/identity/application/dtos/auth/verify-email.dto'
 import { protectedProcedure, publicProcedure } from '@/trpc'
 
-export const authRouter = (useCases: UseCases) =>
+export const authRouter = ({ auth }: UseCases) =>
   ({
     currentUser: protectedProcedure.query(({ ctx }) => currentUser(ctx.req)),
 
@@ -20,7 +20,7 @@ export const authRouter = (useCases: UseCases) =>
       .output(SignInDto.output)
       .mutation(({ ctx, input }) =>
         // oxlint-disable-next-line promise/prefer-await-to-then
-        useCases.auth.signIn.execute(input).then((result) => {
+        auth.signIn.execute(input).then((result) => {
           const { accessToken, refreshToken, expiresAt } = result
           ctx.resHeaders.append(
             'Set-Cookie',
@@ -38,20 +38,20 @@ export const authRouter = (useCases: UseCases) =>
     signUp: publicProcedure
       .input(SignUpDto.input)
       .output(SignUpDto.output)
-      .mutation(({ input }) => useCases.auth.signUp.execute(input)),
+      .mutation(({ input }) => auth.signUp.execute(input)),
 
     forgotPassword: publicProcedure
       .input(ForgotPasswordDto.input)
       .output(ForgotPasswordDto.output)
-      .mutation(({ input }) => useCases.auth.forgotPassword.execute(input)),
+      .mutation(({ input }) => auth.forgotPassword.execute(input)),
 
     resetPassword: publicProcedure
       .input(ResetPasswordDto.input)
       .output(ResetPasswordDto.output)
-      .mutation(({ input }) => useCases.auth.resetPassword.execute(input)),
+      .mutation(({ input }) => auth.resetPassword.execute(input)),
 
     verifyEmail: publicProcedure
       .input(VerifyEmailDto.input)
       .output(VerifyEmailDto.output)
-      .mutation(({ input }) => useCases.auth.verifyEmail.execute(input)),
+      .mutation(({ input }) => auth.verifyEmail.execute(input)),
   }) satisfies TRPCRouterRecord

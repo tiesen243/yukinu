@@ -7,7 +7,7 @@ import { CreateBannerDto } from '@/modules/sales/application/dtos/banner/create-
 import { DeleteBannerDto } from '@/modules/sales/application/dtos/banner/delete-banner.dto'
 import { protectedProcedure } from '@/trpc'
 
-export const createBannerRouter = ({ banner }: UseCases) =>
+export const bannerRouter = ({ banner }: UseCases) =>
   ({
     all: protectedProcedure
       .input(AllBannersDto.input)

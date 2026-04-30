@@ -1,6 +1,7 @@
+import type { Database } from '@yukinu/db/drizzle'
+
 import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
-import type { Database } from '@yukinu/db/drizzle'
 
 import type { ChangeUsernameDto } from '@/modules/identity/application/dtos/security/change-username.dto'
 import type { AccountRepository } from '@/modules/identity/domain/repositories/account.repository'

@@ -9,26 +9,24 @@ import {
 } from '@/modules/identity/types'
 import { protectedProcedure } from '@/trpc'
 
-export const addressRouter = (useCases: UseCases) =>
+export const addressRouter = ({ adddress }: UseCases) =>
   ({
     all: protectedProcedure
       .output(AllAddressesDto.output)
-      .query(({ ctx }) =>
-        useCases.adddress.all.execute({ userId: ctx.session.userId }),
-      ),
+      .query(({ ctx }) => adddress.all.execute({ userId: ctx.session.userId })),
 
     one: protectedProcedure
       .input(OneAddressDto.input.omit({ userId: true }))
       .output(OneAddressDto.output)
       .query(({ ctx, input }) =>
-        useCases.adddress.one.execute({ userId: ctx.session.userId, ...input }),
+        adddress.one.execute({ userId: ctx.session.userId, ...input }),
       ),
 
     create: protectedProcedure
       .input(SaveAddressDto.input.omit({ id: true, userId: true }))
       .output(SaveAddressDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.adddress.save.execute({
+        adddress.save.execute({
           userId: ctx.session.userId,
           ...input,
         }),
@@ -38,7 +36,7 @@ export const addressRouter = (useCases: UseCases) =>
       .input(SaveAddressDto.input.omit({ userId: true }))
       .output(SaveAddressDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.adddress.save.execute({
+        adddress.save.execute({
           userId: ctx.session.userId,
           ...input,
         }),
@@ -48,7 +46,7 @@ export const addressRouter = (useCases: UseCases) =>
       .input(OneAddressDto.input.omit({ userId: true }))
       .output(OneAddressDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.adddress.delete.execute({
+        adddress.delete.execute({
           userId: ctx.session.userId,
           ...input,
         }),

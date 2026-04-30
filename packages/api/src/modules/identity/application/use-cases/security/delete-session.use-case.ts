@@ -1,5 +1,6 @@
-import { TRPCError } from '@trpc/server'
 import type { Database } from '@yukinu/db/drizzle'
+
+import { TRPCError } from '@trpc/server'
 
 import type { DeleteSessionDto } from '@/modules/identity/application/dtos/security/delete-session.dto'
 import type { SessionRepository } from '@/modules/identity/domain/repositories/session.repository'

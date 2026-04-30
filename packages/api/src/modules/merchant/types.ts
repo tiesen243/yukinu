@@ -1,11 +1,11 @@
+import type { AcceptInvitationUseCase } from '@/modules/merchant/application/use-cases/staff/accept-invitation.use-case'
+import type { AllStaffsUseCase } from '@/modules/merchant/application/use-cases/staff/all-staffs.use-case'
+import type { InviteStaffUseCase } from '@/modules/merchant/application/use-cases/staff/invite-staff.use-case'
+import type { RemoveStaffUseCase } from '@/modules/merchant/application/use-cases/staff/remove-staff.use-case'
 import type { AllVendorsUseCase } from '@/modules/merchant/application/use-cases/vendor/all-vendors.use-case'
 import type { OneVendorUseCase } from '@/modules/merchant/application/use-cases/vendor/one-vendor.use-case'
 import type { SaveVendorUseCase } from '@/modules/merchant/application/use-cases/vendor/save-vendor.use-case'
 import type { UpdateVendorStatusUseCase } from '@/modules/merchant/application/use-cases/vendor/update-vendor-status.use-case'
-import type { AllStaffsUseCase } from '@/modules/merchant/application/use-cases/staff/all-staffs.use-case'
-import type { InviteStaffUseCase } from '@/modules/merchant/application/use-cases/staff/invite-staff.use-case'
-import type { AcceptInvitationUseCase } from '@/modules/merchant/application/use-cases/staff/accept-invitation.use-case'
-import type { RemoveStaffUseCase } from '@/modules/merchant/application/use-cases/staff/remove-staff.use-case'
 
 export interface UseCases {
   vendor: {

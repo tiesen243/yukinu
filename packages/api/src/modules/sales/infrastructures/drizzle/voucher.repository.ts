@@ -4,11 +4,11 @@ import { vouchers } from '@yukinu/db/schema'
 
 import type { VoucherRepository } from '@/modules/sales/domain/repositories/voucher.repository'
 
-import { VoucherItemEntity } from '@/modules/sales/domain/entities/voucher.entity'
+import { VoucherEntity } from '@/modules/sales/domain/entities/voucher.entity'
 import { DrizzleRepository } from '@/shared/infrastructures/drizzle.repository'
 
 export class DrizzleVoucherRepository
-  extends DrizzleRepository<VoucherItemEntity, typeof vouchers>
+  extends DrizzleRepository<VoucherEntity, typeof vouchers>
   implements VoucherRepository
 {
   public constructor(db: Database) {
@@ -17,7 +17,7 @@ export class DrizzleVoucherRepository
 
   protected _mapToEntity(
     row: DrizzleRepository.ExtractType<typeof vouchers>,
-  ): VoucherItemEntity {
-    return new VoucherItemEntity(row)
+  ): VoucherEntity {
+    return new VoucherEntity(row)
   }
 }

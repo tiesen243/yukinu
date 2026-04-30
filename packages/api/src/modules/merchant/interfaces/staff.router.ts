@@ -11,15 +11,13 @@ import {
 } from '@/modules/merchant/types'
 import { protectedProcedure } from '@/trpc'
 
-export const staffRouter = (useCases: UseCases) =>
+export const staffRouter = ({ staff }: UseCases) =>
   ({
     all: protectedProcedure
       .use(vendorMiddleware)
       .input(AllStaffsDto.input)
       .output(AllStaffsDto.output)
-      .query(({ ctx }) =>
-        useCases.staff.all.execute({ id: ctx.session.vendorId }),
-      ),
+      .query(({ ctx }) => staff.all.execute({ id: ctx.session.vendorId })),
 
     invite: protectedProcedure
       .meta({ role: ['vendor_owner'] })
@@ -27,7 +25,7 @@ export const staffRouter = (useCases: UseCases) =>
       .input(InviteStaffDto.input.omit({ vendorId: true }))
       .output(InviteStaffDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.staff.invite.execute({
+        staff.invite.execute({
           vendorId: ctx.session.vendorId,
           ...input,
         }),
@@ -38,7 +36,7 @@ export const staffRouter = (useCases: UseCases) =>
       .input(AcceptInvitationDto.input.omit({ userId: true }))
       .output(AcceptInvitationDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.staff.accept.execute({
+        staff.accept.execute({
           userId: ctx.session.userId,
           token: input.token,
         }),
@@ -50,7 +48,7 @@ export const staffRouter = (useCases: UseCases) =>
       .input(RemoveStaffDto.input.omit({ vendorId: true }))
       .output(RemoveStaffDto.output)
       .mutation(({ ctx, input }) =>
-        useCases.staff.remove.execute({
+        staff.remove.execute({
           vendorId: ctx.session.vendorId,
           ...input,
         }),

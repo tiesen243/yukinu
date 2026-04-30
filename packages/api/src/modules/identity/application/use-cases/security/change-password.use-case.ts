@@ -1,6 +1,7 @@
+import type { Database } from '@yukinu/db/drizzle'
+
 import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
-import type { Database } from '@yukinu/db/drizzle'
 import { sendEmail } from '@yukinu/email'
 
 import type { ChangePasswordDto } from '@/modules/identity/application/dtos/security/change-password.dto'

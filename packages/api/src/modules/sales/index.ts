@@ -6,23 +6,39 @@ import type { UseCases } from '@/modules/sales/types'
 import { AllBannersUseCase } from '@/modules/sales/application/use-cases/banner/all-banners.use-case'
 import { CreateBannerUseCase } from '@/modules/sales/application/use-cases/banner/create-banner.use-case'
 import { DeleteBannerUseCase } from '@/modules/sales/application/use-cases/banner/delete-banner.use-case'
+import { AllVouchersUseCase } from '@/modules/sales/application/use-cases/voucher/all-vouchers.use-case'
+import { DeleteVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/delete-voucher.use-case'
+import { OneVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/one-voucher.use-case'
+import { SaveVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/save-voucher.use-case'
 import { DrizzleBannerRepository } from '@/modules/sales/infrastructures/drizzle/banner.repository'
-import { createBannerRouter } from '@/modules/sales/interfaces/banner.router'
+import { DrizzleVoucherRepository } from '@/modules/sales/infrastructures/drizzle/voucher.repository'
+import { bannerRouter } from '@/modules/sales/interfaces/banner.router'
+import { voucherRouter } from '@/modules/sales/interfaces/voucher.router'
 
 export const createSalesModule = (db: Database) => {
   const bannerRepo = new DrizzleBannerRepository(db)
+  const voucherRepo = new DrizzleVoucherRepository(db)
+
   const useCases = {
     banner: {
       all: new AllBannersUseCase(db, bannerRepo),
       create: new CreateBannerUseCase(db, bannerRepo),
       delete: new DeleteBannerUseCase(db, bannerRepo),
     },
+    voucher: {
+      all: new AllVouchersUseCase(db, voucherRepo),
+      one: new OneVoucherUseCase(db, voucherRepo),
+      save: new SaveVoucherUseCase(db, voucherRepo),
+      delete: new DeleteVoucherUseCase(db, voucherRepo),
+    },
   } satisfies UseCases
 
   return {
     useCases,
+
     router: {
-      banner: createBannerRouter(useCases),
+      banner: bannerRouter(useCases),
+      voucher: voucherRouter(useCases),
     } satisfies TRPCRouterRecord,
   }
 }

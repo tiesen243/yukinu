@@ -10,19 +10,19 @@ import {
 } from '@/modules/identity/types'
 import { protectedProcedure } from '@/trpc'
 
-export const ticketRouter = (useCases: UseCases) =>
+export const ticketRouter = ({ ticket }: UseCases) =>
   ({
     all: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
       .input(AllTicketsDto.input.omit({ userId: true }))
       .output(AllTicketsDto.output)
-      .query(({ input }) => useCases.ticket.all.execute(input)),
+      .query(({ input }) => ticket.all.execute(input)),
 
     me: protectedProcedure
       .input(AllTicketsDto.input.omit({ userId: true }))
       .output(AllTicketsDto.output)
       .query(({ ctx, input }) =>
-        useCases.ticket.all.execute({
+        ticket.all.execute({
           ...input,
           userId: ctx.session.userId,
         }),
@@ -31,16 +31,16 @@ export const ticketRouter = (useCases: UseCases) =>
     one: protectedProcedure
       .input(OneTicketDto.input)
       .output(OneTicketDto.output)
-      .query(({ input }) => useCases.ticket.one.execute(input)),
+      .query(({ input }) => ticket.one.execute(input)),
 
     create: protectedProcedure
       .input(CreateTicketDto.input)
       .output(CreateTicketDto.output)
-      .mutation(({ input }) => useCases.ticket.create.execute(input)),
+      .mutation(({ input }) => ticket.create.execute(input)),
 
     updateStatus: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
       .input(UpdateTicketStatusDto.input)
       .output(UpdateTicketStatusDto.output)
-      .mutation(({ input }) => useCases.ticket.updateStatus.execute(input)),
+      .mutation(({ input }) => ticket.updateStatus.execute(input)),
   }) satisfies TRPCRouterRecord
