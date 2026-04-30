@@ -81,26 +81,16 @@ export class SignUpUseCase extends AbstractUseCase<
       })
       await this._profileRepo.save(newProfile, tx)
 
-      const verificationToken = this._generateVerificationToken()
-      const expiresAt = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
       const newVerification = new VerificationEntity({
         userId: newUser.id,
-        token: verificationToken,
         type: 'email',
-        expiresAt,
       })
       await this._verificationRepo.save(newVerification, tx)
 
       return {
         userId: newUser.id,
-        verificationToken,
+        verificationToken: newVerification.token,
       }
     })
-  }
-
-  private _generateVerificationToken(): string {
-    const bytes = new Uint8Array(32)
-    crypto.getRandomValues(bytes)
-    return [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
   }
 }

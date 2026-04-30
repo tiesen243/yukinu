@@ -9,7 +9,8 @@ import {
   SaveVendorDto,
   UpdateVendorStatusDto,
 } from '@/modules/merchant/types'
-import { protectedProcedure } from '@/trpc'
+import { staffRouter } from '@/modules/merchant/interfaces/staff.router'
+import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const vendorRouter = (useCases: UseCases) =>
   ({
@@ -55,9 +56,11 @@ export const vendorRouter = (useCases: UseCases) =>
         }),
       ),
 
+
     updateStatus: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
       .input(UpdateVendorStatusDto.input)
       .output(UpdateVendorStatusDto.output)
       .mutation(({ input }) => useCases.vendor.updateStatus.execute(input)),
+
   }) satisfies TRPCRouterRecord

@@ -76,6 +76,7 @@ export const createIdentityModule = (db: Database) => {
     useCases,
     repos: {
       userRepo,
+      verificationRepo,
     },
 
     router: {

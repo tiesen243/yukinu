@@ -1,7 +1,6 @@
 import type { Database } from '@yukinu/db/drizzle'
 
 import { sendEmail } from '@yukinu/email'
-import { randomBytes } from 'node:crypto'
 
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
 import type { VerificationRepository } from '@/modules/identity/domain/repositories/verification.repository'
@@ -30,18 +29,14 @@ export class ForgotPasswordUseCase extends AbstractUseCase<
     if (!user?.username) return { id: '' }
 
     const { id, username } = user
-    const token = randomBytes(32).toString('hex')
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000)
 
     const newVerification = new VerificationEntity({
-      token,
       userId: id,
       type: 'password_reset',
-      expiresAt,
     })
     await this._verificationRepo.save(newVerification)
 
-    const resetLink = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/forgot-password/reset?token=${token}`
+    const resetLink = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/forgot-password/reset?token=${newVerification.token}`
     await sendEmail({
       to: email,
       subject: 'Yukinu Password Reset',

@@ -5,4 +5,13 @@ export class VendorStaffEntity extends AbstractEntity<VendorStaffEntity> {
 
   declare public vendorId: string
   declare public userId: string
+
+  public constructor(
+    props: AbstractEntity.EntityProps<VendorStaffEntity, 'assignedAt'>,
+  ) {
+    super({
+      assignedAt: new Date(),
+      ...props,
+    })
+  }
 }

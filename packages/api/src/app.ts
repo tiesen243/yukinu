@@ -16,6 +16,7 @@ const createApp = (db: Database) => {
   const identityModule = createIdentityModule(db)
   const merchantModule = createMerchantModule(db, {
     userRepo: identityModule.repos.userRepo,
+    verificationRepo: identityModule.repos.verificationRepo,
   })
   const salesModule = createSalesModule(db)
 
