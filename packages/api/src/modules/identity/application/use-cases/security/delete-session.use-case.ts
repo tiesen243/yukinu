@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server'
+import type { Database } from '@yukinu/db/drizzle'
 
 import type { DeleteSessionDto } from '@/modules/identity/application/dtos/security/delete-session.dto'
 import type { SessionRepository } from '@/modules/identity/domain/repositories/session.repository'
@@ -9,13 +10,17 @@ export class DeleteSessionUseCase extends AbstractUseCase<
   DeleteSessionDto.Input,
   DeleteSessionDto.Output
 > {
-  constructor(private readonly sessionRepo: SessionRepository) {
+  constructor(
+    private readonly _db: Database,
+    private readonly _sessionRepo: SessionRepository,
+  ) {
     super()
   }
+
   async execute(
     input: DeleteSessionDto.Input,
   ): Promise<DeleteSessionDto.Output> {
-    const [session] = await this.sessionRepo.find(
+    const [session] = await this._sessionRepo.find(
       [{ id: input.id }],
       {},
       { limit: 1 },
@@ -29,7 +34,7 @@ export class DeleteSessionUseCase extends AbstractUseCase<
         message: 'You do not have permission to delete this session.',
       })
 
-    await this.sessionRepo.delete([{ id: input.id }])
+    await this._sessionRepo.delete([{ id: input.id }])
     return { id: session.id }
   }
 }

@@ -1,3 +1,5 @@
+import type { Database } from '@yukinu/db/drizzle'
+
 import type { AllSessionsDto } from '@/modules/identity/application/dtos/security/all-sessions.dto'
 import type { SessionRepository } from '@/modules/identity/domain/repositories/session.repository'
 
@@ -7,7 +9,10 @@ export class AllSessionsUseCase extends AbstractUseCase<
   AllSessionsDto.Input,
   AllSessionsDto.Output
 > {
-  public constructor(private readonly _sessionRepo: SessionRepository) {
+  public constructor(
+    private readonly _db: Database,
+    private readonly _sessionRepo: SessionRepository,
+  ) {
     super()
   }
 

@@ -93,10 +93,11 @@ export const createIdentityModule = (db: Database) => {
     },
 
     security: {
-      allSessions: new AllSessionsUseCase(sessionRepo),
-      deleteSession: new DeleteSessionUseCase(sessionRepo),
-      changeUsername: new ChangeUsernameUseCase(accountRepo, userRepo),
+      allSessions: new AllSessionsUseCase(db, sessionRepo),
+      deleteSession: new DeleteSessionUseCase(db, sessionRepo),
+      changeUsername: new ChangeUsernameUseCase(db, accountRepo, userRepo),
       changePassword: new ChangePasswordUseCase(
+        db,
         accountRepo,
         sessionRepo,
         userRepo,

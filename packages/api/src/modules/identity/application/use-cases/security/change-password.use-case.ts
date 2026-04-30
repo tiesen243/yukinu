@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server'
 import { Password } from '@yukinu/auth'
+import type { Database } from '@yukinu/db/drizzle'
 import { sendEmail } from '@yukinu/email'
 
 import type { ChangePasswordDto } from '@/modules/identity/application/dtos/security/change-password.dto'
@@ -17,6 +18,7 @@ export class ChangePasswordUseCase extends AbstractUseCase<
   private readonly _password = new Password()
 
   constructor(
+    private readonly _db: Database,
     private readonly _accountRepo: AccountRepository,
     private readonly _sessionRepo: SessionRepository,
     private readonly _userRepo: UserRepository,
