@@ -9,5 +9,6 @@ export class TicketEntity extends AbstractEntity<TicketEntity> {
 }
 
 export namespace TicketEntity {
-  export type Status = 'open' | 'resolved' | 'closed'
+  export const statuses = ['open', 'resolved', 'closed'] as const
+  export type Status = (typeof statuses)[number]
 }

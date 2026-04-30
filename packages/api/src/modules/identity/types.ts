@@ -15,6 +15,10 @@ import type { ProfileUseCase } from '@/modules/identity/application/use-cases/us
 import type { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
 import type { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
 import type { UpdateUserUseCase } from '@/modules/identity/application/use-cases/user/update-user.use-case'
+import type { AllTicketsUseCase } from '@/modules/identity/application/use-cases/ticket/all-tickets.use-case'
+import type { OneTicketUseCase } from '@/modules/identity/application/use-cases/ticket/one-ticket.use-case'
+import type { CreateTicketUseCase } from '@/modules/identity/application/use-cases/ticket/create-ticket.use-case'
+import type { UpdateTicketStatusUseCase } from '@/modules/identity/application/use-cases/ticket/update-ticket-status.use-case'
 
 export interface UseCases {
   adddress: {
@@ -40,6 +44,12 @@ export interface UseCases {
     updateProfile: UpdateProfileUseCase
     updateUser: UpdateUserUseCase
   }
+  ticket: {
+    all: AllTicketsUseCase
+    one: OneTicketUseCase
+    create: CreateTicketUseCase
+    updateStatus: UpdateTicketStatusUseCase
+  }
 }
 
 // Address DTOs
@@ -60,3 +70,9 @@ export { OneUserDto } from '@/modules/identity/application/dtos/user/one-user.dt
 export { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
 export { UpdateProfileDto } from '@/modules/identity/application/dtos/user/update-profile.dto'
 export { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'
+
+// Ticket DTOs
+export { AllTicketsDto } from '@/modules/identity/application/dtos/ticket/all-tickets.dto'
+export { OneTicketDto } from '@/modules/identity/application/dtos/ticket/one-ticket.dto'
+export { CreateTicketDto } from '@/modules/identity/application/dtos/ticket/create-ticket.dto'
+export { UpdateTicketStatusDto } from '@/modules/identity/application/dtos/ticket/update-ticket-status.dto'
