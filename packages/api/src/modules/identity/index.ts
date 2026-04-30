@@ -12,6 +12,10 @@ import { ResetPasswordUseCase } from '@/modules/identity/application/use-cases/a
 import { SignInUseCase } from '@/modules/identity/application/use-cases/auth/sign-in.use-case'
 import { SignUpUseCase } from '@/modules/identity/application/use-cases/auth/sign-up.use-case'
 import { VerifyEmailUseCase } from '@/modules/identity/application/use-cases/auth/verify-email.use-case'
+import { AllSessionsUseCase } from '@/modules/identity/application/use-cases/security/all-sessions.use-case'
+import { ChangePasswordUseCase } from '@/modules/identity/application/use-cases/security/change-password.use-case'
+import { ChangeUsernameUseCase } from '@/modules/identity/application/use-cases/security/change-username.use-case'
+import { DeleteSessionUseCase } from '@/modules/identity/application/use-cases/security/delete-session.use-case'
 import { AllTicketsUseCase } from '@/modules/identity/application/use-cases/ticket/all-tickets.use-case'
 import { CreateTicketUseCase } from '@/modules/identity/application/use-cases/ticket/create-ticket.use-case'
 import { OneTicketUseCase } from '@/modules/identity/application/use-cases/ticket/one-ticket.use-case'
@@ -27,11 +31,13 @@ import { UpdateUserUseCase } from '@/modules/identity/application/use-cases/user
 import { DrizzleAccountRepository } from '@/modules/identity/infrastructures/drizzle/account.repository'
 import { DrizzleAddressRepository } from '@/modules/identity/infrastructures/drizzle/address.repository'
 import { DrizzleProfileRepository } from '@/modules/identity/infrastructures/drizzle/profile.repository'
+import { DrizzleSessionRepository } from '@/modules/identity/infrastructures/drizzle/session.repository'
 import { DrizzleTicketRepository } from '@/modules/identity/infrastructures/drizzle/ticket.repository'
 import { DrizzleUserRepository } from '@/modules/identity/infrastructures/drizzle/user.repository'
 import { DrizzleVerificationRepository } from '@/modules/identity/infrastructures/drizzle/verification.repository'
 import { addressRouter } from '@/modules/identity/interfaces/address.router'
 import { authRouter } from '@/modules/identity/interfaces/auth.router'
+import { securityRouter } from '@/modules/identity/interfaces/security.router'
 import { ticketRouter } from '@/modules/identity/interfaces/ticket.router'
 import { userRouter } from '@/modules/identity/interfaces/user.router'
 
@@ -42,6 +48,8 @@ export const createIdentityModule = (db: Database) => {
   const userRepo = new DrizzleUserRepository(db)
   const verificationRepo = new DrizzleVerificationRepository(db)
   const ticketRepo = new DrizzleTicketRepository(db)
+
+  const sessionRepo = new DrizzleSessionRepository(db)
 
   const useCases = {
     adddress: {
@@ -83,6 +91,17 @@ export const createIdentityModule = (db: Database) => {
       create: new CreateTicketUseCase(db, ticketRepo),
       updateStatus: new UpdateTicketStatusUseCase(db, ticketRepo),
     },
+
+    security: {
+      allSessions: new AllSessionsUseCase(sessionRepo),
+      deleteSession: new DeleteSessionUseCase(sessionRepo),
+      changeUsername: new ChangeUsernameUseCase(accountRepo, userRepo),
+      changePassword: new ChangePasswordUseCase(
+        accountRepo,
+        sessionRepo,
+        userRepo,
+      ),
+    },
   } satisfies UseCases
 
   return {
@@ -97,6 +116,7 @@ export const createIdentityModule = (db: Database) => {
       auth: authRouter(useCases),
       user: userRouter(useCases),
       ticket: ticketRouter(useCases),
+      security: securityRouter(useCases),
     } satisfies TRPCRouterRecord,
   }
 }

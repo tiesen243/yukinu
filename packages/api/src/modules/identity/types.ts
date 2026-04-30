@@ -7,6 +7,14 @@ import type { ResetPasswordUseCase } from '@/modules/identity/application/use-ca
 import type { SignInUseCase } from '@/modules/identity/application/use-cases/auth/sign-in.use-case'
 import type { SignUpUseCase } from '@/modules/identity/application/use-cases/auth/sign-up.use-case'
 import type { VerifyEmailUseCase } from '@/modules/identity/application/use-cases/auth/verify-email.use-case'
+import type { AllSessionsUseCase } from '@/modules/identity/application/use-cases/security/all-sessions.use-case'
+import type { ChangePasswordUseCase } from '@/modules/identity/application/use-cases/security/change-password.use-case'
+import type { ChangeUsernameUseCase } from '@/modules/identity/application/use-cases/security/change-username.use-case'
+import type { DeleteSessionUseCase } from '@/modules/identity/application/use-cases/security/delete-session.use-case'
+import type { AllTicketsUseCase } from '@/modules/identity/application/use-cases/ticket/all-tickets.use-case'
+import type { CreateTicketUseCase } from '@/modules/identity/application/use-cases/ticket/create-ticket.use-case'
+import type { OneTicketUseCase } from '@/modules/identity/application/use-cases/ticket/one-ticket.use-case'
+import type { UpdateTicketStatusUseCase } from '@/modules/identity/application/use-cases/ticket/update-ticket-status.use-case'
 import type { AllUsersUseCase } from '@/modules/identity/application/use-cases/user/all-users.use-case'
 import type { DeleteUserUseCase } from '@/modules/identity/application/use-cases/user/delete-user.use-case'
 import type { OneUserUseCase } from '@/modules/identity/application/use-cases/user/one-user.use-case'
@@ -15,10 +23,6 @@ import type { ProfileUseCase } from '@/modules/identity/application/use-cases/us
 import type { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
 import type { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
 import type { UpdateUserUseCase } from '@/modules/identity/application/use-cases/user/update-user.use-case'
-import type { AllTicketsUseCase } from '@/modules/identity/application/use-cases/ticket/all-tickets.use-case'
-import type { OneTicketUseCase } from '@/modules/identity/application/use-cases/ticket/one-ticket.use-case'
-import type { CreateTicketUseCase } from '@/modules/identity/application/use-cases/ticket/create-ticket.use-case'
-import type { UpdateTicketStatusUseCase } from '@/modules/identity/application/use-cases/ticket/update-ticket-status.use-case'
 
 export interface UseCases {
   adddress: {
@@ -50,6 +54,12 @@ export interface UseCases {
     create: CreateTicketUseCase
     updateStatus: UpdateTicketStatusUseCase
   }
+  security: {
+    allSessions: AllSessionsUseCase
+    changeUsername: ChangeUsernameUseCase
+    changePassword: ChangePasswordUseCase
+    deleteSession: DeleteSessionUseCase
+  }
 }
 
 // Address DTOs
@@ -76,3 +86,9 @@ export { AllTicketsDto } from '@/modules/identity/application/dtos/ticket/all-ti
 export { OneTicketDto } from '@/modules/identity/application/dtos/ticket/one-ticket.dto'
 export { CreateTicketDto } from '@/modules/identity/application/dtos/ticket/create-ticket.dto'
 export { UpdateTicketStatusDto } from '@/modules/identity/application/dtos/ticket/update-ticket-status.dto'
+
+// Security DTOs
+export { AllSessionsDto } from '@/modules/identity/application/dtos/security/all-sessions.dto'
+export { ChangeUsernameDto } from '@/modules/identity/application/dtos/security/change-username.dto'
+export { ChangePasswordDto } from '@/modules/identity/application/dtos/security/change-password.dto'
+export { DeleteSessionDto } from '@/modules/identity/application/dtos/security/delete-session.dto'

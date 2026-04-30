@@ -1,14 +1,11 @@
 import * as z from 'zod'
 
+import { passwordRegex } from '@/shared/schema'
+
 export namespace SignInDto {
   export const input = z.object({
     identifier: z.string().min(1, 'Identifier is required'),
-    password: z
-      .string()
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/,
-        'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
-      ),
+    password: passwordRegex,
   })
   export type Input = z.infer<typeof input>
 
