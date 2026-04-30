@@ -25,20 +25,22 @@ export class ResetPasswordUseCase extends AbstractUseCase<
     input: ResetPasswordDto.Input,
   ): Promise<ResetPasswordDto.Output> {
     const { token, newPassword } = input
-    const verification = await this._verificationRepo.find({
-      token,
-      type: 'password_reset',
-    })
+    const [verification] = await this._verificationRepo.find(
+      [{ token, type: 'password_reset' }],
+      {},
+      { limit: 1 },
+    )
     if (!verification)
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Invalid or expired password reset token.',
       })
 
-    const existingAccount = await this._accountRepo.find({
-      userId: verification.userId,
-      provider: 'credentials',
-    })
+    const [existingAccount] = await this._accountRepo.find(
+      [{ userId: verification.userId, provider: 'credentials' }],
+      {},
+      { limit: 1 },
+    )
     if (!existingAccount)
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -47,18 +49,17 @@ export class ResetPasswordUseCase extends AbstractUseCase<
 
     const { userId, expiresAt } = verification
     return this._db.transaction(async (tx) => {
-      if (expiresAt < new Date()) {
-        await this._verificationRepo.delete({ token }, tx)
+      await this._verificationRepo.delete([{ token }], tx)
+
+      if (expiresAt < new Date())
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'The password reset token has expired.',
         })
-      }
-      const password = await new Password().hash(newPassword)
 
+      const password = await new Password().hash(newPassword)
       const updatedAccount = existingAccount.clone({ password })
       await this._accountRepo.save(updatedAccount, tx)
-      await this._verificationRepo.delete({ token }, tx)
 
       return { userId }
     })

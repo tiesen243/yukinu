@@ -2,14 +2,14 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
 
-import type { UserIdActionDto } from '@/modules/identity/application/dtos/user/user-id-action.dto'
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
+import type { OneUserDto } from '@/modules/identity/types'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class DeleteUserUseCase extends AbstractUseCase<
-  UserIdActionDto.Input,
-  UserIdActionDto.Output
+  OneUserDto.Input,
+  OneUserDto.Output
 > {
   constructor(
     private readonly _db: Database,
@@ -18,10 +18,8 @@ export class DeleteUserUseCase extends AbstractUseCase<
     super()
   }
 
-  public async execute(
-    input: UserIdActionDto.Input,
-  ): Promise<UserIdActionDto.Output> {
-    const user = await this._userRepo.find(input)
+  public async execute(input: OneUserDto.Input): Promise<OneUserDto.Output> {
+    const [user] = await this._userRepo.find([input], {}, { limit: 1 })
     if (!user)
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -31,6 +29,6 @@ export class DeleteUserUseCase extends AbstractUseCase<
     const deletedUser = user.clone({ deletedAt: new Date() })
     await this._userRepo.save(deletedUser)
 
-    return { id: input.id }
+    return deletedUser
   }
 }

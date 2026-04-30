@@ -7,7 +7,6 @@ import { OneUserDto } from '@/modules/identity/application/dtos/user/one-user.dt
 import { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
 import { UpdateProfileDto } from '@/modules/identity/application/dtos/user/update-profile.dto'
 import { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'
-import { UserIdActionDto } from '@/modules/identity/application/dtos/user/user-id-action.dto'
 import { publicProcedure } from '@/trpc'
 
 export const userRouter = (useCases: UseCases) =>
@@ -38,18 +37,18 @@ export const userRouter = (useCases: UseCases) =>
       .mutation(({ input }) => useCases.user.updateUser.execute(input)),
 
     delete: publicProcedure
-      .input(UserIdActionDto.input)
-      .output(UserIdActionDto.output)
+      .input(OneUserDto.input)
+      .output(OneUserDto.output)
       .mutation(({ input }) => useCases.user.deleteUser.execute(input)),
 
     restore: publicProcedure
-      .input(UserIdActionDto.input)
-      .output(UserIdActionDto.output)
+      .input(OneUserDto.input)
+      .output(OneUserDto.output)
       .mutation(({ input }) => useCases.user.restoreUser.execute(input)),
 
     permanentlyDelete: publicProcedure
-      .input(UserIdActionDto.input)
-      .output(UserIdActionDto.output)
+      .input(OneUserDto.input)
+      .output(OneUserDto.output)
       .mutation(({ input }) =>
         useCases.user.permanentlyDeleteUser.execute(input),
       ),

@@ -3,9 +3,9 @@ import type { Database } from '@yukinu/db/drizzle'
 import { TRPCError } from '@trpc/server'
 
 import type { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
+import type { ProfileRepository } from '@/modules/identity/domain/repositories/profile.repository'
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
 
-import type { ProfileRepository } from '@/modules/identity/domain/repositories/profile.repository'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class ProfileUseCase extends AbstractUseCase<
@@ -21,9 +21,9 @@ export class ProfileUseCase extends AbstractUseCase<
   }
 
   public async execute(input: ProfileDto.Input): Promise<ProfileDto.Output> {
-    const [user, profile] = await Promise.all([
-      this._userRepo.find(input),
-      this._profileRepo.find(input),
+    const [[user], [profile]] = await Promise.all([
+      this._userRepo.find([input], {}, { limit: 1 }),
+      this._profileRepo.find([input], {}, { limit: 1 }),
     ])
 
     if (!user || !profile)

@@ -26,9 +26,9 @@ export class UpdateProfileUseCase extends AbstractUseCase<
   ): Promise<UpdateProfileDto.Output> {
     const { id, image, ...profileData } = input
 
-    const [user, profile] = await Promise.all([
-      this._userRepo.find({ id }),
-      this._profileRepo.find({ id }),
+    const [[user], [profile]] = await Promise.all([
+      this._userRepo.find([{ id }], {}, { limit: 1 }),
+      this._profileRepo.find([{ id }], {}, { limit: 1 }),
     ])
 
     if (!user || !profile)

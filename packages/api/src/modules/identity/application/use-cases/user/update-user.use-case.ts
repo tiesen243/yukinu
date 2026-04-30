@@ -23,7 +23,7 @@ export class UpdateUserUseCase extends AbstractUseCase<
   ): Promise<UpdateUserDto.Output> {
     const { id, status, role } = input
 
-    const user = await this._userRepo.find({ id })
+    const [user] = await this._userRepo.find([{ id }], {}, { limit: 1 })
     if (!user)
       throw new TRPCError({
         code: 'NOT_FOUND',

@@ -5,7 +5,6 @@ import {
   asc,
   desc,
   eq,
-  exists,
   gt,
   gte,
   ilike,
@@ -15,7 +14,7 @@ import {
   lt,
   lte,
   ne,
-  notExists,
+  notLike,
   or,
 } from '@yukinu/db/drizzle'
 
@@ -38,8 +37,8 @@ export abstract class DrizzleRepository<
     super()
   }
 
-  public override async all(
-    criterias: Partial<TEntity>[] = [],
+  public override async find(
+    criterias: AbstractRepository.Criteria<TEntity>[] = [],
     orderBy: Partial<Record<keyof TEntity, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx: Database = this._db,
@@ -58,31 +57,16 @@ export abstract class DrizzleRepository<
     if (options.offset) query.offset(options.offset)
 
     const rows = await query
+
     return rows.map((row) => this._mapToEntity(row))
   }
 
   public override count(
-    criterias: Partial<TEntity>[] = [],
+    criterias: AbstractRepository.Criteria<TEntity>[] = [],
     tx: Database = this._db,
   ): Promise<number> {
     const whereClause = this._buildCriteria(criterias)
     return tx.$count(this._table, whereClause)
-  }
-
-  public override async find(
-    criteria: Partial<TEntity>,
-    tx: Database = this._db,
-  ): Promise<TEntity | null> {
-    const whereClause = this._buildCriteria([criteria])
-    if (!whereClause) return null
-
-    const [row] = await tx
-      .select()
-      .from(this._table as never)
-      .where(whereClause)
-      .limit(1)
-
-    return row ? this._mapToEntity(row) : null
   }
 
   public override async save(
@@ -103,10 +87,10 @@ export abstract class DrizzleRepository<
   }
 
   public override async delete(
-    criteria: Partial<TEntity>,
+    criterias: AbstractRepository.Criteria<TEntity>[],
     tx: Database = this._db,
   ): Promise<void> {
-    const whereClause = this._buildCriteria([criteria])
+    const whereClause = this._buildCriteria(criterias)
     if (!whereClause) return
 
     await tx.delete(this._table).where(whereClause)
@@ -119,7 +103,9 @@ export abstract class DrizzleRepository<
     return entity.toJSON() as DrizzleRepository.ExtractType<TTable>
   }
 
-  protected _buildCriteria(criterias: Partial<TEntity>[]): SQL | undefined {
+  protected _buildCriteria(
+    criterias: AbstractRepository.Criteria<TEntity>[],
+  ): SQL | undefined {
     if (criterias.length === 0) return undefined
 
     const expressions = criterias.map((criteria) => {
@@ -132,27 +118,37 @@ export abstract class DrizzleRepository<
     return expressions.length === 1 ? expressions[0] : or(...expressions)
   }
 
-  private _parseCondition<V>(field: keyof TTable, value: V | unknown[]): SQL {
+  private _parseCondition<V>(field: keyof TTable, value: V): SQL {
     const column = this._table[field] as unknown as SQLWrapper
-
-    if (typeof value !== 'string') return eq(column, value)
-    if (value.startsWith('!')) return ne(column, value.slice(1))
 
     if (Array.isArray(value)) return inArray(column, value)
 
-    if (value === 'not null') return isNotNull(column)
-    if (value === 'null') return isNull(column)
+    if (typeof value === 'string') {
+      if (value.startsWith('!')) return ne(column, value.slice(1))
+      if (value === 'not null') return isNotNull(column)
+      if (value === 'null') return isNull(column)
+    }
 
-    if (value === 'not exists') return notExists(column)
-    if (value === 'exists') return exists(column)
+    if (typeof value === 'object' && value !== null) {
+      const conditions: SQL[] = []
+      const _value = value as AbstractRepository.OperatorObject<TEntity>
 
-    if (value.startsWith('>')) return gt(column, value.slice(1))
-    if (value.startsWith('>=')) return gte(column, value.slice(2))
-    if (value.startsWith('<')) return lt(column, value.slice(1))
-    if (value.startsWith('<=')) return lte(column, value.slice(2))
+      if ('$gt' in _value) conditions.push(gt(column, _value.$gt))
+      if ('$gte' in _value) conditions.push(gte(column, _value.$gte))
+      if ('$lt' in _value) conditions.push(lt(column, _value.$lt))
+      if ('$lte' in _value) conditions.push(lte(column, _value.$lte))
 
-    if (value.startsWith('%') || value.endsWith('%'))
-      return ilike(column as never, value)
+      if ('$like' in _value)
+        conditions.push(ilike(column as never, `%${_value.$like}%`))
+      if ('$nlike' in _value)
+        conditions.push(notLike(column as never, `%${_value.$nlike}%`))
+      if ('$startsWith' in _value)
+        conditions.push(ilike(column as never, `${_value.$startsWith}%`))
+      if ('$endsWith' in _value)
+        conditions.push(ilike(column as never, `%${_value.$endsWith}`))
+
+      return and(...conditions) ?? eq(column, value)
+    }
 
     return eq(this._table[field] as never, value)
   }

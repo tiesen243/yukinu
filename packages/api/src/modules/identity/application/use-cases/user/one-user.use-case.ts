@@ -19,9 +19,12 @@ export class OneUserUseCase extends AbstractUseCase<
   }
 
   public async execute(input: OneUserDto.Input): Promise<OneUserDto.Output> {
-    const user = await this._userRepo.find(input)
+    const [user] = await this._userRepo.find([input], {}, { limit: 1 })
     if (!user)
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' })
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: `User with id ${input.id} not found`,
+      })
 
     return user
   }

@@ -48,7 +48,7 @@ export class SignUpUseCase extends AbstractUseCase<
   }
 
   private async _checkExistingUser(email: string, username: string) {
-    const [user] = await this._userRepo.all(
+    const [user] = await this._userRepo.find(
       [{ email }, { username }],
       {},
       { limit: 1 },

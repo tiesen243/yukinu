@@ -23,13 +23,13 @@ export class AllUsersUseCase extends AbstractUseCase<
     const roleClause = role ? { role } : {}
     const whereClauses = search
       ? [
-          { username: `%${search}%`, ...roleClause },
-          { email: `%${search}%`, ...roleClause },
+          { username: { $like: search }, ...roleClause },
+          { email: { $like: search }, ...roleClause },
         ]
       : []
 
     const [users, total] = await Promise.all([
-      this._userRepo.all(
+      this._userRepo.find(
         whereClauses,
         { createdAt: 'desc' },
         { limit, offset },

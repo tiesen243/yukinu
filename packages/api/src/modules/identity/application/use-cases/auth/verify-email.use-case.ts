@@ -24,17 +24,27 @@ export class VerifyEmailUseCase extends AbstractUseCase<
     input: VerifyEmailDto.Input,
   ): Promise<VerifyEmailDto.Output> {
     const { token } = input
-    const verification = await this._verificationRepo.find({
-      token,
-      type: 'email',
-    })
+    const [verification] = await this._verificationRepo.find(
+      [
+        {
+          token,
+          type: 'email',
+        },
+      ],
+      {},
+      { limit: 1 },
+    )
     if (!verification)
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Invalid or expired verification token.',
       })
 
-    const existingUser = await this._userRepo.find({ id: verification.userId })
+    const [existingUser] = await this._userRepo.find(
+      [{ id: verification.userId }],
+      {},
+      { limit: 1 },
+    )
     if (!existingUser)
       throw new TRPCError({
         code: 'NOT_FOUND',
@@ -43,17 +53,16 @@ export class VerifyEmailUseCase extends AbstractUseCase<
 
     const { userId, expiresAt } = verification
     return this._db.transaction(async (tx) => {
-      if (expiresAt < new Date()) {
-        await this._verificationRepo.delete({ token }, tx)
+      await this._verificationRepo.delete([{ token }], tx)
+
+      if (expiresAt < new Date())
         throw new TRPCError({
           code: 'FORBIDDEN',
           message: 'The verification token has expired.',
         })
-      }
 
       const updatedUser = existingUser.clone({ emailVerified: new Date() })
       await this._userRepo.save(updatedUser, tx)
-      await this._verificationRepo.delete({ token }, tx)
 
       return { userId }
     })

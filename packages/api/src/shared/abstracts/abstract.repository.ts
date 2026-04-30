@@ -5,27 +5,56 @@ export abstract class AbstractRepository<
   TPrimaryKey extends string | number = string,
   TTransaction = unknown,
 > {
-  public abstract all(
-    criterias?: Partial<TEntity>[],
+  public abstract find(
+    criterias?: AbstractRepository.Criteria<TEntity>[],
     orderBy?: Partial<Record<keyof TEntity, 'asc' | 'desc'>>,
     options?: { limit?: number; offset?: number },
     tx?: TTransaction,
   ): Promise<TEntity[]>
 
   public abstract count(
-    criterias?: Partial<TEntity>[],
+    criterias?: AbstractRepository.Criteria<TEntity>[],
     tx?: TTransaction,
   ): Promise<number>
-
-  public abstract find(
-    criteria: Partial<TEntity>,
-    tx?: TTransaction,
-  ): Promise<TEntity | null>
 
   public abstract save(entity: TEntity, tx?: TTransaction): Promise<void>
 
   public abstract delete(
-    criteria: Partial<TEntity>,
+    criterias: AbstractRepository.Criteria<TEntity>[],
     tx?: TTransaction,
   ): Promise<void>
+}
+
+export namespace AbstractRepository {
+  interface StringOps {
+    $like?: string
+    $nlike?: string
+    $startsWith?: string
+    $endsWith?: string
+  }
+
+  interface NumberOps {
+    $gt?: number
+    $gte?: number
+    $lt?: number
+    $lte?: number
+  }
+
+  export type OperatorObject<TEntity> = {
+    [K in keyof TEntity]?: TEntity[K] extends string
+      ? StringOps
+      : never | TEntity[K] extends number
+        ? NumberOps
+        : never
+  }
+
+  export type Criteria<TEntity> = {
+    [K in keyof TEntity]?:
+      | TEntity[K]
+      | TEntity[K][]
+      | 'not null'
+      | 'null'
+      | (TEntity[K] extends string ? StringOps : never)
+      | (TEntity[K] extends number ? NumberOps : never)
+  }
 }

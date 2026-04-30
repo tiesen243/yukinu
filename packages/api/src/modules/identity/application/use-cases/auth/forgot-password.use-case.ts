@@ -26,7 +26,7 @@ export class ForgotPasswordUseCase extends AbstractUseCase<
     input: ForgotPasswordDto.Input,
   ): Promise<ForgotPasswordDto.Output> {
     const { email } = input
-    const [user] = await this._userRepo.all([{ email }], {}, { limit: 1 })
+    const [user] = await this._userRepo.find([{ email }], {}, { limit: 1 })
     if (!user?.username) return { id: '' }
 
     const { id, username } = user
