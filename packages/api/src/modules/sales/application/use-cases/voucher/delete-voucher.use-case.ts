@@ -2,9 +2,9 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
 
+import type { OneVoucherDto } from '@/modules/sales/application/dtos/voucher/one-voucher.dto'
 import type { VoucherRepository } from '@/modules/sales/domain/repositories/voucher.repository'
 
-import type { OneVoucherDto } from '@/modules/sales/application/dtos/voucher/one-voucher.dto'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class DeleteVoucherUseCase extends AbstractUseCase<
