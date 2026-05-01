@@ -16,12 +16,18 @@ const createApp = (db: Database) => {
     verificationRepo: identityModule.repos.verificationRepo,
   })
 
-  const salesModule = createSalesModule(db)
   const catalogModule = createCatalogModule(db, {
     vendorMiddleware: merchantModule.middlewares.vendor,
   })
-  const checkoutModule = createCheckoutModule(db)
+
+  const salesModule = createSalesModule(db)
   const financeModule = createFinanceModule(db)
+
+  const checkoutModule = createCheckoutModule(db, {
+    cartItemRepo: salesModule.repos.cartItemRepo,
+    paymentRepo: financeModule.repos.paymentRepo,
+    voucherRepo: salesModule.repos.voucherRepo,
+  })
 
   return createTRPCRouter({
     catalog: catalogModule.router,

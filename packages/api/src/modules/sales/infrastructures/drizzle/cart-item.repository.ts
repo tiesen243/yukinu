@@ -98,6 +98,7 @@ export class DrizzleCartItemRepository
           quantity: row.quantity,
         }),
         {
+          vendorId: row.vendorId,
           productName: row.productName,
           productImage: row.productImage,
           productPrice: row.productPrice,

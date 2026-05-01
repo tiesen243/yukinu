@@ -55,6 +55,10 @@ export const createSalesModule = (db: Database) => {
 
   return {
     useCases,
+    repos: {
+      cartItemRepo,
+      voucherRepo,
+    },
 
     router: {
       banner: bannerRouter(useCases),

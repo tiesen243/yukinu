@@ -14,6 +14,7 @@ export interface CartItemRepository<
 
 export namespace CartItemRepository {
   export interface WithProduct extends CartItemEntity {
+    vendorId: string | null
     productName: string
     productImage: string | null
     productPrice: string

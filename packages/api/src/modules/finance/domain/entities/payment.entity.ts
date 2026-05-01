@@ -21,6 +21,9 @@ export class PaymentEntity extends AbstractEntity<PaymentEntity> {
 }
 
 export namespace PaymentEntity {
-  export type Method = 'bank_transfer' | 'cash_on_delivery'
-  export type Status = 'pending' | 'success' | 'failed'
+  export const methods = ['bank_transfer', 'cash_on_delivery'] as const
+  export type Method = (typeof methods)[number]
+
+  export const statuses = ['pending', 'success', 'failed'] as const
+  export type Status = (typeof statuses)[number]
 }
