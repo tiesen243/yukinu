@@ -1,7 +1,5 @@
 import type { VariantProps } from 'class-variance-authority'
 
-import { mergeProps } from '@base-ui/react/merge-props'
-import { useRender } from '@base-ui/react/use-render'
 import { cva } from 'class-variance-authority'
 
 import { cn } from '@/utils'
@@ -32,29 +30,26 @@ const typographyVariants = cva('text-base font-normal', {
 
 interface TypographyProps
   extends
-    useRender.ComponentProps<'p'>,
-    VariantProps<typeof typographyVariants> {}
+    React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof typographyVariants> {
+  as?: React.ElementType
+}
 
 function Typography({
   className,
   variant = 'p',
-  render,
+  as,
   ...props
 }: TypographyProps) {
-  return useRender({
-    defaultTagName: variant ?? 'p',
-    props: mergeProps<'p'>(
-      {
-        className: cn(typographyVariants({ variant }), className),
-      },
-      props,
-    ),
-    render,
-    state: {
-      slot: 'typography',
-      variant,
-    },
-  })
+  const Comp = as ?? variant ?? 'p'
+
+  return (
+    <Comp
+      data-slot='typography'
+      className={cn(typographyVariants({ variant }), className)}
+      {...props}
+    />
+  )
 }
 
 export { Typography, typographyVariants }

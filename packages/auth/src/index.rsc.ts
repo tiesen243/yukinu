@@ -14,7 +14,7 @@ const {
   signIn,
   signOut,
 
-  handlers,
+  handler,
 } = Auth(authOptions)
 
 /**
@@ -35,5 +35,5 @@ export {
   serializeTokenCookie,
   signIn,
   signOut,
-  handlers,
+  handler,
 }

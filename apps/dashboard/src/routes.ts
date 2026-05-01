@@ -9,53 +9,28 @@ export default [
     route('/uploadthing/*', './routes/api/uploadthing.ts'),
   ]),
 
-  layout('./routes/turnstile/__root.tsx', [
-    route('/login', './routes/turnstile/login.tsx'),
-    route('/invite', './routes/turnstile/invite.tsx'),
+  layout('./components/protected.tsx', [
+    // Mangement routes
+    route('/management/banners', './routes/(management)/banners/_index.tsx'),
+    route('/management/users', './routes/(management)/users/_index.tsx'),
+    route('/management/vouchers', './routes/(management)/vouchers/_index.tsx'),
+    route('/management/orders', './routes/(management)/orders/_index.tsx'),
+
+    // Catalog routes
+    route('/catalog/categories', './routes/(catalog)/categories/_index.tsx'),
+    route('/catalog/products', './routes/(catalog)/products/_index.tsx'),
+
+    // Merchant routes
+    route('/merchant/vendors', './routes/(merchant)/vendors/_index.tsx'),
+    route('/merchant/my-store', './routes/(merchant)/my-store/_index.tsx'),
+    route('/merchant/staffs', './routes/(merchant)/staffs/_index.tsx'),
+    route('/merchant/balance', './routes/(merchant)/balance/_index.tsx'),
+
+    // Other routes
+    index('./routes/(others)/dashboard/_index.tsx'),
+    route('/analytics', './routes/(others)/analytics/_index.tsx'),
+    route('/tickets', './routes/(others)/tickets/_index.tsx'),
   ]),
 
-  layout('./routes/__layout.tsx', [
-    index('./routes/(dashboard)/_index.tsx'),
-    route('/apply-vendor', './routes/apply-vendor.tsx'),
-
-    layout('./routes/admin/__layout.tsx', [
-      route('/admin/banners', './routes/admin/banners.tsx'),
-
-      route('/admin/categories', './routes/admin/categories/_index.tsx'),
-      route('/admin/categories/new', './routes/admin/categories/new.tsx'),
-      route('/admin/categories/:id', './routes/admin/categories/[id].tsx'),
-
-      route('/admin/users', './routes/admin/users/_index.tsx'),
-
-      route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
-      route('/admin/products', './routes/admin/products.tsx'),
-
-      route('/admin/vouchers', './routes/admin/vouchers/_index.tsx'),
-      route('/admin/vouchers/new', './routes/admin/vouchers/new.tsx'),
-      route('/admin/vouchers/:id', './routes/admin/vouchers/[id].tsx'),
-    ]),
-
-    layout('./routes/products/__layout.tsx', [
-      route('/products', './routes/products/_index.tsx'),
-      route('/products/new', './routes/products/new.tsx'),
-      route('/products/:id', './routes/products/[id]/_index.tsx'),
-      route('/products/:id/variant', './routes/products/[id]/variant.tsx'),
-    ]),
-
-    layout('./routes/vendor/__layout.tsx', [
-      route('/vendor/my-store', './routes/vendor/_index.tsx'),
-      route('/vendor/staffs', './routes/vendor/staffs/_index.tsx'),
-      route('/vendor/orders', './routes/vendor/orders/_index.tsx'),
-      route('/vendor/orders/:id', './routes/vendor/orders/[id].tsx'),
-    ]),
-
-    layout('./routes/support/__layout.tsx', [
-      route('/support/tickets', './routes/support/tickets/_index.tsx'),
-      route('/support/tickets/new', './routes/support/tickets/new.tsx'),
-      route('/support/tickets/:id', './routes/support/tickets/[id].tsx'),
-    ]),
-
-    // Others
-    route('/*', './routes/fallback.tsx'),
-  ]),
+  layout('./components/turnstile.tsx', [route('/login', './routes/login.tsx')]),
 ] satisfies RouteConfig

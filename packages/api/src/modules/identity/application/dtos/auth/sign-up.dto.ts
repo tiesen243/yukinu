@@ -6,7 +6,13 @@ export namespace SignUpDto {
   export const input = z
     .object({
       email: z.email('Invalid email address'),
-      username: passwordRegex,
+      username: z
+        .string()
+        .min(3, 'Username must be at least 3 characters long')
+        .regex(
+          /^[a-zA-Z0-9._]+$/,
+          'Username can only contain letters, numbers, underscores, and periods',
+        ),
       password: passwordRegex,
       confirmPassword: passwordRegex,
     })

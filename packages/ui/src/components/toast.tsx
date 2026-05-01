@@ -12,7 +12,7 @@ import {
 import { buttonVariants } from '@/components/button'
 import { cn } from '@/utils'
 
-const toast = ToastPrimitive.createToastManager()
+const toastManager = ToastPrimitive.createToastManager()
 
 type ToastPosition =
   | 'top-left'
@@ -40,7 +40,7 @@ function ToastProvider({
   ...props
 }: ToastProviderProps) {
   return (
-    <ToastPrimitive.Provider toastManager={toast} {...props}>
+    <ToastPrimitive.Provider toastManager={toastManager} {...props}>
       {children}
 
       <ToastPrimitive.Portal data-slot='toaster-portal'>
@@ -166,6 +166,25 @@ function Toaster({
       </ToastPrimitive.Root>
     )
   })
+}
+
+interface Toast {
+  message: React.ReactNode
+  description?: React.ReactNode
+}
+
+const toast = {
+  show: ({ message, description }: Toast) =>
+    toastManager.add({ title: message, description }),
+  success: ({ message, description }: Toast) =>
+    toastManager.add({ type: 'success', title: message, description }),
+  error: ({ message, description }: Toast) =>
+    toastManager.add({ type: 'error', title: message, description }),
+  info: ({ message, description }: Toast) =>
+    toastManager.add({ type: 'info', title: message, description }),
+  warning: ({ message, description }: Toast) =>
+    toastManager.add({ type: 'warning', title: message, description }),
+  promise: toastManager.promise,
 }
 
 export { toast, ToastProvider }

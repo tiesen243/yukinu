@@ -14,5 +14,5 @@ export const {
   signIn,
   signOut,
 
-  handlers,
+  handler,
 } = Auth(authOptions)

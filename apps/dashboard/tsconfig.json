@@ -4,8 +4,14 @@
     "types": ["vite/client", "bun"],
     "rootDirs": [".", "./.react-router/types"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@assets/*": ["./public/assets/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", ".react-router/types/**/*"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "*.config.ts",
+    ".react-router/types/**/*"
+  ]
 }

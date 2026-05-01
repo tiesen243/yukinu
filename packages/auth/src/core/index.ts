@@ -374,7 +374,7 @@ export function Auth(config: AuthConfig) {
   }
 
   const bucket = new TokenBucketRateLimit<string>(10, 60)
-  async function handlers(req: Request): Promise<Response> {
+  async function handler(req: Request): Promise<Response> {
     let response: Response | null = null
 
     const ip =
@@ -420,7 +420,7 @@ export function Auth(config: AuthConfig) {
     signIn,
     signOut,
 
-    handlers,
+    handler,
   }
 }
 

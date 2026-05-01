@@ -13,26 +13,30 @@ import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const authRouter = ({ auth }: UseCases) =>
   ({
-    currentUser: protectedProcedure.query(({ ctx }) => currentUser(ctx.req)),
+    currentUser: protectedProcedure.query(({ ctx }) =>
+      currentUser({ headers: ctx.reqHeaders }),
+    ),
 
     signIn: publicProcedure
       .input(SignInDto.input)
       .output(SignInDto.output)
       .mutation(({ ctx, input }) =>
-        // oxlint-disable-next-line promise/prefer-await-to-then
-        auth.signIn.execute(input).then((result) => {
-          const { accessToken, refreshToken, expiresAt } = result
-          ctx.resHeaders.append(
-            'Set-Cookie',
-            serializeTokenCookie('refreshToken', refreshToken, expiresAt),
-          )
-          ctx.resHeaders.append(
-            'Set-Cookie',
-            serializeTokenCookie('accessToken', accessToken),
-          )
+        auth.signIn
+          .execute({ ...input, reqHeaders: ctx.reqHeaders })
+          // oxlint-disable-next-line promise/prefer-await-to-then
+          .then((result) => {
+            const { accessToken, refreshToken, expiresAt } = result
+            ctx.resHeaders.append(
+              'Set-Cookie',
+              serializeTokenCookie('refreshToken', refreshToken, expiresAt),
+            )
+            ctx.resHeaders.append(
+              'Set-Cookie',
+              serializeTokenCookie('accessToken', accessToken),
+            )
 
-          return result
-        }),
+            return result
+          }),
       ),
 
     signUp: publicProcedure
