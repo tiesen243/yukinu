@@ -5,4 +5,13 @@ export class WishlistItemEntity extends AbstractEntity<WishlistItemEntity> {
 
   declare public userId: string
   declare public productId: string
+
+  public constructor(
+    props: AbstractEntity.EntityProps<WishlistItemEntity, 'addedAt'>,
+  ) {
+    super({
+      addedAt: new Date(),
+      ...props,
+    })
+  }
 }

@@ -1,7 +1,6 @@
+import type { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'
 import type { VariantEntity } from '@/modules/catalog/domain/entities/variant.entity'
 import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
-
-import type { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'
 
 export interface VariantRepository<
   TTransaction = unknown,

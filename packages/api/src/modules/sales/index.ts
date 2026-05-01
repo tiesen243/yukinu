@@ -10,14 +10,19 @@ import { AllVouchersUseCase } from '@/modules/sales/application/use-cases/vouche
 import { DeleteVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/delete-voucher.use-case'
 import { OneVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/one-voucher.use-case'
 import { SaveVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/save-voucher.use-case'
+import { GetWishlistUseCase } from '@/modules/sales/application/use-cases/wishlist/get-wishlist.dto'
+import { ToggleWishlistUseCase } from '@/modules/sales/application/use-cases/wishlist/toggle-wishlist.dto'
 import { DrizzleBannerRepository } from '@/modules/sales/infrastructures/drizzle/banner.repository'
 import { DrizzleVoucherRepository } from '@/modules/sales/infrastructures/drizzle/voucher.repository'
+import { DrizzleWishlistItemRepository } from '@/modules/sales/infrastructures/drizzle/wishlist-item.repository'
 import { bannerRouter } from '@/modules/sales/interfaces/banner.router'
 import { voucherRouter } from '@/modules/sales/interfaces/voucher.router'
+import { wishlistRouter } from '@/modules/sales/interfaces/wishlist.router'
 
 export const createSalesModule = (db: Database) => {
   const bannerRepo = new DrizzleBannerRepository(db)
   const voucherRepo = new DrizzleVoucherRepository(db)
+  const wishlistItemRepo = new DrizzleWishlistItemRepository(db)
 
   const useCases = {
     banner: {
@@ -31,6 +36,10 @@ export const createSalesModule = (db: Database) => {
       save: new SaveVoucherUseCase(db, voucherRepo),
       delete: new DeleteVoucherUseCase(db, voucherRepo),
     },
+    wishlist: {
+      get: new GetWishlistUseCase(db, wishlistItemRepo),
+      toggle: new ToggleWishlistUseCase(db, wishlistItemRepo),
+    },
   } satisfies UseCases
 
   return {
@@ -39,6 +48,7 @@ export const createSalesModule = (db: Database) => {
     router: {
       banner: bannerRouter(useCases),
       voucher: voucherRouter(useCases),
+      wishlist: wishlistRouter(useCases),
     } satisfies TRPCRouterRecord,
   }
 }
