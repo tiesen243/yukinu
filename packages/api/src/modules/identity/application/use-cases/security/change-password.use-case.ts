@@ -30,6 +30,11 @@ export class ChangePasswordUseCase extends AbstractUseCase<
     input: ChangePasswordDto.Input,
   ): Promise<ChangePasswordDto.Output> {
     const { userId, currentPassword, newPassword, isLogout } = input
+    if (!userId)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'User ID is required.',
+      })
 
     const [[user], [account]] = await Promise.all([
       this._userRepo.find([{ id: userId }], {}, { limit: 1 }),

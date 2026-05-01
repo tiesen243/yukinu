@@ -15,12 +15,12 @@ import {
   vendors,
 } from '@yukinu/db/schema'
 
-import type { AllProductDto } from '@/modules/catalog/application/dtos/product/all-product.dto'
 import type { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
 import type { ProductRepository } from '@/modules/catalog/domain/repositories/product.repository'
 import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
 
 import { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'
+import type { AllProductsDto } from '@/modules/catalog/types'
 import { DrizzleRepository } from '@/shared/infrastructures/drizzle.repository'
 
 export class DrizzleProductRepository
@@ -36,7 +36,7 @@ export class DrizzleProductRepository
     orderBy: Partial<Record<keyof ProductEntity, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx: Database = this._db,
-  ): Promise<AllProductDto.Output['products']> {
+  ): Promise<AllProductsDto.Output['products']> {
     const whereClauses = this._buildCriteria(criterias)
     const orderByClauses = this._buildOrderBy(orderBy)
 

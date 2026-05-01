@@ -1,7 +1,8 @@
-import type { AllProductDto } from '@/modules/catalog/application/dtos/product/all-product.dto'
 import type { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
 import type { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'
 import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
+
+import type { AllProductsDto } from '@/modules/catalog/types'
 
 export interface ProductRepository<
   TTransaction = unknown,
@@ -11,7 +12,7 @@ export interface ProductRepository<
     orderBy?: Partial<Record<keyof ProductEntity, 'asc' | 'desc'>>,
     options?: { limit?: number; offset?: number },
     tx?: TTransaction,
-  ): Promise<AllProductDto.Output['products']>
+  ): Promise<AllProductsDto.Output['products']>
 
   findWithDetails(
     id: ProductEntity['id'],
