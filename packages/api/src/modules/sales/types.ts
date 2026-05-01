@@ -2,6 +2,7 @@ import type { AllBannersUseCase } from '@/modules/sales/application/use-cases/ba
 import type { CreateBannerUseCase } from '@/modules/sales/application/use-cases/banner/create-banner.use-case'
 import type { DeleteBannerUseCase } from '@/modules/sales/application/use-cases/banner/delete-banner.use-case'
 import type { GetCartUseCase } from '@/modules/sales/application/use-cases/cart/get-cart.use-case'
+import type { RemoveCartItemUseCase } from '@/modules/sales/application/use-cases/cart/remove-item.dto'
 import type { SaveCartItemUseCase } from '@/modules/sales/application/use-cases/cart/save-cart-item.dto'
 import type { AllVouchersUseCase } from '@/modules/sales/application/use-cases/voucher/all-vouchers.use-case'
 import type { DeleteVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/delete-voucher.use-case'
@@ -9,8 +10,6 @@ import type { OneVoucherUseCase } from '@/modules/sales/application/use-cases/vo
 import type { SaveVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/save-voucher.use-case'
 import type { GetWishlistUseCase } from '@/modules/sales/application/use-cases/wishlist/get-wishlist.dto'
 import type { ToggleWishlistUseCase } from '@/modules/sales/application/use-cases/wishlist/toggle-wishlist.dto'
-
-import type { RemoveCartItemUseCase } from '@/modules/sales/application/use-cases/cart/remove-item.dto'
 
 export interface UseCases {
   banner: {

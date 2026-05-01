@@ -1,8 +1,8 @@
 import type { Database } from '@yukinu/db/drizzle'
 
+import type { GetCartDto } from '@/modules/sales/application/dtos/cart/get-cart.dto'
 import type { CartItemRepository } from '@/modules/sales/domain/repositories/cart-item.repository'
 
-import type { GetCartDto } from '@/modules/sales/application/dtos/cart/get-cart.dto'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class GetCartUseCase extends AbstractUseCase<

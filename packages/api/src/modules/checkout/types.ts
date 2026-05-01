@@ -3,11 +3,11 @@ import type { CheckoutUseCase } from '@/modules/checkout/application/use-cases/o
 import type { OneOrderUseCase } from '@/modules/checkout/application/use-cases/order/one-order.use-case'
 
 export interface UseCases {
-	order: {
-		all: AllOrdersUseCase
-		one: OneOrderUseCase
-		checkout: CheckoutUseCase
-	}
+  order: {
+    all: AllOrdersUseCase
+    one: OneOrderUseCase
+    checkout: CheckoutUseCase
+  }
 }
 
 export { AllOrdersDto } from '@/modules/checkout/application/dtos/order/all-orders.dto'

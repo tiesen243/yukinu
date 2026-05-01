@@ -42,4 +42,3 @@ export class AllOrdersUseCase extends AbstractUseCase<
     return { orders, pagination: { total, page, limit, totalPages } }
   }
 }
-

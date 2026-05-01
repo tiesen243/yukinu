@@ -1,8 +1,7 @@
 import type { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
 import type { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'
-import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
-
 import type { AllProductsDto } from '@/modules/catalog/types'
+import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
 
 export interface ProductRepository<
   TTransaction = unknown,

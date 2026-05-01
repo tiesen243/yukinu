@@ -2,8 +2,8 @@ import type { TRPCRouterRecord } from '@trpc/server'
 
 import type { UseCases } from '@/modules/checkout/types'
 
-import { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 import { AllOrdersDto } from '@/modules/checkout/application/dtos/order/all-orders.dto'
+import { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 import { OneOrderDto } from '@/modules/checkout/application/dtos/order/one-order.dto'
 import { protectedProcedure } from '@/trpc'
 

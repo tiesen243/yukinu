@@ -1,5 +1,6 @@
-import { useMutation } from '@tanstack/react-query'
 import type { AllUsersDto } from '@yukinu/api/identity'
+
+import { useMutation } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogTrigger,

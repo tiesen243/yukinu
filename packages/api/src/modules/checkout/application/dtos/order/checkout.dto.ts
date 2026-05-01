@@ -16,4 +16,3 @@ export namespace CheckoutDto {
   })
   export type Output = z.infer<typeof output>
 }
-

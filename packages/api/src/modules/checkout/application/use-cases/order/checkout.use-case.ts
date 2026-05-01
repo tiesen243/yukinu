@@ -150,4 +150,3 @@ export class CheckoutUseCase extends AbstractUseCase<
     return discount
   }
 }
-

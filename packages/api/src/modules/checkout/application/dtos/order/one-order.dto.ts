@@ -39,4 +39,3 @@ export namespace OneOrderDto {
   })
   export type Output = z.infer<typeof output>
 }
-
