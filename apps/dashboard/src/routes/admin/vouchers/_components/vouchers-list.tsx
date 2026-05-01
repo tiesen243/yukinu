@@ -1,6 +1,7 @@
-import type { AllVouchersOutput } from '@yukinu/validators/general'
+import type { AllVouchersDto } from '@yukinu/api/sales'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { formatDate } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -18,13 +19,11 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { useVoucherQueryStates } from '@/routes/admin/vouchers/_components/hook'
 
 export const VouchersList: React.FC = () => {
-  const trpc = useTRPC()
-  const [query] = useVoucherQueryStates()
+  const { trpc } = useTRPC()
 
-  const { data, isLoading } = useQuery(trpc.voucher.all.queryOptions(query))
+  const { data, isLoading } = useQuery(trpc.sales.voucher.all.queryOptions())
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
@@ -37,13 +36,13 @@ export const VouchersList: React.FC = () => {
       </TableRow>
     ))
 
-  return data?.vouchers.map((voucher) => (
+  return data?.map((voucher) => (
     <TableRow key={voucher.id}>
       <TableCell>{voucher.code}</TableCell>
       <TableCell>{voucher.discountAmount}</TableCell>
       <TableCell>{voucher.discountPercentage}</TableCell>
       <TableCell>{voucher.quantity}</TableCell>
-      <TableCell>{voucher.expiryDate.toLocaleDateString()}</TableCell>
+      <TableCell>{formatDate(voucher.expiredAt)}</TableCell>
       <TableCell className='space-x-2'>
         <Link
           to={`/admin/vouchers/${voucher.id}`}
@@ -58,13 +57,13 @@ export const VouchersList: React.FC = () => {
 }
 
 const DeleteVoucherButton: React.FC<{
-  voucher: AllVouchersOutput['vouchers'][number]
+  voucher: AllVouchersDto.Output[number]
 }> = ({ voucher }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.voucher.delete.mutationOptions(),
+    ...trpc.sales.voucher.delete.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -78,7 +77,7 @@ const DeleteVoucherButton: React.FC<{
         title: 'Failed to delete voucher',
         description: message,
       }),
-    meta: { filter: trpc.voucher.all.queryFilter() },
+    meta: { filter: trpc.sales.voucher.all.queryFilter() },
   })
 
   return (
@@ -103,9 +102,7 @@ const DeleteVoucherButton: React.FC<{
           <Button
             variant='destructive'
             disabled={isPending}
-            onClick={() => {
-              mutate({ id: voucher.id })
-            }}
+            onClick={() => mutate({ code: voucher.code })}
           >
             {isPending ? 'Deleting...' : 'Delete'}
           </Button>

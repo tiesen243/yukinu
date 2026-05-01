@@ -6,10 +6,15 @@ import { useTRPC } from '@/lib/trpc/react'
 import { useVendorQueryStates } from '@/routes/admin/vendors/_components/hook'
 
 export const VendorsPagination: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query, setQuery] = useVendorQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.vendor.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.merchant.vendor.all.queryOptions({
+      ...query,
+      status: query.status ?? undefined,
+    }),
+  )
 
   if (isLoading || !data?.pagination) return
 

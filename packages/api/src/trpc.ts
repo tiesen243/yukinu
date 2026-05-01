@@ -11,7 +11,7 @@ export interface TRPCMeta {
 }
 
 export interface TRPCContext {
-  req: Request
+  reqHeaders: Headers
   resHeaders: Headers
 
   db: Database
@@ -28,7 +28,7 @@ const createTRPCContext = async (
 ) => ({
   ...opts,
   db,
-  session: await verifyAccessToken(opts.req),
+  session: await verifyAccessToken({ headers: opts.reqHeaders }),
 })
 
 const createTRPCRouter = t.router
@@ -38,12 +38,17 @@ const createTRPCMiddleware = t.middleware
 const { createCallerFactory, mergeRouters } = t
 
 const publicProcedure = t.procedure.use(
-  t.middleware(async ({ path, type, next }) => {
+  t.middleware(async ({ ctx, path, type, next }) => {
     const start = performance.now()
+    const source = ctx.reqHeaders.get('x-trpc-source') ?? 'unknown'
+    const by = ctx.session?.userId ?? 'anonymous'
+
     const result = await next()
 
     const end = performance.now()
-    console.log(`[${type}] ${path} took ${(end - start).toFixed(2)}ms`)
+    console.log(
+      `[${type}] ${path} from ${source} by ${by} took ${(end - start).toFixed(2)}ms`,
+    )
 
     return result
   }),

@@ -19,10 +19,10 @@ export const RestoreProductButton: React.FC<{
   productId: string
   isAdmin?: boolean
 }> = ({ productId, isAdmin }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.product.restore.mutationOptions(),
+    ...trpc.catalog.product.restore.mutationOptions(),
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -36,8 +36,8 @@ export const RestoreProductButton: React.FC<{
       }),
     meta: {
       filter: isAdmin
-        ? trpc.product.all.queryFilter()
-        : trpc.product.allByVendor.queryFilter(),
+        ? trpc.catalog.product.all.queryFilter()
+        : trpc.catalog.product.allByVendor.queryFilter(),
     },
   })
 

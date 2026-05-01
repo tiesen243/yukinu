@@ -15,3 +15,10 @@ export class VendorStaffEntity extends AbstractEntity<VendorStaffEntity> {
     })
   }
 }
+
+export namespace VendorStaffEntity {
+  export type WithUser = VendorStaffEntity & {
+    username: string
+    email: string
+  }
+}

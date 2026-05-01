@@ -10,10 +10,15 @@ import { RestoreUserButton } from '@/routes/admin/users/_components/restore-user
 import { useUserQueryStates } from '@/routes/admin/users/hook'
 
 export const UsersList: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query] = useUserQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.user.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.identity.user.all.queryOptions({
+      ...query,
+      role: query.role ?? undefined,
+    }),
+  )
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (

@@ -1,9 +1,12 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
-import { appRouter, createCaller, createTRPCContext } from '@yukinu/api'
-import { createClient } from '@yukinu/api/client'
+import {
+  AppRouter,
+  createTRPCCaller,
+  createTRPCClient,
+  createTRPCContext,
+} from '@yukinu/api'
 import { createQueryClient } from '@yukinu/lib/create-query-client'
-import { env } from '@yukinu/validators/env.vite'
 import { cache } from 'react'
 
 import { getDashboardUrl } from '@/lib/utils'
@@ -11,26 +14,22 @@ import { getDashboardUrl } from '@/lib/utils'
 const createRscContext = cache((opts: { headers: Headers }) => {
   const heads = new Headers(opts.headers)
   heads.set('x-trpc-source', 'rsc')
-
-  return createTRPCContext({ headers: heads })
+  return createTRPCContext({ reqHeaders: heads, resHeaders: new Headers() })
 })
 
 const getQueryClient = cache(createQueryClient)
 
 const createApi = (opts: { headers: Headers }) =>
-  createCaller(() => createRscContext(opts))
+  createTRPCCaller(() => createRscContext(opts)) as ReturnType<
+    typeof createTRPCCaller
+  >
 
 const createTRPC = (opts: { headers: Headers }) =>
   createTRPCOptionsProxy({
     ctx: () => createRscContext(opts),
     queryClient: getQueryClient,
-    router: appRouter,
-    client: createClient({
-      source: 'dashboard-rsc',
-      baseUrl: getDashboardUrl(),
-      useStreaming: env.VITE_TRPC_USE_STREAMING === 'true',
-    }),
-  })
+    client: createTRPCClient('dashboard-rsc', getDashboardUrl()),
+  }) as ReturnType<typeof createTRPCOptionsProxy<AppRouter>>
 
 function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {
   const queryClient = getQueryClient()

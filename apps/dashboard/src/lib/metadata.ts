@@ -1,7 +1,6 @@
 import type { MetaDescriptor } from 'react-router'
 
-import { env } from '@yukinu/validators/env.vite'
-
+import { env } from '@/env'
 import { getDashboardUrl } from '@/lib/utils'
 
 export interface Metadata {

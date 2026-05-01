@@ -9,9 +9,5 @@ export interface VendorStaffRepository<
     orderBy?: Partial<Record<keyof VendorStaffEntity, 'asc' | 'desc'>>,
     options?: { limit?: number; offset?: number },
     tx?: TTransaction,
-  ): Promise<
-    (VendorStaffEntity & {
-      user: { id: string; username: string; email: string }
-    })[]
-  >
+  ): Promise<VendorStaffEntity.WithUser[]>
 }

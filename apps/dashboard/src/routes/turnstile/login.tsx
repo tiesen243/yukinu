@@ -1,4 +1,4 @@
-import { useSession } from '@yukinu/auth/react'
+import { SignInDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -13,10 +13,10 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import * as AuthValidators from '@yukinu/validators/auth'
-import { env } from '@yukinu/validators/env.vite'
 import { Link, useNavigate, useSubmit } from 'react-router'
 
+import { env } from '@/env'
+import { useTRPC } from '@/lib/trpc/react'
 import { getWebUrl } from '@/lib/utils'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
@@ -26,19 +26,19 @@ export const action = ({ request }: Route.ActionArgs) =>
   verifyTurnstile(request)
 
 export default function LoginPage({ actionData }: Route.ComponentProps) {
-  const { signIn } = useSession()
   const navigate = useNavigate()
   const submit = useSubmit()
+  const { trpcClient } = useTRPC()
 
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
-    schema: AuthValidators.loginInput,
+    schema: SignInDto.input,
     onSubmit: (data, event) => {
       if (!(event && event.target instanceof HTMLFormElement)) return
       submit(event.target, { method: 'post' })
 
       if (actionData?.success === false) throw new Error(actionData.message)
-      return signIn(data)
+      return trpcClient.identity.auth.signIn.mutate(data)
     },
     onError: ({ message }) =>
       toast.add({ type: 'error', title: 'Login failed', description: message }),

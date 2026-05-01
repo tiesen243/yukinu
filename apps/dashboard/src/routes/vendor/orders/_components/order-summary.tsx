@@ -1,10 +1,12 @@
-import type { OneOutput } from '@yukinu/validators/order'
+import type { OneOrderDto } from '@yukinu/api/checkout'
 
 import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Card, CardHeader, CardTitle, CardContent } from '@yukinu/ui/card'
 
-export const OrderSummary: React.FC<{ order: OneOutput }> = ({ order }) => (
+export const OrderSummary: React.FC<{ order: OneOrderDto.Output }> = ({
+  order,
+}) => (
   <Card>
     <CardHeader>
       <CardTitle>Order Summary</CardTitle>

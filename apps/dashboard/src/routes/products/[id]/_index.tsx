@@ -22,15 +22,17 @@ import type { Route } from './+types/_index'
 
 export const loader = ({ request, params }: Route.LoaderArgs) => {
   const trpc = createTRPC(request)
-  return getQueryClient().ensureQueryData(trpc.product.one.queryOptions(params))
+  return getQueryClient().ensureQueryData(
+    trpc.catalog.product.one.queryOptions(params),
+  )
 }
 
 export default function ProductsUpdatePage({
   loaderData,
 }: Route.ComponentProps) {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { data } = useQuery({
-    ...trpc.product.one.queryOptions({ id: loaderData.id }),
+    ...trpc.catalog.product.one.queryOptions({ id: loaderData.id }),
     initialData: loaderData,
   })
 

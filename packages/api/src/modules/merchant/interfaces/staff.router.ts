@@ -15,7 +15,7 @@ export const staffRouter = ({ staff }: UseCases) =>
   ({
     all: protectedProcedure
       .use(vendorMiddleware)
-      .input(AllStaffsDto.input)
+      .input(AllStaffsDto.input.omit({ id: true }))
       .output(AllStaffsDto.output)
       .query(({ ctx }) => staff.all.execute({ id: ctx.session.vendorId })),
 

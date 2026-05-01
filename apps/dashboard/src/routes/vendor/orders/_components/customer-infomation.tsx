@@ -1,10 +1,10 @@
-import type { OneOutput } from '@yukinu/validators/order'
+import type { OneOrderDto } from '@yukinu/api/checkout'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
 
-export const CustomerInformation: React.FC<{ user: OneOutput['user'] }> = ({
-  user,
-}) => (
+export const CustomerInformation: React.FC<{
+  user: OneOrderDto.Output['user']
+}> = ({ user }) => (
   <Card>
     <CardHeader>
       <CardTitle>Customer Information</CardTitle>

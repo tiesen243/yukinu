@@ -7,10 +7,15 @@ import { EditVendorButton } from '@/routes/admin/vendors/_components/edit-vendor
 import { useVendorQueryStates } from '@/routes/admin/vendors/_components/hook'
 
 export const VendorsList: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query] = useVendorQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.vendor.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.merchant.vendor.all.queryOptions({
+      ...query,
+      status: query.status ?? undefined,
+    }),
+  )
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
@@ -25,16 +30,17 @@ export const VendorsList: React.FC = () => {
 
   const statusVariantMap = {
     approved: 'success',
-    pending: 'warning',
-    suspended: 'destructive',
+    pending: 'info',
+    suspended: 'warning',
+    rejected: 'destructive',
   } as const
 
   return data?.vendors.map((vendor) => (
     <TableRow key={vendor.id}>
       <TableCell>{vendor.id}</TableCell>
       <TableCell>{vendor.name}</TableCell>
-      <TableCell>{vendor.owner.username}</TableCell>
-      <TableCell>{vendor.staffCount}</TableCell>
+      {/* <TableCell>{vendor.owner.username}</TableCell> */}
+      {/* <TableCell>{vendor.staffCount}</TableCell> */}
       <TableCell>
         <Badge variant={statusVariantMap[vendor.status]}>{vendor.status}</Badge>
       </TableCell>

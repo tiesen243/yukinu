@@ -6,6 +6,15 @@ export class TicketEntity extends AbstractEntity<TicketEntity> {
   declare public status: TicketEntity.Status
 
   declare public userId: string
+
+  public constructor(
+    props: AbstractEntity.EntityProps<TicketEntity, 'status'>,
+  ) {
+    super({
+      status: 'open',
+      ...props,
+    })
+  }
 }
 
 export namespace TicketEntity {

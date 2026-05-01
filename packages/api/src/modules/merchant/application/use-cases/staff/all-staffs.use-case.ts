@@ -12,6 +12,6 @@ export class AllStaffsUseCase extends AbstractUseCase<
   }
 
   public execute(input: AllStaffsDto.Input): Promise<AllStaffsDto.Output> {
-    return this.vendorStaffRepo.find([{ vendorId: input.id }])
+    return this.vendorStaffRepo.findWithUser([{ vendorId: input.id }])
   }
 }

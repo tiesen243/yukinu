@@ -1,6 +1,5 @@
-import type { AllUsersOutput } from '@yukinu/validators/user'
-
 import { useMutation } from '@tanstack/react-query'
+import type { AllUsersDto } from '@yukinu/api/identity'
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -19,13 +18,13 @@ import { useState } from 'react'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const DeleteUserButton: React.FC<{
-  user: AllUsersOutput['users'][number]
+  user: AllUsersDto.Output['users'][number]
 }> = ({ user }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.user.delete.mutationOptions(),
+    ...trpc.identity.user.delete.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -39,7 +38,7 @@ export const DeleteUserButton: React.FC<{
         title: 'Failed to delete user',
         description: message,
       }),
-    meta: { filter: trpc.user.all.queryFilter() },
+    meta: { filter: trpc.identity.user.all.queryFilter() },
   })
 
   return (

@@ -18,15 +18,15 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router'
 
 import { exportCsv } from '@/lib/export-csv'
-import { useTRPCClient } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc/react'
 
 export default function VendorOrdersPage() {
-  const trpcClient = useTRPCClient()
+  const { trpcClient } = useTRPC()
   const navigate = useNavigate()
 
   const { data, status, hasNextPage, fetchNextPage } = useInfiniteQuery({
     queryKey: [['vendor', 'orders'], { type: 'infinite' }],
-    queryFn: ({ pageParam }) => trpcClient.vendor.orders.query(pageParam),
+    queryFn: ({ pageParam }) => trpcClient.checkout.order.all.query(pageParam),
     initialPageParam: { page: 1, limit: 10 },
     getNextPageParam: (lastPage) =>
       lastPage.pagination.page < lastPage.pagination.totalPages

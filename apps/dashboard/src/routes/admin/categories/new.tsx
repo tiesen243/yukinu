@@ -1,6 +1,5 @@
-import type { CreateCategoryInput } from '@yukinu/validators/general'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { SaveCategoryDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -23,23 +22,22 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/toast'
-import { createCategoryInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function CategoriesNewPage() {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
   const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: '', limit: 100 }),
+    trpc.catalog.category.all.queryOptions({ search: '', limit: 100 }),
   )
 
   const { mutateAsync } = useMutation({
-    ...trpc.category.create.mutationOptions(),
-    meta: { filter: trpc.category.all.queryFilter() },
+    ...trpc.catalog.category.save.mutationOptions(),
+    meta: { filter: trpc.catalog.category.all.queryFilter() },
     onSuccess: () =>
       toast.add({ type: 'success', title: 'Category created successfully' }),
     onError: ({ message }) =>
@@ -55,9 +53,9 @@ export default function CategoriesNewPage() {
       parentId: null,
       name: '',
       description: '',
-      image: null,
-    } as CreateCategoryInput,
-    schema: createCategoryInput,
+      image: '',
+    },
+    schema: SaveCategoryDto.input,
     onSubmit: mutateAsync,
     onSuccess: () => void navigate('/admin/categories'),
   })

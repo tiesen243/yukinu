@@ -1,7 +1,7 @@
-import type { TicketStatus } from '@yukinu/validators/general'
-
 import { useQuery } from '@tanstack/react-query'
+import type { OneTicketDto } from '@yukinu/api/identity'
 import { useSession } from '@yukinu/auth/react'
+import { ticketStatusEnum } from '@yukinu/db/schema'
 import { Badge } from '@yukinu/ui/badge'
 import { buttonVariants } from '@yukinu/ui/button'
 import {
@@ -13,7 +13,6 @@ import {
 } from '@yukinu/ui/item'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@yukinu/ui/tabs'
 import { Typography } from '@yukinu/ui/typography'
-import { ticketStatuses } from '@yukinu/validators/general'
 import { Link } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -35,17 +34,17 @@ export default function SupportTicketsPage() {
 
       <Tabs defaultValue='open' className='mt-4'>
         <TabsList variant='line'>
-          {ticketStatuses.map((status) => (
+          {ticketStatusEnum.enumValues.map((status) => (
             <TabsTrigger key={status} value={status}>
               {status}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        {ticketStatuses.map((status) => (
+        {ticketStatusEnum.enumValues.map((status) => (
           <TabsContent key={status} value={status}>
             <ItemGroup>
-              <Tickets status={status} />
+              <Tickets status={status as OneTicketDto.Output['status']} />
             </ItemGroup>
           </TabsContent>
         ))}
@@ -54,9 +53,13 @@ export default function SupportTicketsPage() {
   )
 }
 
-const Tickets: React.FC<{ status: TicketStatus }> = ({ status }) => {
-  const trpc = useTRPC()
-  const { data, isLoading } = useQuery(trpc.ticket.all.queryOptions({ status }))
+const Tickets: React.FC<{ status: OneTicketDto.Output['status'] }> = ({
+  status,
+}) => {
+  const { trpc } = useTRPC()
+  const { data, isLoading } = useQuery(
+    trpc.identity.ticket.all.queryOptions({ status }),
+  )
   const { status: sessionStatus, user } = useSession()
 
   if (isLoading || sessionStatus !== 'authenticated')

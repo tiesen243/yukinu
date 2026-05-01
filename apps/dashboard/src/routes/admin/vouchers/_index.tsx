@@ -13,7 +13,7 @@ import { Link } from 'react-router'
 
 import { SearchForm } from '@/routes/admin/vouchers/_components/search-form'
 import { VouchersList } from '@/routes/admin/vouchers/_components/vouchers-list'
-import { VouchersPagination } from '@/routes/admin/vouchers/_components/vouchers-pagination'
+// import { VouchersPagination } from '@/routes/admin/vouchers/_components/vouchers-pagination'
 
 export default function VouchersPage() {
   return (
@@ -62,7 +62,7 @@ export default function VouchersPage() {
           </TableBody>
         </Table>
 
-        <VouchersPagination />
+        {/* <VouchersPagination /> */}
       </Card>
     </>
   )

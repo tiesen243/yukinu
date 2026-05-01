@@ -37,8 +37,8 @@ export default function VendorsPage() {
             <TableRow>
               <TableHead>ID</TableHead>
               <TableHead>Name</TableHead>
-              <TableHead>Owner</TableHead>
-              <TableHead>Staff Count</TableHead>
+              {/* <TableHead>Owner</TableHead> */}
+              {/* <TableHead>Staff Count</TableHead> */}
               <TableHead>Status</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Updated At</TableHead>

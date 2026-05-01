@@ -1,6 +1,5 @@
-import type { AllCategoriesOutput } from '@yukinu/validators/general'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
+import type { AllCategoriesDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -21,10 +20,12 @@ import { useTRPC } from '@/lib/trpc/react'
 import { useCategoryQueryStates } from '@/routes/admin/categories/_components/hook'
 
 export const CategoriesList: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query] = useCategoryQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.category.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.catalog.category.all.queryOptions(query),
+  )
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
@@ -41,7 +42,7 @@ export const CategoriesList: React.FC = () => {
     <TableRow key={category.id}>
       <TableCell>{category.id}</TableCell>
       <TableCell>{category.name}</TableCell>
-      <TableCell>{category.parent?.name}</TableCell>
+      <TableCell>{category.parentId}</TableCell>
       <TableCell className='space-x-2'>
         <Link
           to={`/admin/categories/${category.id}`}
@@ -56,13 +57,13 @@ export const CategoriesList: React.FC = () => {
 }
 
 const DeleteCategoryButton: React.FC<{
-  category: AllCategoriesOutput['categories'][number]
+  category: AllCategoriesDto.Output['categories'][number]
 }> = ({ category }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.category.delete.mutationOptions(),
+    ...trpc.catalog.category.delete.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -76,7 +77,7 @@ const DeleteCategoryButton: React.FC<{
         title: 'Failed to delete category',
         description: message,
       }),
-    meta: { filter: trpc.category.all.queryFilter() },
+    meta: { filter: trpc.catalog.category.all.queryFilter() },
   })
 
   return (

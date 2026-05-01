@@ -34,9 +34,14 @@ export const ticketRouter = ({ ticket }: UseCases) =>
       .query(({ input }) => ticket.one.execute(input)),
 
     create: protectedProcedure
-      .input(CreateTicketDto.input)
+      .input(CreateTicketDto.input.omit({ userId: true }))
       .output(CreateTicketDto.output)
-      .mutation(({ input }) => ticket.create.execute(input)),
+      .mutation(({ ctx, input }) =>
+        ticket.create.execute({
+          ...input,
+          userId: ctx.session.userId,
+        }),
+      ),
 
     updateStatus: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })

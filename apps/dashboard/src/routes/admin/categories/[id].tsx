@@ -1,6 +1,6 @@
-import type { UpdateCategoryInput } from '@yukinu/validators/general'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
+import type { RouterOutputs } from '@yukinu/api'
+import { SaveCategoryDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -23,40 +23,56 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/toast'
-import { updateCategoryInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
-import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
 import type { Route } from './+types/[id]'
 
-export const loader = ({ request, params }: Route.LoaderArgs) => {
-  const trpc = createTRPC(request)
-  return getQueryClient().ensureQueryData(
-    trpc.category.one.queryOptions(params),
+export default function CategoriesEditPage({ params }: Route.ComponentProps) {
+  const { trpc } = useTRPC()
+
+  const { data: category, refetch } = useQuery(
+    trpc.catalog.category.one.queryOptions({ id: params.id }),
+  )
+
+  const { data: categories } = useQuery(
+    trpc.catalog.category.all.queryOptions({ search: '', limit: 100 }),
+  )
+
+  if (!category || !categories)
+    return (
+      <Card>
+        <FieldSet className='px-4'>
+          <FieldLegend>Loading Category...</FieldLegend>
+          <FieldDescription>
+            Please wait while we load the category details.
+          </FieldDescription>
+        </FieldSet>
+      </Card>
+    )
+
+  return (
+    <CategoriesEditFrom
+      category={category}
+      categories={categories.categories}
+      refetch={refetch}
+    />
   )
 }
 
-export default function CategoriesEditPage({
-  loaderData,
-}: Route.ComponentProps) {
-  const trpc = useTRPC()
+const CategoriesEditFrom: React.FC<{
+  category: RouterOutputs['catalog']['category']['one']
+  categories: RouterOutputs['catalog']['category']['all']['categories']
+  refetch: () => void
+}> = ({ category, categories, refetch }) => {
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
-  const { data: category, refetch } = useQuery({
-    ...trpc.category.one.queryOptions({ id: loaderData.id }),
-    initialData: loaderData,
-  })
-
-  const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: '', limit: 100 }),
-  )
-
   const { mutateAsync } = useMutation({
-    ...trpc.category.update.mutationOptions(),
-    meta: { filter: trpc.category.all.queryFilter() },
+    ...trpc.catalog.category.save.mutationOptions(),
+    meta: { filter: trpc.catalog.category.all.queryFilter() },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -73,12 +89,12 @@ export default function CategoriesEditPage({
   const form = useForm({
     defaultValues: {
       id: category.id,
-      parentId: category.parent?.id,
+      parentId: category.parentId,
       name: category.name,
       description: category.description,
       image: category.image,
-    } as UpdateCategoryInput,
-    schema: updateCategoryInput,
+    },
+    schema: SaveCategoryDto.input,
     onSubmit: mutateAsync,
     onSuccess: () => {
       void navigate('/admin/categories')
@@ -157,7 +173,7 @@ export default function CategoriesEditPage({
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={field.id}>Parent Category</FieldLabel>
                 <NativeSelect {...field} value={value ?? ''}>
-                  {data?.categories
+                  {categories
                     .filter((cat) => cat.id !== category.id)
                     .map((cat) => (
                       <NativeSelectOption key={cat.id} value={cat.id}>

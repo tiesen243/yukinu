@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { SaveVoucherDto } from '@yukinu/api/sales'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -13,18 +14,17 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { createVoucherInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function VouchersNewPage() {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
   const { mutateAsync } = useMutation({
-    ...trpc.voucher.create.mutationOptions(),
-    meta: { filter: trpc.voucher.all.queryFilter() },
+    ...trpc.sales.voucher.save.mutationOptions(),
+    meta: { filter: trpc.sales.voucher.all.queryFilter() },
     onSuccess: () =>
       toast.add({ type: 'success', title: 'Voucher created successfully' }),
     onError: ({ message }) =>
@@ -41,9 +41,9 @@ export default function VouchersNewPage() {
       discountAmount: null,
       discountPercentage: null,
       quantity: 1,
-      expiryDate: new Date().toISOString().split('T')[0] ?? '',
+      expiredAt: new Date(),
     },
-    schema: createVoucherInput,
+    schema: SaveVoucherDto.input,
     onSubmit: mutateAsync,
     onSuccess: () => void navigate('/admin/vouchers'),
   })
@@ -116,11 +116,20 @@ export default function VouchersNewPage() {
           />
 
           <form.Field
-            name='expiryDate'
+            name='expiredAt'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={field.id}>Expiry Date</FieldLabel>
-                <Input {...field} type='date' placeholder='Expiry Date' />
+                <Input
+                  {...field}
+                  value={
+                    field.value
+                      ? new Date(field.value).toISOString().split('T')[0]
+                      : ''
+                  }
+                  type='date'
+                  placeholder='Expiry Date'
+                />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

@@ -8,13 +8,18 @@ import { useProductQueryStates } from '@/routes/products/_components/hook'
 export const ProductsPagination: React.FC<{ isAdmin?: boolean }> = ({
   isAdmin,
 }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query, setQuery] = useProductQueryStates()
 
   const queryOptions = isAdmin
-    ? trpc.product.all.queryOptions
-    : trpc.product.allByVendor.queryOptions
-  const { data, isLoading } = useQuery(queryOptions(query))
+    ? trpc.catalog.product.all.queryOptions
+    : trpc.catalog.product.allByVendor.queryOptions
+  const { data, isLoading } = useQuery(
+    queryOptions({
+      ...query,
+      categoryId: query.categoryId ?? undefined,
+    }),
+  )
 
   if (isLoading || !data?.pagination) return
 

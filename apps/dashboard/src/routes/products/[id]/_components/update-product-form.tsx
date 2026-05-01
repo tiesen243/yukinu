@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { OneProductDto, SaveProductDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -24,26 +25,25 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/toast'
-import * as ProductValidators from '@yukinu/validators/product'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const UpdateProductForm: React.FC<{
-  data: ProductValidators.OneOutput
+  data: OneProductDto.Output
 }> = ({ data }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
   const { data: product, refetch } = useQuery({
-    ...trpc.product.one.queryOptions({ id: data.id }),
+    ...trpc.catalog.product.one.queryOptions({ id: data.id }),
     initialData: data,
   })
   const { data: _data } = useQuery(
-    trpc.category.all.queryOptions({ search: '', limit: 100 }),
+    trpc.catalog.category.all.queryOptions({ search: '', limit: 100 }),
   )
   const { mutateAsync } = useMutation({
-    ...trpc.product.update.mutationOptions(),
-    meta: { filter: trpc.product.allByVendor.queryFilter() },
+    ...trpc.catalog.product.update.mutationOptions(),
+    meta: { filter: trpc.catalog.product.allByVendor.queryFilter() },
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -69,8 +69,8 @@ export const UpdateProductForm: React.FC<{
       stock: product.stock,
       images: product.images.map((img) => img.url),
       attributes: product.attributes,
-    } as Omit<ProductValidators.UpdateInput, 'vendorId'>,
-    schema: ProductValidators.updateInput.omit({ vendorId: true }),
+    } as Omit<SaveProductDto.Input, 'variants' | 'vendorId'>,
+    schema: SaveProductDto.input.omit({ variants: true, vendorId: true }),
     onSubmit: mutateAsync,
   })
 

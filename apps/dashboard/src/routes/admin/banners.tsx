@@ -25,8 +25,8 @@ import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function BannersPage() {
-  const trpc = useTRPC()
-  const { data, isPending } = useQuery(trpc.banner.all.queryOptions())
+  const { trpc } = useTRPC()
+  const { data, isPending } = useQuery(trpc.sales.banner.all.queryOptions())
 
   return (
     <>
@@ -48,10 +48,10 @@ export default function BannersPage() {
 }
 
 const Banner: React.FC<{ id: string; url: string }> = ({ id, url }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.banner.delete.mutationOptions(),
-    meta: { filter: trpc.banner.all.queryFilter() },
+    ...trpc.sales.banner.delete.mutationOptions(),
+    meta: { filter: trpc.sales.banner.all.queryFilter() },
   })
 
   return (
@@ -69,11 +69,11 @@ const Banner: React.FC<{ id: string; url: string }> = ({ id, url }) => {
 const AddBannerButton: React.FC = () => {
   const [open, setOpen] = React.useState(false)
   const [url, setUrl] = React.useState('')
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.banner.create.mutationOptions(),
-    meta: { filter: trpc.banner.all.queryFilter() },
+    ...trpc.sales.banner.create.mutationOptions(),
+    meta: { filter: trpc.sales.banner.all.queryFilter() },
     onSuccess: () => {
       toast.add({ type: 'success', title: 'Banner added' })
       setOpen(false)

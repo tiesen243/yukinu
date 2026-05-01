@@ -18,13 +18,13 @@ import { useState } from 'react'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const InviteStaffButton: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState('')
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendorStaff.invite.mutationOptions(),
-    meta: { filter: trpc.vendorStaff.all.queryFilter() },
+    ...trpc.merchant.staff.invite.mutationOptions(),
+    meta: { filter: trpc.merchant.staff.all.queryFilter() },
     onSuccess: () => {
       toast.add({
         type: 'success',

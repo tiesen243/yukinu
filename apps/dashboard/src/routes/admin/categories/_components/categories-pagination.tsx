@@ -6,10 +6,12 @@ import { useTRPC } from '@/lib/trpc/react'
 import { useCategoryQueryStates } from '@/routes/admin/categories/_components/hook'
 
 export const CategoriesPagination: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query, setQuery] = useCategoryQueryStates()
 
-  const { data, isLoading } = useQuery(trpc.category.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.catalog.category.all.queryOptions(query),
+  )
 
   if (isLoading || !data?.pagination) return
 

@@ -1,4 +1,4 @@
-import { env } from '@yukinu/validators/env'
+import { env } from '@/env'
 
 interface TurnstileResponse {
   success: boolean

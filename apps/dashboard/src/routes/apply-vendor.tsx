@@ -1,3 +1,4 @@
+import { SaveVendorDto } from '@yukinu/api/merchant'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -19,23 +20,17 @@ import {
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/toast'
-import * as VendorValidators from '@yukinu/validators/vendor'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
-import { useTRPCClient } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc/react'
 
 export default function AppVendorPage() {
-  const trpc = useTRPCClient()
+  const { trpcClient } = useTRPC()
 
   const form = useForm({
-    defaultValues: {
-      name: '',
-      description: null,
-      image: null,
-      address: null,
-    } as Omit<VendorValidators.CreateVendorInput, 'ownerId'>,
-    schema: VendorValidators.createVendorInput.omit({ ownerId: true }),
-    onSubmit: trpc.vendor.create.mutate,
+    defaultValues: { name: '', description: '', image: '', address: '' },
+    schema: SaveVendorDto.input.omit({ ownerId: true }),
+    onSubmit: trpcClient.merchant.vendor.create.mutate,
     onSuccess: () =>
       toast.add({
         type: 'success',

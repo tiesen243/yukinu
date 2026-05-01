@@ -9,13 +9,18 @@ import { PermanentDeleteProductButton } from '@/routes/products/_components/perm
 import { RestoreProductButton } from '@/routes/products/_components/restore-product-button'
 
 export const ProductsList: React.FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query] = useProductQueryStates()
 
   const queryOptions = isAdmin
-    ? trpc.product.all.queryOptions
-    : trpc.product.allByVendor.queryOptions
-  const { data, isLoading } = useQuery(queryOptions(query))
+    ? trpc.catalog.product.all.queryOptions
+    : trpc.catalog.product.allByVendor.queryOptions
+  const { data, isLoading } = useQuery(
+    queryOptions({
+      ...query,
+      categoryId: query.categoryId ?? undefined,
+    }),
+  )
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (

@@ -22,13 +22,18 @@ import {
 } from '@/routes/products/_components/search-form'
 
 export function ProductTable({ isAdmin }: { isAdmin?: boolean }) {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
   const [query] = useProductQueryStates()
   const queryOptions = isAdmin
-    ? trpc.product.all.queryOptions
-    : trpc.product.allByVendor.queryOptions
-  const { data, isLoading } = useQuery(queryOptions(query))
+    ? trpc.catalog.product.all.queryOptions
+    : trpc.catalog.product.allByVendor.queryOptions
+  const { data, isLoading } = useQuery(
+    queryOptions({
+      ...query,
+      categoryId: query.categoryId ?? undefined,
+    }),
+  )
 
   return (
     <>

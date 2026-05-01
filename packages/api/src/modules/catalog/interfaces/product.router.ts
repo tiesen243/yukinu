@@ -20,6 +20,17 @@ export const productRouter = (
       .output(AllProductsDto.output)
       .query(({ input }) => product.all.execute(input)),
 
+    allByVendor: protectedProcedure
+      .use(deps.vendorMiddleware)
+      .input(AllProductsDto.input)
+      .output(AllProductsDto.output)
+      .query(({ ctx, input }) =>
+        product.all.execute({
+          ...input,
+          vendorId: ctx.session.vendorId,
+        }),
+      ),
+
     one: publicProcedure
       .input(OneProductDto.input)
       .output(OneProductDto.output)

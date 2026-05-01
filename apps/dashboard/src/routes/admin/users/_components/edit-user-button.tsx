@@ -1,7 +1,7 @@
-import type { Role } from '@yukinu/validators/auth'
-import type { AllUsersOutput } from '@yukinu/validators/user'
+import type { AllUsersDto } from '@yukinu/api/identity'
 
 import { useMutation } from '@tanstack/react-query'
+import { userRoleEnum, userStatusEnum } from '@yukinu/db/schema'
 import { cn } from '@yukinu/ui'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -19,21 +19,20 @@ import { Label } from '@yukinu/ui/label'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/toast'
-import { roles, userStatuses } from '@yukinu/validators/auth'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 export const EditUserButton: React.FC<{
-  user: AllUsersOutput['users'][number]
+  user: AllUsersDto.Output['users'][number]
 }> = ({ user }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState(user.status)
   const [role, setRole] = useState(user.role)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.user.update.mutationOptions(),
+    ...trpc.identity.user.update.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -47,7 +46,7 @@ export const EditUserButton: React.FC<{
         title: 'Failed to update user',
         description: message,
       }),
-    meta: { filter: trpc.user.all.queryFilter() },
+    meta: { filter: trpc.identity.user.all.queryFilter() },
   })
 
   return (
@@ -69,10 +68,12 @@ export const EditUserButton: React.FC<{
               id='role'
               value={role}
               onChange={(e) => {
-                setRole(e.target.value as Role)
+                setRole(
+                  e.target.value as AllUsersDto.Output['users'][number]['role'],
+                )
               }}
             >
-              {roles.map((r) => (
+              {userRoleEnum.enumValues.map((r) => (
                 <NativeSelectOption key={r} label={r} value={r} />
               ))}
             </NativeSelect>
@@ -81,7 +82,7 @@ export const EditUserButton: React.FC<{
           <Field>
             <FieldLabel>Status</FieldLabel>
             <RadioGroup value={status} onValueChange={setStatus as never}>
-              {userStatuses.map((st) => (
+              {userStatusEnum.enumValues.map((st) => (
                 <Label
                   key={st}
                   htmlFor={st}

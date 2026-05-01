@@ -22,11 +22,7 @@ export class DrizzleVendorStaffRepository
     orderBy: Partial<Record<keyof VendorStaffEntity, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx: Database = this._db,
-  ): Promise<
-    (VendorStaffEntity & {
-      user: { id: string; username: string; email: string }
-    })[]
-  > {
+  ): Promise<VendorStaffEntity.WithUser[]> {
     const whereClauses = this._buildCriteria(criterias)
     const orderByClause = this._buildOrderBy(orderBy)
 
@@ -44,7 +40,8 @@ export class DrizzleVendorStaffRepository
     const rows = await query
     return rows.map((row) =>
       Object.assign(this._mapToEntity(row.vendor_staffs), {
-        user: row.users,
+        username: row.users.username,
+        email: row.users.email,
       }),
     )
   }

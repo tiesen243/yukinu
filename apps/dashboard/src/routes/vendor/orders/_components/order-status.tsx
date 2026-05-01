@@ -1,11 +1,13 @@
-import type { OneOutput } from '@yukinu/validators/order'
+import type { OneOrderDto } from '@yukinu/api/checkout'
 
 import { STATUS_COLORS } from '@yukinu/lib/constants'
 import { formatDate } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
 
-export const OrderStatus: React.FC<{ order: OneOutput }> = ({ order }) => (
+export const OrderStatus: React.FC<{ order: OneOrderDto.Output }> = ({
+  order,
+}) => (
   <Card>
     <CardHeader>
       <CardTitle>Order Status</CardTitle>

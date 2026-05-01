@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { RecreateVariantDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -20,7 +21,6 @@ import {
   InputGroupInput,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/toast'
-import * as ProductValidators from '@yukinu/validators/product'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -30,12 +30,12 @@ import type { Route } from './+types/variant'
 export default function CreateProductVariantsPage({
   params,
 }: Route.ComponentProps) {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
   const { mutateAsync } = useMutation({
-    ...trpc.productVariant.recreate.mutationOptions(),
-    meta: { filter: trpc.product.one.queryFilter({ id: params.id }) },
+    ...trpc.catalog.variant.recreate.mutationOptions(),
+    meta: { filter: trpc.catalog.product.one.queryFilter({ id: params.id }) },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -51,10 +51,11 @@ export default function CreateProductVariantsPage({
 
   const form = useForm({
     defaultValues: {
+      vendorId: null,
       id: params.id,
       variants: [{ name: '', options: [''] }],
-    } as Omit<ProductValidators.RecreateVariantInput, 'vendorId'>,
-    schema: ProductValidators.recreateVariantInput.omit({ vendorId: true }),
+    },
+    schema: RecreateVariantDto.input.omit({ vendorId: true }),
     onSubmit: mutateAsync,
     onSuccess: () => void navigate(`/products/${params.id}`),
   })

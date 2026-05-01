@@ -1,4 +1,7 @@
+import type { OneVoucherDto } from '@yukinu/api/sales'
+
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { SaveVoucherDto } from '@yukinu/api/sales'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -13,36 +16,43 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { updateVoucherInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
-import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
 import type { Route } from './+types/[id]'
 
-export const loader = ({ request, params }: Route.LoaderArgs) => {
-  const trpc = createTRPC(request)
-  return getQueryClient().ensureQueryData(
-    trpc.voucher.one.queryOptions({ id: params.id }),
-  )
-}
+export default function VouchersEditPage({ params }: Route.ComponentProps) {
+  const { trpc } = useTRPC()
 
-export default function VouchersEditPage({ loaderData }: Route.ComponentProps) {
-  const trpc = useTRPC()
-  const navigate = useNavigate()
-
-  const {
-    data: { expiryDate, ...voucher },
-    refetch,
-  } = useQuery({
-    ...trpc.voucher.one.queryOptions({ id: loaderData.id }),
-    initialData: loaderData,
+  const { data, isLoading } = useQuery({
+    ...trpc.sales.voucher.one.queryOptions({ code: params.id }),
   })
 
+  if (isLoading || !data)
+    return (
+      <Card>
+        <FieldSet className='px-4'>
+          <FieldLegend>Loading Voucher...</FieldLegend>
+          <FieldDescription>
+            Please wait while we load the voucher details.
+          </FieldDescription>
+        </FieldSet>
+      </Card>
+    )
+
+  return <VouchersEditForm voucher={data} />
+}
+
+const VouchersEditForm: React.FC<{ voucher: OneVoucherDto.Output }> = ({
+  voucher,
+}) => {
+  const { trpc } = useTRPC()
+  const navigate = useNavigate()
+
   const { mutateAsync } = useMutation({
-    ...trpc.voucher.update.mutationOptions(),
-    meta: { filter: trpc.voucher.all.queryFilter() },
+    ...trpc.sales.voucher.save.mutationOptions(),
+    meta: { filter: trpc.sales.voucher.all.queryFilter() },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -57,16 +67,10 @@ export default function VouchersEditPage({ loaderData }: Route.ComponentProps) {
   })
 
   const form = useForm({
-    defaultValues: {
-      ...voucher,
-      expiryDate: expiryDate.toISOString().split('T')[0] ?? '',
-    },
-    schema: updateVoucherInput,
+    defaultValues: voucher,
+    schema: SaveVoucherDto.input,
     onSubmit: mutateAsync,
-    onSuccess: () => {
-      void navigate('/admin/vouchers')
-      void refetch()
-    },
+    onSuccess: () => navigate('/admin/vouchers'),
   })
 
   return (
@@ -132,11 +136,20 @@ export default function VouchersEditPage({ loaderData }: Route.ComponentProps) {
           />
 
           <form.Field
-            name='expiryDate'
+            name='expiredAt'
             render={({ meta, field }) => (
               <Field data-invalid={meta.errors.length > 0}>
                 <FieldLabel htmlFor={field.id}>Expiry Date</FieldLabel>
-                <Input {...field} type='date' placeholder='Expiry Date' />
+                <Input
+                  {...field}
+                  value={
+                    field.value
+                      ? new Date(field.value).toISOString().split('T')[0]
+                      : ''
+                  }
+                  type='date'
+                  placeholder='Expiry Date'
+                />
                 <FieldError id={meta.errorId} errors={meta.errors} />
               </Field>
             )}

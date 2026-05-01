@@ -1,6 +1,5 @@
-import type { TicketStatus } from '@yukinu/validators/general'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
+import type { OneTicketDto } from '@yukinu/api/identity'
 import { cn } from '@yukinu/ui'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
@@ -18,7 +17,6 @@ import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/toast'
 import { Typography } from '@yukinu/ui/typography'
-import { ticketStatuses } from '@yukinu/validators/general'
 import * as React from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
@@ -27,12 +25,14 @@ import { badgeVariants } from '@/routes/support/tickets/_index'
 import type { Route } from './+types/[id]'
 
 export default function SupportTicketDetails({ params }: Route.ComponentProps) {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
-  const { data, isLoading } = useQuery(trpc.ticket.one.queryOptions(params))
+  const { data, isLoading } = useQuery(
+    trpc.identity.ticket.one.queryOptions(params),
+  )
   const { mutate, isPending } = useMutation({
-    ...trpc.ticket.updateStatus.mutationOptions(),
-    meta: { filter: trpc.ticket.all.queryFilter() },
+    ...trpc.identity.ticket.updateStatus.mutationOptions(),
+    meta: { filter: trpc.identity.ticket.all.queryFilter() },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -47,7 +47,7 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
   })
 
   const [open, setOpen] = React.useState(false)
-  const [status, setStatus] = React.useState<TicketStatus>(
+  const [status, setStatus] = React.useState<OneTicketDto.Output['status']>(
     () => data?.status ?? 'open',
   )
 
@@ -83,7 +83,7 @@ export default function SupportTicketDetails({ params }: Route.ComponentProps) {
             </DialogHeader>
 
             <RadioGroup value={status} onValueChange={setStatus as never}>
-              {ticketStatuses.map((st) => (
+              {['open', 'closed', 'resolved'].map((st) => (
                 <Label
                   key={st}
                   htmlFor={st}

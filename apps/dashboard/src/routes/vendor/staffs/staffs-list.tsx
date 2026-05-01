@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { formatDate } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -17,8 +18,8 @@ import { useState } from 'react'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const StaffsList: React.FC = () => {
-  const trpc = useTRPC()
-  const { data, isLoading } = useQuery(trpc.vendorStaff.all.queryOptions({}))
+  const { trpc } = useTRPC()
+  const { data, isLoading } = useQuery(trpc.merchant.staff.all.queryOptions({}))
 
   if (isLoading)
     return Array.from({ length: 5 }, (_, index) => (
@@ -32,13 +33,13 @@ export const StaffsList: React.FC = () => {
     ))
 
   return data?.map((staff) => (
-    <TableRow key={staff.id}>
-      <TableCell>{staff.id}</TableCell>
+    <TableRow key={staff.userId}>
+      <TableCell>{staff.userId}</TableCell>
       <TableCell>{staff.username}</TableCell>
       <TableCell>{staff.email}</TableCell>
-      <TableCell>{staff.assignedAt.toLocaleDateString()}</TableCell>
+      <TableCell>{formatDate(staff.assignedAt)}</TableCell>
       <TableCell>
-        <RemoveStaffButton staffId={staff.id} username={staff.username} />
+        <RemoveStaffButton staffId={staff.userId} username={staff.username} />
       </TableCell>
     </TableRow>
   ))
@@ -48,11 +49,11 @@ const RemoveStaffButton: React.FC<{
   staffId: string
   username: string
 }> = ({ staffId, username }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendorStaff.remove.mutationOptions(),
+    ...trpc.merchant.staff.remove.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -67,7 +68,7 @@ const RemoveStaffButton: React.FC<{
         title: 'Failed to remove staff member.',
         description: message,
       }),
-    meta: { filter: trpc.vendorStaff.all.queryFilter() },
+    meta: { filter: trpc.merchant.staff.all.queryFilter() },
   })
 
   return (

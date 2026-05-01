@@ -1,4 +1,4 @@
-import type { AllVendorsOutput } from '@yukinu/validators/vendor'
+import type { AllVendorsDto } from '@yukinu/api/merchant'
 
 import { useMutation } from '@tanstack/react-query'
 import { cn } from '@yukinu/ui'
@@ -16,20 +16,19 @@ import {
 import { Label } from '@yukinu/ui/label'
 import { RadioGroup, RadioGroupItem } from '@yukinu/ui/radio-group'
 import { toast } from '@yukinu/ui/toast'
-import { vendorStatuses } from '@yukinu/validators/vendor'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 export const EditVendorButton: React.FC<{
-  vendor: AllVendorsOutput['vendors'][number]
+  vendor: AllVendorsDto.Output['vendors'][number]
 }> = ({ vendor }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
   const [status, setStatus] = useState(vendor.status)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendor.updateStatus.mutationOptions(),
+    ...trpc.merchant.vendor.updateStatus.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -43,7 +42,7 @@ export const EditVendorButton: React.FC<{
         title: 'Failed to update vendor status',
         description: message,
       }),
-    meta: { filter: trpc.vendor.all.queryFilter() },
+    meta: { filter: trpc.merchant.vendor.all.queryFilter() },
   })
 
   return (
@@ -61,7 +60,7 @@ export const EditVendorButton: React.FC<{
         </DialogHeader>
 
         <RadioGroup value={status} onValueChange={setStatus as never}>
-          {vendorStatuses.map((st) => (
+          {['approved', 'pending', 'rejected', 'suspended'].map((st) => (
             <Label
               key={st}
               htmlFor={st}
@@ -69,8 +68,9 @@ export const EditVendorButton: React.FC<{
                 'flex cursor-pointer items-center space-x-2 rounded-md border border-current/40 bg-current/5 px-2 py-4 capitalize transition-colors hover:bg-current/10',
                 {
                   'text-success': st === 'approved',
-                  'text-warning': st === 'pending',
-                  'text-destructive': st === 'suspended',
+                  'text-info': st === 'pending',
+                  'text-warning': st === 'suspended',
+                  'text-destructive': st === 'rejected',
                 },
               )}
             >
@@ -84,7 +84,7 @@ export const EditVendorButton: React.FC<{
           <DialogClose disabled={isPending}>Cancel</DialogClose>
           <Button
             onClick={() => {
-              mutate({ id: vendor.id, status })
+              mutate({ id: vendor.id, ownerId: vendor.ownerId ?? '', status })
             }}
             disabled={isPending || status === vendor.status}
           >

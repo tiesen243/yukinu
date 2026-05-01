@@ -1,4 +1,3 @@
-import { vendorStatuses } from '@yukinu/validators/vendor'
 import {
   parseAsInteger,
   parseAsString,
@@ -7,8 +6,8 @@ import {
 } from 'nuqs'
 
 const parser = {
-  search: parseAsString,
-  status: parseAsStringEnum([...vendorStatuses]),
+  search: parseAsString.withDefault(''),
+  status: parseAsStringEnum(['pending', 'approved', 'rejected', 'suspended']),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),
 }

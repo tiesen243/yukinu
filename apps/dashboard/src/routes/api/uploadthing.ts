@@ -1,5 +1,3 @@
-// oxlint-disable prefer-destructuring
-
 import { createRemixRouteHandler } from '@yukinu/uploadthing'
 import { ourFileRouter, config } from '@yukinu/uploadthing/config'
 

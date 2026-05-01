@@ -6,13 +6,13 @@ import { useTRPC } from '@/lib/trpc/react'
 import { useUserQueryStates } from '@/routes/admin/users/hook'
 
 export const UsersPagination: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query, setQuery] = useUserQueryStates()
 
   const { data, isLoading } = useQuery(
-    trpc.user.all.queryOptions({
+    trpc.identity.user.all.queryOptions({
       ...query,
-      role: query.role ?? null,
+      role: query.role ?? undefined,
     }),
   )
 

@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { SaveProductDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -24,22 +25,21 @@ import {
 } from '@yukinu/ui/input-group'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
 import { toast } from '@yukinu/ui/toast'
-import * as ProductValidators from '@yukinu/validators/product'
 import { useNavigate } from 'react-router'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function ProductsNewPage() {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
   const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: '', limit: 100 }),
+    trpc.catalog.category.all.queryOptions({ search: '', limit: 100 }),
   )
   const { mutateAsync } = useMutation({
-    ...trpc.product.create.mutationOptions(),
-    meta: { filter: trpc.product.allByVendor.queryFilter() },
+    ...trpc.catalog.product.create.mutationOptions(),
+    meta: { filter: trpc.catalog.product.allByVendor.queryFilter() },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -63,8 +63,8 @@ export default function ProductsNewPage() {
       images: [''],
       attributes: [],
       variants: [],
-    } as Omit<ProductValidators.CreateInput, 'vendorId'>,
-    schema: ProductValidators.createInput.omit({ vendorId: true }),
+    } as Omit<SaveProductDto.Input, 'vendorId'>,
+    schema: SaveProductDto.input.omit({ vendorId: true }),
     onSubmit: mutateAsync,
     onSuccess: () => void navigate('/products'),
   })

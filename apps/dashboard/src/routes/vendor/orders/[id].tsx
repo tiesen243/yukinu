@@ -45,9 +45,9 @@ export default function VendorOrderDetailPage({
 }
 
 const OrderDetail: React.FC<{ id: number }> = ({ id }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { data: order, isLoading } = useQuery(
-    trpc.vendor.order.queryOptions({ id }),
+    trpc.checkout.order.one.queryOptions({ id }),
   )
 
   if (isLoading || !order)

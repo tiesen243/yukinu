@@ -1,4 +1,4 @@
-import { env } from '@yukinu/validators/env.vite'
+import { env } from '@/env'
 
 export function getDashboardUrl(): string {
   if (typeof window !== 'undefined') return window.location.origin

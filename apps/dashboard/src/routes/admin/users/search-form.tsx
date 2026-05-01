@@ -1,3 +1,4 @@
+import { userRoleEnum } from '@yukinu/db/schema'
 import { Button } from '@yukinu/ui/button'
 import { SearchIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
@@ -9,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@yukinu/ui/select'
-import { roles } from '@yukinu/validators/auth'
 
 import { useUserQueryStates } from '@/routes/admin/users/hook'
 
@@ -46,7 +46,7 @@ export const SearchForm: React.FC = () => {
         name='role'
         defaultValue={query.role ?? ''}
         items={[
-          ...roles.map((role) => ({
+          ...userRoleEnum.enumValues.map((role) => ({
             label: role.split('_').join(' '),
             value: role,
           })),
@@ -59,7 +59,7 @@ export const SearchForm: React.FC = () => {
         <SelectContent>
           <SelectGroup>
             <SelectItem value=''>all</SelectItem>
-            {roles.map((role) => (
+            {userRoleEnum.enumValues.map((role) => (
               <SelectItem key={role} value={role}>
                 {role.split('_').join(' ')}
               </SelectItem>

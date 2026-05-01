@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { CreateTicketDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -14,18 +15,17 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { Textarea } from '@yukinu/ui/textarea'
 import { toast } from '@yukinu/ui/toast'
-import { createTicketInput } from '@yukinu/validators/general'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 export default function NewSupportTicketPage() {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
   const { mutateAsync } = useMutation({
-    ...trpc.ticket.create.mutationOptions(),
-    meta: { filter: trpc.ticket.all.queryFilter() },
+    ...trpc.identity.ticket.create.mutationOptions(),
+    meta: { filter: trpc.identity.ticket.all.queryFilter() },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -40,11 +40,8 @@ export default function NewSupportTicketPage() {
   })
 
   const form = useForm({
-    defaultValues: {
-      subject: '',
-      description: '',
-    },
-    schema: createTicketInput.omit({ userId: true }),
+    defaultValues: { subject: '', description: '' },
+    schema: CreateTicketDto.input.omit({ userId: true }),
     onSubmit: mutateAsync,
     onSuccess: () => void navigate('/support/tickets'),
   })

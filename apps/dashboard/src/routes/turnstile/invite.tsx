@@ -8,9 +8,9 @@ import {
   FieldSet,
 } from '@yukinu/ui/field'
 import { toast } from '@yukinu/ui/toast'
-import { env } from '@yukinu/validators/env.vite'
 import { useNavigate, useSearchParams, useSubmit } from 'react-router'
 
+import { env } from '@/env'
 import { useTRPC } from '@/lib/trpc/react'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
@@ -25,10 +25,10 @@ export default function InvitePage({ actionData }: Route.ComponentProps) {
 
   const navigate = useNavigate()
   const submit = useSubmit()
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.vendorStaff.acceptInvitation.mutationOptions(),
+    ...trpc.merchant.staff.acceptInvitation.mutationOptions(),
     onError: ({ message }) =>
       toast.add({
         type: 'error',

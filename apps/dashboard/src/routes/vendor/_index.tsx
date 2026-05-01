@@ -1,4 +1,7 @@
-import { useMutation } from '@tanstack/react-query'
+import type { OneVendorDto } from '@yukinu/api/merchant'
+
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { SaveVendorDto } from '@yukinu/api/merchant'
 import { Button } from '@yukinu/ui/button'
 import { Card } from '@yukinu/ui/card'
 import {
@@ -20,38 +23,45 @@ import {
   InputGroupTextarea,
 } from '@yukinu/ui/input-group'
 import { toast } from '@yukinu/ui/toast'
-import * as VendorValidators from '@yukinu/validators/vendor'
 
 import { InputGroupUploadButton } from '@/components/input-group-upload-button'
 import { useTRPC } from '@/lib/trpc/react'
-import { createTRPC, getQueryClient } from '@/lib/trpc/rsc'
 
 import type { Route } from './+types/_index'
 
-export const loader = ({ request }: Route.LoaderArgs) => {
-  const trpc = createTRPC(request)
-  return getQueryClient().ensureQueryData(trpc.vendor.me.queryOptions({}))
+export default function MyStorePage(_: Route.ComponentProps) {
+  const { trpc } = useTRPC()
+  const { data, isLoading } = useQuery(trpc.merchant.vendor.me.queryOptions())
+
+  if (isLoading || !data)
+    return (
+      <Card>
+        <p>Loading...</p>
+      </Card>
+    )
+
+  return <MyStoreContent data={data} />
 }
 
-export default function MyStorePage({ loaderData }: Route.ComponentProps) {
-  const trpc = useTRPC()
+const MyStoreContent: React.FC<{ data: OneVendorDto.Output }> = ({ data }) => {
+  const { trpc } = useTRPC()
   const { mutateAsync } = useMutation({
-    ...trpc.vendor.update.mutationOptions(),
-    meta: { filter: trpc.vendor.me.queryFilter() },
+    ...trpc.merchant.vendor.update.mutationOptions(),
+    meta: { filter: trpc.merchant.vendor.me.queryFilter() },
   })
 
   const form = useForm({
     defaultValues: {
-      name: loaderData.name,
-      description: loaderData.description,
-      image: loaderData.image,
-      address: loaderData.address,
-      contact: loaderData.contact,
-      payoutBankName: loaderData.payoutBankName,
-      payoutAccountName: loaderData.payoutAccountName,
-      payoutAccountNumber: loaderData.payoutAccountNumber,
-    } as Omit<VendorValidators.UpdateVendorInput, 'id'>,
-    schema: VendorValidators.updateVendorInput.omit({ id: true }),
+      name: data.name,
+      description: data.description ?? '',
+      image: data.image ?? '',
+      address: data.address ?? '',
+      contact: data.contact ?? '',
+      payoutBankName: data.payoutBankName ?? '',
+      payoutAccountName: data.payoutAccountName ?? '',
+      payoutAccountNumber: data.payoutAccountNumber ?? '',
+    },
+    schema: SaveVendorDto.input.omit({ id: true }),
     onSubmit: mutateAsync,
     onSuccess: () =>
       toast.add({

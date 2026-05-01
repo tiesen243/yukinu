@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { OneProductDto, UpdateVariantDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
 import {
   Dialog,
@@ -14,20 +15,19 @@ import { Field, FieldError, FieldGroup, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import * as ProductValidators from '@yukinu/validators/product'
 import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc/react'
 
 export const EditVariantButton: React.FC<{
   productId: string
-  variant: ProductValidators.OneOutput['variants'][number]
+  variant: OneProductDto.Output['variants'][number]
 }> = ({ productId, variant }) => {
   const [open, setOpen] = useState(false)
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { mutateAsync } = useMutation({
-    ...trpc.productVariant.update.mutationOptions(),
-    meta: { filter: trpc.product.one.queryFilter({ id: productId }) },
+    ...trpc.catalog.variant.update.mutationOptions(),
+    meta: { filter: trpc.catalog.product.one.queryFilter({ id: productId }) },
     onSuccess: () =>
       toast.add({
         type: 'success',
@@ -47,7 +47,7 @@ export const EditVariantButton: React.FC<{
       price: variant.price,
       stock: variant.stock,
     },
-    schema: ProductValidators.updateVariantInput.omit({ vendorId: true }),
+    schema: UpdateVariantDto.input,
     onSubmit: mutateAsync,
     onSuccess: () => {
       setOpen(false)

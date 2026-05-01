@@ -1,4 +1,4 @@
-import type { AllUsersOutput } from '@yukinu/validators/user'
+import type { AllUsersDto } from '@yukinu/api/identity'
 
 import { useMutation } from '@tanstack/react-query'
 import {
@@ -19,13 +19,13 @@ import { useState } from 'react'
 import { useTRPC } from '@/lib/trpc/react'
 
 export const RestoreUserButton: React.FC<{
-  user: AllUsersOutput['users'][number]
+  user: AllUsersDto.Output['users'][number]
 }> = ({ user }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [open, setOpen] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    ...trpc.user.restore.mutationOptions(),
+    ...trpc.identity.user.restore.mutationOptions(),
     onSuccess: () => {
       toast.add({
         type: 'success',
@@ -39,7 +39,7 @@ export const RestoreUserButton: React.FC<{
         title: 'Failed to restore user',
         description: message,
       }),
-    meta: { filter: trpc.user.all.queryFilter() },
+    meta: { filter: trpc.identity.user.all.queryFilter() },
   })
 
   return (

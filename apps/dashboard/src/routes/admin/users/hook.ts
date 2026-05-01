@@ -1,4 +1,4 @@
-import { roles } from '@yukinu/validators/auth'
+import { userRoleEnum } from '@yukinu/db/schema'
 import {
   parseAsInteger,
   parseAsString,
@@ -8,7 +8,7 @@ import {
 
 const parser = {
   search: parseAsString.withDefault(''),
-  role: parseAsStringEnum([...roles]),
+  role: parseAsStringEnum(userRoleEnum.enumValues),
   page: parseAsInteger.withDefault(1),
   limit: parseAsInteger.withDefault(10),
 }

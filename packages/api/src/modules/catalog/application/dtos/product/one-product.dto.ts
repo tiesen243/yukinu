@@ -40,6 +40,7 @@ export namespace OneProductDto {
     variants: z.array(
       z.object({
         id: z.cuid2(),
+        sku: z.string(),
         price: z.string(),
         stock: z.number().default(0),
         options: z.array(z.object({ name: z.string(), value: z.string() })),

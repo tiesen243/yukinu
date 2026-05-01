@@ -1,4 +1,8 @@
-import { createTRPCProxyClient, httpBatchStreamLink } from '@trpc/client'
+import {
+  createTRPCProxyClient,
+  httpBatchStreamLink,
+  retryLink,
+} from '@trpc/client'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
 import { db } from '@yukinu/db'
 import { transformer } from '@yukinu/lib/transformer'
@@ -19,7 +23,7 @@ const handler = async (request: Request): Promise<Response> => {
           req: request,
           router: appRouter,
           createContext: ({ resHeaders }) =>
-            createTRPCContext({ req: request, resHeaders }),
+            createTRPCContext({ reqHeaders: request.headers, resHeaders }),
         })
 
   // Set CORS headers
@@ -31,18 +35,43 @@ const handler = async (request: Request): Promise<Response> => {
 }
 
 const createTRPCCaller = createCallerFactory(createApp(db))
-const createTRPCClient = (baseUrl: string) =>
+const createTRPCClient = (source: string, baseUrl: string) =>
   createTRPCProxyClient<AppRouter>({
     links: [
       httpBatchStreamLink({
         transformer,
         url: `${baseUrl}/api/trpc`,
+        headers: {
+          'x-trpc-source': source,
+        },
+      }),
+      retryLink({
+        retry: ({ op, error, attempts }) => {
+          if (error.data?.code === 'UNAUTHORIZED') {
+            if (attempts > 1) return false // Only attempt to refresh the token once
+            fetch(`${baseUrl}/api/auth/refresh-token`, { method: 'POST' })
+            return true // Retry after refreshing the token
+          }
+
+          if (
+            op.type !== 'query' ||
+            [
+              'FORBIDDEN',
+              'INTERNAL_SERVER_ERROR',
+              'TOO_MANY_REQUESTS',
+            ].includes(error.data?.code ?? '')
+          )
+            return false // Do not retry on specific errors
+
+          return attempts <= 3 // Retry up to 3 times for other errors
+        },
+        retryDelayMs: (attempts) => Math.min(1000 * 2 ** attempts, 30_000),
       }),
     ],
   })
 
 export type { AppRouter, RouterInputs, RouterOutputs } from '@/app'
-export { createTRPCCaller, createTRPCClient, handler }
+export { createTRPCCaller, createTRPCClient, createTRPCContext, handler }
 
 export default {
   fetch: handler,
