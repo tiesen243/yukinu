@@ -10,15 +10,18 @@ import { createSalesModule } from '@/modules/sales'
 import { createTRPCRouter } from '@/trpc'
 
 const createApp = (db: Database) => {
-  const catalogModule = createCatalogModule(db)
-  const checkoutModule = createCheckoutModule(db)
-  const financeModule = createFinanceModule(db)
   const identityModule = createIdentityModule(db)
   const merchantModule = createMerchantModule(db, {
     userRepo: identityModule.repos.userRepo,
     verificationRepo: identityModule.repos.verificationRepo,
   })
+
   const salesModule = createSalesModule(db)
+  const catalogModule = createCatalogModule(db, {
+    vendorMiddleware: merchantModule.middlewares.vendor,
+  })
+  const checkoutModule = createCheckoutModule(db)
+  const financeModule = createFinanceModule(db)
 
   return createTRPCRouter({
     catalog: catalogModule.router,

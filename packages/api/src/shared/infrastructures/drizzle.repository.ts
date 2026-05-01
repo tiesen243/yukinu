@@ -86,6 +86,24 @@ export abstract class DrizzleRepository<
       })
   }
 
+  public override async saveMany(
+    entities: TEntity[],
+    tx: Database = this._db,
+  ): Promise<void> {
+    if (entities.length === 0) return
+    const rows = entities.map((entity) => this._mapToRow(entity))
+
+    await tx
+      .insert(this._table)
+      .values(rows)
+      .onConflictDoUpdate({
+        target: Array.isArray(this._primaryKey)
+          ? this._primaryKey.map((key) => this._table[key] as never)
+          : (this._table[this._primaryKey] as never),
+        set: rows[0] as never,
+      })
+  }
+
   public override async delete(
     criterias: AbstractRepository.Criteria<TEntity>[],
     tx: Database = this._db,

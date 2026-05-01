@@ -8,7 +8,7 @@ import type { OneUserDto } from '@/modules/identity/types'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
-export class PermanentlyDeleteUserUseCase extends AbstractUseCase<
+export class PermanentDeleteUserUseCase extends AbstractUseCase<
   OneUserDto.Input,
   OneUserDto.Output
 > {

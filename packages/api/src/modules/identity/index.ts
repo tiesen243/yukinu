@@ -23,7 +23,7 @@ import { UpdateTicketStatusUseCase } from '@/modules/identity/application/use-ca
 import { AllUsersUseCase } from '@/modules/identity/application/use-cases/user/all-users.use-case'
 import { DeleteUserUseCase } from '@/modules/identity/application/use-cases/user/delete-user.use-case'
 import { OneUserUseCase } from '@/modules/identity/application/use-cases/user/one-user.use-case'
-import { PermanentlyDeleteUserUseCase } from '@/modules/identity/application/use-cases/user/permanently-delete-user.use-case'
+import { PermanentDeleteUserUseCase } from '@/modules/identity/application/use-cases/user/permanent-delete-user.use-case'
 import { ProfileUseCase } from '@/modules/identity/application/use-cases/user/profile.use-case'
 import { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
 import { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
@@ -79,7 +79,7 @@ export const createIdentityModule = (db: Database) => {
       allUsers: new AllUsersUseCase(db, userRepo),
       deleteUser: new DeleteUserUseCase(db, userRepo),
       oneUser: new OneUserUseCase(db, userRepo),
-      permanentlyDeleteUser: new PermanentlyDeleteUserUseCase(db, userRepo),
+      permanentDeleteUser: new PermanentDeleteUserUseCase(db, userRepo),
       profile: new ProfileUseCase(db, userRepo, profileRepo),
       restoreUser: new RestoreUserUseCase(db, userRepo),
       updateProfile: new UpdateProfileUseCase(db, profileRepo, userRepo),

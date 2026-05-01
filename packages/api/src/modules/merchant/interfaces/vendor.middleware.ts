@@ -2,10 +2,22 @@ import { TRPCError } from '@trpc/server'
 import { eq } from '@yukinu/db/drizzle'
 import { vendors, vendorStaffs } from '@yukinu/db/schema'
 
+import { MINMOD_ACCESS } from '@/shared/constants'
 import { createTRPCMiddleware } from '@/trpc'
 
 export const vendorMiddleware = createTRPCMiddleware(async ({ ctx, next }) => {
   if (!ctx.session?.userId) throw new TRPCError({ code: 'UNAUTHORIZED' })
+
+  if (['admin', 'moderator'].includes(ctx.session.role))
+    return next({
+      ctx: {
+        ...ctx,
+        session: {
+          ...ctx.session,
+          vendorId: MINMOD_ACCESS,
+        },
+      },
+    })
 
   if (!['vendor_owner', 'vendor_staff'].includes(ctx.session.role))
     throw new TRPCError({
@@ -44,3 +56,5 @@ export const vendorMiddleware = createTRPCMiddleware(async ({ ctx, next }) => {
     },
   })
 })
+
+export type VendorMiddleware = typeof vendorMiddleware

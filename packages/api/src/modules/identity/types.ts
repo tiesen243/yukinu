@@ -18,7 +18,7 @@ import type { UpdateTicketStatusUseCase } from '@/modules/identity/application/u
 import type { AllUsersUseCase } from '@/modules/identity/application/use-cases/user/all-users.use-case'
 import type { DeleteUserUseCase } from '@/modules/identity/application/use-cases/user/delete-user.use-case'
 import type { OneUserUseCase } from '@/modules/identity/application/use-cases/user/one-user.use-case'
-import type { PermanentlyDeleteUserUseCase } from '@/modules/identity/application/use-cases/user/permanently-delete-user.use-case'
+import type { PermanentDeleteUserUseCase } from '@/modules/identity/application/use-cases/user/permanent-delete-user.use-case'
 import type { ProfileUseCase } from '@/modules/identity/application/use-cases/user/profile.use-case'
 import type { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
 import type { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
@@ -42,7 +42,7 @@ export interface UseCases {
     allUsers: AllUsersUseCase
     deleteUser: DeleteUserUseCase
     oneUser: OneUserUseCase
-    permanentlyDeleteUser: PermanentlyDeleteUserUseCase
+    permanentDeleteUser: PermanentDeleteUserUseCase
     profile: ProfileUseCase
     restoreUser: RestoreUserUseCase
     updateProfile: UpdateProfileUseCase
@@ -74,12 +74,11 @@ export { SignInDto } from '@/modules/identity/application/dtos/auth/sign-in.dto'
 export { SignUpDto } from '@/modules/identity/application/dtos/auth/sign-up.dto'
 export { VerifyEmailDto } from '@/modules/identity/application/dtos/auth/verify-email.dto'
 
-// User DTOs
-export { AllUsersDto } from '@/modules/identity/application/dtos/user/all-users.dto'
-export { OneUserDto } from '@/modules/identity/application/dtos/user/one-user.dto'
-export { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
-export { UpdateProfileDto } from '@/modules/identity/application/dtos/user/update-profile.dto'
-export { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'
+// Security DTOs
+export { AllSessionsDto } from '@/modules/identity/application/dtos/security/all-sessions.dto'
+export { ChangeUsernameDto } from '@/modules/identity/application/dtos/security/change-username.dto'
+export { ChangePasswordDto } from '@/modules/identity/application/dtos/security/change-password.dto'
+export { DeleteSessionDto } from '@/modules/identity/application/dtos/security/delete-session.dto'
 
 // Ticket DTOs
 export { AllTicketsDto } from '@/modules/identity/application/dtos/ticket/all-tickets.dto'
@@ -87,8 +86,9 @@ export { OneTicketDto } from '@/modules/identity/application/dtos/ticket/one-tic
 export { CreateTicketDto } from '@/modules/identity/application/dtos/ticket/create-ticket.dto'
 export { UpdateTicketStatusDto } from '@/modules/identity/application/dtos/ticket/update-ticket-status.dto'
 
-// Security DTOs
-export { AllSessionsDto } from '@/modules/identity/application/dtos/security/all-sessions.dto'
-export { ChangeUsernameDto } from '@/modules/identity/application/dtos/security/change-username.dto'
-export { ChangePasswordDto } from '@/modules/identity/application/dtos/security/change-password.dto'
-export { DeleteSessionDto } from '@/modules/identity/application/dtos/security/delete-session.dto'
+// User DTOs
+export { AllUsersDto } from '@/modules/identity/application/dtos/user/all-users.dto'
+export { OneUserDto } from '@/modules/identity/application/dtos/user/one-user.dto'
+export { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
+export { UpdateProfileDto } from '@/modules/identity/application/dtos/user/update-profile.dto'
+export { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'

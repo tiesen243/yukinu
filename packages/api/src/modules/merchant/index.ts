@@ -15,6 +15,7 @@ import { UpdateVendorStatusUseCase } from '@/modules/merchant/application/use-ca
 import { DrizzleVendorStaffRepository } from '@/modules/merchant/infrastructures/drizzle/vendor-staff.repository'
 import { DrizzleVendorRepository } from '@/modules/merchant/infrastructures/drizzle/vendor.repository'
 import { staffRouter } from '@/modules/merchant/interfaces/staff.router'
+import { vendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 import { vendorRouter } from '@/modules/merchant/interfaces/vendor.router'
 
 export const createMerchantModule = (
@@ -62,5 +63,9 @@ export const createMerchantModule = (
       staff: staffRouter(useCases),
       vendor: vendorRouter(useCases),
     } satisfies TRPCRouterRecord,
+
+    middlewares: {
+      vendor: vendorMiddleware,
+    },
   }
 }

@@ -40,7 +40,7 @@ export const securityRouter = ({ security }: UseCases) =>
       ),
 
     changePassword: protectedProcedure
-      .input(ChangePasswordDto.input.omit({ userId: true }))
+      .input(ChangePasswordDto.input)
       .output(ChangePasswordDto.output)
       .mutation(({ ctx, input }) =>
         security.changePassword.execute({

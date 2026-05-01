@@ -19,3 +19,13 @@ export interface UseCases {
     save: SaveVoucherUseCase
   }
 }
+
+// Banner DTOs
+export { AllBannersDto } from '@/modules/sales/application/dtos/banner/all-banners.dto'
+export { CreateBannerDto } from '@/modules/sales/application/dtos/banner/create-banner.dto'
+export { DeleteBannerDto } from '@/modules/sales/application/dtos/banner/delete-banner.dto'
+
+// Voucher DTOs
+export { AllVouchersDto } from '@/modules/sales/application/dtos/voucher/all-vouchers.dto'
+export { OneVoucherDto } from '@/modules/sales/application/dtos/voucher/one-voucher.dto'
+export { SaveVoucherDto } from '@/modules/sales/application/dtos/voucher/save-voucher.dto'

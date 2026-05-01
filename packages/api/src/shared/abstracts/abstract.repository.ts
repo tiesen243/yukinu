@@ -19,6 +19,11 @@ export abstract class AbstractRepository<
 
   public abstract save(entity: TEntity, tx?: TTransaction): Promise<void>
 
+  public abstract saveMany(
+    entities: TEntity[],
+    tx?: TTransaction,
+  ): Promise<void>
+
   public abstract delete(
     criterias: AbstractRepository.Criteria<TEntity>[],
     tx?: TTransaction,

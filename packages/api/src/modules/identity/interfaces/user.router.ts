@@ -50,9 +50,9 @@ export const userRouter = ({ user }: UseCases) =>
       .output(OneUserDto.output)
       .mutation(({ input }) => user.restoreUser.execute(input)),
 
-    permanentlyDelete: protectedProcedure
+    permanentDelete: protectedProcedure
       .meta({ role: ['admin'] })
       .input(OneUserDto.input)
       .output(OneUserDto.output)
-      .mutation(({ input }) => user.permanentlyDeleteUser.execute(input)),
+      .mutation(({ input }) => user.permanentDeleteUser.execute(input)),
   }) satisfies TRPCRouterRecord

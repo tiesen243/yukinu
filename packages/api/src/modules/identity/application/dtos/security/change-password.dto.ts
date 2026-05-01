@@ -5,7 +5,7 @@ import { passwordRegex } from '@/shared/schema'
 export namespace ChangePasswordDto {
   export const input = z
     .object({
-      userId: z.cuid2(),
+      userId: z.cuid2().optional(),
       currentPassword: passwordRegex.optional(),
       newPassword: passwordRegex,
       confirmNewPassword: passwordRegex,
