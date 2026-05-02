@@ -7,31 +7,27 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
-import { Link } from 'react-router'
+import { NavLink } from 'react-router'
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string
-    url: string
-    icon?: LucideIcon
-  }[]
-}) {
-  return (
-    <SidebarGroup>
-      <SidebarGroupContent className='flex flex-col gap-2'>
-        <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton render={<Link to={item.url} />}>
-                {item.icon && <item.icon />}
-                <span>{item.title}</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  )
-}
+export const NavMain: React.FC<{
+  items: { title: string; url: string; icon?: LucideIcon }[]
+}> = ({ items }) => (
+  <SidebarGroup>
+    <SidebarGroupContent className='flex flex-col gap-2'>
+      <SidebarMenu>
+        {items.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <NavLink to={item.url}>
+              {({ isActive }) => (
+                <SidebarMenuButton isActive={isActive}>
+                  {item.icon && <item.icon />}
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
+              )}
+            </NavLink>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroupContent>
+  </SidebarGroup>
+)

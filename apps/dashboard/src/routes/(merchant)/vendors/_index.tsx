@@ -30,7 +30,7 @@ export default function MerchantVendorsIndexPage() {
   return (
     <>
       <Typography variant='h2'>Vendors</Typography>
-      <Typography>
+      <Typography className='text-muted-foreground'>
         Manage and view all registered vendors. Monitor vendor details, review
         their status, and manage their system access and permissions.
       </Typography>

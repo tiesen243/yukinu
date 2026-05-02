@@ -44,7 +44,7 @@ export default function ManagementUsersIndexPage() {
   return (
     <>
       <Typography variant='h2'>Users</Typography>
-      <Typography>
+      <Typography className='text-muted-foreground'>
         Manage and view all system users. Edit user information, monitor account
         status, and configure roles and permissions.
       </Typography>

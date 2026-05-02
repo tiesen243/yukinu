@@ -14,7 +14,7 @@ export default function ManagementBannersIndexPage() {
   return (
     <>
       <Typography variant='h2'>Banners</Typography>
-      <Typography>
+      <Typography className='text-muted-foreground'>
         Manage your banners here. You can create and delete banners as needed.
       </Typography>
 

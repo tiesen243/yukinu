@@ -32,36 +32,41 @@ export const UserSearchForm: React.FC<{
         e.stopPropagation()
         onSearch({ search, role })
       }}
-      className='flex w-full items-center gap-2'
+      className='flex w-full flex-col items-start gap-2 md:flex-row md:items-center'
     >
-      <Input
-        placeholder='Search users...'
-        value={search}
-        className='max-w-sm'
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      <Select value={role} onValueChange={setRole}>
-        <SelectTrigger>
-          <SelectValue placeholder='Filter by role' />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value=''>All Roles</SelectItem>
-          {UserEntity.roles.map((r) => (
-            <SelectItem key={r} value={r}>
-              {r}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Button type='submit'>Search</Button>
+      <div className='flex items-center gap-2'>
+        <Input
+          placeholder='Search users...'
+          value={search}
+          className='max-w-sm'
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Select value={role} onValueChange={setRole}>
+          <SelectTrigger>
+            <SelectValue placeholder='Filter by role' />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value=''>All Roles</SelectItem>
+            {UserEntity.roles.map((r) => (
+              <SelectItem key={r} value={r}>
+                {r}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
-      <Button
-        className='ml-auto'
-        variant='outline'
-        onClick={() => onSearch({ isDeleted: !query.isDeleted })}
-      >
-        {query.isDeleted ? 'Show Active Users' : 'Show Deleted Users'}
-      </Button>
+      <div className='flex flex-1 items-center justify-between gap-2'>
+        <Button type='submit'>Search</Button>
+
+        <Button
+          className='md:ml-auto'
+          variant='outline'
+          onClick={() => onSearch({ isDeleted: !query.isDeleted })}
+        >
+          {query.isDeleted ? 'Show Active Users' : 'Show Deleted Users'}
+        </Button>
+      </div>
     </form>
   )
 }

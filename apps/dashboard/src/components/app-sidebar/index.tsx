@@ -1,4 +1,5 @@
 import Logo from '@assets/logo.svg'
+import { useSession } from '@yukinu/auth/react'
 import {
   ChartBarIcon,
   ClipboardCheckIcon,
@@ -34,33 +35,93 @@ import { env } from '@/lib/env'
 
 const data = {
   navMain: [
-    { title: 'Dashboard', url: '/', icon: LayoutDashboardIcon },
-    { title: 'Analytics', url: '/analytics', icon: ChartBarIcon },
+    {
+      title: 'Dashboard',
+      url: '/',
+      icon: LayoutDashboardIcon,
+      role: ['admin', 'moderator'],
+    },
+    {
+      title: 'Analytics',
+      url: '/analytics',
+      icon: ChartBarIcon,
+      role: ['admin', 'moderator'],
+    },
   ],
   navContent: [
     {
       title: 'Management',
       items: [
-        { name: 'Users', url: '/management/users', icon: UsersIcon },
-        { name: 'Banners', url: '/management/banners', icon: MegaphoneIcon },
-        { name: 'Vouchers', url: '/management/vouchers', icon: TicketsIcon },
-        { name: 'Orders', url: '/management/orders', icon: ClipboardCheckIcon },
+        {
+          name: 'Users',
+          url: '/management/users',
+          icon: UsersIcon,
+          role: ['admin', 'moderator'],
+        },
+        {
+          name: 'Banners',
+          url: '/management/banners',
+          icon: MegaphoneIcon,
+          role: ['admin', 'moderator'],
+        },
+        {
+          name: 'Vouchers',
+          url: '/management/vouchers',
+          icon: TicketsIcon,
+          role: ['admin', 'moderator'],
+        },
+        {
+          name: 'Orders',
+          url: '/management/orders',
+          icon: ClipboardCheckIcon,
+          role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+        },
       ],
     },
     {
       title: 'Catalog',
       items: [
-        { name: 'Categories', url: '/catalog/categories', icon: TagIcon },
-        { name: 'Products', url: '/catalog/products', icon: PackageIcon },
+        {
+          name: 'Categories',
+          url: '/catalog/categories',
+          icon: TagIcon,
+          role: ['admin', 'moderator'],
+        },
+        {
+          name: 'Products',
+          url: '/catalog/products',
+          icon: PackageIcon,
+          role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+        },
       ],
     },
     {
       title: 'Merchant',
       items: [
-        { name: 'Vendors', url: '/merchant/vendors', icon: StoreIcon },
-        { name: 'My Store', url: '/merchant/my-store', icon: StoreIcon },
-        { name: 'Staffs', url: '/merchant/staffs', icon: UserStarIcon },
-        { name: 'Balance', url: '/merchant/balance', icon: HandCoinsIcon },
+        {
+          name: 'Vendors',
+          url: '/merchant/vendors',
+          icon: StoreIcon,
+          role: ['admin', 'moderator'],
+        },
+        {
+          name: 'My Store',
+          url: '/merchant/my-store',
+          icon: StoreIcon,
+          role: ['vendor_owner'],
+        },
+        {
+          name: 'Staffs',
+          url: '/merchant/staffs',
+          icon: UserStarIcon,
+          role: ['vendor_owner'],
+        },
+        {
+          name: 'Balance',
+          url: '/merchant/balance',
+          icon: HandCoinsIcon,
+          role: ['vendor_owner'],
+        },
       ],
     },
   ],
@@ -69,13 +130,34 @@ const data = {
       title: 'Get Help',
       url: '/tickets',
       icon: MessageCircleQuestionIcon,
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
     },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useSession()
+
+  const filteredData = React.useMemo(() => {
+    const filterItems = (
+      items:
+        | typeof data.navMain
+        | (typeof data.navContent)[0]['items']
+        | typeof data.navSecondary,
+    ) => items.filter((item) => item.role.includes(user?.role || ''))
+
+    return {
+      navMain: filterItems(data.navMain),
+      navContent: data.navContent.map((content) => ({
+        ...content,
+        items: filterItems(content.items),
+      })),
+      navSecondary: filterItems(data.navSecondary),
+    } as typeof data
+  }, [user?.role])
+
   return (
-    <Sidebar collapsible='offcanvas' {...props}>
+    <Sidebar collapsible='icon' {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -92,15 +174,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        {data.navContent.map((content) => (
+        <NavMain items={filteredData.navMain} />
+        {filteredData.navContent.map((content) => (
           <NavContent
             key={content.title}
             label={content.title}
             items={content.items}
           />
         ))}
-        <NavSecondary items={data.navSecondary} className='mt-auto' />
+        <NavSecondary items={filteredData.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

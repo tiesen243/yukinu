@@ -1,4 +1,5 @@
 import { useSession } from '@yukinu/auth/react'
+import { useTheme } from '@yukinu/ui'
 import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import {
   DropdownMenu,
@@ -7,9 +8,19 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '@yukinu/ui/dropdown-menu'
-import { EllipsisVerticalIcon, LogOutIcon } from '@yukinu/ui/icons'
+import {
+  CheckIcon,
+  EllipsisVerticalIcon,
+  LaptopIcon,
+  LogOutIcon,
+  MoonIcon,
+  SunIcon,
+} from '@yukinu/ui/icons'
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -38,6 +49,7 @@ const UserInfo: React.FC<{
 
 export function NavUser() {
   const { status, user, signOut } = useSession()
+  const { theme, setTheme } = useTheme()
   const { isMobile } = useSidebar()
 
   if (status === 'loading') return null
@@ -69,6 +81,28 @@ export function NavUser() {
               <DropdownMenuLabel className='flex items-center gap-2 p-0 px-1 py-1.5 text-left text-sm font-normal'>
                 <UserInfo user={user} />
               </DropdownMenuLabel>
+
+              <DropdownMenuSeparator />
+
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Appearance</DropdownMenuSubTrigger>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuItem onClick={() => setTheme('light')}>
+                      <SunIcon /> <span className='flex-1'>Light</span>
+                      {theme === 'light' && <CheckIcon />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme('dark')}>
+                      <MoonIcon /> <span className='flex-1'>Dark</span>
+                      {theme === 'dark' && <CheckIcon />}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setTheme('system')}>
+                      <LaptopIcon /> <span className='flex-1'>System</span>
+                      {theme === 'system' && <CheckIcon />}
+                    </DropdownMenuItem>
+                  </DropdownMenuSubContent>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
 
               <DropdownMenuSeparator />
 

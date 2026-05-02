@@ -38,7 +38,7 @@ export default function Protected() {
         </header>
 
         <ScrollArea
-          className='h-[calc(100dvh-3.5rem)] px-4 md:h-[calc(100dvh-4.5rem)]'
+          className='h-[calc(100dvh-3.5rem)] px-4 md:h-[calc(100dvh-4.5rem)] [&_h2]:mb-0'
           render={<section />}
         >
           <Outlet />

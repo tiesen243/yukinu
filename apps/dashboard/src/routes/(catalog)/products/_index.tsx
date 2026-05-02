@@ -23,7 +23,7 @@ export default function CatalogProductsIndexPage() {
   return (
     <>
       <Typography variant='h2'>Products</Typography>
-      <Typography>
+      <Typography className='text-muted-foreground'>
         Manage and view all catalog products. Create, edit, and organize
         products with detailed information, pricing, and inventory management.
       </Typography>

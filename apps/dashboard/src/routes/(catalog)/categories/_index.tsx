@@ -22,7 +22,7 @@ export default function CatalogCategoriesIndexPage() {
   return (
     <>
       <Typography variant='h2'>Categories</Typography>
-      <Typography>
+      <Typography className='text-muted-foreground'>
         Manage and view all catalog categories. Create, edit, and organize
         hierarchical categories to structure your products effectively.
       </Typography>
