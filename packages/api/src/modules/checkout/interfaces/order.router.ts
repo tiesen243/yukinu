@@ -15,7 +15,10 @@ export const orderRouter = ({ order }: UseCases) =>
       .query(({ ctx, input }) =>
         order.all.execute({
           ...input,
-          userId: ctx.session.userId,
+          userId:
+            ctx.session.role === 'admin' || ctx.session.role === 'moderator'
+              ? null
+              : ctx.session.userId,
           vendorId: null,
           paymentId: null,
         }),

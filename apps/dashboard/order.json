@@ -1,0 +1,190 @@
+{
+  "orders": [
+    {
+      "id": 1110,
+      "status": "pending",
+      "totalAmount": "1126.53",
+      "user": {
+        "id": "9ec8dcf96c9e3657eba3adf3",
+        "username": "cust_50ab1"
+      },
+      "items": [
+        {
+          "quantity": 2,
+          "productId": "df1a927b9513f18c38b10030",
+          "unitPrice": "563.27",
+          "productName": "Gadget 50BB",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1111,
+      "status": "pending",
+      "totalAmount": "1047.41",
+      "user": {
+        "id": "230967e43211457550623f80",
+        "username": "cust_3a337"
+      },
+      "items": [
+        {
+          "quantity": 2,
+          "productId": "77b82f4c7cd59895b271c201",
+          "unitPrice": "523.71",
+          "productName": "Gadget 175F",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1112,
+      "status": "completed",
+      "totalAmount": "914.27",
+      "user": {
+        "id": "887a3a5d9bed94b38f0185aa",
+        "username": "cust_b7432"
+      },
+      "items": [
+        {
+          "quantity": 3,
+          "productId": "859b08a877c8a9c245073569",
+          "unitPrice": "457.14",
+          "productName": "Gadget CB43",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1113,
+      "status": "completed",
+      "totalAmount": "1110.03",
+      "user": {
+        "id": "33f2a7762b219b2de4582198",
+        "username": "cust_aff19"
+      },
+      "items": [
+        {
+          "quantity": 1,
+          "productId": "a3fd4ce77a4cfc11e83a86ad",
+          "unitPrice": "555.02",
+          "productName": "Gadget B405",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1114,
+      "status": "pending",
+      "totalAmount": "590.72",
+      "user": {
+        "id": "7573d5f415930d3dfce63452",
+        "username": "cust_7dc02"
+      },
+      "items": [
+        {
+          "quantity": 2,
+          "productId": "33da5ac12ed1303bbae0cd89",
+          "unitPrice": "295.36",
+          "productName": "Gadget 39B7",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1115,
+      "status": "completed",
+      "totalAmount": "577.62",
+      "user": {
+        "id": "35134aa6e7c8991097cb4a43",
+        "username": "cust_d4954"
+      },
+      "items": [
+        {
+          "quantity": 3,
+          "productId": "a3fd4ce77a4cfc11e83a86ad",
+          "unitPrice": "288.81",
+          "productName": "Gadget B405",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1116,
+      "status": "pending",
+      "totalAmount": "615.75",
+      "user": {
+        "id": "b38a46c34b0d321641171166",
+        "username": "cust_c1a0e"
+      },
+      "items": [
+        {
+          "quantity": 3,
+          "productId": "eb906ab6ddbd5e235a898665",
+          "unitPrice": "307.88",
+          "productName": "Gadget C05F",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1117,
+      "status": "cancelled",
+      "totalAmount": "1195.57",
+      "user": {
+        "id": "230967e43211457550623f80",
+        "username": "cust_3a337"
+      },
+      "items": [
+        {
+          "quantity": 3,
+          "productId": "df1a927b9513f18c38b10030",
+          "unitPrice": "597.79",
+          "productName": "Gadget 50BB",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1118,
+      "status": "pending",
+      "totalAmount": "574.63",
+      "user": {
+        "id": "4ac399cc104459973f2487dc",
+        "username": "cust_a69f0"
+      },
+      "items": [
+        {
+          "quantity": 3,
+          "productId": "d275f33dfcbb7f4a9129c379",
+          "unitPrice": "287.32",
+          "productName": "Gadget B98E",
+          "productImage": null
+        }
+      ]
+    },
+    {
+      "id": 1119,
+      "status": "cancelled",
+      "totalAmount": "302.88",
+      "user": {
+        "id": "b38a46c34b0d321641171166",
+        "username": "cust_c1a0e"
+      },
+      "items": [
+        {
+          "quantity": 1,
+          "productId": "fcabfacd762a5675a98c3584",
+          "unitPrice": "151.44",
+          "productName": "Gadget 4886",
+          "productImage": null
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "total": 120,
+    "page": 12,
+    "limit": 10,
+    "totalPages": 12
+  }
+}

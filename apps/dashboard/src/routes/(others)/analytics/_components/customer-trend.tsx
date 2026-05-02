@@ -16,8 +16,6 @@ export function CustomerTrend() {
   )
   if (isLoading || !data) return <div>Loading...</div>
 
-  console.log(data.customerTrend)
-
   return (
     <Card>
       <CardHeader>
