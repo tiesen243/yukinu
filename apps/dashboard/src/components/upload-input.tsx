@@ -1,0 +1,63 @@
+import type { OurFileRouter } from '@yukinu/uploadthing/config'
+
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@yukinu/ui/input-group'
+import { toast } from '@yukinu/ui/toast'
+import { useUploadThing } from '@yukinu/uploadthing/react'
+import { useRef } from 'react'
+
+export const UploadInput: React.FC<{
+  endpoint: keyof OurFileRouter
+  value: string
+  onValueChange: (url: string) => void
+}> = ({ endpoint, value, onValueChange }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const ut = useUploadThing(endpoint, {
+    onClientUploadComplete: ([res]) => {
+      if (res?.ufsUrl) {
+        toast.success({ message: 'Upload successful' })
+        onValueChange(res.ufsUrl)
+      } else toast.error({ message: 'Failed to upload' })
+    },
+    onUploadError: ({ message }) => {
+      toast.error({ message: 'Upload failed', description: message })
+    },
+  })
+
+  return (
+    <InputGroup>
+      <input
+        ref={inputRef}
+        type='file'
+        accept='image/*'
+        max={1}
+        onChange={(e) => {
+          const selectedFile = e.target.files?.[0]
+          if (!selectedFile) return
+          ut.startUpload([selectedFile])
+        }}
+        hidden
+      />
+
+      <InputGroupInput
+        value={ut.isUploading ? 'Uploading...' : value}
+        placeholder='No file selected'
+        readOnly
+      />
+
+      <InputGroupAddon align='inline-end'>
+        <InputGroupButton
+          disabled={ut.isUploading}
+          onClick={() => inputRef.current?.click()}
+        >
+          Upload
+        </InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
+  )
+}

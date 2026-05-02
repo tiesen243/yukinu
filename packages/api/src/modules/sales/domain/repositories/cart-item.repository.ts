@@ -14,11 +14,13 @@ export interface CartItemRepository<
 
 export namespace CartItemRepository {
   export interface WithProduct extends CartItemEntity {
-    vendorId: string | null
-    productName: string
-    productImage: string | null
-    productPrice: string
-    productStock: number
-    variant: Record<string, string>
+    product: {
+      vendorId: string | null
+      name: string
+      image: string | null
+      price: string
+      stock: number
+      variant: Record<string, string>
+    }
   }
 }

@@ -11,7 +11,16 @@ export namespace AllCategoriesDto {
   export type Input = z.infer<typeof input>
 
   export const output = z.object({
-    categories: z.array(z.instanceof(CategoryEntity)),
+    categories: z.array(
+      z
+        .instanceof(CategoryEntity)
+        .transform(
+          (val) =>
+            val as CategoryEntity & {
+              parent: { id: string; name: string } | null
+            },
+        ),
+    ),
     pagination: Pagination.output,
   })
   export type Output = z.infer<typeof output>

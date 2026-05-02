@@ -67,9 +67,7 @@ export function Auth(config: AuthConfig) {
     try {
       const { sub: userId, role } = await jwt.verify(token)
       return { userId, role }
-    } catch (error) {
-      // oxlint-disable-next-line node/no-process-env
-      if (process.env.NODE_ENV === 'development') console.log(error)
+    } catch {
       return null
     }
   }
@@ -137,9 +135,7 @@ export function Auth(config: AuthConfig) {
       }
 
       return { token, user, expiresAt: session.expiresAt }
-    } catch (error) {
-      // oxlint-disable-next-line node/no-process-env
-      if (process.env.NODE_ENV === 'development') console.log(error)
+    } catch {
       return DEFAULT_SESSION_USER
     }
   }
@@ -391,9 +387,6 @@ export function Auth(config: AuthConfig) {
         response = new Response(null, { status: 204 })
       else response = new Response('Method not allowed', { status: 405 })
     } catch (error) {
-      // oxlint-disable-next-line node/no-process-env
-      if (process.env.NODE_ENV === 'development') console.log(error)
-
       const _error = error instanceof Error ? error.message : 'Unknown error'
       const status = error instanceof AuthError ? 401 : 500
       response = new Response(_error, { status })

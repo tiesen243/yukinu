@@ -1,5 +1,6 @@
 import * as z from 'zod'
 
+import { CartItemEntity } from '@/modules/sales/domain/entities/cart-item.entity'
 import { priceRegex } from '@/shared/schema'
 
 export namespace GetCartDto {
@@ -10,16 +11,18 @@ export namespace GetCartDto {
 
   export const output = z.object({
     items: z.array(
-      z.object({
-        id: z.cuid2(),
-        productId: z.cuid2(),
-        productName: z.string(),
-        productImage: z.url().nullable(),
-        productPrice: priceRegex,
-        productStock: z.number().int(),
-        variant: z.record(z.string(), z.string()),
-        quantity: z.int().positive(),
-      }),
+      z.instanceof(CartItemEntity).and(
+        z.object({
+          product: z.object({
+            vendorId: z.string().nullable(),
+            name: z.string(),
+            image: z.string().nullable(),
+            price: z.string(),
+            stock: z.number(),
+            variant: z.record(z.string(), z.string()),
+          }),
+        }),
+      ),
     ),
     totalAmount: priceRegex,
   })

@@ -23,8 +23,9 @@ export class GetCartUseCase extends AbstractUseCase<
 
     const totalAmount = items
       .reduce(
-        (acc, { productPrice, quantity }) =>
-          acc + (productPrice ? Number.parseFloat(productPrice) * quantity : 0),
+        (acc, { product, quantity }) =>
+          acc +
+          (product.price ? Number.parseFloat(product.price) * quantity : 0),
         0,
       )
       .toFixed(2)

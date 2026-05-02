@@ -26,7 +26,7 @@ export class AllVendorsUseCase extends AbstractUseCase<
     ]
 
     const [vendors, total] = await Promise.all([
-      this.vendorRepo.find(
+      this.vendorRepo.findWithDetails(
         whereClauses,
         { createdAt: 'desc' },
         { limit, offset },

@@ -37,12 +37,6 @@ const createTRPCClient = (source: string, baseUrl: string) => {
     links: [
       retryLink({
         retry: ({ op, error, attempts }) => {
-          console.log({
-            op,
-            error,
-            attempts,
-          })
-
           if (error.data?.code === 'UNAUTHORIZED') {
             if (attempts > 1) return false // Only attempt to refresh the token once
             fetch(`${baseUrl}/api/auth/refresh-token`, { method: 'POST' })

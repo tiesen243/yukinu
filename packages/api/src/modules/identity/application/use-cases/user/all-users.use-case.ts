@@ -17,16 +17,20 @@ export class AllUsersUseCase extends AbstractUseCase<
   }
 
   public async execute(input: AllUsersDto.Input): Promise<AllUsersDto.Output> {
-    const { search, role, page, limit } = input
+    const { search, role, isDeleted, page, limit } = input
     const offset = (page - 1) * limit
 
-    const roleClause = role ? { role } : {}
+    const baseFilters = {
+      role: role && role.trim() !== '' ? role : ('not null' as const),
+      deletedAt: isDeleted ? ('not null' as const) : ('null' as const),
+    }
+
     const whereClauses = search
       ? [
-          { username: { $like: search }, ...roleClause },
-          { email: { $like: search }, ...roleClause },
+          { username: { $like: search }, ...baseFilters },
+          { email: { $like: search }, ...baseFilters },
         ]
-      : []
+      : [baseFilters]
 
     const [users, total] = await Promise.all([
       this._userRepo.find(

@@ -47,7 +47,7 @@ export class InviteStaffUseCase {
     })
     await this.verificationRepo.save(verification)
 
-    const [vendor] = await this.vendorRepo.findWithOwner(
+    const [vendor] = await this.vendorRepo.findWithDetails(
       [{ id: vendorId }],
       {},
       { limit: 1 },

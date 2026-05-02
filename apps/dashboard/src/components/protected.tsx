@@ -28,7 +28,7 @@ export default function Protected() {
     <SidebarProvider>
       <AppSidebar variant='inset' />
 
-      <SidebarInset>
+      <SidebarInset className='overflow-x-hidden'>
         <h1 className='sr-only'>Dashboard</h1>
 
         <header className='flex h-14 shrink-0 items-center gap-2 border-b bg-background/70 px-4'>

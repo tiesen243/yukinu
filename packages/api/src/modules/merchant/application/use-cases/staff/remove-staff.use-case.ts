@@ -34,8 +34,8 @@ export class RemoveStaffUseCase {
     return this.db.transaction(async (tx) => {
       const updatedUser = new UserEntity({
         id: userId,
-        username: staff.user.username,
-        email: staff.user.email,
+        username: staff.username,
+        email: staff.email,
         role: 'user',
       })
       await this.userRepo.save(updatedUser, tx)

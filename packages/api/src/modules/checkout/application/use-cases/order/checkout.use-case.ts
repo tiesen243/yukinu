@@ -42,7 +42,7 @@ export class CheckoutUseCase extends AbstractUseCase<
 
     const cartItemsByVendor = Object.groupBy(
       cartItems,
-      ({ vendorId }) => vendorId ?? 'unknown',
+      ({ product: { vendorId } }) => vendorId ?? 'unknown',
     )
 
     const discount = await this._applyVoucher(voucherId)
@@ -56,7 +56,7 @@ export class CheckoutUseCase extends AbstractUseCase<
 
           const totalAmount = items.reduce(
             (sum, item) =>
-              sum + Number.parseFloat(item.productPrice) * item.quantity,
+              sum + Number.parseFloat(item.product.price) * item.quantity,
             0,
           )
           amount += totalAmount
@@ -88,12 +88,12 @@ export class CheckoutUseCase extends AbstractUseCase<
 
           await this._orderItemRepo.saveMany(
             items.map(
-              ({ productId, productVariantId, productPrice, quantity }) =>
+              ({ productId, productVariantId, product, quantity }) =>
                 new OrderItemEntity({
                   orderId: order.id,
                   productId,
                   productVariantId,
-                  unitPrice: productPrice,
+                  unitPrice: product.price,
                   quantity,
                 }),
             ),

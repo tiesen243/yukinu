@@ -4,10 +4,20 @@ import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
 export interface VendorRepository<
   TTransaction = unknown,
 > extends AbstractRepository<VendorEntity> {
-  findWithOwner(
+  findWithDetails(
     criterias?: AbstractRepository.Criteria<VendorEntity>[],
     orderBy?: Partial<Record<keyof VendorEntity, 'asc' | 'desc'>>,
     options?: { limit?: number; offset?: number },
     tx?: TTransaction,
-  ): Promise<(VendorEntity & { owner: { id: string; username: string } })[]>
+  ): Promise<VendorRepository.WithDetails[]>
+}
+
+export namespace VendorRepository {
+  export interface WithDetails extends VendorEntity {
+    owner: {
+      id: string
+      username: string
+    }
+    staffCount: number
+  }
 }

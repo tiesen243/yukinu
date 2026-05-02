@@ -9,9 +9,11 @@ export interface CategoryRepository<
     orderBy?: Partial<Record<keyof CategoryEntity, 'asc' | 'desc'>>,
     options?: { limit?: number; offset?: number },
     tx?: TTransaction,
-  ): Promise<
-    (CategoryEntity & {
-      parent: { id: CategoryEntity['id']; name: CategoryEntity['name'] } | null
-    })[]
-  >
+  ): Promise<CategoryRepository.WithParent[]>
+}
+
+export namespace CategoryRepository {
+  export interface WithParent extends CategoryEntity {
+    parent: { id: CategoryEntity['id']; name: CategoryEntity['name'] } | null
+  }
 }

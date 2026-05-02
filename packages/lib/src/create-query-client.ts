@@ -14,6 +14,7 @@ export const createQueryClient = () =>
       queries: {
         staleTime: 10 * 60 * 1000, // 10 minutes
         retry: false,
+        refetchOnWindowFocus: false,
       },
       mutations: {
         gcTime: 5 * 60 * 1000, // 5 minutes

@@ -98,12 +98,15 @@ export class DrizzleCartItemRepository
           quantity: row.quantity,
         }),
         {
-          vendorId: row.vendorId,
-          productName: row.productName,
-          productImage: row.productImage,
-          productPrice: row.productPrice,
-          productStock: row.productStock,
-          variant: row.variant,
+          product: {
+            vendorId: row.vendorId,
+            name: row.productName,
+            image: row.productImage,
+            price: row.productPrice,
+            stock: row.productStock,
+
+            variant: row.variant,
+          },
         },
       ),
     )

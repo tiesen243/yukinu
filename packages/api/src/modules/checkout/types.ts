@@ -10,6 +10,11 @@ export interface UseCases {
   }
 }
 
+// Order DTOs
 export { AllOrdersDto } from '@/modules/checkout/application/dtos/order/all-orders.dto'
 export { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 export { OneOrderDto } from '@/modules/checkout/application/dtos/order/one-order.dto'
+
+// Entities
+export { OrderItemEntity } from '@/modules/checkout/domain/entities/order-item.entity'
+export { OrderEntity } from '@/modules/checkout/domain/entities/order.entity'

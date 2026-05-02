@@ -12,6 +12,7 @@ type DataType =
 type Metadata = Record<string, DataType>
 
 function getDeep(obj: any, path: string) {
+  if (path === '') return obj
   const keys = path.split('.')
   let current = obj
   for (const key of keys) current = current[key]

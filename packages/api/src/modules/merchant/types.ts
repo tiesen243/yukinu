@@ -33,3 +33,9 @@ export { AllStaffsDto } from '@/modules/merchant/application/dtos/staff/all-staf
 export { InviteStaffDto } from '@/modules/merchant/application/dtos/staff/invite-staff.dto'
 export { AcceptInvitationDto } from '@/modules/merchant/application/dtos/staff/accept-invitation.dto'
 export { RemoveStaffDto } from '@/modules/merchant/application/dtos/staff/remove-staff.dto'
+
+// Entities
+export { VendorBalanceEntity } from '@/modules/merchant/domain/entities/vendor-balance.entity'
+export { VendorStaffEntity } from '@/modules/merchant/domain/entities/vendor-staff.entity'
+export { VendorTransferEntity } from '@/modules/merchant/domain/entities/vendor-transfer.entity'
+export { VendorEntity } from '@/modules/merchant/domain/entities/vendor.entity'

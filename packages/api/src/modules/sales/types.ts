@@ -47,3 +47,9 @@ export { SaveVoucherDto } from '@/modules/sales/application/dtos/voucher/save-vo
 // Wishlist DTOs
 export { GetWishlistDto } from '@/modules/sales/application/dtos/wishlist/get-wishlist.dto'
 export { ToggleWishlistDto } from '@/modules/sales/application/dtos/wishlist/toggle-wishlist.dto'
+
+// Entities
+export { BannerEntity } from '@/modules/sales/domain/entities/banner.entity'
+export { CartItemEntity } from '@/modules/sales/domain/entities/cart-item.entity'
+export { VoucherEntity } from '@/modules/sales/domain/entities/voucher.entity'
+export { WishlistItemEntity } from '@/modules/sales/domain/entities/wishlist-item.entity'

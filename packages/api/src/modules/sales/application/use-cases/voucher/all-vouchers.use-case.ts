@@ -17,6 +17,6 @@ export class AllVouchersUseCase extends AbstractUseCase<
   }
 
   execute(_input: AllVouchersDto.Input): Promise<AllVouchersDto.Output> {
-    return this._voucherRepo.find()
+    return this._voucherRepo.find([], { expiredAt: 'desc' })
   }
 }

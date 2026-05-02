@@ -51,3 +51,14 @@ export { OneProductDto } from '@/modules/catalog/application/dtos/product/one-pr
 export { DeleteVariantDto } from '@/modules/catalog/application/dtos/variant/delete-variant.dto'
 export { RecreateVariantDto } from '@/modules/catalog/application/dtos/variant/recreate-variant.dto'
 export { UpdateVariantDto } from '@/modules/catalog/application/dtos/variant/update-variant.dto'
+
+// Entities
+export { AttributeEntity } from '@/modules/catalog/domain/entities/attribute.entity'
+export { CategoryEntity } from '@/modules/catalog/domain/entities/category.entity'
+export { ProductAttributeEntity } from '@/modules/catalog/domain/entities/product-attribute.entity'
+export { ProductImageEntity } from '@/modules/catalog/domain/entities/product-image.entity'
+export { ProductReviewEntity } from '@/modules/catalog/domain/entities/product-review.entity'
+export { ProductVariantEntity } from '@/modules/catalog/domain/entities/product-variant.entity'
+export { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'
+export { VariantOptionEntity } from '@/modules/catalog/domain/entities/variant-option.entity'
+export { VariantEntity } from '@/modules/catalog/domain/entities/variant.entity'

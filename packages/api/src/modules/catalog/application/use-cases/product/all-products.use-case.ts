@@ -24,7 +24,7 @@ export class AllProductsUseCase extends AbstractUseCase<
 
     const whereClauses = [
       {
-        name: search ? `%${search}%` : ('not null' as const),
+        ...(search ? { name: { $like: `%${search}%` } } : {}),
         deletedAt: isDeleted ? ('not null' as const) : ('null' as const),
         ...(categoryId ? { categoryId } : {}),
         ...(vendorId ? { vendorId } : {}),

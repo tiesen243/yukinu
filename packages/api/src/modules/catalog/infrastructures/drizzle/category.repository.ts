@@ -22,11 +22,7 @@ export class DrizzleCategoryRepository
     orderBy: Partial<Record<keyof CategoryEntity, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx: Database = this._db,
-  ): Promise<
-    (CategoryEntity & {
-      parent: { id: CategoryEntity['id']; name: CategoryEntity['name'] } | null
-    })[]
-  > {
+  ): Promise<CategoryRepository.WithParent[]> {
     const whereClauses = this._buildCriteria(criterias)
     const orderByClause = this._buildOrderBy(orderBy)
 

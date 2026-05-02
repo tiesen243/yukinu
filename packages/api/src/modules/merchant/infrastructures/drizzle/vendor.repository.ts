@@ -1,7 +1,7 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import { eq } from '@yukinu/db/drizzle'
-import { users, vendors } from '@yukinu/db/schema'
+import { count, eq } from '@yukinu/db/drizzle'
+import { users, vendors, vendorStaffs } from '@yukinu/db/schema'
 
 import type { VendorRepository } from '@/modules/merchant/domain/repositories/vendor.repository'
 import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
@@ -17,19 +17,28 @@ export class DrizzleVendorRepository
     super(db, vendors, 'id')
   }
 
-  public async findWithOwner(
+  public async findWithDetails(
     criterias: AbstractRepository.Criteria<VendorEntity>[] = [],
     orderBy: Partial<Record<keyof VendorEntity, 'asc' | 'desc'>> = {},
     options: { limit?: number; offset?: number } = {},
     tx: Database = this._db,
-  ): Promise<(VendorEntity & { owner: { id: string; username: string } })[]> {
+  ): Promise<VendorRepository.WithDetails[]> {
     const whereClauses = this._buildCriteria(criterias)
     const orderByClause = this._buildOrderBy(orderBy)
 
     const query = tx
-      .select()
+      .select({
+        vendor: this._table,
+        owner: {
+          id: users.id,
+          username: users.username,
+        },
+        staffCount: count(vendorStaffs.userId),
+      })
       .from(this._table)
       .innerJoin(users, eq(users.id, this._table.ownerId))
+      .leftJoin(vendorStaffs, eq(vendorStaffs.vendorId, this._table.id))
+      .groupBy(this._table.id, users.id)
       .$dynamic()
 
     if (whereClauses) query.where(whereClauses)
@@ -40,7 +49,10 @@ export class DrizzleVendorRepository
     const rows = await query
 
     return rows.map((row) =>
-      Object.assign(this._mapToEntity(row.vendors), { owner: row.users }),
+      Object.assign(this._mapToEntity(row.vendor), {
+        owner: row.owner,
+        staffCount: row.staffCount,
+      }),
     )
   }
 

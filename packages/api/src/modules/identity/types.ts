@@ -92,3 +92,12 @@ export { OneUserDto } from '@/modules/identity/application/dtos/user/one-user.dt
 export { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
 export { UpdateProfileDto } from '@/modules/identity/application/dtos/user/update-profile.dto'
 export { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'
+
+// Entities
+export { AccountEntity } from '@/modules/identity/domain/entities/account.entity'
+export { AddressEntity } from '@/modules/identity/domain/entities/address.entity'
+export { ProfileEntity } from '@/modules/identity/domain/entities/profile.entity'
+export { SessionEntity } from '@/modules/identity/domain/entities/session.entity'
+export { TicketEntity } from '@/modules/identity/domain/entities/ticket.entity'
+export { UserEntity } from '@/modules/identity/domain/entities/user.entity'
+export { VerificationEntity } from '@/modules/identity/domain/entities/verification.entity'

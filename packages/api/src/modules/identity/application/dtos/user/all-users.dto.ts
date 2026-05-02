@@ -7,6 +7,7 @@ export namespace AllUsersDto {
   export const input = Pagination.input.extend({
     search: z.string().optional(),
     role: z.enum(UserEntity.roles).optional(),
+    isDeleted: z.boolean().default(false),
   })
   export type Input = z.infer<typeof input>
 
