@@ -1,9 +1,9 @@
 import type { TRPCRouterRecord } from '@trpc/server'
 import type { Database } from '@yukinu/db/drizzle'
 
+import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 import type { UseCases } from '@/modules/sales/types'
 
-import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 import { AllBannersUseCase } from '@/modules/sales/application/use-cases/banner/all-banners.use-case'
 import { CreateBannerUseCase } from '@/modules/sales/application/use-cases/banner/create-banner.use-case'
 import { DeleteBannerUseCase } from '@/modules/sales/application/use-cases/banner/delete-banner.use-case'
