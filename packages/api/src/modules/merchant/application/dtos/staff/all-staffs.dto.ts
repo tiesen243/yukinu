@@ -10,7 +10,8 @@ export namespace AllStaffsDto {
     z.instanceof(VendorStaffEntity).transform(
       (val) =>
         val as VendorStaffEntity & {
-          user: { id: string; username: string }
+          username: string
+          email: string
         },
     ),
   )

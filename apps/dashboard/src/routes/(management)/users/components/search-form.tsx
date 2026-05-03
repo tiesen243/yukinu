@@ -41,11 +41,12 @@ export const UserSearchForm: React.FC<{
           className='max-w-sm'
           onChange={(e) => setSearch(e.target.value)}
         />
+
         <Select value={role} onValueChange={setRole}>
           <SelectTrigger>
             <SelectValue placeholder='Filter by role' />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent alignItemWithTrigger={false}>
             <SelectItem value=''>All Roles</SelectItem>
             {UserEntity.roles.map((r) => (
               <SelectItem key={r} value={r}>

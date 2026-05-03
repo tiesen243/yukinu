@@ -35,7 +35,7 @@ export class SaveVendorUseCase extends AbstractUseCase<
     if (!input.id && existingVendor)
       throw new TRPCError({
         code: 'CONFLICT',
-        message: `Vendor for owner ID ${input.ownerId} already exists`,
+        message: `Your vendor registration is pending approval. Please wait for the approval process to complete before registering again.`,
       })
 
     const vendor = new VendorEntity(input)

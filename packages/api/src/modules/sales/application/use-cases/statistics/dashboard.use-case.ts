@@ -1,6 +1,6 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import { sql, eq, and, sum, count } from '@yukinu/db/drizzle'
+import { sql, eq, and, sum, count, desc } from '@yukinu/db/drizzle'
 import {
   orders,
   payments,
@@ -10,7 +10,7 @@ import {
   products,
 } from '@yukinu/db/schema'
 
-import type { DashboardDto } from '@/modules/sales/application/dtos/admin/dashboard.dto'
+import type { DashboardDto } from '@/modules/sales/application/dtos/statistics/dashboard.dto'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
@@ -22,20 +22,32 @@ export class DashboardUseCase extends AbstractUseCase<
     super()
   }
 
-  async execute(_input: DashboardDto.Input): Promise<DashboardDto.Output> {
+  async execute({
+    vendorId,
+  }: DashboardDto.Input): Promise<DashboardDto.Output> {
     // 1. Overview Metrics
     const [stats] = await this._db
       .select({
         totalRevenue: sum(payments.amount),
         totalOrders: count(orders.id),
-        totalUsers: count(users.id),
-        activeVendors: sql<number>`count(case when ${vendors.status} = 'approved' then 1 end)`,
+        totalUsers: vendorId
+          ? sql<number>`count(distinct ${orders.userId})`
+          : count(users.id),
+        secondaryMetric: vendorId
+          ? count(products.id)
+          : sql<number>`count(distinct case when ${vendors.status} = 'approved' then ${vendors.id} end)`,
       })
       .from(payments)
-      .leftJoin(orders, eq(payments.id, orders.paymentId))
+      .innerJoin(orders, eq(payments.id, orders.paymentId))
       .leftJoin(users, eq(orders.userId, users.id))
       .leftJoin(vendors, eq(orders.vendorId, vendors.id))
-      .where(eq(payments.status, 'success'))
+      .leftJoin(products, eq(vendors.id, products.vendorId))
+      .where(
+        and(
+          eq(payments.status, 'success'),
+          vendorId ? eq(orders.vendorId, vendorId) : undefined,
+        ),
+      )
 
     // 2. Revenue Trend (Last 6 months)
     const revenueTrend = await this._db
@@ -44,10 +56,12 @@ export class DashboardUseCase extends AbstractUseCase<
         amount: sum(payments.amount).mapWith(Number),
       })
       .from(payments)
+      .innerJoin(orders, eq(payments.id, orders.paymentId))
       .where(
         and(
           eq(payments.status, 'success'),
           sql`${payments.createdAt} > now() - interval '6 months'`,
+          vendorId ? eq(orders.vendorId, vendorId) : undefined,
         ),
       )
       .groupBy(
@@ -63,7 +77,8 @@ export class DashboardUseCase extends AbstractUseCase<
       })
       .from(orderItems)
       .innerJoin(products, eq(orderItems.productId, products.id))
-      .groupBy(products.id)
+      .where(vendorId ? eq(products.vendorId, vendorId) : undefined)
+      .groupBy(products.id, products.name)
       .orderBy(sql`sum(${orderItems.quantity}) desc`)
       .limit(5)
 
@@ -76,7 +91,9 @@ export class DashboardUseCase extends AbstractUseCase<
         createdAt: payments.createdAt,
       })
       .from(payments)
-      .orderBy(sql`${payments.createdAt} desc`)
+      .innerJoin(orders, eq(payments.id, orders.paymentId))
+      .where(vendorId ? eq(orders.vendorId, vendorId) : undefined)
+      .orderBy(desc(payments.createdAt))
       .limit(8)
 
     return {
@@ -84,7 +101,7 @@ export class DashboardUseCase extends AbstractUseCase<
         revenue: Number(stats?.totalRevenue ?? 0),
         orders: Number(stats?.totalOrders ?? 0),
         users: Number(stats?.totalUsers ?? 0),
-        vendors: Number(stats?.activeVendors ?? 0),
+        vendors: Number(stats?.secondaryMetric ?? 0),
       },
       revenueTrend,
       topProducts,

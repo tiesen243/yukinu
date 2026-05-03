@@ -6,7 +6,7 @@ import { Pagination } from '@/shared/schema'
 export namespace AllVendorsDto {
   export const input = Pagination.input.extend({
     search: z.string().optional(),
-    status: z.enum(VendorEntity.statuses).optional(),
+    status: z.enum(VendorEntity.statuses).nullable(),
   })
   export type Input = z.infer<typeof input>
 

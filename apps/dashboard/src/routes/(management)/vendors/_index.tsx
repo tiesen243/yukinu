@@ -1,7 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
+import { VendorEntity } from '@yukinu/api/merchant'
 import { Badge } from '@yukinu/ui/badge'
 import { Typography } from '@yukinu/ui/typography'
-import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
+import {
+  parseAsInteger,
+  parseAsString,
+  parseAsStringEnum,
+  useQueryStates,
+} from 'nuqs'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
@@ -19,12 +25,16 @@ export default function MerchantVendorsIndexPage() {
   const { trpc } = useTRPC()
   const [query, setQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
+    status: parseAsStringEnum([...VendorEntity.statuses]),
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
   })
 
   const { data, isLoading } = useQuery(
-    trpc.merchant.vendor.all.queryOptions(query),
+    trpc.merchant.vendor.all.queryOptions({
+      ...query,
+      status: query.status?.trim() ? query.status : null,
+    }),
   )
 
   return (
@@ -38,8 +48,10 @@ export default function MerchantVendorsIndexPage() {
       <DataTable
         header={
           <VendorSearchForm
-            query={query.search}
-            onSearch={({ search }) => setQuery({ search, page: 1 })}
+            query={query}
+            onSearch={({ search, status }) =>
+              setQuery({ search, status, page: 1 })
+            }
           />
         }
         data={data?.vendors ?? []}

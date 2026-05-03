@@ -3,7 +3,7 @@ import type { Database } from '@yukinu/db/drizzle'
 import { sql, eq, desc } from '@yukinu/db/drizzle'
 import { orders, vendors, users } from '@yukinu/db/schema'
 
-import type { AnalyticsDto } from '@/modules/sales/application/dtos/admin/analytics.dto'
+import type { AnalyticsDto } from '@/modules/sales/application/dtos/statistics/analytics.dto'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 

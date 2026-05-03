@@ -8,6 +8,7 @@ import type { AcceptInvitationDto } from '@/modules/merchant/application/dtos/st
 import type { VendorStaffRepository } from '@/modules/merchant/domain/repositories/vendor-staff.repository'
 import type { VendorRepository } from '@/modules/merchant/domain/repositories/vendor.repository'
 
+import { UserEntity } from '@/modules/identity/types'
 import { VendorStaffEntity } from '@/modules/merchant/domain/entities/vendor-staff.entity'
 
 export class AcceptInvitationUseCase {
@@ -22,23 +23,21 @@ export class AcceptInvitationUseCase {
   public async execute(
     input: AcceptInvitationDto.Input,
   ): Promise<AcceptInvitationDto.Output> {
-    const { token, userId } = input
+    const { token } = input
 
-    const [[verification], [user]] = await Promise.all([
-      this.verificationRepo.find([{ token }], {}, { limit: 1 }),
-      this.userRepo.find([{ id: userId }], {}, { limit: 1 }),
-    ])
+    const [verification] = await this.verificationRepo.findWithUser(
+      [{ token }],
+      {},
+      { limit: 1 },
+    )
 
-    if (!verification || !user)
+    if (!verification)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: 'Invalid invitation token or user not found.',
+        message: 'Invalid invitation token.',
       })
 
-    if (
-      verification?.userId !== userId &&
-      !verification?.type.startsWith('invite_')
-    )
+    if (!verification?.type.startsWith('invite_'))
       throw new TRPCError({
         code: 'FORBIDDEN',
         message: 'Invalid invitation token.',
@@ -65,13 +64,19 @@ export class AcceptInvitationUseCase {
     return this.db.transaction(async (tx) => {
       await this.verificationRepo.delete([{ token }], tx)
 
-      const updatedUser = user.clone({ role: 'vendor_staff' })
+      const updatedUser = new UserEntity({
+        ...verification.user,
+        role: 'vendor_staff',
+      })
       await this.userRepo.save(updatedUser, tx)
 
-      const staff = new VendorStaffEntity({ userId, vendorId })
+      const staff = new VendorStaffEntity({
+        userId: verification.user.id,
+        vendorId,
+      })
       await this.vendorStaffRepo.save(staff, tx)
 
-      return { userId }
+      return { userId: verification.user.id }
     })
   }
 }

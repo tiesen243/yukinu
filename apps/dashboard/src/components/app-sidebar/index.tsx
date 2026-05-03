@@ -1,4 +1,3 @@
-import Logo from '@assets/logo.svg'
 import { useSession } from '@yukinu/auth/react'
 import {
   ArrowLeftRightIcon,
@@ -29,6 +28,7 @@ import {
 import * as React from 'react'
 import { Link } from 'react-router'
 
+import Logo from '@/assets/logo.svg'
 import { NavContent } from '@/components/app-sidebar/nav-content'
 import { NavMain } from '@/components/app-sidebar/nav-main'
 import { NavSecondary } from '@/components/app-sidebar/nav-secondary'
@@ -41,7 +41,7 @@ const data = {
       title: 'Dashboard',
       url: '/',
       icon: LayoutDashboardIcon,
-      role: ['admin', 'moderator'],
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
     },
     {
       title: 'Analytics',
@@ -189,13 +189,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={filteredData.navMain} />
-        {filteredData.navContent.map((content) => (
-          <NavContent
-            key={content.title}
-            label={content.title}
-            items={content.items}
-          />
-        ))}
+        {filteredData.navContent
+          .filter((content) => content.items.length > 0)
+          .map((content) => (
+            <NavContent
+              key={content.title}
+              label={content.title}
+              items={content.items}
+            />
+          ))}
         <NavSecondary items={filteredData.navSecondary} className='mt-auto' />
       </SidebarContent>
       <SidebarFooter>

@@ -9,7 +9,7 @@ import {
   AcceptInvitationDto,
   RemoveStaffDto,
 } from '@/modules/merchant/types'
-import { protectedProcedure } from '@/trpc'
+import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const staffRouter = ({ staff }: UseCases) =>
   ({
@@ -31,16 +31,10 @@ export const staffRouter = ({ staff }: UseCases) =>
         }),
       ),
 
-    acceptInvitation: protectedProcedure
-      .meta({ role: ['user'] })
-      .input(AcceptInvitationDto.input.omit({ userId: true }))
+    acceptInvitation: publicProcedure
+      .input(AcceptInvitationDto.input)
       .output(AcceptInvitationDto.output)
-      .mutation(({ ctx, input }) =>
-        staff.accept.execute({
-          userId: ctx.session.userId,
-          token: input.token,
-        }),
-      ),
+      .mutation(({ input }) => staff.accept.execute({ token: input.token })),
 
     remove: protectedProcedure
       .meta({ role: ['vendor_owner'] })

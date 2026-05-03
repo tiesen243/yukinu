@@ -58,14 +58,14 @@ export class InviteStaffUseCase {
         message: `Vendor with id ${vendorId} not found`,
       })
 
-    const inviteLink = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/invite?token=${verification.token}`
+    const inviteLink = `https://${process.env.VITE_DASHBOARD_URL}/accept-invitation?token=${verification.token}`
     await sendEmail({
       to: email,
       subject: `Invitation to join ${vendor.name} on Yukinu`,
       template: 'Invite',
       data: {
         username: user.username,
-        inviterName: vendor.owner.username,
+        inviterName: vendor.owner?.username ?? 'Vendor Owner',
         vendorName: vendor.name,
         inviteLink,
       },

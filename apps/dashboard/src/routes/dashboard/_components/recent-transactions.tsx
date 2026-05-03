@@ -19,10 +19,14 @@ const STATUS_VARIANT = {
   failed: 'destructive',
 } as const
 
-export function RecentTransactions() {
+export const RecentTransactions: React.FC<{ isAdmin: boolean }> = ({
+  isAdmin,
+}) => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
-    trpc.sales.admin.dashboard.queryOptions(),
+    isAdmin
+      ? trpc.sales.statistics.dashboard.queryOptions({})
+      : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
   if (isLoading || !data) return <div>Loading...</div>

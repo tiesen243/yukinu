@@ -45,5 +45,6 @@ export default [
   layout('./components/turnstile.tsx', [
     route('/login', './routes/login.tsx'),
     route('/register-vendor', './routes/register-vendor.tsx'),
+    route('/accept-invitation', './routes/accept-invitation.tsx'),
   ]),
 ] satisfies RouteConfig

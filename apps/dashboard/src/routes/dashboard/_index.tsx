@@ -1,11 +1,15 @@
+import { useSession } from '@yukinu/auth/react'
 import { Typography } from '@yukinu/ui/typography'
 
 import { RecentTransactions } from '@/routes/dashboard/_components/recent-transactions'
 import { RevenueChart } from '@/routes/dashboard/_components/revenue-chart'
 import { Stats } from '@/routes/dashboard/_components/stats'
-import { TopProductsChart } from '@/routes/dashboard/_components/top-product-chart'
+import { TopProductsChart } from '@/routes/dashboard/_components/top-products-chart'
 
 export default function DashboardIndexPage() {
+  const { user } = useSession()
+  const isAdmin = ['admin', 'moderator'].includes(user?.role ?? '')
+
   return (
     <>
       <Typography variant='h2'>Admin Insights</Typography>
@@ -16,16 +20,16 @@ export default function DashboardIndexPage() {
         optimize your business strategy.
       </Typography>
 
-      <Stats />
+      <Stats isAdmin={isAdmin} />
 
       <section className='my-4 grid gap-4 lg:grid-cols-7'>
         <h3 className='sr-only'>Performance Charts</h3>
 
-        <RevenueChart />
-        <TopProductsChart />
+        <RevenueChart isAdmin={isAdmin} />
+        <TopProductsChart isAdmin={isAdmin} />
       </section>
 
-      <RecentTransactions />
+      <RecentTransactions isAdmin={isAdmin} />
     </>
   )
 }

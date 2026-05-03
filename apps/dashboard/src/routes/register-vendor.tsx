@@ -1,7 +1,7 @@
 import { SaveVendorDto } from '@yukinu/api/merchant'
+import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
 import {
-  Card,
   CardHeader,
   CardTitle,
   CardDescription,
@@ -12,34 +12,42 @@ import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { Textarea } from '@yukinu/ui/textarea'
 import { toast } from '@yukinu/ui/toast'
+import { Navigate } from 'react-router'
 
 import { UploadInput } from '@/components/upload-input'
 import { env } from '@/lib/env'
+import { createMetadata } from '@/lib/metadata'
 import { useTRPC } from '@/lib/trpc'
 import { verifyTurnstile } from '@/lib/turnstile'
 
 import type { Route } from './+types/register-vendor'
 
+export const meta: Route.MetaFunction = () =>
+  createMetadata({
+    title: 'Register as a Vendor',
+    description:
+      'Join our marketplace as a vendor and start selling your products to a wide audience. Register now to take advantage of our platform and grow your business.',
+  })
+
 export default function RegisterVendorPage(_: Route.ComponentProps) {
   return (
-    <main className='flex h-dvh flex-col items-center justify-center px-4'>
-      <Card className='min-w-full md:max-w-xl md:min-w-xl'>
-        <CardHeader>
-          <CardTitle>Register as a Vendor</CardTitle>
-          <CardDescription>
-            Fill in the form to register as a vendor and start selling your
-            products on our marketplace. Provide accurate information to ensure
-            a smooth registration process.
-          </CardDescription>
-        </CardHeader>
+    <>
+      <CardHeader>
+        <CardTitle>Register as a Vendor</CardTitle>
+        <CardDescription>
+          Fill in the form to register as a vendor and start selling your
+          products on our marketplace. Provide accurate information to ensure a
+          smooth registration process.
+        </CardDescription>
+      </CardHeader>
 
-        <RegisterVendorForm />
-      </Card>
-    </main>
+      <RegisterVendorForm />
+    </>
   )
 }
 
 const RegisterVendorForm: React.FC = () => {
+  const { status, signOut } = useSession()
   const { trpcClient } = useTRPC()
   const form = useForm({
     defaultValues: {
@@ -63,6 +71,8 @@ const RegisterVendorForm: React.FC = () => {
     onError: (error) => toast.error({ message: error.message }),
   })
 
+  if (status === 'unauthenticated') return <Navigate to='/login' replace />
+
   return (
     <CardContent
       id={form.formId}
@@ -71,62 +81,62 @@ const RegisterVendorForm: React.FC = () => {
     >
       <form.Field
         name='name'
-        render={({ field, meta }) => (
-          <Field data-invalid={meta.errors.length > 0}>
+        render={({ field, meta: _meta }) => (
+          <Field data-invalid={_meta.errors.length > 0}>
             <FieldLabel htmlFor={field.id}>Vendor Name</FieldLabel>
             <Input {...field} placeholder='Enter your vendor name' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldError id={_meta.errorId} errors={_meta.errors} />
           </Field>
         )}
       />
 
       <form.Field
         name='description'
-        render={({ field, meta }) => (
-          <Field data-invalid={meta.errors.length > 0}>
+        render={({ field, meta: _meta }) => (
+          <Field data-invalid={_meta.errors.length > 0}>
             <FieldLabel htmlFor={field.id}>Description</FieldLabel>
             <Textarea
               {...field}
               placeholder='Provide a brief description of your vendor'
             />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldError id={_meta.errorId} errors={_meta.errors} />
           </Field>
         )}
       />
 
       <form.Field
         name='image'
-        render={({ field, meta }) => (
-          <Field data-invalid={meta.errors.length > 0}>
+        render={({ field, meta: _meta }) => (
+          <Field data-invalid={_meta.errors.length > 0}>
             <FieldLabel htmlFor={field.id}>Image URL</FieldLabel>
             <UploadInput
               endpoint='avatarUploader'
               value={field.value ?? ''}
               onValueChange={field.onChange}
             />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldError id={_meta.errorId} errors={_meta.errors} />
           </Field>
         )}
       />
 
       <form.Field
         name='address'
-        render={({ field, meta }) => (
-          <Field data-invalid={meta.errors.length > 0}>
+        render={({ field, meta: _meta }) => (
+          <Field data-invalid={_meta.errors.length > 0}>
             <FieldLabel htmlFor={field.id}>Address</FieldLabel>
             <Input {...field} placeholder='Enter your vendor address' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldError id={_meta.errorId} errors={_meta.errors} />
           </Field>
         )}
       />
 
       <form.Field
         name='contact'
-        render={({ field, meta }) => (
-          <Field data-invalid={meta.errors.length > 0}>
+        render={({ field, meta: _meta }) => (
+          <Field data-invalid={_meta.errors.length > 0}>
             <FieldLabel htmlFor={field.id}>Contact Information</FieldLabel>
             <Input {...field} placeholder='Enter your contact information' />
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldError id={_meta.errorId} errors={_meta.errors} />
           </Field>
         )}
       />
@@ -139,6 +149,14 @@ const RegisterVendorForm: React.FC = () => {
 
         <Button type='submit' disabled={form.state.isPending}>
           Register
+        </Button>
+
+        <Button
+          variant='link'
+          onClick={signOut}
+          disabled={form.state.isPending}
+        >
+          Sign Out
         </Button>
       </Field>
     </CardContent>

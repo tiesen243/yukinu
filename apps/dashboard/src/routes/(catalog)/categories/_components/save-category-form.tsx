@@ -77,7 +77,7 @@ export const SaveCategoryForm: React.FC<{
       className='my-4'
       render={<form id={form.formId} onSubmit={form.handleSubmit} />}
     >
-      <FieldSet className='px-4'>
+      <FieldSet className='px-4' disabled={form.state.isPending}>
         <FieldGroup>
           <form.Field
             name='name'
@@ -156,7 +156,7 @@ export const SaveCategoryForm: React.FC<{
           />
 
           <Field>
-            <Button type='submit' disabled={form.state.isPending}>
+            <Button type='submit'>
               {category?.id ? 'Save Changes' : 'Create Category'}
             </Button>
           </Field>

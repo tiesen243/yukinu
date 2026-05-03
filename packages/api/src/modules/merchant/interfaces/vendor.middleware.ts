@@ -28,13 +28,13 @@ export const vendorMiddleware = createTRPCMiddleware(async ({ ctx, next }) => {
   let vendor
   if (ctx.session.role === 'vendor_owner')
     [vendor] = await ctx.db
-      .select({ id: vendors.id })
+      .select({ id: vendors.id, status: vendors.status })
       .from(vendors)
       .where(eq(vendors.ownerId, ctx.session.userId))
       .limit(1)
   else if (ctx.session.role === 'vendor_staff')
     [vendor] = await ctx.db
-      .select({ id: vendors.id })
+      .select({ id: vendors.id, status: vendors.status })
       .from(vendors)
       .innerJoin(vendorStaffs, eq(vendorStaffs.vendorId, vendors.id))
       .where(eq(vendorStaffs.userId, ctx.session.userId))
@@ -44,6 +44,17 @@ export const vendorMiddleware = createTRPCMiddleware(async ({ ctx, next }) => {
     throw new TRPCError({
       code: 'NOT_FOUND',
       message: `Vendor for user ID ${ctx.session.userId} not found`,
+    })
+
+  const forbiddenMessages: Record<string, string> = {
+    pending: 'Vendor account is pending approval',
+    rejected: 'Vendor account has been rejected',
+    suspended: 'Vendor account has been suspended',
+  }
+  if (forbiddenMessages[vendor.status])
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: forbiddenMessages[vendor.status],
     })
 
   return next({

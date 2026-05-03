@@ -11,10 +11,12 @@ import {
 
 import { useTRPC } from '@/lib/trpc'
 
-export const Stats: React.FC = () => {
+export const Stats: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
-    trpc.sales.admin.dashboard.queryOptions(),
+    isAdmin
+      ? trpc.sales.statistics.dashboard.queryOptions({})
+      : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
   if (isLoading || !data) return <div>Loading...</div>

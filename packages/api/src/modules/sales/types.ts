@@ -1,11 +1,11 @@
-import type { AnalyticsUseCase } from '@/modules/sales/application/use-cases/admin/analytics.use-case'
-import type { DashboardUseCase } from '@/modules/sales/application/use-cases/admin/dashboard.use-case'
 import type { AllBannersUseCase } from '@/modules/sales/application/use-cases/banner/all-banners.use-case'
 import type { CreateBannerUseCase } from '@/modules/sales/application/use-cases/banner/create-banner.use-case'
 import type { DeleteBannerUseCase } from '@/modules/sales/application/use-cases/banner/delete-banner.use-case'
 import type { GetCartUseCase } from '@/modules/sales/application/use-cases/cart/get-cart.use-case'
 import type { RemoveCartItemUseCase } from '@/modules/sales/application/use-cases/cart/remove-item.dto'
 import type { SaveCartItemUseCase } from '@/modules/sales/application/use-cases/cart/save-cart-item.dto'
+import type { AnalyticsUseCase } from '@/modules/sales/application/use-cases/statistics/analytics.use-case'
+import type { DashboardUseCase } from '@/modules/sales/application/use-cases/statistics/dashboard.use-case'
 import type { AllVouchersUseCase } from '@/modules/sales/application/use-cases/voucher/all-vouchers.use-case'
 import type { DeleteVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/delete-voucher.use-case'
 import type { OneVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/one-voucher.use-case'
@@ -44,6 +44,15 @@ export interface UseCases {
 export { AllBannersDto } from '@/modules/sales/application/dtos/banner/all-banners.dto'
 export { CreateBannerDto } from '@/modules/sales/application/dtos/banner/create-banner.dto'
 export { DeleteBannerDto } from '@/modules/sales/application/dtos/banner/delete-banner.dto'
+
+// Cart DTOs
+export { GetCartDto } from '@/modules/sales/application/dtos/cart/get-cart.dto'
+export { SaveCartItemDto } from '@/modules/sales/application/dtos/cart/save-cart-item.dto'
+export { RemoveCartItemDto } from '@/modules/sales/application/dtos/cart/remove-cart-item.dto'
+
+// Statistics DTOs
+export { AnalyticsDto } from '@/modules/sales/application/dtos/statistics/analytics.dto'
+export { DashboardDto } from '@/modules/sales/application/dtos/statistics/dashboard.dto'
 
 // Voucher DTOs
 export { AllVouchersDto } from '@/modules/sales/application/dtos/voucher/all-vouchers.dto'

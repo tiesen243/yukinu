@@ -3,7 +3,7 @@ import * as z from 'zod'
 import { PaymentEntity } from '@/modules/finance/types'
 
 export namespace DashboardDto {
-  export const input = z.void()
+  export const input = z.object({ vendorId: z.cuid2().optional() })
   export type Input = z.infer<typeof input>
 
   export const output = z.object({

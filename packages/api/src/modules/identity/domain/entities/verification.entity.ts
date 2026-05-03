@@ -23,3 +23,9 @@ export class VerificationEntity extends AbstractEntity<VerificationEntity> {
     })
   }
 }
+
+export namespace VerificationEntity {
+  export type WithUser = VerificationEntity & {
+    user: { id: string; username: string; email: string }
+  }
+}

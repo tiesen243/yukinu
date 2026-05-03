@@ -4,7 +4,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { SignInDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -31,18 +30,16 @@ export const meta: Route.MetaFunction = () =>
 
 export default function LoginPage(_: Route.ComponentProps) {
   return (
-    <main className='flex h-dvh flex-col items-center justify-center px-4'>
-      <Card className='min-w-full md:max-w-xl md:min-w-xl'>
-        <CardHeader>
-          <CardTitle>Login</CardTitle>
-          <CardDescription>
-            Fill in your credentials to access the dashboard.
-          </CardDescription>
-        </CardHeader>
+    <>
+      <CardHeader>
+        <CardTitle>Login</CardTitle>
+        <CardDescription>
+          Fill in your credentials to access the dashboard.
+        </CardDescription>
+      </CardHeader>
 
-        <LoginForm />
-      </Card>
-    </main>
+      <LoginForm />
+    </>
   )
 }
 

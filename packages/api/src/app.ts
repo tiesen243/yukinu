@@ -20,7 +20,9 @@ const createApp = (db: Database) => {
     vendorMiddleware: merchantModule.middlewares.vendor,
   })
 
-  const salesModule = createSalesModule(db)
+  const salesModule = createSalesModule(db, {
+    vendorMiddleware: merchantModule.middlewares.vendor,
+  })
   const financeModule = createFinanceModule(db)
 
   const checkoutModule = createCheckoutModule(db, {

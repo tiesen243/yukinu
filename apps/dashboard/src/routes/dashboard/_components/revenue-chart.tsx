@@ -24,10 +24,12 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function RevenueChart() {
+export const RevenueChart: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
-    trpc.sales.admin.dashboard.queryOptions(),
+    isAdmin
+      ? trpc.sales.statistics.dashboard.queryOptions({})
+      : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
   if (isLoading || !data) return <div>Loading...</div>

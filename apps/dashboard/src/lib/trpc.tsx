@@ -13,6 +13,7 @@ import { env } from '@/lib/env'
 interface TRPCContextValue {
   trpcClient: ReturnType<typeof createTRPCClient>
   trpc: ReturnType<typeof createTRPCOptionsProxy<AppRouter>>
+  queryClient: QueryClient
 }
 
 const TRPCContext = React.createContext<TRPCContextValue | null>(null)
@@ -38,6 +39,7 @@ const TRPCProvider: React.FC<{ children: React.ReactNode }> = ({
         client: trpcClient,
         queryClient,
       }),
+      queryClient,
     }),
     [trpcClient, queryClient],
   )

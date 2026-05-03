@@ -24,10 +24,14 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function TopProductsChart() {
+export const TopProductsChart: React.FC<{ isAdmin: boolean }> = ({
+  isAdmin,
+}) => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
-    trpc.sales.admin.dashboard.queryOptions(),
+    isAdmin
+      ? trpc.sales.statistics.dashboard.queryOptions({})
+      : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
   if (isLoading || !data) return <div>Loading...</div>
