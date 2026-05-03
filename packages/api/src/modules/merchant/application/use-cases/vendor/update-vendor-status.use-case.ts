@@ -26,13 +26,17 @@ export class UpdateVendorStatusUseCase extends AbstractUseCase<
     const { id, ownerId, status } = input
 
     const [[vendor], [user]] = await Promise.all([
-      this._vendorRepo.find([{ id, ownerId }], {}, { limit: 1 }),
-      this._userRepo.find([{ id: ownerId }], {}, { limit: 1 }),
+      this._vendorRepo.find(
+        [{ id, ownerId: ownerId ?? 'null' }],
+        {},
+        { limit: 1 },
+      ),
+      this._userRepo.find([{ id: ownerId ?? '' }], {}, { limit: 1 }),
     ])
-    if (!vendor || !user)
+    if (!vendor)
       throw new TRPCError({
         code: 'NOT_FOUND',
-        message: `Vendor with ID ${id} and owner ID ${ownerId} not found`,
+        message: `Vendor with ID ${id} not found`,
       })
 
     const validTransitions = {
@@ -51,6 +55,7 @@ export class UpdateVendorStatusUseCase extends AbstractUseCase<
     return this._db.transaction(async (tx) => {
       const updatedVendor = vendor.clone({ status })
       await this._vendorRepo.save(updatedVendor, tx)
+      if (!user) return { id }
 
       if (status === 'approved') {
         const updatedUser = user.clone({ role: 'vendor_owner' })

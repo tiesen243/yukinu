@@ -36,7 +36,7 @@ export class DrizzleVendorRepository
         staffCount: count(vendorStaffs.userId),
       })
       .from(this._table)
-      .innerJoin(users, eq(users.id, this._table.ownerId))
+      .leftJoin(users, eq(users.id, this._table.ownerId))
       .leftJoin(vendorStaffs, eq(vendorStaffs.vendorId, this._table.id))
       .groupBy(this._table.id, users.id)
       .$dynamic()

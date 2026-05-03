@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from '@yukinu/auth/react'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
@@ -10,6 +11,7 @@ import { ProductSearchForm } from '@/routes/(catalog)/products/_components/searc
 
 export default function CatalogProductsIndexPage() {
   const { trpc } = useTRPC()
+  const { user } = useSession()
   const [query, setQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
     page: parseAsInteger.withDefault(1),
@@ -17,7 +19,9 @@ export default function CatalogProductsIndexPage() {
   })
 
   const { data, isLoading } = useQuery(
-    trpc.catalog.product.all.queryOptions(query),
+    ['admin', 'moderator'].includes(user?.role ?? '')
+      ? trpc.catalog.product.all.queryOptions(query)
+      : trpc.catalog.product.allByVendor.queryOptions(query),
   )
 
   return (

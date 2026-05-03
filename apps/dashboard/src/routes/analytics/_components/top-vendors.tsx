@@ -20,7 +20,7 @@ export const TopVendors: React.FC = () => {
   if (isLoading || !data) return <div>Loading...</div>
 
   return (
-    <Card className='px-4'>
+    <Card className='mb-4 px-4'>
       <CardHeader className='px-0'>
         <CardTitle>Top Performing Vendors</CardTitle>
       </CardHeader>

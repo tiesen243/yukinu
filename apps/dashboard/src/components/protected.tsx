@@ -12,7 +12,7 @@ import { AppSidebar } from '@/components/app-sidebar'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 
 export default function Protected() {
-  const { status } = useSession()
+  const { status, user } = useSession()
 
   if (status === 'loading')
     return (
@@ -23,6 +23,8 @@ export default function Protected() {
     )
 
   if (status === 'unauthenticated') return <Navigate to='/login' replace />
+
+  if (user.role === 'user') return <Navigate to='/register-vendor' replace />
 
   return (
     <SidebarProvider>

@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from '@yukinu/ui/chart'
@@ -25,7 +27,6 @@ export function OrderStatusChart() {
   )
   if (isLoading || !data) return <div>Loading...</div>
 
-  // Map data to include colors based on status
   const formattedData = data.orderStatusDist.map((item, idx) => ({
     ...item,
     fill: `var(--color-chart-${(idx % 5) + 1})`,
@@ -57,6 +58,7 @@ export function OrderStatusChart() {
                 fontSize={12}
               />
             </Pie>
+            <ChartLegend content={<ChartLegendContent nameKey='status' />} />
           </PieChart>
         </ChartContainer>
       </CardContent>

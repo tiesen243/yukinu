@@ -1,8 +1,10 @@
 import Logo from '@assets/logo.svg'
 import { useSession } from '@yukinu/auth/react'
 import {
+  ArrowLeftRightIcon,
   ChartBarIcon,
   ClipboardCheckIcon,
+  ExternalLinkIcon,
   HandCoinsIcon,
   LayoutDashboardIcon,
   MegaphoneIcon,
@@ -47,6 +49,12 @@ const data = {
       icon: ChartBarIcon,
       role: ['admin', 'moderator'],
     },
+    {
+      title: 'Back to Store',
+      url: env.VITE_WEB_URL,
+      icon: ExternalLinkIcon,
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
+    },
   ],
   navContent: [
     {
@@ -76,6 +84,18 @@ const data = {
           icon: ClipboardCheckIcon,
           role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
         },
+        {
+          name: 'Vendors',
+          url: '/management/vendors',
+          icon: StoreIcon,
+          role: ['admin', 'moderator'],
+        },
+        {
+          name: 'Transactions',
+          url: '/management/transactions',
+          icon: ArrowLeftRightIcon,
+          role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
+        },
       ],
     },
     {
@@ -98,12 +118,6 @@ const data = {
     {
       title: 'Merchant',
       items: [
-        {
-          name: 'Vendors',
-          url: '/merchant/vendors',
-          icon: StoreIcon,
-          role: ['admin', 'moderator'],
-        },
         {
           name: 'My Store',
           url: '/merchant/my-store',

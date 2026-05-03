@@ -14,7 +14,7 @@ import { Field, FieldError, FieldLabel } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { useNavigate, useSubmit } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { env } from '@/lib/env'
 import { createMetadata } from '@/lib/metadata'
@@ -29,10 +29,7 @@ export const meta: Route.MetaFunction = () =>
     openGraph: { url: '/login' },
   })
 
-export const action = ({ request }: Route.ActionArgs) =>
-  verifyTurnstile(request)
-
-export default function LoginPage({ actionData }: Route.ComponentProps) {
+export default function LoginPage(_: Route.ComponentProps) {
   return (
     <main className='flex h-dvh flex-col items-center justify-center px-4'>
       <Card className='min-w-full md:max-w-xl md:min-w-xl'>
@@ -43,16 +40,13 @@ export default function LoginPage({ actionData }: Route.ComponentProps) {
           </CardDescription>
         </CardHeader>
 
-        <LoginForm actionData={actionData} />
+        <LoginForm />
       </Card>
     </main>
   )
 }
 
-const LoginForm: React.FC<Pick<Route.ComponentProps, 'actionData'>> = ({
-  actionData,
-}) => {
-  const submit = useSubmit()
+const LoginForm: React.FC = () => {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
 
@@ -60,11 +54,8 @@ const LoginForm: React.FC<Pick<Route.ComponentProps, 'actionData'>> = ({
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
     schema: SignInDto.input,
-    onSubmit: (data, event) => {
-      if (!(event && event.target instanceof HTMLFormElement)) return
-      submit(event.target, { method: 'post' })
-
-      if (actionData?.success === false) throw new Error(actionData.message)
+    onSubmit: async (data, event) => {
+      await verifyTurnstile(event as unknown as React.SubmitEvent)
       return trpcClient.identity.auth.signIn.mutate(data)
     },
     onSuccess: () => [

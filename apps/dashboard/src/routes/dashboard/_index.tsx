@@ -1,9 +1,9 @@
 import { Typography } from '@yukinu/ui/typography'
 
-import { RecentTransactions } from '@/routes/(others)/dashboard/_components/recent-transactions'
-import { RevenueChart } from '@/routes/(others)/dashboard/_components/revenue-chart'
-import { Stats } from '@/routes/(others)/dashboard/_components/stats'
-import { TopProductsChart } from '@/routes/(others)/dashboard/_components/top-product-chart'
+import { RecentTransactions } from '@/routes/dashboard/_components/recent-transactions'
+import { RevenueChart } from '@/routes/dashboard/_components/revenue-chart'
+import { Stats } from '@/routes/dashboard/_components/stats'
+import { TopProductsChart } from '@/routes/dashboard/_components/top-product-chart'
 
 export default function DashboardIndexPage() {
   return (

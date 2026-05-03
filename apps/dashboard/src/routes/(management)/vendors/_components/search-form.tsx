@@ -3,9 +3,10 @@ import { Input } from '@yukinu/ui/input'
 import { useState } from 'react'
 
 export const VendorSearchForm: React.FC<{
+  query: string
   onSearch: (opts: { search?: string }) => void
-}> = ({ onSearch }) => {
-  const [search, setSearch] = useState('')
+}> = ({ query, onSearch }) => {
+  const [search, setSearch] = useState(query)
 
   return (
     <form

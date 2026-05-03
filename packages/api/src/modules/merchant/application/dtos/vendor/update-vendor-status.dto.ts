@@ -5,7 +5,7 @@ import { VendorEntity } from '@/modules/merchant/domain/entities/vendor.entity'
 export namespace UpdateVendorStatusDto {
   export const input = z.object({
     id: z.cuid2(),
-    ownerId: z.cuid2(),
+    ownerId: z.cuid2().nullable(),
     status: z.enum(VendorEntity.statuses),
   })
   export type Input = z.infer<typeof input>

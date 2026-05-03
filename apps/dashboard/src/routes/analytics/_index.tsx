@@ -1,8 +1,8 @@
 import { Typography } from '@yukinu/ui/typography'
 
-import { CustomerTrend } from '@/routes/(others)/analytics/_components/customer-trend'
-import { OrderStatusChart } from '@/routes/(others)/analytics/_components/order-status-chart'
-import { TopVendors } from '@/routes/(others)/analytics/_components/top-vendors'
+import { CustomerTrend } from '@/routes/analytics/_components/customer-trend'
+import { OrderStatusChart } from '@/routes/analytics/_components/order-status-chart'
+import { TopVendors } from '@/routes/analytics/_components/top-vendors'
 
 export default function AnalyticsIndexPage() {
   return (

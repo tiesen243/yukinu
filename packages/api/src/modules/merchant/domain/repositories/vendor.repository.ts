@@ -17,7 +17,7 @@ export namespace VendorRepository {
     owner: {
       id: string
       username: string
-    }
+    } | null
     staffCount: number
   }
 }

@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { Badge } from '@yukinu/ui/badge'
-import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { VendorSearchForm } from '@/routes/(merchant)/vendors/_components/search-form'
+import { VendorSearchForm } from '@/routes/(management)/vendors/_components/search-form'
+import { UpdateVendorButton } from '@/routes/(management)/vendors/_components/update-vendor-button'
 
 const STATUS_VARIANTS = {
   pending: 'info',
@@ -38,6 +38,7 @@ export default function MerchantVendorsIndexPage() {
       <DataTable
         header={
           <VendorSearchForm
+            query={query.search}
             onSearch={({ search }) => setQuery({ search, page: 1 })}
           />
         }
@@ -62,11 +63,13 @@ export default function MerchantVendorsIndexPage() {
           createdAt: 'Created At',
           updatedAt: 'Updated At',
         }}
-        actions={() => (
-          <div className='flex items-center gap-2'>
-            <Button>Edit</Button>
-            <Button variant='destructive'>Delete</Button>
-          </div>
+        actions={(item) => (
+          <UpdateVendorButton
+            vendorId={item.id}
+            vendorOwnerId={item.owner?.id ?? null}
+            vendorName={item.name}
+            vendorStatus={item.status}
+          />
         )}
         pagination={{
           ...data?.pagination,

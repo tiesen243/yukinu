@@ -12,14 +12,12 @@ export namespace AllCategoriesDto {
 
   export const output = z.object({
     categories: z.array(
-      z
-        .instanceof(CategoryEntity)
-        .transform(
-          (val) =>
-            val as CategoryEntity & {
-              parent: { id: string; name: string } | null
-            },
-        ),
+      z.instanceof(CategoryEntity).transform(
+        (val) =>
+          val as CategoryEntity & {
+            parent: { id: string; name: string } | null
+          },
+      ),
     ),
     pagination: Pagination.output,
   })

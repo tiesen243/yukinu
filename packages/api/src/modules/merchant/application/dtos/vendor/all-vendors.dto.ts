@@ -12,10 +12,13 @@ export namespace AllVendorsDto {
 
   export const output = z.object({
     vendors: z.array(
-      z.instanceof(VendorEntity).transform((val) => val as VendorEntity & {
-          owner: { id: string; username: string }
-          staffCount: number
-        }),
+      z.instanceof(VendorEntity).transform(
+        (val) =>
+          val as VendorEntity & {
+            owner: { id: string; username: string } | null
+            staffCount: number
+          },
+      ),
     ),
     pagination: Pagination.output,
   })

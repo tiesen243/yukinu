@@ -1,3 +1,4 @@
+import type { AnalyticsUseCase } from '@/modules/sales/application/use-cases/admin/analytics.use-case'
 import type { DashboardUseCase } from '@/modules/sales/application/use-cases/admin/dashboard.use-case'
 import type { AllBannersUseCase } from '@/modules/sales/application/use-cases/banner/all-banners.use-case'
 import type { CreateBannerUseCase } from '@/modules/sales/application/use-cases/banner/create-banner.use-case'
@@ -11,8 +12,6 @@ import type { OneVoucherUseCase } from '@/modules/sales/application/use-cases/vo
 import type { SaveVoucherUseCase } from '@/modules/sales/application/use-cases/voucher/save-voucher.use-case'
 import type { GetWishlistUseCase } from '@/modules/sales/application/use-cases/wishlist/get-wishlist.dto'
 import type { ToggleWishlistUseCase } from '@/modules/sales/application/use-cases/wishlist/toggle-wishlist.dto'
-
-import type { AnalyticsUseCase } from '@/modules/sales/application/use-cases/admin/analytics.use-case'
 
 export interface UseCases {
   admin: {
