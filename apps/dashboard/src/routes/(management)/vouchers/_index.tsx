@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { formatPrice } from '@yukinu/lib/utils'
+import { formatDate, formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
 
@@ -38,9 +38,15 @@ export default function ManagementVouchersIndexPage() {
             label: 'Discount Amount',
             render: (val) => (val ? formatPrice(val) : '-'),
           },
-          discountPercentage: 'Discount Percentage',
+          discountPercentage: {
+            label: 'Discount Percentage',
+            render: (val) => (val ? `${val}%` : '-'),
+          },
           quantity: 'Quantity',
-          expiredAt: 'Expired At',
+          expiredAt: {
+            label: 'Expired At',
+            render: (val) => formatDate(val, true),
+          },
         }}
         actions={(item) => (
           <div className='flex items-center gap-2'>

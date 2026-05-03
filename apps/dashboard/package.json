@@ -4,7 +4,7 @@
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "bun --env-file=.env react-router build",
+    "build": "react-router build",
     "clean": "git clean -xdf .cache .react-router .turbo .vercel build node_modules",
     "dev": "react-router dev",
     "start": "react-router-serve build/server/index.js",

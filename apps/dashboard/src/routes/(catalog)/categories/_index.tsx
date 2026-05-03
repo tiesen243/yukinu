@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
+import { Link } from 'react-router'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
+import { DeleteCategoryButton } from '@/routes/(catalog)/categories/_components/delete-category-button'
 import { CategorySearchForm } from '@/routes/(catalog)/categories/_components/search-form'
 
 export default function CatalogCategoriesIndexPage() {
@@ -29,9 +31,18 @@ export default function CatalogCategoriesIndexPage() {
 
       <DataTable
         header={
-          <CategorySearchForm
-            onSearch={({ search }) => setQuery({ search, page: 1 })}
-          />
+          <div className='flex items-center justify-between'>
+            <CategorySearchForm
+              onSearch={({ search }) => setQuery({ search, page: 1 })}
+            />
+
+            <Button
+              nativeButton={false}
+              render={<Link to='/catalog/categories/new' />}
+            >
+              Create Category
+            </Button>
+          </div>
         }
         data={data?.categories ?? []}
         isLoading={isLoading}
@@ -44,10 +55,18 @@ export default function CatalogCategoriesIndexPage() {
             render: (value) => value?.name,
           },
         }}
-        actions={() => (
+        actions={(item) => (
           <div className='flex items-center gap-2'>
-            <Button>Edit</Button>
-            <Button variant='destructive'>Delete</Button>
+            <Button
+              nativeButton={false}
+              render={<Link to={`/catalog/categories/${item.id}`} />}
+            >
+              Edit
+            </Button>
+            <DeleteCategoryButton
+              categoryId={item.id}
+              categoryName={item.name}
+            />
           </div>
         )}
         pagination={{

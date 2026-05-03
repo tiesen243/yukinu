@@ -37,12 +37,23 @@ export const userRouter = ({ user }: UseCases) =>
       .meta({ role: ['admin', 'moderator'] })
       .input(UpdateUserDto.input)
       .output(UpdateUserDto.output)
-      .mutation(({ input }) => user.updateUser.execute(input)),
+      .mutation(({ ctx, input }) =>
+        user.updateUser.execute({
+          ...input,
+          currentUserId: ctx.session.userId,
+          currentUserRole: ctx.session.role,
+        }),
+      ),
 
     delete: protectedProcedure
       .input(OneUserDto.input)
       .output(OneUserDto.output)
-      .mutation(({ input }) => user.deleteUser.execute(input)),
+      .mutation(({ ctx, input }) =>
+        user.deleteUser.execute({
+          ...input,
+          currentUserId: ctx.session.userId,
+        }),
+      ),
 
     restore: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })
@@ -54,5 +65,10 @@ export const userRouter = ({ user }: UseCases) =>
       .meta({ role: ['admin'] })
       .input(OneUserDto.input)
       .output(OneUserDto.output)
-      .mutation(({ input }) => user.permanentDeleteUser.execute(input)),
+      .mutation(({ ctx, input }) =>
+        user.permanentDeleteUser.execute({
+          ...input,
+          currentUserId: ctx.session.userId,
+        }),
+      ),
   }) satisfies TRPCRouterRecord

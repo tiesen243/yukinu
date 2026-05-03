@@ -41,7 +41,11 @@ export const createQueryClient = () =>
         context,
       ) {
         const filter = context.meta?.filter
-        if (filter) void context.client.invalidateQueries(filter)
+        if (!filter) return
+
+        void (Array.isArray(filter)
+          ? Promise.all(filter.map((f) => context.client.invalidateQueries(f)))
+          : context.client.invalidateQueries(filter))
       },
     }),
   })
@@ -49,7 +53,7 @@ export const createQueryClient = () =>
 declare module '@tanstack/react-query' {
   interface Register {
     mutationMeta: {
-      filter: InvalidateQueryFilters
+      filter: InvalidateQueryFilters | InvalidateQueryFilters[]
     }
   }
 }

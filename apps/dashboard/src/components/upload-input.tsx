@@ -10,11 +10,14 @@ import { toast } from '@yukinu/ui/toast'
 import { useUploadThing } from '@yukinu/uploadthing/react'
 import { useRef } from 'react'
 
-export const UploadInput: React.FC<{
-  endpoint: keyof OurFileRouter
-  value: string
-  onValueChange: (url: string) => void
-}> = ({ endpoint, value, onValueChange }) => {
+export const UploadInput: React.FC<
+  {
+    endpoint: keyof OurFileRouter
+    value: string
+    onValueChange: (url: string) => void
+    disabled?: boolean
+  } & React.ComponentPropsWithoutRef<typeof InputGroup>
+> = ({ endpoint, value, onValueChange, disabled = false, ...props }) => {
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const ut = useUploadThing(endpoint, {
@@ -30,7 +33,7 @@ export const UploadInput: React.FC<{
   })
 
   return (
-    <InputGroup>
+    <InputGroup {...props}>
       <input
         ref={inputRef}
         type='file'
@@ -41,18 +44,20 @@ export const UploadInput: React.FC<{
           if (!selectedFile) return
           ut.startUpload([selectedFile])
         }}
+        disabled={disabled || ut.isUploading}
         hidden
       />
 
       <InputGroupInput
         value={ut.isUploading ? 'Uploading...' : value}
         placeholder='No file selected'
+        disabled={disabled || ut.isUploading}
         readOnly
       />
 
       <InputGroupAddon align='inline-end'>
         <InputGroupButton
-          disabled={ut.isUploading}
+          disabled={disabled || ut.isUploading}
           onClick={() => inputRef.current?.click()}
         >
           Upload

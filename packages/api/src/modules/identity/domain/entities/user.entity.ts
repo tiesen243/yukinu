@@ -21,6 +21,10 @@ export class UserEntity extends AbstractEntity<UserEntity> {
       ...props,
     })
   }
+
+  get isDeleted() {
+    return this.deletedAt !== null
+  }
 }
 
 export namespace UserEntity {

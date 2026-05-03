@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { UserEntity } from '@yukinu/api/identity'
 import { Badge } from '@yukinu/ui/badge'
-import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
 import {
   parseAsBoolean,
@@ -14,6 +13,8 @@ import {
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
 import { UserSearchForm } from '@/routes/(management)/users/components/search-form'
+import { UpdateUserButton } from '@/routes/(management)/users/components/update-user-button'
+import { UserButton } from '@/routes/(management)/users/components/user-button'
 
 const STATUS_VARIANTS = {
   active: 'success',
@@ -82,10 +83,30 @@ export default function ManagementUsersIndexPage() {
           updatedAt: 'Updated At',
           deletedAt: 'Deleted At',
         }}
-        actions={() => (
+        actions={(item) => (
           <div className='flex items-center gap-2'>
-            <Button>Edit</Button>
-            <Button variant='destructive'>Delete</Button>
+            {item.deletedAt === null ? (
+              <UpdateUserButton
+                userId={item.id}
+                username={item.username}
+                userRole={item.role}
+                userStatus={item.status}
+              />
+            ) : (
+              <UserButton
+                userId={item.id}
+                username={item.username}
+                type='restore'
+                variant='default'
+              />
+            )}
+
+            <UserButton
+              userId={item.id}
+              username={item.username}
+              type={item.deletedAt === null ? 'delete' : 'permanentDelete'}
+              variant='destructive'
+            />
           </div>
         )}
         pagination={{

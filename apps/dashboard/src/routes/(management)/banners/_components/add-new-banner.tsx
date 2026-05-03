@@ -48,6 +48,7 @@ export const AddNewBanner = () => {
           endpoint='bannerUploader'
           value={url}
           onValueChange={setUrl}
+          disabled={upload.isPending}
         />
 
         <img

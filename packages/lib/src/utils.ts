@@ -17,11 +17,18 @@ export function formatPrice(price: string | number): string {
   }).format(typeof price === 'string' ? Number.parseFloat(price) : price)
 }
 
-export function formatDate(date: Date | string): string {
+export function formatDate(date: Date | string, showTime?: boolean): string {
   const d = typeof date === 'string' ? new Date(date) : date
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
+    ...(showTime
+      ? {
+          hour: '2-digit',
+          minute: '2-digit',
+        }
+      : {}),
+    hour12: false,
   }).format(d)
 }

@@ -18,6 +18,8 @@ export default [
 
     // Catalog routes
     route('/catalog/categories', './routes/(catalog)/categories/_index.tsx'),
+    route('/catalog/categories/new', './routes/(catalog)/categories/new.tsx'),
+    route('/catalog/categories/:id', './routes/(catalog)/categories/[id].tsx'),
     route('/catalog/products', './routes/(catalog)/products/_index.tsx'),
 
     // Merchant routes

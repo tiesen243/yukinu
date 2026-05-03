@@ -1,8 +1,5 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import fs from 'node:fs/promises'
-import path from 'node:path'
-
 import type { AllOrdersDto } from '@/modules/checkout/application/dtos/order/all-orders.dto'
 import type { OrderRepository } from '@/modules/checkout/domain/repositories/order.repository'
 
@@ -41,15 +38,6 @@ export class AllOrdersUseCase extends AbstractUseCase<
       this._orderRepo.count(whereClauses, this._db),
     ])
     const totalPages = Math.ceil(total / limit)
-
-    await fs.writeFile(
-      path.join(process.cwd(), 'order.json'),
-      JSON.stringify(
-        { orders, pagination: { total, page, limit, totalPages } },
-        null,
-        2,
-      ),
-    )
 
     return { orders, pagination: { total, page, limit, totalPages } }
   }

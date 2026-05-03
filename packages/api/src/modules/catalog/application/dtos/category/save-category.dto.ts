@@ -4,9 +4,9 @@ export namespace SaveCategoryDto {
   export const input = z.object({
     id: z.cuid2().optional(),
     name: z.string(),
-    description: z.string().nullable().optional(),
-    image: z.string().nullable().optional(),
-    parentId: z.cuid2().nullable().optional(),
+    description: z.string().optional(),
+    image: z.url().optional(),
+    parentId: z.cuid2().nullable(),
   })
   export type Input = z.infer<typeof input>
 

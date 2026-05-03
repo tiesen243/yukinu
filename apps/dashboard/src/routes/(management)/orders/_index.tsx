@@ -42,12 +42,7 @@ export default function ManagementOrdersIndexPage() {
             render: (value) => value?.username ?? 'N/A',
           },
         }}
-        actions={() => (
-          <div className='flex items-center gap-2'>
-            <Button>Edit</Button>
-            <Button variant='destructive'>Delete</Button>
-          </div>
-        )}
+        actions={() => <Button>View</Button>}
         pagination={{
           ...data?.pagination,
           setPage: (page) => setQuery({ page }),

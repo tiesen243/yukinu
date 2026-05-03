@@ -9,7 +9,7 @@ import type { OneUserDto } from '@/modules/identity/types'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class PermanentDeleteUserUseCase extends AbstractUseCase<
-  OneUserDto.Input,
+  OneUserDto.Input & { currentUserId: string },
   OneUserDto.Output
 > {
   constructor(
@@ -19,12 +19,24 @@ export class PermanentDeleteUserUseCase extends AbstractUseCase<
     super()
   }
 
-  public async execute(input: OneUserDto.Input): Promise<OneUserDto.Output> {
-    const [user] = await this._userRepo.find([input], {}, { limit: 1 })
+  public async execute(
+    input: OneUserDto.Input & { currentUserId: string },
+  ): Promise<OneUserDto.Output> {
+    const [user] = await this._userRepo.find(
+      [{ id: input.id }],
+      {},
+      { limit: 1 },
+    )
     if (!user)
       throw new TRPCError({
         code: 'NOT_FOUND',
         message: `User with id ${input.id} not found`,
+      })
+
+    if (user.id === input.currentUserId)
+      throw new TRPCError({
+        code: 'FORBIDDEN',
+        message: 'You are not allowed to delete your self',
       })
 
     if (user.deletedAt === null)
@@ -33,7 +45,7 @@ export class PermanentDeleteUserUseCase extends AbstractUseCase<
         message: `User with id ${input.id} is not deleted`,
       })
 
-    await this._userRepo.delete([input])
+    await this._userRepo.delete([{ id: input.id }])
     if (user.image) await utapi.deleteFiles(user.image.split('/').pop() ?? '')
 
     return user
