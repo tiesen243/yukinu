@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { UserEntity } from '@yukinu/api/identity'
 import { Badge } from '@yukinu/ui/badge'
+import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
 import {
   parseAsBoolean,
@@ -52,12 +53,20 @@ export default function ManagementUsersIndexPage() {
 
       <DataTable
         header={
-          <UserSearchForm
-            query={query}
-            onSearch={({ search, role, isDeleted }) =>
-              setQuery({ search, role, isDeleted, page: 1 })
-            }
-          />
+          <div className='flex items-center gap-2'>
+            <UserSearchForm
+              query={query}
+              onSearch={({ search, role }) =>
+                setQuery({ search, role, page: 1 })
+              }
+            />
+            <Button
+              variant='outline'
+              onClick={() => setQuery({ isDeleted: !query.isDeleted, page: 1 })}
+            >
+              {query.isDeleted ? 'Show Active Users' : 'Show Deleted Users'}
+            </Button>
+          </div>
         }
         data={data?.users ?? []}
         isLoading={isLoading}

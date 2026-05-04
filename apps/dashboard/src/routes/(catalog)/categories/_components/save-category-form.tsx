@@ -117,7 +117,7 @@ export const SaveCategoryForm: React.FC<{
                   <SelectTrigger>
                     <SelectValue placeholder='Select parent category (optional)' />
                   </SelectTrigger>
-                  <SelectContent alignItemWithTrigger={false}>
+                  <SelectContent>
                     {data?.categories.map(({ id, name }) => (
                       <SelectItem key={id} value={id}>
                         {name}

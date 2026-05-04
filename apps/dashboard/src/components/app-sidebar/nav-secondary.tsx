@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
 import * as React from 'react'
-import { NavLink } from 'react-router'
+import { NavLink, useMatch, useResolvedPath } from 'react-router'
 
 export const NavSecondary: React.FC<
   {
@@ -22,18 +22,22 @@ export const NavSecondary: React.FC<
   <SidebarGroup {...props}>
     <SidebarGroupContent>
       <SidebarMenu>
-        {items.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <NavLink to={item.url}>
-              {({ isActive }) => (
-                <SidebarMenuButton isActive={isActive}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              )}
-            </NavLink>
-          </SidebarMenuItem>
-        ))}
+        {items.map((item) => {
+          const resolved = useResolvedPath(item.url)
+          const match = useMatch({ path: resolved.pathname, end: true })
+
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton
+                isActive={!!match}
+                render={<NavLink to={item.url} />}
+              >
+                <item.icon />
+                <span>{item.title}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          )
+        })}
       </SidebarMenu>
     </SidebarGroupContent>
   </SidebarGroup>

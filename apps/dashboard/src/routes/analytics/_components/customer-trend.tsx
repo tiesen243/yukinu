@@ -12,7 +12,7 @@ import { useTRPC } from '@/lib/trpc'
 export function CustomerTrend() {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
-    trpc.sales.admin.analytics.queryOptions(),
+    trpc.sales.statistics.analytics.queryOptions(),
   )
   if (isLoading || !data) return <div>Loading...</div>
 

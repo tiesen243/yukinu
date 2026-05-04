@@ -15,7 +15,7 @@ import { useTRPC } from '@/lib/trpc'
 export const TopVendors: React.FC = () => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
-    trpc.sales.admin.analytics.queryOptions(),
+    trpc.sales.statistics.analytics.queryOptions(),
   )
   if (isLoading || !data) return <div>Loading...</div>
 

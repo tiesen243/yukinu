@@ -23,4 +23,6 @@ export const passwordRegex = z
     'Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character',
   )
 
-export const priceRegex = z.string().regex(/^\d+(\.\d+)?$/)
+export const priceRegex = z
+  .string()
+  .regex(/^\d+(\.\d+)?$/, 'Price must be a valid number')

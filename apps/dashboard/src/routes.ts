@@ -17,6 +17,8 @@ export default [
     route('/catalog/categories/new', './routes/(catalog)/categories/new.tsx'),
     route('/catalog/categories/:id', './routes/(catalog)/categories/[id].tsx'),
     route('/catalog/products', './routes/(catalog)/products/_index.tsx'),
+    route('/catalog/products/new', './routes/(catalog)/products/new.tsx'),
+    route('/catalog/products/:id', './routes/(catalog)/products/[id].tsx'),
 
     // Mangement routes
     route('/management', './routes/(management)/_index.tsx'),

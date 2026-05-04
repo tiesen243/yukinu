@@ -41,7 +41,7 @@ export const VendorSearchForm: React.FC<{
           <SelectTrigger>
             <SelectValue placeholder='Filter by status' />
           </SelectTrigger>
-          <SelectContent alignItemWithTrigger={false}>
+          <SelectContent>
             <SelectItem value=''>All Statuses</SelectItem>
             {VendorEntity.statuses.map((s) => (
               <SelectItem key={s} value={s}>

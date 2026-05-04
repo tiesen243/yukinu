@@ -52,6 +52,9 @@ export const UploadInput: React.FC<
         value={ut.isUploading ? 'Uploading...' : value}
         placeholder='No file selected'
         disabled={disabled || ut.isUploading}
+        aria-label='File URL'
+        aria-invalid={props['aria-invalid']}
+        aria-describedby={props['aria-describedby']}
         readOnly
       />
 

@@ -3,10 +3,18 @@ import { useSession } from '@yukinu/auth/react'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
-import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs'
+import {
+  parseAsBoolean,
+  parseAsInteger,
+  parseAsString,
+  useQueryStates,
+} from 'nuqs'
+import { useMemo } from 'react'
+import { Link } from 'react-router'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
+import { ProductButton } from '@/routes/(catalog)/products/_components/product-button'
 import { ProductSearchForm } from '@/routes/(catalog)/products/_components/search-form'
 
 export default function CatalogProductsIndexPage() {
@@ -14,12 +22,18 @@ export default function CatalogProductsIndexPage() {
   const { user } = useSession()
   const [query, setQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
+    isDeleted: parseAsBoolean.withDefault(false),
     page: parseAsInteger.withDefault(1),
     limit: parseAsInteger.withDefault(10),
   })
 
+  const isAdmin = useMemo(
+    () => ['admin', 'moderator'].includes(user?.role ?? ''),
+    [user?.role],
+  )
+
   const { data, isLoading } = useQuery(
-    ['admin', 'moderator'].includes(user?.role ?? '')
+    isAdmin
       ? trpc.catalog.product.all.queryOptions(query)
       : trpc.catalog.product.allByVendor.queryOptions(query),
   )
@@ -34,9 +48,26 @@ export default function CatalogProductsIndexPage() {
 
       <DataTable
         header={
-          <ProductSearchForm
-            onSearch={({ search }) => setQuery({ search, page: 1 })}
-          />
+          <div className='flex items-center gap-2'>
+            <ProductSearchForm
+              onSearch={({ search }) => setQuery({ search, page: 1 })}
+            />
+
+            <Button
+              nativeButton={false}
+              render={<Link to='/catalog/products/new' />}
+            >
+              Create Product
+            </Button>
+            <Button
+              variant='outline'
+              onClick={() => setQuery({ isDeleted: !query.isDeleted, page: 1 })}
+            >
+              {query.isDeleted
+                ? 'Show Active Products'
+                : 'Show Deleted Products'}
+            </Button>
+          </div>
         }
         data={data?.products ?? []}
         isLoading={isLoading}
@@ -53,10 +84,42 @@ export default function CatalogProductsIndexPage() {
           updatedAt: 'Updated At',
           deletedAt: 'Deleted At',
         }}
-        actions={() => (
+        actions={(item) => (
           <div className='flex items-center gap-2'>
-            <Button>Edit</Button>
-            <Button variant='destructive'>Delete</Button>
+            {item.deletedAt ? (
+              <ProductButton
+                productId={item.id}
+                productName={item.name}
+                type='restore'
+                variant='default'
+                isAdmin={isAdmin}
+              />
+            ) : (
+              <Button
+                nativeButton={false}
+                render={<Link to={`/catalog/products/${item.id}`} />}
+              >
+                Edit
+              </Button>
+            )}
+
+            {item.deletedAt ? (
+              <ProductButton
+                productId={item.id}
+                productName={item.name}
+                type='permanentDelete'
+                variant='destructive'
+                isAdmin={isAdmin}
+              />
+            ) : (
+              <ProductButton
+                productId={item.id}
+                productName={item.name}
+                type='delete'
+                variant='destructive'
+                isAdmin={isAdmin}
+              />
+            )}
           </div>
         )}
         pagination={{

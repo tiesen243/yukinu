@@ -7,7 +7,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@yukinu/ui/sidebar'
-import { NavLink } from 'react-router'
+import { Link, useMatch, useResolvedPath } from 'react-router'
 
 export const NavContent: React.FC<{
   label: string
@@ -16,18 +16,22 @@ export const NavContent: React.FC<{
   <SidebarGroup className='group-data-[collapsible=icon]:hidden'>
     <SidebarGroupLabel>{label}</SidebarGroupLabel>
     <SidebarMenu>
-      {items.map((item) => (
-        <SidebarMenuItem key={item.name}>
-          <NavLink to={item.url}>
-            {({ isActive }) => (
-              <SidebarMenuButton isActive={isActive}>
-                <item.icon />
-                <span>{item.name}</span>
-              </SidebarMenuButton>
-            )}
-          </NavLink>
-        </SidebarMenuItem>
-      ))}
+      {items.map((item) => {
+        const resolved = useResolvedPath(item.url)
+        const match = useMatch({ path: resolved.pathname, end: true })
+
+        return (
+          <SidebarMenuItem key={item.name}>
+            <SidebarMenuButton
+              isActive={!!match}
+              render={<Link to={item.url} />}
+            >
+              <item.icon />
+              <span>{item.name}</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        )
+      })}
     </SidebarMenu>
   </SidebarGroup>
 )

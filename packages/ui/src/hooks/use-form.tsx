@@ -47,7 +47,22 @@ function extractError(errors: StandardSchemaV1.Issue[], name: string) {
   })
 }
 
-export function useForm<
+interface UseFormReturn<TValues, TData, TError extends FormError = FormError> {
+  formId: string
+  Field: <TName extends keyof TValues>(
+    props: FormFieldProps<TName, TValues>,
+  ) => React.ReactNode
+  handleSubmit: (event?: React.SubmitEvent) => void
+  state: {
+    values: TValues
+    data: TData | null
+    error: TError | null
+    isPending: boolean
+  }
+  reset: () => void
+}
+
+function useForm<
   TValues,
   TData,
   TError extends FormError,
@@ -64,20 +79,7 @@ export function useForm<
   ) => TData | Promise<TData>
   onSuccess?: (data: TData) => unknown | Promise<unknown>
   onError?: (error: TError) => unknown | Promise<unknown>
-}): {
-  formId: string
-  Field: <TName extends keyof TValues>(
-    props: FormFieldProps<TName, TValues>,
-  ) => React.ReactNode
-  handleSubmit: (event?: React.SubmitEvent) => void
-  state: {
-    values: TValues
-    data: TData | null
-    error: TError | null
-    isPending: boolean
-  }
-  reset: () => void
-} {
+}): UseFormReturn<TValues, TData, TError> {
   const { defaultValues, schema, onSubmit, onSuccess, onError } = props
 
   const formId = React.useId()
@@ -265,3 +267,6 @@ export function useForm<
     [formId, Field, handleSubmit, isPending, reset],
   )
 }
+
+export type { FormError, FormFieldProps, UseFormReturn }
+export { useForm }
