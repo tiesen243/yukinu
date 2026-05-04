@@ -144,6 +144,18 @@ export function DataTable<TData>({
               </TableRow>
             ))}
 
+          {!isLoading && data.length === 0 && (
+            <TableRow>
+              <TableCell colSpan={keys.length + (actions ? 1 : 0)}>
+                <div className='flex flex-col items-center justify-center gap-2 py-8'>
+                  <p className='text-sm text-muted-foreground'>
+                    No data found.
+                  </p>
+                </div>
+              </TableCell>
+            </TableRow>
+          )}
+
           {!isLoading &&
             data.map((row) => (
               <TableRow key={keyExtractor(row)}>

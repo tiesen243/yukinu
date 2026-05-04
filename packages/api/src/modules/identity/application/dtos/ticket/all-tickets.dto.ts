@@ -6,7 +6,7 @@ import { Pagination } from '@/shared/schema'
 export namespace AllTicketsDto {
   export const input = Pagination.input.extend({
     userId: z.cuid2().optional(),
-    status: z.enum(TicketEntity.statuses).optional(),
+    status: z.enum(TicketEntity.statuses).nullable(),
   })
   export type Input = z.infer<typeof input>
 
