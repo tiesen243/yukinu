@@ -43,7 +43,7 @@ export const UpdateVendorButton: React.FC<{
         message: `Vendor ${vendorName} status updated successfully`,
       }),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

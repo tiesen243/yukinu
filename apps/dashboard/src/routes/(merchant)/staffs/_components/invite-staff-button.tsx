@@ -28,7 +28,7 @@ export const InviteStaffButton: React.FC = () => {
       setIsOpen(false),
       setEmail(''),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

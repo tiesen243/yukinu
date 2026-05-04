@@ -26,7 +26,7 @@ export const DeleteVariantButton: React.FC<{
     ...trpc.catalog.variant.delete.mutationOptions(),
     meta: { filter: trpc.catalog.product.one.queryFilter({ id: productId }) },
     onSuccess: () => toast.success({ message: 'Variant deleted successfully' }),
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

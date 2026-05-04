@@ -48,7 +48,6 @@ export namespace OneProductDto {
     ),
     reviews: z.array(
       z.object({
-        id: z.cuid2(),
         rating: z.number(),
         comment: z.string().nullable(),
         user: z.object({

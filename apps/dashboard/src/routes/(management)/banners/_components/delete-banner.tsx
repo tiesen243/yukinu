@@ -22,7 +22,7 @@ export const DeleteBanner: React.FC<{
     ...trpc.sales.banner.delete.mutationOptions(),
     meta: { filter: trpc.sales.banner.all.queryFilter() },
     onSuccess: () => toast.success({ message: 'Banner deleted successfully' }),
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

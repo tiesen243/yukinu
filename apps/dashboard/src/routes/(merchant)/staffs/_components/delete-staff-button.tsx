@@ -23,7 +23,7 @@ export const DeleteStaffButton: React.FC<{
     ...trpc.merchant.staff.remove.mutationOptions(),
     meta: { filter: trpc.merchant.staff.all.queryFilter() },
     onSuccess: () => toast.success({ message: 'Staff deleted successfully' }),
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

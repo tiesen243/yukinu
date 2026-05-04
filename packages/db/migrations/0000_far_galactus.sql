@@ -6,11 +6,11 @@ CREATE TYPE "public"."user_role" AS ENUM('user', 'admin', 'moderator', 'vendor_o
 CREATE TYPE "public"."user_status" AS ENUM('active', 'inactive', 'banned');--> statement-breakpoint
 CREATE TYPE "public"."vendor_status" AS ENUM('pending', 'approved', 'rejected', 'suspended');--> statement-breakpoint
 CREATE TABLE "accounts" (
-	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"user_id" varchar(24) NOT NULL,
 	"provider" varchar(50) NOT NULL,
 	"provider_account_id" varchar(100) NOT NULL,
-	"password" text
+	"password" text,
+	CONSTRAINT "accounts_provider_account_id_pk" PRIMARY KEY("provider","provider_account_id")
 );
 --> statement-breakpoint
 CREATE TABLE "addresses" (
@@ -99,12 +99,12 @@ CREATE TABLE "product_images" (
 );
 --> statement-breakpoint
 CREATE TABLE "product_reviews" (
-	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"product_id" varchar(24) NOT NULL,
 	"user_id" varchar(24) NOT NULL,
 	"rating" integer NOT NULL,
 	"comment" text,
-	"created_at" timestamp DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "product_reviews_product_id_user_id_pk" PRIMARY KEY("product_id","user_id")
 );
 --> statement-breakpoint
 CREATE TABLE "product_variants" (
@@ -160,13 +160,13 @@ CREATE TABLE "tickets" (
 CREATE TABLE "transactions" (
 	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"payment_id" varchar(24) NOT NULL,
+	"body" text,
 	"gateway" varchar(100) NOT NULL,
-	"transaction_date" timestamp DEFAULT now() NOT NULL,
 	"amount_in" numeric(20, 2) DEFAULT '0.00' NOT NULL,
 	"amount_out" numeric(20, 2) DEFAULT '0.00' NOT NULL,
-	"transaction_content" text,
 	"reference_number" varchar(255),
-	"body" text,
+	"transaction_content" text,
+	"transaction_date" timestamp DEFAULT now() NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -195,10 +195,9 @@ CREATE TABLE "variants" (
 );
 --> statement-breakpoint
 CREATE TABLE "vendor_balances" (
-	"vendor_id" varchar(24) NOT NULL,
+	"vendor_id" varchar(24) PRIMARY KEY NOT NULL,
 	"balance" numeric(10, 2) DEFAULT '0.00' NOT NULL,
-	"updated_at" timestamp DEFAULT now() NOT NULL,
-	CONSTRAINT "vendor_balances_vendor_id_pk" PRIMARY KEY("vendor_id")
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "vendor_staffs" (
@@ -251,10 +250,10 @@ CREATE TABLE "vouchers" (
 );
 --> statement-breakpoint
 CREATE TABLE "wishlist_items" (
-	"id" varchar(24) PRIMARY KEY NOT NULL,
 	"user_id" varchar(24) NOT NULL,
 	"product_id" varchar(24) NOT NULL,
-	"added_at" timestamp DEFAULT now() NOT NULL
+	"added_at" timestamp DEFAULT now() NOT NULL,
+	CONSTRAINT "wishlist_items_user_id_product_id_pk" PRIMARY KEY("user_id","product_id")
 );
 --> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
@@ -292,7 +291,6 @@ ALTER TABLE "vendors" ADD CONSTRAINT "vendors_owner_id_users_id_fk" FOREIGN KEY 
 ALTER TABLE "verifications" ADD CONSTRAINT "verifications_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "wishlist_items" ADD CONSTRAINT "wishlist_items_product_id_products_id_fk" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-CREATE UNIQUE INDEX "accounts_provider_account_id_uq_idx" ON "accounts" USING btree ("provider","provider_account_id");--> statement-breakpoint
 CREATE INDEX "accounts_user_id_idx" ON "accounts" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "addresses_user_id_idx" ON "addresses" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "attributes_name_idx" ON "attributes" USING btree ("name");--> statement-breakpoint
@@ -329,5 +327,4 @@ CREATE INDEX "vendor_transactions_vendor_id_idx" ON "vendor_transfers" USING btr
 CREATE INDEX "vendors_owner_id_idx" ON "vendors" USING btree ("owner_id");--> statement-breakpoint
 CREATE INDEX "verifications_user_id_idx" ON "verifications" USING btree ("user_id");--> statement-breakpoint
 CREATE UNIQUE INDEX "vouchers_code_uq_idx" ON "vouchers" USING btree ("code");--> statement-breakpoint
-CREATE UNIQUE INDEX "wishlist_items_user_product_uq_idx" ON "wishlist_items" USING btree ("user_id","product_id");--> statement-breakpoint
 CREATE INDEX "wishlist_items_user_id_idx" ON "wishlist_items" USING btree ("user_id");

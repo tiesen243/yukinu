@@ -27,7 +27,7 @@ export const DeleteCategoryButton: React.FC<{
     },
     onSuccess: () =>
       toast.success({ message: 'Category deleted successfully' }),
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

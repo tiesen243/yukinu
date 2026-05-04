@@ -43,7 +43,7 @@ export const ProductButton: React.FC<{
       }),
       setIsOpen(false),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

@@ -184,7 +184,7 @@ BEGIN
 
                 INSERT INTO "order_items" ("id", "order_id", "product_id", "quantity", "unit_price")
                 VALUES (
-                    substr('oi_' || md5(random()::text), 1, 24), 
+                    substr(md5(random()::text), 1, 24),
                     v_ord_id, 
                     v_p_id, 
                     (1 + floor(random()*2))::int, 

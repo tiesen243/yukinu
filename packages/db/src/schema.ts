@@ -123,7 +123,6 @@ export const addresses = pgTable(
 export const accounts = pgTable(
   'accounts',
   (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
@@ -133,10 +132,10 @@ export const accounts = pgTable(
     password: t.text(),
   }),
   (t) => [
-    uniqueIndex('accounts_provider_account_id_uq_idx').on(
-      t.provider,
-      t.providerAccountId,
-    ),
+    primaryKey({
+      name: 'accounts_provider_account_id_pk',
+      columns: [t.provider, t.providerAccountId],
+    }),
     index('accounts_user_id_idx').on(t.userId),
   ],
 )
@@ -178,7 +177,6 @@ export const verifications = pgTable(
 export const wishlistItems = pgTable(
   'wishlist_items',
   (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey(),
     userId: t
       .varchar({ length: 24 })
       .notNull()
@@ -190,7 +188,10 @@ export const wishlistItems = pgTable(
     addedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
   }),
   (t) => [
-    uniqueIndex('wishlist_items_user_product_uq_idx').on(t.userId, t.productId),
+    primaryKey({
+      name: 'wishlist_items_user_id_product_id_pk',
+      columns: [t.userId, t.productId],
+    }),
     index('wishlist_items_user_id_idx').on(t.userId),
   ],
 )
@@ -262,7 +263,10 @@ export const vendorStaffs = pgTable(
     assignedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
   }),
   (t) => [
-    primaryKey({ columns: [t.vendorId, t.userId] }),
+    primaryKey({
+      name: 'vendor_staffs_vendor_id_user_id_pk',
+      columns: [t.vendorId, t.userId],
+    }),
     index('vendor_staffs_vendor_id_idx').on(t.vendorId),
   ],
 )
@@ -273,14 +277,12 @@ export const vendorBalances = pgTable(
     vendorId: t
       .varchar({ length: 24 })
       .notNull()
+      .primaryKey()
       .references(() => vendors.id, { onDelete: 'restrict' }),
     balance: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
     updatedAt: t.timestamp({ mode: 'date' }).defaultNow().notNull(),
   }),
-  (t) => [
-    primaryKey({ columns: [t.vendorId] }),
-    index('vendor_balances_vendor_id_idx').on(t.vendorId),
-  ],
+  (t) => [index('vendor_balances_vendor_id_idx').on(t.vendorId)],
 )
 
 export const vendorTransfers = pgTable(
@@ -414,7 +416,10 @@ export const productAttributes = pgTable(
     value: t.varchar({ length: 255 }).notNull(),
   }),
   (t) => [
-    primaryKey({ columns: [t.productId, t.attributeId] }),
+    primaryKey({
+      name: 'product_attributes_product_id_attribute_id_pk',
+      columns: [t.productId, t.attributeId],
+    }),
     index('product_attributes_product_id_idx').on(t.productId),
     index('product_attributes_attribute_id_idx').on(t.attributeId),
   ],
@@ -469,7 +474,6 @@ export const productVariants = pgTable(
 export const productReviews = pgTable(
   'product_reviews',
   (t) => ({
-    id: t.varchar({ length: 24 }).primaryKey(),
     productId: t
       .varchar({ length: 24 })
       .notNull()
@@ -482,7 +486,13 @@ export const productReviews = pgTable(
     comment: t.text(),
     createdAt,
   }),
-  (t) => [index('product_reviews_product_id_idx').on(t.productId)],
+  (t) => [
+    primaryKey({
+      name: 'product_reviews_product_id_user_id_pk',
+      columns: [t.productId, t.userId],
+    }),
+    index('product_reviews_product_id_idx').on(t.productId),
+  ],
 )
 //#endregion
 

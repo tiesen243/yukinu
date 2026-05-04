@@ -38,7 +38,7 @@ export const UserButton: React.FC<{
       toast.success({ message: `User ${label.toLowerCase()}d successfully` }),
       setIsOpen(false),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

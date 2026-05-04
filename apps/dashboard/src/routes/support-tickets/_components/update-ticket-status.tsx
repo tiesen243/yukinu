@@ -39,7 +39,7 @@ export const UpdateTicketStatus: React.FC<{
       toast.success({ message: 'Ticket status updated successfully' }),
       setIsOpen(false),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

@@ -12,7 +12,7 @@ export class DrizzleProductReviewRepository
   implements ProductReviewRepository
 {
   public constructor(db: Database) {
-    super(db, productReviews, 'id')
+    super(db, productReviews, ['productId', 'userId'])
   }
 
   protected _mapToEntity(

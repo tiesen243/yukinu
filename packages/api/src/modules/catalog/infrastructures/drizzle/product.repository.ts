@@ -91,7 +91,6 @@ export class DrizzleProductRepository
 
     const reviewsAgg = sql<OneProductDto.Output['reviews']>`coalesce(
       jsonb_agg(distinct jsonb_build_object(
-        'id', ${productReviews.id},
         'rating', ${productReviews.rating},
         'comment', ${productReviews.comment},
         'user', jsonb_build_object(

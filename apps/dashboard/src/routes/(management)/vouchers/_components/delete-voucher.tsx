@@ -22,7 +22,7 @@ export const DeleteVoucher: React.FC<{
     ...trpc.sales.voucher.delete.mutationOptions(),
     meta: { filter: trpc.sales.voucher.all.queryFilter() },
     onSuccess: () => toast.success({ message: 'Voucher deleted successfully' }),
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

@@ -14,7 +14,7 @@ export class DrizzleWishlistItemRepository
   implements WishlistItemRepository
 {
   public constructor(db: Database) {
-    super(db, wishlistItems, 'id')
+    super(db, wishlistItems, ['userId', 'productId'])
   }
 
   public async findWithProduct(
@@ -28,7 +28,6 @@ export class DrizzleWishlistItemRepository
 
     const query = tx
       .select({
-        id: this._table.id,
         userId: this._table.userId,
         product: {
           id: products.id,
@@ -41,12 +40,7 @@ export class DrizzleWishlistItemRepository
       .from(this._table)
       .innerJoin(products, eq(products.id, this._table.productId))
       .innerJoin(productImages, eq(productImages.productId, products.id))
-      .groupBy(
-        this._table.id,
-        this._table.userId,
-        products.id,
-        this._table.addedAt,
-      )
+      .groupBy(this._table.userId, products.id, this._table.addedAt)
       .$dynamic()
 
     if (whereClauses) query.where(whereClauses)
@@ -59,7 +53,6 @@ export class DrizzleWishlistItemRepository
     return rows.map((row) =>
       Object.assign(
         this._mapToEntity({
-          id: row.id,
           userId: row.userId,
           productId: row.product.id,
           addedAt: row.addedAt,

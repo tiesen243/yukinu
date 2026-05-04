@@ -44,7 +44,7 @@ export const UpdateUserButton: React.FC<{
       toast.success({ message: 'User updated successfully' }),
       setIsOpen(false),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (
