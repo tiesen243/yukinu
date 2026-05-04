@@ -29,7 +29,19 @@ export const RecentTransactions: React.FC<{ isAdmin: boolean }> = ({
       : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
-  if (isLoading || !data) return <div>Loading...</div>
+  if (isLoading || !data)
+    return (
+      <Card className='mb-4 animate-pulse px-4'>
+        <CardHeader className='px-0'>
+          <CardTitle>Recent Transactions</CardTitle>
+          <CardDescription>
+            Latest payment activities across the platform.
+          </CardDescription>
+        </CardHeader>
+        <div className='h-40 w-full rounded-sm bg-muted' />
+      </Card>
+    )
+
   const { recentTransactions: transactions } = data
 
   return (

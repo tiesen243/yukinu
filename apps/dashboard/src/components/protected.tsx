@@ -10,6 +10,7 @@ import { Navigate, Outlet } from 'react-router'
 
 import { AppSidebar } from '@/components/app-sidebar'
 import { Breadcrumbs } from '@/components/breadcrumbs'
+import { SearchBox } from '@/components/search-box'
 
 export default function Protected() {
   const { status, user } = useSession()
@@ -37,6 +38,8 @@ export default function Protected() {
           <SidebarTrigger />
           <hr className='h-4 border-l' />
           <Breadcrumbs />
+
+          <SearchBox />
         </header>
 
         <ScrollArea

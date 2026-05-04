@@ -21,6 +21,7 @@ import { useCallback } from 'react'
 interface TRenderCell<TValue> {
   label: string
   render: (value: TValue) => React.ReactNode
+  className?: string
 }
 
 export function DataTable<TData>({
@@ -147,7 +148,14 @@ export function DataTable<TData>({
             data.map((row) => (
               <TableRow key={keyExtractor(row)}>
                 {keys.map((key) => (
-                  <TableCell key={String(key)}>
+                  <TableCell
+                    key={String(key)}
+                    className={
+                      typeof columns[key] === 'object'
+                        ? columns[key]?.className
+                        : undefined
+                    }
+                  >
                     {renderCell(key, row[key])}
                   </TableCell>
                 ))}

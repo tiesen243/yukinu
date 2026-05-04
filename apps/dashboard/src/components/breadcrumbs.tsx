@@ -8,7 +8,7 @@ export const Breadcrumbs: React.FC = () => {
   const pathnames = location.pathname.split('/').filter(Boolean)
 
   return (
-    <nav className='flex items-center gap-1'>
+    <nav className='flex flex-1 items-center gap-1'>
       <Link to='/' className='hover:underline'>
         ~
       </Link>

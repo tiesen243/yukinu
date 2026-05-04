@@ -9,12 +9,23 @@ import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 
 import { useTRPC } from '@/lib/trpc'
 
-export function CustomerTrend() {
+export const CustomerTrend: React.FC = () => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
     trpc.sales.statistics.analytics.queryOptions(),
   )
-  if (isLoading || !data) return <div>Loading...</div>
+
+  if (isLoading || !data)
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Customer Acquisition</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className='h-75 w-full animate-pulse rounded-md bg-muted' />
+        </CardContent>
+      </Card>
+    )
 
   return (
     <Card>

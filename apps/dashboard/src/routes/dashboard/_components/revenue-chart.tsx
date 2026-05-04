@@ -32,7 +32,20 @@ export const RevenueChart: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
       : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
-  if (isLoading || !data) return <div>Loading...</div>
+  if (isLoading || !data)
+    return (
+      <Card className='animate-pulse lg:col-span-4'>
+        <CardHeader>
+          <CardTitle>Revenue Stream</CardTitle>
+          <CardDescription>
+            Showing total revenue for the last 6 months
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='h-75 w-full rounded-md bg-muted' />
+        </CardContent>
+      </Card>
+    )
 
   return (
     <Card className='lg:col-span-4'>
@@ -45,7 +58,7 @@ export const RevenueChart: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
       <CardContent>
         <ChartContainer
           config={chartConfig}
-          className='aspect-auto h-62.5 w-full'
+          className='aspect-auto h-75 w-full'
         >
           <AreaChart data={data.revenueTrend}>
             <defs>

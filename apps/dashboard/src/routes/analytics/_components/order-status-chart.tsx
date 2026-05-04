@@ -20,12 +20,23 @@ const chartConfig = {
   pending: { label: 'Pending', color: 'var(--color-chart-3)' },
 } satisfies ChartConfig
 
-export function OrderStatusChart() {
+export const OrderStatusChart: React.FC = () => {
   const { trpc } = useTRPC()
   const { data, isLoading } = useQuery(
     trpc.sales.statistics.analytics.queryOptions(),
   )
-  if (isLoading || !data) return <div>Loading...</div>
+
+  if (isLoading || !data)
+    return (
+      <Card className='animate-pulse flex-col lg:col-span-2'>
+        <CardHeader className='items-center pb-0'>
+          <CardTitle>Order Status Distribution</CardTitle>
+        </CardHeader>
+        <CardContent className='flex-1 pb-0'>
+          <div className='mx-auto aspect-square max-h-75 rounded-full bg-muted' />
+        </CardContent>
+      </Card>
+    )
 
   const formattedData = data.orderStatusDist.map((item, idx) => ({
     ...item,

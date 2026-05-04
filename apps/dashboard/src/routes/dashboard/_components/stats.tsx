@@ -19,7 +19,30 @@ export const Stats: React.FC<{ isAdmin: boolean }> = ({ isAdmin }) => {
       : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
-  if (isLoading || !data) return <div>Loading...</div>
+  if (isLoading || !data)
+    return (
+      <section className='my-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
+        <h3 className='sr-only'>Loading Key Performance Indicators</h3>
+        {Array.from({ length: 4 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+              <CardTitle className='w-1/2 animate-pulse rounded-sm bg-muted'>
+                &nbsp;
+              </CardTitle>
+              <div className='size-4 animate-pulse rounded-full bg-muted' />
+            </CardHeader>
+            <CardContent>
+              <div className='w-1/4 animate-pulse rounded-sm bg-muted text-2xl'>
+                &nbsp;
+              </div>
+              <p className='mt-1 w-2/3 animate-pulse rounded-sm bg-muted text-xs'>
+                &nbsp;
+              </p>
+            </CardContent>
+          </Card>
+        ))}
+      </section>
+    )
 
   return (
     <section className='my-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
@@ -65,7 +88,7 @@ function StatsCard({ label, value, icon: Icon, description }: StatsCardsProps) {
     <Card>
       <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
         <CardTitle className='text-sm font-medium'>{label}</CardTitle>
-        <Icon className='h-4 w-4 text-muted-foreground' />
+        <Icon className='size-4 text-muted-foreground' />
       </CardHeader>
       <CardContent>
         <div className='text-2xl font-bold'>{value}</div>

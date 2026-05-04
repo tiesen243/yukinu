@@ -34,7 +34,18 @@ export const TopProductsChart: React.FC<{ isAdmin: boolean }> = ({
       : trpc.sales.statistics.vendorDashboard.queryOptions({}),
   )
 
-  if (isLoading || !data) return <div>Loading...</div>
+  if (isLoading || !data)
+    return (
+      <Card className='animate-pulse lg:col-span-3'>
+        <CardHeader>
+          <CardTitle>Best Sellers</CardTitle>
+          <CardDescription>Top performing products by volume</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className='h-75 w-full rounded-md bg-muted' />
+        </CardContent>
+      </Card>
+    )
 
   return (
     <Card className='lg:col-span-3'>

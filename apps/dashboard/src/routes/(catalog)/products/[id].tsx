@@ -1,8 +1,14 @@
 import { useQuery } from '@tanstack/react-query'
+import { formatPrice } from '@yukinu/lib/utils'
+import { Button } from '@yukinu/ui/button'
 import { Loader2Icon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
+import { Link } from 'react-router'
 
+import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
+import { DeleteVariantButton } from '@/routes/(catalog)/products/_components/delete-variant-button'
+import { EditVariantButton } from '@/routes/(catalog)/products/_components/edit-variant-button'
 import { SaveProductForm } from '@/routes/(catalog)/products/_components/save-product-form'
 
 import type { Route } from './+types/[id]'
@@ -42,6 +48,42 @@ export default function CatalogProductsIDPage({
       )}
 
       {data && <SaveProductForm product={data} />}
+
+      {data && (
+        <DataTable
+          header={
+            <div className='flex items-center justify-end'>
+              <Button
+                variant='outline'
+                nativeButton={false}
+                render={<Link to={`/catalog/products/${data.id}/variant`} />}
+              >
+                Recreate Variants
+              </Button>
+            </div>
+          }
+          data={data.variants}
+          keyExtractor={(item) => item.sku}
+          columns={{
+            sku: 'SKU',
+            options: {
+              label: 'Options',
+              render: (options) =>
+                options
+                  .map((option) => `${option.name}: ${option.value}`)
+                  .join(', '),
+            },
+            price: { label: 'Price', render: formatPrice },
+            stock: 'Stock',
+          }}
+          actions={(item) => (
+            <div className='flex items-center gap-2'>
+              <EditVariantButton productId={data.id} variant={item} />
+              <DeleteVariantButton productId={data.id} variant={item} />
+            </div>
+          )}
+        />
+      )}
     </>
   )
 }

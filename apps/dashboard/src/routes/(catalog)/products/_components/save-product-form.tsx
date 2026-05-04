@@ -388,7 +388,7 @@ function ProductAttributesFields({
   )
 }
 
-function ProductVariantsFields({
+export function ProductVariantsFields({
   form,
 }: {
   form: UseFormReturn<Omit<SaveProductDto.Input, 'vendorId'>, unknown>

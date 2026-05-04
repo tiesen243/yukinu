@@ -19,6 +19,10 @@ export default [
     route('/catalog/products', './routes/(catalog)/products/_index.tsx'),
     route('/catalog/products/new', './routes/(catalog)/products/new.tsx'),
     route('/catalog/products/:id', './routes/(catalog)/products/[id].tsx'),
+    route(
+      '/catalog/products/:id/variant',
+      './routes/(catalog)/products/[id].variant.tsx',
+    ),
 
     // Mangement routes
     route('/management', './routes/(management)/_index.tsx'),
@@ -41,7 +45,7 @@ export default [
     // Other routes
     index('./routes/dashboard/_index.tsx'),
     route('/analytics', './routes/analytics/_index.tsx'),
-    route('/tickets', './routes/tickets/_index.tsx'),
+    route('/support-tickets', './routes/support-tickets/_index.tsx'),
   ]),
 
   layout('./components/turnstile.tsx', [

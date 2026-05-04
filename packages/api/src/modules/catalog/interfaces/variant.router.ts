@@ -23,9 +23,14 @@ export const variantRouter = (
 
     recreate: protectedProcedure
       .use(deps.vendorMiddleware)
-      .input(RecreateVariantDto.input)
+      .input(RecreateVariantDto.input.omit({ vendorId: true }))
       .output(RecreateVariantDto.output)
-      .mutation(({ input }) => variant.recreate.execute(input)),
+      .mutation(({ ctx, input }) =>
+        variant.recreate.execute({
+          ...input,
+          vendorId: ctx.session.vendorId,
+        }),
+      ),
 
     update: protectedProcedure
       .use(deps.vendorMiddleware)

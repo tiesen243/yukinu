@@ -142,9 +142,9 @@ const data = {
   navSecondary: [
     {
       title: 'Get Help',
-      url: '/tickets',
+      url: '/support-tickets',
       icon: MessageCircleQuestionIcon,
-      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff', 'user'],
+      role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
     },
   ],
 }
