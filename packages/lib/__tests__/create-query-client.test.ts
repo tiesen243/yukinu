@@ -13,7 +13,12 @@ describe('createQueryClient', () => {
     const queryClient = createQueryClient()
     expect(queryClient.getDefaultOptions()).toEqual({
       queries: {
-        staleTime: 5 * 60 * 1000,
+        staleTime: 10 * 60 * 1000,
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+      mutations: {
+        gcTime: 5 * 60 * 1000,
         retry: false,
       },
       dehydrate: {

@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
-    "resend": "^6.12.2"
+    "resend": "^6.12.3"
   },
   "devDependencies": {
     "@types/react": "catalog:react",

@@ -1,3 +1,4 @@
+import '@/lib/env'
 import type { AppLoadContext, EntryContext } from 'react-router'
 
 import { isbot } from 'isbot'

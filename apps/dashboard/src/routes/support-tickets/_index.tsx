@@ -1,20 +1,25 @@
 import { useQuery } from '@tanstack/react-query'
 import { TicketEntity } from '@yukinu/api/identity'
-import { useSession } from '@yukinu/auth/react'
 import { Badge } from '@yukinu/ui/badge'
 import { Tabs, TabsList, TabsTrigger } from '@yukinu/ui/tabs'
 import { Typography } from '@yukinu/ui/typography'
 import { parseAsInteger, parseAsStringEnum, useQueryStates } from 'nuqs'
-import { useMemo } from 'react'
 
 import { DataTable } from '@/components/data-table'
+import { userContext } from '@/lib/context'
 import { useTRPC } from '@/lib/trpc'
 import { CreateTicketButton } from '@/routes/support-tickets/_components/create-ticket-buttont'
 import { UpdateTicketStatus } from '@/routes/support-tickets/_components/update-ticket-status'
 
-export default function TicketsIndexPage() {
+import type { Route } from './+types/_index'
+
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const user = context.get(userContext)
+  return { isAdmin: ['admin', 'moderator'].includes(user?.role ?? '') }
+}
+
+export default function TicketsIndexPage({ loaderData }: Route.ComponentProps) {
   const { trpc } = useTRPC()
-  const { user } = useSession()
 
   const [query, setQuery] = useQueryStates({
     page: parseAsInteger.withDefault(1),
@@ -22,13 +27,8 @@ export default function TicketsIndexPage() {
     status: parseAsStringEnum([...TicketEntity.statuses]),
   })
 
-  const isAdmin = useMemo(
-    () => ['admin', 'moderator'].includes(user?.role ?? ''),
-    [user?.role],
-  )
-
   const { data, isLoading } = useQuery(
-    isAdmin
+    loaderData.isAdmin
       ? trpc.identity.ticket.all.queryOptions(query)
       : trpc.identity.ticket.me.queryOptions(query),
   )
@@ -65,7 +65,7 @@ export default function TicketsIndexPage() {
               </TabsList>
             </Tabs>
 
-            {!isAdmin && <CreateTicketButton />}
+            {!loaderData.isAdmin && <CreateTicketButton />}
           </div>
         }
         data={data?.tickets ?? []}
@@ -87,7 +87,7 @@ export default function TicketsIndexPage() {
           setPage: (page) => setQuery({ page }),
         }}
         actions={(item) =>
-          isAdmin && (
+          loaderData.isAdmin && (
             <UpdateTicketStatus
               ticketId={item.id}
               currentStatus={item.status}

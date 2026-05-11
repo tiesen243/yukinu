@@ -1,32 +1,36 @@
-import { useSession } from '@yukinu/auth/react'
-import { Loader2Icon } from '@yukinu/ui/icons'
+import { currentUser } from '@yukinu/auth'
 import { ScrollArea } from '@yukinu/ui/scroll-area'
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from '@yukinu/ui/sidebar'
-import { Navigate, Outlet } from 'react-router'
+import { Outlet, redirect } from 'react-router'
 
 import { AppSidebar } from '@/components/app-sidebar'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { SearchBox } from '@/components/search-box'
+import { userContext } from '@/lib/context'
 
-export default function Protected() {
-  const { status, user } = useSession()
+import type { Route } from './+types/protected'
 
-  if (status === 'loading')
-    return (
-      <main className='flex h-dvh animate-pulse flex-col items-center justify-center gap-4'>
-        <Loader2Icon className='size-8 animate-spin' />
-        <span className='sr-only'>Loading...</span>
-      </main>
-    )
+const authMiddleware: Route.MiddlewareFunction = async ({
+  context,
+  request,
+}) => {
+  const user = await currentUser(request)
+  if (!user) throw redirect('/login')
+  context.set(userContext, user)
+}
 
-  if (status === 'unauthenticated') return <Navigate to='/login' replace />
+export const middleware: Route.MiddlewareFunction[] = [authMiddleware]
 
-  if (user.role === 'user') return <Navigate to='/register-vendor' replace />
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const user = context.get(userContext)
+  if (user?.role === 'user') throw redirect('/register-vendor')
+}
 
+export default function Protected(_: Route.ComponentProps) {
   return (
     <SidebarProvider>
       <AppSidebar variant='inset' />

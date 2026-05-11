@@ -20,16 +20,16 @@
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
-    "isbot": "^5.1.39",
+    "isbot": "^5.1.40",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.14.2",
+    "react-router": "^7.15.0",
     "recharts": "catalog:prod",
     "zod": "catalog:prod"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.14.2",
+    "@react-router/dev": "^7.15.0",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
@@ -37,6 +37,6 @@
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev",
-    "vite": "^8.0.10"
+    "vite": "^8.0.12"
   }
 }

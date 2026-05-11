@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSession } from '@yukinu/auth/react'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
@@ -9,17 +8,25 @@ import {
   parseAsString,
   useQueryStates,
 } from 'nuqs'
-import { useMemo } from 'react'
 import { Link } from 'react-router'
 
 import { DataTable } from '@/components/data-table'
+import { userContext } from '@/lib/context'
 import { useTRPC } from '@/lib/trpc'
 import { ProductButton } from '@/routes/(catalog)/products/_components/product-button'
 import { ProductSearchForm } from '@/routes/(catalog)/products/_components/search-form'
 
-export default function CatalogProductsIndexPage() {
+import type { Route } from './+types/_index'
+
+export const loader = ({ context }: Route.LoaderArgs) => {
+  const user = context.get(userContext)
+  return { isAdmin: ['admin', 'moderator'].includes(user?.role ?? '') }
+}
+
+export default function CatalogProductsIndexPage({
+  loaderData,
+}: Route.ComponentProps) {
   const { trpc } = useTRPC()
-  const { user } = useSession()
   const [query, setQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
     isDeleted: parseAsBoolean.withDefault(false),
@@ -27,13 +34,8 @@ export default function CatalogProductsIndexPage() {
     limit: parseAsInteger.withDefault(10),
   })
 
-  const isAdmin = useMemo(
-    () => ['admin', 'moderator'].includes(user?.role ?? ''),
-    [user?.role],
-  )
-
   const { data, isLoading } = useQuery(
-    isAdmin
+    loaderData.isAdmin
       ? trpc.catalog.product.all.queryOptions(query)
       : trpc.catalog.product.allByVendor.queryOptions(query),
   )
@@ -92,7 +94,7 @@ export default function CatalogProductsIndexPage() {
                 productName={item.name}
                 type='restore'
                 variant='default'
-                isAdmin={isAdmin}
+                isAdmin={loaderData.isAdmin}
               />
             ) : (
               <Button
@@ -109,7 +111,7 @@ export default function CatalogProductsIndexPage() {
                 productName={item.name}
                 type='permanentDelete'
                 variant='destructive'
-                isAdmin={isAdmin}
+                isAdmin={loaderData.isAdmin}
               />
             ) : (
               <ProductButton
@@ -117,7 +119,7 @@ export default function CatalogProductsIndexPage() {
                 productName={item.name}
                 type='delete'
                 variant='destructive'
-                isAdmin={isAdmin}
+                isAdmin={loaderData.isAdmin}
               />
             )}
           </div>
