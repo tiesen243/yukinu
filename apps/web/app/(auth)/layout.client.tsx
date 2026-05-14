@@ -1,10 +1,9 @@
-import { Card } from '@yukinu/ui/card'
+'use client'
+
+import { usePathname } from 'next/navigation'
 import { useEffect } from 'react'
-import { Outlet, useLocation } from 'react-router'
 
 import { env } from '@/lib/env'
-
-import type { Route } from './+types/turnstile'
 
 declare global {
   interface Window {
@@ -20,8 +19,8 @@ declare global {
   }
 }
 
-export default function TurnstileChallenge(_: Route.ComponentProps) {
-  const location = useLocation()
+export const LoadTurnstile: React.FC = () => {
+  const pathname = usePathname()
 
   useEffect(() => {
     if (document.querySelector('#turnstile-script')) return
@@ -34,7 +33,7 @@ export default function TurnstileChallenge(_: Route.ComponentProps) {
     script.defer = true
 
     document.body.append(script)
-  }, [location.pathname])
+  }, [pathname])
 
   useEffect(() => {
     const el = document.querySelector('.cf-turnstile')
@@ -42,15 +41,9 @@ export default function TurnstileChallenge(_: Route.ComponentProps) {
 
     el.innerHTML = ''
     window.turnstile.render(el as HTMLElement, {
-      sitekey: env.VITE_TURNSTILE_SITE_KEY,
+      sitekey: env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
     })
-  }, [location.pathname])
+  }, [pathname])
 
-  return (
-    <main className='flex h-dvh flex-col items-center justify-center px-4'>
-      <Card className='min-w-full md:max-w-xl md:min-w-xl'>
-        <Outlet />
-      </Card>
-    </main>
-  )
+  return null
 }

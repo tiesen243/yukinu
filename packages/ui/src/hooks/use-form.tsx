@@ -70,13 +70,11 @@ function useForm<
     | StandardSchemaV1
     | ((values: TValues) => TResults | Promise<TResults>),
   TResults extends StandardSchemaV1.Result<TValues>,
+  TEvent,
 >(props: {
   defaultValues: TValues
   schema?: TSchema
-  onSubmit: (
-    data: TValues,
-    event?: Record<string, unknown>,
-  ) => TData | Promise<TData>
+  onSubmit: (data: TValues, event?: TEvent) => TData | Promise<TData>
   onSuccess?: (data: TData) => unknown | Promise<unknown>
   onError?: (error: TError) => unknown | Promise<unknown>
 }): UseFormReturn<TValues, TData, TError> {
@@ -125,10 +123,7 @@ function useForm<
           const validValues = await validate(formValuesRef.current)
           formValuesRef.current = validValues
 
-          const result = await onSubmit(
-            validValues,
-            event as Record<string, unknown> | undefined,
-          )
+          const result = await onSubmit(validValues, event as unknown as TEvent)
           formDataRef.current = result ?? null
           await onSuccess?.(result)
         } catch (error) {

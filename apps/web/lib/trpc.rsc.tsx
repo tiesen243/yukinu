@@ -39,4 +39,4 @@ function HydrateClient({ children }: Readonly<{ children: React.ReactNode }>) {
   )
 }
 
-export { api, trpc, HydrateClient }
+export { api, trpc, HydrateClient, getQueryClient }

@@ -1,15 +1,6 @@
-// oxlint-disable no-nested-ternary
-
-import type { Metadata as NextMetadata } from 'next'
+import type { Metadata } from 'next'
 
 import { env } from '@/lib/env'
-
-export interface Metadata extends NextMetadata {
-  title?: string
-  openGraph?: NextMetadata['openGraph'] & {
-    images?: ({ url: string; alt?: string } | string)[]
-  }
-}
 
 export function createMetadata(override: Metadata = {}): Metadata {
   const siteName = env.NEXT_PUBLIC_APP_NAME
@@ -25,9 +16,12 @@ export function createMetadata(override: Metadata = {}): Metadata {
     : baseUrl
 
   const images = [
-    ...(override.openGraph?.images ?? []),
-    { url: '/api/og', alt: 'Open Graph Image' },
-  ]
+    ...(Array.isArray(override.openGraph?.images)
+      ? (override.openGraph?.images ?? [])
+      : [override.openGraph?.images]
+    ).filter(Boolean),
+    `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
+  ] as NonNullable<Metadata['openGraph']>['images']
 
   return {
     ...override,

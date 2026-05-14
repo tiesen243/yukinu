@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
+    "@types/node": "^25.8.0",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/oxc": "workspace:*",

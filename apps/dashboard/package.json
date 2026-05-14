@@ -24,12 +24,12 @@
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",
-    "react-router": "^7.15.0",
+    "react-router": "^7.15.1",
     "recharts": "catalog:prod",
     "zod": "catalog:prod"
   },
   "devDependencies": {
-    "@react-router/dev": "^7.15.0",
+    "@react-router/dev": "^7.15.1",
     "@tailwindcss/vite": "catalog:tailwind",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
@@ -37,6 +37,6 @@
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev",
-    "vite": "^8.0.12"
+    "vite": "^8.0.13"
   }
 }
