@@ -19,7 +19,7 @@ import { useTRPC } from '@/lib/trpc'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 export const LoginForm: React.FC = () => {
-  const { trpcClient } = useTRPC()
+  const { trpcClient, queryClient } = useTRPC()
   const router = useRouter()
 
   const form = useForm({
@@ -32,6 +32,9 @@ export const LoginForm: React.FC = () => {
     onSuccess: () => [
       toast.success({ message: 'Logged in successfully! Redirecting...' }),
       router.push('/'),
+      queryClient.invalidateQueries({
+        queryKey: [['auth', 'currentUser'], { type: 'query' }],
+      }),
     ],
     onError: ({ message }) => toast.error({ message }),
   })

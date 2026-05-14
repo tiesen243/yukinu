@@ -1,5 +1,5 @@
 import { Card } from '@yukinu/ui/card'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Outlet, useLocation } from 'react-router'
 
 import { env } from '@/lib/env'
@@ -15,20 +15,30 @@ declare global {
           sitekey: string
           callback?: (token: string) => void
         },
-      ) => void
+      ) => string
+
+      remove: (widgetId: string) => void
     }
   }
 }
 
 export default function TurnstileChallenge(_: Route.ComponentProps) {
   const location = useLocation()
+  const widgetIdRef = useRef<string | null>(null)
 
   useEffect(() => {
     if (!window.turnstile?.render) return
 
-    window.turnstile.render('.cf-turnstile', {
+    widgetIdRef.current = window.turnstile.render('.cf-turnstile', {
       sitekey: env.VITE_TURNSTILE_SITE_KEY,
     })
+
+    return () => {
+      if (widgetIdRef.current && window.turnstile?.remove) {
+        window.turnstile.remove(widgetIdRef.current)
+        widgetIdRef.current = null
+      }
+    }
   }, [location.pathname])
 
   return (
