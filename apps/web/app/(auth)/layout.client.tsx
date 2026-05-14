@@ -23,27 +23,19 @@ export const LoadTurnstile: React.FC = () => {
   const pathname = usePathname()
 
   useEffect(() => {
-    if (document.querySelector('#turnstile-script')) return
+    if (!window.turnstile?.render) return
 
-    const script = document.createElement('script')
-    script.id = 'turnstile-script'
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-
-    script.async = true
-    script.defer = true
-
-    document.body.append(script)
-  }, [pathname])
-
-  useEffect(() => {
-    const el = document.querySelector('.cf-turnstile')
-    if (!el || !window.turnstile) return
-
-    el.innerHTML = ''
-    window.turnstile.render(el as HTMLElement, {
+    window.turnstile.render('.cf-turnstile', {
       sitekey: env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
     })
   }, [pathname])
 
-  return null
+  return (
+    <script
+      id='turnstile-script'
+      src='https://challenges.cloudflare.com/turnstile/v0/api.js'
+      async
+      defer
+    />
+  )
 }

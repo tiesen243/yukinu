@@ -6,8 +6,6 @@ import { LoadTurnstile } from '@/app/(auth)/layout.client'
 export default function AuthLayout({ children }: LayoutProps<'/'>) {
   return (
     <main className='flex min-h-dvh items-center justify-center px-4'>
-      <LoadTurnstile />
-
       <Card className='w-full bg-transparent ring-0 md:max-w-xl md:bg-card md:ring-1'>
         {children}
 
@@ -32,6 +30,8 @@ export default function AuthLayout({ children }: LayoutProps<'/'>) {
           ))}
         </CardFooter>
       </Card>
+
+      <LoadTurnstile />
     </main>
   )
 }

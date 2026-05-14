@@ -24,24 +24,9 @@ export default function TurnstileChallenge(_: Route.ComponentProps) {
   const location = useLocation()
 
   useEffect(() => {
-    if (document.querySelector('#turnstile-script')) return
+    if (!window.turnstile?.render) return
 
-    const script = document.createElement('script')
-    script.id = 'turnstile-script'
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-
-    script.async = true
-    script.defer = true
-
-    document.body.append(script)
-  }, [location.pathname])
-
-  useEffect(() => {
-    const el = document.querySelector('.cf-turnstile')
-    if (!el || !window.turnstile) return
-
-    el.innerHTML = ''
-    window.turnstile.render(el as HTMLElement, {
+    window.turnstile.render('.cf-turnstile', {
       sitekey: env.VITE_TURNSTILE_SITE_KEY,
     })
   }, [location.pathname])
@@ -51,6 +36,13 @@ export default function TurnstileChallenge(_: Route.ComponentProps) {
       <Card className='min-w-full md:max-w-xl md:min-w-xl'>
         <Outlet />
       </Card>
+
+      <script
+        id='turnstile-script'
+        src='https://challenges.cloudflare.com/turnstile/v0/api.js'
+        async
+        defer
+      />
     </main>
   )
 }
