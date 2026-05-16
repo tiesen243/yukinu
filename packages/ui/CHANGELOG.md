@@ -1,5 +1,11 @@
 # @yukinu/ui
 
+## 0.9.1
+
+### Patch Changes
+
+- 38731e3: fix linter error
+
 ## 0.9.0
 
 ### Minor Changes

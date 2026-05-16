@@ -36,6 +36,7 @@ export const UploadInput: React.FC<
     <InputGroup {...props}>
       <input
         ref={inputRef}
+        aria-label='File input'
         type='file'
         accept='image/*'
         max={1}

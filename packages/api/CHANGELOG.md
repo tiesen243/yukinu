@@ -1,5 +1,19 @@
 # @yukinu/api
 
+## 0.10.2
+
+### Patch Changes
+
+- Updated dependencies [38731e3]
+  - @yukinu/auth@0.10.1
+  - @yukinu/uploadthing@0.4.1
+
+## 0.10.1
+
+### Patch Changes
+
+- 4051f4e: fix change password
+
 ## 0.10.0
 
 ### Minor Changes
