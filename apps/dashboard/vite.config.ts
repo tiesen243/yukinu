@@ -1,15 +1,15 @@
 import { reactRouter } from '@react-router/dev/vite'
 import tailwindcss from '@tailwindcss/vite'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 
-export default defineConfig({
-  // base: mode === 'development' ? '/dashboard' : '/',
-  plugins: [reactRouter(), tailwindcss()],
-  resolve: { tsconfigPaths: true },
-  server: {
-    watch: { usePolling: process.env.NODE_ENV === 'development' },
-  },
-  build: {
-    // assetsDir: 'dashboard/assets',
-  },
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+
+  return {
+    plugins: [reactRouter(), tailwindcss()],
+    resolve: { tsconfigPaths: true },
+    define: {
+      'process.env': JSON.stringify(env),
+    },
+  }
 })

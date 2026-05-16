@@ -1,7 +1,6 @@
 'use client'
 
-import type { ChangePasswordInput } from '@yukinu/validators/auth'
-
+import { ChangePasswordDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import { Checkbox } from '@yukinu/ui/checkbox'
 import {
@@ -16,35 +15,29 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { changePasswordInput } from '@yukinu/validators/auth'
 import { useRouter } from 'next/navigation'
 
-import { useTRPCClient } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const ChangePasswordForm: React.FC = () => {
-  const trpc = useTRPCClient()
+  const { trpcClient } = useTRPC()
   const router = useRouter()
 
   const form = useForm({
     defaultValues: {
-      userId: null,
-      currentPassword: null,
+      userId: undefined,
+      currentPassword: undefined,
       newPassword: '',
       confirmNewPassword: '',
       isLogout: true,
-    } as ChangePasswordInput,
-    schema: changePasswordInput,
-    onSubmit: trpc.security.changePassword.mutate,
+    } as ChangePasswordDto.Input,
+    schema: ChangePasswordDto.input,
+    onSubmit: trpcClient.identity.security.changePassword.mutate,
     onSuccess: () => {
-      toast.add({ type: 'success', title: 'Password changed successfully' })
+      toast.success({ message: 'Password changed successfully' })
       if (form.state.values.isLogout) router.push('/login')
     },
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Failed to change password',
-        description: message,
-      }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

@@ -1,12 +1,13 @@
-import type { AllCategoriesOutput } from '@yukinu/validators/general'
+import type { AllCategoriesDto } from '@yukinu/api/catalog'
 
 import { cn } from '@yukinu/ui'
 import { Card, CardContent, CardHeader, CardTitle } from '@yukinu/ui/card'
 import Image from 'next/image'
-import Link from 'next/link'
+
+import { Link } from '@/components/link'
 
 interface CategoryCardProps extends React.ComponentProps<typeof Card> {
-  category: AllCategoriesOutput['categories'][number]
+  category: AllCategoriesDto.Output['categories'][number]
 }
 
 export const CategoryCard: React.FC<CategoryCardProps> = ({
@@ -24,7 +25,7 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   >
     <div className='relative flex-1 overflow-hidden'>
       <Image
-        src={category.image ?? '/assets/favicon.svg'}
+        src={category.image ?? '/assets/logo.svg'}
         alt={category.name}
         loading='eager'
         className='rounded-t-lg object-cover transition-transform group-hover/category-card:scale-105'

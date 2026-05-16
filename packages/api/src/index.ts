@@ -1,32 +1,39 @@
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
+import { db } from '@yukinu/db'
 
-import { createTRPCContext } from '@/context'
-import { appRouter } from '@/routers/_app'
-import { createCallerFactory } from '@/trpc'
+import type { AppRouter } from '@/app'
+
+import { createApp } from '@/app'
+import { createCallerFactory, createTRPCContext } from '@/trpc'
 
 const handler = async (request: Request): Promise<Response> => {
-  let response: Response
+  const appRouter = createApp(db)
 
-  // oxlint-disable-next-line unicorn/prefer-ternary
-  if (request.method === 'OPTIONS')
-    response = new Response(null, { status: 204 })
-  else
-    response = await fetchRequestHandler({
-      endpoint: '/api/trpc',
-      req: request,
-      router: appRouter,
-      createContext: () => createTRPCContext(request),
-    })
+  const response =
+    request.method === 'OPTIONS'
+      ? new Response(null, { status: 204 })
+      : await fetchRequestHandler<AppRouter>({
+          endpoint: '/api/trpc',
+          req: request,
+          router: appRouter,
+          createContext: ({ resHeaders }) =>
+            createTRPCContext({ reqHeaders: request.headers, resHeaders }),
+        })
 
+  // Set CORS headers
   response.headers.set('Access-Control-Allow-Origin', '*')
+  response.headers.set('Access-Control-Allow-Credentials', 'true')
   response.headers.set('Access-Control-Request-Method', '*')
   response.headers.set('Access-Control-Allow-Methods', 'OPTIONS, GET, POST')
   response.headers.set('Access-Control-Allow-Headers', '*')
   return response
 }
 
-const createCaller = createCallerFactory(appRouter)
+const createTRPCCaller = createCallerFactory(createApp(db))
 
-export type { AppRouter, RouterInputs, RouterOutputs } from '@/routers/_app'
-export type { TRPCMeta, TRPCContext } from '@/trpc'
-export { appRouter, createCaller, createTRPCContext, handler }
+export type { AppRouter, RouterInputs, RouterOutputs } from '@/app'
+export { createApp, createTRPCCaller, createTRPCContext, handler }
+
+export default {
+  fetch: handler,
+}

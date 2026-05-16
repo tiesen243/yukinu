@@ -1,14 +1,14 @@
 {
   "name": "@yukinu/web",
-  "version": "0.11.20",
+  "version": "0.12.0",
   "private": false,
   "type": "module",
   "scripts": {
-    "build": "bun --env-file ../../.env next build",
+    "build": "next build",
     "clean": "git clean -xdf .cache .next .turbo node_modules",
-    "dev": "bun --env-file ../../.env next dev",
-    "start": "bun --env-file ../../.env next start",
-    "typecheck": "bun --env-file ../../.env next typegen && tsc --noEmit"
+    "dev": "next dev",
+    "start": "next start",
+    "typecheck": "next typegen && tsc --noEmit"
   },
   "dependencies": {
     "@tanstack/react-query": "catalog:prod",
@@ -16,21 +16,21 @@
     "@yukinu/api": "workspace:*",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
-    "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
-    "@yukinu/validators": "workspace:*",
-    "next": "^16.2.2",
+    "next": "^16.2.6",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
-    "react-dom": "catalog:react"
+    "react-dom": "catalog:react",
+    "zod": "catalog:prod"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
-    "@types/node": "catalog:dev",
+    "@types/node": "^25.8.0",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev"

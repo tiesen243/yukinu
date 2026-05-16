@@ -1,5 +1,35 @@
 # @yukinu/dashboard
 
+## 0.12.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+- b5d5198: completed migrate dashboard
+
+### Patch Changes
+
+- 45ce85f: crud banner and voucher
+- 2cdd2f9: added crud product
+- 8695cb3: added invite staff
+- af2111f: update to match new api
+- d2308e0: added management user
+- 3c3cea1: added dashboard and analytics pages
+- Updated dependencies [6a2ed40]
+- Updated dependencies [888ccb8]
+- Updated dependencies [440cba9]
+- Updated dependencies [9de78ea]
+- Updated dependencies [637fb0e]
+- Updated dependencies [e38b624]
+- Updated dependencies [7fdf356]
+- Updated dependencies [1db49df]
+  - @yukinu/db@0.10.0
+  - @yukinu/api@0.10.0
+  - @yukinu/uploadthing@0.4.0
+  - @yukinu/auth@0.10.0
+  - @yukinu/lib@0.8.0
+  - @yukinu/ui@0.9.0
+
 ## 0.11.19
 
 ### Patch Changes

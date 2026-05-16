@@ -1,9 +1,7 @@
-import type { LoginInput, LoginOutput } from '@yukinu/validators/auth'
-
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as React from 'react'
 
-import type { User } from '@/core/types'
+import type { LoginInput, LoginOutput, User } from '@/core/types'
 
 const QUERY_KEY = [['auth', 'currentUser'], { type: 'query' }]
 
@@ -34,12 +32,12 @@ const useSession = () => {
 }
 
 function SessionProvider(props: Readonly<SessionProviderProps>) {
-  const { user, getUserFn, basePath = '/api/auth', children } = props
+  const { user, getUserFn, children } = props
 
   const queryClient = useQueryClient()
 
   const defaultGetUserFn = async () => {
-    const res = await fetch(`${basePath}/current-user`)
+    const res = await fetch('/api/auth/current-user')
     if (!res.ok) throw new Error('Failed to fetch session')
     return res.json() as Promise<User | null>
   }
@@ -56,7 +54,7 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
   const { mutateAsync: signIn } = useMutation({
     mutationKey: [['auth', 'sign-in'], { type: 'mutation' }],
     mutationFn: async (credentials: LoginInput) => {
-      const res = await fetch(`${basePath}/sign-in`, {
+      const res = await fetch('/api/auth/sign-in', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(credentials),
@@ -71,7 +69,7 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
   const { mutateAsync: signOut } = useMutation({
     mutationKey: [['auth', 'sign-out'], { type: 'mutation' }],
     mutationFn: async () => {
-      const res = await fetch(`${basePath}/sign-out`, { method: 'POST' })
+      const res = await fetch('/api/auth/sign-out', { method: 'POST' })
       if (!res.ok) throw new Error(await res.text())
     },
     onSuccess: () => queryClient.setQueriesData({ queryKey: QUERY_KEY }, null),
@@ -80,7 +78,7 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
   const { mutateAsync: refreshToken } = useMutation({
     mutationKey: [['auth', 'refresh-token'], { type: 'mutation' }],
     mutationFn: async () => {
-      const res = await fetch(`${basePath}/refresh-token`, { method: 'POST' })
+      const res = await fetch('/api/auth/refresh-token', { method: 'POST' })
       if (!res.ok) throw new Error(await res.text())
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
@@ -92,7 +90,7 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
     else if (data) status = 'authenticated'
 
     return { status, user: data, signIn, signOut, refreshToken }
-  }, [data, isLoading, signIn, signOut]) as SessionContextValue
+  }, [data, isLoading, signIn, signOut, refreshToken]) as SessionContextValue
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation } from '@tanstack/react-query'
+import { SaveAddressDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
@@ -12,30 +12,13 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { createAddressInput } from '@yukinu/validators/user'
 import { useRouter } from 'next/navigation'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const NewAddressForm: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpcClient, trpc, queryClient } = useTRPC()
   const router = useRouter()
-
-  const { mutateAsync } = useMutation({
-    ...trpc.address.create.mutationOptions(),
-    meta: { filter: trpc.address.all.queryFilter() },
-    onSuccess: () =>
-      toast.add({
-        type: 'success',
-        title: 'Address added successfully!',
-      }),
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Error adding address',
-        description: message,
-      }),
-  })
 
   const form = useForm({
     defaultValues: {
@@ -47,9 +30,14 @@ export const NewAddressForm: React.FC = () => {
       country: '',
       postalCode: '',
     },
-    schema: createAddressInput.omit({ userId: true }),
-    onSubmit: mutateAsync,
-    onSuccess: () => {
+    schema: SaveAddressDto.input.omit({ userId: true }),
+    onSubmit: trpcClient.identity.address.create.mutate,
+    onError: toast.error,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(
+        trpc.identity.address.all.queryFilter(),
+      )
+      toast.success({ message: 'Address added successfully!' })
       router.push('/account/address')
     },
   })

@@ -1,15 +1,17 @@
 import type { MetadataRoute } from 'next'
 
-import { db, orm } from '@yukinu/db'
+import { db } from '@yukinu/db'
+import { and, eq, isNull } from '@yukinu/db/drizzle'
 import { products, users, vendors } from '@yukinu/db/schema'
-import { slugify } from '@yukinu/lib/slugify'
+import { slugify } from '@yukinu/lib/utils'
 
-import { getWebUrl } from '@/lib/utils'
+import { env } from '@/lib/env'
 
 export const revalidate = 86_400 // 24 hours
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const url = (path: string): string => new URL(path, getWebUrl()).toString()
+  const url = (path: string): string =>
+    new URL(path, env.NEXT_PUBLIC_WEB_URL).toString()
 
   const statics: string[] = ['/home', '/about', '/contact', '/search']
 
@@ -21,14 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     db
       .select({ id: users.id })
       .from(users)
-      .where(
-        orm.and(orm.eq(users.status, 'active'), orm.isNull(users.deletedAt)),
-      )
+      .where(and(eq(users.status, 'active'), isNull(users.deletedAt)))
       .limit(1000),
     db
       .select({ id: vendors.id })
       .from(vendors)
-      .where(orm.eq(vendors.status, 'approved'))
+      .where(eq(vendors.status, 'approved'))
       .limit(1000),
   ])
 

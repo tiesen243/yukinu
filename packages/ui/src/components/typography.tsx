@@ -1,28 +1,26 @@
 import type { VariantProps } from 'class-variance-authority'
 
-import { mergeProps } from '@base-ui/react/merge-props'
-import { useRender } from '@base-ui/react/use-render'
 import { cva } from 'class-variance-authority'
 
 import { cn } from '@/utils'
 
-const typographyVariants = cva('text-base font-normal text-foreground', {
+const typographyVariants = cva('text-base font-normal', {
   variants: {
     variant: {
-      h1: 'my-8 scroll-m-20 text-4xl font-extrabold tracking-tight text-balance',
-      h2: 'my-5 scroll-m-20 text-3xl font-bold tracking-tight text-balance first:mt-0',
-      h3: 'my-4 scroll-m-20 text-2xl font-semibold tracking-tight text-balance',
-      h4: 'my-3 scroll-m-20 text-xl font-semibold tracking-tight text-balance',
-      h5: 'my-2.5 scroll-m-20 text-lg font-medium tracking-tight text-balance',
-      h6: 'my-2 scroll-m-20 text-base font-medium tracking-tight text-balance',
-      p: 'leading-7 text-pretty [&:not(:first-child)]:mt-2',
-      small: 'text-sm leading-none font-medium',
+      h1: 'scroll-m-20 text-4xl font-extrabold tracking-tight text-balance',
+      h2: 'my-4 scroll-m-20 text-2xl font-bold tracking-tight text-balance',
+      h3: 'my-2 scroll-m-20 text-xl font-semibold tracking-tight text-balance',
+      h4: 'my-2 scroll-m-20 text-lg font-semibold tracking-tight text-balance',
+      p: 'text-justify leading-7 text-pretty not-first:mt-2 last:mb-4',
+      small:
+        'block text-sm leading-none font-medium tracking-wide not-first:mt-2 last:mb-4',
       ul: 'my-4 ml-6 list-disc text-base [&>li]:mt-2 [&>li]:first:mt-0',
       ol: 'my-4 ml-6 list-decimal text-base [&>li]:mt-2 [&>li]:first:mt-0',
       blockquote:
-        'my-2 inline-flex border-l-2 pl-6 italic before:content-["“"] after:content-["”"]',
+        'my-4 inline-block border-l-2 pl-6 italic before:content-["“"] after:content-["”"]',
       code: 'relative w-fit rounded-sm border border-accent bg-accent/40 px-[0.3rem] py-[0.2rem] font-mono text-sm font-medium text-accent-foreground',
-      caption: 'block text-sm tracking-wide',
+      caption:
+        'mt-1 block text-center text-sm tracking-wide text-muted-foreground',
     },
   },
   defaultVariants: {
@@ -32,30 +30,26 @@ const typographyVariants = cva('text-base font-normal text-foreground', {
 
 interface TypographyProps
   extends
-    useRender.ComponentProps<'p'>,
-    VariantProps<typeof typographyVariants> {}
+    React.HTMLAttributes<HTMLElement>,
+    VariantProps<typeof typographyVariants> {
+  as?: React.ElementType
+}
 
 function Typography({
   className,
   variant = 'p',
-  render,
+  as,
   ...props
 }: TypographyProps) {
-  return useRender({
-    defaultTagName: variant ?? 'p',
-    props: mergeProps<'p'>(
-      {
-        className: cn(typographyVariants({ variant }), className),
-      },
-      props,
-    ),
-    render,
-    state: {
-      slot: 'typography',
-      variant,
-    },
-  })
+  const Comp = as ?? variant ?? 'p'
+
+  return (
+    <Comp
+      data-slot='typography'
+      className={cn(typographyVariants({ variant }), className)}
+      {...props}
+    />
+  )
 }
 
-export type { TypographyProps }
 export { Typography, typographyVariants }

@@ -31,7 +31,7 @@ export const BuyerValue: React.FC = () => (
             <Icon className='size-6 shrink-0 text-accent-foreground' />
             <div>
               <Typography className='font-semibold'>{title}</Typography>
-              <Typography className='text-muted-foreground' render={<span />}>
+              <Typography className='text-muted-foreground' as='span'>
                 {desc}
               </Typography>
             </div>

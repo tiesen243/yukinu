@@ -4,15 +4,14 @@ import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
 import { Card, CardFooter, CardHeader } from '@yukinu/ui/card'
 import { Typography } from '@yukinu/ui/typography'
-import { useRouter } from 'next/navigation'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
+import { Link } from '@/components/link'
 
 export const ProductDescription: React.FC = () => {
   const {
     product: { vendor, description, attributes },
   } = usePage()
-  const router = useRouter()
 
   return (
     <Card className='gap-0' render={<section />}>
@@ -36,8 +35,8 @@ export const ProductDescription: React.FC = () => {
           <Button
             variant='outline'
             size='sm'
-            onClick={() => router.push(`/v/${vendor.id}`)}
-            onMouseEnter={() => router.prefetch(`/v/${vendor.id}`)}
+            nativeButton={false}
+            render={<Link href={`/v/${vendor.id}` as never} />}
           >
             Visit Store
           </Button>
@@ -45,14 +44,14 @@ export const ProductDescription: React.FC = () => {
       )}
 
       <CardFooter className='flex-col items-start' render={<section />}>
-        <Typography variant='h4' render={<h3>Overview</h3>} />
+        <Typography variant='h3'>Overview</Typography>
         <Typography className='overflow-x-auto whitespace-pre-wrap'>
           {description?.split('\\n').join('\n')}
         </Typography>
 
         {attributes.length > 0 && (
           <section>
-            <Typography variant='h5' render={<h4>Specifications</h4>} />
+            <Typography variant='h4'>Specifications</Typography>
             <Typography variant='ul' className='capitalize'>
               {attributes.map((attr) => (
                 <li key={attr.name}>

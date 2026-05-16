@@ -1,17 +1,16 @@
-import { env } from '@yukinu/validators/env'
 import { defineConfig } from 'drizzle-kit'
 
 export default defineConfig({
-  dialect: 'postgresql',
-  dbCredentials: {
-    host: env.POSTGRES_HOST,
-    port: env.POSTGRES_PORT,
-    user: env.POSTGRES_USER,
-    password: env.POSTGRES_PASSWORD,
-    database: env.POSTGRES_DATABASE,
-    ssl: env.POSTGRES_SSL_MODE === 'true' ? 'require' : false,
-  },
-  schema: './src/schema/index.ts',
   casing: 'snake_case',
+  dialect: 'postgresql',
   strict: true,
+
+  schema: './src/schema.ts',
+  out: './migrations',
+
+  dbCredentials: {
+    url:
+      process.env.DATABASE_URL ??
+      'postgresql://yukinu:supersecret@127.0.0.1:5432/db',
+  },
 })

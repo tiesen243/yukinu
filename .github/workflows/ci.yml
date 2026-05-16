@@ -3,9 +3,6 @@ name: CI
 on:
   pull_request:
     branches: ['*']
-  push:
-    branches: ['main']
-  merge_group:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -22,40 +19,31 @@ jobs:
   format:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup
-        uses: ./tools/github/setup
-
-      - name: Format
-        run: npm run format
+      - uses: actions/checkout@v6
+      - uses: ./tools/github/setup
+      - name: Format check
+        run: ./node_modules/.bin/oxfmt --check
 
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup
-        uses: ./tools/github/setup
-
-      - name: Copy env
-        shell: bash
-        run: cp .env.example .env
-
-      - name: Lint
+      - uses: actions/checkout@v6
+      - uses: ./tools/github/setup
+      - name: Lint check
         run: bun lint
 
   typecheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Setup
-        uses: ./tools/github/setup
-
-      - name: Copy env
-        shell: bash
-        run: cp .env.example .env
-
+      - uses: actions/checkout@v6
+      - uses: ./tools/github/setup
       - name: Typecheck
         run: bun typecheck
+
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./tools/github/setup
+      - name: Unit Test
+        run: bun test

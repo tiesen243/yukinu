@@ -1,23 +1,14 @@
 import { Button } from '@yukinu/ui/button'
 import { PlusIcon } from '@yukinu/ui/icons'
 import Link from 'next/link'
-import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
-import {
-  AddressesList,
-  AddressesListSkeleton,
-} from '@/app/(main)/account/address/page.client'
+import { AddressesList } from '@/app/(main)/account/address/page.client'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
-
-export const dynamic = 'force-dynamic'
 
 export default function AddressPage() {
-  void getQueryClient().prefetchQuery(trpc.address.all.queryOptions({}))
-
   return (
-    <HydrateClient>
+    <>
       <AccountHeader
         title='My Addresses'
         description='View, add, and manage your saved shipping addresses for faster checkout.'
@@ -26,9 +17,7 @@ export default function AddressPage() {
       <section className='flex flex-col gap-4 px-4'>
         <h2 className='sr-only'>Address List section</h2>
 
-        <Suspense fallback={<AddressesListSkeleton />}>
-          <AddressesList />
-        </Suspense>
+        <AddressesList />
 
         <Button
           variant='outline'
@@ -40,7 +29,7 @@ export default function AddressPage() {
           }
         />
       </section>
-    </HydrateClient>
+    </>
   )
 }
 

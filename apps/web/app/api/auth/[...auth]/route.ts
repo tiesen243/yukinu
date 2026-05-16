@@ -1,5 +1,5 @@
 export {
-  handlers as GET,
-  handlers as POST,
-  handlers as OPTIONS,
+  handler as GET,
+  handler as POST,
+  handler as OPTIONS,
 } from '@yukinu/auth'

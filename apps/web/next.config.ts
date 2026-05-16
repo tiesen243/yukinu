@@ -1,7 +1,5 @@
-import '@yukinu/validators/env'
+import '@/lib/env'
 import type { NextConfig } from 'next'
-
-import path from 'node:path'
 
 const nextConfig = {
   typedRoutes: true,
@@ -13,20 +11,40 @@ const nextConfig = {
     '@yukinu/api',
     '@yukinu/auth',
     '@yukinu/db',
-    '@yukinu/email',
     '@yukinu/lib',
     '@yukinu/ui',
     '@yukinu/uploadthing',
-    '@yukinu/validators',
   ],
 
-  // Enable standalone build output if specified (for Docker deployment)
-  // oxlint-disable-next-line no-process-env
-  ...(process.env.NEXT_BUILD_OUTPUT === 'standalone' && {
-    output: 'standalone',
-    // oxlint-disable-next-line unicorn/prefer-module
-    outputFileTracingRoot: path.join(__dirname, '../../'),
-  }),
+  redirects: () => [
+    {
+      source: '/terms',
+      destination:
+        'https://tiesen243.github.io/yukinu/legal/term-of-service.html',
+      permanent: true,
+    },
+    {
+      source: '/privacy',
+      destination:
+        'https://tiesen243.github.io/yukinu/legal/privacy-policy.html',
+      permanent: true,
+    },
+    {
+      source: '/cookies',
+      destination: 'https://tiesen243.github.io/yukinu/legal/cookie.html',
+      permanent: true,
+    },
+    {
+      source: '/dmca',
+      destination: 'https://tiesen243.github.io/yukinu/legal/dmca.html',
+      permanent: true,
+    },
+    {
+      source: '/faq',
+      destination: 'https://tiesen243.github.io/yukinu/faq.html',
+      permanent: true,
+    },
+  ],
 } satisfies NextConfig
 
 export default nextConfig

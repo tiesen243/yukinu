@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/db",
-  "version": "0.9.10",
+  "version": "0.10.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -8,9 +8,13 @@
       "types": "./dist/index.d.mts",
       "default": "./dist/index.mjs"
     },
+    "./drizzle": {
+      "types": "./dist/drizzle.d.mts",
+      "default": "./dist/drizzle.mjs"
+    },
     "./schema": {
-      "types": "./dist/schema/index.d.mts",
-      "default": "./dist/schema/index.mjs"
+      "types": "./dist/schema.d.mts",
+      "default": "./dist/schema.mjs"
     }
   },
   "scripts": {
@@ -24,13 +28,11 @@
     "~dev": "tsdown --watch ./src"
   },
   "dependencies": {
-    "@yukinu/lib": "workspace:*",
-    "@yukinu/validators": "workspace:*",
     "drizzle-orm": "^0.45.2",
-    "postgres": "^3.4.7"
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
-    "@types/node": "catalog:dev",
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "drizzle-kit": "^0.31.10",
     "tsdown": "catalog:dev",

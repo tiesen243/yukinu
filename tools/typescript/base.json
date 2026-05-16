@@ -6,7 +6,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "es2024",
-    "lib": ["es2024", "dom"],
+    "lib": ["es2024"],
+    "types": ["bun"],
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
@@ -23,8 +24,8 @@
     "checkJs": true,
 
     /** Transpile using Bundler (not tsc) */
-    "module": "Preserve",
-    "moduleResolution": "Bundler",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "noEmit": true
   },
   "exclude": ["node_modules", "build", "dist", ".next", ".expo"]

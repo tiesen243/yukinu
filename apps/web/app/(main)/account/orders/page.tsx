@@ -1,18 +1,12 @@
 import { ItemGroup } from '@yukinu/ui/item'
-import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { OrderHistories } from '@/app/(main)/account/orders/page.client'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
-
-export const dynamic = 'force-dynamic'
 
 export default function AccountOrdersPage() {
-  void getQueryClient().prefetchQuery(trpc.order.all.queryOptions({}))
-
   return (
-    <HydrateClient>
+    <>
       <AccountHeader
         title='My Orders'
         description='Review your past orders, track current shipments, and manage returns or exchanges all in one place.'
@@ -22,12 +16,10 @@ export default function AccountOrdersPage() {
         <h2 className='sr-only'>Orders History List section</h2>
 
         <ItemGroup>
-          <Suspense fallback={<p>Loading...</p>}>
-            <OrderHistories />
-          </Suspense>
+          <OrderHistories />
         </ItemGroup>
       </section>
-    </HydrateClient>
+    </>
   )
 }
 

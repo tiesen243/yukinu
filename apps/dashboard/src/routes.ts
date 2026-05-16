@@ -6,56 +6,51 @@ export default [
   ...prefix('/api', [
     route('/auth/*', './routes/api/auth.ts'),
     route('/trpc/*', './routes/api/trpc.ts'),
+    route('/turnstile', './routes/api/turnstile.ts'),
     route('/uploadthing/*', './routes/api/uploadthing.ts'),
   ]),
 
-  layout('./routes/turnstile/__root.tsx', [
-    route('/login', './routes/turnstile/login.tsx'),
-    route('/invite', './routes/turnstile/invite.tsx'),
+  layout('./components/protected.tsx', [
+    // Catalog routes
+    route('/catalog', './routes/(catalog)/_index.tsx'),
+    route('/catalog/categories', './routes/(catalog)/categories/_index.tsx'),
+    route('/catalog/categories/new', './routes/(catalog)/categories/new.tsx'),
+    route('/catalog/categories/:id', './routes/(catalog)/categories/[id].tsx'),
+    route('/catalog/products', './routes/(catalog)/products/_index.tsx'),
+    route('/catalog/products/new', './routes/(catalog)/products/new.tsx'),
+    route('/catalog/products/:id', './routes/(catalog)/products/[id].tsx'),
+    route(
+      '/catalog/products/:id/variant',
+      './routes/(catalog)/products/[id].variant.tsx',
+    ),
+
+    // Mangement routes
+    route('/management', './routes/(management)/_index.tsx'),
+    route('/management/banners', './routes/(management)/banners/_index.tsx'),
+    route('/management/orders', './routes/(management)/orders/_index.tsx'),
+    route(
+      '/management/transactions',
+      './routes/(management)/transactions/_index.tsx',
+    ),
+    route('/management/users', './routes/(management)/users/_index.tsx'),
+    route('/management/vendors', './routes/(management)/vendors/_index.tsx'),
+    route('/management/vouchers', './routes/(management)/vouchers/_index.tsx'),
+
+    // Merchant routes
+    route('/merchant', './routes/(merchant)/_index.tsx'),
+    route('/merchant/my-store', './routes/(merchant)/my-store/_index.tsx'),
+    route('/merchant/staffs', './routes/(merchant)/staffs/_index.tsx'),
+    route('/merchant/balance', './routes/(merchant)/balance/_index.tsx'),
+
+    // Other routes
+    index('./routes/dashboard/_index.tsx'),
+    route('/analytics', './routes/analytics/_index.tsx'),
+    route('/support-tickets', './routes/support-tickets/_index.tsx'),
   ]),
 
-  layout('./routes/__layout.tsx', [
-    index('./routes/(dashboard)/_index.tsx'),
-    route('/apply-vendor', './routes/apply-vendor.tsx'),
-
-    layout('./routes/admin/__layout.tsx', [
-      route('/admin/banners', './routes/admin/banners.tsx'),
-
-      route('/admin/categories', './routes/admin/categories/_index.tsx'),
-      route('/admin/categories/new', './routes/admin/categories/new.tsx'),
-      route('/admin/categories/:id', './routes/admin/categories/[id].tsx'),
-
-      route('/admin/users', './routes/admin/users/_index.tsx'),
-
-      route('/admin/vendors', './routes/admin/vendors/_index.tsx'),
-      route('/admin/products', './routes/admin/products.tsx'),
-
-      route('/admin/vouchers', './routes/admin/vouchers/_index.tsx'),
-      route('/admin/vouchers/new', './routes/admin/vouchers/new.tsx'),
-      route('/admin/vouchers/:id', './routes/admin/vouchers/[id].tsx'),
-    ]),
-
-    layout('./routes/products/__layout.tsx', [
-      route('/products', './routes/products/_index.tsx'),
-      route('/products/new', './routes/products/new.tsx'),
-      route('/products/:id', './routes/products/[id]/_index.tsx'),
-      route('/products/:id/variant', './routes/products/[id]/variant.tsx'),
-    ]),
-
-    layout('./routes/vendor/__layout.tsx', [
-      route('/vendor/my-store', './routes/vendor/_index.tsx'),
-      route('/vendor/staffs', './routes/vendor/staffs/_index.tsx'),
-      route('/vendor/orders', './routes/vendor/orders/_index.tsx'),
-      route('/vendor/orders/:id', './routes/vendor/orders/[id].tsx'),
-    ]),
-
-    layout('./routes/support/__layout.tsx', [
-      route('/support/tickets', './routes/support/tickets/_index.tsx'),
-      route('/support/tickets/new', './routes/support/tickets/new.tsx'),
-      route('/support/tickets/:id', './routes/support/tickets/[id].tsx'),
-    ]),
-
-    // Others
-    route('/*', './routes/fallback.tsx'),
+  layout('./components/turnstile.tsx', [
+    route('/login', './routes/login.tsx'),
+    route('/register-vendor', './routes/register-vendor.tsx'),
+    route('/accept-invitation', './routes/accept-invitation.tsx'),
   ]),
 ] satisfies RouteConfig

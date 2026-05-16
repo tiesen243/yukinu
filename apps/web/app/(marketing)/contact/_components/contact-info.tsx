@@ -9,7 +9,7 @@ export const ContactInfo: React.FC = () => (
           <info.icon className='size-5 text-accent-foreground' />
         </div>
         <div>
-          <Typography variant='h5' className='my-0' render={<p />}>
+          <Typography variant='h4' as='p'>
             {info.title}
           </Typography>
           {info.details.map((detail) => (

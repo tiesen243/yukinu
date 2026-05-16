@@ -1,5 +1,17 @@
 # @yukinu/uploadthing
 
+## 0.4.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+
+### Patch Changes
+
+- Updated dependencies [440cba9]
+- Updated dependencies [9de78ea]
+  - @yukinu/auth@0.10.0
+
 ## 0.3.12
 
 ### Patch Changes

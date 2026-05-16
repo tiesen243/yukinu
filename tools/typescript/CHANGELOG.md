@@ -1,5 +1,11 @@
 # @yukinu/tsconfig
 
+## 0.7.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+
 ## 0.6.1
 
 ### Patch Changes

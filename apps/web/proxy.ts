@@ -4,6 +4,7 @@ import { verifyAccessToken } from '@yukinu/auth'
 import { NextResponse } from 'next/server'
 
 const protectedPaths = ['/account', '/account/:path']
+const bypassCsrfPaths = ['/api/uploadthing']
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
@@ -22,6 +23,9 @@ export async function proxy(request: NextRequest) {
     loginUrl.searchParams.set('redirect_to', request.url)
     return NextResponse.redirect(loginUrl)
   }
+
+  if (bypassCsrfPaths.some((path) => pathname.startsWith(path)))
+    return NextResponse.next()
 
   // CRSF protection: only allow same-origin requests to mutate data
   if (

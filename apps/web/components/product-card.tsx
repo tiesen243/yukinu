@@ -1,6 +1,6 @@
-import type { AllOutput } from '@yukinu/validators/product'
+import type { AllProductsDto } from '@yukinu/api/catalog'
 
-import { slugify } from '@yukinu/lib/slugify'
+import { slugify } from '@yukinu/lib/utils'
 import { cn } from '@yukinu/ui'
 import {
   Card,
@@ -11,10 +11,11 @@ import {
 } from '@yukinu/ui/card'
 import { StarIcon } from '@yukinu/ui/icons'
 import Image from 'next/image'
-import Link from 'next/link'
+
+import { Link } from '@/components/link'
 
 interface ProductCardProps extends React.ComponentProps<typeof Card> {
-  product: AllOutput['products'][number]
+  product: AllProductsDto.Output['products'][number]
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -28,11 +29,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       'group/product-card flex aspect-square pt-0 transition-colors hover:bg-accent/40 hover:text-accent-foreground hover:ring-primary',
       className,
     )}
-    render={<Link href={`/${slugify(product.name)}-${product.id}`} />}
+    render={<Link href={`/${slugify(product.name)}-${product.id}` as never} />}
   >
     <div className='relative flex-1 overflow-hidden'>
       <Image
-        src={product.image ?? '/assets/favicon.svg'}
+        src={product.image ?? '/assets/logo.svg'}
         alt={product.name}
         sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         className='object-cover transition-transform group-hover/product-card:scale-105'

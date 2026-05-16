@@ -1,12 +1,16 @@
 {
   "extends": "@yukinu/tsconfig/react-package.json",
   "compilerOptions": {
-    "types": ["vite/client"],
+    "types": ["vite/client", "bun"],
     "rootDirs": [".", "./.react-router/types"],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", ".react-router/types/**/*"],
-  "exclude": ["build", "node_modules"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "*.config.ts",
+    ".react-router/types/**/*"
+  ]
 }

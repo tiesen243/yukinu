@@ -1,23 +1,15 @@
 import { ItemGroup } from '@yukinu/ui/item'
-import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import {
   CartItemsList,
-  CartItemsListSkeleton,
   CartItemsTotal,
-  CartItemsTotalSkeleton,
 } from '@/app/(main)/account/cart/page.client'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
-
-export const dynamic = 'force-dynamic'
 
 export default function AccountCartPage() {
-  void getQueryClient().prefetchQuery(trpc.cart.get.queryOptions({}))
-
   return (
-    <HydrateClient>
+    <>
       <AccountHeader
         title='My Cart'
         description='View and manage the items in your shopping cart before proceeding to checkout.'
@@ -27,16 +19,12 @@ export default function AccountCartPage() {
         <h2 className='sr-only'>Cart Items List section</h2>
 
         <ItemGroup className='flex-1'>
-          <Suspense fallback={<CartItemsListSkeleton />}>
-            <CartItemsList />
-          </Suspense>
+          <CartItemsList />
         </ItemGroup>
 
-        <Suspense fallback={<CartItemsTotalSkeleton />}>
-          <CartItemsTotal />
-        </Suspense>
+        <CartItemsTotal />
       </section>
-    </HydrateClient>
+    </>
   )
 }
 

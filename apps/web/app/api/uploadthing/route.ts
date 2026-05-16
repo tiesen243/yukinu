@@ -1,8 +1,5 @@
-// oxlint-disable-next-line typescript/ban-ts-comment
-// @ts-nocheck
-
 import { createNextRouteHandler } from '@yukinu/uploadthing'
-import { ourFileRouter, config } from '@yukinu/uploadthing/config'
+import { config, ourFileRouter } from '@yukinu/uploadthing/config'
 
 export const { GET, POST } = createNextRouteHandler({
   router: ourFileRouter,

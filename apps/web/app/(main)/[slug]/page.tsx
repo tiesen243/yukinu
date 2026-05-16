@@ -1,14 +1,13 @@
 import { Loader2Icon } from '@yukinu/ui/icons'
-import { env } from '@yukinu/validators/env.next'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { Suspense } from 'react'
 
 import { ProductDetails } from '@/app/(main)/[slug]/page.client'
 import { PageProvider } from '@/app/(main)/[slug]/page.provider'
+import { env } from '@/lib/env'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
-import { getWebUrl } from '@/lib/utils'
+import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc.rsc'
 
 export default async function ProductDetailsPage({
   params,
@@ -19,7 +18,7 @@ export default async function ProductDetailsPage({
 
   try {
     const product = await getQueryClient().ensureQueryData(
-      trpc.product.one.queryOptions({ id }),
+      trpc.catalog.product.one.queryOptions({ id }),
     )
 
     const avgRating =
@@ -69,7 +68,7 @@ export default async function ProductDetailsPage({
               })),
               offers: {
                 '@type': 'Offer',
-                url: `${getWebUrl()}/${slug}`,
+                url: `${env.NEXT_PUBLIC_WEB_URL}/${slug}`,
                 priceCurrency: 'USD',
                 price: product.price,
                 availability:
@@ -94,13 +93,10 @@ export default async function ProductDetailsPage({
 
             <Suspense
               fallback={
-                <div
-                  className='flex flex-1 animate-pulse flex-col items-center justify-center gap-4'
-                  role='status'
-                >
+                <output className='flex flex-1 animate-pulse flex-col items-center justify-center gap-4'>
                   <Loader2Icon className='size-16 animate-spin' />
                   <span className='text-sm'>Loading product details...</span>
-                </div>
+                </output>
               }
             >
               <PageProvider id={id}>
@@ -123,7 +119,7 @@ export const generateMetadata = async ({ params }: PageProps<'/[slug]'>) => {
 
   try {
     const product = await getQueryClient().ensureQueryData(
-      trpc.product.one.queryOptions({ id }),
+      trpc.catalog.product.one.queryOptions({ id }),
     )
 
     return createMetadata({

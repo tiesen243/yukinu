@@ -47,24 +47,7 @@ function extractError(errors: StandardSchemaV1.Issue[], name: string) {
   })
 }
 
-export function useForm<
-  TValues,
-  TData,
-  TError extends FormError,
-  TSchema extends
-    | StandardSchemaV1
-    | ((values: TValues) => TResults | Promise<TResults>),
-  TResults extends StandardSchemaV1.Result<TValues>,
->(props: {
-  defaultValues: TValues
-  schema?: TSchema
-  onSubmit: (
-    data: TValues,
-    event?: Record<string, unknown>,
-  ) => TData | Promise<TData>
-  onSuccess?: (data: TData) => unknown | Promise<unknown>
-  onError?: (error: TError) => unknown | Promise<unknown>
-}): {
+interface UseFormReturn<TValues, TData, TError extends FormError = FormError> {
   formId: string
   Field: <TName extends keyof TValues>(
     props: FormFieldProps<TName, TValues>,
@@ -77,7 +60,24 @@ export function useForm<
     isPending: boolean
   }
   reset: () => void
-} {
+}
+
+function useForm<
+  TValues,
+  TData,
+  TError extends FormError,
+  TSchema extends
+    | StandardSchemaV1
+    | ((values: TValues) => TResults | Promise<TResults>),
+  TResults extends StandardSchemaV1.Result<TValues>,
+  TEvent,
+>(props: {
+  defaultValues: TValues
+  schema?: TSchema
+  onSubmit: (data: TValues, event?: TEvent) => TData | Promise<TData>
+  onSuccess?: (data: TData) => unknown | Promise<unknown>
+  onError?: (error: TError) => unknown | Promise<unknown>
+}): UseFormReturn<TValues, TData, TError> {
   const { defaultValues, schema, onSubmit, onSuccess, onError } = props
 
   const formId = React.useId()
@@ -123,10 +123,7 @@ export function useForm<
           const validValues = await validate(formValuesRef.current)
           formValuesRef.current = validValues
 
-          const result = await onSubmit(
-            validValues,
-            event as Record<string, unknown> | undefined,
-          )
+          const result = await onSubmit(validValues, event as unknown as TEvent)
           formDataRef.current = result ?? null
           await onSuccess?.(result)
         } catch (error) {
@@ -265,3 +262,6 @@ export function useForm<
     [formId, Field, handleSubmit, isPending, reset],
   )
 }
+
+export type { FormError, FormFieldProps, UseFormReturn }
+export { useForm }

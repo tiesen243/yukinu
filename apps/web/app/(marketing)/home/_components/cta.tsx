@@ -4,26 +4,24 @@ import { Typography } from '@yukinu/ui/typography'
 import Link from 'next/link'
 
 export const CTASection: React.FC = () => (
-  <section className='bg-accent/20 px-4 py-20 sm:px-4 md:py-32 lg:px-8 dark:bg-accent/10'>
-    <div className='container space-y-6 text-center'>
-      <Typography variant='h2' className='text-primary'>
-        Ready to transform your shopping experience?
-      </Typography>
-      <Typography className='mx-auto max-w-2xl text-muted-foreground'>
-        Join Yukinu today and discover the future of multi-vendor e-commerce.
-        Whether you&apos;re a buyer or seller, we have a place for you.
-      </Typography>
+  <section className='container space-y-6 px-4 py-20 text-center sm:px-4 md:py-32 lg:px-8'>
+    <Typography variant='h2' className='text-primary'>
+      Ready to transform your shopping experience?
+    </Typography>
+    <Typography className='mx-auto max-w-2xl text-muted-foreground'>
+      Join Yukinu today and discover the future of multi-vendor e-commerce.
+      Whether you&apos;re a buyer or seller, we have a place for you.
+    </Typography>
 
-      <Button
-        size='lg'
-        variant='secondary'
-        nativeButton={false}
-        render={
-          <Link href='/'>
-            Get Started Now <ArrowRightIcon />
-          </Link>
-        }
-      />
-    </div>
+    <Button
+      size='lg'
+      variant='secondary'
+      nativeButton={false}
+      render={
+        <Link href='/'>
+          Get Started Now <ArrowRightIcon />
+        </Link>
+      }
+    />
   </section>
 )

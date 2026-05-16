@@ -7,15 +7,15 @@ import {
   ShoppingCartIcon,
   UserIcon,
 } from '@yukinu/ui/icons'
-import Link from 'next/link'
 
-import { UserHeader } from '@/app/(main)/account/_components/user-header'
+import { User } from '@/app/(main)/account/_components/user'
+import { Link } from '@/components/link'
 
 export default function AccountLayout({ children }: LayoutProps<'/account'>) {
   return (
-    <div className='container flex h-dvh w-full flex-1 flex-col gap-4 py-4 md:flex-row'>
+    <div className='container flex min-h-[calc(100dvh-3.5rem)] flex-1 flex-col gap-4 p-4 md:flex-row'>
       <Card render={<aside />} className='shrink-0 md:w-1/4'>
-        <UserHeader />
+        <User />
 
         <nav className='px-4'>
           <ul className='flex flex-row gap-4 overflow-x-auto px-1 py-2 md:flex-col md:gap-2'>
@@ -33,7 +33,10 @@ export default function AccountLayout({ children }: LayoutProps<'/account'>) {
         </nav>
       </Card>
 
-      <Card render={<main />} className='w-full overflow-x-hidden'>
+      <Card
+        render={<main />}
+        className='w-full overflow-x-hidden overflow-y-auto'
+      >
         {children}
       </Card>
     </div>

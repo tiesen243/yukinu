@@ -1,8 +1,12 @@
 {
   "name": "@yukinu/oxc",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "private": true,
-  "files": [
-    "*.json"
-  ]
+  "type": "module",
+  "exports": {
+    "./*": {
+      "types": "./types.d.ts",
+      "default": "./*.js"
+    }
+  }
 }

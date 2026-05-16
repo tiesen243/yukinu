@@ -1,8 +1,8 @@
 'use client'
 
-import type { AllSessionsOutput } from '@yukinu/validators/auth'
+import type { AllSessionsDto } from '@yukinu/api/identity'
 
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -18,11 +18,14 @@ import { Button } from '@yukinu/ui/button'
 import { XIcon } from '@yukinu/ui/icons'
 import { toast } from '@yukinu/ui/toast'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const SessionsList: React.FC = () => {
-  const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.security.allSessions.queryOptions())
+  const { trpc } = useTRPC()
+  const { data, status } = useQuery(
+    trpc.identity.security.allSessions.queryOptions({}),
+  )
+  if (status !== 'success') return <SessionsListSkeleton />
 
   return data.map((session) => (
     <SessionItem key={session.id} session={session} />
@@ -45,23 +48,15 @@ export const SessionsListSkeleton: React.FC = () =>
   ))
 
 const SessionItem: React.FC<{
-  session: AllSessionsOutput[number]
+  session: AllSessionsDto.Output[number]
 }> = ({ session }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.security.deleteSession.mutationOptions(),
-    meta: { filter: trpc.security.allSessions.queryFilter() },
+    ...trpc.identity.security.deleteSession.mutationOptions(),
+    meta: { filter: trpc.identity.security.allSessions.queryFilter() },
     onSuccess: () =>
-      toast.add({
-        type: 'success',
-        title: 'Logged out of session successfully',
-      }),
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Failed to log out of session',
-        description: message,
-      }),
+      toast.success({ message: 'Logged out of session successfully' }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

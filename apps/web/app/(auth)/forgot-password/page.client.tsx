@@ -1,67 +1,67 @@
 'use client'
 
+import { ForgotPasswordDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
-import { Field, FieldError, FieldLabel, FieldSet } from '@yukinu/ui/field'
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldLabel,
+} from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { forgotPasswordInput } from '@yukinu/validators/auth'
-import { env } from '@yukinu/validators/env.next'
+import Link from 'next/link'
 
-import { useTRPCClient } from '@/lib/trpc/react'
-import { verifyTurnstile } from '@/lib/verify-turnstile.client'
+import { env } from '@/lib/env'
+import { useTRPC } from '@/lib/trpc'
+import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 export const ForgotPasswordForm: React.FC = () => {
-  const trpc = useTRPCClient()
+  const { trpcClient } = useTRPC()
 
   const form = useForm({
     defaultValues: { email: '' },
-    schema: forgotPasswordInput,
-    onSubmit: async (data, event) => {
-      await verifyTurnstile(event)
-      return trpc.auth.forgotPassword.mutate(data)
+    schema: ForgotPasswordDto.input,
+    onSubmit: async (data, event?: React.SubmitEvent) => {
+      await verifyTurnstile(new FormData(event?.target))
+      return trpcClient.identity.auth.forgotPassword.mutate(data)
     },
-    onSuccess: () =>
-      toast.add({
-        type: 'success',
-        title: 'Password reset email sent!',
-        description: 'Please check your inbox for the reset link.',
-      }),
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Failed to send reset email',
-        description: message,
-      }),
+    onSuccess: () => toast.success({ message: 'Password reset email sent!' }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (
-    <form id={form.formId} className='px-4' onSubmit={form.handleSubmit}>
-      <FieldSet>
-        <legend className='sr-only'>Forgot your password?</legend>
+    <form
+      id={form.formId}
+      onSubmit={form.handleSubmit}
+      className='group/field-group @container/field-group flex w-full flex-col gap-5 px-4 data-[slot=checkbox-group]:gap-3 *:data-[slot=field-group]:gap-4'
+    >
+      <form.Field
+        name='email'
+        render={({ meta, field }) => (
+          <Field data-invalid={meta.errors.length > 0}>
+            <FieldLabel htmlFor={field.id}>Email</FieldLabel>
+            <Input {...field} placeholder='Enter your email' />
+            <FieldError id={meta.errorId} errors={meta.errors} />
+          </Field>
+        )}
+      />
 
-        <form.Field
-          name='email'
-          render={({ meta, field }) => (
-            <Field data-invalid={meta.errors.length > 0}>
-              <FieldLabel htmlFor={field.id}>Email</FieldLabel>
-              <Input {...field} placeholder='Enter your email' />
-              <FieldError id={meta.errorId} errors={meta.errors} />
-            </Field>
-          )}
+      <Field>
+        <div
+          className='cf-turnstile'
+          data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
         />
 
-        <Field>
-          <div
-            className='cf-turnstile'
-            data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-          />
+        <Button type='submit' disabled={form.state.isPending}>
+          {form.state.isPending ? 'Sending...' : 'Send Reset Link'}
+        </Button>
 
-          <Button type='submit' disabled={form.state.isPending}>
-            {form.state.isPending ? 'Sending...' : 'Send Reset Link'}
-          </Button>
-        </Field>
-      </FieldSet>
+        <FieldDescription>
+          Remembered your password? <Link href='/login'>Log in here.</Link>
+        </FieldDescription>
+      </Field>
     </form>
   )
 }

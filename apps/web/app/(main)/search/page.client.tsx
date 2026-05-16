@@ -1,11 +1,8 @@
 'use client'
 
-import type { OrderBy } from '@yukinu/validators/product'
-
 import { useQuery } from '@tanstack/react-query'
-import { Avatar, AvatarFallback, AvatarImage } from '@yukinu/ui/avatar'
+import { AllProductsDto } from '@yukinu/api/catalog'
 import { Button } from '@yukinu/ui/button'
-import { Card } from '@yukinu/ui/card'
 import {
   Field,
   FieldGroup,
@@ -16,33 +13,43 @@ import {
 import { FilterIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import { NativeSelect, NativeSelectOption } from '@yukinu/ui/native-select'
-import { orderBy } from '@yukinu/validators/product'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@yukinu/ui/select'
 import { useQueryStates } from 'nuqs'
+import { useState } from 'react'
 
+import { productsOptions, productsParsers } from '@/app/(main)/search/page.lib'
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
 import { ProductPagination } from '@/components/product-pagination'
-import { productsOptions, productsParsers } from '@/lib/search'
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const FilterForm: React.FC = () => {
   const [query, setQuery] = useQueryStates(productsParsers, productsOptions)
 
-  const trpc = useTRPC()
-  const { data } = useQuery(
-    trpc.category.all.queryOptions({ search: '', limit: 100 }),
+  const { trpc } = useTRPC()
+  const { data, status } = useQuery(
+    trpc.catalog.category.all.queryOptions({ search: '', limit: 100 }),
   )
+
+  const [formState, setFormState] = useState({
+    q: query.search,
+    categoryId: query.categoryId,
+    orderBy: query.orderBy,
+  })
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault()
 
-    const formData = Object.fromEntries(new FormData(e.target)) as Record<
-      string,
-      string
-    >
-    const search = formData.q ?? null
+    const search = formState.q ?? null
     const categoryId =
-      formData.categoryId === '' ? null : (formData.categoryId ?? null)
-    const _orderBy = (formData.orderBy as OrderBy | null) ?? 'createdAt_desc'
+      formState.categoryId === '' ? null : (formState.categoryId ?? null)
+    const _orderBy =
+      (formState.orderBy as AllProductsDto.OrderBy | null) ?? 'createdAt_desc'
 
     await setQuery((prev) => ({
       ...prev,
@@ -65,34 +72,62 @@ export const FilterForm: React.FC = () => {
               name='q'
               type='search'
               placeholder='Search...'
-              defaultValue={query.search ?? ''}
+              value={formState.q}
+              onChange={(e) =>
+                setFormState((prev) => ({ ...prev, q: e.target.value }))
+              }
             />
           </Field>
 
-          <Field>
-            <FieldLabel htmlFor='categoryId'>Category</FieldLabel>
-            <NativeSelect
-              id='categoryId'
-              name='categoryId'
-              defaultValue={query.categoryId ?? ''}
-            >
-              <NativeSelectOption value=''>All</NativeSelectOption>
-              {data?.categories.map((category) => (
-                <NativeSelectOption key={category.id} value={category.id}>
-                  {category.name}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
-          </Field>
+          {status === 'success' && (
+            <Field>
+              <FieldLabel htmlFor='categoryId'>Category</FieldLabel>
+              <Select
+                id='categoryId'
+                name='categoryId'
+                value={formState.categoryId}
+                onValueChange={(value) =>
+                  setFormState((prev) => ({ ...prev, categoryId: value }))
+                }
+                items={[
+                  { value: '', label: 'All' },
+                  ...data.categories.map((category) => ({
+                    value: category.id,
+                    label: category.name,
+                  })),
+                ]}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder='Select a category' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value='' className='text-muted-foreground'>
+                    All
+                  </SelectItem>
+                  {data?.categories.map((category) => (
+                    <SelectItem key={category.id} value={category.id}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+          )}
 
           <Field>
             <FieldLabel htmlFor='orderBy'>Sort By</FieldLabel>
             <NativeSelect
               id='orderBy'
               name='orderBy'
-              defaultValue={query.orderBy}
+              value={formState.orderBy}
+              onChange={(e) =>
+                setFormState((prev) => ({
+                  ...prev,
+                  orderBy: e.target.value as AllProductsDto.OrderBy,
+                }))
+              }
             >
-              {orderBy.map((order) => {
+              {AllProductsDto.orderBy.map((order) => {
                 const [field, direction] = order.split('_')
 
                 return (
@@ -115,38 +150,13 @@ export const FilterForm: React.FC = () => {
   )
 }
 
-export const VendorInfomation: React.FC = () => {
-  const [query] = useQueryStates(productsParsers, productsOptions)
-  const trpc = useTRPC()
-
-  const { data } = useQuery(trpc.product.all.queryOptions(query))
-  if (!data?.vendor) return null
-  const { vendor } = data
-
-  return (
-    <Card className='flex-row items-center px-4'>
-      <Avatar className='size-16'>
-        <AvatarImage
-          src={vendor.image ?? '/assets/favicon.svg'}
-          alt={vendor.name}
-        />
-        <AvatarFallback>{vendor.name.charAt(0).toUpperCase()}</AvatarFallback>
-      </Avatar>
-      <div className='flex flex-col gap-2'>
-        <p className='text-lg font-semibold'>{vendor.name}</p>
-        <p className='text-sm text-muted-foreground'>
-          {vendor.description ?? 'No description available.'}
-        </p>
-      </div>
-    </Card>
-  )
-}
-
 export const ProductsSearchResults: React.FC = () => {
   const [query] = useQueryStates(productsParsers, productsOptions)
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
-  const { data, isLoading } = useQuery(trpc.product.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.catalog.product.all.queryOptions(query),
+  )
 
   if (isLoading)
     return Array.from({ length: 8 }, (_, i) => <ProductCardSkeleton key={i} />)
@@ -163,9 +173,11 @@ export const ProductsSearchResults: React.FC = () => {
 
 export const ProductsSearchPagination: React.FC = () => {
   const [query, setQuery] = useQueryStates(productsParsers, productsOptions)
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
-  const { data, isLoading } = useQuery(trpc.product.all.queryOptions(query))
+  const { data, isLoading } = useQuery(
+    trpc.catalog.product.all.queryOptions(query),
+  )
   if (isLoading || !data) return null
 
   const { pagination } = data

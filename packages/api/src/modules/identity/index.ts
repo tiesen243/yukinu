@@ -1,0 +1,123 @@
+import type { TRPCRouterRecord } from '@trpc/server'
+import type { Database } from '@yukinu/db/drizzle'
+
+import type { UseCases } from '@/modules/identity/types'
+
+import { AllAddressesUseCase } from '@/modules/identity/application/use-cases/address/all-addresses.use-case'
+import { DeleteAddressUseCase } from '@/modules/identity/application/use-cases/address/delete-address.use-case'
+import { OneAddressUseCase } from '@/modules/identity/application/use-cases/address/one-address.use-case'
+import { SaveAddressUseCase } from '@/modules/identity/application/use-cases/address/save-address.use-case'
+import { ForgotPasswordUseCase } from '@/modules/identity/application/use-cases/auth/forgot-password.use-case'
+import { ResetPasswordUseCase } from '@/modules/identity/application/use-cases/auth/reset-password.use-case'
+import { SignInUseCase } from '@/modules/identity/application/use-cases/auth/sign-in.use-case'
+import { SignUpUseCase } from '@/modules/identity/application/use-cases/auth/sign-up.use-case'
+import { VerifyEmailUseCase } from '@/modules/identity/application/use-cases/auth/verify-email.use-case'
+import { AllSessionsUseCase } from '@/modules/identity/application/use-cases/security/all-sessions.use-case'
+import { ChangePasswordUseCase } from '@/modules/identity/application/use-cases/security/change-password.use-case'
+import { ChangeUsernameUseCase } from '@/modules/identity/application/use-cases/security/change-username.use-case'
+import { DeleteSessionUseCase } from '@/modules/identity/application/use-cases/security/delete-session.use-case'
+import { AllTicketsUseCase } from '@/modules/identity/application/use-cases/ticket/all-tickets.use-case'
+import { CreateTicketUseCase } from '@/modules/identity/application/use-cases/ticket/create-ticket.use-case'
+import { OneTicketUseCase } from '@/modules/identity/application/use-cases/ticket/one-ticket.use-case'
+import { UpdateTicketStatusUseCase } from '@/modules/identity/application/use-cases/ticket/update-ticket-status.use-case'
+import { AllUsersUseCase } from '@/modules/identity/application/use-cases/user/all-users.use-case'
+import { DeleteUserUseCase } from '@/modules/identity/application/use-cases/user/delete-user.use-case'
+import { OneUserUseCase } from '@/modules/identity/application/use-cases/user/one-user.use-case'
+import { PermanentDeleteUserUseCase } from '@/modules/identity/application/use-cases/user/permanent-delete-user.use-case'
+import { ProfileUseCase } from '@/modules/identity/application/use-cases/user/profile.use-case'
+import { RestoreUserUseCase } from '@/modules/identity/application/use-cases/user/restore-user.use-case'
+import { UpdateProfileUseCase } from '@/modules/identity/application/use-cases/user/update-profile.use-case'
+import { UpdateUserUseCase } from '@/modules/identity/application/use-cases/user/update-user.use-case'
+import { DrizzleAccountRepository } from '@/modules/identity/infrastructures/drizzle/account.repository'
+import { DrizzleAddressRepository } from '@/modules/identity/infrastructures/drizzle/address.repository'
+import { DrizzleProfileRepository } from '@/modules/identity/infrastructures/drizzle/profile.repository'
+import { DrizzleSessionRepository } from '@/modules/identity/infrastructures/drizzle/session.repository'
+import { DrizzleTicketRepository } from '@/modules/identity/infrastructures/drizzle/ticket.repository'
+import { DrizzleUserRepository } from '@/modules/identity/infrastructures/drizzle/user.repository'
+import { DrizzleVerificationRepository } from '@/modules/identity/infrastructures/drizzle/verification.repository'
+import { addressRouter } from '@/modules/identity/interfaces/address.router'
+import { authRouter } from '@/modules/identity/interfaces/auth.router'
+import { securityRouter } from '@/modules/identity/interfaces/security.router'
+import { ticketRouter } from '@/modules/identity/interfaces/ticket.router'
+import { userRouter } from '@/modules/identity/interfaces/user.router'
+
+export const createIdentityModule = (db: Database) => {
+  const accountRepo = new DrizzleAccountRepository(db)
+  const addressRepo = new DrizzleAddressRepository(db)
+  const profileRepo = new DrizzleProfileRepository(db)
+  const userRepo = new DrizzleUserRepository(db)
+  const verificationRepo = new DrizzleVerificationRepository(db)
+  const ticketRepo = new DrizzleTicketRepository(db)
+
+  const sessionRepo = new DrizzleSessionRepository(db)
+
+  const useCases = {
+    adddress: {
+      all: new AllAddressesUseCase(db, addressRepo),
+      one: new OneAddressUseCase(db, addressRepo),
+      save: new SaveAddressUseCase(db, addressRepo),
+      delete: new DeleteAddressUseCase(db, addressRepo),
+    },
+    auth: {
+      forgotPassword: new ForgotPasswordUseCase(db, userRepo, verificationRepo),
+      resetPassword: new ResetPasswordUseCase(
+        db,
+        accountRepo,
+        verificationRepo,
+      ),
+      signIn: new SignInUseCase(db),
+      signUp: new SignUpUseCase(
+        db,
+        accountRepo,
+        profileRepo,
+        userRepo,
+        verificationRepo,
+      ),
+      verifyEmail: new VerifyEmailUseCase(db, userRepo, verificationRepo),
+    },
+    user: {
+      allUsers: new AllUsersUseCase(db, userRepo),
+      deleteUser: new DeleteUserUseCase(db, userRepo),
+      oneUser: new OneUserUseCase(db, userRepo),
+      permanentDeleteUser: new PermanentDeleteUserUseCase(db, userRepo),
+      profile: new ProfileUseCase(db, userRepo, profileRepo),
+      restoreUser: new RestoreUserUseCase(db, userRepo),
+      updateProfile: new UpdateProfileUseCase(db, profileRepo, userRepo),
+      updateUser: new UpdateUserUseCase(db, userRepo),
+    },
+    ticket: {
+      all: new AllTicketsUseCase(db, ticketRepo),
+      one: new OneTicketUseCase(db, ticketRepo),
+      create: new CreateTicketUseCase(db, ticketRepo),
+      updateStatus: new UpdateTicketStatusUseCase(db, ticketRepo),
+    },
+
+    security: {
+      allSessions: new AllSessionsUseCase(db, sessionRepo),
+      deleteSession: new DeleteSessionUseCase(db, sessionRepo),
+      changeUsername: new ChangeUsernameUseCase(db, accountRepo, userRepo),
+      changePassword: new ChangePasswordUseCase(
+        db,
+        accountRepo,
+        sessionRepo,
+        userRepo,
+      ),
+    },
+  } satisfies UseCases
+
+  return {
+    useCases,
+    repos: {
+      userRepo,
+      verificationRepo,
+    },
+
+    router: {
+      address: addressRouter(useCases),
+      auth: authRouter(useCases),
+      user: userRouter(useCases),
+      ticket: ticketRouter(useCases),
+      security: securityRouter(useCases),
+    } satisfies TRPCRouterRecord,
+  }
+}

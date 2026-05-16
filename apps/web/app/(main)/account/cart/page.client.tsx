@@ -1,6 +1,6 @@
 'use client'
 
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -17,11 +17,13 @@ import * as React from 'react'
 
 import { EditButton } from '@/app/(main)/account/cart/_components/edit-button'
 import { RemoveButton } from '@/app/(main)/account/cart/_components/remove-button'
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const CartItemsList: React.FC = () => {
-  const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.cart.get.queryOptions({}))
+  const { trpc } = useTRPC()
+  const { data, status } = useQuery(trpc.sales.cart.get.queryOptions({}))
+
+  if (status !== 'success') return <CartItemsListSkeleton />
 
   return data.items.map((item) => (
     <Item
@@ -31,18 +33,18 @@ export const CartItemsList: React.FC = () => {
     >
       <ItemMedia variant='image'>
         <Image
-          src={item.productImage ?? '/assets/favicon.svg'}
-          alt={item.productName}
+          src={item.product.image ?? '/assets/logo.svg'}
+          alt={item.product.name}
           className='h-20 w-20 rounded-md object-cover'
           width={80}
           height={80}
         />
       </ItemMedia>
       <ItemContent className='flex-1'>
-        <ItemTitle>{item.productName}</ItemTitle>
+        <ItemTitle>{item.product.name}</ItemTitle>
         <ItemDescription>
-          {item.variant
-            ? Object.entries(item.variant as Record<string, string>)
+          {item.product.variant
+            ? Object.entries(item.product.variant as Record<string, string>)
                 .map(([key, value]) => `${key}: ${value}`)
                 .join(', ')
             : null}
@@ -51,18 +53,19 @@ export const CartItemsList: React.FC = () => {
 
       <ItemContent className='flex flex-col items-end'>
         <ItemTitle className='text-lg text-primary'>
-          {formatPrice(Number.parseFloat(item.productPrice) * item.quantity)}
+          {formatPrice(Number.parseFloat(item.product.price) * item.quantity)}
         </ItemTitle>
         <ItemDescription>
-          {formatPrice(item.productPrice)} × {item.quantity}
+          {formatPrice(item.product.price)} × {item.quantity}
         </ItemDescription>
       </ItemContent>
 
       <ItemActions>
         <EditButton
           {...item}
-          name={item.productName}
-          stock={item.productStock}
+          name={item.product.name}
+          stock={item.product.stock}
+          variant={item.product.variant}
         />
         <RemoveButton itemId={item.id} />
       </ItemActions>
@@ -70,7 +73,7 @@ export const CartItemsList: React.FC = () => {
   ))
 }
 
-export const CartItemsListSkeleton: React.FC = () =>
+const CartItemsListSkeleton: React.FC = () =>
   Array.from({ length: 3 }, (_, i) => (
     <Item
       key={i}
@@ -79,7 +82,7 @@ export const CartItemsListSkeleton: React.FC = () =>
     >
       <ItemMedia variant='image'>
         <Image
-          src='/assets/favicon.svg'
+          src='/assets/logo.svg'
           alt={`thumbnail of product ${i + 1}`}
           className='h-20 w-20 rounded-md object-cover'
           width={80}
@@ -114,12 +117,14 @@ export const CartItemsListSkeleton: React.FC = () =>
   ))
 
 export const CartItemsTotal: React.FC = () => {
-  const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.cart.get.queryOptions({}))
+  const { trpc } = useTRPC()
+  const { data, status } = useQuery(trpc.sales.cart.get.queryOptions({}))
+
+  if (status !== 'success') return <CartItemsTotalSkeleton />
 
   const total = data.items.reduce(
-    (acc, { productPrice, quantity }) =>
-      acc + (productPrice ? Number.parseFloat(productPrice) * quantity : 0),
+    (acc, { product: { price }, quantity }) =>
+      acc + (price ? Number.parseFloat(price) * quantity : 0),
     0,
   )
 
@@ -150,7 +155,7 @@ export const CartItemsTotal: React.FC = () => {
   )
 }
 
-export const CartItemsTotalSkeleton: React.FC = () => (
+const CartItemsTotalSkeleton: React.FC = () => (
   <Item className='animate-pulse'>
     <ItemContent>
       <ItemTitle className='w-1/4 rounded-sm bg-muted'>&nbsp;</ItemTitle>

@@ -10,7 +10,7 @@ import {
 import Form from 'next/form'
 import { useQueryStates } from 'nuqs'
 
-import { productsOptions, productsParsers } from '@/lib/search'
+import { productsOptions, productsParsers } from '@/app/(main)/search/page.lib'
 
 export const SearchForm: React.FC = () => {
   const [query] = useQueryStates(productsParsers, productsOptions)

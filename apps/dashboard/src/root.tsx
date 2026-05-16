@@ -1,7 +1,6 @@
-import { Button } from '@yukinu/ui/button'
+import { Typography } from '@yukinu/ui/typography'
 import {
   isRouteErrorResponse,
-  Link,
   Links,
   Meta,
   Outlet,
@@ -9,12 +8,21 @@ import {
   ScrollRestoration,
 } from 'react-router'
 
-import { Providers } from '@/components/providers'
+import { Provider } from '@/components/provider'
 import globalsCss from '@/globals.css?url'
 import { createMetadata } from '@/lib/metadata'
-import { getWebUrl } from '@/lib/utils'
 
 import type { Route } from './+types/root'
+
+export const meta: Route.MetaFunction = () =>
+  createMetadata({
+    title: 'Dashboard',
+  })
+
+export const links: Route.LinksFunction = () => [
+  { rel: 'stylesheet', href: globalsCss },
+  { rel: 'manifest', href: '/manifest.json' },
+]
 
 export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -25,8 +33,8 @@ export function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
         <Meta />
         <Links />
       </head>
-      <body className='flex min-h-dvh flex-col font-sans antialiased'>
-        <Providers>{children}</Providers>
+      <body className='flex min-h-dvh flex-col bg-background font-sans text-foreground antialiased'>
+        <Provider>{children}</Provider>
 
         <ScrollRestoration />
         <Scripts />
@@ -45,63 +53,29 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let stack: string | undefined
 
   if (isRouteErrorResponse(error)) {
-    message = error.status === 404 ? '404' : 'Error'
+    message = error.status === 404 ? '404' : message
     details =
-      error.status === 404 ? 'Page Not Found' : error.statusText || details
-  } else if (
-    import.meta.env.MODE === 'development' &&
-    error &&
-    error instanceof Error
-  ) {
+      error.status === 404
+        ? 'The requested page could not be found.'
+        : error.data
+  } else if (import.meta.env.DEV && error instanceof Error) {
     details = error.message
     ;({ stack } = error)
   }
 
   return (
-    <main className='container flex min-h-dvh flex-col items-center justify-center gap-6'>
-      <img
-        src='/assets/yuki.webp'
-        alt='Mascot'
-        className='size-48 object-cover select-none'
-        draggable={false}
-      />
-
-      <div className='flex items-center gap-4'>
-        <h1 className='text-2xl font-bold'>{message}</h1>
-        <hr className='h-9 w-0.5 bg-muted' />
-        <p className='text-lg font-medium'>{details}</p>
+    <main className='flex min-h-dvh flex-col items-center justify-center gap-8'>
+      <div className='flex gap-4 divide-x divide-border'>
+        <Typography variant='h1' className='pr-4'>
+          {message}
+        </Typography>
+        <Typography className='last:mb-0'>{details}</Typography>
       </div>
-
-      <Button
-        size='sm'
-        nativeButton={false}
-        render={<Link to='/'>Take me home</Link>}
-      />
-
       {stack && (
-        <pre className='w-full overflow-x-auto p-4'>
-          <code>{stack}</code>
+        <pre className='max-h-64 max-w-4xl overflow-x-auto rounded-lg bg-accent p-4 text-accent-foreground'>
+          {stack}
         </pre>
       )}
     </main>
   )
 }
-
-// prettier-ignore
-export const links: Route.LinksFunction = () => [
-  { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-  { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
-  { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Yuji+Syuku&family=Geist+Mono:wght@100..900&display=swap' },
-  { rel: 'stylesheet', href: globalsCss },
-  { rel: 'manifest', href: '/manifest.json' },
-]
-
-export const meta: Route.MetaFunction = () =>
-  createMetadata({
-    title: 'Dashboard',
-    openGraph: {
-      images: [
-        { url: `${getWebUrl()}/api/og?title=Dashboard`, alt: 'Dashboard' },
-      ],
-    },
-  })

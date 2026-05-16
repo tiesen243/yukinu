@@ -15,7 +15,9 @@ const links = [
 
 export const QuickLinks: React.FC = () => (
   <nav>
-    <Typography variant='h6' className='mt-0' render={<p>Quick Links</p>} />
+    <Typography variant='h4' as='p'>
+      Quick Links
+    </Typography>
 
     <ul className='space-y-1 text-sm'>
       {links.map((link) => (

@@ -1,18 +1,51 @@
 'use client'
 
-import { useEffect } from 'react'
+import { usePathname } from 'next/navigation'
+import { useEffect, useRef } from 'react'
 
-export default function AuthLayoutClient({ children }: LayoutProps<'/'>) {
+import { env } from '@/lib/env'
+
+declare global {
+  interface Window {
+    turnstile?: {
+      render: (
+        container: string | HTMLElement,
+        options: {
+          sitekey: string
+          callback?: (token: string) => void
+        },
+      ) => string
+
+      remove: (widgetId: string) => void
+    }
+  }
+}
+
+export const LoadTurnstile: React.FC = () => {
+  const pathname = usePathname()
+  const widgetIdRef = useRef<string | null>(null)
+
   useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js'
-    script.async = true
-    document.body.append(script)
+    if (!window.turnstile?.render) return
+
+    widgetIdRef.current = window.turnstile.render('.cf-turnstile', {
+      sitekey: env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+    })
 
     return () => {
-      script.remove()
+      if (widgetIdRef.current && window.turnstile?.remove) {
+        window.turnstile.remove(widgetIdRef.current)
+        widgetIdRef.current = null
+      }
     }
-  }, [])
+  }, [pathname])
 
-  return children
+  return (
+    <script
+      id='turnstile-script'
+      src='https://challenges.cloudflare.com/turnstile/v0/api.js'
+      async
+      defer
+    />
+  )
 }

@@ -5,27 +5,32 @@ import {
   MutationCache,
   QueryClient,
 } from '@tanstack/react-query'
-import { SuperJSON } from 'superjson'
+
+import { transformer } from '@/transformer'
 
 export const createQueryClient = () =>
   new QueryClient({
     defaultOptions: {
       queries: {
-        // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
-        staleTime: 5 * 60 * 1000,
+        staleTime: 10 * 60 * 1000, // 10 minutes
+        retry: false,
+        refetchOnWindowFocus: false,
+      },
+      mutations: {
+        gcTime: 5 * 60 * 1000, // 5 minutes
         retry: false,
       },
       dehydrate: {
-        serializeData: SuperJSON.serialize,
+        serializeData: transformer.serialize,
         shouldDehydrateQuery: (query) =>
           defaultShouldDehydrateQuery(query) ||
           query.state.status === 'pending',
       },
       hydrate: {
-        deserializeData: SuperJSON.deserialize,
+        deserializeData: transformer.deserialize,
       },
     },
+
     mutationCache: new MutationCache({
       onSettled(
         _data,
@@ -36,7 +41,11 @@ export const createQueryClient = () =>
         context,
       ) {
         const filter = context.meta?.filter
-        if (filter) void context.client.invalidateQueries(filter)
+        if (!filter) return
+
+        void (Array.isArray(filter)
+          ? Promise.all(filter.map((f) => context.client.invalidateQueries(f)))
+          : context.client.invalidateQueries(filter))
       },
     }),
   })
@@ -44,7 +53,7 @@ export const createQueryClient = () =>
 declare module '@tanstack/react-query' {
   interface Register {
     mutationMeta: {
-      filter: InvalidateQueryFilters
+      filter: InvalidateQueryFilters | InvalidateQueryFilters[]
     }
   }
 }

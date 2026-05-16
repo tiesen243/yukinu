@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/uploadthing",
-  "version": "0.3.12",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "exports": {
@@ -26,15 +26,15 @@
   "dependencies": {
     "@uploadthing/react": "catalog:uploadthing",
     "@yukinu/auth": "workspace:*",
-    "@yukinu/validators": "workspace:*",
     "uploadthing": "catalog:uploadthing"
   },
   "devDependencies": {
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"
   },
   "peerDependencies": {
-    "@uploadthing/shared": "catalog:uploadthing"
+    "@uploadthing/shared": "^7.1.10"
   }
 }

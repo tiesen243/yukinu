@@ -5,13 +5,12 @@ import { Suspense } from 'react'
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { EditAddressForm } from '@/app/(main)/account/address/[id]/page.client'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
+import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc.rsc'
 
 export default async function EditAddressPage({
   params,
 }: PageProps<'/account/address/[id]'>) {
   const { id } = await params
-  void getQueryClient().prefetchQuery(trpc.address.one.queryOptions({ id }))
 
   return (
     <HydrateClient>
@@ -47,7 +46,7 @@ export const generateMetadata = async ({
 
   try {
     const address = await getQueryClient().ensureQueryData(
-      trpc.address.one.queryOptions({ id }),
+      trpc.identity.address.one.queryOptions({ id }),
     )
 
     const title = `Edit Address: ${address.recipientName}`
@@ -57,11 +56,9 @@ export const generateMetadata = async ({
       title,
       description,
       openGraph: {
-        images: [
-          `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
-            description,
-          )}`,
-        ],
+        images: `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(
+          description,
+        )}`,
         url: `/account/address/${id}/edit`,
       },
     })

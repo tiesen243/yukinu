@@ -1,8 +1,10 @@
-import type { Role } from '@yukinu/validators/auth'
+import type { userRoleEnum } from '@yukinu/db/schema'
 
 import type { BaseProvider } from '@/core/providers/base'
 
 export type Awaitable<T> = T | PromiseLike<T>
+
+export type Role = (typeof userRoleEnum)['enumValues'][number]
 
 export interface User {
   id: string
@@ -121,4 +123,14 @@ export interface AuthConfig {
       'Max-Age'?: number
     }
   }
+}
+
+export interface LoginInput {
+  identifier: string
+  password: string
+}
+
+export interface LoginOutput {
+  accessToken: string
+  refreshToken: string
 }

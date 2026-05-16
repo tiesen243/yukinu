@@ -1,6 +1,6 @@
 'use client'
 
-import type { PaymentMethod } from '@yukinu/validators/order'
+import type { PaymentEntity } from '@yukinu/api/finance'
 
 import * as React from 'react'
 
@@ -10,7 +10,7 @@ interface PageContextValue {
     React.SetStateAction<PageContextValue['addressId']>
   >
 
-  paymentMethod: PaymentMethod | null
+  paymentMethod: PaymentEntity.Method | null
   setPaymentMethod: React.Dispatch<
     React.SetStateAction<PageContextValue['paymentMethod']>
   >
@@ -30,7 +30,7 @@ function PageProvider({ children }: Readonly<{ children: React.ReactNode }>) {
     PageContextValue['addressId'] | null
   >(null)
   const [paymentMethod, setPaymentMethod] =
-    React.useState<PaymentMethod | null>(null)
+    React.useState<PaymentEntity.Method | null>(null)
   const [voucher, setVoucher] = React.useState<PageContextValue['voucher']>({
     id: null,
     discountAmount: null,
