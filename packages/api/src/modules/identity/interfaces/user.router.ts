@@ -24,14 +24,19 @@ export const userRouter = ({ user }: UseCases) =>
       .query(({ input }) => user.oneUser.execute(input)),
 
     profile: protectedProcedure
-      .input(ProfileDto.input)
+      .input(ProfileDto.input.omit({ id: true }))
       .output(ProfileDto.output)
-      .query(({ input }) => user.profile.execute(input)),
+      .query(({ ctx }) => user.profile.execute({ id: ctx.session.userId })),
 
     updateProfile: protectedProcedure
-      .input(UpdateProfileDto.input)
+      .input(UpdateProfileDto.input.omit({ id: true }))
       .output(UpdateProfileDto.output)
-      .mutation(({ input }) => user.updateProfile.execute(input)),
+      .mutation(({ ctx, input }) =>
+        user.updateProfile.execute({
+          ...input,
+          id: ctx.session.userId,
+        }),
+      ),
 
     update: protectedProcedure
       .meta({ role: ['admin', 'moderator'] })

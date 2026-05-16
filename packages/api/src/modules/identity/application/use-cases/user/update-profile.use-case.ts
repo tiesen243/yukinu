@@ -45,6 +45,6 @@ export class UpdateProfileUseCase extends AbstractUseCase<
     if (profile.banner && profileData.banner !== profile.banner)
       await utapi.deleteFiles(profile.banner.split('/').pop() ?? '')
 
-    return { id: input.id }
+    return { id }
   }
 }

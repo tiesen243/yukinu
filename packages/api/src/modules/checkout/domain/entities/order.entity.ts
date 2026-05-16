@@ -11,6 +11,7 @@ export class OrderEntity extends AbstractEntity<OrderEntity, number> {
 
   public constructor(props: AbstractEntity.EntityProps<OrderEntity, 'status'>) {
     super({
+      id: undefined,
       userId: null,
       vendorId: null,
       addressId: null,

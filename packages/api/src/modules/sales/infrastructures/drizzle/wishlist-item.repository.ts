@@ -39,14 +39,21 @@ export class DrizzleWishlistItemRepository
       })
       .from(this._table)
       .innerJoin(products, eq(products.id, this._table.productId))
-      .innerJoin(productImages, eq(productImages.productId, products.id))
-      .groupBy(this._table.userId, products.id, this._table.addedAt)
+      .leftJoin(productImages, eq(productImages.productId, products.id))
+      .groupBy(
+        this._table.userId,
+        products.id,
+        products.name,
+        products.price,
+        this._table.addedAt,
+      )
       .$dynamic()
 
     if (whereClauses) query.where(whereClauses)
     if (orderByClause) query.orderBy(orderByClause)
     if (options.limit) query.limit(options.limit)
     if (options.offset) query.offset(options.offset)
+    console.log(query.toSQL())
 
     const rows = await query
 

@@ -7,7 +7,9 @@ const title = 'Login'
 const description =
   'Fill in your credentials to access your account and start shopping with Yukinu!'
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
+  const { redirect_to = '/' } = await searchParams
+
   return (
     <>
       <CardHeader>
@@ -15,7 +17,7 @@ export default function LoginPage() {
         <CardDescription>{description}</CardDescription>
       </CardHeader>
 
-      <LoginForm />
+      <LoginForm redirectTo={redirect_to.toString()} />
     </>
   )
 }

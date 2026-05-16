@@ -1,6 +1,6 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import { and, eq, isNotNull, min, sql } from '@yukinu/db/drizzle'
+import { and, eq, isNotNull, isNull, min, sql } from '@yukinu/db/drizzle'
 import {
   cartItems,
   productImages,
@@ -22,6 +22,29 @@ export class DrizzleCartItemRepository
 {
   public constructor(db: Database) {
     super(db, cartItems, ['userId', 'productId'])
+  }
+
+  public override async save(
+    entity: CartItemEntity,
+    tx: Database = this._db,
+  ): Promise<string> {
+    const row = this._mapToRow(entity)
+
+    const [pkey] = await tx
+      .insert(this._table)
+      .values(row)
+      .onConflictDoUpdate({
+        target: row.productVariantId
+          ? [this._table.userId, this._table.productVariantId]
+          : [this._table.userId, this._table.productId],
+        targetWhere: row.productVariantId
+          ? isNotNull(this._table.productVariantId)
+          : isNull(this._table.productVariantId),
+        set: { quantity: row.quantity },
+      })
+      .returning({ id: this._table.id })
+    if (!pkey) throw new Error('Failed to save cart item')
+    return pkey.id
   }
 
   public async findWithProduct(

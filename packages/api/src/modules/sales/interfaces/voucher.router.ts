@@ -23,6 +23,18 @@ export const voucherRouter = ({ voucher }: UseCases) => ({
     .output(SaveVoucherDto.output)
     .mutation(({ input }) => voucher.save.execute(input)),
 
+  apply: protectedProcedure
+    .input(OneVoucherDto.input)
+    .output(OneVoucherDto.output)
+    .mutation(async ({ input }) => {
+      const _voucher = await voucher.one.execute(input)
+      await voucher.save.execute({
+        ..._voucher,
+        quantity: _voucher.quantity - 1,
+      })
+      return _voucher
+    }),
+
   delete: protectedProcedure
     .meta({ role: ['admin', 'moderator'] })
     .input(OneVoucherDto.input)

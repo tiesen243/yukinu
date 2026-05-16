@@ -25,8 +25,9 @@ export class ToggleWishlistUseCase extends AbstractUseCase<
       {},
       { limit: 1 },
     )
+
     if (wishlist) {
-      await this._wishlistItemRepo.delete([wishlist])
+      await this._wishlistItemRepo.delete([input])
       return { added: false }
     }
 

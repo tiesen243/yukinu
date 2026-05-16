@@ -24,7 +24,7 @@ const api = createTRPCCaller(() => createRscContext()) as ReturnType<
 >
 
 const trpc = createTRPCOptionsProxy({
-  ctx: () => createRscContext(),
+  ctx: createRscContext,
   queryClient: getQueryClient,
   client: createTRPCClient('web-rsc', env.NEXT_PUBLIC_WEB_URL),
 }) as ReturnType<typeof createTRPCOptionsProxy<AppRouter>>

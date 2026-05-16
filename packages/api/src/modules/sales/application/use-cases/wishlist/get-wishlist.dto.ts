@@ -17,6 +17,6 @@ export class GetWishlistUseCase extends AbstractUseCase<
   }
 
   public execute(input: GetWishlistDto.Input): Promise<GetWishlistDto.Output> {
-    return this._wishlistItemRepo.findWithProduct([input])
+    return this._wishlistItemRepo.findWithProduct([input], { addedAt: 'desc' })
   }
 }

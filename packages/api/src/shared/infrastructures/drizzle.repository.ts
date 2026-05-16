@@ -72,18 +72,38 @@ export abstract class DrizzleRepository<
   public override async save(
     entity: TEntity,
     tx: Database = this._db,
-  ): Promise<void> {
+  ): Promise<TPrimaryKey> {
     const row = this._mapToRow(entity)
 
-    await tx
+    const updateSet = Object.fromEntries(
+      Object.entries(row).filter(([key]) =>
+        Array.isArray(this._primaryKey)
+          ? !this._primaryKey.includes(key as never)
+          : key !== this._primaryKey,
+      ),
+    )
+
+    const returningColumns: Record<string, unknown> = {}
+    if (Array.isArray(this._primaryKey)) {
+      for (const key of this._primaryKey)
+        returningColumns[key as string] = this._table[key]
+    } else returningColumns['id'] = this._table[this._primaryKey as never]
+
+    const [pkey]: Record<string, TPrimaryKey>[] = await tx
       .insert(this._table)
       .values(row)
       .onConflictDoUpdate({
         target: Array.isArray(this._primaryKey)
           ? this._primaryKey.map((key) => this._table[key] as never)
           : (this._table[this._primaryKey] as never),
-        set: row,
+        set: updateSet as never,
       })
+      .returning(returningColumns as never)
+    if (!pkey) throw new Error('Failed to save entity.')
+
+    return (
+      typeof pkey === 'object' && pkey !== null && 'id' in pkey ? pkey.id : pkey
+    ) as TPrimaryKey
   }
 
   public override async saveMany(

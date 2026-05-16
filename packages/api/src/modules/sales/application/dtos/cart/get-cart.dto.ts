@@ -11,17 +11,18 @@ export namespace GetCartDto {
 
   export const output = z.object({
     items: z.array(
-      z.instanceof(CartItemEntity).and(
-        z.object({
-          product: z.object({
-            vendorId: z.string().nullable(),
-            name: z.string(),
-            image: z.string().nullable(),
-            price: z.string(),
-            stock: z.number(),
-            variant: z.record(z.string(), z.string()),
-          }),
-        }),
+      z.instanceof(CartItemEntity).transform(
+        (val) =>
+          val as CartItemEntity & {
+            product: {
+              vendorId: string | null
+              name: string
+              image: string | null
+              price: string
+              stock: number
+              variant: Record<string, string>
+            }
+          },
       ),
     ),
     totalAmount: priceRegex,

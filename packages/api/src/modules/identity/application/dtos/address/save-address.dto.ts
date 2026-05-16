@@ -10,12 +10,21 @@ export namespace SaveAddressDto {
     phoneNumber: z
       .string()
       .regex(
-        /\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/,
+        /(?:\(\+[0-9]{1,3}\)|\+[0-9]{1,3}|0)[ .-]?[0-9]{2,4}[ .-]?[0-9]{2,4}[ .-]?[0-9]{3,4}/,
         'Invalid phone number',
       ),
-    street: z.string().max(255, 'Street must be at most 255 characters long'),
-    city: z.string().max(100, 'City must be at most 100 characters long'),
-    state: z.string().max(100, 'State must be at most 100 characters long'),
+    street: z
+      .string()
+      .min(5, 'Street must be at least 5 characters long')
+      .max(255, 'Street must be at most 255 characters long'),
+    city: z
+      .string()
+      .min(2, 'City must be at least 2 characters long')
+      .max(100, 'City must be at most 100 characters long'),
+    state: z
+      .string()
+      .min(2, 'State must be at least 2 characters long')
+      .max(100, 'State must be at most 100 characters long'),
     postalCode: z
       .string()
       .regex(

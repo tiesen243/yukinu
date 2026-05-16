@@ -17,7 +17,7 @@ export abstract class AbstractRepository<
     tx?: TTransaction,
   ): Promise<number>
 
-  public abstract save(entity: TEntity, tx?: TTransaction): Promise<void>
+  public abstract save(entity: TEntity, tx?: TTransaction): Promise<TPrimaryKey>
 
   public abstract saveMany(
     entities: TEntity[],

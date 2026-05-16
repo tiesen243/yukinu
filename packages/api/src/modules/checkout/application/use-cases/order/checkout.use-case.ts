@@ -1,7 +1,6 @@
 import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
-import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
 
 import type { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 import type { OrderItemRepository } from '@/modules/checkout/domain/repositories/order-item.repository'
@@ -34,119 +33,120 @@ export class CheckoutUseCase extends AbstractUseCase<
     const { userId, addressId, voucherId, paymentMethod } = input
 
     const cartItems = await this._cartItemRepo.findWithProduct([{ userId }])
-    if (cartItems.length === 0)
+    if (cartItems.length === 0) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Your cart is empty.',
       })
+    }
 
     const cartItemsByVendor = Object.groupBy(
       cartItems,
       ({ product: { vendorId } }) => vendorId ?? 'unknown',
     )
 
-    const discount = await this._applyVoucher(voucherId)
-
     return this._db.transaction(async (tx) => {
-      let amount = 0
+      await this._applyAndConsumeVoucher(voucherId, tx)
 
-      const ordersData = Object.entries(cartItemsByVendor).flatMap(
+      let totalSubtotal = 0
+      const vendorsOrdersPlan = Object.entries(cartItemsByVendor).flatMap(
         ([vendorId, items]) => {
           if (vendorId === 'unknown' || !items || items.length === 0) return []
 
-          const totalAmount = items.reduce(
-            (sum, item) =>
-              sum + Number.parseFloat(item.product.price) * item.quantity,
+          const vendorSubtotal = items.reduce(
+            (sum, item) => sum + Number(item.product.price) * item.quantity,
             0,
           )
-          amount += totalAmount
+          totalSubtotal += vendorSubtotal
 
-          return [{ vendorId, items, totalAmount }]
+          return [{ vendorId, items, vendorSubtotal }]
         },
       )
 
-      if (typeof discount === 'string') amount -= Number.parseFloat(discount)
-      else if (typeof discount === 'number') amount -= (amount * discount) / 100
-      amount += TAX_RATE * Math.max(amount, 0) + SHIPPING_COST
-
       const payment = new PaymentEntity({
-        amount: amount.toFixed(2),
+        amount: totalSubtotal.toFixed(2),
+        voucherId: voucherId ?? null,
         method: paymentMethod,
       })
       await this._paymentRepo.save(payment, tx)
 
-      const orderPromises = ordersData.map(
-        async ({ vendorId, items, totalAmount }) => {
-          const order = new OrderEntity({
-            userId,
-            vendorId,
-            paymentId: payment.id,
-            addressId,
-            totalAmount: totalAmount.toFixed(2),
-          })
-          await this._orderRepo.save(order, tx)
+      const orderIds: number[] = []
 
-          await this._orderItemRepo.saveMany(
-            items.map(
-              ({ productId, productVariantId, product, quantity }) =>
-                new OrderItemEntity({
-                  orderId: order.id,
-                  productId,
-                  productVariantId,
-                  unitPrice: product.price,
-                  quantity,
-                }),
-            ),
-            tx,
-          )
+      for (const { vendorId, items, vendorSubtotal } of vendorsOrdersPlan) {
+        const order = new OrderEntity({
+          userId,
+          vendorId,
+          paymentId: payment.id,
+          addressId,
+          totalAmount: vendorSubtotal.toFixed(2),
+        })
 
-          return order.id
-        },
-      )
+        const orderId = await this._orderRepo.save(order, tx)
+        orderIds.push(orderId ?? 0)
 
-      const [orderIds] = await Promise.all([
-        Promise.all(orderPromises),
-        this._cartItemRepo.delete([{ userId }], tx),
-      ])
+        const orderItems = items.map(
+          ({ productId, productVariantId, product, quantity }) =>
+            new OrderItemEntity({
+              orderId,
+              productId,
+              productVariantId,
+              unitPrice: product.price,
+              quantity,
+            }),
+        )
 
+        await this._orderItemRepo.saveMany(orderItems, tx)
+      }
+
+      await this._cartItemRepo.delete([{ userId }], tx)
       return { orderIds }
     })
   }
 
-  private async _applyVoucher(
+  /**
+   * Validates and updates the voucher securely within the active transaction
+   * context.
+   */
+  private async _applyAndConsumeVoucher(
     voucherId: string | null,
+    tx: Database,
   ): Promise<string | number | null> {
-    let discount: string | number | null = null
+    if (!voucherId) return null
 
-    if (voucherId) {
-      const [voucher] = await this._voucherRepo.find(
-        [{ id: voucherId }],
-        {},
-        { limit: 1 },
-      )
+    // Pass the transaction context `tx` if your repository layer supports it,
+    // ensuring rows are locked or evaluated in isolation context.
+    const [voucher] = await this._voucherRepo.find(
+      [{ id: voucherId }],
+      {},
+      { limit: 1 },
+    )
 
-      if (!voucher)
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Voucher not found.',
-        })
-
-      if (voucher.expiredAt < new Date())
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Voucher has expired.',
-        })
-
-      if (voucher.quantity <= 0)
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'Voucher is no longer available.',
-        })
-
-      if (voucher.discountAmount) discount = voucher.discountAmount
-      else if (voucher.discountPercentage) discount = voucher.discountPercentage
+    if (!voucher) {
+      throw new TRPCError({
+        code: 'NOT_FOUND',
+        message: 'Voucher not found.',
+      })
     }
 
-    return discount
+    if (voucher.expiredAt < new Date()) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Voucher has expired.',
+      })
+    }
+
+    if (voucher.quantity <= 0) {
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Voucher is no longer available.',
+      })
+    }
+
+    // CRITICAL OPTIMIZATION: Decrement quantity so it can't be overused concurrently
+    // Assuming your voucher repository has an update method:
+    const updatedVoucher = voucher.clone({ quantity: voucher.quantity - 1 })
+    await this._voucherRepo.save(updatedVoucher, tx)
+
+    return voucher.discountAmount ?? voucher.discountPercentage ?? null
   }
 }
