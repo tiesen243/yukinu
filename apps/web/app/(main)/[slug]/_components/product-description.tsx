@@ -36,7 +36,7 @@ export const ProductDescription: React.FC = () => {
             variant='outline'
             size='sm'
             nativeButton={false}
-            render={<Link href={`/v/${vendor.id}`} />}
+            render={<Link href={`/v/${vendor.id}` as never} />}
           >
             Visit Store
           </Button>

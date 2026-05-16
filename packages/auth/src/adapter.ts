@@ -179,9 +179,6 @@ export const adapter = {
     return account
   },
   async createAccount(account) {
-    await db.insert(accounts).values({
-      ...account,
-      id: createId(),
-    })
+    await db.insert(accounts).values(account)
   },
 } satisfies AuthAdapter

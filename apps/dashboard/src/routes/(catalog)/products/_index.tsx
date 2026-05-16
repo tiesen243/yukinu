@@ -34,10 +34,11 @@ export default function CatalogProductsIndexPage({
     limit: parseAsInteger.withDefault(10),
   })
 
+  const queryParams = { ...query, categoryId: null, vendorId: null }
   const { data, isLoading } = useQuery(
     loaderData.isAdmin
-      ? trpc.catalog.product.all.queryOptions(query)
-      : trpc.catalog.product.allByVendor.queryOptions(query),
+      ? trpc.catalog.product.all.queryOptions(queryParams)
+      : trpc.catalog.product.allByVendor.queryOptions(queryParams),
   )
 
   return (

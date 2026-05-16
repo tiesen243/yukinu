@@ -19,7 +19,8 @@
     "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
-    "typescript": "catalog:dev"
+    "typescript": "catalog:dev",
+    "zod": "catalog:prod"
   },
   "peerDependencies": {
     "@tanstack/react-query": "catalog:prod"
