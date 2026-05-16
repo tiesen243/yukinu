@@ -30,7 +30,7 @@ export const VerifyEmailForm: React.FC<{ token: string }> = ({ token }) => {
         e.preventDefault()
 
         try {
-          await verifyTurnstile(e as never)
+          await verifyTurnstile(new FormData(e.currentTarget))
           mutate({ token })
         } catch (error) {
           toast.error({
