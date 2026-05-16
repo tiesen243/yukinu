@@ -1,5 +1,12 @@
 # @yukinu/web
 
+## 0.12.2
+
+### Patch Changes
+
+- Updated dependencies [4051f4e]
+  - @yukinu/api@0.10.1
+
 ## 0.12.1
 
 ### Patch Changes

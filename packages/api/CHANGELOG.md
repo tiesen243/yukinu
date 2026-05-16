@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 0.10.1
+
+### Patch Changes
+
+- 4051f4e: fix change password
+
 ## 0.10.0
 
 ### Minor Changes
