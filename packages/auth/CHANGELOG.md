@@ -1,5 +1,11 @@
 # @yukinu/auth
 
+## 0.10.1
+
+### Patch Changes
+
+- 38731e3: fix linter error
+
 ## 0.10.0
 
 ### Minor Changes
