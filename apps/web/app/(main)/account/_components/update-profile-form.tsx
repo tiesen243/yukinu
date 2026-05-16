@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { ProfileEntity, UpdateProfileDto } from '@yukinu/api/identity'
 import { Avatar, AvatarImage, AvatarFallback } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
@@ -41,7 +41,7 @@ import { useTRPC } from '@/lib/trpc'
 
 export function UpdateProfileForm() {
   const { trpc } = useTRPC()
-  const { data } = useQuery(trpc.identity.user.profile.queryOptions({}))
+  const { data } = useSuspenseQuery(trpc.identity.user.profile.queryOptions({}))
   const { mutateAsync } = useMutation({
     ...trpc.identity.user.updateProfile.mutationOptions(),
     meta: { filter: trpc.identity.user.profile.queryFilter() },
@@ -51,12 +51,12 @@ export function UpdateProfileForm() {
 
   const form = useForm({
     defaultValues: {
-      fullName: data?.profile.fullName,
-      bio: data?.profile.bio,
-      gender: data?.profile.gender,
-      dateOfBirth: data?.profile.dateOfBirth,
-      image: data?.user.image,
-      banner: data?.profile.banner,
+      fullName: data.profile.fullName,
+      bio: data.profile.bio,
+      gender: data.profile.gender,
+      dateOfBirth: data.profile.dateOfBirth,
+      image: data.user.image,
+      banner: data.profile.banner,
     } as UpdateProfileDto.Input,
     schema: UpdateProfileDto.input.omit({ id: true }),
     onSubmit: mutateAsync,
