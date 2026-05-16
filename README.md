@@ -13,9 +13,6 @@
   <a href="https://github.com/tiesen243/yukinu/releases?q=dashboard">
     <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/dashboard/package.json&label=version@dashboard" alt="Version Dashboard">
   </a>
-  <a href="https://github.com/tiesen243/yukinu/releases?q=mobile">
-    <img src="https://img.shields.io/github/package-json/v/tiesen243/yukinu/dev?filename=apps/mobile/package.json&label=version@mobile" alt="Version Mobile">
-  </a>
   <a href="LICENSE">
     <img src="https://img.shields.io/github/license/tiesen243/yukinu" alt="License">
   </a>
