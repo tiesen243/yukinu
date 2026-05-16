@@ -15,6 +15,8 @@ import {
 } from '@/app/(main)/(home)/_components/product-list'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc.rsc'
 
+export const dynamic = 'force-dynamic'
+
 export default function Home() {
   const queryClient = getQueryClient()
 
