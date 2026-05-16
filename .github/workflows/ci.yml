@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: ./tools/github/setup
       - name: Format check
-        run: bun format
+        run: ./node_modules/.bin/oxfmt --check
 
   lint:
     runs-on: ubuntu-latest
