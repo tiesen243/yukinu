@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.12.4
+
+### Patch Changes
+
+- 2b6a856: fix default value of account page
+
 ## 0.12.3
 
 ### Patch Changes
