@@ -1,13 +1,14 @@
 import { Suspense } from 'react'
 
+import { productsCache } from '@/app/(main)/search/page.lib'
 import {
   VendorDetails,
   VendorDetailsSkeleton,
   VendorProducts,
   VendorProductsSkeleton,
 } from '@/app/(main)/v/[id]/page.client'
-import { productsCache } from '@/lib/search'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
+import { createMetadata } from '@/lib/metadata'
+import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc.rsc'
 
 export default async function VendorPage({
   params,
@@ -16,9 +17,8 @@ export default async function VendorPage({
   const { id } = await params
   const query = await productsCache.parse(searchParams)
 
-  void getQueryClient().prefetchQuery(trpc.vendor.one.queryOptions({ id }))
   void getQueryClient().prefetchQuery(
-    trpc.product.all.queryOptions({ ...query, vendorId: id }),
+    trpc.catalog.product.all.queryOptions({ ...query, vendorId: id }),
   )
 
   return (
@@ -39,4 +39,27 @@ export default async function VendorPage({
       </main>
     </HydrateClient>
   )
+}
+
+export const generateMetadata = async ({ params }: PageProps<'/v/[id]'>) => {
+  const { id } = await params
+  const data = await getQueryClient().ensureQueryData(
+    trpc.merchant.vendor.one.queryOptions({ id }),
+  )
+
+  return createMetadata({
+    title: data.name,
+    description: data.description ?? `Vendor page of ${data.name}`,
+    openGraph: {
+      images: [
+        ...(data.image ? [data.image] : []),
+        `/api/og?title=${encodeURIComponent(
+          data.name,
+        )}&description=${encodeURIComponent(
+          data.description ?? '',
+        )}&image=${encodeURIComponent(data.image ?? '')}`,
+      ],
+      url: `/v/${data.id}`,
+    },
+  })
 }

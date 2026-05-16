@@ -5,13 +5,13 @@ import {
   XFormerTwitterIcon,
 } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
-import { env } from '@yukinu/validators/env.next'
 import Image from 'next/image'
 import Link from 'next/link'
 
 import { LegalLinks } from '@/components/footer/legal-links'
 import { Newsletter } from '@/components/footer/newsletter'
 import { QuickLinks } from '@/components/footer/quick-links'
+import { env } from '@/lib/env'
 
 export function Footer() {
   return (
@@ -21,14 +21,14 @@ export function Footer() {
           <Link href='/' className='flex items-center gap-2'>
             <div className='flex size-9 items-center justify-center rounded-lg bg-foreground'>
               <Image
-                src='/assets/favicon.svg'
+                src='/assets/logo.svg'
                 alt='Yukinu Logo'
                 width={28}
                 height={28}
-                className='object-cover invert'
+                className='object-cover invert dark:invert-0'
               />
             </div>
-            <Typography variant='h4' render={<span />}>
+            <Typography variant='h4' as='span'>
               {env.NEXT_PUBLIC_APP_NAME}
             </Typography>
           </Link>

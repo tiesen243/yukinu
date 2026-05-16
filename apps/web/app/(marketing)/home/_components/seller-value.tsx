@@ -7,7 +7,7 @@ import {
 } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 
-import { getDashboardUrl } from '@/lib/utils'
+import { env } from '@/lib/env'
 
 export const SellerValue: React.FC = () => (
   <section
@@ -48,7 +48,7 @@ export const SellerValue: React.FC = () => (
               <Icon className='size-6 shrink-0 text-accent-foreground' />
               <div>
                 <Typography className='font-semibold'>{title}</Typography>
-                <Typography className='text-muted-foreground' render={<span />}>
+                <Typography className='text-muted-foreground' as='span'>
                   {desc}
                 </Typography>
               </div>
@@ -61,9 +61,8 @@ export const SellerValue: React.FC = () => (
           variant='outline'
           nativeButton={false}
           render={
-            // oxlint-disable-next-line no-html-link-for-pages
             <a
-              href={`${getDashboardUrl()}/apply-vendor`}
+              href={`${env.NEXT_PUBLIC_DASHBOARD_URL}/register-vendor`}
               target='_blank'
               rel='noopener noreferrer'
             >

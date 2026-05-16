@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto'
+// oxlint-disable no-bitwise
 
 const createRandom = () => {
   if (
@@ -26,16 +26,25 @@ const createEntropy = (length = 4, rand = random) => {
   return entropy
 }
 
-const bufToBigInt = (buf: Buffer) => {
-  let v = 0n
-  // oxlint-disable-next-line no-bitwise
-  for (const i of buf) v = (v << 8n) + BigInt(i)
-  return v
-}
+function hash(input: string, length = 24): string {
+  let _hash = ''
+  const seed = 2_166_136_261
 
-const hash = (input: string) => {
-  const hashBuf = createHash('sha3-512').update(input).digest()
-  return bufToBigInt(hashBuf).toString(36).slice(1)
+  for (let i = 0; _hash.length < length; i += 1) {
+    let h = seed
+
+    for (let j = 0; j < input.length; j += 1) {
+      h ^= (input.codePointAt(j) ?? 0) + i
+      h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24)
+    }
+
+    // oxlint-disable-next-line unicorn/prefer-math-trunc
+    _hash += (h >>> 0).toString(36) ?? ''
+    // oxlint-disable-next-line no-param-reassign
+    input = _hash
+  }
+
+  return _hash.slice(0, length)
 }
 
 const createFingerprint = ({
@@ -54,6 +63,9 @@ const createFingerprint = ({
 // oxlint-disable-next-line no-param-reassign, no-plusplus
 const createCounter = (count: number) => () => count++
 
+const createRandomLetter = (rand = random) =>
+  String.fromCodePoint(97 + Math.floor(rand() * 26))
+
 export function createId(rand = random): string {
   const time = Date.now().toString(36)
   const count = createCounter(Math.floor(rand() * 476_782_367))().toString(36)
@@ -62,5 +74,6 @@ export function createId(rand = random): string {
   const salt = createEntropy(24, rand)
   const hashInput = `${time}${salt}${count}${fingerprint}`
 
-  return `c${hash(hashInput).slice(1, 24)}`
+  const letter = createRandomLetter(rand)
+  return `${letter}${hash(hashInput).slice(1, 24)}`
 }

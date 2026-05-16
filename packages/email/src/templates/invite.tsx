@@ -5,19 +5,18 @@ import { EmailLayout } from '@/templates/_layout'
 interface InviteProps {
   username: string
   inviterName: string
-  inviterEmail: string
   vendorName: string
   inviteLink: string
 }
 
 export default function Invite(props: InviteProps) {
-  const { username, inviterName, inviterEmail, vendorName, inviteLink } = props
+  const { username, inviterName, vendorName, inviteLink } = props
 
   return (
     <EmailLayout preview={`${inviterName} has invited you to join Yukinu!`}>
       <Text>Hi {username},</Text>
       <Text>
-        <strong>{inviterName}</strong> ({inviterEmail}) has invited you to the{' '}
+        <strong>{inviterName}</strong> has invited you to the{' '}
         <strong>{vendorName}</strong> on <strong>Yukinu</strong>.
       </Text>
 

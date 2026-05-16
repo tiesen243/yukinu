@@ -1,20 +1,12 @@
-// oxlint-disable no-nested-ternary
+import type { Metadata } from 'next'
 
-import type { Metadata as NextMetadata } from 'next'
-
-import { env } from '@yukinu/validators/env.next'
-
-import { getWebUrl } from '@/lib/utils'
-
-export interface Metadata extends NextMetadata {
-  title?: string
-}
+import { env } from '@/lib/env'
 
 export function createMetadata(override: Metadata = {}): Metadata {
   const siteName = env.NEXT_PUBLIC_APP_NAME
   const siteDescription =
     'An e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience.'
-  const baseUrl = getWebUrl()
+  const baseUrl = env.NEXT_PUBLIC_WEB_URL
 
   const title = override.title ? `${override.title} | ${siteName}` : siteName
   const description = override.description ?? siteDescription
@@ -24,13 +16,12 @@ export function createMetadata(override: Metadata = {}): Metadata {
     : baseUrl
 
   const images = [
-    ...(override.openGraph?.images
-      ? Array.isArray(override.openGraph.images)
-        ? override.openGraph.images
-        : [override.openGraph.images]
-      : []),
-    { url: '/api/og', alt: 'Open Graph Image' },
-  ]
+    ...(Array.isArray(override.openGraph?.images)
+      ? (override.openGraph?.images ?? [])
+      : [override.openGraph?.images]
+    ).filter(Boolean),
+    `/api/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`,
+  ] as NonNullable<Metadata['openGraph']>['images']
 
   return {
     ...override,
@@ -67,11 +58,7 @@ export function createMetadata(override: Metadata = {}): Metadata {
     icons: { icon: '/favicon.ico', apple: '/favicon.ico' },
     alternates: { ...override.alternates, canonical: url },
     keywords: [
-      ...(Array.isArray(override.keywords)
-        ? override.keywords
-        : override.keywords
-          ? [override.keywords]
-          : []),
+      ...(override.keywords ?? []),
       'multi-vendor e-commerce platform',
       'e-commerce marketplace',
       'online shopping marketplace',
@@ -79,10 +66,8 @@ export function createMetadata(override: Metadata = {}): Metadata {
       'discover products from multiple sellers',
       'secure online shopping',
     ],
-    generator: 'Create Yuki Stack',
 
     // Webmaster verifications
     verification: { google: 'IxxbL_t4Uj36PsfajteCHNpV6Ln9fr7WCkxmzFjW_ms' },
-    facebook: { appId: '523462826928110' },
   }
 }

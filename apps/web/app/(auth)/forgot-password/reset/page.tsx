@@ -4,6 +4,10 @@ import { FieldDescription, FieldLegend, FieldSet } from '@yukinu/ui/field'
 import { ResetPasswordForm } from '@/app/(auth)/forgot-password/reset/page.client'
 import { createMetadata } from '@/lib/metadata'
 
+const title = 'Reset Your Password'
+const description =
+  'Set a new password to regain access to your account and keep it secure.'
+
 export default async function ResetPasswordPage({
   searchParams,
 }: PageProps<'/forgot-password/reset'>) {
@@ -24,25 +28,17 @@ export default async function ResetPasswordPage({
     )
 
   return (
-    <main className='grid min-h-dvh place-items-center'>
-      <Card className='w-full max-w-xl bg-background shadow-none ring-0 sm:bg-card sm:shadow-sm sm:ring-1'>
-        <CardHeader>
-          <CardTitle>Reset Your Password</CardTitle>
-          <CardDescription>
-            Set a new password to regain access to your account and keep it
-            secure.
-          </CardDescription>
-        </CardHeader>
+    <>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
 
-        <ResetPasswordForm token={token} />
-      </Card>
-    </main>
+      <ResetPasswordForm token={token} />
+    </>
   )
 }
 
-const title = 'Reset Your Password'
-const description =
-  'Set a new password to regain access to your account and keep it secure.'
 export const metadata = createMetadata({
   title,
   description,

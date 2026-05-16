@@ -1,11 +1,9 @@
 {
   "extends": "@yukinu/tsconfig/react-package.json",
   "compilerOptions": {
-    "types": ["node"],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src", "__tests__"]
 }

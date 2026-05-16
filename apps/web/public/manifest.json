@@ -1,6 +1,8 @@
 {
+  "$schema": "https://json.schemastore.org/web-manifest.json",
   "name": "Yukinu",
   "short_name": "Yukinu",
+  "display": "standalone",
   "icons": [
     { "src": "/favicon.ico", "type": "image/x-icon", "sizes": "16x16 32x32" },
     { "src": "/icon-192.png", "type": "image/png", "sizes": "192x192" },
@@ -17,8 +19,5 @@
       "sizes": "512x512",
       "purpose": "maskable"
     }
-  ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  ]
 }

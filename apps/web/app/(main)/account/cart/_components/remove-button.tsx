@@ -13,30 +13,22 @@ import {
 import { toast } from '@yukinu/ui/toast'
 import * as React from 'react'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const RemoveButton: React.FC<{ itemId: string | null }> = ({
   itemId,
 }) => {
   const [open, setOpen] = React.useState(false)
 
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.cart.removeItemFromCart.mutationOptions(),
-    meta: { filter: trpc.cart.get.queryFilter() },
+    ...trpc.sales.cart.remove.mutationOptions(),
+    meta: { filter: trpc.sales.cart.get.queryFilter() },
     onSuccess: () => {
-      toast.add({
-        type: 'success',
-        title: 'Item removed from cart',
-      })
+      toast.success({ message: 'Item removed from cart' })
       setOpen(false)
     },
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Failed to remove item',
-        description: message,
-      }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (
@@ -62,7 +54,7 @@ export const RemoveButton: React.FC<{ itemId: string | null }> = ({
             disabled={isPending}
             onClick={() => {
               if (!itemId) return
-              mutate({ itemId })
+              mutate({ cartItemId: itemId })
             }}
           >
             {isPending ? 'Removing...' : 'Remove'}

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,20 +16,22 @@ import { Button } from '@yukinu/ui/button'
 import { toast } from '@yukinu/ui/toast'
 import Link from 'next/link'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const AddressesList: React.FC = () => {
-  const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.address.all.queryOptions({}))
+  const { trpc } = useTRPC()
+  const { data, status } = useQuery(trpc.identity.address.all.queryOptions())
 
-  if (data.addresses.length === 0)
+  if (status !== 'success') return <AddressesListSkeleton />
+
+  if (data.length === 0)
     return (
       <p className='text-center text-sm text-muted-foreground'>
         No addresses found.
       </p>
     )
 
-  return data.addresses.map((address) => (
+  return data.map((address) => (
     <div
       key={address.id}
       className='relative flex flex-col gap-1 border-b pb-4'
@@ -58,7 +60,7 @@ export const AddressesList: React.FC = () => {
   ))
 }
 
-export const AddressesListSkeleton: React.FC = () =>
+const AddressesListSkeleton: React.FC = () =>
   Array.from({ length: 3 }, (_, i) => (
     <div
       key={i}
@@ -71,22 +73,14 @@ export const AddressesListSkeleton: React.FC = () =>
   ))
 
 const DeleteAddressButton: React.FC<{ id: string }> = ({ id }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
 
   const { mutate, isPending } = useMutation({
-    ...trpc.address.delete.mutationOptions(),
-    meta: { filter: trpc.address.all.queryFilter() },
+    ...trpc.identity.address.delete.mutationOptions(),
+    meta: { filter: trpc.identity.address.all.queryFilter() },
     onSuccess: () =>
-      toast.add({
-        type: 'success',
-        title: 'Address deleted successfully!',
-      }),
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Error deleting address',
-        description: message,
-      }),
+      toast.success({ message: 'Address deleted successfully!' }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

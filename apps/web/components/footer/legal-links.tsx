@@ -25,7 +25,9 @@ const links = [
 
 export const LegalLinks: React.FC = () => (
   <nav>
-    <Typography variant='h6' className='mt-0' render={<p>Legal</p>} />
+    <Typography variant='h4' as='p'>
+      Legal
+    </Typography>
 
     <ul className='space-y-1 text-sm'>
       {links.map((link) => (

@@ -1,7 +1,6 @@
 import type { FileRouter, RouteHandlerConfig } from 'uploadthing/types'
 
 import { auth } from '@yukinu/auth'
-import { env } from '@yukinu/validators/env'
 import { createUploadthing, UploadThingError } from 'uploadthing/server'
 
 const f = createUploadthing()
@@ -25,7 +24,7 @@ const sharedFileRouteConfig = f({
         code: 'FORBIDDEN',
       })
 
-    return { userId: session.user.id }
+    return { userId: 'user-id' }
   })
   .onUploadComplete(({ metadata, file }) => {
     console.log('Upload complete for userId:', metadata.userId)
@@ -41,7 +40,7 @@ export const ourFileRouter = {
 } as const satisfies FileRouter
 
 export const config = {
-  token: env.UPLOADTHING_TOKEN,
+  token: process.env.UPLOADTHING_TOKEN,
 } satisfies RouteHandlerConfig
 
 export type OurFileRouter = typeof ourFileRouter

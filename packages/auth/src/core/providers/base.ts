@@ -1,5 +1,3 @@
-import { env } from '@yukinu/validators/env'
-
 import type { OAuthAccount } from '@/core/types'
 
 import { generateCodeChallenge } from '@/core/crypto'
@@ -25,11 +23,11 @@ export abstract class BaseProvider {
   ): Promise<OAuthAccount>
 
   protected createCallbackUrl() {
-    // oxlint-disable-next-line node/no-process-env
     let baseUrl = `http://localhost:${process.env.PORT ?? 3000}`
-    if (env.VERCEL_PROJECT_PRODUCTION_URL)
-      baseUrl = `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`
-    else if (env.VERCEL_URL) baseUrl = `https://${env.VERCEL_URL}`
+    if (process.env.VERCEL_PROJECT_PRODUCTION_URL)
+      baseUrl = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    else if (process.env.VERCEL_URL)
+      baseUrl = `https://${process.env.VERCEL_URL}`
 
     return `${baseUrl}/api/auth/${this.providerName}/callback`
   }
@@ -97,6 +95,7 @@ export abstract class BaseProvider {
     return await fetch(request)
   }
 
+  // oxlint-disable-next-line class-methods-use-this
   private createRequest(enpoint: string, body: URLSearchParams) {
     const bodyBytes = new TextEncoder().encode(body.toString())
     const request = new Request(enpoint, { method: 'POST', body: bodyBytes })
@@ -109,6 +108,7 @@ export abstract class BaseProvider {
     return request
   }
 
+  // oxlint-disable-next-line class-methods-use-this
   private encodeCredentials(clientId: string, clientSecret: string): string {
     const credentials = `${clientId}:${clientSecret}`
     const bytes = new TextEncoder().encode(credentials)

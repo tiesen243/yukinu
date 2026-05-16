@@ -9,11 +9,10 @@ runs:
       with:
         node-version-file: '.nvmrc'
 
-    - shell: bash
-      run: bun add -g turbo
-
-    - shell: bash
+    - name: Install dependencies
+      shell: bash
       run: bun ci
 
-    - shell: bash
+    - name: Build packages
+      shell: bash
       run: bun run build -F './packages/*'

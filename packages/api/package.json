@@ -12,6 +12,10 @@
     "./client": {
       "types": "./dist/client.d.mts",
       "default": "./dist/client.mjs"
+    },
+    "./*": {
+      "types": "./dist/modules/*/types.d.mts",
+      "default": "./dist/modules/*/types.mjs"
     }
   },
   "scripts": {
@@ -23,16 +27,15 @@
   "dependencies": {
     "@trpc/client": "catalog:trpc",
     "@trpc/server": "catalog:trpc",
-    "@types/node": "catalog:dev",
     "@yukinu/auth": "workspace:*",
     "@yukinu/db": "workspace:*",
     "@yukinu/email": "workspace:*",
     "@yukinu/lib": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
-    "@yukinu/validators": "workspace:*",
-    "superjson": "catalog:trpc"
+    "zod": "catalog:prod"
   },
   "devDependencies": {
+    "@yukinu/oxc": "workspace:*",
     "@yukinu/tsconfig": "workspace:*",
     "tsdown": "catalog:dev",
     "typescript": "catalog:dev"

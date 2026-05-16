@@ -1,6 +1,6 @@
 'use client'
 
-import { useSuspenseQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { STATUS_COLORS } from '@yukinu/lib/constants'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
@@ -16,13 +16,14 @@ import {
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const OrderHistories: React.FC = () => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const router = useRouter()
 
-  const { data } = useSuspenseQuery(trpc.order.all.queryOptions({}))
+  const { data, status } = useQuery(trpc.checkout.order.all.queryOptions({}))
+  if (status !== 'success') return <OrderHistoriesSkeleton />
 
   return data.orders.map((order) => (
     <Item
@@ -49,7 +50,7 @@ export const OrderHistories: React.FC = () => {
             >
               <ItemMedia variant='image'>
                 <Image
-                  src={item.productImage ?? '/assets/favicon.svg'}
+                  src={item.productImage ?? '/assets/logo.svg'}
                   alt={item.productName ?? 'Product Image'}
                   width={80}
                   height={80}
@@ -78,3 +79,49 @@ export const OrderHistories: React.FC = () => {
     </Item>
   ))
 }
+
+const OrderHistoriesSkeleton: React.FC = () =>
+  Array.from({ length: 3 }).map((_, index) => (
+    <Item key={index} variant='outline' className='animate-pulse'>
+      <ItemHeader>
+        <ItemContent>
+          <ItemTitle className='bg-muted text-transparent'>
+            Order #{index + 1}
+          </ItemTitle>
+          <ItemDescription className='bg-muted text-transparent'>
+            Loading...
+          </ItemDescription>
+        </ItemContent>
+        <Badge variant='default'>Loading</Badge>
+      </ItemHeader>
+
+      <ItemContent>
+        <ItemGroup>
+          {Array.from({ length: 2 }).map((__, itemIndex) => (
+            <Item
+              key={itemIndex}
+              variant='muted'
+              className='border-l-2 border-l-primary'
+            >
+              <ItemMedia variant='image'>
+                <div className='size-20 bg-muted' />
+              </ItemMedia>
+              <ItemContent>
+                <ItemTitle className='bg-muted text-transparent'>
+                  Product Name
+                </ItemTitle>
+                <ItemDescription className='bg-muted text-transparent'>
+                  Loading...
+                </ItemDescription>
+              </ItemContent>
+              <ItemContent>
+                <ItemDescription className='bg-muted text-transparent'>
+                  Loading...
+                </ItemDescription>
+              </ItemContent>
+            </Item>
+          ))}
+        </ItemGroup>
+      </ItemContent>
+    </Item>
+  ))

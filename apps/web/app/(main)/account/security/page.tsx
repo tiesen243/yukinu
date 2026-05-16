@@ -1,28 +1,19 @@
+import { Button } from '@yukinu/ui/button'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@yukinu/ui/collapsible'
 import { ChevronRightIcon } from '@yukinu/ui/icons'
-import { Suspense } from 'react'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { ChangePasswordForm } from '@/app/(main)/account/security/_components/change-password-form'
-import { DeleteAccountButton } from '@/app/(main)/account/security/_components/delete-account-button'
-import {
-  SessionsList,
-  SessionsListSkeleton,
-} from '@/app/(main)/account/security/_components/session-list'
+import { SessionsList } from '@/app/(main)/account/security/_components/session-list'
 import { createMetadata } from '@/lib/metadata'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc/rsc'
-
-export const dynamic = 'force-dynamic'
 
 export default function AccountSecurityPage() {
-  void getQueryClient().prefetchQuery(trpc.security.allSessions.queryOptions())
-
   return (
-    <HydrateClient>
+    <>
       <AccountHeader
         title='Security Settings'
         description='Manage your password, two-factor authentication, and other security settings to keep your account safe.'
@@ -31,9 +22,7 @@ export default function AccountSecurityPage() {
       <section className='flex flex-col gap-4 px-4'>
         <h2 className='text-lg font-medium'>Where you are logged in</h2>
 
-        <Suspense fallback={<SessionsListSkeleton />}>
-          <SessionsList />
-        </Suspense>
+        <SessionsList />
       </section>
 
       <hr />
@@ -56,10 +45,10 @@ export default function AccountSecurityPage() {
         </CollapsibleTrigger>
 
         <CollapsibleContent className='h-(--collapsible-panel-height) pt-4 transition-[height] ease-out data-ending-style:h-0 data-starting-style:h-0'>
-          <DeleteAccountButton />
+          <Button variant='destructive'>Delete Account</Button>
         </CollapsibleContent>
       </Collapsible>
-    </HydrateClient>
+    </>
   )
 }
 

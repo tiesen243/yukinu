@@ -7,14 +7,16 @@ import { UserIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 import { useQueryStates } from 'nuqs'
 
+import { productsOptions, productsParsers } from '@/app/(main)/search/page.lib'
 import { ProductCard, ProductCardSkeleton } from '@/components/product-card'
 import { ProductPagination } from '@/components/product-pagination'
-import { productsOptions, productsParsers } from '@/lib/search'
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const VendorDetails: React.FC<{ id: string }> = ({ id }) => {
-  const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.vendor.one.queryOptions({ id }))
+  const { trpc } = useTRPC()
+  const { data } = useSuspenseQuery(
+    trpc.merchant.vendor.one.queryOptions({ id }),
+  )
 
   return (
     <Card render={<section />}>
@@ -79,11 +81,11 @@ export const VendorDetailsSkeleton: React.FC = () => (
 )
 
 export const VendorProducts: React.FC<{ id: string }> = ({ id }) => {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const [query, setQuery] = useQueryStates(productsParsers, productsOptions)
 
   const { data } = useSuspenseQuery(
-    trpc.product.all.queryOptions({ ...query, vendorId: id }),
+    trpc.catalog.product.all.queryOptions({ ...query, vendorId: id }),
   )
 
   const goToPage = async (page: number) => {

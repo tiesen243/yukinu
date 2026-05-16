@@ -18,7 +18,7 @@ export const ProductImages: React.FC = () => {
 
       <div className='relative aspect-square w-full rounded-md border'>
         <Image
-          src={currentImage ?? '/assets/favicon.svg'}
+          src={currentImage ?? '/assets/logo.svg'}
           alt={`${id}-main-image`}
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className='rounded-md object-contain p-0.5'

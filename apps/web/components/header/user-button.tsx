@@ -22,7 +22,7 @@ import {
 import Link from 'next/link'
 
 import { ThemeSwitcher } from '@/components/header/theme-switcher'
-import { getDashboardUrl } from '@/lib/utils'
+import { env } from '@/lib/env'
 
 export const UserButton = () => {
   const { status, user, signOut } = useSession()
@@ -83,8 +83,7 @@ export const UserButton = () => {
         <DropdownMenuGroup>
           <DropdownMenuItem
             render={
-              // oxlint-disable-next-line no-html-link-for-pages
-              <a href={getDashboardUrl()}>
+              <a href={env.NEXT_PUBLIC_DASHBOARD_URL}>
                 <LayoutDashboardIcon /> Dashboard
               </a>
             }

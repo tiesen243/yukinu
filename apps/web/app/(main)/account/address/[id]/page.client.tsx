@@ -1,6 +1,7 @@
 'use client'
 
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { SaveAddressDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import {
   Field,
@@ -12,42 +13,31 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { updateAddressInput } from '@yukinu/validators/user'
 import { useRouter } from 'next/navigation'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const EditAddressForm: React.FC<{ id: string }> = ({ id }) => {
-  const trpc = useTRPC()
+  const { trpcClient, trpc, queryClient } = useTRPC()
   const router = useRouter()
 
   const { data, refetch } = useSuspenseQuery(
-    trpc.address.one.queryOptions({ id }),
+    trpc.identity.address.one.queryOptions({ id }),
   )
-
-  const { mutateAsync } = useMutation({
-    ...trpc.address.update.mutationOptions(),
-    meta: { filter: trpc.address.all.queryFilter() },
-    onSuccess: () =>
-      toast.add({
-        type: 'success',
-        title: 'Address updated successfully!',
-      }),
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Error updating address',
-        description: message,
-      }),
-  })
 
   const form = useForm({
     defaultValues: data,
-    schema: updateAddressInput,
-    onSubmit: mutateAsync,
-    onSuccess: () => {
+    schema: SaveAddressDto.input,
+    onSubmit: trpcClient.identity.address.update.mutate,
+    onError: toast.error,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(
+        trpc.identity.address.all.queryFilter(),
+      )
+      await refetch()
+
+      toast.success({ message: 'Address updated successfully!' })
       router.push('/account/address')
-      void refetch()
     },
   })
 

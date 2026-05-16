@@ -1,22 +1,22 @@
 'use client'
 
-import type { OneOutput } from '@yukinu/validators/product'
+import type { OneProductDto } from '@yukinu/api/catalog'
 
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
 import { toast } from '@yukinu/ui/toast'
 import { parseAsString, useQueryStates } from 'nuqs'
 import * as React from 'react'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 const PageContext = React.createContext<{
-  product: OneOutput
+  product: OneProductDto.Output
   optionTypes: string[]
 
   avgRating: number
   currentImage: string | undefined
   selectedOptions: Record<string, string | null>
-  selectedVariant: OneOutput['variants'][number] | undefined
+  selectedVariant: OneProductDto.Output['variants'][number] | undefined
 
   handleChangeImage: (url: string) => void
   handleOptionChange: (type: string, value: string | null) => void
@@ -34,9 +34,9 @@ interface PageProviderProps {
 }
 
 function PageProvider({ children, id }: Readonly<PageProviderProps>) {
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { data: product } = useSuspenseQuery(
-    trpc.product.one.queryOptions({ id }),
+    trpc.catalog.product.one.queryOptions({ id }),
   )
 
   const [currentImage, setCurrentImage] = React.useState(
@@ -71,35 +71,20 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
 
   const { mutate: toggleWishlistItem, isPending: isTogglingWishlistItem } =
     useMutation({
-      ...trpc.wishlist.toggleItem.mutationOptions(),
-      meta: { filter: trpc.wishlist.get.queryOptions({}) },
+      ...trpc.sales.wishlist.toggle.mutationOptions(),
+      meta: { filter: trpc.sales.wishlist.get.queryOptions({}) },
       onSuccess: ({ added }) =>
-        toast.add({
-          type: 'success',
-          title: added ? 'Added to wishlist' : 'Removed from wishlist',
+        toast.success({
+          message: added ? 'Added to wishlist' : 'Removed from wishlist',
         }),
-      onError: ({ message }) =>
-        toast.add({
-          type: 'error',
-          title: 'Failed to update wishlist',
-          description: message,
-        }),
+      onError: ({ message }) => toast.error({ message }),
     })
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({
-    ...trpc.cart.addItemToCart.mutationOptions(),
-    meta: { filter: trpc.cart.get.queryOptions({}) },
-    onSuccess: () =>
-      toast.add({
-        type: 'success',
-        title: 'Item added to cart',
-      }),
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Failed to add item to cart',
-        description: message,
-      }),
+    ...trpc.sales.cart.save.mutationOptions(),
+    meta: { filter: trpc.sales.cart.get.queryOptions({}) },
+    onSuccess: () => toast.success({ message: 'Item added to cart' }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   const value = React.useMemo(() => {

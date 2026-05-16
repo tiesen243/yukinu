@@ -3,7 +3,7 @@ import { Typography } from '@yukinu/ui/typography'
 
 export const CoreValuesSection: React.FC = () => (
   <section className='container py-20'>
-    <Typography variant='h3' render={<h2 />}>
+    <Typography variant='h3' as='h2'>
       Our Core Values
     </Typography>
 

@@ -20,7 +20,7 @@ import {
 import { toast } from '@yukinu/ui/toast'
 import * as React from 'react'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const EditButton: React.FC<{
   productId: string
@@ -33,23 +33,15 @@ export const EditButton: React.FC<{
   const [localQuantity, setLocalQuantity] = React.useState(quantity)
   const [open, setOpen] = React.useState(false)
 
-  const trpc = useTRPC()
+  const { trpc } = useTRPC()
   const { mutate, isPending } = useMutation({
-    ...trpc.cart.addItemToCart.mutationOptions(),
-    meta: { filter: trpc.cart.get.queryFilter() },
+    ...trpc.sales.cart.save.mutationOptions(),
+    meta: { filter: trpc.sales.cart.get.queryFilter() },
     onSuccess: () => {
-      toast.add({
-        type: 'success',
-        title: 'Quantity updated successfully',
-      })
+      toast.success({ message: 'Quantity updated successfully' })
       setOpen(false)
     },
-    onError: ({ message }) =>
-      toast.add({
-        type: 'error',
-        title: 'Failed to update quantity',
-        description: message,
-      }),
+    onError: ({ message }) => toast.error({ message }),
   })
 
   return (

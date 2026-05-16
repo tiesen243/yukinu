@@ -29,7 +29,7 @@ export const FeaturesSection: React.FC = () => (
           className='gap-2 bg-background/80 px-4 text-accent-foreground transition-colors hover:bg-accent/20 hover:text-primary hover:ring-accent'
         >
           <feature.icon className='size-12' />
-          <Typography variant='h6' render={<h3>{feature.title}</h3>} />
+          <Typography variant='h3'>{feature.title}</Typography>
           <Typography className='text-accent-foreground/70'>
             {feature.description}
           </Typography>

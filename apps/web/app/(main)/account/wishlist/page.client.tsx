@@ -1,7 +1,7 @@
 'use client'
 
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { slugify } from '@yukinu/lib/slugify'
+import { useQuery } from '@tanstack/react-query'
+import { slugify } from '@yukinu/lib/utils'
 import {
   Card,
   CardContent,
@@ -13,11 +13,13 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { useTRPC } from '@/lib/trpc/react'
+import { useTRPC } from '@/lib/trpc'
 
 export const WishlistItems: React.FC = () => {
-  const trpc = useTRPC()
-  const { data } = useSuspenseQuery(trpc.wishlist.get.queryOptions({}))
+  const { trpc } = useTRPC()
+  const { data, status } = useQuery(trpc.sales.wishlist.get.queryOptions({}))
+
+  if (status !== 'success') return <WishlistItemsSkeleton />
 
   return data.map((item) => (
     <Card
@@ -29,7 +31,7 @@ export const WishlistItems: React.FC = () => {
     >
       <CardHeader className='relative flex-1 rounded-t-xl'>
         <Image
-          src={item.product.image ?? '/assets/favicon.svg'}
+          src={item.product.image ?? '/assets/logo.svg'}
           alt={item.product.name}
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
           className='rounded-t-xl object-cover transition-transform group-hover/product-card:scale-105'
@@ -47,7 +49,7 @@ export const WishlistItems: React.FC = () => {
   ))
 }
 
-export const WishlistItemsSkeleton: React.FC = () =>
+const WishlistItemsSkeleton: React.FC = () =>
   Array.from({ length: 8 }, (_, index) => (
     <div
       key={index}

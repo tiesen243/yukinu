@@ -4,7 +4,7 @@ import { cn } from '@yukinu/ui'
 import { Geist, Geist_Mono } from 'next/font/google'
 
 import { Footer } from '@/components/footer'
-import { Providers } from '@/components/providers'
+import { Provider } from '@/components/provider'
 import { createMetadata } from '@/lib/metadata'
 
 const geistSans = Geist({
@@ -29,11 +29,11 @@ export default function RootLayout({
           geistMono.variable,
         )}
       >
-        <Providers>
+        <Provider>
           {children}
 
           <Footer />
-        </Providers>
+        </Provider>
       </body>
     </html>
   )

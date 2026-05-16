@@ -1,0 +1,49 @@
+import type { Database } from '@yukinu/db/drizzle'
+
+import { sendEmail } from '@yukinu/email'
+
+import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
+import type { VerificationRepository } from '@/modules/identity/domain/repositories/verification.repository'
+import type { ForgotPasswordDto } from '@/modules/identity/types'
+
+import { VerificationEntity } from '@/modules/identity/domain/entities/verification.entity'
+import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
+
+export class ForgotPasswordUseCase extends AbstractUseCase<
+  ForgotPasswordDto.Input,
+  ForgotPasswordDto.Output
+> {
+  public constructor(
+    private readonly _db: Database,
+    private readonly _userRepo: UserRepository,
+    private readonly _verificationRepo: VerificationRepository,
+  ) {
+    super()
+  }
+
+  public async execute(
+    input: ForgotPasswordDto.Input,
+  ): Promise<ForgotPasswordDto.Output> {
+    const { email } = input
+    const [user] = await this._userRepo.find([{ email }], {}, { limit: 1 })
+    if (!user?.username) return { id: '' }
+
+    const { id, username } = user
+
+    const newVerification = new VerificationEntity({
+      userId: id,
+      type: 'password_reset',
+    })
+    await this._verificationRepo.save(newVerification)
+
+    const resetLink = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/forgot-password/reset?token=${newVerification.token}`
+    await sendEmail({
+      to: email,
+      subject: 'Yukinu Password Reset',
+      template: 'ResetPassword',
+      data: { username, resetLink },
+    })
+
+    return { id }
+  }
+}

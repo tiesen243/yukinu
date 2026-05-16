@@ -1,7 +1,0 @@
-export * from '@/schema/auth'
-export * from '@/schema/cart'
-export * from '@/schema/general'
-export * from '@/schema/order'
-export * from '@/schema/product'
-export * from '@/schema/user'
-export * from '@/schema/vendor'

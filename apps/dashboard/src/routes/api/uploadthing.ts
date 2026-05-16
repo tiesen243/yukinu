@@ -1,11 +1,8 @@
-// oxlint-disable prefer-destructuring
-
 import { createRemixRouteHandler } from '@yukinu/uploadthing'
-import { ourFileRouter, config } from '@yukinu/uploadthing/config'
+import { config, ourFileRouter } from '@yukinu/uploadthing/config'
 
-export const handlers = createRemixRouteHandler({
+const { loader, action } = createRemixRouteHandler({
   router: ourFileRouter,
   config,
 })
-export const loader = handlers.loader
-export const action = handlers.action
+export { loader, action }

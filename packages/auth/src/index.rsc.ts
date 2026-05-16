@@ -6,21 +6,34 @@ import { Auth } from '@/core'
 const {
   auth: uncachedAuth,
   currentUser: uncachedCurrentUser,
+
+  createSession,
   verifyAccessToken,
+  serializeTokenCookie,
 
   signIn,
   signOut,
 
-  handlers,
+  handler,
 } = Auth(authOptions)
 
 /**
- * This is the main way to get session data for your RSCs.
- * This will de-duplicate all calls to auth's default `auth()` function and only call it once per request
+ * This is the main way to get session data for your RSCs. This will
+ * de-duplicate all calls to auth's default `auth()` function and only call it
+ * once per request.
  */
 const auth = cache(uncachedAuth)
 const currentUser = cache(uncachedCurrentUser)
 
 export type { SessionWithUser, User } from '@/core/types'
 export { Password } from '@/core/password'
-export { auth, currentUser, verifyAccessToken, signIn, signOut, handlers }
+export {
+  auth,
+  currentUser,
+  createSession,
+  verifyAccessToken,
+  serializeTokenCookie,
+  signIn,
+  signOut,
+  handler,
+}

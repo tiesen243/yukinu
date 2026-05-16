@@ -14,10 +14,7 @@ export const ProductReviews: React.FC = () => {
 
   return (
     <Card className='px-4' render={<section />}>
-      <Typography
-        variant='h4'
-        render={<h2>Reviews ({avgRating.toFixed(1)}/5)</h2>}
-      />
+      <Typography variant='h2'>Reviews ({avgRating.toFixed(1)}/5)</Typography>
 
       {reviews.length === 0 ? (
         <Typography className='text-muted-foreground'>
@@ -27,7 +24,7 @@ export const ProductReviews: React.FC = () => {
         <ul className='grid gap-4'>
           {reviews.map((review) => (
             <li
-              key={review.id}
+              key={review.createdAt.getTime()}
               className='flex items-start gap-4 border-b pb-4 last:border-0'
             >
               <Avatar className='size-9'>
