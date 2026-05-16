@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.12.1
+
+### Patch Changes
+
+- bc947c6: fix verify email
+
 ## 0.12.0
 
 ### Minor Changes
