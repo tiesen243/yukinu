@@ -9,10 +9,10 @@ import { env } from '@/lib/env'
 
 export const revalidate = 86_400 // 24 hours
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const url = (path: string): string =>
-    new URL(path, env.NEXT_PUBLIC_WEB_URL).toString()
+const url = (path: string): string =>
+  new URL(path, env.NEXT_PUBLIC_WEB_URL).toString()
 
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const statics: string[] = ['/home', '/about', '/contact', '/search']
 
   const [productsList, usersList, vendorsList] = await Promise.all([
