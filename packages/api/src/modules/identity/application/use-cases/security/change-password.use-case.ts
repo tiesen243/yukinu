@@ -39,7 +39,7 @@ export class ChangePasswordUseCase extends AbstractUseCase<
     const [[user], [account]] = await Promise.all([
       this._userRepo.find([{ id: userId }], {}, { limit: 1 }),
       this._accountRepo.find(
-        [{ id: userId, provider: 'credentials' }],
+        [{ userId, provider: 'credentials' }],
         {},
         { limit: 1 },
       ),
