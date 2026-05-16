@@ -1,5 +1,16 @@
 # @yukinu/dashboard
 
+## 0.12.2
+
+### Patch Changes
+
+- 38731e3: fix linter error
+- Updated dependencies [38731e3]
+  - @yukinu/auth@0.10.1
+  - @yukinu/ui@0.9.1
+  - @yukinu/api@0.10.2
+  - @yukinu/uploadthing@0.4.1
+
 ## 0.12.1
 
 ### Patch Changes

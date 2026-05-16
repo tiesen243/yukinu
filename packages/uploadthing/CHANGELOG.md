@@ -1,5 +1,12 @@
 # @yukinu/uploadthing
 
+## 0.4.1
+
+### Patch Changes
+
+- Updated dependencies [38731e3]
+  - @yukinu/auth@0.10.1
+
 ## 0.4.0
 
 ### Minor Changes
