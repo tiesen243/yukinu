@@ -19,8 +19,8 @@ export namespace AllProductsDto {
 
   export const input = Pagination.input.extend({
     search: z.string().optional(),
-    categoryId: z.cuid().optional(),
-    vendorId: z.cuid().optional(),
+    categoryId: z.cuid2().nullable(),
+    vendorId: z.cuid2().nullable(),
     orderBy: z.enum(orderBy).optional(),
     isDeleted: z.boolean().default(false),
   })

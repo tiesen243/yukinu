@@ -6,6 +6,7 @@ import { Card, CardFooter, CardHeader } from '@yukinu/ui/card'
 import { Typography } from '@yukinu/ui/typography'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
+import { Link } from '@/components/link'
 
 export const ProductDescription: React.FC = () => {
   const {
@@ -34,7 +35,8 @@ export const ProductDescription: React.FC = () => {
           <Button
             variant='outline'
             size='sm'
-            // onClick={() => router.push(`/v/${vendor.id}`)}
+            nativeButton={false}
+            render={<Link href={`/v/${vendor.id}`} />}
           >
             Visit Store
           </Button>

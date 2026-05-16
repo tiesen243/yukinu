@@ -7,7 +7,7 @@ import { OneUserDto } from '@/modules/identity/application/dtos/user/one-user.dt
 import { ProfileDto } from '@/modules/identity/application/dtos/user/profile.dto'
 import { UpdateProfileDto } from '@/modules/identity/application/dtos/user/update-profile.dto'
 import { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'
-import { protectedProcedure } from '@/trpc'
+import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const userRouter = ({ user }: UseCases) =>
   ({
@@ -27,6 +27,11 @@ export const userRouter = ({ user }: UseCases) =>
       .input(ProfileDto.input.omit({ id: true }))
       .output(ProfileDto.output)
       .query(({ ctx }) => user.profile.execute({ id: ctx.session.userId })),
+
+    publicProfile: publicProcedure
+      .input(ProfileDto.input)
+      .output(ProfileDto.output)
+      .query(({ input }) => user.profile.execute(input)),
 
     updateProfile: protectedProcedure
       .input(UpdateProfileDto.input.omit({ id: true }))

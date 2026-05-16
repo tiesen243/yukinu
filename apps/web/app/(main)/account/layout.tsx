@@ -13,8 +13,8 @@ import { Link } from '@/components/link'
 
 export default function AccountLayout({ children }: LayoutProps<'/account'>) {
   return (
-    <div className='flex min-h-[calc(100dvh-3.5rem)] w-full flex-1 flex-col gap-4 p-4 md:flex-row'>
-      <Card render={<aside />} className='shrink-0 md:w-1/5'>
+    <div className='container flex min-h-[calc(100dvh-3.5rem)] flex-1 flex-col gap-4 p-4 md:flex-row'>
+      <Card render={<aside />} className='shrink-0 md:w-1/4'>
         <User />
 
         <nav className='px-4'>

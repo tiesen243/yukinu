@@ -9,7 +9,11 @@ export const ProductsList: React.FC = () => {
   const { trpc } = useTRPC()
 
   const { data } = useSuspenseQuery(
-    trpc.catalog.product.all.queryOptions({ limit: 6 }),
+    trpc.catalog.product.all.queryOptions({
+      categoryId: null,
+      vendorId: null,
+      limit: 6,
+    }),
   )
 
   return data.products.map((product, idx) => (

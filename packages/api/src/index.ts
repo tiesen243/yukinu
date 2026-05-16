@@ -32,7 +32,7 @@ const handler = async (request: Request): Promise<Response> => {
 const createTRPCCaller = createCallerFactory(createApp(db))
 
 export type { AppRouter, RouterInputs, RouterOutputs } from '@/app'
-export { createTRPCCaller, createTRPCContext, handler }
+export { createApp, createTRPCCaller, createTRPCContext, handler }
 
 export default {
   fetch: handler,

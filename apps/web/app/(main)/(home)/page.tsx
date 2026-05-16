@@ -21,7 +21,11 @@ export default function Home() {
   void Promise.all([
     queryClient.prefetchQuery(trpc.sales.banner.all.queryOptions()),
     queryClient.prefetchQuery(
-      trpc.catalog.product.all.queryOptions({ limit: 6 }),
+      trpc.catalog.product.all.queryOptions({
+        categoryId: null,
+        vendorId: null,
+        limit: 6,
+      }),
     ),
     queryClient.prefetchQuery(
       trpc.catalog.category.all.queryOptions({
