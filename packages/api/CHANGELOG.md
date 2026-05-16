@@ -1,5 +1,27 @@
 # @yukinu/api
 
+## 0.10.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+
+### Patch Changes
+
+- 888ccb8: added entities
+- e38b624: added repositories
+- 7fdf356: setup api structure
+- Updated dependencies [6a2ed40]
+- Updated dependencies [440cba9]
+- Updated dependencies [0b588e8]
+- Updated dependencies [9de78ea]
+- Updated dependencies [1db49df]
+  - @yukinu/db@0.10.0
+  - @yukinu/uploadthing@0.4.0
+  - @yukinu/email@0.9.0
+  - @yukinu/auth@0.10.0
+  - @yukinu/lib@0.8.0
+
 ## 0.9.14
 
 ### Patch Changes

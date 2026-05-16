@@ -1,5 +1,15 @@
 # @yukinu/email
 
+## 0.9.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+
+### Patch Changes
+
+- 0b588e8: update email package
+
 ## 0.8.8
 
 ### Patch Changes

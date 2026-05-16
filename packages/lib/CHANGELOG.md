@@ -1,5 +1,15 @@
 # @yukinu/lib
 
+## 0.8.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+
+### Patch Changes
+
+- 1db49df: update package and added unit test
+
 ## 0.7.3
 
 ### Patch Changes
