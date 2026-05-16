@@ -1,5 +1,15 @@
 # @yukinu/oxc
 
+## 0.1.0
+
+### Minor Changes
+
+- 440cba9: refractor all apps and packages to use the new architecture and new features, also added a lot of new features and fixed some bugs
+
+### Patch Changes
+
+- 1db49df: migrate config to js
+
 ## 0.0.2
 
 ### Patch Changes
