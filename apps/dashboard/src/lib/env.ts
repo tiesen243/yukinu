@@ -37,4 +37,9 @@ export const env = createEnv({
     VITE_APP_NAME: import.meta.env.VITE_APP_NAME,
     VITE_APP_URL: import.meta.env.VITE_APP_URL,
   },
+
+  skipValidation:
+    !!process.env.SKIP_ENV_VALIDATION ||
+    !!process.env.CI ||
+    process.env.npm_lifecycle_event === 'lint',
 })
