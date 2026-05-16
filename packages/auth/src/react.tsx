@@ -31,16 +31,16 @@ const useSession = () => {
   return context
 }
 
+const defaultGetUserFn = async () => {
+  const res = await fetch('/api/auth/current-user')
+  if (!res.ok) throw new Error('Failed to fetch session')
+  return res.json() as Promise<User | null>
+}
+
 function SessionProvider(props: Readonly<SessionProviderProps>) {
   const { user, getUserFn, children } = props
 
   const queryClient = useQueryClient()
-
-  const defaultGetUserFn = async () => {
-    const res = await fetch('/api/auth/current-user')
-    if (!res.ok) throw new Error('Failed to fetch session')
-    return res.json() as Promise<User | null>
-  }
 
   const { data, isLoading } = useQuery({
     queryKey: QUERY_KEY,

@@ -339,6 +339,7 @@ function ProductAttributesFields({
                 />
                 <datalist id={`${field.id}-attr-suggestions`}>
                   {SUGGESTED_ATTRIBUTES.map((suggestion) => (
+                    // oxlint-disable-next-line jsx_a11y/control-has-associated-label
                     <option key={suggestion} value={suggestion} />
                   ))}
                 </datalist>
@@ -420,6 +421,7 @@ export function ProductVariantsFields({
                       />
                       <datalist id={`${field.id}-variant-suggestions`}>
                         {SUGGESTED_VARIANTS.map((suggestion) => (
+                          // oxlint-disable-next-line jsx_a11y/control-has-associated-label
                           <option key={suggestion} value={suggestion} />
                         ))}
                       </datalist>
