@@ -18,11 +18,15 @@ import { useRouter } from 'next/navigation'
 
 import { useTRPC } from '@/lib/trpc'
 
-export const OrderHistories: React.FC = () => {
+export const OrderHistories: React.FC<{ paymentId?: string }> = ({
+  paymentId,
+}) => {
   const { trpc } = useTRPC()
   const router = useRouter()
 
-  const { data, status } = useQuery(trpc.checkout.order.all.queryOptions({}))
+  const { data, status } = useQuery(
+    trpc.checkout.order.me.queryOptions({ paymentId }),
+  )
   if (status !== 'success') return <OrderHistoriesSkeleton />
 
   return data.orders.map((order) => (

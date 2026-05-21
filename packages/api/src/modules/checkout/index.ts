@@ -12,6 +12,7 @@ import { OneOrderUseCase } from '@/modules/checkout/application/use-cases/order/
 import { DrizzleOrderItemRepository } from '@/modules/checkout/infrastructures/drizzle/order-item.repository'
 import { DrizzleOrderRepository } from '@/modules/checkout/infrastructures/drizzle/order.repository'
 import { orderRouter } from '@/modules/checkout/interfaces/order.router'
+import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 
 export const createCheckoutModule = (
   db: Database,
@@ -19,6 +20,7 @@ export const createCheckoutModule = (
     cartItemRepo: CartItemRepository
     paymentRepo: PaymentRepository
     voucherRepo: VoucherRepository
+    vendorMiddleware: VendorMiddleware
   },
 ) => {
   const orderItemRepo = new DrizzleOrderItemRepository(db)
@@ -43,7 +45,9 @@ export const createCheckoutModule = (
     useCases,
 
     router: {
-      order: orderRouter(useCases),
+      order: orderRouter(useCases, {
+        vendorMiddleware: deps.vendorMiddleware,
+      }),
     } satisfies TRPCRouterRecord,
   }
 }

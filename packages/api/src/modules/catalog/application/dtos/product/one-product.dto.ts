@@ -14,6 +14,7 @@ export namespace OneProductDto {
     price: z.string(),
     stock: z.number().default(0),
     sold: z.number().default(0),
+    isWishlisted: z.boolean().default(false),
     createdAt: z.date(),
     updatedAt: z.date(),
     category: z.object({ id: z.cuid2(), name: z.string() }).nullable(),

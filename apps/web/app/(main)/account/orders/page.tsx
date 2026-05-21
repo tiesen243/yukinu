@@ -4,7 +4,11 @@ import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { OrderHistories } from '@/app/(main)/account/orders/page.client'
 import { createMetadata } from '@/lib/metadata'
 
-export default function AccountOrdersPage() {
+export default async function AccountOrdersPage({
+  searchParams,
+}: PageProps<'/account/orders'>) {
+  const { paymentId } = await searchParams
+
   return (
     <>
       <AccountHeader
@@ -16,7 +20,9 @@ export default function AccountOrdersPage() {
         <h2 className='sr-only'>Orders History List section</h2>
 
         <ItemGroup>
-          <OrderHistories />
+          <OrderHistories
+            paymentId={typeof paymentId === 'string' ? paymentId : undefined}
+          />
         </ItemGroup>
       </section>
     </>

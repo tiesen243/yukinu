@@ -34,7 +34,7 @@ interface PageProviderProps {
 }
 
 function PageProvider({ children, id }: Readonly<PageProviderProps>) {
-  const { trpc } = useTRPC()
+  const { trpc, queryClient } = useTRPC()
   const { data: product } = useSuspenseQuery(
     trpc.catalog.product.one.queryOptions({ id }),
   )
@@ -73,11 +73,41 @@ function PageProvider({ children, id }: Readonly<PageProviderProps>) {
     useMutation({
       ...trpc.sales.wishlist.toggle.mutationOptions(),
       meta: { filter: trpc.sales.wishlist.get.queryOptions({}) },
+
+      // Optimistically update the product's wishlist status in the cache
+      onMutate: async () => {
+        const filter = trpc.catalog.product.one.queryFilter({ id })
+
+        await queryClient.cancelQueries(filter)
+
+        const previousProduct = queryClient.getQueryData(filter.queryKey)
+        queryClient.setQueryData(
+          filter.queryKey,
+          (old) =>
+            ({
+              ...old,
+              isWishlisted: !old?.isWishlisted,
+            }) as OneProductDto.Output,
+        )
+
+        return { previousProduct }
+      },
+      onSettled: () =>
+        queryClient.invalidateQueries(
+          trpc.catalog.product.one.queryFilter({ id }),
+        ),
+
       onSuccess: ({ added }) =>
         toast.success({
           message: added ? 'Added to wishlist' : 'Removed from wishlist',
         }),
-      onError: ({ message }) => toast.error({ message }),
+      onError: ({ message }, _, context) => {
+        toast.error({ message })
+        queryClient.setQueriesData(
+          trpc.catalog.product.one.queryFilter({ id }),
+          context?.previousProduct,
+        )
+      },
     })
 
   const { mutate: addItemToCart, isPending: isAddingItemToCart } = useMutation({

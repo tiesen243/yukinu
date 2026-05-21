@@ -1,27 +1,44 @@
 import type { TRPCRouterRecord } from '@trpc/server'
 
 import type { UseCases } from '@/modules/checkout/types'
+import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 
 import { AllOrdersDto } from '@/modules/checkout/application/dtos/order/all-orders.dto'
 import { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 import { OneOrderDto } from '@/modules/checkout/application/dtos/order/one-order.dto'
 import { protectedProcedure } from '@/trpc'
 
-export const orderRouter = ({ order }: UseCases) =>
+export const orderRouter = (
+  { order }: UseCases,
+  deps: {
+    vendorMiddleware: VendorMiddleware
+  },
+) =>
   ({
     all: protectedProcedure
+      .meta({ role: ['admin', 'moderator'] })
       .input(AllOrdersDto.input.pick({ page: true, limit: true }))
+      .output(AllOrdersDto.output)
+      .query(({ input }) => order.all.execute(input)),
+
+    me: protectedProcedure
+      .input(
+        AllOrdersDto.input.pick({ page: true, limit: true, paymentId: true }),
+      )
       .output(AllOrdersDto.output)
       .query(({ ctx, input }) =>
         order.all.execute({
           ...input,
-          userId:
-            ctx.session.role === 'admin' || ctx.session.role === 'moderator'
-              ? null
-              : ctx.session.userId,
-          vendorId: null,
-          paymentId: null,
+          userId: ctx.session.userId,
         }),
+      ),
+
+    vendor: protectedProcedure
+      .use(deps.vendorMiddleware)
+      .input(AllOrdersDto.input.pick({ page: true, limit: true }))
+      .output(AllOrdersDto.output)
+      .query(({ ctx, input }) =>
+        order.all.execute({ ...input, vendorId: ctx.session.vendorId }),
       ),
 
     one: protectedProcedure
