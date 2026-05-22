@@ -1,5 +1,12 @@
 # @yukinu/web
 
+## 0.12.5
+
+### Patch Changes
+
+- 37916ff: integrate sepay webhook
+- 8a741a4: fix orders page
+
 ## 0.12.4
 
 ### Patch Changes
