@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/web",
-  "version": "0.12.4",
+  "version": "0.12.5",
   "private": false,
   "type": "module",
   "scripts": {
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "catalog:tailwind",
-    "@types/node": "^25.8.0",
+    "@types/node": "^25.9.1",
     "@types/react": "catalog:react",
     "@types/react-dom": "catalog:react",
     "@yukinu/oxc": "workspace:*",

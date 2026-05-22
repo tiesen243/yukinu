@@ -18,8 +18,10 @@ export const env = createEnv({
     AUTH_GOOGLE_ID: z.string(),
     AUTH_GOOGLE_SECRET: z.string(),
 
+    SEPAY_TOKEN: z.string(),
     RESEND_TOKEN: z.string(),
     UPLOADTHING_TOKEN: z.string(),
+
     TURNSTILE_SECRET_KEY: z.string(),
   },
 
@@ -30,6 +32,10 @@ export const env = createEnv({
     NEXT_PUBLIC_WEB_URL: z._default(z.url(), 'http://localhost:3000'),
 
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
+
+    NEXT_PUBLIC_SEPAY_DEMO: z._default(z.enum(['true', 'false']), 'true'),
+    NEXT_PUBLIC_BANK_NAME: z.string(),
+    NEXT_PUBLIC_BANK_ACCOUNT: z.string(),
   },
 
   runtimeEnv: {
@@ -38,6 +44,10 @@ export const env = createEnv({
     NEXT_PUBLIC_DASHBOARD_URL: process.env.NEXT_PUBLIC_DASHBOARD_URL,
     NEXT_PUBLIC_WEB_URL: process.env.NEXT_PUBLIC_WEB_URL,
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+
+    NEXT_PUBLIC_SEPAY_DEMO: process.env.NEXT_PUBLIC_SEPAY_DEMO,
+    NEXT_PUBLIC_BANK_NAME: process.env.NEXT_PUBLIC_BANK_NAME,
+    NEXT_PUBLIC_BANK_ACCOUNT: process.env.NEXT_PUBLIC_BANK_ACCOUNT,
   },
 
   skipValidation:

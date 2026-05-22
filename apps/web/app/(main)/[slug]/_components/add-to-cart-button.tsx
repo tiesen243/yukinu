@@ -14,7 +14,7 @@ import { usePage } from '@/app/(main)/[slug]/page.provider'
 
 export const AddToCartButton: React.FC = () => {
   const {
-    product: { variants, stock },
+    product: { variants, stock, isWishlisted },
     selectedVariant,
     toggleWishlistItem,
     isTogglingWishlistItem,
@@ -100,11 +100,16 @@ export const AddToCartButton: React.FC = () => {
         <Button
           variant='outline'
           size='icon'
+          aria-pressed={isWishlisted}
+          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={toggleWishlistItem}
           disabled={isTogglingWishlistItem}
         >
-          <HeartIcon />
-          <span className='sr-only'>Add to wishlist</span>
+          <HeartIcon
+            className={
+              isWishlisted ? 'fill-destructive stroke-destructive' : ''
+            }
+          />
         </Button>
       </div>
     </section>

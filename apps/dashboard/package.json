@@ -37,6 +37,6 @@
     "@yukinu/tsconfig": "workspace:*",
     "tailwindcss": "catalog:tailwind",
     "typescript": "catalog:dev",
-    "vite": "^8.0.13"
+    "vite": "^8.0.14"
   }
 }

@@ -73,7 +73,7 @@ export class DrizzleProductRepository
   public async findWithDetails(
     id: ProductEntity['id'],
     tx: Database = this._db,
-  ): Promise<OneProductDto.Output | null> {
+  ): Promise<Omit<OneProductDto.Output, 'isWishlisted'> | null> {
     const imagesAgg = sql<OneProductDto.Output['images']>`coalesce(
       jsonb_agg(distinct jsonb_build_object(
         'id', ${productImages.id}, 

@@ -1,22 +1,10 @@
-import { Suspense } from 'react'
-
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { ProfileSummary } from '@/app/(main)/account/_components/profile-summary'
-import {
-  UpdateProfileForm,
-  UpdateProfileFormSkeleton,
-} from '@/app/(main)/account/_components/update-profile-form'
-import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc.rsc'
-
-export const dynamic = 'force-dynamic'
+import { UpdateProfileForm } from '@/app/(main)/account/_components/update-profile-form'
 
 export default function AccountPage() {
-  void getQueryClient().prefetchQuery(
-    trpc.identity.user.profile.queryOptions({}),
-  )
-
   return (
-    <HydrateClient>
+    <>
       <AccountHeader
         title='My Profile'
         description='View and update your personal details, email, and password to keep your account secure.'
@@ -29,10 +17,8 @@ export default function AccountPage() {
 
         <hr className='my-4' />
 
-        <Suspense fallback={<UpdateProfileFormSkeleton />}>
-          <UpdateProfileForm />
-        </Suspense>
+        <UpdateProfileForm />
       </section>
-    </HydrateClient>
+    </>
   )
 }

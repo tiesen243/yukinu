@@ -1,6 +1,8 @@
 'use client'
 
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query'
+import type { ProfileDto } from '@yukinu/api/identity'
+
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { ProfileEntity, UpdateProfileDto } from '@yukinu/api/identity'
 import { Avatar, AvatarImage, AvatarFallback } from '@yukinu/ui/avatar'
 import { Button } from '@yukinu/ui/button'
@@ -39,9 +41,18 @@ import { toast } from '@yukinu/ui/toast'
 import { UploadInput } from '@/components/upload-input'
 import { useTRPC } from '@/lib/trpc'
 
-export function UpdateProfileForm() {
+export const UpdateProfileForm = () => {
   const { trpc } = useTRPC()
-  const { data } = useSuspenseQuery(trpc.identity.user.profile.queryOptions({}))
+  const { data, status } = useQuery(trpc.identity.user.profile.queryOptions({}))
+
+  if (status !== 'success') return <UpdateProfileFormContentSkeleton />
+  return <UpdateProfileFormContent data={data} />
+}
+
+const UpdateProfileFormContent: React.FC<{
+  data: ProfileDto.Output
+}> = ({ data }) => {
+  const { trpc } = useTRPC()
   const { mutateAsync } = useMutation({
     ...trpc.identity.user.updateProfile.mutationOptions(),
     meta: { filter: trpc.identity.user.profile.queryFilter() },
@@ -250,7 +261,7 @@ export function UpdateProfileForm() {
   )
 }
 
-export const UpdateProfileFormSkeleton: React.FC = () => (
+export const UpdateProfileFormContentSkeleton: React.FC = () => (
   <div className='animate-pulse'>
     <h3 className='sr-only'>Update Profile form</h3>
 

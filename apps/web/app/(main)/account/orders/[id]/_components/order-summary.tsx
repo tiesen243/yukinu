@@ -13,6 +13,7 @@ export const OrderSummary: React.FC<{ id: number }> = ({ id }) => {
   const { data, status } = useQuery(
     trpc.checkout.order.one.queryOptions({ id }),
   )
+
   if (status !== 'success') return <OrderSummarySkeleton />
 
   return (

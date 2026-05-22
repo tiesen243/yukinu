@@ -53,7 +53,6 @@ export class DrizzleWishlistItemRepository
     if (orderByClause) query.orderBy(orderByClause)
     if (options.limit) query.limit(options.limit)
     if (options.offset) query.offset(options.offset)
-    console.log(query.toSQL())
 
     const rows = await query
 

@@ -1,39 +1,24 @@
 import type { NextRequest, ProxyConfig } from 'next/server'
 
-import { verifyAccessToken } from '@yukinu/auth'
 import { NextResponse } from 'next/server'
 
-const protectedPaths = ['/account', '/account/:path']
-const bypassCsrfPaths = ['/api/uploadthing']
+const bypassCsrf = [
+  (pathname: string) => pathname === '/api/uploadthing',
+  (pathname: string) => pathname === '/api/trpc/finance.payment.webhook',
+]
 
-export async function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  const isProtected = protectedPaths.some((path) => {
-    if (path.endsWith('/:path')) {
-      const basePath = path.replace('/:path', '')
-      return pathname.startsWith(`${basePath}/`)
-    }
-    return pathname === path
-  })
-
-  const session = await verifyAccessToken(request)
-  if (isProtected && !session?.userId) {
-    const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('redirect_to', request.url)
-    return NextResponse.redirect(loginUrl)
-  }
-
-  if (bypassCsrfPaths.some((path) => pathname.startsWith(path)))
+  if (bypassCsrf.some((matches) => matches(pathname)))
     return NextResponse.next()
 
   // CRSF protection: only allow same-origin requests to mutate data
   if (
     !['GET', 'HEAD', 'OPTIONS'].includes(request.method) &&
     request.headers.get('origin') !== request.nextUrl.origin
-  ) {
+  )
     return new NextResponse('Forbidden', { status: 403 })
-  }
 
   return NextResponse.next()
 }
