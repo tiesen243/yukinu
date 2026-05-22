@@ -75,16 +75,6 @@ export abstract class DrizzleRepository<
   ): Promise<TPrimaryKey> {
     const row = this._mapToRow(entity)
 
-    const updateSet = Object.fromEntries(
-      Object.entries(row).filter(
-        ([key]) =>
-          !['createdAt', 'updatedAt'].includes(key) &&
-          (Array.isArray(this._primaryKey)
-            ? !this._primaryKey.includes(key as never)
-            : key !== this._primaryKey),
-      ),
-    )
-
     const returningColumns: Record<string, unknown> = {}
     if (Array.isArray(this._primaryKey)) {
       for (const key of this._primaryKey)
@@ -98,7 +88,7 @@ export abstract class DrizzleRepository<
         target: Array.isArray(this._primaryKey)
           ? this._primaryKey.map((key) => this._table[key] as never)
           : (this._table[this._primaryKey] as never),
-        set: updateSet as never,
+        set: this._buildUpsertUpdateSet(row as never),
       })
       .returning(returningColumns as never)
     if (!pkey) throw new Error('Failed to save entity.')
@@ -122,7 +112,7 @@ export abstract class DrizzleRepository<
         target: Array.isArray(this._primaryKey)
           ? this._primaryKey.map((key) => this._table[key] as never)
           : (this._table[this._primaryKey] as never),
-        set: rows[0] as never,
+        set: this._buildUpsertUpdateSet(rows[0] as never),
       })
   }
 
@@ -205,6 +195,20 @@ export abstract class DrizzleRepository<
     )
 
     return conditions.length === 1 ? conditions[0] : and(...conditions)
+  }
+
+  private _buildUpsertUpdateSet(
+    row: DrizzleRepository.ExtractType<TTable>,
+  ): Record<string, unknown> {
+    return Object.fromEntries(
+      Object.entries(row).filter(
+        ([key]) =>
+          !['createdAt', 'updatedAt'].includes(key) &&
+          (Array.isArray(this._primaryKey)
+            ? !this._primaryKey.includes(key as never)
+            : key !== this._primaryKey),
+      ),
+    )
   }
 }
 

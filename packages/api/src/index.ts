@@ -20,7 +20,11 @@ const handler = async (request: Request): Promise<Response> => {
             createTRPCContext({ reqHeaders: request.headers, resHeaders }),
         })
 
-  if (request.method === 'POST' && request.url.endsWith('.hook') && response.ok)
+  if (
+    request.method === 'POST' &&
+    new URL(request.url).pathname.endsWith('.hook') &&
+    response.ok
+  )
     response = Response.json({ success: true })
 
   // Set CORS headers

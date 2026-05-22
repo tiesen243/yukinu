@@ -10,6 +10,8 @@ export default async function AccountOrdersPage({
   searchParams,
 }: PageProps<'/account/orders'>) {
   const { paymentId } = await searchParams
+  const normalizedPaymentId =
+    typeof paymentId === 'string' ? paymentId : undefined
 
   return (
     <>
@@ -22,17 +24,17 @@ export default async function AccountOrdersPage({
         <h2 className='sr-only'>Orders History List section</h2>
 
         <ItemGroup>
-          <OrderHistories
-            paymentId={typeof paymentId === 'string' ? paymentId : undefined}
-          />
+          <OrderHistories paymentId={normalizedPaymentId} />
         </ItemGroup>
       </section>
 
-      {paymentId && (
+      {normalizedPaymentId && (
         <section className='flex justify-end px-4'>
           <Button
             nativeButton={false}
-            render={<Link href={`/account/orders/checkout/${paymentId}`} />}
+            render={
+              <Link href={`/account/orders/checkout/${normalizedPaymentId}`} />
+            }
           >
             Process to Checkout
           </Button>

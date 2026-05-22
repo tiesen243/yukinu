@@ -100,13 +100,16 @@ export const AddToCartButton: React.FC = () => {
         <Button
           variant='outline'
           size='icon'
+          aria-pressed={isWishlisted}
+          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
           onClick={toggleWishlistItem}
           disabled={isTogglingWishlistItem}
         >
           <HeartIcon
-            className={isWishlisted ? 'fill-red-500 stroke-red-500' : ''}
+            className={
+              isWishlisted ? 'fill-destructive stroke-destructive' : ''
+            }
           />
-          <span className='sr-only'>Add to wishlist</span>
         </Button>
       </div>
     </section>

@@ -6,7 +6,7 @@ export namespace PaymentHookDto {
     transactionDate: z.string(),
     accountNumber: z.string(),
     subAccount: z.string().optional(),
-    code: z.string().nullable(),
+    code: z.string(),
     content: z.string(),
     transferType: z.enum(['in', 'out']),
     description: z.string(),

@@ -24,8 +24,13 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
   const { trpc } = useTRPC()
   const { data, status } = useQuery({
     ...trpc.finance.payment.one.queryOptions({ id: paymentId }),
-    refetchInterval: (query) =>
-      query.state.data?.status === 'success' ? false : 5000,
+    refetchInterval: (query) => {
+      const paymentStatus = query.state.data?.status
+      if (paymentStatus === 'success' || paymentStatus === 'failed')
+        return false
+      if (query.state.status === 'error') return false
+      return 5000
+    },
     refetchIntervalInBackground: true,
   })
 

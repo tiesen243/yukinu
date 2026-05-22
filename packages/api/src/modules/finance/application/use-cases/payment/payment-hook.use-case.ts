@@ -21,7 +21,19 @@ export class PaymentHookUseCase extends AbstractUseCase<
   public async execute(
     input: PaymentHookDto.Input,
   ): Promise<PaymentHookDto.Output> {
-    const id = input.code?.replace('PM', '')
+    if (!input.code.startsWith('PM'))
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Invalid payment code format',
+      })
+
+    if (input.transferType !== 'in' || input.transferAmount <= 0)
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Only incoming transfers with positive amounts are accepted',
+      })
+
+    const id = input.code.replace('PM', '')
     const [payment] = await this._paymentRepo.find(
       [{ id, status: 'pending' }],
       {},

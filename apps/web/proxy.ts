@@ -2,15 +2,15 @@ import type { NextRequest, ProxyConfig } from 'next/server'
 
 import { NextResponse } from 'next/server'
 
-const bypassCsrfPaths = [
-  '/api/uploadthing',
-  '/api/trpc/finance.payment.webhook',
+const bypassCsrf = [
+  (pathname: string) => pathname === '/api/uploadthing',
+  (pathname: string) => pathname === '/api/trpc/finance.payment.webhook',
 ]
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (bypassCsrfPaths.some((path) => pathname.startsWith(path)))
+  if (bypassCsrf.some((matches) => matches(pathname)))
     return NextResponse.next()
 
   // CRSF protection: only allow same-origin requests to mutate data

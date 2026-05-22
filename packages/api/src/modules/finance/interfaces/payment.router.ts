@@ -17,9 +17,21 @@ export const paymentRouter = ({ payment }: UseCases) => ({
     .input(PaymentHookDto.input)
     .output(PaymentHookDto.output)
     .mutation(async ({ ctx, input }) => {
-      const apiKey =
-        ctx.reqHeaders.get('authorization')?.replace('Apikey ', '') ?? ''
+      const authorization = ctx.reqHeaders.get('authorization') ?? ''
+      if (!authorization.startsWith('Apikey '))
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Missing or invalid authorization header',
+        })
+
+      const apiKey = authorization.replace('Apikey ', '') ?? ''
+
       const expectedToken = process.env.SEPAY_TOKEN ?? ''
+      if (!expectedToken)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Payment webhook token is not configured',
+        })
 
       if (!(await new Password().verify(expectedToken, apiKey)))
         throw new TRPCError({
