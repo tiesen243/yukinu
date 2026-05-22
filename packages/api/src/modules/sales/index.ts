@@ -71,6 +71,7 @@ export const createSalesModule = (
     repos: {
       cartItemRepo,
       voucherRepo,
+      wishlistItemRepo,
     },
 
     router: {

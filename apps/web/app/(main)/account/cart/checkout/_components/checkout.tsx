@@ -22,7 +22,8 @@ export function Checkout() {
   const router = useRouter()
   const { mutateAsync } = useMutation({
     ...trpc.checkout.order.checkout.mutationOptions(),
-    onSuccess: () => router.push('/account/orders'),
+    onSuccess: ({ paymentId }) =>
+      router.push(`/account/orders?paymentId=${paymentId}`),
     meta: { filter: trpc.sales.cart.get.queryFilter() },
   })
 

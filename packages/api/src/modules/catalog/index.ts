@@ -3,6 +3,7 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import type { UseCases } from '@/modules/catalog/types'
 import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
+import type { WishlistItemRepository } from '@/modules/sales/domain/repositories/wishlist-item.repository'
 
 import { AllCategoriesUseCase } from '@/modules/catalog/application/use-cases/category/all-categories.use-case'
 import { DeleteCategoryUseCase } from '@/modules/catalog/application/use-cases/category/delete-category.use-case'
@@ -31,6 +32,7 @@ import { variantRouter } from '@/modules/catalog/interfaces/variant.router'
 export const createCatalogModule = (
   db: Database,
   deps: {
+    wishlistItemRepo: WishlistItemRepository
     vendorMiddleware: VendorMiddleware
   },
 ) => {
@@ -50,7 +52,7 @@ export const createCatalogModule = (
     },
     product: {
       all: new AllProductsUseCase(db, productRepo),
-      one: new OneProductUseCase(db, productRepo),
+      one: new OneProductUseCase(db, productRepo, deps.wishlistItemRepo),
       create: new CreateProductUseCase(
         db,
         categoryRepo,

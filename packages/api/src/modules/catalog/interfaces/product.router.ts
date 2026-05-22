@@ -34,7 +34,9 @@ export const productRouter = (
     one: publicProcedure
       .input(OneProductDto.input)
       .output(OneProductDto.output)
-      .query(({ input }) => product.one.execute(input)),
+      .query(({ ctx, input }) =>
+        product.one.execute({ ...input, userId: ctx.session?.userId }),
+      ),
 
     create: protectedProcedure
       .use(deps.vendorMiddleware)

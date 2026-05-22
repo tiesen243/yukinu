@@ -9,7 +9,7 @@ import { createCallerFactory, createTRPCContext } from '@/trpc'
 const handler = async (request: Request): Promise<Response> => {
   const appRouter = createApp(db)
 
-  const response =
+  let response =
     request.method === 'OPTIONS'
       ? new Response(null, { status: 204 })
       : await fetchRequestHandler<AppRouter>({
@@ -19,6 +19,13 @@ const handler = async (request: Request): Promise<Response> => {
           createContext: ({ resHeaders }) =>
             createTRPCContext({ reqHeaders: request.headers, resHeaders }),
         })
+
+  if (
+    request.method === 'POST' &&
+    new URL(request.url).pathname.endsWith('.hook') &&
+    response.ok
+  )
+    response = Response.json({ success: true })
 
   // Set CORS headers
   response.headers.set('Access-Control-Allow-Origin', '*')

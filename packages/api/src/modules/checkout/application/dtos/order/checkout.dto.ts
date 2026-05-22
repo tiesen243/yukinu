@@ -13,6 +13,7 @@ export namespace CheckoutDto {
 
   export const output = z.object({
     orderIds: z.array(z.number().int().positive()),
+    paymentId: z.cuid2(),
   })
   export type Output = z.infer<typeof output>
 }

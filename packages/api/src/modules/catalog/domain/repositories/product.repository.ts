@@ -16,5 +16,5 @@ export interface ProductRepository<
   findWithDetails(
     id: ProductEntity['id'],
     tx?: TTransaction,
-  ): Promise<OneProductDto.Output | null>
+  ): Promise<Omit<OneProductDto.Output, 'isWishlisted'> | null>
 }

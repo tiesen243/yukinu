@@ -99,7 +99,7 @@ export class CheckoutUseCase extends AbstractUseCase<
       }
 
       await this._cartItemRepo.delete([{ userId }], tx)
-      return { orderIds }
+      return { orderIds, paymentId: payment.id }
     })
   }
 

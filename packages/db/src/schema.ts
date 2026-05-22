@@ -563,6 +563,7 @@ export const payments = pgTable('payments', (t) => ({
   method: paymentMethodEnum().notNull(),
   methodReference: t.varchar({ length: 255 }),
   amount: t.numeric({ precision: 10, scale: 2 }).notNull(),
+  paidAmount: t.numeric({ precision: 10, scale: 2 }).notNull().default('0.00'),
   voucherId: t
     .varchar({ length: 24 })
     .references(() => vouchers.id, { onDelete: 'set null' }),

@@ -1,5 +1,5 @@
 {
-  "id": "fb3efee0-701f-4198-8e50-2bda92dfce20",
+  "id": "a595f828-a5f7-439e-92a2-3efe7c7d4990",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -759,6 +759,13 @@
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
+        },
+        "paid_amount": {
+          "name": "paid_amount",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0.00'"
         },
         "voucher_id": {
           "name": "voucher_id",

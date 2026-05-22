@@ -79,6 +79,7 @@ CREATE TABLE "payments" (
 	"method" "payment_method" NOT NULL,
 	"method_reference" varchar(255),
 	"amount" numeric(10, 2) NOT NULL,
+	"paid_amount" numeric(10, 2) DEFAULT '0.00' NOT NULL,
 	"voucher_id" varchar(24),
 	"status" "payment_status" DEFAULT 'pending' NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
