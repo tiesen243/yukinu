@@ -1,6 +1,5 @@
 // oxlint-disable no-shadow
 
-import { useQueryClient } from '@tanstack/react-query'
 import { SignInDto } from '@yukinu/api/identity'
 import { Button } from '@yukinu/ui/button'
 import {
@@ -15,10 +14,11 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import { useNavigate } from 'react-router'
 
+import { useTurnstile } from '@/components/turnstile.provider'
 import { env } from '@/lib/env'
 import { createMetadata } from '@/lib/metadata'
 import { useTRPC } from '@/lib/trpc'
-import { verifyTurnstile } from '@/lib/turnstile'
+import { resetTurnstile, verifyTurnstile } from '@/lib/turnstile'
 
 import type { Route } from './+types/login'
 
@@ -44,10 +44,10 @@ export default function LoginPage(_: Route.ComponentProps) {
 }
 
 const LoginForm: React.FC = () => {
+  const turnstileWidgetId = useTurnstile()
+  const { trpcClient, queryClient } = useTRPC()
   const navigate = useNavigate()
-  const queryClient = useQueryClient()
 
-  const { trpcClient } = useTRPC()
   const form = useForm({
     defaultValues: { identifier: '', password: '' },
     schema: SignInDto.input,
@@ -62,7 +62,10 @@ const LoginForm: React.FC = () => {
       toast.success({ message: 'Logged in successfully!' }),
       setTimeout(() => navigate('/'), 200),
     ],
-    onError: (error) => toast.error({ message: error.message }),
+    onError: (error) => {
+      toast.error({ message: error.message })
+      resetTurnstile(turnstileWidgetId)
+    },
   })
 
   return (

@@ -3,8 +3,8 @@ import { Typography } from '@yukinu/ui/typography'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { DeleteStaffButton } from '@/routes/(merchant)/staffs/_components/delete-staff-button'
-import { InviteStaffButton } from '@/routes/(merchant)/staffs/_components/invite-staff-button'
+import { DeleteStaffButton } from '@/routes/merchant/staffs/_components/delete-staff-button'
+import { InviteStaffButton } from '@/routes/merchant/staffs/_components/invite-staff-button'
 
 export default function MerchantStaffsIndexPage() {
   const { trpc } = useTRPC()

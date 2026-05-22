@@ -11,8 +11,8 @@ import {
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { VendorSearchForm } from '@/routes/(management)/vendors/_components/search-form'
-import { UpdateVendorButton } from '@/routes/(management)/vendors/_components/update-vendor-button'
+import { VendorSearchForm } from '@/routes/management/vendors/_components/search-form'
+import { UpdateVendorButton } from '@/routes/management/vendors/_components/update-vendor-button'
 
 const STATUS_VARIANTS = {
   pending: 'info',

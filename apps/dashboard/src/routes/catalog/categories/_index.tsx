@@ -6,8 +6,8 @@ import { Link } from 'react-router'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { DeleteCategoryButton } from '@/routes/(catalog)/categories/_components/delete-category-button'
-import { CategorySearchForm } from '@/routes/(catalog)/categories/_components/search-form'
+import { DeleteCategoryButton } from '@/routes/catalog/categories/_components/delete-category-button'
+import { CategorySearchForm } from '@/routes/catalog/categories/_components/search-form'
 
 export default function CatalogCategoriesIndexPage() {
   const { trpc } = useTRPC()

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Typography } from '@yukinu/ui/typography'
 
 import { useTRPC } from '@/lib/trpc'
-import { UpdateVendorForm } from '@/routes/(merchant)/my-store/_components/update-vendor-form'
+import { UpdateVendorForm } from '@/routes/merchant/my-store/_components/update-vendor-form'
 
 export default function MerchantMyStoreIndexPage() {
   const { trpc } = useTRPC()

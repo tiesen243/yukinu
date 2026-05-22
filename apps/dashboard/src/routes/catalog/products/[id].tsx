@@ -7,9 +7,9 @@ import { Link } from 'react-router'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { DeleteVariantButton } from '@/routes/(catalog)/products/_components/delete-variant-button'
-import { EditVariantButton } from '@/routes/(catalog)/products/_components/edit-variant-button'
-import { SaveProductForm } from '@/routes/(catalog)/products/_components/save-product-form'
+import { DeleteVariantButton } from '@/routes/catalog/products/_components/delete-variant-button'
+import { EditVariantButton } from '@/routes/catalog/products/_components/edit-variant-button'
+import { SaveProductForm } from '@/routes/catalog/products/_components/save-product-form'
 
 import type { Route } from './+types/[id]'
 

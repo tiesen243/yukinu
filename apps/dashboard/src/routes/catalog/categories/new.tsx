@@ -1,6 +1,6 @@
 import { Typography } from '@yukinu/ui/typography'
 
-import { SaveCategoryForm } from '@/routes/(catalog)/categories/_components/save-category-form'
+import { SaveCategoryForm } from '@/routes/catalog/categories/_components/save-category-form'
 
 export default function CatalogCategoriesNewPage() {
   return (

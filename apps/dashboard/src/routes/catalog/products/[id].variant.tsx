@@ -7,7 +7,7 @@ import { Typography } from '@yukinu/ui/typography'
 import { useNavigate } from 'react-router'
 
 import { useTRPC } from '@/lib/trpc'
-import { ProductVariantsFields } from '@/routes/(catalog)/products/_components/save-product-form'
+import { ProductVariantsFields } from '@/routes/catalog/products/_components/save-product-form'
 
 import type { Route } from './+types/[id].variant'
 

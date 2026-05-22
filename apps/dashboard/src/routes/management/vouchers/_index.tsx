@@ -5,8 +5,8 @@ import { Typography } from '@yukinu/ui/typography'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { DeleteVoucher } from '@/routes/(management)/vouchers/_components/delete-voucher'
-import { SaveVoucher } from '@/routes/(management)/vouchers/_components/save-voucher'
+import { DeleteVoucher } from '@/routes/management/vouchers/_components/delete-voucher'
+import { SaveVoucher } from '@/routes/management/vouchers/_components/save-voucher'
 
 export default function ManagementVouchersIndexPage() {
   const { trpc } = useTRPC()
