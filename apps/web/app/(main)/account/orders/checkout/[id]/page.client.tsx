@@ -7,11 +7,13 @@ import { Button } from '@yukinu/ui/button'
 import {
   CheckCircle2Icon,
   ClockIcon,
+  CopyCheckIcon,
   CopyIcon,
   TriangleAlertIcon,
 } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 import Image from 'next/image'
+import { useState } from 'react'
 
 import { env } from '@/lib/env'
 import { useTRPC } from '@/lib/trpc'
@@ -59,7 +61,7 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
 
   return (
     <>
-      <section className='space-y-4 md:col-span-2 md:p-8'>
+      <section className='space-y-4 md:col-span-2'>
         <h2 className='sr-only'>Payment Details section</h2>
         <div className='flex items-center justify-between'>
           <Typography className='font-medium'>Payment Status</Typography>
@@ -72,10 +74,10 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
         <div className='space-y-4'>
           <div>
             <Typography className='text-sm text-muted-foreground'>
-              Payment Method
+              Bank Name
             </Typography>
             <Typography className='text-lg font-semibold'>
-              Bank Transfer ({env.NEXT_PUBLIC_BANK_NAME})
+              {env.NEXT_PUBLIC_BANK_NAME}
             </Typography>
           </div>
 
@@ -83,8 +85,27 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
             <Typography className='text-sm text-muted-foreground'>
               Account Number
             </Typography>
-            <Typography className='text-lg font-semibold'>
+            <Typography className='inline-flex items-center gap-2 text-lg font-semibold'>
               {env.NEXT_PUBLIC_BANK_ACCOUNT}
+
+              <CopyButton
+                title='Copy bank account'
+                content={env.NEXT_PUBLIC_BANK_ACCOUNT}
+              />
+            </Typography>
+          </div>
+
+          <div>
+            <Typography className='text-sm text-muted-foreground'>
+              Content
+            </Typography>
+
+            <Typography className='inline-flex items-center gap-2 text-lg font-semibold'>
+              SEVQR TKPYKN PM{paymentId}
+              <CopyButton
+                title='Copy content'
+                content={`SEVQR TKPYKN PM${paymentId}`}
+              />
             </Typography>
           </div>
         </div>
@@ -103,14 +124,7 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
 
           <div className='mt-2 flex items-center gap-2'>
             <Typography variant='code'>{paymentId}</Typography>
-            <Button
-              variant='outline'
-              size='icon-sm'
-              title='Copy payment ID'
-              onClick={() => navigator.clipboard.writeText(paymentId)}
-            >
-              <CopyIcon className='size-4 text-muted-foreground' />
-            </Button>
+            <CopyButton title='Copy payment ID' content={paymentId} />
           </div>
         </div>
       </section>
@@ -153,5 +167,34 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
         )}
       </section>
     </>
+  )
+}
+
+const CopyButton: React.FC<{ title: string; content: string }> = ({
+  title,
+  content,
+}) => {
+  const [isCopy, setIsCopy] = useState(false)
+
+  const handleClick = () => {
+    setIsCopy(true)
+    navigator.clipboard.writeText(content)
+    setTimeout(() => setIsCopy(false), 2000)
+  }
+
+  return (
+    <Button
+      variant='outline'
+      size='icon-sm'
+      title={title}
+      aria-label={title}
+      onClick={handleClick}
+    >
+      {isCopy ? (
+        <CopyCheckIcon className='text-success' />
+      ) : (
+        <CopyIcon className='text-muted-foreground' />
+      )}
+    </Button>
   )
 }

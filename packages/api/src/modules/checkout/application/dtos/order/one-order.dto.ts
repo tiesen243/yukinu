@@ -16,17 +16,21 @@ export namespace OneOrderDto {
     totalAmount: z.string(),
     createdAt: z.date(),
     updatedAt: z.date(),
-    user: z.object({ id: z.cuid2(), email: z.email(), username: z.string() }),
-    address: z.object({
-      id: z.cuid2(),
-      recipientName: z.string(),
-      phoneNumber: z.string(),
-      street: z.string(),
-      city: z.string(),
-      state: z.string(),
-      postalCode: z.string(),
-      country: z.string(),
-    }),
+    user: z
+      .object({ id: z.cuid2(), email: z.email(), username: z.string() })
+      .nullable(),
+    address: z
+      .object({
+        id: z.cuid2(),
+        recipientName: z.string(),
+        phoneNumber: z.string(),
+        street: z.string(),
+        city: z.string(),
+        state: z.string(),
+        postalCode: z.string(),
+        country: z.string(),
+      })
+      .nullable(),
     items: z.array(
       z.object({
         quantity: z.number().int().positive(),
@@ -36,6 +40,10 @@ export namespace OneOrderDto {
         productImage: z.url().nullable(),
       }),
     ),
+    payment: z.object({
+      id: z.cuid2(),
+      isPaid: z.boolean(),
+    }),
   })
   export type Output = z.infer<typeof output>
 }

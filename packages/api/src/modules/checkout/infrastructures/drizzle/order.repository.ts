@@ -5,6 +5,7 @@ import {
   addresses,
   orderItems,
   orders,
+  payments,
   productImages,
   products,
   users,
@@ -116,14 +117,22 @@ export class DrizzleOrderRepository
               LIMIT 1
             )
           )), '$[0 to 2]')`,
+        payment: {
+          id: payments.id,
+          isPaid:
+            sql<boolean>`CASE WHEN ${payments.status}::text = 'success' THEN true ELSE false END`.as(
+              'is_paid',
+            ),
+        },
       })
       .from(this._table)
-      .innerJoin(users, eq(users.id, this._table.userId))
-      .innerJoin(addresses, eq(addresses.id, this._table.addressId))
+      .innerJoin(payments, eq(payments.id, this._table.paymentId))
+      .leftJoin(users, eq(users.id, this._table.userId))
+      .leftJoin(addresses, eq(addresses.id, this._table.addressId))
       .leftJoin(orderItems, eq(orderItems.orderId, this._table.id))
       .leftJoin(products, eq(products.id, orderItems.productId))
       .where(whereClause)
-      .groupBy(this._table.id, addresses.id, users.id)
+      .groupBy(this._table.id, payments.id, users.id, addresses.id)
       .limit(1)
 
     return order ?? null

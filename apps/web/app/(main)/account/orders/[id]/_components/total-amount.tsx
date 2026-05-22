@@ -2,6 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query'
 import { formatPrice } from '@yukinu/lib/utils'
+import { Button } from '@yukinu/ui/button'
+import Link from 'next/link'
 
 import { useTRPC } from '@/lib/trpc'
 
@@ -18,6 +20,15 @@ export const TotalAmount: React.FC<{ id: number }> = ({ id }) => {
       <span className='text-xl font-bold text-primary'>
         {formatPrice(data.totalAmount)}
       </span>
+
+      {!data.payment.isPaid && (
+        <Button
+          nativeButton={false}
+          render={<Link href={`/account/orders/checkout/${data.payment.id}`} />}
+        >
+          Process to Checkout
+        </Button>
+      )}
     </div>
   )
 }

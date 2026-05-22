@@ -34,7 +34,7 @@ export default async function AccountOrdersPage({
             nativeButton={false}
             render={<Link href={`/account/orders/checkout/${paymentId}`} />}
           >
-            Continue to Checkout
+            Process to Checkout
           </Button>
         </section>
       )}
