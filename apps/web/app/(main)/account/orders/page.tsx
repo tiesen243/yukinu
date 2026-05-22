@@ -1,4 +1,6 @@
+import { Button } from '@yukinu/ui/button'
 import { ItemGroup } from '@yukinu/ui/item'
+import Link from 'next/link'
 
 import { AccountHeader } from '@/app/(main)/account/_components/header'
 import { OrderHistories } from '@/app/(main)/account/orders/page.client'
@@ -16,7 +18,7 @@ export default async function AccountOrdersPage({
         description='Review your past orders, track current shipments, and manage returns or exchanges all in one place.'
       />
 
-      <section className='px-4'>
+      <section className='flex-1 px-4'>
         <h2 className='sr-only'>Orders History List section</h2>
 
         <ItemGroup>
@@ -25,6 +27,17 @@ export default async function AccountOrdersPage({
           />
         </ItemGroup>
       </section>
+
+      {paymentId && (
+        <section className='flex justify-end px-4'>
+          <Button
+            nativeButton={false}
+            render={<Link href={`/account/orders/checkout/${paymentId}`} />}
+          >
+            Continue to Checkout
+          </Button>
+        </section>
+      )}
     </>
   )
 }

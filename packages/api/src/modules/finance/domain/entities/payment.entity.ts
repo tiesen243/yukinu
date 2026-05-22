@@ -4,16 +4,18 @@ export class PaymentEntity extends AbstractEntity<PaymentEntity> {
   declare public method: PaymentEntity.Method
   declare public methodReference: string | null
   declare public amount: string
+  declare public paidAmount: string
   declare public status: PaymentEntity.Status
 
   declare public voucherId: string | null
 
   public constructor(
-    props: AbstractEntity.EntityProps<PaymentEntity, 'status'>,
+    props: AbstractEntity.EntityProps<PaymentEntity, 'paidAmount' | 'status'>,
   ) {
     super({
       methodReference: null,
       voucherId: null,
+      paidAmount: '0.00',
       status: 'pending',
       ...props,
     })

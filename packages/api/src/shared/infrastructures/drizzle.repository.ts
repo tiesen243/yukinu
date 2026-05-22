@@ -76,10 +76,12 @@ export abstract class DrizzleRepository<
     const row = this._mapToRow(entity)
 
     const updateSet = Object.fromEntries(
-      Object.entries(row).filter(([key]) =>
-        Array.isArray(this._primaryKey)
-          ? !this._primaryKey.includes(key as never)
-          : key !== this._primaryKey,
+      Object.entries(row).filter(
+        ([key]) =>
+          !['createdAt', 'updatedAt'].includes(key) &&
+          (Array.isArray(this._primaryKey)
+            ? !this._primaryKey.includes(key as never)
+            : key !== this._primaryKey),
       ),
     )
 

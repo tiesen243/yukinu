@@ -28,11 +28,15 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
 
   // CRSF protection: only allow same-origin requests to mutate data
-  if (
-    !['GET', 'HEAD', 'OPTIONS'].includes(request.method) &&
-    request.headers.get('origin') !== request.nextUrl.origin
-  ) {
-    return new NextResponse('Forbidden', { status: 403 })
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method)) {
+    const authHeader = request.headers.get('authorization') ?? ''
+
+    const isApiKey = authHeader.startsWith('Apikey ')
+    const isSameOrigin =
+      request.headers.get('origin') === request.nextUrl.origin
+
+    if (!isSameOrigin && !isApiKey)
+      return new NextResponse('Forbidden', { status: 403 })
   }
 
   return NextResponse.next()
