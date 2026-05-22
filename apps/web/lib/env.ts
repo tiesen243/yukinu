@@ -34,8 +34,8 @@ export const env = createEnv({
     NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string(),
 
     NEXT_PUBLIC_SEPAY_DEMO: z._default(z.enum(['true', 'false']), 'true'),
-    NEXT_PUBLIC_BANK_NAME: z._default(z.string(), 'VietinBank'),
-    NEXT_PUBLIC_BANK_ACCOUNT: z._default(z.string(), '109876529294'),
+    NEXT_PUBLIC_BANK_NAME: z.string(),
+    NEXT_PUBLIC_BANK_ACCOUNT: z.string(),
   },
 
   runtimeEnv: {
