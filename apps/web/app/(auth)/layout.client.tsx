@@ -43,7 +43,7 @@ export const AuthLayoutClient: React.FC<{ children: React.ReactNode }> = ({
   return <LoadTurnstile>{children}</LoadTurnstile>
 }
 
-const TurnstileContext = React.createContext<{ id: string } | null>(null)
+const TurnstileContext = React.createContext<{ id: string | null } | null>(null)
 
 export const useTurnstile = () => {
   const context = React.use(TurnstileContext)
@@ -77,7 +77,7 @@ const LoadTurnstile: React.FC<{ children: React.ReactNode }> = ({
   }, [pathname])
 
   return (
-    <TurnstileContext value={{ id: widgetId ?? '' }}>
+    <TurnstileContext value={{ id: widgetId }}>
       {children}
 
       <Script

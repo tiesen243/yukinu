@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-const TurnstileContext = React.createContext<{ id: string } | null>(null)
+const TurnstileContext = React.createContext<{ id: string | null } | null>(null)
 
 const useTurnstile = () => {
   const context = React.use(TurnstileContext)
@@ -53,7 +53,7 @@ function TurnstileChallengeScript({
   }, [location])
 
   return (
-    <TurnstileContext value={{ id: widgetId ?? '' }}>
+    <TurnstileContext value={{ id: widgetId }}>
       {children}
 
       <script

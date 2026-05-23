@@ -20,7 +20,12 @@ export const CheckAuthentication: React.FC<{
     )
 
   if (status === 'unauthenticated')
-    return <Navigate href={`/login?redirect_to=${pathname}`} replace />
+    return (
+      <Navigate
+        href={`/login?redirect_to=${encodeURIComponent(pathname)}`}
+        replace
+      />
+    )
 
   return children
 }

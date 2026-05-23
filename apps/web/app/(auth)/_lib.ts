@@ -1,4 +1,4 @@
-export const resetTurnstile = (widgetId: string | null = null) => {
+export const resetTurnstile = (widgetId: string | null) => {
   if (
     typeof window !== 'undefined' &&
     window.turnstile &&
