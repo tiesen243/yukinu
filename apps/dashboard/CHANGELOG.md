@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.12.3
+
+### Patch Changes
+
+- 9558016: fix turnstile challenge
+
 ## 0.12.2
 
 ### Patch Changes
