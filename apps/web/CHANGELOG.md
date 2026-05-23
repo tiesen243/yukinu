@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.12.6
+
+### Patch Changes
+
+- 9558016: fix turnstile challenge
+
 ## 0.12.5
 
 ### Patch Changes
