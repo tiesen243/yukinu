@@ -57,7 +57,7 @@ export const SaveCategoryForm: React.FC<{
         message: `Category ${category?.id ? 'updated' : 'created'} successfully`,
       }),
     ],
-    onError: toast.error,
+    onError: ({ message }) => toast.error({ message }),
   })
 
   const form = useForm({

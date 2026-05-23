@@ -1,6 +1,6 @@
 import { Typography } from '@yukinu/ui/typography'
 
-import { SaveProductForm } from '@/routes/(catalog)/products/_components/save-product-form'
+import { SaveProductForm } from '@/routes/catalog/products/_components/save-product-form'
 
 export default function CatalogProductsNewPage() {
   return (

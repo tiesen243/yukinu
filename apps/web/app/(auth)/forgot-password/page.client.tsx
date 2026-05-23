@@ -13,11 +13,14 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import Link from 'next/link'
 
+import { resetTurnstile } from '@/app/(auth)/_lib'
+import { useTurnstile } from '@/app/(auth)/layout.client'
 import { env } from '@/lib/env'
 import { useTRPC } from '@/lib/trpc'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 export const ForgotPasswordForm: React.FC = () => {
+  const turnstileWidgetId = useTurnstile()
   const { trpcClient } = useTRPC()
 
   const form = useForm({
@@ -28,7 +31,10 @@ export const ForgotPasswordForm: React.FC = () => {
       return trpcClient.identity.auth.forgotPassword.mutate(data)
     },
     onSuccess: () => toast.success({ message: 'Password reset email sent!' }),
-    onError: ({ message }) => toast.error({ message }),
+    onError: ({ message }) => {
+      resetTurnstile(turnstileWidgetId)
+      toast.error({ message })
+    },
   })
 
   return (

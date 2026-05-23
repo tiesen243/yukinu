@@ -3,8 +3,8 @@ import { Typography } from '@yukinu/ui/typography'
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { AddNewBanner } from '@/routes/(management)/banners/_components/add-new-banner'
-import { DeleteBanner } from '@/routes/(management)/banners/_components/delete-banner'
+import { AddNewBanner } from '@/routes/management/banners/_components/add-new-banner'
+import { DeleteBanner } from '@/routes/management/banners/_components/delete-banner'
 
 export default function ManagementBannersIndexPage() {
   const { trpc } = useTRPC()

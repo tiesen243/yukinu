@@ -13,9 +13,9 @@ import {
 
 import { DataTable } from '@/components/data-table'
 import { useTRPC } from '@/lib/trpc'
-import { UserSearchForm } from '@/routes/(management)/users/components/search-form'
-import { UpdateUserButton } from '@/routes/(management)/users/components/update-user-button'
-import { UserButton } from '@/routes/(management)/users/components/user-button'
+import { UserSearchForm } from '@/routes/management/users/components/search-form'
+import { UpdateUserButton } from '@/routes/management/users/components/update-user-button'
+import { UserButton } from '@/routes/management/users/components/user-button'
 
 const STATUS_VARIANTS = {
   active: 'success',

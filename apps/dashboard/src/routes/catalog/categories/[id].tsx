@@ -3,7 +3,7 @@ import { Loader2Icon, TriangleAlertIcon } from '@yukinu/ui/icons'
 import { Typography } from '@yukinu/ui/typography'
 
 import { useTRPC } from '@/lib/trpc'
-import { SaveCategoryForm } from '@/routes/(catalog)/categories/_components/save-category-form'
+import { SaveCategoryForm } from '@/routes/catalog/categories/_components/save-category-form'
 
 import type { Route } from './+types/[id]'
 

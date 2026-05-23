@@ -14,12 +14,15 @@ import { toast } from '@yukinu/ui/toast'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
+import { resetTurnstile } from '@/app/(auth)/_lib'
+import { useTurnstile } from '@/app/(auth)/layout.client'
 import { env } from '@/lib/env'
 import { useTRPC } from '@/lib/trpc'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
   const { trpcClient, queryClient } = useTRPC()
+  const turnstileWidgetId = useTurnstile()
   const router = useRouter()
 
   const form = useForm({
@@ -37,7 +40,10 @@ export const LoginForm: React.FC<{ redirectTo: string }> = ({ redirectTo }) => {
       toast.success({ message: 'Logged in successfully! Redirecting...' })
       router.push(redirectTo as never)
     },
-    onError: ({ message }) => toast.error({ message }),
+    onError: ({ message }) => {
+      resetTurnstile(turnstileWidgetId)
+      toast.error({ message })
+    },
   })
 
   return (

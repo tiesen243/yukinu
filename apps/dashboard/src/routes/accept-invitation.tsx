@@ -9,10 +9,11 @@ import {
 import { toast } from '@yukinu/ui/toast'
 import { useNavigate, useSearchParams } from 'react-router'
 
+import { useTurnstile } from '@/components/turnstile.provider'
 import { env } from '@/lib/env'
 import { createMetadata } from '@/lib/metadata'
 import { useTRPC } from '@/lib/trpc'
-import { verifyTurnstile } from '@/lib/turnstile'
+import { resetTurnstile, verifyTurnstile } from '@/lib/turnstile'
 
 import type { Route } from './+types/accept-invitation'
 
@@ -24,17 +25,21 @@ export const meta: Route.MetaFunction = () =>
   })
 
 export default function AcceptInvitationPage(_: Route.ComponentProps) {
+  const turnstileWidgetId = useTurnstile()
   const [searchParams] = useSearchParams()
+  const { trpc } = useTRPC()
   const navigate = useNavigate()
 
-  const { trpc } = useTRPC()
   const accept = useMutation({
     ...trpc.merchant.staff.acceptInvitation.mutationOptions(),
     onSuccess: () => [
       toast.success({ message: 'Invitation accepted successfully!' }),
       navigate('/login'),
     ],
-    onError: toast.error,
+    onError: ({ message }) => {
+      resetTurnstile(turnstileWidgetId)
+      toast.error({ message })
+    },
   })
 
   const token = searchParams.get('token')

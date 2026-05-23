@@ -12,6 +12,7 @@ type SessionContextValue = (
 ) & {
   signIn: (credentials: LoginInput) => Promise<LoginOutput>
   signOut: () => Promise<void>
+  refresh: () => Promise<void>
   refreshToken: () => Promise<void>
 }
 
@@ -84,13 +85,25 @@ function SessionProvider(props: Readonly<SessionProviderProps>) {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   })
 
+  const refresh = React.useCallback(
+    () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+    [queryClient],
+  )
+
   const value = React.useMemo(() => {
     let status = 'unauthenticated'
     if (isLoading) status = 'loading'
     else if (data) status = 'authenticated'
 
-    return { status, user: data, signIn, signOut, refreshToken }
-  }, [data, isLoading, signIn, signOut, refreshToken]) as SessionContextValue
+    return { status, user: data, signIn, signOut, refresh, refreshToken }
+  }, [
+    data,
+    isLoading,
+    signIn,
+    signOut,
+    refresh,
+    refreshToken,
+  ]) as SessionContextValue
 
   return <SessionContext value={value}>{children}</SessionContext>
 }

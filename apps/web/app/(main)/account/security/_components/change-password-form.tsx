@@ -1,6 +1,7 @@
 'use client'
 
 import { ChangePasswordDto } from '@yukinu/api/identity'
+import { useSession } from '@yukinu/auth/react'
 import { Button } from '@yukinu/ui/button'
 import { Checkbox } from '@yukinu/ui/checkbox'
 import {
@@ -15,13 +16,12 @@ import {
 import { useForm } from '@yukinu/ui/hooks/use-form'
 import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
-import { useRouter } from 'next/navigation'
 
 import { useTRPC } from '@/lib/trpc'
 
 export const ChangePasswordForm: React.FC = () => {
   const { trpcClient } = useTRPC()
-  const router = useRouter()
+  const { signOut } = useSession()
 
   const form = useForm({
     defaultValues: {
@@ -35,7 +35,7 @@ export const ChangePasswordForm: React.FC = () => {
     onSubmit: trpcClient.identity.security.changePassword.mutate,
     onSuccess: () => {
       toast.success({ message: 'Password changed successfully' })
-      if (form.state.values.isLogout) router.push('/login')
+      if (form.state.values.isLogout) void signOut()
     },
     onError: ({ message }) => toast.error({ message }),
   })

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from '@yukinu/auth/react'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import { Typography } from '@yukinu/ui/typography'
@@ -11,21 +12,24 @@ import {
 import { Link } from 'react-router'
 
 import { DataTable } from '@/components/data-table'
-import { userContext } from '@/lib/context'
 import { useTRPC } from '@/lib/trpc'
-import { ProductButton } from '@/routes/(catalog)/products/_components/product-button'
-import { ProductSearchForm } from '@/routes/(catalog)/products/_components/search-form'
+import { ProductButton } from '@/routes/catalog/products/_components/product-button'
+import { ProductSearchForm } from '@/routes/catalog/products/_components/search-form'
 
-import type { Route } from './+types/_index'
+export default function CatalogProductsIndexPage() {
+  const { status, user } = useSession()
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const user = context.get(userContext)
-  return { isAdmin: ['admin', 'moderator'].includes(user?.role ?? '') }
+  if (status !== 'authenticated') return null
+  return (
+    <CatalogProductsIndexPageContent
+      isAdmin={['admin', 'moderator'].includes(user.role)}
+    />
+  )
 }
 
-export default function CatalogProductsIndexPage({
-  loaderData,
-}: Route.ComponentProps) {
+const CatalogProductsIndexPageContent: React.FC<{ isAdmin: boolean }> = ({
+  isAdmin,
+}) => {
   const { trpc } = useTRPC()
   const [query, setQuery] = useQueryStates({
     search: parseAsString.withDefault(''),
@@ -36,7 +40,7 @@ export default function CatalogProductsIndexPage({
 
   const queryParams = { ...query, categoryId: null, vendorId: null }
   const { data, isLoading } = useQuery(
-    loaderData.isAdmin
+    isAdmin
       ? trpc.catalog.product.all.queryOptions(queryParams)
       : trpc.catalog.product.allByVendor.queryOptions(queryParams),
   )
@@ -56,12 +60,15 @@ export default function CatalogProductsIndexPage({
               onSearch={({ search }) => setQuery({ search, page: 1 })}
             />
 
-            <Button
-              nativeButton={false}
-              render={<Link to='/catalog/products/new' />}
-            >
-              Create Product
-            </Button>
+            {!isAdmin && (
+              <Button
+                nativeButton={false}
+                render={<Link to='/catalog/products/new' />}
+              >
+                Create Product
+              </Button>
+            )}
+
             <Button
               variant='outline'
               onClick={() => setQuery({ isDeleted: !query.isDeleted, page: 1 })}
@@ -95,7 +102,7 @@ export default function CatalogProductsIndexPage({
                 productName={item.name}
                 type='restore'
                 variant='default'
-                isAdmin={loaderData.isAdmin}
+                isAdmin={isAdmin}
               />
             ) : (
               <Button
@@ -112,7 +119,7 @@ export default function CatalogProductsIndexPage({
                 productName={item.name}
                 type='permanentDelete'
                 variant='destructive'
-                isAdmin={loaderData.isAdmin}
+                isAdmin={isAdmin}
               />
             ) : (
               <ProductButton
@@ -120,7 +127,7 @@ export default function CatalogProductsIndexPage({
                 productName={item.name}
                 type='delete'
                 variant='destructive'
-                isAdmin={loaderData.isAdmin}
+                isAdmin={isAdmin}
               />
             )}
           </div>

@@ -8,11 +8,14 @@ import { Input } from '@yukinu/ui/input'
 import { toast } from '@yukinu/ui/toast'
 import { useRouter } from 'next/navigation'
 
+import { resetTurnstile } from '@/app/(auth)/_lib'
+import { useTurnstile } from '@/app/(auth)/layout.client'
 import { env } from '@/lib/env'
 import { useTRPC } from '@/lib/trpc'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
+  const turnstileWidgetId = useTurnstile()
   const { trpcClient } = useTRPC()
   const router = useRouter()
 
@@ -30,7 +33,10 @@ export const ResetPasswordForm: React.FC<{ token: string }> = ({ token }) => {
       }),
       router.push('/login'),
     ],
-    onError: ({ message }) => toast.error({ message }),
+    onError: ({ message }) => {
+      resetTurnstile(turnstileWidgetId)
+      toast.error({ message })
+    },
   })
 
   return (

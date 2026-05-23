@@ -14,11 +14,12 @@ import { Textarea } from '@yukinu/ui/textarea'
 import { toast } from '@yukinu/ui/toast'
 import { Navigate } from 'react-router'
 
+import { useTurnstile } from '@/components/turnstile.provider'
 import { UploadInput } from '@/components/upload-input'
 import { env } from '@/lib/env'
 import { createMetadata } from '@/lib/metadata'
 import { useTRPC } from '@/lib/trpc'
-import { verifyTurnstile } from '@/lib/turnstile'
+import { resetTurnstile, verifyTurnstile } from '@/lib/turnstile'
 
 import type { Route } from './+types/register-vendor'
 
@@ -47,8 +48,10 @@ export default function RegisterVendorPage(_: Route.ComponentProps) {
 }
 
 const RegisterVendorForm: React.FC = () => {
+  const turnstileWidgetId = useTurnstile()
   const { status, signOut } = useSession()
   const { trpcClient } = useTRPC()
+
   const form = useForm({
     defaultValues: {
       name: '',
@@ -68,7 +71,10 @@ const RegisterVendorForm: React.FC = () => {
         description:
           'Your vendor registration has been submitted and is pending approval.',
       }),
-    onError: (error) => toast.error({ message: error.message }),
+    onError: ({ message }) => {
+      resetTurnstile(turnstileWidgetId)
+      toast.error({ message })
+    },
   })
 
   if (status === 'unauthenticated') return <Navigate to='/login' replace />
