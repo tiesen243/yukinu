@@ -1,5 +1,6 @@
 import { Card } from '@yukinu/ui/card'
 import {
+  ArrowLeftRightIcon,
   HeartIcon,
   MapPinIcon,
   ReceiptIcon,
@@ -71,6 +72,11 @@ const sidebarLinks = [
     href: '/account/orders',
     icon: ReceiptIcon,
     label: 'Orders History',
+  },
+  {
+    href: '/account/transactions',
+    icon: ArrowLeftRightIcon,
+    label: 'Transactions',
   },
   {
     href: '/account/security',

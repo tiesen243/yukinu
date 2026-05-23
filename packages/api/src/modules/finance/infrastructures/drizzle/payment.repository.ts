@@ -1,6 +1,6 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import { eq, sql } from '@yukinu/db/drizzle'
+import { and, eq, ne, sql } from '@yukinu/db/drizzle'
 import { orders, payments, vouchers } from '@yukinu/db/schema'
 
 import type { PaymentRepository } from '@/modules/finance/domain/repositories/payment.repository'
@@ -16,11 +16,9 @@ export class DrizzlePaymentRepository
     super(db, payments, 'id')
   }
 
-  async deductCancelledOrderAmount(
+  public async deductCancelledOrderAmount(
     params: {
       paymentId: string
-      cancelledOrderId: number
-      orderSubtotal: number
       taxRate: number
       shippingCost: number
     },
@@ -28,33 +26,53 @@ export class DrizzlePaymentRepository
   ): Promise<void> {
     const { paymentId, taxRate, shippingCost } = params
 
+    const [subtotalResult] = await tx
+      .select({
+        activeSubtotal: sql<string>`sum(${orders.totalAmount})`,
+      })
+      .from(orders)
+      .where(
+        and(eq(orders.paymentId, paymentId), ne(orders.status, 'cancelled')),
+      )
+
+    const activeSubtotal = Number(subtotalResult?.activeSubtotal || 0)
+
+    if (activeSubtotal === 0) {
+      await tx
+        .update(payments)
+        .set({ amount: '0.00' })
+        .where(eq(payments.id, paymentId))
+      return
+    }
+
+    const [paymentWithVoucher] = await tx
+      .select({
+        paymentId: payments.id,
+        discountAmount: vouchers.discountAmount,
+        discountPercentage: vouchers.discountPercentage,
+      })
+      .from(payments)
+      .leftJoin(vouchers, eq(vouchers.id, payments.voucherId))
+      .where(eq(payments.id, paymentId))
+      .limit(1)
+
+    const baseAmountWithTaxAndShipping =
+      activeSubtotal * (1 + taxRate) + shippingCost
+    let discount = 0
+
+    if (paymentWithVoucher) {
+      if (paymentWithVoucher.discountAmount !== null)
+        discount = Number(paymentWithVoucher.discountAmount)
+      else if (paymentWithVoucher.discountPercentage !== null)
+        discount =
+          (activeSubtotal * Number(paymentWithVoucher.discountPercentage)) / 100
+    }
+
+    const finalAmount = Math.max(0, baseAmountWithTaxAndShipping - discount)
+
     await tx
       .update(payments)
-      .set({
-        amount: sql`
-          COALESCE(
-            (
-              SELECT 
-                GREATEST(0, 
-                  (SUM(o.total_amount) * (1 + ${taxRate}) + ${shippingCost}) 
-                  - 
-                  COALESCE(
-                    CASE 
-                      WHEN v.discount_amount IS NOT NULL THEN v.discount_amount
-                      WHEN v.discount_percentage IS NOT NULL THEN (SUM(o.total_amount) * v.discount_percentage / 100)
-                      ELSE 0
-                    END, 
-                    0
-                  )
-                )
-              FROM ${orders} o
-              LEFT JOIN ${vouchers} v ON v.id = ${payments.voucherId}
-              WHERE o.payment_id = ${paymentId} 
-                AND o.status <> 'cancelled'
-            ),
-            0
-          )::numeric(10,2)`,
-      })
+      .set({ amount: finalAmount.toFixed(2) })
       .where(eq(payments.id, paymentId))
   }
 

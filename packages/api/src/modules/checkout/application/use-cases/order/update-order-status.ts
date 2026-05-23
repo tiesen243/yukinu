@@ -59,7 +59,7 @@ export class UpdateOrderStatusUseCase extends AbstractUseCase<
     > = {
       pending: ['confirmed', 'cancelled'],
       confirmed: ['shipped', 'cancelled'],
-      shipped: ['completed', 'cancelled'],
+      shipped: ['completed'],
       completed: [],
       cancelled: [],
     }
