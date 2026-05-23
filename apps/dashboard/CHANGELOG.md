@@ -1,5 +1,11 @@
 # @yukinu/dashboard
 
+## 0.12.4
+
+### Patch Changes
+
+- 79f806f: completed order, payment and transaction management
+
 ## 0.12.3
 
 ### Patch Changes
