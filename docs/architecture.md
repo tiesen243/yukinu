@@ -1,47 +1,40 @@
 ---
-title: 1.2. System Architecture
-description: A high-level overview of the system's design, components, and the relationships between them.
-parent: 1. Overview
+title: 2. Architecture
+description: An in-depth overview of the technical architecture, directory structure, and database design of the Yukinu Multi-Vendor E-commerce platform.
 ---
 
-## 1. Introduction
+# Monorepo Architecture
 
-Yukinu is a multi-vendor e-commerce platform built on a modern, scalable, and maintainable technology stack. The architecture is designed as a **monorepo** managed by **Turborepo**, which allows for efficient code sharing, streamlined dependency management, and unified development workflows across multiple applications and packages.
+This document provides a deep dive into the technical design, directory structure, and database relational models of the Yukinu Multi-Vendor platform.
 
-The system is composed of several loosely-coupled services and applications that communicate via a well-defined API, ensuring a clean separation of concerns and enabling independent development and deployment.
+The project is structured as a Monorepo managed by Turborepo and powered by Bun. Code splitting is organized into public-facing applications and internal domain-driven packages.
 
-## 2. Core Components
+## Architectural Blueprint
 
-The architecture consists of three primary layers:
-
-1.  **Frontend Applications**: User-facing applications for customers and vendors.
-2.  **Backend Services**: The core business logic, API, and data processing layer.
-3.  **Shared Packages**: Reusable modules and libraries consumed by other parts of the system.
+The architecture isolates the client applications from raw infrastructure mutations. Apps handle routing and user interactions, while internal packages govern core business logic, type definitions, and database queries.
 
 ```mermaid
 graph TD
     subgraph Frontend Applications
-        A1[Web App / Marketplace]
-        A2[Vendor Dashboard]
-        A3[Mobile App]
+        A1[Web App (Next.js 16)]
+        A2[Vendor Dashboard (React Router v7)]
     end
 
     subgraph Backend Services
         B1[tRPC API]
         B2[Authentication Service]
-        B3[Database Service]
+        B3[Database Service (Drizzle ORM)]
     end
 
     subgraph Shared Packages
-        C1[UI Library]
-        C2[Validators]
-        C3[Email Service]
-        C4[File Storage]
+        C1[UI Library (Shadcn UI)]
+        C2[Libraries & Utilities]
+        C3[Email Service (Resend)]
+        C4[File Storage (Uploadthing)]
     end
 
     A1 --> B1
     A2 --> B1
-    A3 --> B1
 
     B1 --> B2
     B1 --> B3
@@ -54,49 +47,96 @@ graph TD
     B1 --> C4
 ```
 
-### Frontend Applications
+### Technology Stack
 
-- **Web App (Marketplace)**: The primary customer-facing storefront built with **Next.js**. It allows users to browse products, manage their accounts, and complete purchases.
-- **Vendor Dashboard**: A dedicated interface built with **React** and **React Router** for vendors to manage their products, orders, and store settings.
-- **Mobile App**: A cross-platform application for customers, developed with **React Native** and **Expo**.
+| Layer                 | Technology Choices            |
+| --------------------- | ----------------------------- |
+| Web Application       | Next.js 16, Tailwind CSS      |
+| Dashboard Application | React Router v7, Tailwind CSS |
+| API Layer             | tRPC, Zod                     |
+| Database              | PostgreSQL, Drizzle ORM       |
+| Authentication        | From scratch                  |
+| Payment Processing    | Sepay (Bank Transfer)         |
+| Email Service         | Resend                        |
+| File Storage          | UploadThing                   |
+| UI Library            | Shadcn UI                     |
+| Containerization      | Docker, Docker Compose        |
 
-### Backend Services
+## Core Workspace Packages
 
-- **tRPC API**: A typesafe API layer that connects the frontend applications to the backend logic. Using tRPC ensures end-to-end type safety, reducing runtime errors and improving developer experience.
-- **Authentication Service**: A custom-built service for managing user accounts, sessions, roles, and permissions.
-- **Database Service**: Powered by **PostgreSQL** and **Drizzle ORM**, this service handles all data persistence and retrieval operations.
+### 1. `@yukinu/db` (Data Layer Schema)
 
-### Shared Packages
+The database layer uses **Drizzle ORM** communicating with a PostgreSQL instance. It is designed around relational integrity with explicit conditional indexing.
 
-- **UI Library**: A collection of reusable React components based on **shadcn/ui** and **Base UI** to ensure a consistent look and feel across all web applications.
-- **Validators**: A centralized package using **Zod** for data validation, ensuring that all data flowing into and out of the API is well-formed and type-correct.
-- **Email Service**: An abstraction layer for sending transactional emails (e.g., welcome emails, password resets) via **Resend**.
-- **File Storage**: A service for managing file uploads, such as product images and user avatars, using **Uploadthing**.
+#### Global Infrastructure Columns
 
-## 3. Technology Stack
+To enforce consistency across the ecosystem, tables share lifecycle tracking variables:
 
-| Layer          | Technology                                            |
-| -------------- | ----------------------------------------------------- |
-| Web App        | Next.js, React, TailwindCSS                           |
-| Dashboard      | React, React Router, TailwindCSS                      |
-| Mobile App     | React Native, Expo, Uniwind                           |
-| Backend API    | tRPC, TypeScript                                      |
-| Database & ORM | PostgreSQL + Drizzle ORM                              |
-| Authentication | Custom auth + Accounts & Sessions system              |
-| Validation     | Zod                                                   |
-| Email Services | Resend                                                |
-| File Storage   | Uploadthing                                           |
-| UI Library     | Base UI, shadcn/ui                                    |
-| Deployment     | Vercel or Docker, docker-compose, NGINX Reverse Proxy |
+- `createdAt`: Automatically initialized via `.defaultNow()`.
+- `updatedAt`: Programmatically updated on item changes using the custom `.$onUpdate(() => new Date())` execution hook.
+- `deletedAt`: Supports application-level soft-deletes.
 
-## 4. Data Flow
+#### Identity & Access Control
 
-1.  A **User** interacts with one of the **Frontend Applications**.
-2.  The frontend application sends a request to the **tRPC API**.
-3.  The API uses the **Validators** package to sanitize and validate the incoming data.
-4.  The request is routed to the appropriate service logic, which may involve the **Authentication Service**, **Database Service**, or other utilities like the **Email Service**.
-5.  The service processes the request and interacts with the **PostgreSQL** database via the **Drizzle ORM**.
-6.  The API returns a typed response to the frontend application.
-7.  The frontend updates the UI to reflect the new state.
+- **`users` & `profiles**`: Built using standard 24-character IDs (`varchar(24)`) linked together via cascading foreign keys (`onDelete: 'cascade'`).
+- **`user_role` Enum**: Governs platform permissions across 5 rigid tiers: `user`, `admin`, `moderator`, `vendor_owner`, and `vendor_staff`.
+- **`vendor_staffs`**: A junction table map implementing a composite primary key over `[vendorId, userId]` to handle multi-employee store management scenarios.
 
-This architecture ensures a robust, scalable, and developer-friendly platform that can be easily extended with new features.
+## E-Commerce & Transaction Architecture
+
+Your real-world schema features highly advanced constraints engineered to prevent typical transactional edge-cases.
+
+### A. Integrity In The Shopping Cart
+
+The `cart_items` architecture uses a smart conditional unique index workflow via a custom SQL check. This prevents a user from accidentally creating redundant rows for identical items:
+
+- **Standard Items:** A unique constraint is checked on `[userId, productId]` _only_ when a variation is omitted (`where(isNull(t.productVariantId))`).
+- **Variant Configurations:** An independent constraint checks `[userId, productVariantId]` when variations exist (`where(isNotNull(t.productVariantId))`).
+- **Quantity Safety:** A hard table check constraint (`cart_items_quantity_check`) guarantees quantities remain greater than zero (`quantity > 0`).
+
+### B. Single-Payment Multi-Vendor Orders
+
+Rather than relying on complex parent-to-child order tables, Yukinu maps multi-vendor groupings directly through its relationship with payment tokens.
+
+```text
+               ┌─── [ Order 1001 ] ──> (Vendor A) ──> Total Amount
+               │
+[ Payments ] ──┼─── [ Order 1002 ] ──> (Vendor B) ──> Total Amount
+               │
+               └─── [ Order 1003 ] ──> (Vendor C) ──> Total Amount
+
+```
+
+1. When checking out a multi-vendor cart, a single global `payments` record is logged specifying the chosen `payment_method` (e.g., `bank_transfer`, `cash_on_delivery`).
+2. The engine splits the transaction into distinct rows inside the `orders` table. **Every order row is strictly bound to exactly one vendor (`vendorId`) and one payment (`paymentId`)**.
+3. Financial ledgers are kept clear because `unitPrice` and `quantity` are duplicated directly into immutable snapshots within `order_items` at the moment of checkout, shielding historical transaction receipts from future product modifications.
+
+## Ledger Control & Financial Tracking
+
+Yukinu implements two core modules inside `@yukinu/db` to maintain balance sheets for independent vendors safely.
+
+### Vendor Balances
+
+The `vendor_balances` table serves as a single source of truth for an operating storefront's outstanding funds. It uses high-precision types (`numeric({ precision: 10, scale: 2 })`) and maps changes using a restrictive foreign key constraint (`onDelete: 'restrict'`). This layout prevents deletion of a vendor profile if it contains active balances.
+
+### Transaction Auditing
+
+Every raw banking webhook event (such as inbound SePay callbacks) records an immutable log inside the `transactions` table.
+
+- To prevent duplicate ledger deposits, the system enforces a strict **`uniqueIndex`** over the bank's processing ID field (`referenceNumber`).
+- Once verified, adjustments are pushed out via `vendor_transfers` using `amountIn` or `amountOut` metrics to correctly audit the vendor balance updates.
+
+## Request Pipeline & Security Middlewares
+
+To protect sensitive administration vectors in a multi-vendor setup, the tRPC router implements progressive validation filters based directly on your database enums.
+
+```text
+[ Incoming Request ] ──> [ Public Procedure ]
+                               │
+                               ▼ (Validates Session & userStatusEnum == 'active')
+                         [ Protected Procedure ]
+                               │
+                               ▼ (Validates userRoleEnum matches Vendor / Owner)
+                         [ Vendor Staff Procedure ]
+
+```

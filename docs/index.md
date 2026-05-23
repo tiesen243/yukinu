@@ -1,124 +1,34 @@
----
-title: 1. Overview
-description: Introduction to the Yukinu multi-vendor e-commerce platform, its features, and project roadmap.
-has_children: true
----
+# Yukinu Documentation
 
-Welcome to the official documentation for **Yukinu**—a modern **multi-vendor e-commerce platform** that enables buyers to shop from multiple sellers in a unified marketplace experience.
+Welcome to the official documentation for Yukinu, a multi-vendor e-commerce platform built with modern web technologies. This documentation is designed to guide developers, contributors, and users through the architecture, setup, and usage of the Yukinu project.
 
-This documentation provides complete technical and product information for the Yukinu ecosystem. Whether you are a developer, a system administrator, or a product manager, these documents offer a comprehensive guide to understanding, operating, and extending the platform.
+## Live Demo
 
-## Live Previews
+You can explore a live demonstration of the Yukinu platform at the following URL:
 
-- **Web App**: [https://yukinu.vercel.app](https://yukinu.vercel.app)
-- **Dashboard**: [https://yukinu-dashboard.vercel.app](https://yukinu-dashboard.vercel.app)
-- **Mobile App**: [Download APK from GitHub Releases](https://github.com/tiesen243/yukinu/releases?q=mobile)
-- **This Documentation**: [https://tiesen243.github.io/yukinu](https://tiesen243.github.io/yukinu)
+- [Web Application](https://yukinu.vercel.app)
+- [Dashboard Application](https://yukinu-dashboard.vercel.app)
 
-## Core Documentation Sections
+## Table of Contents
 
-- **[1. Overview](./index.md)**: Introduction to the Yukinu project, its purpose, and key features.
-- **[1.1. Development Setup](./development-setup.md)**: A step-by-step guide for setting up the project for local development.
-- **[1.2. System Architecture](./architecture.md)**: A high-level overview of the system's design, components, and the relationships between them.
-- **[2. User Guide](./guide/index.md)**: A practical, role-based guide to using the platform's features.
-- **[3. Legal](./legal/index.md)**: Terms of Service, Privacy Policy, and other legal documentation.
-- **[4. Use Cases](./usecases/index.md)**: A functional breakdown of all services, detailing the preconditions, post-conditions, actors, and flows for every feature.
-- **[5. Sequence Diagrams](./sequences/index.md)**: Visual representations of the interaction flows for each use case, illustrating how actors and the system communicate to achieve specific goals.
-- **[6. Database](./database/index.md)**: An overview of the database schema, tables, and relationships.
+1. [Getting Started](getting-started.md) - A step-by-step guide to setting up your local development environment for the Yukinu Multi-Vendor E-commerce platform.
+2. [Architecture](architecture.md) - An in-depth overview of the technical architecture, directory structure, and database design of the Yukinu Multi-Vendor E-commerce platform.
+3. [Legal](legal/index.md) - Comprehensive legal documentation including the Terms of Service, Privacy Policy, and Cookie Policy for Yukinu.
 
-## Key Features
+## Features
 
-The Yukinu platform is designed with a rich set of features to support a complete multi-vendor marketplace experience.
-
-### For Customers
-
-- **Unified Shopping Cart**: Purchase items from multiple vendors in a single checkout transaction.
-- **Advanced Search & Filtering**: Easily find products with powerful search and attribute-based filtering.
-- **Wishlist**: Save products for later and track desired items.
-- **Order Management**: View order history, track shipping status, and manage returns.
-- **Account Management**: Update profiles, manage shipping addresses, and view personal data.
-- **Vendor Discovery**: Browse products by specific vendors and explore different storefronts.
-
-### For Vendors
-
-- **Vendor Dashboard**: A dedicated interface for managing products, orders, and staff.
-- **Product Management**: Full CRUD (Create, Read, Update, Delete) for products, including variants like size and color.
-- **Order Processing**: View and update the status of orders from processing to shipped.
-- **Staff Management**: Invite and manage team members with access to the vendor dashboard.
-- **Storefront Profile**: Manage public-facing store information and branding.
-
-### For Administrators
-
-- **Centralized Admin Dashboard**: A powerful interface to oversee the entire marketplace.
-- **User & Vendor Management**: Approve, suspend, or manage users and vendors.
-- **Content Moderation**: Moderate products and other content across the platform.
-- **Category Management**: Define and organize the product categories available in the marketplace.
-- **System-wide Analytics**: (Planned) Access to key metrics and dashboards for monitoring platform health and growth.
-
-## Project To-Do List
-
-This section tracks the implementation progress of features across different user roles and system components.
-
-### Guest (7/7 completed ✅)
-
-- [x] Register an account
-- [x] Login
-- [x] Browse product list
-- [x] View product details
-- [x] Search and filter products
-- [x] View products by vendor
-- [x] Reset password (forgot password)
-
-### User (Customer) (7/11 completed 🚧)
-
-- [x] Update personal profile
-- [x] Manage shipping addresses (CRUD)
-- [x] Add product to wishlist
-- [x] Remove product from wishlist
-- [x] Add product to cart
-- [x] Place an order (checkout)
-- [ ] Make payment
-- [ ] Track order status
-- [ ] Cancel order (if not processed yet)
-- [ ] Review products
-- [x] View order history
-
-### Vendor Owner / Manager (6/8 completed 🚧)
-
-- [x] Apply to become a vendor
-- [x] Manage store information
-- [x] Manage products (list/create/update)
-- [x] Manage product images
-- [x] Manage product variants (size, color, etc.)
-- [x] Manage vendor members (add / remove)
-- [x] Manage vendor-specific orders
-- [ ] Update order status (processing → shipped → delivered)
-
-### Admin (5/6 completed 🚧)
-
-- [x] Manage users (activate / deactivate)
-- [x] Manage vendors (approve / suspend)
-- [x] Manage product categories (CRUD)
-- [x] Moderate products across the system
-- [x] Manage roles & permissions _(optional)_
-- [ ] System analytics & dashboards
-
-### Payment System Integration (0/3 completed 📋)
-
-- [ ] Initialize payment transaction
-- [ ] Confirm successful payment
-- [ ] Handle failed or refunded payments
-
-### Optional Enhancements (2/3 completed 📋)
-
-- [ ] Vendor payout system
-- [x] Coupon / voucher management
-- [x] Email notifications & marketing automation
+- **Multi-Vendor Support**: Allow multiple sellers to create their own storefronts and manage their products, orders, and inventory independently.
+- **Product Catalog**: Provide a rich product catalog with support for categories, tags, and advanced search capabilities.
+- **Shopping Cart and Checkout**: Enable customers to add products to their cart and complete their purchase with a secure and seamless checkout process.
+- **Order Management**: Allow customers to view their order history and track the status of their orders, while vendors can manage incoming orders and update their status.
+- **User Authentication**: Implement secure user authentication and authorization for both customers and vendors, with support for social login and password recovery.
+- **Responsive Design**: Ensure a smooth and consistent user experience across all devices with a responsive design and intuitive user interface.
+- **Scalability**: Build the platform with scalability in mind, using modern technologies and best practices to handle increasing traffic and data as the platform grows.
 
 ## Contributing
 
-Guidelines for reporting issues and contributing improvements will be provided later.
+We welcome contributions to the Yukinu project! If you're interested in contributing, please check out our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get involved.
 
 ## License
 
-This project is licensed under the terms of the [LICENSE](https://raw.githubusercontent.com/tiesen243/yukinu/refs/heads/main/LICENSE).
+Yukinu is licensed under the MIT License. See the [LICENSE](https://raw.githubusercontent.com/tiesen243/yukinu/refs/heads/main/LICENSE) file for more details.
