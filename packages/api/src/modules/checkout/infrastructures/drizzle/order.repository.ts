@@ -119,10 +119,7 @@ export class DrizzleOrderRepository
           )), '$[0 to 2]')`,
         payment: {
           id: payments.id,
-          isPaid:
-            sql<boolean>`CASE WHEN ${payments.status}::text = 'success' THEN true ELSE false END`.as(
-              'is_paid',
-            ),
+          status: payments.status,
         },
       })
       .from(this._table)

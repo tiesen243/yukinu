@@ -10,6 +10,7 @@ import type { VoucherRepository } from '@/modules/sales/domain/repositories/vouc
 import { AllOrdersUseCase } from '@/modules/checkout/application/use-cases/order/all-orders.use-case'
 import { CheckoutUseCase } from '@/modules/checkout/application/use-cases/order/checkout.use-case'
 import { OneOrderUseCase } from '@/modules/checkout/application/use-cases/order/one-order.use-case'
+import { UpdateOrderStatusUseCase } from '@/modules/checkout/application/use-cases/order/update-order-status'
 import { DrizzleOrderItemRepository } from '@/modules/checkout/infrastructures/drizzle/order-item.repository'
 import { DrizzleOrderRepository } from '@/modules/checkout/infrastructures/drizzle/order.repository'
 import { orderRouter } from '@/modules/checkout/interfaces/order.router'
@@ -37,6 +38,11 @@ export const createCheckoutModule = (
         orderItemRepo,
         deps.paymentRepo,
         deps.voucherRepo,
+      ),
+      updateStatus: new UpdateOrderStatusUseCase(
+        db,
+        orderRepo,
+        deps.paymentRepo,
       ),
     },
   } satisfies UseCases

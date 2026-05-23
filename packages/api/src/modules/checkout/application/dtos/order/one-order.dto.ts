@@ -1,6 +1,7 @@
 import * as z from 'zod'
 
 import { OrderEntity } from '@/modules/checkout/domain/entities/order.entity'
+import { PaymentEntity } from '@/modules/finance/types'
 
 export namespace OneOrderDto {
   export const input = z.object({
@@ -42,7 +43,7 @@ export namespace OneOrderDto {
     ),
     payment: z.object({
       id: z.cuid2(),
-      isPaid: z.boolean(),
+      status: z.enum(PaymentEntity.statuses),
     }),
   })
   export type Output = z.infer<typeof output>

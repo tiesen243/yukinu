@@ -123,7 +123,7 @@ export function DataTable<TData>({
               </TableHead>
             ))}
 
-            {actions && <TableHead>Actions</TableHead>}
+            {actions && <TableHead>&nbsp;</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>

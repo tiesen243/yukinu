@@ -1,5 +1,5 @@
 {
-  "id": "a595f828-a5f7-439e-92a2-3efe7c7d4990",
+  "id": "246f37e0-1ed8-49a4-b361-a975e7926f6a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -590,7 +590,7 @@
           "primaryKey": true,
           "notNull": true,
           "identity": {
-            "type": "always",
+            "type": "byDefault",
             "name": "orders_id_seq",
             "schema": "public",
             "increment": "1",
