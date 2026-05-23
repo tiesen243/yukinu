@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 0.12.7
+
+### Patch Changes
+
+- 79f806f: completed order, payment and transaction management
+
 ## 0.12.6
 
 ### Patch Changes
