@@ -1,6 +1,7 @@
 import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
+import { SHIPPING_COST, TAX_RATE } from '@yukinu/lib/constants'
 
 import type { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 import type { OrderItemRepository } from '@/modules/checkout/domain/repositories/order-item.repository'
@@ -64,7 +65,11 @@ export class CheckoutUseCase extends AbstractUseCase<
       )
 
       const payment = new PaymentEntity({
-        amount: totalSubtotal.toFixed(2),
+        amount: (
+          totalSubtotal +
+          totalSubtotal * TAX_RATE +
+          SHIPPING_COST
+        ).toFixed(2),
         voucherId: voucherId ?? null,
         method: paymentMethod,
       })

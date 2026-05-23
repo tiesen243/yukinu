@@ -48,7 +48,7 @@ function ToastProvider({
           data-slot='toaster-viewport'
           data-position={position}
           className={cn(
-            'fixed z-50 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] max-w-90 [--toast-inset:--spacing(4)] sm:[--toast-inset:--spacing(8)]',
+            'fixed z-999 mx-auto flex w-[calc(100%-var(--toast-inset)*2)] max-w-90 [--toast-inset:--spacing(4)] sm:[--toast-inset:--spacing(8)]',
             // Vertical positions
             'data-[position*=top]:top-(--toast-inset)',
             'data-[position*=bottom]:bottom-(--toast-inset)',

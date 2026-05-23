@@ -18,8 +18,8 @@ import { ProductSearchForm } from '@/routes/catalog/products/_components/search-
 
 export default function CatalogProductsIndexPage() {
   const { status, user } = useSession()
-
   if (status !== 'authenticated') return null
+
   return (
     <CatalogProductsIndexPageContent
       isAdmin={['admin', 'moderator'].includes(user.role)}

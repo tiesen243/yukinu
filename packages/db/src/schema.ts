@@ -500,7 +500,10 @@ export const productReviews = pgTable(
 export const orders = pgTable(
   'orders',
   (t) => ({
-    id: t.integer().primaryKey().generatedAlwaysAsIdentity({ startWith: 1000 }),
+    id: t
+      .integer()
+      .primaryKey()
+      .generatedByDefaultAsIdentity({ startWith: 1000 }),
     userId: t
       .varchar({ length: 24 })
       .references(() => users.id, { onDelete: 'set null' }),
