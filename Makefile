@@ -29,15 +29,15 @@ build-dashboard:
 
 db-generate:
 	@echo "Generating migration files..."
-	@$(pkm) --env-file=.env --filter @yukinu/db db:generate
+	@$(pkm) --filter @yukinu/db db:generate
 
 db-migrate:
 	@echo "Running database migrations..."
-	@$(pkm) --env-file=.env --filter @yukinu/db db:migrate
+	@$(pkm) --filter @yukinu/db db:migrate
 
 db-studio:
 	@echo "Starting database studio..."
-	@$(pkm) --env-file=.env --filter @yukinu/db db:studio
+	@$(pkm) --filter @yukinu/db db:studio
 
 lint:
 	@echo "Linting code..."
