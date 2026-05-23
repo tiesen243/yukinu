@@ -32,7 +32,7 @@ const UserInfo: React.FC<{
   user: NonNullable<ReturnType<typeof useSession>['user']>
 }> = ({ user }) => (
   <>
-    <Avatar className='h-8 w-8 rounded-lg grayscale'>
+    <Avatar className='h-8 w-8 rounded-lg'>
       <AvatarImage src={user.image ?? ''} alt={user.username} />
       <AvatarFallback className='rounded-lg'>
         {user.username.slice(0, 2).toUpperCase()}

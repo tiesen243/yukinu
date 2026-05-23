@@ -21,74 +21,47 @@
   </a>
 </p>
 
-An open-source, multi-vendor e-commerce platform built with a modern, type-safe technology stack. It enables buyers to shop from multiple sellers in a unified marketplace.
+An open-source e-commerce platform that enables customers to discover, compare, and purchase products from multiple sellers in one place, with fast browsing, secure checkout, and a smooth user experience.
 
-## Links
+- [Web Preview](https://yukinu.vercel.app)
+- [Dashboard Preview](https://yukinu-dashboard.vercel.app)
 
-- **[Live Web App](https://yukinu.vercel.app)**
-- **[Live Dashboard](https://yukinu-dashboard.vercel.app)**
-- **[Project Documentation](https://tiesen243.github.io/yukinu)**
-- **[Mobile App Releases](https://github.com/tiesen243/yukinu/releases?q=mobile)**
+## Features
 
-## Key Features
+- **Multi-Vendor Support**: Allow multiple sellers to create their own storefronts and manage their products, orders, and inventory independently.
+- **Product Catalog**: Provide a rich product catalog with support for categories, tags, and advanced search capabilities.
+- **Shopping Cart and Checkout**: Enable customers to add products to their cart and complete their purchase with a secure and seamless checkout process.
+- **Order Management**: Allow customers to view their order history and track the status of their orders, while vendors can manage incoming orders and update their status.
+- **User Authentication**: Implement secure user authentication and authorization for both customers and vendors, with support for social login and password recovery.
+- **Responsive Design**: Ensure a smooth and consistent user experience across all devices with a responsive design and intuitive user interface.
+- **Scalability**: Build the platform with scalability in mind, using modern technologies and best practices to handle increasing traffic and data as the platform grows.
 
-- **For Customers**: Unified shopping cart, advanced search and filtering, wishlists, order tracking, and vendor discovery.
-- **For Vendors**: A dedicated dashboard for product management (including variants), order processing, and staff management.
-- **For Administrators**: A central dashboard to manage users, approve vendors, moderate content, and manage product categories.
-- **Type-safe**: End-to-end type safety with tRPC and Zod, ensuring robust and error-resistant code.
-- **Modern Stack**: Built with Next.js, React, and TailwindCSS, running on a Bun-powered monorepo.
-- **Scalable**: The monorepo architecture, managed by Turborepo, allows for efficient code sharing and independent scaling of services.
+## Project Structure
 
-## Tech Stack
-
-### Apps
-
-- **Web App**
-  - Next.js, React.js, TailwindCSS
-  - tRPC client integration
-- **Dashboard**
-  - React, React Router, TailwindCSS
-  - tRPC client integration
-- **Mobile App**
-  - React Native, Expo, TailwindCSS (via Uniwind)
-  - tRPC client integration
-
-### Backend & Shared Services
-
-- **API**: tRPC (type-safe communication)
-- **ORM**: Drizzle ORM + PostgreSQL
-- **Validation**: Zod
-- **Email Service**: Resend
-- **File Storage**: UploadThing
-
-## Monorepo Structure
-
-```
+```text
 (root)
 ├── apps
-│   ├── dashboard        # Vendor/Admin dashboard
-│   ├── mobile           # Customer-facing mobile app
-│   └── web              # Customer-facing web app
+│   ├── dashboard            # Admin dashboard for vendors and site administrators (React Router v7)
+│   └── web                  # Customer-facing web application (Next.js 16)
+├── docs                     # Documentation site built with Fumapress
 ├── packages
-│   ├── api              # tRPC API package
-│   ├── auth             # Authentication utilities
-│   ├── db               # Drizzle + DB models + queries
-│   ├── email            # Email service (Resend)
-│   ├── lib              # Shared utilities/helpers
-│   ├── ui               # Shared UI components (shadcn/ui)
-│   ├── uploadthing      # File upload service
-│   └── validators       # Zod validators
+│   ├── api                  # tRPC API server and shared types
+│   ├── auth                 # Authentication logic and utilities
+│   ├── db                   # Database schema and Drizzle ORM setup
+│   ├── email                # Email templates and Resend integration
+│   ├── lib                  # Shared utilities and helper functions
+│   ├── ui                   # Shared UI components and design system (Shadcn UI)
+│   └── uploadthing          # File upload utilities and UploadThing integration
 ├── tools
-│   ├── github           # Github workflows/scripts
-│   ├── nginx            # Deployment config
-│   └── typescript       # TS base configs
-├── docs                 # Developer & legal documentation
-└── docker-compose.yml   # Local deployment (NGINX + Postgres + Apps)
+│   ├── github               # GitHub Actions setup and related scripts for CI/CD
+│   ├── oxc                  # Oxc configuration and related scripts for linting and code analysis
+│   └── typescript           # TypeScript configuration and related scripts
+├── docker-compose.yml       # Docker configuration for local development
+├── package.json             # Root package.json for managing dependencies and scripts
+└── turbo.json               # Turborepo configuration for managing the monorepo
 ```
 
 ## Getting Started
-
-Full setup instructions are available in the **[Development Setup Guide](https://tiesen243.github.io/yukinu/development-setup)**.
 
 ### Quick Start
 
@@ -108,52 +81,23 @@ Full setup instructions are available in the **[Development Setup Guide](https:/
 3.  **Set up environment variables:**
 
     ```bash
-    cp .env.example .env
-    # Edit the .env file with your credentials
+    cp apps/web/.env.example apps/web/.env
+    cp apps/dashboard/.env.example apps/dashboard/.env
     ```
 
-4.  **Start the database:**
+4.  **Set up the database:**
 
     ```bash
-    bun run db:start
+    docker compose up -d db
+    bun --filter @yukinu/db run db:migrate
     ```
 
-5.  **Apply the database schema:**
+5.  **Start all applications:**
 
-    ```bash
-    bun run db:push
-    ```
-
-6.  **Start all applications:**
     ```bash
     bun run dev
     ```
 
-## Deployment
-
-### 1. Web and Dashboard
-
-#### 1.1. Docker Deployment
-
-- Clone the repository to your server or VPS.
-- Build and start the web and dashboard apps with Docker Compose:
-  ```bash
-  docker compose up --build -d web dashboard
-  ```
-
-#### 1.2. Vercel Deployment
-
-- Connect your GitHub repository to Vercel.
-- Configure environment variables in the Vercel dashboard.
-
-### 2. Mobile App
-
-Follow the official Expo guide for building and deploying the mobile app: [Create a release build locally](https://docs.expo.dev/guides/local-app-production/)
-
-## Contributing
-
-Contributions are welcome! Please read the [CONTRIBUTING](./.github/CONTRIBUTING.md) guide for details on how to get started.
-
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.

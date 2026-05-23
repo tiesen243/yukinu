@@ -1,24 +1,32 @@
 import { useQuery } from '@tanstack/react-query'
 import { TicketEntity } from '@yukinu/api/identity'
+import { useSession } from '@yukinu/auth/react'
 import { Badge } from '@yukinu/ui/badge'
 import { Tabs, TabsList, TabsTrigger } from '@yukinu/ui/tabs'
 import { Typography } from '@yukinu/ui/typography'
 import { parseAsInteger, parseAsStringEnum, useQueryStates } from 'nuqs'
 
 import { DataTable } from '@/components/data-table'
-import { userContext } from '@/lib/context'
 import { useTRPC } from '@/lib/trpc'
 import { CreateTicketButton } from '@/routes/support-tickets/_components/create-ticket-buttont'
 import { UpdateTicketStatus } from '@/routes/support-tickets/_components/update-ticket-status'
 
 import type { Route } from './+types/_index'
 
-export const loader = ({ context }: Route.LoaderArgs) => {
-  const user = context.get(userContext)
-  return { isAdmin: ['admin', 'moderator'].includes(user?.role ?? '') }
+export default function TicketsIndexPage(_: Route.ComponentProps) {
+  const { status, user } = useSession()
+
+  if (status !== 'authenticated') return null
+  return (
+    <TicketsIndexPageContent
+      isAdmin={['admin', 'moderator'].includes(user.role)}
+    />
+  )
 }
 
-export default function TicketsIndexPage({ loaderData }: Route.ComponentProps) {
+const TicketsIndexPageContent: React.FC<{ isAdmin: boolean }> = ({
+  isAdmin,
+}) => {
   const { trpc } = useTRPC()
 
   const [query, setQuery] = useQueryStates({
@@ -28,7 +36,7 @@ export default function TicketsIndexPage({ loaderData }: Route.ComponentProps) {
   })
 
   const { data, isLoading } = useQuery(
-    loaderData.isAdmin
+    isAdmin
       ? trpc.identity.ticket.all.queryOptions(query)
       : trpc.identity.ticket.me.queryOptions(query),
   )
@@ -65,7 +73,7 @@ export default function TicketsIndexPage({ loaderData }: Route.ComponentProps) {
               </TabsList>
             </Tabs>
 
-            {!loaderData.isAdmin && <CreateTicketButton />}
+            {!isAdmin && <CreateTicketButton />}
           </div>
         }
         data={data?.tickets ?? []}
@@ -87,7 +95,7 @@ export default function TicketsIndexPage({ loaderData }: Route.ComponentProps) {
           setPage: (page) => setQuery({ page }),
         }}
         actions={(item) =>
-          loaderData.isAdmin && (
+          isAdmin && (
             <UpdateTicketStatus
               ticketId={item.id}
               currentStatus={item.status}

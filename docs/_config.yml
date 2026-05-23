@@ -1,7 +1,7 @@
 remote_theme: mikearnaldi/just-the-docs
 color_scheme: dark
 
-title: Yukinu
+title: Yukinu Documentation
 favicon_ico: '/apps/web/public/favicon.ico'
 
 search_enabled: true
@@ -9,8 +9,6 @@ search_enabled: true
 aux_links:
   'GitHub':
     - '//github.com/tiesen243/yukinu'
-  'Portfolio':
-    - '//tiesen.id.vn'
 aux_links_new_tab: true
 
 nav_enabled: true

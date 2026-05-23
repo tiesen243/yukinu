@@ -1,20 +1,31 @@
 'use client'
 
 import { useSession } from '@yukinu/auth/react'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { Loader2Icon } from '@yukinu/ui/icons'
+import { usePathname } from 'next/navigation'
+
+import { Navigate } from '@/components/navigate'
 
 export const CheckAuthentication: React.FC<{
   children: React.ReactNode
 }> = ({ children }) => {
   const { status } = useSession()
-  const router = useRouter()
   const pathname = usePathname()
 
-  useEffect(() => {
-    if (status === 'unauthenticated')
-      router.push(`/login?redirect_to=${encodeURIComponent(pathname)}`)
-  }, [pathname, router, status])
+  if (status === 'loading')
+    return (
+      <div className='grid min-h-[calc(100dvh-3.5rem)] place-items-center'>
+        <Loader2Icon className='animate-spin' />
+      </div>
+    )
+
+  if (status === 'unauthenticated')
+    return (
+      <Navigate
+        href={`/login?redirect_to=${encodeURIComponent(pathname)}`}
+        replace
+      />
+    )
 
   return children
 }

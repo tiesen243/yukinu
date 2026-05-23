@@ -6,11 +6,14 @@ import { Field } from '@yukinu/ui/field'
 import { toast } from '@yukinu/ui/toast'
 import { useRouter } from 'next/navigation'
 
+import { resetTurnstile } from '@/app/(auth)/_lib'
+import { useTurnstile } from '@/app/(auth)/layout.client'
 import { env } from '@/lib/env'
 import { useTRPC } from '@/lib/trpc'
 import { verifyTurnstile } from '@/lib/verify-turnstile'
 
 export const VerifyEmailForm: React.FC<{ token: string }> = ({ token }) => {
+  const turnstileWidgetId = useTurnstile()
   const { trpc } = useTRPC()
   const router = useRouter()
 
@@ -20,7 +23,10 @@ export const VerifyEmailForm: React.FC<{ token: string }> = ({ token }) => {
       toast.success({ message: 'Email verified successfully!' }),
       router.push('/login'),
     ],
-    onError: ({ message }) => toast.error({ message }),
+    onError: ({ message }) => {
+      resetTurnstile(turnstileWidgetId)
+      toast.error({ message })
+    },
   })
 
   return (
