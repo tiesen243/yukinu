@@ -25,6 +25,7 @@ An open-source e-commerce platform that enables customers to discover, compare, 
 
 - [Web Preview](https://yukinu.vercel.app)
 - [Dashboard Preview](https://yukinu-dashboard.vercel.app)
+- [Documentation](https://tiesen243.github.io/yukinu)
 
 ## Features
 

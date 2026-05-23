@@ -27,7 +27,7 @@ You can explore a live demonstration of the Yukinu platform at the following URL
 
 ## Contributing
 
-We welcome contributions to the Yukinu project! If you're interested in contributing, please check out our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get involved.
+We welcome contributions to the Yukinu project! If you're interested in contributing, please check out our [Contributing Guidelines](https://github.com/tiesen243/yukinu/blob/main/.github/CONTRIBUTING.md) for more information on how to get involved.
 
 ## License
 
