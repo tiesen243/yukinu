@@ -5,6 +5,7 @@ import { formatPrice } from '@yukinu/lib/utils'
 import { Button } from '@yukinu/ui/button'
 import Link from 'next/link'
 
+import { CancelButton } from '@/app/(main)/account/orders/[id]/_components/cancel-button'
 import { useTRPC } from '@/lib/trpc'
 
 export const TotalAmount: React.FC<{ id: number }> = ({ id }) => {
@@ -21,7 +22,20 @@ export const TotalAmount: React.FC<{ id: number }> = ({ id }) => {
         {formatPrice(data.totalAmount)}
       </span>
 
-      {!data.payment.isPaid && (
+      {['pending', 'confirmed'].includes(data.status) && (
+        <CancelButton orderId={data.id} />
+      )}
+
+      {data.status === 'completed' && data.unreviewedProductIds.length > 0 && (
+        <Button
+          nativeButton={false}
+          render={<Link href={`/account/orders/${data.id}/review`} />}
+        >
+          Leave a Review
+        </Button>
+      )}
+
+      {data.payment.status === 'pending' && (
         <Button
           nativeButton={false}
           render={<Link href={`/account/orders/checkout/${data.payment.id}`} />}

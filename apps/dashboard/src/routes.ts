@@ -28,6 +28,7 @@ export default [
     route('/management', './routes/management/_index.tsx'),
     route('/management/banners', './routes/management/banners/_index.tsx'),
     route('/management/orders', './routes/management/orders/_index.tsx'),
+    route('/management/orders/:id', './routes/management/orders/[id].tsx'),
     route(
       '/management/transactions',
       './routes/management/transactions/_index.tsx',

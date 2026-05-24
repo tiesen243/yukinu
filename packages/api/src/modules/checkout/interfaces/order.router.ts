@@ -6,6 +6,7 @@ import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.midd
 import { AllOrdersDto } from '@/modules/checkout/application/dtos/order/all-orders.dto'
 import { CheckoutDto } from '@/modules/checkout/application/dtos/order/checkout.dto'
 import { OneOrderDto } from '@/modules/checkout/application/dtos/order/one-order.dto'
+import { UpdateOrderStatusDto } from '@/modules/checkout/application/dtos/order/update-order-status'
 import { protectedProcedure } from '@/trpc'
 
 export const orderRouter = (
@@ -57,5 +58,21 @@ export const orderRouter = (
       .output(CheckoutDto.output)
       .mutation(({ ctx, input }) =>
         order.checkout.execute({ ...input, userId: ctx.session.userId }),
+      ),
+
+    updateStatus: protectedProcedure
+      .use(deps.vendorMiddleware)
+      .input(UpdateOrderStatusDto.input)
+      .output(UpdateOrderStatusDto.output)
+      .mutation(({ input }) => order.updateStatus.execute(input)),
+
+    cancel: protectedProcedure
+      .input(UpdateOrderStatusDto.input.pick({ id: true }))
+      .output(UpdateOrderStatusDto.output)
+      .mutation(({ input }) =>
+        order.updateStatus.execute({
+          id: input.id,
+          status: 'cancelled',
+        }),
       ),
   }) satisfies TRPCRouterRecord
