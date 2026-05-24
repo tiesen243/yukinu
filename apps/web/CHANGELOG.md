@@ -1,5 +1,21 @@
 # @yukinu/web
 
+## 1.0.0
+
+### Major Changes
+
+- 07a4a4a: Official production-ready release featuring secure checkout, dynamic product reviews, and optimized performance.
+
+### Patch Changes
+
+- Updated dependencies [07a4a4a]
+  - @yukinu/api@1.0.0
+  - @yukinu/auth@1.0.0
+  - @yukinu/db@1.0.0
+  - @yukinu/lib@1.0.0
+  - @yukinu/ui@1.0.0
+  - @yukinu/uploadthing@1.0.0
+
 ## 0.12.8
 
 ### Patch Changes

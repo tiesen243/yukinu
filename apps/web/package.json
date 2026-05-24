@@ -1,6 +1,6 @@
 {
   "name": "@yukinu/web",
-  "version": "0.12.8",
+  "version": "1.0.0",
   "private": false,
   "type": "module",
   "scripts": {
