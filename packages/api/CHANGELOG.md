@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 1.0.1
+
+### Patch Changes
+
+- 5ae2461: fix calculate payment amount
+
 ## 1.0.0
 
 ### Major Changes
