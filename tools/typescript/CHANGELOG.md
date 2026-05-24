@@ -1,5 +1,11 @@
 # @yukinu/tsconfig
 
+## 1.0.0
+
+### Major Changes
+
+- 07a4a4a: Official production-ready release featuring secure checkout, dynamic product reviews, and optimized performance.
+
 ## 0.7.0
 
 ### Minor Changes
