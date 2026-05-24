@@ -1,5 +1,13 @@
 # @yukinu/web
 
+## 0.12.8
+
+### Patch Changes
+
+- 9863b95: added reviews product
+- Updated dependencies [9863b95]
+  - @yukinu/api@0.10.3
+
 ## 0.12.7
 
 ### Patch Changes
