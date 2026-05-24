@@ -7,7 +7,7 @@ export interface PaymentRepository extends AbstractRepository<PaymentEntity> {
   deductCancelledOrderAmount(
     params: {
       paymentId: string
-      canceledOrderId: number
+      cancelledOrderId: number
       taxRate: number
       shippingCost: number
     },
