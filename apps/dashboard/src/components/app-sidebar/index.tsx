@@ -1,6 +1,5 @@
 import { useSession } from '@yukinu/auth/react'
 import {
-  ArrowLeftRightIcon,
   ChartBarIcon,
   ClipboardCheckIcon,
   ExternalLinkIcon,
@@ -89,12 +88,6 @@ const data = {
           url: '/management/vendors',
           icon: StoreIcon,
           role: ['admin', 'moderator'],
-        },
-        {
-          name: 'Transactions',
-          url: '/management/transactions',
-          icon: ArrowLeftRightIcon,
-          role: ['admin', 'moderator', 'vendor_owner', 'vendor_staff'],
         },
       ],
     },

@@ -19,6 +19,7 @@ export class DrizzlePaymentRepository
   public async deductCancelledOrderAmount(
     params: {
       paymentId: string
+      cancelledOrderId: number
       taxRate: number
       shippingCost: number
     },
@@ -32,7 +33,11 @@ export class DrizzlePaymentRepository
       })
       .from(orders)
       .where(
-        and(eq(orders.paymentId, paymentId), ne(orders.status, 'cancelled')),
+        and(
+          eq(orders.paymentId, paymentId),
+          ne(orders.id, params.cancelledOrderId),
+          ne(orders.status, 'cancelled'),
+        ),
       )
 
     const activeSubtotal = Number(subtotalResult?.activeSubtotal || 0)
@@ -56,23 +61,19 @@ export class DrizzlePaymentRepository
       .where(eq(payments.id, paymentId))
       .limit(1)
 
-    const baseAmountWithTaxAndShipping =
-      activeSubtotal * (1 + taxRate) + shippingCost
     let discount = 0
+    if (paymentWithVoucher?.discountAmount)
+      discount = Number.parseFloat(paymentWithVoucher.discountAmount)
+    else if (paymentWithVoucher?.discountPercentage)
+      discount += (paymentWithVoucher.discountPercentage / 100) * activeSubtotal
 
-    if (paymentWithVoucher) {
-      if (paymentWithVoucher.discountAmount !== null)
-        discount = Number(paymentWithVoucher.discountAmount)
-      else if (paymentWithVoucher.discountPercentage !== null)
-        discount =
-          (activeSubtotal * Number(paymentWithVoucher.discountPercentage)) / 100
-    }
-
-    const finalAmount = Math.max(0, baseAmountWithTaxAndShipping - discount)
+    const amountAfterDiscount = Math.max(activeSubtotal - discount, 0)
+    const grossAmount =
+      amountAfterDiscount + amountAfterDiscount * taxRate + shippingCost
 
     await tx
       .update(payments)
-      .set({ amount: finalAmount.toFixed(2) })
+      .set({ amount: Math.max(grossAmount, 0).toFixed(2) })
       .where(eq(payments.id, paymentId))
   }
 
