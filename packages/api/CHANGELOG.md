@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 1.0.2
+
+### Patch Changes
+
+- 58a6475: bump
+
 ## 1.0.1
 
 ### Patch Changes
