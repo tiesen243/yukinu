@@ -4,4 +4,4 @@
 "@yukinu/web": patch
 ---
 
-fix calcute payment amount
+fix calculate payment amount
