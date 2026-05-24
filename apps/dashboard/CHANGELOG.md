@@ -1,5 +1,13 @@
 # @yukinu/dashboard
 
+## 1.0.1
+
+### Patch Changes
+
+- 5ae2461: fix calculate payment amount
+- Updated dependencies [5ae2461]
+  - @yukinu/api@1.0.1
+
 ## 1.0.0
 
 ### Major Changes
