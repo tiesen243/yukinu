@@ -1,6 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
+import { formatPrice } from '@yukinu/lib/utils'
 import { Alert, AlertDescription, AlertTitle } from '@yukinu/ui/alert'
 import { Badge } from '@yukinu/ui/badge'
 import { Button } from '@yukinu/ui/button'
@@ -119,7 +120,7 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
             Amount Due
           </Typography>
           <Typography className='text-3xl font-bold text-info'>
-            ${data.amount}
+            {formatPrice(data.amount)}
           </Typography>
         </div>
         <div>
@@ -150,7 +151,7 @@ export const PaymentDetails: React.FC<{ paymentId: string }> = ({
             Amount:
           </Typography>
           <Typography className='text-2xl font-bold text-success'>
-            ${data.amount}
+            {formatPrice(data.amount)}
           </Typography>
         </div>
 
