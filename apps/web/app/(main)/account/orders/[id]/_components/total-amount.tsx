@@ -26,6 +26,15 @@ export const TotalAmount: React.FC<{ id: number }> = ({ id }) => {
         <CancelButton orderId={data.id} />
       )}
 
+      {data.status === 'completed' && data.unreviewedProductIds.length > 0 && (
+        <Button
+          nativeButton={false}
+          render={<Link href={`/account/orders/${data.id}/review`} />}
+        >
+          Leave a Review
+        </Button>
+      )}
+
       {data.payment.status === 'pending' && (
         <Button
           nativeButton={false}

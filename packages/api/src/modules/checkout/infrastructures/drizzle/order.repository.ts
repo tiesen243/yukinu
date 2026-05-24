@@ -1,12 +1,13 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import { eq, sql } from '@yukinu/db/drizzle'
+import { and, eq, sql } from '@yukinu/db/drizzle'
 import {
   addresses,
   orderItems,
   orders,
   payments,
   productImages,
+  productReviews,
   products,
   users,
 } from '@yukinu/db/schema'
@@ -121,6 +122,12 @@ export class DrizzleOrderRepository
           id: payments.id,
           status: payments.status,
         },
+        unreviewedProductIds: sql<string[]>`
+          coalesce(
+            jsonb_agg(${products.id}) filter (where ${productReviews.productId} is null), 
+            '[]'::jsonb
+          )
+        `,
       })
       .from(this._table)
       .innerJoin(payments, eq(payments.id, this._table.paymentId))
@@ -128,6 +135,13 @@ export class DrizzleOrderRepository
       .leftJoin(addresses, eq(addresses.id, this._table.addressId))
       .leftJoin(orderItems, eq(orderItems.orderId, this._table.id))
       .leftJoin(products, eq(products.id, orderItems.productId))
+      .leftJoin(
+        productReviews,
+        and(
+          eq(productReviews.productId, products.id),
+          eq(productReviews.userId, this._table.userId),
+        ),
+      )
       .where(whereClause)
       .groupBy(this._table.id, payments.id, users.id, addresses.id)
       .limit(1)

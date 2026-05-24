@@ -6,6 +6,7 @@ import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.midd
 import { AllProductsDto } from '@/modules/catalog/application/dtos/product/all-products.dto'
 import { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
 import { SaveProductDto } from '@/modules/catalog/application/dtos/product/save-product.dto'
+import { CreateReviewDto } from '@/modules/catalog/types'
 import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const productRouter = (
@@ -46,6 +47,16 @@ export const productRouter = (
         product.create.execute({
           ...input,
           vendorId: ctx.session.vendorId,
+        }),
+      ),
+
+    createReview: protectedProcedure
+      .input(CreateReviewDto.input)
+      .output(CreateReviewDto.output)
+      .mutation(({ ctx, input }) =>
+        product.creareReview.execute({
+          ...input,
+          userId: ctx.session.userId,
         }),
       ),
 

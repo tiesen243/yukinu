@@ -45,6 +45,7 @@ export namespace OneOrderDto {
       id: z.cuid2(),
       status: z.enum(PaymentEntity.statuses),
     }),
+    unreviewedProductIds: z.array(z.cuid2()),
   })
   export type Output = z.infer<typeof output>
 }
