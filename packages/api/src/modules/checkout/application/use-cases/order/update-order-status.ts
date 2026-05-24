@@ -41,6 +41,7 @@ export class UpdateOrderStatusUseCase extends AbstractUseCase<
         await this._paymentRepo.deductCancelledOrderAmount(
           {
             paymentId: order.paymentId,
+            cancelledOrderId: order.id,
             taxRate: TAX_RATE,
             shippingCost: SHIPPING_COST,
           },

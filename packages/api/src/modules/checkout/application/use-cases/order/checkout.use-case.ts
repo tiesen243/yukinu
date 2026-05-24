@@ -47,7 +47,7 @@ export class CheckoutUseCase extends AbstractUseCase<
     )
 
     return this._db.transaction(async (tx) => {
-      await this._applyAndConsumeVoucher(voucherId, tx)
+      const voucher = await this._applyAndConsumeVoucher(voucherId, tx)
 
       let totalSubtotal = 0
       const vendorsOrdersPlan = Object.entries(cartItemsByVendor).flatMap(
@@ -64,12 +64,18 @@ export class CheckoutUseCase extends AbstractUseCase<
         },
       )
 
+      let discount = 0
+      if (voucher?.discountAmount)
+        discount += Number.parseFloat(voucher.discountAmount)
+      else if (voucher?.discountPercentage)
+        discount += (voucher.discountPercentage / 100) * totalSubtotal
+
+      const amountAfterDiscount = Math.max(totalSubtotal - discount, 0)
+      const grossAmount =
+        amountAfterDiscount + amountAfterDiscount * TAX_RATE + SHIPPING_COST
+
       const payment = new PaymentEntity({
-        amount: (
-          totalSubtotal +
-          totalSubtotal * TAX_RATE +
-          SHIPPING_COST
-        ).toFixed(2),
+        amount: Math.max(grossAmount, 0).toFixed(2),
         voucherId: voucherId ?? null,
         method: paymentMethod,
       })
@@ -115,15 +121,17 @@ export class CheckoutUseCase extends AbstractUseCase<
   private async _applyAndConsumeVoucher(
     voucherId: string | null,
     tx: Database,
-  ): Promise<string | number | null> {
+  ): Promise<{
+    discountAmount: string | null
+    discountPercentage: number | null
+  } | null> {
     if (!voucherId) return null
 
-    // Pass the transaction context `tx` if your repository layer supports it,
-    // ensuring rows are locked or evaluated in isolation context.
     const [voucher] = await this._voucherRepo.find(
       [{ id: voucherId }],
       {},
       { limit: 1 },
+      tx,
     )
 
     if (!voucher) {
@@ -147,11 +155,12 @@ export class CheckoutUseCase extends AbstractUseCase<
       })
     }
 
-    // CRITICAL OPTIMIZATION: Decrement quantity so it can't be overused concurrently
-    // Assuming your voucher repository has an update method:
     const updatedVoucher = voucher.clone({ quantity: voucher.quantity - 1 })
     await this._voucherRepo.save(updatedVoucher, tx)
 
-    return voucher.discountAmount ?? voucher.discountPercentage ?? null
+    return {
+      discountAmount: voucher.discountAmount,
+      discountPercentage: voucher.discountPercentage,
+    }
   }
 }

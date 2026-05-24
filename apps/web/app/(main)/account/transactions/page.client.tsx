@@ -17,21 +17,19 @@ export const TransactionsHistory: React.FC = () => {
   const { data } = useQuery(trpc.finance.transaction.allByUser.queryOptions({}))
   if (!data) return <p>No transactions found.</p>
 
-  return [...data, ...data, ...data, ...data, ...data, ...data, ...data].map(
-    (transaction, i) => (
-      <Item key={i} variant='outline'>
-        <ItemHeader>
-          <ItemTitle>{transaction.referenceNumber}</ItemTitle>
-          <ItemDescription>
-            {formatDate(transaction.transactionDate ?? new Date())}
-          </ItemDescription>
-        </ItemHeader>
-        <ItemContent>
-          <p>Gateway: {transaction.gateway}</p>
-          <p>Amount In: {transaction.amountIn}</p>
-          <p>Amount Out: {transaction.amountOut}</p>
-        </ItemContent>
-      </Item>
-    ),
-  )
+  return data.map((transaction) => (
+    <Item key={transaction.id} variant='outline'>
+      <ItemHeader>
+        <ItemTitle>{transaction.referenceNumber}</ItemTitle>
+        <ItemDescription>
+          {formatDate(transaction.transactionDate ?? new Date())}
+        </ItemDescription>
+      </ItemHeader>
+      <ItemContent>
+        <p>Gateway: {transaction.gateway}</p>
+        <p>Amount In: {transaction.amountIn}</p>
+        <p>Amount Out: {transaction.amountOut}</p>
+      </ItemContent>
+    </Item>
+  ))
 }
