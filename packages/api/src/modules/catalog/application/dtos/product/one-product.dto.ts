@@ -56,7 +56,7 @@ export namespace OneProductDto {
           username: z.string(),
           image: z.url().nullable(),
         }),
-        createdAt: z.date(),
+        createdAt: z.coerce.date(),
       }),
     ),
   })

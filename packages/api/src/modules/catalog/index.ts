@@ -11,6 +11,7 @@ import { OneCategoryUseCase } from '@/modules/catalog/application/use-cases/cate
 import { SaveCategoryUseCase } from '@/modules/catalog/application/use-cases/category/save-category.use-case'
 import { AllProductsUseCase } from '@/modules/catalog/application/use-cases/product/all-products.use-case'
 import { CreateProductUseCase } from '@/modules/catalog/application/use-cases/product/create-product.use-case'
+import { CreateReviewUseCase } from '@/modules/catalog/application/use-cases/product/create-review.use-case'
 import { DeleteProductUseCase } from '@/modules/catalog/application/use-cases/product/delete-product.use-case'
 import { OneProductUseCase } from '@/modules/catalog/application/use-cases/product/one-product.use-case'
 import { PermanentDeleteProductUseCase } from '@/modules/catalog/application/use-cases/product/permanent-delete.use-case'
@@ -22,6 +23,7 @@ import { UpdateVariantUseCase } from '@/modules/catalog/application/use-cases/va
 import { DrizzleCategoryRepository } from '@/modules/catalog/infrastructures/drizzle/category.repository'
 import { DrizzleProductAttributeRepository } from '@/modules/catalog/infrastructures/drizzle/product-attribute.repository'
 import { DrizzleProductImageRepository } from '@/modules/catalog/infrastructures/drizzle/product-image.repository'
+import { DrizzleProductReviewRepository } from '@/modules/catalog/infrastructures/drizzle/product-review.repository'
 import { DrizzleProductVariantRepository } from '@/modules/catalog/infrastructures/drizzle/product-variant.repository'
 import { DrizzleProductRepository } from '@/modules/catalog/infrastructures/drizzle/product.repository'
 import { DrizzleVariantRepository } from '@/modules/catalog/infrastructures/drizzle/variant.repository'
@@ -39,6 +41,7 @@ export const createCatalogModule = (
   const categoryRepo = new DrizzleCategoryRepository(db)
   const productAttributeRepo = new DrizzleProductAttributeRepository(db)
   const productImageRepo = new DrizzleProductImageRepository(db)
+  const productReviewRepo = new DrizzleProductReviewRepository(db)
   const productVariantRepo = new DrizzleProductVariantRepository(db)
   const productRepo = new DrizzleProductRepository(db)
   const variantRepo = new DrizzleVariantRepository(db)
@@ -61,6 +64,7 @@ export const createCatalogModule = (
         productRepo,
         variantRepo,
       ),
+      creareReview: new CreateReviewUseCase(db, productReviewRepo, productRepo),
       update: new UpdateProductUseCase(
         db,
         categoryRepo,

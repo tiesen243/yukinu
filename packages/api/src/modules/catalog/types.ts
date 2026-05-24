@@ -4,6 +4,7 @@ import type { OneCategoryUseCase } from '@/modules/catalog/application/use-cases
 import type { SaveCategoryUseCase } from '@/modules/catalog/application/use-cases/category/save-category.use-case'
 import type { AllProductsUseCase } from '@/modules/catalog/application/use-cases/product/all-products.use-case'
 import type { CreateProductUseCase } from '@/modules/catalog/application/use-cases/product/create-product.use-case'
+import type { CreateReviewUseCase } from '@/modules/catalog/application/use-cases/product/create-review.use-case'
 import type { DeleteProductUseCase } from '@/modules/catalog/application/use-cases/product/delete-product.use-case'
 import type { OneProductUseCase } from '@/modules/catalog/application/use-cases/product/one-product.use-case'
 import type { PermanentDeleteProductUseCase } from '@/modules/catalog/application/use-cases/product/permanent-delete.use-case'
@@ -24,6 +25,7 @@ export interface UseCases {
     all: AllProductsUseCase
     one: OneProductUseCase
     create: CreateProductUseCase
+    creareReview: CreateReviewUseCase
     update: UpdateProductUseCase
     delete: DeleteProductUseCase
     restore: RestoreProductUseCase
@@ -46,6 +48,7 @@ export { SaveCategoryDto } from '@/modules/catalog/application/dtos/category/sav
 export { AllProductsDto } from '@/modules/catalog/application/dtos/product/all-products.dto'
 export { SaveProductDto } from '@/modules/catalog/application/dtos/product/save-product.dto'
 export { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
+export { CreateReviewDto } from '@/modules/catalog/application/dtos/product/create-review.dto'
 
 // Variant DTOs
 export { DeleteVariantDto } from '@/modules/catalog/application/dtos/variant/delete-variant.dto'
