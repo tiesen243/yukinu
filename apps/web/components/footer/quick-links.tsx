@@ -2,15 +2,10 @@ import { Typography } from '@yukinu/ui/typography'
 import Link from 'next/link'
 
 const links = [
-  { href: '/home', label: 'Home', isExternal: false },
-  { href: '/search', label: 'Shop', isExternal: false },
-  { href: '/about', label: 'About', isExternal: false },
-  { href: '/contact', label: 'Contact', isExternal: false },
-  {
-    href: 'https://tiesen243.github.io/yukinu/legal/faq.html',
-    label: 'FAQ',
-    isExternal: true,
-  },
+  { href: '/home', label: 'Home' },
+  { href: '/search', label: 'Shop' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
 ] as const
 
 export const QuickLinks: React.FC = () => (
@@ -22,12 +17,7 @@ export const QuickLinks: React.FC = () => (
     <ul className='space-y-1 text-sm'>
       {links.map((link) => (
         <li key={link.href}>
-          <Link
-            href={link.href}
-            className='hover:underline'
-            target={link.isExternal ? '_blank' : '_self'}
-            rel={link.isExternal ? 'noopener noreferrer' : undefined}
-          >
+          <Link href={link.href} className='hover:underline'>
             {link.label}
           </Link>
         </li>

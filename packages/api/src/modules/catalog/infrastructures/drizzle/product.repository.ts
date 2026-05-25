@@ -13,6 +13,7 @@ import {
   variantOptions,
   variants,
   vendors,
+  profiles,
 } from '@yukinu/db/schema'
 
 import type { AllProductsDto } from '@/modules/catalog/application/dtos/product/all-products.dto'
@@ -96,6 +97,7 @@ export class DrizzleProductRepository
         'user', jsonb_build_object(
           'id', ${users.id},
           'username', ${users.username},
+          'fullName', ${profiles.fullName},
           'image', ${users.image}
         ),
         'createdAt', ${productReviews.createdAt}
@@ -131,6 +133,7 @@ export class DrizzleProductRepository
       .leftJoin(attributes, eq(attributes.id, productAttributes.attributeId))
       .leftJoin(productReviews, eq(productReviews.productId, products.id))
       .leftJoin(users, eq(users.id, productReviews.userId))
+      .leftJoin(profiles, eq(profiles.id, users.id))
       .leftJoin(vendors, eq(vendors.id, products.vendorId))
       .where(and(eq(products.id, id), isNull(products.deletedAt)))
       .groupBy(products.id, categories.id, vendors.id)
