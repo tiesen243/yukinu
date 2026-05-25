@@ -1,5 +1,11 @@
 # @yukinu/web
 
+## 1.0.4
+
+### Patch Changes
+
+- 7c3fe5c: added link to user profile in comment section
+
 ## 1.0.3
 
 ### Patch Changes
