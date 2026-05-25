@@ -3,6 +3,8 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import type { UseCases } from '@/modules/checkout/types'
 import type { PaymentRepository } from '@/modules/finance/domain/repositories/payment.repository'
+import type { VendorBalanceRepository } from '@/modules/merchant/domain/repositories/vendor-balance.repository'
+import type { VendorTransferRepository } from '@/modules/merchant/domain/repositories/vendor-transfer.repository'
 import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 import type { CartItemRepository } from '@/modules/sales/domain/repositories/cart-item.repository'
 import type { VoucherRepository } from '@/modules/sales/domain/repositories/voucher.repository'
@@ -14,8 +16,6 @@ import { UpdateOrderStatusUseCase } from '@/modules/checkout/application/use-cas
 import { DrizzleOrderItemRepository } from '@/modules/checkout/infrastructures/drizzle/order-item.repository'
 import { DrizzleOrderRepository } from '@/modules/checkout/infrastructures/drizzle/order.repository'
 import { orderRouter } from '@/modules/checkout/interfaces/order.router'
-import type { VendorBalanceRepository } from '@/modules/merchant/domain/repositories/vendor-balance.repository'
-import type { VendorTransferRepository } from '@/modules/merchant/domain/repositories/vendor-transfer.repository'
 
 export const createCheckoutModule = (
   db: Database,
