@@ -5,6 +5,7 @@ import { Card } from '@yukinu/ui/card'
 import { Typography } from '@yukinu/ui/typography'
 
 import { usePage } from '@/app/(main)/[slug]/page.provider'
+import { Link } from '@/components/link'
 
 export const ProductReviews: React.FC = () => {
   const {
@@ -27,7 +28,11 @@ export const ProductReviews: React.FC = () => {
               key={review.createdAt.getTime()}
               className='flex items-start gap-4 border-b pb-4 last:border-0'
             >
-              <Avatar className='size-9'>
+              <Avatar
+                className='size-9 cursor-pointer'
+                aria-label={`View profile of ${review.user.username}`}
+                render={<Link href={`/u/${review.user.id}` as never} />}
+              >
                 <AvatarImage
                   src={review.user.image ?? ''}
                   alt={review.user.username}
@@ -38,7 +43,12 @@ export const ProductReviews: React.FC = () => {
               </Avatar>
 
               <div className='flex flex-col gap-1'>
-                <p className='font-medium'>{review.user.username}</p>
+                <Link
+                  href={`/u/${review.user.id}` as never}
+                  className='cursor-pointer font-medium'
+                >
+                  {review.user.fullName ?? review.user.username}
+                </Link>
                 <span className='text-xs text-muted-foreground'>
                   Rating: {review.rating}/5 - {review.createdAt.toDateString()}
                 </span>
