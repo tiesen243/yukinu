@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-import { PaymentEntity } from '@/modules/finance/types'
+import { PaymentEntity } from '@/modules/finance/domain/entities/payment.entity'
 
 export namespace DashboardDto {
   export const input = z.object({ vendorId: z.cuid2().optional() })

@@ -2,11 +2,11 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
 
-import type { PaymentHookDto } from '@/modules/finance/application/dtos/payment/payment-hook.dto'
+import type { PaymentHookDto } from '@/modules/finance/application/dtos/payment-hook.dto'
 import type { PaymentRepository } from '@/modules/finance/domain/repositories/payment.repository'
 import type { TransactionRepository } from '@/modules/finance/domain/repositories/transaction.repository'
 
-import { TransactionEntity } from '@/modules/finance/types'
+import { TransactionEntity } from '@/modules/finance/domain/entities/transaction.entity'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class PaymentHookUseCase extends AbstractUseCase<
@@ -51,7 +51,7 @@ export class PaymentHookUseCase extends AbstractUseCase<
       })
       await this._transactionRepo.save(transaction, tx)
 
-      const [payment] = await this._paymentRepo.find(
+      const [payment] = await this._paymentRepo.findWithOrders(
         [{ id, status: 'pending' }],
         {},
         { limit: 1 },
@@ -64,6 +64,7 @@ export class PaymentHookUseCase extends AbstractUseCase<
       const totalAmount = Number.parseFloat(payment.amount)
       const currentPaid = Number.parseFloat(payment.paidAmount ?? '0')
       const newTransfer = Number.parseFloat(String(input.transferAmount))
+
       const updatedPaidAmount = currentPaid + newTransfer
       const newStatus: 'success' | 'pending' =
         isDemoMode || updatedPaidAmount >= totalAmount ? 'success' : 'pending'

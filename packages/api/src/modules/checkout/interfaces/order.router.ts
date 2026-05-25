@@ -53,6 +53,18 @@ export const orderRouter = (
         }),
       ),
 
+    oneForVendor: protectedProcedure
+      .use(deps.vendorMiddleware)
+      .input(OneOrderDto.input.pick({ id: true }))
+      .output(OneOrderDto.output)
+      .query(({ ctx, input }) =>
+        order.one.execute({
+          ...input,
+          userId: null,
+          vendorId: ctx.session.vendorId,
+        }),
+      ),
+
     checkout: protectedProcedure
       .input(CheckoutDto.input.omit({ userId: true }))
       .output(CheckoutDto.output)

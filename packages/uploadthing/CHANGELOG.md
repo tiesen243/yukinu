@@ -1,5 +1,11 @@
 # @yukinu/uploadthing
 
+## 1.0.1
+
+### Patch Changes
+
+- @yukinu/auth@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

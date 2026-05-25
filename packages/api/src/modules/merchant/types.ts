@@ -3,6 +3,7 @@ import type { AllStaffsUseCase } from '@/modules/merchant/application/use-cases/
 import type { InviteStaffUseCase } from '@/modules/merchant/application/use-cases/staff/invite-staff.use-case'
 import type { RemoveStaffUseCase } from '@/modules/merchant/application/use-cases/staff/remove-staff.use-case'
 import type { AllVendorsUseCase } from '@/modules/merchant/application/use-cases/vendor/all-vendors.use-case'
+import type { GetBalanceUseCase } from '@/modules/merchant/application/use-cases/vendor/get-balance.use-case'
 import type { OneVendorUseCase } from '@/modules/merchant/application/use-cases/vendor/one-vendor.use-case'
 import type { SaveVendorUseCase } from '@/modules/merchant/application/use-cases/vendor/save-vendor.use-case'
 import type { UpdateVendorStatusUseCase } from '@/modules/merchant/application/use-cases/vendor/update-vendor-status.use-case'
@@ -11,6 +12,7 @@ export interface UseCases {
   vendor: {
     all: AllVendorsUseCase
     one: OneVendorUseCase
+    getBalance: GetBalanceUseCase
     save: SaveVendorUseCase
     updateStatus: UpdateVendorStatusUseCase
   }
@@ -35,7 +37,5 @@ export { AcceptInvitationDto } from '@/modules/merchant/application/dtos/staff/a
 export { RemoveStaffDto } from '@/modules/merchant/application/dtos/staff/remove-staff.dto'
 
 // Entities
-export { VendorBalanceEntity } from '@/modules/merchant/domain/entities/vendor-balance.entity'
 export { VendorStaffEntity } from '@/modules/merchant/domain/entities/vendor-staff.entity'
-export { VendorTransferEntity } from '@/modules/merchant/domain/entities/vendor-transfer.entity'
 export { VendorEntity } from '@/modules/merchant/domain/entities/vendor.entity'

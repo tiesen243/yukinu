@@ -1,6 +1,6 @@
 import type { Database } from '@yukinu/db/drizzle'
 
-import type { AllTransactionsByUserDto } from '@/modules/finance/application/dtos/transaction/all-by-user.dto'
+import type { AllTransactionsByUserDto } from '@/modules/finance/application/dtos/all-transactions-by-user.dto'
 import type { TransactionRepository } from '@/modules/finance/domain/repositories/transaction.repository'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'

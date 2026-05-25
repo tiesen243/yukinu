@@ -76,6 +76,47 @@ export class DrizzleOrderRepository
     return query
   }
 
+  public async findWithPayment(
+    criterias: AbstractRepository.Criteria<OrderEntity>[] = [],
+    orderBy: Partial<Record<keyof OrderEntity, 'asc' | 'desc'>> = {},
+    options: { limit?: number; offset?: number } = {},
+    tx: Database = this._db,
+  ): Promise<OrderRepository.WithPayment[]> {
+    const whereClauses = this._buildCriteria(criterias)
+    const orderByClause = this._buildOrderBy(orderBy)
+
+    const query = tx
+      .select({
+        id: this._table.id,
+        userId: this._table.userId,
+        vendorId: this._table.vendorId,
+        paymentId: this._table.paymentId,
+        addressId: this._table.addressId,
+        totalAmount: this._table.totalAmount,
+        status: this._table.status,
+        createdAt: this._table.createdAt,
+        updatedAt: this._table.updatedAt,
+        payment: {
+          id: payments.id,
+          status: payments.status,
+        },
+      })
+      .from(this._table)
+      .leftJoin(payments, eq(payments.id, this._table.paymentId))
+      .$dynamic()
+
+    if (whereClauses) query.where(whereClauses)
+    if (orderByClause) query.orderBy(orderByClause)
+    if (options.limit) query.limit(options.limit)
+    if (options.offset) query.offset(options.offset)
+
+    const rows = await query
+
+    return rows.map(({ payment, ...row }) =>
+      Object.assign(this._mapToEntity(row), { payment }),
+    )
+  }
+
   public async oneWithDetails(
     criteria: AbstractRepository.Criteria<OrderEntity>,
     tx: Database = this._db,

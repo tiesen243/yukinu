@@ -15,9 +15,9 @@ import {
   vendors,
 } from '@yukinu/db/schema'
 
+import type { AllProductsDto } from '@/modules/catalog/application/dtos/product/all-products.dto'
 import type { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
 import type { ProductRepository } from '@/modules/catalog/domain/repositories/product.repository'
-import type { AllProductsDto } from '@/modules/catalog/types'
 import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
 
 import { ProductEntity } from '@/modules/catalog/domain/entities/product.entity'

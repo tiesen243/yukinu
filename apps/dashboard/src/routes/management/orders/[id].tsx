@@ -29,7 +29,7 @@ export default function ManagementOrdersDetailPage({
   const { trpc } = useTRPC()
 
   const { data, isLoading } = useQuery(
-    trpc.checkout.order.one.queryOptions({
+    trpc.checkout.order.oneForVendor.queryOptions({
       id: Number.parseInt(params.id, 10),
     }),
   )

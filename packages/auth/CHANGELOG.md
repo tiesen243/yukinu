@@ -1,5 +1,12 @@
 # @yukinu/auth
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies [25356cd]
+  - @yukinu/lib@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

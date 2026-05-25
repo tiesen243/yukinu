@@ -1,5 +1,11 @@
 # @yukinu/lib
 
+## 1.0.1
+
+### Patch Changes
+
+- 25356cd: added update vendor balance when complete order
+
 ## 1.0.0
 
 ### Major Changes
