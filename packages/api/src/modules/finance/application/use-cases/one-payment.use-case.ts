@@ -2,7 +2,7 @@ import type { Database } from '@yukinu/db/drizzle'
 
 import { TRPCError } from '@trpc/server'
 
-import type { OnePaymentDto } from '@/modules/finance/application/dtos/payment/one-payment.dto'
+import type { OnePaymentDto } from '@/modules/finance/application/dtos/one-payment.dto'
 import type { PaymentRepository } from '@/modules/finance/domain/repositories/payment.repository'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'

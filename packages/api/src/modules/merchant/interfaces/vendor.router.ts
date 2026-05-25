@@ -2,13 +2,12 @@ import type { TRPCRouterRecord } from '@trpc/server'
 
 import type { UseCases } from '@/modules/merchant/types'
 
+import { AllVendorsDto } from '@/modules/merchant/application/dtos/vendor/all-vendors.dto'
+import { GetBalanceDto } from '@/modules/merchant/application/dtos/vendor/get-balance.dto'
+import { OneVendorDto } from '@/modules/merchant/application/dtos/vendor/one-vendor.dto'
+import { SaveVendorDto } from '@/modules/merchant/application/dtos/vendor/save-vendor.dto'
+import { UpdateVendorStatusDto } from '@/modules/merchant/application/dtos/vendor/update-vendor-status.dto'
 import { vendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
-import {
-  AllVendorsDto,
-  OneVendorDto,
-  SaveVendorDto,
-  UpdateVendorStatusDto,
-} from '@/modules/merchant/types'
 import { protectedProcedure } from '@/trpc'
 
 export const vendorRouter = ({ vendor }: UseCases) =>
@@ -29,6 +28,14 @@ export const vendorRouter = ({ vendor }: UseCases) =>
       .use(vendorMiddleware)
       .output(OneVendorDto.output)
       .query(({ ctx }) => vendor.one.execute({ id: ctx.session.vendorId })),
+
+    balance: protectedProcedure
+      .use(vendorMiddleware)
+      .input(GetBalanceDto.input.omit({ vendorId: true }))
+      .output(GetBalanceDto.output)
+      .query(({ ctx }) =>
+        vendor.getBalance.execute({ vendorId: ctx.session.vendorId }),
+      ),
 
     create: protectedProcedure
       .meta({ role: ['user'] })

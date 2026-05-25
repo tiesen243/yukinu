@@ -1,7 +1,7 @@
 import * as z from 'zod'
 
 import { OrderEntity } from '@/modules/checkout/domain/entities/order.entity'
-import { PaymentEntity } from '@/modules/finance/types'
+import { PaymentEntity } from '@/modules/finance/domain/entities/payment.entity'
 
 export namespace OneOrderDto {
   export const input = z.object({

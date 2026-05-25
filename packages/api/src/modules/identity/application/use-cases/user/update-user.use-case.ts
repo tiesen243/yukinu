@@ -3,8 +3,8 @@ import type { Database } from '@yukinu/db/drizzle'
 import { TRPCError } from '@trpc/server'
 
 import type { UpdateUserDto } from '@/modules/identity/application/dtos/user/update-user.dto'
+import type { UserEntity } from '@/modules/identity/domain/entities/user.entity'
 import type { UserRepository } from '@/modules/identity/domain/repositories/user.repository'
-import type { UserEntity } from '@/modules/identity/types'
 
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 

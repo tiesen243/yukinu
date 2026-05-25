@@ -32,6 +32,8 @@ const createApp = (db: Database) => {
     paymentRepo: financeModule.repos.paymentRepo,
     voucherRepo: salesModule.repos.voucherRepo,
     vendorMiddleware: merchantModule.middlewares.vendor,
+    vendorBalanceRepo: merchantModule.repos.vendorBalanceRepo,
+    vendorTransferRepo: merchantModule.repos.vendorTransferRepo,
   })
 
   return createTRPCRouter({

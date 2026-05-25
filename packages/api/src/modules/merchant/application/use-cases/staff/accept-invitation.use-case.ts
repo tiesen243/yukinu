@@ -8,7 +8,7 @@ import type { AcceptInvitationDto } from '@/modules/merchant/application/dtos/st
 import type { VendorStaffRepository } from '@/modules/merchant/domain/repositories/vendor-staff.repository'
 import type { VendorRepository } from '@/modules/merchant/domain/repositories/vendor.repository'
 
-import { UserEntity } from '@/modules/identity/types'
+import { UserEntity } from '@/modules/identity/domain/entities/user.entity'
 import { VendorStaffEntity } from '@/modules/merchant/domain/entities/vendor-staff.entity'
 
 export class AcceptInvitationUseCase {

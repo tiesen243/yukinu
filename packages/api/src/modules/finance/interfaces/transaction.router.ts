@@ -1,6 +1,6 @@
 import type { UseCases } from '@/modules/finance/types'
 
-import { AllTransactionsByUserDto } from '@/modules/finance/types'
+import { AllTransactionsByUserDto } from '@/modules/finance/application/dtos/all-transactions-by-user.dto'
 import { protectedProcedure } from '@/trpc'
 
 export const transactionRouter = ({ transaction }: UseCases) => ({

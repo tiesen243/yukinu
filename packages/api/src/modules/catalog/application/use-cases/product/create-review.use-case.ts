@@ -6,7 +6,7 @@ import type { CreateReviewDto } from '@/modules/catalog/application/dtos/product
 import type { ProductReviewRepository } from '@/modules/catalog/domain/repositories/product-review.repository'
 import type { ProductRepository } from '@/modules/catalog/domain/repositories/product.repository'
 
-import { ProductReviewEntity } from '@/modules/catalog/types'
+import { ProductReviewEntity } from '@/modules/catalog/domain/entities/product-review.entity'
 import { AbstractUseCase } from '@/shared/abstracts/abstract.use-case'
 
 export class CreateReviewUseCase extends AbstractUseCase<

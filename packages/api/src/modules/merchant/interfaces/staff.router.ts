@@ -2,13 +2,11 @@ import type { TRPCRouterRecord } from '@trpc/server'
 
 import type { UseCases } from '@/modules/merchant/types'
 
+import { AcceptInvitationDto } from '@/modules/merchant/application/dtos/staff/accept-invitation.dto'
+import { AllStaffsDto } from '@/modules/merchant/application/dtos/staff/all-staffs.dto'
+import { InviteStaffDto } from '@/modules/merchant/application/dtos/staff/invite-staff.dto'
+import { RemoveStaffDto } from '@/modules/merchant/application/dtos/staff/remove-staff.dto'
 import { vendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
-import {
-  AllStaffsDto,
-  InviteStaffDto,
-  AcceptInvitationDto,
-  RemoveStaffDto,
-} from '@/modules/merchant/types'
 import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const staffRouter = ({ staff }: UseCases) =>

@@ -3,8 +3,8 @@ import { Password } from '@yukinu/auth'
 
 import type { UseCases } from '@/modules/finance/types'
 
-import { PaymentHookDto } from '@/modules/finance/application/dtos/payment/payment-hook.dto'
-import { OnePaymentDto } from '@/modules/finance/types'
+import { OnePaymentDto } from '@/modules/finance/application/dtos/one-payment.dto'
+import { PaymentHookDto } from '@/modules/finance/application/dtos/payment-hook.dto'
 import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const paymentRouter = ({ payment }: UseCases) => ({
