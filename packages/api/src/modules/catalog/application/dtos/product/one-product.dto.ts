@@ -54,6 +54,7 @@ export namespace OneProductDto {
         user: z.object({
           id: z.cuid2(),
           username: z.string(),
+          fullName: z.string().nullable(),
           image: z.url().nullable(),
         }),
         createdAt: z.coerce.date(),

@@ -58,7 +58,7 @@ export const UserDetails: React.FC<{ id: string }> = ({ id }) => {
         )}
       </Card>
 
-      <Card render={<section />} className='gap-0 px-4'>
+      <Card render={<section />} className='gap-0 px-4 pb-0'>
         <h2 className='sr-only'>User Profile Details</h2>
 
         <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
@@ -83,3 +83,50 @@ export const UserDetails: React.FC<{ id: string }> = ({ id }) => {
     </>
   )
 }
+
+export const UserDetailsSkeleton: React.FC = () => (
+  <>
+    <Card
+      render={<section />}
+      className='mb-4 rounded-t-none pt-0 *:[img:first-child]:rounded-t-none'
+    >
+      <h2 className='sr-only'>User Profile Header</h2>
+      <div className='aspect-video size-full animate-pulse rounded-none bg-current after:border-none md:aspect-3/1' />
+
+      <div className='relative mx-8 -mt-28 flex flex-col items-center gap-4 md:-mt-14 md:flex-row'>
+        <div className='size-32 animate-pulse rounded-full border-4 border-background bg-current after:border-none' />
+
+        <Typography
+          variant='h2'
+          className='my-0 w-48 animate-pulse rounded-sm bg-current md:mt-8'
+        >
+          &nbsp;
+        </Typography>
+      </div>
+
+      <Typography
+        variant='blockquote'
+        className='mx-auto my-0 w-96 animate-pulse rounded-sm border-0 bg-current px-4 text-center'
+      >
+        &nbsp;
+      </Typography>
+    </Card>
+
+    <Card render={<section />} className='gap-0 px-4 pb-0'>
+      <h2 className='sr-only'>User Profile Details</h2>
+
+      <div className='flex flex-col sm:flex-row sm:items-center sm:gap-4'>
+        <Typography className='w-32 animate-pulse rounded-sm bg-current'>
+          &nbsp;
+        </Typography>
+        <Typography className='w-32 animate-pulse rounded-sm bg-current not-first:mt-0 last:mb-0'>
+          &nbsp;
+        </Typography>
+      </div>
+
+      <Typography className='w-48 animate-pulse rounded-sm bg-current'>
+        &nbsp;
+      </Typography>
+    </Card>
+  </>
+)

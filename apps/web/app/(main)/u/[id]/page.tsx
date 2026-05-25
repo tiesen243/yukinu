@@ -1,6 +1,9 @@
 import { Suspense } from 'react'
 
-import { UserDetails } from '@/app/(main)/u/[id]/page.client'
+import {
+  UserDetails,
+  UserDetailsSkeleton,
+} from '@/app/(main)/u/[id]/page.client'
 import { createMetadata } from '@/lib/metadata'
 import { getQueryClient, HydrateClient, trpc } from '@/lib/trpc.rsc'
 
@@ -12,7 +15,7 @@ export default async function UserPage({ params }: PageProps<'/u/[id]'>) {
       <main className='container flex-1 pb-4'>
         <h1 className='sr-only'>User page</h1>
 
-        <Suspense fallback={<div>Loading user profile...</div>}>
+        <Suspense fallback={<UserDetailsSkeleton />}>
           <UserDetails id={id} />
         </Suspense>
       </main>
