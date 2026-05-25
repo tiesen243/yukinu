@@ -4,9 +4,9 @@ import type { UseCases } from '@/modules/catalog/types'
 import type { VendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
 
 import { AllProductsDto } from '@/modules/catalog/application/dtos/product/all-products.dto'
+import { CreateReviewDto } from '@/modules/catalog/application/dtos/product/create-review.dto'
 import { OneProductDto } from '@/modules/catalog/application/dtos/product/one-product.dto'
 import { SaveProductDto } from '@/modules/catalog/application/dtos/product/save-product.dto'
-import { CreateReviewDto } from '@/modules/catalog/types'
 import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const productRouter = (

@@ -1,6 +1,6 @@
 import * as z from 'zod'
 
-import { OrderEntity } from '@/modules/checkout/types'
+import { OrderEntity } from '@/modules/checkout/domain/entities/order.entity'
 
 export namespace AnalyticsDto {
   export const input = z.void()

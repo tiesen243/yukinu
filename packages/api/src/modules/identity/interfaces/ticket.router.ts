@@ -2,12 +2,10 @@ import type { TRPCRouterRecord } from '@trpc/server'
 
 import type { UseCases } from '@/modules/identity/types'
 
-import {
-  AllTicketsDto,
-  OneTicketDto,
-  CreateTicketDto,
-  UpdateTicketStatusDto,
-} from '@/modules/identity/types'
+import { AllTicketsDto } from '@/modules/identity/application/dtos/ticket/all-tickets.dto'
+import { CreateTicketDto } from '@/modules/identity/application/dtos/ticket/create-ticket.dto'
+import { OneTicketDto } from '@/modules/identity/application/dtos/ticket/one-ticket.dto'
+import { UpdateTicketStatusDto } from '@/modules/identity/application/dtos/ticket/update-ticket-status.dto'
 import { protectedProcedure } from '@/trpc'
 
 export const ticketRouter = ({ ticket }: UseCases) =>

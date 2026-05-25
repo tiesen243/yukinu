@@ -3,11 +3,9 @@ import type { TRPCRouterRecord } from '@trpc/server'
 import type { UseCases } from '@/modules/identity/types'
 
 import { AllSessionsDto } from '@/modules/identity/application/dtos/security/all-sessions.dto'
-import {
-  ChangePasswordDto,
-  ChangeUsernameDto,
-  DeleteSessionDto,
-} from '@/modules/identity/types'
+import { ChangePasswordDto } from '@/modules/identity/application/dtos/security/change-password.dto'
+import { ChangeUsernameDto } from '@/modules/identity/application/dtos/security/change-username.dto'
+import { DeleteSessionDto } from '@/modules/identity/application/dtos/security/delete-session.dto'
 import { protectedProcedure } from '@/trpc'
 
 export const securityRouter = ({ security }: UseCases) =>

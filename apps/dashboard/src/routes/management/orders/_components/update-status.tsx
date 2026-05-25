@@ -36,7 +36,9 @@ export const UpdateStatus: React.FC<{
 
   const { mutate, isPending } = useMutation({
     ...trpc.checkout.order.updateStatus.mutationOptions(),
-    meta: { filter: trpc.checkout.order.one.queryFilter({ id: orderId }) },
+    meta: {
+      filter: trpc.checkout.order.oneForVendor.queryFilter({ id: orderId }),
+    },
     onSuccess: () => {
       toast.success({ message: 'Order status updated successfully!' })
       setIsOpen(false)

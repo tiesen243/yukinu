@@ -14,6 +14,8 @@ import { UpdateOrderStatusUseCase } from '@/modules/checkout/application/use-cas
 import { DrizzleOrderItemRepository } from '@/modules/checkout/infrastructures/drizzle/order-item.repository'
 import { DrizzleOrderRepository } from '@/modules/checkout/infrastructures/drizzle/order.repository'
 import { orderRouter } from '@/modules/checkout/interfaces/order.router'
+import type { VendorBalanceRepository } from '@/modules/merchant/domain/repositories/vendor-balance.repository'
+import type { VendorTransferRepository } from '@/modules/merchant/domain/repositories/vendor-transfer.repository'
 
 export const createCheckoutModule = (
   db: Database,
@@ -21,6 +23,8 @@ export const createCheckoutModule = (
     cartItemRepo: CartItemRepository
     paymentRepo: PaymentRepository
     voucherRepo: VoucherRepository
+    vendorBalanceRepo: VendorBalanceRepository
+    vendorTransferRepo: VendorTransferRepository
     vendorMiddleware: VendorMiddleware
   },
 ) => {
@@ -43,6 +47,8 @@ export const createCheckoutModule = (
         db,
         orderRepo,
         deps.paymentRepo,
+        deps.vendorBalanceRepo,
+        deps.vendorTransferRepo,
       ),
     },
   } satisfies UseCases

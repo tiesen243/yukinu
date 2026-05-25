@@ -4,6 +4,7 @@ import { and, eq, ne, sql } from '@yukinu/db/drizzle'
 import { orders, payments, vouchers } from '@yukinu/db/schema'
 
 import type { PaymentRepository } from '@/modules/finance/domain/repositories/payment.repository'
+import type { AbstractRepository } from '@/shared/abstracts/abstract.repository'
 
 import { PaymentEntity } from '@/modules/finance/domain/entities/payment.entity'
 import { DrizzleRepository } from '@/shared/infrastructures/drizzle.repository'
@@ -16,6 +17,49 @@ export class DrizzlePaymentRepository
     super(db, payments, 'id')
   }
 
+  public async findWithOrders(
+    criterias: AbstractRepository.Criteria<PaymentEntity>[] = [],
+    orderBy: Partial<Record<keyof PaymentEntity, 'asc' | 'desc'>> = {},
+    options: { limit?: number; offset?: number } = {},
+    tx: Database = this._db,
+  ): Promise<PaymentRepository.WithOrders[]> {
+    const whereClauses = this._buildCriteria(criterias)
+    const orderByClause = this._buildOrderBy(orderBy)
+
+    const query = tx
+      .select({
+        id: payments.id,
+        method: payments.method,
+        methodReference: payments.methodReference,
+        amount: payments.amount,
+        paidAmount: payments.paidAmount,
+        voucherId: payments.voucherId,
+        status: payments.status,
+        createdAt: payments.createdAt,
+        updatedAt: payments.updatedAt,
+        orders: sql<
+          PaymentRepository.WithOrders['orders']
+        >`array_agg(json_build_object('id', ${orders.id}, 'vendorId', ${orders.vendorId}))`.as(
+          'orders',
+        ),
+      })
+      .from(this._table)
+      .leftJoin(orders, eq(orders.paymentId, payments.id))
+      .groupBy(payments.id)
+      .$dynamic()
+
+    if (whereClauses) query.where(whereClauses)
+    if (orderByClause) query.orderBy(orderByClause)
+    if (options.limit) query.limit(options.limit)
+    if (options.offset) query.offset(options.offset)
+
+    const rows = await query
+
+    return rows.map((row) =>
+      Object.assign(this._mapToEntity(row), { orders: row.orders }),
+    )
+  }
+
   public async deductCancelledOrderAmount(
     params: {
       paymentId: string
@@ -23,7 +67,7 @@ export class DrizzlePaymentRepository
       taxRate: number
       shippingCost: number
     },
-    tx: Database,
+    tx: Database = this._db,
   ): Promise<void> {
     const { paymentId, taxRate, shippingCost } = params
 

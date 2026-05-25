@@ -2,11 +2,9 @@ import type { TRPCRouterRecord } from '@trpc/server'
 
 import type { UseCases } from '@/modules/identity/types'
 
-import {
-  AllAddressesDto,
-  OneAddressDto,
-  SaveAddressDto,
-} from '@/modules/identity/types'
+import { AllAddressesDto } from '@/modules/identity/application/dtos/address/all-addresses.dto'
+import { OneAddressDto } from '@/modules/identity/application/dtos/address/one-address.dto'
+import { SaveAddressDto } from '@/modules/identity/application/dtos/address/save-address.dto'
 import { protectedProcedure } from '@/trpc'
 
 export const addressRouter = ({ adddress }: UseCases) =>
