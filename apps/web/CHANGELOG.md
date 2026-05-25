@@ -1,5 +1,16 @@
 # @yukinu/web
 
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies [25356cd]
+  - @yukinu/api@1.0.3
+  - @yukinu/lib@1.0.1
+  - @yukinu/auth@1.0.1
+  - @yukinu/ui@1.0.1
+  - @yukinu/uploadthing@1.0.1
+
 ## 1.0.2
 
 ### Patch Changes
