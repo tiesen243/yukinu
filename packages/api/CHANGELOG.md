@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 1.0.5
+
+### Patch Changes
+
+- cef62d0: fix role for route vendor.one
+
 ## 1.0.4
 
 ### Patch Changes

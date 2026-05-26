@@ -1,5 +1,12 @@
 # @yukinu/dashboard
 
+## 1.0.5
+
+### Patch Changes
+
+- Updated dependencies [cef62d0]
+  - @yukinu/api@1.0.5
+
 ## 1.0.4
 
 ### Patch Changes
