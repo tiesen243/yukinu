@@ -1,5 +1,11 @@
 # @yukinu/api
 
+## 1.0.4
+
+### Patch Changes
+
+- 67714b8: added user comfirm receive order
+
 ## 1.0.3
 
 ### Patch Changes

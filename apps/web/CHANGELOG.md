@@ -1,5 +1,13 @@
 # @yukinu/web
 
+## 1.0.5
+
+### Patch Changes
+
+- 67714b8: added user comfirm receive order
+- Updated dependencies [67714b8]
+  - @yukinu/api@1.0.4
+
 ## 1.0.4
 
 ### Patch Changes
