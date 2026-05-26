@@ -108,16 +108,24 @@ const statuses = [
   {
     value: 'shipped',
     label: 'Shipped',
-    description: 'Order has been shipped and is on its way to the customer.',
+    description: 'Order has been handed over to the courier and is on its way.',
+  },
+  // oxlint-disable-next-line no-warning-comments
+  // TODO: Automate this state transition later by integrating shipping carrier APIs & Webhooks
+  {
+    value: 'delivered',
+    label: 'Delivered',
+    description:
+      'Courier reports the order has been successfully delivered to the customer.',
   },
   {
     value: 'completed',
     label: 'Completed',
-    description: 'Order has been delivered and completed successfully.',
+    description: 'Order is fully completed, funds released to vendor.',
   },
   {
     value: 'cancelled',
     label: 'Cancelled',
-    description: 'Order has been cancelled and will not be processed.',
+    description: 'Order has been cancelled.',
   },
 ]

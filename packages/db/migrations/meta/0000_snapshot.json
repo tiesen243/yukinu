@@ -1,5 +1,5 @@
 {
-  "id": "246f37e0-1ed8-49a4-b361-a975e7926f6a",
+  "id": "d79daacb-a4ea-48d9-b759-a472afe34b44",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -2405,7 +2405,15 @@
     "public.order_status": {
       "name": "order_status",
       "schema": "public",
-      "values": ["pending", "confirmed", "shipped", "completed", "cancelled"]
+      "values": [
+        "pending",
+        "confirmed",
+        "shipped",
+        "delivered",
+        "received",
+        "completed",
+        "cancelled"
+      ]
     },
     "public.payment_method": {
       "name": "payment_method",

@@ -1,22 +1,12 @@
 import type { OneOrderDto } from '@yukinu/api/checkout'
 
+import {
+  ORDER_STATUS_COLORS,
+  PAYMENT_STATUS_COLORS,
+} from '@yukinu/lib/constants'
 import { formatDate } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import { CalendarIcon } from '@yukinu/ui/icons'
-
-const orderStatusMap = {
-  pending: 'warning',
-  confirmed: 'info',
-  shipped: 'info',
-  completed: 'success',
-  cancelled: 'destructive',
-} as const
-
-const paymentStatusMap = {
-  pending: 'warning',
-  success: 'success',
-  failed: 'destructive',
-} as const
 
 export const OrderSummary: React.FC<{ data: OneOrderDto.Output }> = ({
   data,
@@ -26,13 +16,13 @@ export const OrderSummary: React.FC<{ data: OneOrderDto.Output }> = ({
 
     <div className='flex items-center gap-4'>
       <div className='flex items-center gap-1.5 text-sm font-medium'>
-        <span className='text-muted-foreground'>Order Status:</span>
-        <Badge variant={orderStatusMap[data.status]}>{data?.status}</Badge>
+        <span className='text-muted-foreground'>Order:</span>
+        <Badge variant={ORDER_STATUS_COLORS[data.status]}>{data?.status}</Badge>
       </div>
 
       <div className='flex items-center gap-1.5 text-sm font-medium'>
         <span className='text-muted-foreground'>Payment:</span>
-        <Badge variant={paymentStatusMap[data.payment.status]}>
+        <Badge variant={PAYMENT_STATUS_COLORS[data.payment.status]}>
           {data.payment.status}
         </Badge>
       </div>

@@ -71,11 +71,12 @@ export class UpdateOrderStatusUseCase extends AbstractUseCase<
   ) {
     if (
       (!paymentStatus || paymentStatus !== 'success') &&
-      target === 'confirmed'
+      target === 'received'
     )
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: `Cannot transition to 'confirmed' without a successful payment.`,
+        message:
+          'Orders cannot be marked as received or completed until payment is successfully processed.',
       })
 
     const ALLOWED_TRANSITIONS: Record<
@@ -84,7 +85,9 @@ export class UpdateOrderStatusUseCase extends AbstractUseCase<
     > = {
       pending: ['confirmed', 'cancelled'],
       confirmed: ['shipped', 'cancelled'],
-      shipped: ['completed'],
+      shipped: ['delivered', 'cancelled'],
+      delivered: ['received'],
+      received: ['completed'],
       completed: [],
       cancelled: [],
     }

@@ -15,7 +15,7 @@ import {
   FieldLegend,
 } from '@yukinu/ui/field'
 import { useForm } from '@yukinu/ui/hooks/use-form'
-import { XIcon } from '@yukinu/ui/icons'
+import { TrashIcon, XIcon } from '@yukinu/ui/icons'
 import { Input } from '@yukinu/ui/input'
 import {
   InputGroup,
@@ -34,7 +34,7 @@ import { Textarea } from '@yukinu/ui/textarea'
 import { toast } from '@yukinu/ui/toast'
 import { useNavigate } from 'react-router'
 
-import { UploadInput } from '@/components/upload-input'
+import { UploadDropzone } from '@/components/upload-dropzone'
 import { useTRPC } from '@/lib/trpc'
 
 export const SaveProductForm: React.FC<{
@@ -250,59 +250,57 @@ function ProductImagesFields({
   form: UseFormReturn<Omit<SaveProductDto.Input, 'vendorId'>, unknown>
 }) {
   return (
-    <FieldGroup>
+    <FieldGroup className='flex-row flex-wrap gap-4'>
       <form.Field
         name='images'
         render={({ field, meta }) => (
           <>
             {field.value?.map((image: string, i: number) => (
-              <Field key={`${i}-${image}`} orientation='horizontal'>
-                <UploadInput
-                  endpoint='productImageUploader'
-                  value={image}
-                  onValueChange={(url) =>
-                    field.onChange([
-                      ...field.value.filter((img: string) => img !== image),
-                      url,
-                    ])
-                  }
-                  aria-describedby={field['aria-describedby']}
-                  aria-invalid={field['aria-invalid']}
+              <Field
+                key={`${i}-${image}`}
+                className='group/image relative flex aspect-square size-32 flex-col items-center justify-center gap-2 bg-muted'
+              >
+                <img
+                  src={image}
+                  alt={`Product ${i + 1} Thumbnail`}
+                  className='size-32 rounded object-cover'
                 />
 
-                {image && (
-                  <img
-                    src={image}
-                    alt={`Preview ${i + 1}`}
-                    className='size-16 rounded object-cover'
-                  />
-                )}
-
-                <Button
+                <button
                   type='button'
-                  variant='destructive'
-                  size='icon'
-                  onClick={() =>
+                  className='absolute inset-0 flex h-full w-full cursor-pointer flex-col items-center justify-center gap-2 bg-muted/80 text-destructive opacity-0 transition-opacity ease-in-out group-hover/image:opacity-100'
+                  onClick={async () => {
+                    const formData = new FormData()
+                    formData.append('image', image)
+                    await fetch('/catalog/products/new', {
+                      method: 'POST',
+                      body: formData,
+                    })
+
+                    const newImages = [...field.value]
                     field.onChange(
-                      field.value.filter((_: string, idx: number) => idx !== i),
+                      newImages.filter((_, idx: number) => idx !== i),
                     )
-                  }
+                  }}
                 >
-                  <XIcon />
+                  <TrashIcon />
                   <span className='sr-only'>Remove Image</span>
-                </Button>
+                </button>
               </Field>
             ))}
 
-            <Button
-              type='button'
-              variant='secondary'
-              onClick={() => field.onChange([...field.value, ''])}
-            >
-              Add Image
-            </Button>
+            <UploadDropzone
+              className='size-32'
+              endpoint='productImageUploader'
+              value={''}
+              onValueChange={(url) => field.onChange((prev) => [...prev, url])}
+            />
 
-            <FieldError id={meta.errorId} errors={meta.errors} />
+            <FieldError
+              id={meta.errorId}
+              errors={meta.errors}
+              className='basis-full'
+            />
           </>
         )}
       />
