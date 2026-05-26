@@ -26,6 +26,7 @@ export default async function VendorPage({
       <main className='container flex-1 space-y-4 py-4'>
         <h1 className='sr-only'>Vendor Page</h1>
 
+        <VendorDetailsSkeleton />
         <Suspense fallback={<VendorDetailsSkeleton />}>
           <VendorDetails id={id} />
         </Suspense>
