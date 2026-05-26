@@ -6,6 +6,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -17,16 +18,14 @@ import { useState } from 'react'
 
 import { useTRPC } from '@/lib/trpc'
 
-export const CancelButton: React.FC<{ orderId: number }> = ({ orderId }) => {
+export const ReceiveButton: React.FC<{ orderId: number }> = ({ orderId }) => {
   const { trpc } = useTRPC()
   const [isOpen, setIsOpen] = useState(false)
   const { mutate, isPending } = useMutation({
-    ...trpc.checkout.order.cancel.mutationOptions(),
+    ...trpc.checkout.order.received.mutationOptions(),
     meta: { filter: trpc.checkout.order.one.queryFilter({ id: orderId }) },
     onSuccess: () => {
-      toast.success({
-        message: `Order #${orderId} has been cancelled successfully.`,
-      })
+      toast.success({ message: `Order #${orderId} marked as received` })
       setIsOpen(false)
     },
     onError: ({ message }) => toast.error({ message }),
@@ -35,25 +34,32 @@ export const CancelButton: React.FC<{ orderId: number }> = ({ orderId }) => {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger
-        render={<Button variant='destructive'>Cancel Order</Button>}
+        render={
+          <Button className='bg-success/10 text-success hover:bg-success/20 focus-visible:border-success/40 focus-visible:ring-success/20 dark:bg-success/20 dark:hover:bg-success/30 dark:focus-visible:ring-success/40'>
+            Mark as Received
+          </Button>
+        }
       />
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to cancel order <strong>#{orderId}</strong>?
-            This action cannot be undone.
-          </AlertDialogTitle>
+          <AlertDialogTitle>Did you receive your order?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Please confirm if order <strong>#{orderId}</strong> has been
+            delivered to you safely.
+          </AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isPending}>Keep Order</AlertDialogCancel>
+          <AlertDialogCancel disabled={isPending}>
+            No, Not Yet
+          </AlertDialogCancel>
           <AlertDialogAction
-            variant='destructive'
+            className='bg-success/10 text-success hover:bg-success/20 focus-visible:border-success/40 focus-visible:ring-success/20 dark:bg-success/20 dark:hover:bg-success/30 dark:focus-visible:ring-success/40'
             onClick={() => mutate({ id: orderId })}
             disabled={isPending}
           >
-            {isPending ? 'Cancelling...' : 'Cancel Order'}
+            {isPending ? 'Updating...' : 'Yes, I Received It'}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

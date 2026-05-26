@@ -1,7 +1,10 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { STATUS_COLORS } from '@yukinu/lib/constants'
+import {
+  ORDER_STATUS_COLORS,
+  PAYMENT_STATUS_COLORS,
+} from '@yukinu/lib/constants'
 import { formatDate } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import { Typography } from '@yukinu/ui/typography'
@@ -20,7 +23,20 @@ export const OrderSummary: React.FC<{ id: number }> = ({ id }) => {
     <div className='flex items-start justify-between'>
       <div className='space-y-2'>
         <Typography>Purchased on {formatDate(data.createdAt)}</Typography>
-        <Badge variant={STATUS_COLORS[data.status]}>{data.status}</Badge>
+
+        <Typography variant='small'>
+          Order:&nbsp;
+          <Badge variant={ORDER_STATUS_COLORS[data.status]}>
+            {data.status}
+          </Badge>
+        </Typography>
+
+        <Typography variant='small'>
+          Payment:&nbsp;
+          <Badge variant={PAYMENT_STATUS_COLORS[data.payment.status]}>
+            {data.payment.status}
+          </Badge>
+        </Typography>
       </div>
 
       {data.address && (

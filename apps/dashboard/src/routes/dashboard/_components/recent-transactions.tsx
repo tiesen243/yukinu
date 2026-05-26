@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { PAYMENT_STATUS_COLORS } from '@yukinu/lib/constants'
 import { formatDate } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import { Card, CardDescription, CardHeader, CardTitle } from '@yukinu/ui/card'
@@ -12,12 +13,6 @@ import {
 } from '@yukinu/ui/table'
 
 import { useTRPC } from '@/lib/trpc'
-
-const STATUS_VARIANT = {
-  success: 'success',
-  pending: 'warning',
-  failed: 'destructive',
-} as const
 
 export const RecentTransactions: React.FC<{ isAdmin: boolean }> = ({
   isAdmin,
@@ -67,7 +62,9 @@ export const RecentTransactions: React.FC<{ isAdmin: boolean }> = ({
               <TableCell className='font-mono text-xs'>{tx.id}</TableCell>
               <TableCell>${tx.amount}</TableCell>
               <TableCell>
-                <Badge variant={STATUS_VARIANT[tx.status]}>{tx.status}</Badge>
+                <Badge variant={PAYMENT_STATUS_COLORS[tx.status]}>
+                  {tx.status}
+                </Badge>
               </TableCell>
               <TableCell className='text-right text-muted-foreground'>
                 {formatDate(tx.createdAt)}

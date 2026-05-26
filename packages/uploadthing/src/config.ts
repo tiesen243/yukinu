@@ -1,12 +1,12 @@
 import type { FileRouter, RouteHandlerConfig } from 'uploadthing/types'
 
-import { auth } from '@yukinu/auth'
+import { currentUser } from '@yukinu/auth'
 import { createUploadthing, UploadThingError } from 'uploadthing/server'
 
 const f = createUploadthing()
 
 const sharedFileRouteConfig = f({
-  image: { maxFileSize: '4MB', maxFileCount: 1 },
+  image: { maxFileSize: '4MB', maxFileCount: 4 },
 })
   // @ts-expect-error req is only available in certain environments
   .middleware(async ({ event, req }) => {
@@ -17,14 +17,14 @@ const sharedFileRouteConfig = f({
         code: 'INTERNAL_SERVER_ERROR',
       })
 
-    const session = await auth({ headers: request.headers })
-    if (!session.user)
+    const user = await currentUser({ headers: request.headers })
+    if (!user)
       throw new UploadThingError({
         message: 'User not authenticated',
         code: 'FORBIDDEN',
       })
 
-    return { userId: 'user-id' }
+    return { userId: user.id }
   })
   .onUploadComplete(({ metadata, file }) => {
     console.log('Upload complete for userId:', metadata.userId)

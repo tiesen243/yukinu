@@ -42,10 +42,27 @@ export const vendorStatusEnum = pgEnum('vendor_status', [
   'suspended',
 ])
 
+/**
+ * Order Lifecycle Statuses:
+ *
+ * 1. Pending -> Awaiting customer payment or initial shop validation.
+ * 2. Confirmed -> Order accepted by the vendor; products are being
+ *    prepared/packed.
+ * 3. Shipped -> Handed over to the courier; package is in transit.
+ * 4. Delivered -> Courier marked as successfully dropped off at the customer's
+ *    location.
+ * 5. Received -> Customer confirmed they received the correct items.
+ * 6. Completed -> Final state. Order is closed, and funds are officially released
+ *    to the vendor.
+ * 7. Cancelled -> Terminated order (can be triggered from pending, confirmed, or
+ *    shipped).
+ */
 export const orderStatusEnum = pgEnum('order_status', [
   'pending',
   'confirmed',
   'shipped',
+  'delivered',
+  'received',
   'completed',
   'cancelled',
 ])

@@ -87,4 +87,14 @@ export const orderRouter = (
           status: 'cancelled',
         }),
       ),
+
+    received: protectedProcedure
+      .input(UpdateOrderStatusDto.input.pick({ id: true }))
+      .output(UpdateOrderStatusDto.output)
+      .mutation(({ input }) =>
+        order.updateStatus.execute({
+          id: input.id,
+          status: 'received',
+        }),
+      ),
   }) satisfies TRPCRouterRecord

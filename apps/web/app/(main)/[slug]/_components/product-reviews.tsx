@@ -15,7 +15,7 @@ export const ProductReviews: React.FC = () => {
 
   return (
     <Card className='px-4' render={<section />}>
-      <Typography variant='h2'>Reviews ({avgRating.toFixed(1)}/5)</Typography>
+      <Typography variant='h2'>Reviews ({avgRating.toFixed(1)}/5.0)</Typography>
 
       {reviews.length === 0 ? (
         <Typography className='text-muted-foreground'>
