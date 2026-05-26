@@ -49,7 +49,7 @@ export default function Home() {
           </Suspense>
         </section>
 
-        <section className='grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:grid-rows-2'>
+        <section className='grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:grid-rows-2'>
           <Typography variant='h2' className='col-span-full row-span-full mb-0'>
             Featured Products
           </Typography>
@@ -58,7 +58,7 @@ export default function Home() {
           </Suspense>
         </section>
 
-        <section className='grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-6'>
+        <section className='grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6'>
           <Typography variant='h2' className='col-span-full mb-0'>
             Categories
           </Typography>
