@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { STATUS_COLORS } from '@yukinu/lib/constants'
+import { ORDER_STATUS_COLORS } from '@yukinu/lib/constants'
 import { formatPrice } from '@yukinu/lib/utils'
 import { Badge } from '@yukinu/ui/badge'
 import {
@@ -41,7 +41,9 @@ export const OrderHistories: React.FC<{ paymentId?: string }> = ({
           <ItemTitle>#{order.id}</ItemTitle>
           <ItemDescription>{formatPrice(order.totalAmount)}</ItemDescription>
         </ItemContent>
-        <Badge variant={STATUS_COLORS[order.status]}>{order.status}</Badge>
+        <Badge variant={ORDER_STATUS_COLORS[order.status]}>
+          {order.status}
+        </Badge>
       </ItemHeader>
 
       <ItemContent>

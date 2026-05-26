@@ -12,6 +12,7 @@ type OnChangeParam<TValue> =
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   | TValue
+  | ((prevValue: TValue) => TValue)
 
 interface FormFieldProps<TName extends keyof TValues, TValues> {
   name: TName
@@ -173,7 +174,11 @@ function useForm<
                 ? 0
                 : target.valueAsNumber
             else newValue = target.value
-          } else newValue = param as TValues[TName]
+          } else if (typeof param === 'function')
+            newValue = (param as (prevValue: TValues[TName]) => TValues[TName])(
+              formValuesRef.current[name],
+            )
+          else newValue = param as TValues[TName]
 
           setValue(newValue as TValues[TName])
           setFormValue(name, newValue as TValues[TName])

@@ -26,6 +26,8 @@ export namespace OrderEntity {
     'pending',
     'confirmed',
     'shipped',
+    'delivered',
+    'received',
     'completed',
     'cancelled',
   ] as const

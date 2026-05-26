@@ -1,4 +1,4 @@
-CREATE TYPE "public"."order_status" AS ENUM('pending', 'confirmed', 'shipped', 'completed', 'cancelled');--> statement-breakpoint
+CREATE TYPE "public"."order_status" AS ENUM('pending', 'confirmed', 'shipped', 'delivered', 'received', 'completed', 'cancelled');--> statement-breakpoint
 CREATE TYPE "public"."payment_method" AS ENUM('bank_transfer', 'cash_on_delivery');--> statement-breakpoint
 CREATE TYPE "public"."payment_status" AS ENUM('pending', 'success', 'failed');--> statement-breakpoint
 CREATE TYPE "public"."ticket_status" AS ENUM('open', 'resolved', 'closed');--> statement-breakpoint
