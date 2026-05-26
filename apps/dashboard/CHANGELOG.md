@@ -1,5 +1,13 @@
 # @yukinu/dashboard
 
+## 1.0.4
+
+### Patch Changes
+
+- 763ad94: added update dropzone for product image field
+- Updated dependencies [67714b8]
+  - @yukinu/api@1.0.4
+
 ## 1.0.3
 
 ### Patch Changes
