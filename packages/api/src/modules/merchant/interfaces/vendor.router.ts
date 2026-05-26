@@ -8,7 +8,7 @@ import { OneVendorDto } from '@/modules/merchant/application/dtos/vendor/one-ven
 import { SaveVendorDto } from '@/modules/merchant/application/dtos/vendor/save-vendor.dto'
 import { UpdateVendorStatusDto } from '@/modules/merchant/application/dtos/vendor/update-vendor-status.dto'
 import { vendorMiddleware } from '@/modules/merchant/interfaces/vendor.middleware'
-import { protectedProcedure } from '@/trpc'
+import { protectedProcedure, publicProcedure } from '@/trpc'
 
 export const vendorRouter = ({ vendor }: UseCases) =>
   ({
@@ -18,8 +18,7 @@ export const vendorRouter = ({ vendor }: UseCases) =>
       .output(AllVendorsDto.output)
       .query(({ input }) => vendor.all.execute(input)),
 
-    one: protectedProcedure
-      .meta({ role: ['admin', 'moderator'] })
+    one: publicProcedure
       .input(OneVendorDto.input)
       .output(OneVendorDto.output)
       .query(({ input }) => vendor.one.execute(input)),

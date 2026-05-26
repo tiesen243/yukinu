@@ -22,7 +22,7 @@ export const VendorDetails: React.FC<{ id: string }> = ({ id }) => {
     <Card render={<section />}>
       <CardHeader className='flex flex-row items-center gap-4'>
         <Avatar className='size-32'>
-          <AvatarImage src={data.image ?? ''} alt={data.name} />
+          <AvatarImage src={data?.image ?? ''} alt={data.name} />
           <AvatarFallback>
             <UserIcon className='size-16 text-muted-foreground' />
           </AvatarFallback>
@@ -68,9 +68,7 @@ export const VendorDetailsSkeleton: React.FC = () => (
     </CardHeader>
 
     <CardContent>
-      <Typography className='h-20 w-full rounded-sm bg-muted'>
-        &nbsp;
-      </Typography>
+      <Typography className='w-full rounded-sm bg-muted'>&nbsp;</Typography>
 
       <Typography variant='ul'>
         <li className='w-1/3 rounded-sm bg-muted'>&nbsp;</li>
