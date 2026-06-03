@@ -19,7 +19,7 @@
     "@yukinu/lib": "workspace:*",
     "@yukinu/ui": "workspace:*",
     "@yukinu/uploadthing": "workspace:*",
-    "next": "^16.2.6",
+    "next": "^16.2.7",
     "nuqs": "catalog:prod",
     "react": "catalog:react",
     "react-dom": "catalog:react",
