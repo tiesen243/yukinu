@@ -1,5 +1,13 @@
 # @yukinu/dashboard
 
+## 1.0.6
+
+### Patch Changes
+
+- a2da015: bump deps
+- Updated dependencies [a2da015]
+  - @yukinu/ui@1.0.2
+
 ## 1.0.5
 
 ### Patch Changes

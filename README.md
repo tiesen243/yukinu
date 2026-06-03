@@ -27,6 +27,11 @@ An open-source e-commerce platform that enables customers to discover, compare, 
 - [Dashboard Preview](https://yukinu-dashboard.vercel.app)
 - [Documentation](https://tiesen243.github.io/yukinu)
 
+Test accounts for the dashboard:
+
+- Username: `tester`
+- Password: `Test#12345678`
+
 ## Features
 
 - **Multi-Vendor Support**: Allow multiple sellers to create their own storefronts and manage their products, orders, and inventory independently.
