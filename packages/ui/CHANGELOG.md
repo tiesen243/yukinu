@@ -1,5 +1,11 @@
 # @yukinu/ui
 
+## 1.0.2
+
+### Patch Changes
+
+- a2da015: bump deps
+
 ## 1.0.1
 
 ### Patch Changes
